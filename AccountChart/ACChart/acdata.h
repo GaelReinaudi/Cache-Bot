@@ -4,75 +4,111 @@
 #include <QDateTime>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QJsonDocument>
+#include <QFileInfo>
+#include <QDebug>
 
 class Transaction
 {
 public:
-	Transaction();
-	Transaction(double price, QDateTime time, QString &descr)
-		: m_price(price)
-		, m_time(time)
+	Transaction() {}
+	Transaction(double amount, QDateTime startDate, QString &descr)
+		: m_amount(amount)
+		, m_startDate(startDate)
 		, m_description(descr)
 	{
 	}
 
 	//! json in
-	void read(const QJsonObject &json)
-	{
-		m_price = json["price"].toDouble();
-		m_time = QDateTime::fromTime_t(json["time"].toInt());
+	void read(const QJsonObject &json) {
+		m_amount = json["amount"].toString().toDouble();
+		uint sec = json["startDate"].toString().toDouble();
+		m_startDate = QDateTime::fromTime_t(sec);
 		m_description = json["descr"].toString();
+		qDebug() << m_amount << sec << m_startDate << m_description;
 	}
 	//! json out
-	void write(QJsonObject &json) const
-	{
-		json["price"] = m_price;
-		json["time"] = int(m_time.toTime_t());
+	void write(QJsonObject &json) const {
+		json["amount"] = m_amount;
+		json["startDate"] = int(m_startDate.toTime_t());
 		json["descr"] = m_description;
 	}
 
+	double amount() const{
+		return m_amount;
+	}
+	uint time() const{
+		return m_startDate.toTime_t();
+	}
+
 private:
-	double m_price = 0.0;
-	QDateTime m_time;
+	double m_amount = 0.0;
+	QDateTime m_startDate;
 	QString m_description;
 };
 
 class Transactions
 {
 public:
-	Transactions();
+	Transactions() {}
 
 	//! json in
-	void read(const QJsonObject &json)
-	{
-		m_trans.clear();
-		QJsonArray npcArray = json["transactions"].toArray();
+	void read(const QJsonObject &json) {
+		m_transList.clear();
+		QJsonArray npcArray = json["purchases"].toArray();
 		for (int npcIndex = 0; npcIndex < npcArray.size(); ++npcIndex) {
 			QJsonObject npcObject = npcArray[npcIndex].toObject();
 			Transaction tra;
 			tra.read(npcObject);
-			m_trans.append(tra);
+			m_transList.append(tra);
 		}
+		qDebug() << "m_transList count" << m_transList.size();
 	}
 	//! json out
-	void write(QJsonObject &json) const
-	{
+	void write(QJsonObject &json) const {
 		QJsonArray npcArray;
-		foreach (const auto tra, m_trans) {
+		foreach (const auto tra, m_transList) {
 			QJsonObject npcObject;
 			tra.write(npcObject);
 			npcArray.append(npcObject);
 		}
-		json["transactions"] = npcArray;
+		json["purchases"] = npcArray;
 	}
+
+	QList<Transaction>& list() {
+		return m_transList;
+	}
+
 private:
-	QList<Transaction> m_trans;
+	QList<Transaction> m_transList;
 };
 
-class ACData
+class Account
 {
 public:
-	ACData();
+	Account() {}
+
+	// loading the json file
+	// see this: https://qt-project.org/doc/qt-5-snapshot/qtcore-savegame-example.html
+	bool load(QString jsonFile) {
+		QFile loadFile(jsonFile);
+		if (!loadFile.open(QIODevice::ReadOnly)) {
+			qWarning(QString("Couldn't open file %1").arg(QFileInfo(loadFile).absoluteFilePath()).toUtf8());
+			return false;
+		}
+		QByteArray saveData = loadFile.readAll();
+		QJsonDocument loadDoc(QJsonDocument::fromJson(saveData));
+		m_transactions.read(loadDoc.object());
+		return true;
+	}
+
+	Transactions& transactions() {
+		return m_transactions;
+	}
+
+
+private:
+	Transactions m_transactions;
 };
 
 #endif // ACDATA_H
