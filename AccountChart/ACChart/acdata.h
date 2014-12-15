@@ -37,6 +37,11 @@ public:
 	double amount() const{
 		return m_amount;
 	}
+	double compressedAmount() const{
+		if (m_amount < 0)
+			return -log10(-m_amount+1.0);
+		return log10(m_amount+1.0);
+	}
 	uint time() const{
 		return m_startDate.toTime_t();
 	}
