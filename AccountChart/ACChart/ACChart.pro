@@ -15,10 +15,12 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     ../qcustomplot/qcustomplot.cpp \
-    acustomplot.cpp
+    acustomplot.cpp \
+    acdata.cpp
 
 HEADERS  += mainwindow.h \
     ../qcustomplot/qcustomplot.h \
-    acustomplot.h
+    acustomplot.h \
+    acdata.h
 
 FORMS    += mainwindow.ui
