@@ -9,7 +9,8 @@ CONFIG+=c++11
 
 INCLUDEPATH  += ./ \
 	$$PWD/puppy/puppy/include \
-	$$PWD/../ACChart
+	$$PWD/../AccountChart \
+	$$PWD/../AccountChart/qcustomplot
 
 TARGET = evoCache
 TEMPLATE = app
@@ -21,9 +22,12 @@ SOURCES += main.cpp\
 	$$PWD/puppy/puppy/src/Tree.cpp \
 	$$PWD/puppy/SymbRegPrimits.cpp \
 	$$PWD/../AccountChart/qcustomplot/qcustomplot.cpp \
+	$$PWD/../AccountChart/ACChart/acustomplot.cpp \
+    EvolutionSpinner.cpp
 
 HEADERS  += mainwindow.h \
 	$$PWD/../AccountChart/qcustomplot/qcustomplot.h \
+	$$PWD/../AccountChart/ACChart/acustomplot.h \
 	$$PWD/puppy/puppy/Primitive.hpp \
 	$$PWD/puppy/puppy/PrimitiveHandle.hpp \
 	$$PWD/puppy/puppy/PrimitiveInline.hpp \
@@ -31,7 +35,8 @@ HEADERS  += mainwindow.h \
 	$$PWD/puppy/puppy/Randomizer.hpp \
 	$$PWD/puppy/puppy/Token.hpp \
 	$$PWD/puppy/puppy/Tree.hpp \
-	$$PWD/log.h
+	$$PWD/log.h \
+    EvolutionSpinner.h
 
 
 FORMS    += mainwindow.ui

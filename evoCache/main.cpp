@@ -5,7 +5,11 @@
 int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
-	MainWindow w;
+	QString jsonFile = "";
+	if(argc > 1) {
+		jsonFile = argv[1];
+	}
+	MainWindow w(jsonFile);
 	w.show();
 
 	return a.exec();
