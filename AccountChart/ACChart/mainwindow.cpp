@@ -12,22 +12,7 @@ MainWindow::MainWindow(QString jsonFile, QWidget *parent) :
 	Account account;
 	account.load(jsonFile);
 
-	// setup the chart options
-	ui->plot->addGraph();
-	ui->plot->graph(0)->setLineStyle(QCPGraph::lsNone);
-	ui->plot->graph(0)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 1.0));
-	ui->plot->xAxis->setTickLabelType(QCPAxis::ltDateTime);
-	ui->plot->xAxis->setDateTimeFormat("yyyy/MM/dd hh");
-	ui->plot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
-	ui->plot->axisRect(0)->setRangeZoomAxes(ui->plot->xAxis, 0);
-
-	ui->plot->yAxis->setLabel("log($)");
-
-	// add the purchase points
-	for (const auto& trans : account.transactions().list()) {
-		ui->plot->graph(0)->addData(trans.time(), trans.compressedAmount());
-	}
-	ui->plot->rescaleAxes();
+	ui->plot->loadCompressedAmount(&account);
 }
 
 MainWindow::~MainWindow()

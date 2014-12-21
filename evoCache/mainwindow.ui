@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>891</width>
-    <height>300</height>
+    <width>1000</width>
+    <height>400</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -59,7 +59,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QCustomPlot" name="accountPlot" native="true"/>
+     <widget class="ACustomPlot" name="accountPlot" native="true"/>
     </item>
    </layout>
   </widget>
@@ -68,7 +68,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>891</width>
+     <width>1000</width>
      <height>21</height>
     </rect>
    </property>
@@ -89,9 +89,9 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>QCustomPlot</class>
+   <class>ACustomPlot</class>
    <extends>QWidget</extends>
-   <header>qcustomplot.h</header>
+   <header>ACChart/acustomplot.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

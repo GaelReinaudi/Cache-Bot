@@ -16,7 +16,7 @@ class MainWindow : public QMainWindow
 	Q_OBJECT
 
 public:
-	explicit MainWindow(QWidget *parent = 0);
+	explicit MainWindow(QString jsonFile, QWidget *parent = 0);
 	~MainWindow();
 
 public slots:
@@ -30,7 +30,7 @@ signals:
 
 private:
 	Ui::MainWindow *ui;
-	ACustomplot* m_accountPlot;
+	ACustomPlot* m_accountPlot;
 	QThread* m_evoThread;
 	EvolutionSpinner* m_evoSpinner;
 };

@@ -23,11 +23,13 @@ SOURCES += main.cpp\
 	$$PWD/puppy/SymbRegPrimits.cpp \
 	$$PWD/../AccountChart/qcustomplot/qcustomplot.cpp \
 	$$PWD/../AccountChart/ACChart/acustomplot.cpp \
-    EvolutionSpinner.cpp
+	$$PWD/../AccountChart/ACChart/acdata.cpp \
+	EvolutionSpinner.cpp
 
 HEADERS  += mainwindow.h \
 	$$PWD/../AccountChart/qcustomplot/qcustomplot.h \
 	$$PWD/../AccountChart/ACChart/acustomplot.h \
+	$$PWD/../AccountChart/ACChart/acdata.h \
 	$$PWD/puppy/puppy/Primitive.hpp \
 	$$PWD/puppy/puppy/PrimitiveHandle.hpp \
 	$$PWD/puppy/puppy/PrimitiveInline.hpp \
