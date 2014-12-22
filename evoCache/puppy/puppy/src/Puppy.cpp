@@ -480,6 +480,7 @@ void Puppy::mutateSwap(Puppy::Tree& ioTree,
       ioContext.mFunctionSet[lKArgsFunction[ioContext.mRandom(lKArgsFunction.size())]];
     ioTree[lMutIndex].mPrimitive = lFunction->giveReference(ioContext);
   }
+  ioTree.mValid = false;
 }
 
 

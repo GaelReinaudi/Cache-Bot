@@ -24,7 +24,8 @@ SOURCES += main.cpp\
 	$$PWD/../AccountChart/qcustomplot/qcustomplot.cpp \
 	$$PWD/../AccountChart/ACChart/acustomplot.cpp \
 	$$PWD/../AccountChart/ACChart/acdata.cpp \
-	EvolutionSpinner.cpp
+	EvolutionSpinner.cpp \
+    AccRegPrimits.cpp
 
 HEADERS  += mainwindow.h \
 	$$PWD/../AccountChart/qcustomplot/qcustomplot.h \
@@ -38,7 +39,8 @@ HEADERS  += mainwindow.h \
 	$$PWD/puppy/puppy/Token.hpp \
 	$$PWD/puppy/puppy/Tree.hpp \
 	$$PWD/log.h \
-    EvolutionSpinner.h
+    EvolutionSpinner.h \
+    AccRegPrimits.h
 
 
 FORMS    += mainwindow.ui
