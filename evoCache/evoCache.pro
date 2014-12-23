@@ -20,7 +20,6 @@ SOURCES += main.cpp\
 	$$PWD/puppy/puppy/src/Primitive.cpp \
 	$$PWD/puppy/puppy/src/Puppy.cpp \
 	$$PWD/puppy/puppy/src/Tree.cpp \
-	$$PWD/puppy/SymbRegPrimits.cpp \
 	$$PWD/../AccountChart/qcustomplot/qcustomplot.cpp \
 	$$PWD/../AccountChart/ACChart/acustomplot.cpp \
 	$$PWD/../AccountChart/ACChart/acdata.cpp \

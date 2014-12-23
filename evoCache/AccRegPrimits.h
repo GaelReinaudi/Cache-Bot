@@ -7,8 +7,7 @@
 class Add : public Puppy::Primitive
 {
 public:
-	Add() : Primitive(2, "ADD")
-	{ }
+	Add() : Primitive(2, "ADD") { }
 	virtual ~Add() {}
 	virtual void execute(void* outDatum, Puppy::Context& ioContext)  {
 		double& lResult = *(double*)outDatum;
@@ -22,8 +21,7 @@ public:
 class Subtract : public Puppy::Primitive
 {
 public:
-	Subtract() : Primitive(2, "SUB")
-	{ }
+	Subtract() : Primitive(2, "SUB") { }
 	virtual ~Subtract() { }
 	virtual void execute(void* outDatum, Puppy::Context& ioContext) {
 		double& lResult = *(double*)outDatum;
@@ -37,8 +35,7 @@ public:
 class Multiply : public Puppy::Primitive
 {
 public:
-	Multiply() : Primitive(2, "MUL")
-	{ }
+	Multiply() : Primitive(2, "MUL") { }
 	virtual ~Multiply() { }
 	virtual void execute(void* outDatum, Puppy::Context& ioContext) {
 		double& lResult = *(double*)outDatum;
@@ -52,8 +49,7 @@ public:
 class Divide : public Puppy::Primitive
 {
 public:
-	Divide() : Primitive(2, "DIV")
-	{ }
+	Divide() : Primitive(2, "DIV") { }
 	virtual ~Divide() { }
 	virtual void execute(void* outDatum, Puppy::Context& ioContext) {
 		double& lResult = *(double*)outDatum;
@@ -64,6 +60,18 @@ public:
 			getArgument(0, &lResult, ioContext);
 			lResult /= lArg2;
 		}
+	}
+};
+
+class Cosinus : public Puppy::Primitive
+{
+public:
+	Cosinus() : Primitive(2, "COS") { }
+	virtual ~Cosinus() { }
+	virtual void execute(void* outDatum, Puppy::Context& ioContext) {
+		double& lResult = *(double*)outDatum;
+		getArgument(0, &lResult, ioContext);
+		lResult = qCos(lResult);
 	}
 };
 
