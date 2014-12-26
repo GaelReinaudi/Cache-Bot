@@ -43,6 +43,7 @@
 #include "puppy/PrimitiveHandle.hpp"
 #include "puppy/Primitive.hpp"
 #include "puppy/Randomizer.hpp"
+#include "ACChart/acdata.h"
 
 namespace Puppy {
 
@@ -61,33 +62,48 @@ class Context {
 
 public:
 
-  /*!
+	/*!
    *  \brief Build an evolutionary context.
    */
-  inline Context() :
-    mTree(NULL)
-  { }
+	inline Context(Account* pAc) :
+		mTree(NULL)
+	  , m_pAccount(pAc)
+	{
+		QDateTime mostRecent;
+		int mostDaysAgo = 0;
+		for (const Transaction& trans : pAc->transactions().list()) {
+			if (trans.startDate().daysTo(mostRecent) <= 0) {
+				mostRecent = trans.startDate();
+			}
+		}
+		qDebug() << "mostRecent" << mostRecent;
+		for (const Transaction& trans : pAc->transactions().list()) {
+			int daysAgo = trans.startDate().daysTo(mostRecent);
+		}
+	}
 
 
-  /*!
+	/*!
    *  \brief Add a new primitive in the sets of primitive.
    *  \param inPrimitive Primitive added.
    */
-  inline void insert(PrimitiveHandle inPrimitive)
-  {
-    assert(mPrimitiveMap.find(inPrimitive->getName()) == mPrimitiveMap.end());
-    mPrimitiveMap[inPrimitive->getName()] = inPrimitive;
-    if(inPrimitive->getNumberArguments() == 0) mTerminalSet.push_back(inPrimitive);
-    else mFunctionSet.push_back(inPrimitive);
-  }
-  
-  Randomizer                            mRandom;        //!< Random number generator.
-  std::vector<PrimitiveHandle>          mFunctionSet;   //!< Set of functions usable to build trees.
-  std::vector<PrimitiveHandle>          mTerminalSet;   //!< Set of terminals usable to build trees.
-  std::map<std::string,PrimitiveHandle> mPrimitiveMap;  //!< Name-primitive map.
-  std::vector<unsigned int>             mCallStack;     //!< Execution call stack.
-  Tree*                                 mTree;          //!< Actual tree evaluated.
-      
+	inline void insert(PrimitiveHandle inPrimitive)
+	{
+		assert(mPrimitiveMap.find(inPrimitive->getName()) == mPrimitiveMap.end());
+		mPrimitiveMap[inPrimitive->getName()] = inPrimitive;
+		if(inPrimitive->getNumberArguments() == 0) mTerminalSet.push_back(inPrimitive);
+		else mFunctionSet.push_back(inPrimitive);
+	}
+
+	Randomizer                            mRandom;        //!< Random number generator.
+	std::vector<PrimitiveHandle>          mFunctionSet;   //!< Set of functions usable to build trees.
+	std::vector<PrimitiveHandle>          mTerminalSet;   //!< Set of terminals usable to build trees.
+	std::map<std::string,PrimitiveHandle> mPrimitiveMap;  //!< Name-primitive map.
+	std::vector<unsigned int>             mCallStack;     //!< Execution call stack.
+	Tree*                                 mTree;          //!< Actual tree evaluated.
+
+	Account* m_pAccount;
+	std::vector<std::vector<int> > m_dailyAmounts;
 };
 
 }

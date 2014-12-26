@@ -25,3 +25,15 @@ void ACustomPlot::loadCompressedAmount(Account* account)
 	rescaleAxes();
 }
 
+
+void ACustomPlot::loadAmount(Account* account)
+{
+	m_mode = Mode::linear;
+	yAxis->setLabel("$");
+	// add the purchase points
+	for (const auto& trans : account->transactions().list()) {
+		graph(0)->addData(trans.time(), trans.amount());
+	}
+	rescaleAxes();
+}
+

@@ -46,6 +46,10 @@ public:
 		return m_startDate.toTime_t();
 	}
 
+	QDateTime startDate() const {
+		return m_startDate;
+	}
+
 private:
 	double m_amount = 0.0;
 	QDateTime m_startDate;

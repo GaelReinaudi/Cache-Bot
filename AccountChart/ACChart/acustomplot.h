@@ -11,6 +11,7 @@ public:
 	explicit ACustomPlot(QWidget *parent = 0);
 
 	void loadCompressedAmount(Account *account);
+	void loadAmount(Account *account);
 
 signals:
 

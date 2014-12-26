@@ -20,7 +20,7 @@
 
 using namespace Puppy;
 
-EvolutionSpinner::EvolutionSpinner(QObject* parent)
+EvolutionSpinner::EvolutionSpinner(Account *pAc, QObject* parent)
 	: QObject(parent)
 {
 	// Create parameter variables with default values.
@@ -41,7 +41,7 @@ EvolutionSpinner::EvolutionSpinner(QObject* parent)
 
 	// Create evolution context add primitives used into it.
 	std::cout << "Creating evolution context" << std::endl;
-	Context lContext;
+	Context lContext(pAc);
 	lContext.mRandom.seed(lSeed);
 	lContext.insert(new Add);
 	lContext.insert(new Subtract);

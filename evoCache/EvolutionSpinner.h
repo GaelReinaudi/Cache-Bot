@@ -9,7 +9,7 @@ class EvolutionSpinner : public QObject
 	Q_OBJECT
 
 public:
-	EvolutionSpinner(QObject* parent = 0);
+	EvolutionSpinner(Account* pAc, QObject* parent = 0);
 protected:
 	unsigned int evaluateSymbReg(std::vector<Puppy::Tree> &ioPopulation, Puppy::Context &ioContext, const std::vector<double> &inX, const std::vector<double> &inF);
 
