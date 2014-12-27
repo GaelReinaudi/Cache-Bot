@@ -36,5 +36,5 @@ MainWindow::~MainWindow()
 void MainWindow::startEvolution(bool doStart) {
 	if (!doStart)
 		return;
-
+	m_evoSpinner->doSpin();
 }

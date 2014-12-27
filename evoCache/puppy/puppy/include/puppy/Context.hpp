@@ -72,16 +72,22 @@ public:
 		QDateTime mostRecent;
 		int mostDaysAgo = 0;
 		for (const Transaction& trans : pAc->transactions().list()) {
-			if (trans.startDate().daysTo(mostRecent) <= 0) {
+			int daysToNewMostRecent = trans.startDate().daysTo(mostRecent);
+			if (daysToNewMostRecent <= 0) {
 				mostRecent = trans.startDate();
+				mostDaysAgo += -daysToNewMostRecent;
+			}
+			else if (daysToNewMostRecent > mostDaysAgo) {
+				mostDaysAgo = daysToNewMostRecent;
 			}
 		}
-		qDebug() << "mostRecent" << mostRecent;
+		qDebug() << "mostRecent" << mostRecent << "mostDaysAgo" << mostDaysAgo;
+		m_dailyAmounts.resize(mostDaysAgo + 1);
 		for (const Transaction& trans : pAc->transactions().list()) {
 			int daysAgo = trans.startDate().daysTo(mostRecent);
+			m_dailyAmounts[daysAgo].push_back(trans.amount());
 		}
 	}
-
 
 	/*!
    *  \brief Add a new primitive in the sets of primitive.

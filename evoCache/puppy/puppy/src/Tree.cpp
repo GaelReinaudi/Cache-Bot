@@ -48,8 +48,8 @@
  *  \param inValid Validity of the fitness value.
  */
 Puppy::Tree::Tree(float inFitness, bool inValid) :
-  mFitness(inFitness),
-  mValid(inValid)
+	mFitness(inFitness),
+	mValid(inValid)
 { }
 
 
@@ -60,16 +60,16 @@ Puppy::Tree::Tree(float inFitness, bool inValid) :
  */
 unsigned int Puppy::Tree::getDepth(unsigned int inIndex) const
 {
-  assert(inIndex < size());
-  unsigned int lNbArgs = (*this)[inIndex].mPrimitive->getNumberArguments();
-  unsigned int lDepth = 1;
-  unsigned int j = inIndex + 1;
-  for(unsigned int i=0; i<lNbArgs; ++i) {
-    unsigned int lChildDepth = getDepth(j) + 1;
-    if(lChildDepth > lDepth) lDepth = lChildDepth;
-    j += (*this)[j].mSubTreeSize;
-  }
-  return lDepth;
+	assert(inIndex < size());
+	unsigned int lNbArgs = (*this)[inIndex].mPrimitive->getNumberArguments();
+	unsigned int lDepth = 1;
+	unsigned int j = inIndex + 1;
+	for(unsigned int i=0; i<lNbArgs; ++i) {
+		unsigned int lChildDepth = getDepth(j) + 1;
+		if(lChildDepth > lDepth) lDepth = lChildDepth;
+		j += (*this)[j].mSubTreeSize;
+	}
+	return lDepth;
 }
 
 
@@ -80,11 +80,11 @@ unsigned int Puppy::Tree::getDepth(unsigned int inIndex) const
  */
 void Puppy::Tree::interpret(void* outResult, Puppy::Context& ioContext)
 {
-  assert(size() > 0);
-  ioContext.mTree = this;
-  ioContext.mCallStack.push_back(0);
-  front().mPrimitive->execute(outResult, ioContext);
-  ioContext.mCallStack.pop_back();
+	assert(size() > 0);
+	ioContext.mTree = this;
+	ioContext.mCallStack.push_back(0);
+	front().mPrimitive->execute(outResult, ioContext);
+	ioContext.mCallStack.pop_back();
 }
 
 
@@ -94,24 +94,24 @@ void Puppy::Tree::interpret(void* outResult, Puppy::Context& ioContext)
  *  \param outCallStack Result of call stack setting.
  */
 void Puppy::Tree::setStackToNode(unsigned int inIndex,
-                                 std::vector<unsigned int>& outCallStack) const
+								 std::vector<unsigned int>& outCallStack) const
 {
-  assert(inIndex < size());
-  outCallStack.resize(0);
-  unsigned int i = 0;
-  outCallStack.push_back(i);
-  while(i < inIndex) {
-    unsigned int lNbArgs=(*this)[i].mPrimitive->getNumberArguments();
-    unsigned int lChildIndex = i + 1;
-    for(unsigned int j=0; j<lNbArgs; ++j) {
-      if((lChildIndex+(*this)[lChildIndex].mSubTreeSize) > inIndex) break;
-      lChildIndex += (*this)[lChildIndex].mSubTreeSize;
-    }
-    assert(lChildIndex < size());
-    i = lChildIndex;
-    outCallStack.push_back(i);
-  }
-  assert(i == inIndex);
+	assert(inIndex < size());
+	outCallStack.resize(0);
+	unsigned int i = 0;
+	outCallStack.push_back(i);
+	while(i < inIndex) {
+		unsigned int lNbArgs=(*this)[i].mPrimitive->getNumberArguments();
+		unsigned int lChildIndex = i + 1;
+		for(unsigned int j=0; j<lNbArgs; ++j) {
+			if((lChildIndex+(*this)[lChildIndex].mSubTreeSize) > inIndex) break;
+			lChildIndex += (*this)[lChildIndex].mSubTreeSize;
+		}
+		assert(lChildIndex < size());
+		i = lChildIndex;
+		outCallStack.push_back(i);
+	}
+	assert(i == inIndex);
 }
 
 
@@ -122,15 +122,15 @@ void Puppy::Tree::setStackToNode(unsigned int inIndex,
  */
 void Puppy::Tree::write(std::ostream& ioOS, unsigned int inIndex) const
 {
-  assert(inIndex < size());
-  unsigned int lNbArgs = (*this)[inIndex].mPrimitive->getNumberArguments();
-  if(lNbArgs > 0) ioOS << '(';
-  ioOS << (*this)[inIndex].mPrimitive->getName();
-  unsigned int j = inIndex + 1;
-  for(unsigned int i=0; i<lNbArgs; ++i) {
-    ioOS << ' ';
-    write(ioOS, j);
-    j += (*this)[j].mSubTreeSize;
-  }
-  if(lNbArgs > 0) ioOS << ')';
+	assert(inIndex < size());
+	unsigned int lNbArgs = (*this)[inIndex].mPrimitive->getNumberArguments();
+	if(lNbArgs > 0) ioOS << '(';
+	ioOS << (*this)[inIndex].mPrimitive->getName();
+	unsigned int j = inIndex + 1;
+	for(unsigned int i=0; i<lNbArgs; ++i) {
+		ioOS << ' ';
+		write(ioOS, j);
+		j += (*this)[j].mSubTreeSize;
+	}
+	if(lNbArgs > 0) ioOS << ')';
 }

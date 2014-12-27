@@ -41,39 +41,39 @@ EvolutionSpinner::EvolutionSpinner(Account *pAc, QObject* parent)
 
 	// Create evolution context add primitives used into it.
 	std::cout << "Creating evolution context" << std::endl;
-	Context lContext(pAc);
-	lContext.mRandom.seed(lSeed);
-	lContext.insert(new Add);
-	lContext.insert(new Subtract);
-	lContext.insert(new Multiply);
-	lContext.insert(new Divide);
-	lContext.insert(new Cosinus);
-	lContext.insert(new TokenT<double>("X", 0.0));
+	m_context = new Context(pAc);
+	m_context->mRandom.seed(lSeed);
+	m_context->insert(new Add);
+	m_context->insert(new Subtract);
+	m_context->insert(new Multiply);
+	m_context->insert(new Divide);
+	m_context->insert(new Cosinus);
+	m_context->insert(new TokenT<double>("X", 0.0));
 
 	// Sample equation on 20 random points in [-1.0, 1.0].
 	std::cout << "Sampling equation to regress" << std::endl;
 	std::vector<double> lX(20);
 	std::vector<double> lF(20);
 	for(unsigned int i=0; i<lX.size(); ++i) {
-		lX[i] = lContext.mRandom.rollUniform(-1.0, 1.0);
+		lX[i] = m_context->mRandom.rollUniform(-1.0, 1.0);
 		lF[i] = lX[i]*(lX[i]*(lX[i]*(lX[i]+1.0)+1.0)+1.0);
 	}
 
 	// Initialize population.
 	std::vector<Tree> lPopulation(lPopSize);
 	std::cout << "Initializing population" << std::endl;
-	initializePopulation(lPopulation, lContext, lInitGrowProba, lMinInitDepth, lMaxInitDepth);
-	evaluateSymbReg(lPopulation, lContext, lX, lF);
+	initializePopulation(lPopulation, *m_context, lInitGrowProba, lMinInitDepth, lMaxInitDepth);
+	evaluateSymbReg(lPopulation, *m_context, lX, lF);
 	calculateStats(lPopulation, 0);
 
 	// Evolve population for the given number of generations
 	std::cout << "Starting evolution" << std::endl;
 	for(unsigned int i=1; i<=lNbrGen; ++i) {
-		applySelectionTournament(lPopulation, lContext, lNbrPartTournament);
-		applyCrossover(lPopulation, lContext, lCrossoverProba, lCrossDistribProba, lMaxDepth);
-		applyMutationStandard(lPopulation, lContext, lMutStdProba, lMutMaxRegenDepth, lMaxDepth);
-		applyMutationSwap(lPopulation, lContext, lMutSwapProba, lMutSwapDistribProba);
-		evaluateSymbReg(lPopulation, lContext, lX, lF);
+		applySelectionTournament(lPopulation, *m_context, lNbrPartTournament);
+		applyCrossover(lPopulation, *m_context, lCrossoverProba, lCrossDistribProba, lMaxDepth);
+		applyMutationStandard(lPopulation, *m_context, lMutStdProba, lMutMaxRegenDepth, lMaxDepth);
+		applyMutationSwap(lPopulation, *m_context, lMutSwapProba, lMutSwapDistribProba);
+		evaluateSymbReg(lPopulation, *m_context, lX, lF);
 		calculateStats(lPopulation, i);
 	}
 	std::cout << "End of evolution" << std::endl;

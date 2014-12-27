@@ -30,13 +30,14 @@ HEADERS  += mainwindow.h \
 	$$PWD/../AccountChart/qcustomplot/qcustomplot.h \
 	$$PWD/../AccountChart/ACChart/acustomplot.h \
 	$$PWD/../AccountChart/ACChart/acdata.h \
-	$$PWD/puppy/puppy/Primitive.hpp \
-	$$PWD/puppy/puppy/PrimitiveHandle.hpp \
-	$$PWD/puppy/puppy/PrimitiveInline.hpp \
-	$$PWD/puppy/puppy/Puppy.hpp \
-	$$PWD/puppy/puppy/Randomizer.hpp \
-	$$PWD/puppy/puppy/Token.hpp \
-	$$PWD/puppy/puppy/Tree.hpp \
+	puppy/Primitive.hpp \
+	puppy/PrimitiveHandle.hpp \
+	puppy/PrimitiveInline.hpp \
+	puppy/Puppy.hpp \
+	puppy/Context.hpp \
+	puppy/Randomizer.hpp \
+	puppy/Token.hpp \
+	puppy/Tree.hpp \
 	$$PWD/log.h \
     EvolutionSpinner.h \
     AccRegPrimits.h
