@@ -83,7 +83,13 @@ void Puppy::Tree::interpret(void* outResult, Puppy::Context& ioContext)
 	assert(size() > 0);
 	ioContext.mTree = this;
 	ioContext.mCallStack.push_back(0);
-	front().mPrimitive->execute(outResult, ioContext);
+	if(front().mPrimitive->isFeature()) {
+		front().mPrimitive->execute(outResult, ioContext);
+	}
+	else {
+		double& lResult = *(double*)outResult;
+		lResult = -11111.1;
+	}
 	ioContext.mCallStack.pop_back();
 }
 

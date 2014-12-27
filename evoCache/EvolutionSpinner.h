@@ -16,7 +16,7 @@ public:
 	}
 
 protected:
-	unsigned int evaluateSymbReg(std::vector<Puppy::Tree> &ioPopulation, Puppy::Context &ioContext, const std::vector<double> &inX, const std::vector<double> &inF);
+	unsigned int evaluateSymbReg(std::vector<Puppy::Tree> &ioPopulation, Puppy::Context &ioContext);
 
 signals:
 	void resultReady(const QString &result);

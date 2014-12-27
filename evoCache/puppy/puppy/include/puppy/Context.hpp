@@ -109,7 +109,7 @@ public:
 	Tree*                                 mTree;          //!< Actual tree evaluated.
 
 	Account* m_pAccount;
-	std::vector<std::vector<int> > m_dailyAmounts;
+	QVector<QVector<int> > m_dailyAmounts;
 };
 
 }

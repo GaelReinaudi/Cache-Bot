@@ -113,6 +113,38 @@ public:
 		getArgument(3, &m_every, ioContext);
 		getArgument(4, &m_amountDelta, ioContext);
 		getArgument(5, &m_dayDelta, ioContext);
+		double& lResult = *(double*)outDatum;
+		lResult = -1.0;
+		if (m_every < 1 || m_endAgo < 0 || m_dur < 0 || m_amountDelta < 0 || m_amountDelta > m_amount || m_dayDelta < 0)
+			return;
+		if (m_dur > m_every<<10)
+			return;
+		if (m_dayDelta > 5)
+			return;
+		// arbitrary grade based on (valid) input values
+		lResult = m_amount - m_amountDelta - m_dayDelta;
+		for (int i = m_endAgo; i < m_endAgo + m_dur; i += m_every) {
+			for (int j = 0; j <= m_dayDelta; ++j) {
+				if(i + j >= ioContext.m_dailyAmounts.size())
+					continue;
+				for (int pr : ioContext.m_dailyAmounts[i + j]) {
+					if (pr <= m_amount + m_amountDelta && pr >= m_amount - m_amountDelta) {
+						goto foundIt;
+					}
+				}
+				// if j not null, we try negative deltas also
+				if (j) {
+					for (int pr : ioContext.m_dailyAmounts[i - j]) {
+						if (pr <= m_amount + m_amountDelta && pr >= m_amount - m_amountDelta) {
+							goto foundIt;
+						}
+					}
+				}
+			}
+		}
+		lResult -= 2 * m_amount;
+foundIt:
+		lResult += m_amount;
 	}
 protected:
 	int m_amount = 0;

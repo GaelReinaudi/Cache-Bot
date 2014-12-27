@@ -4,7 +4,7 @@
 #include "AccRegPrimits.h"
 
 #define POP_SIZE_DEFAULT 100
-#define NBR_GEN_DEFAULT 50
+#define NBR_GEN_DEFAULT 100
 #define NBR_PART_TOURNAMENT_DEFAULT 2
 #define MAX_DEPTH_DEFAULT 17
 #define MIN_INIT_DEPTH_DEFAULT 2
@@ -48,22 +48,27 @@ EvolutionSpinner::EvolutionSpinner(Account *pAc, QObject* parent)
 	m_context->insert(new Multiply);
 	m_context->insert(new Divide);
 	m_context->insert(new Cosinus);
-	m_context->insert(new TokenT<double>("X", 0.0));
+	m_context->insert(new TokenT<double>("0", 0.0));
+	m_context->insert(new TokenT<double>("1", 1.0));
+	m_context->insert(new TokenT<double>("2", 2.0));
+	m_context->insert(new TokenT<double>("5", 5.0));
+	m_context->insert(new TokenT<double>("10", 10.0));
+	m_context->insert(new TokenT<double>("20", 20.0));
+	m_context->insert(new TokenT<double>("50", 50.0));
+	m_context->insert(new TokenT<double>("100", 100.0));
+	m_context->insert(new TokenT<double>("200", 200.0));
+	m_context->insert(new TokenT<double>("500", 500.0));
+	m_context->insert(new TokenT<double>("1000", 1000.0));
+	m_context->insert(new TokenT<double>("2000", 2000.0));
+	m_context->insert(new TokenT<double>("5000", 5000.0));
+	m_context->insert(new FeatureSalary);
 
-	// Sample equation on 20 random points in [-1.0, 1.0].
-	std::cout << "Sampling equation to regress" << std::endl;
-	std::vector<double> lX(20);
-	std::vector<double> lF(20);
-	for(unsigned int i=0; i<lX.size(); ++i) {
-		lX[i] = m_context->mRandom.rollUniform(-1.0, 1.0);
-		lF[i] = lX[i]*(lX[i]*(lX[i]*(lX[i]+1.0)+1.0)+1.0);
-	}
 
 	// Initialize population.
 	std::vector<Tree> lPopulation(lPopSize);
 	std::cout << "Initializing population" << std::endl;
 	initializePopulation(lPopulation, *m_context, lInitGrowProba, lMinInitDepth, lMaxInitDepth);
-	evaluateSymbReg(lPopulation, *m_context, lX, lF);
+	evaluateSymbReg(lPopulation, *m_context);
 	calculateStats(lPopulation, 0);
 
 	// Evolve population for the given number of generations
@@ -73,7 +78,7 @@ EvolutionSpinner::EvolutionSpinner(Account *pAc, QObject* parent)
 		applyCrossover(lPopulation, *m_context, lCrossoverProba, lCrossDistribProba, lMaxDepth);
 		applyMutationStandard(lPopulation, *m_context, lMutStdProba, lMutMaxRegenDepth, lMaxDepth);
 		applyMutationSwap(lPopulation, *m_context, lMutSwapProba, lMutSwapDistribProba);
-		evaluateSymbReg(lPopulation, *m_context, lX, lF);
+		evaluateSymbReg(lPopulation, *m_context);
 		calculateStats(lPopulation, i);
 	}
 	std::cout << "End of evolution" << std::endl;
@@ -88,24 +93,15 @@ EvolutionSpinner::EvolutionSpinner(Account *pAc, QObject* parent)
 }
 
 unsigned int EvolutionSpinner::evaluateSymbReg(std::vector<Tree>& ioPopulation,
-											   Context& ioContext,
-											   const std::vector<double>& inX,
-											   const std::vector<double>& inF)
+											   Context& ioContext)
 {
-	assert(inX.size() == inF.size());
 	unsigned int lNbrEval = 0;
 	for(unsigned int i=0; i<ioPopulation.size(); ++i) {
-		if(ioPopulation[i].mValid) continue;
-		double lQuadErr = 0.0;
-		for(unsigned int j=0; j<inX.size(); ++j) {
-			ioContext.mPrimitiveMap["X"]->setValue(&inX[j]);
-			double lResult = 0.0;
-			ioPopulation[i].interpret(&lResult, ioContext);
-			double lErr = lResult - inF[j];
-			lQuadErr += (lErr * lErr);
-		}
-		double lRMS = std::sqrt(lQuadErr / inX.size());
-		ioPopulation[i].mFitness = 1. / (1. + lRMS);
+		if(ioPopulation[i].mValid)
+			continue;
+		double lResult = 0.0;
+		ioPopulation[i].interpret(&lResult, ioContext);
+		ioPopulation[i].mFitness = lResult;
 		ioPopulation[i].mValid = true;
 		++lNbrEval;
 	}
