@@ -75,4 +75,50 @@ public:
 	}
 };
 
+
+
+class AccountFeature : public Puppy::Primitive
+{
+public:
+	AccountFeature(unsigned int inNumberArguments, std::string inName)
+		: Primitive(inNumberArguments, inName)
+	{
+
+	}
+	virtual ~AccountFeature() { }
+	virtual void execute(void* outDatum, Puppy::Context& ioContext) {
+		Q_UNUSED(outDatum);
+		Q_UNUSED(ioContext);
+		getArgument(0, &m_endAgo, ioContext);
+		getArgument(1, &m_dur, ioContext);
+	}
+
+	bool isFeature() const override {
+		return true;
+	}
+
+protected:
+	int m_endAgo = 0;
+	int m_dur = 0;
+};
+
+class FeatureSalary : public AccountFeature
+{
+public:
+	FeatureSalary() : AccountFeature(6, "SALARY") { }
+	virtual ~FeatureSalary() { }
+	virtual void execute(void* outDatum, Puppy::Context& ioContext) {
+		AccountFeature::execute(outDatum, ioContext);
+		getArgument(2, &m_amount, ioContext);
+		getArgument(3, &m_every, ioContext);
+		getArgument(4, &m_amountDelta, ioContext);
+		getArgument(5, &m_dayDelta, ioContext);
+	}
+protected:
+	int m_amount = 0;
+	int m_every = 0;
+	int m_amountDelta = 0;
+	int m_dayDelta = 0;
+};
+
 #endif // ACCREGPRIMITS_H
