@@ -10,7 +10,7 @@ MainWindow::MainWindow(QString jsonFile, QWidget *parent)
 	ui->setupUi(this);
 
 	connect(ui->startButton, SIGNAL(clicked(bool)), this, SLOT(startEvolution(bool)));
-
+    ui->startButton->setText("Start");
 	// an account object that is going to be populated by the json file
 	Account* account = new Account();
 	account->load(jsonFile);
@@ -35,6 +35,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::startEvolution(bool doStart) {
 	if (!doStart)
+        ui->startButton->setText("Start");
 		return;
+    ui->startButton->setText("Stop");
 	m_evoSpinner->doSpin();
 }

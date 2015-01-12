@@ -5,7 +5,7 @@
 int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
-	QString jsonFile = "";
+    QString jsonFile = "/Users/alecto/Cache-Bot/data/d.json";
 	if(argc > 1) {
 		jsonFile = argv[1];
 	}
