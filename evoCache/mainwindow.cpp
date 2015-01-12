@@ -9,8 +9,7 @@ MainWindow::MainWindow(QString jsonFile, QWidget *parent)
 {
 	ui->setupUi(this);
 
-	connect(ui->startButton, SIGNAL(clicked(bool)), this, SLOT(startEvolution(bool)));
-    ui->startButton->setText("Start");
+
 	// an account object that is going to be populated by the json file
 	Account* account = new Account();
 	account->load(jsonFile);
@@ -24,8 +23,9 @@ MainWindow::MainWindow(QString jsonFile, QWidget *parent)
 	m_evoSpinner->moveToThread(m_evoThread);
 	connect(m_evoThread, &QThread::finished, m_evoSpinner, &QObject::deleteLater);
 	connect(m_evoSpinner, &EvolutionSpinner::resultReady, this, &MainWindow::handleResults);
+	connect(ui->startButton, SIGNAL(clicked(bool)), m_evoSpinner, SLOT(startEvolution(bool)));
+	connect(m_evoSpinner, &EvolutionSpinner::sendMask, this, &MainWindow::plotMask);
 	m_evoThread->start();
-
 }
 
 MainWindow::~MainWindow()
@@ -33,10 +33,12 @@ MainWindow::~MainWindow()
 	delete ui;
 }
 
-void MainWindow::startEvolution(bool doStart) {
-	if (!doStart)
-        ui->startButton->setText("Start");
-		return;
-    ui->startButton->setText("Stop");
-	m_evoSpinner->doSpin();
+void MainWindow::plotMask(QVector<QRectF> vecRect) {
+	qDebug() << vecRect.size();
+	for(const QRectF& rect : vecRect) {
+		QCPItemRect itRect(ui->accountPlot);
+		itRect.setBrush(QBrush(QColor(255, 0, 0, 128)));
+		ui->accountPlot->addItem(&itRect);
+	}
 }
+

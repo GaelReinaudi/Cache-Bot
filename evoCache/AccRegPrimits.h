@@ -117,7 +117,7 @@ public:
 		lResult = -1.0;
 		if (m_every < 1 || m_endAgo < 0 || m_dur < 0 || m_amountDelta < 0 || m_amountDelta > m_amount || m_dayDelta < 0)
 			return;
-		if (m_dur > m_every<<10)
+		if (m_dur > m_every<<10 || m_every > 365)
 			return;
 		if (m_dayDelta > 5)
 			return;

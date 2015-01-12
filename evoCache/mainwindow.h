@@ -20,10 +20,10 @@ public:
 	~MainWindow();
 
 public slots:
-	void startEvolution(bool doStart);
 	void handleResults(const QString &) {
 
 	}
+	void plotMask(QVector<QRectF> vecRect);
 
 signals:
 	void operate(const QString &);
