@@ -23,10 +23,7 @@ public slots:
 	void handleResults(const QString &) {
 
 	}
-	void plotMask(QVector<QRectF> vecRect) {
-		qDebug() << vecRect.size();
-
-	}
+	void plotMask(QVector<QRectF> vecRect);
 
 signals:
 	void operate(const QString &);

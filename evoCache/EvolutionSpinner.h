@@ -4,6 +4,7 @@
 #include <QRectF>
 
 #include "puppy/Puppy.hpp"
+typedef QVector<QRectF> VectorRectF;
 
 class EvolutionSpinner : public QObject
 {
@@ -20,12 +21,14 @@ protected:
 
 signals:
 	void resultReady(const QString &result);
-	void sendMask(QVector<QRectF> vecRect);
+	void sendMask(VectorRectF vecRect);
 
 private:
 	Puppy::Context* m_context = 0;
 	int m_gen = 0;
 	volatile bool m_doSpin = false;
 };
+
+//Q_DECLARE_METATYPE(VectorRectF)
 
 #endif // EVOLUTIONSPINNER_H

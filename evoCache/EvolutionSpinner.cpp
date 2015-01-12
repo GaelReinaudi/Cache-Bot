@@ -23,6 +23,8 @@ using namespace Puppy;
 EvolutionSpinner::EvolutionSpinner(Account *pAc, QObject* parent)
 	: QObject(parent)
 {
+	qRegisterMetaType<VectorRectF>("VectorRectF");
+
 	unsigned long lSeed                = SEED_DEFAULT;
 
 	// Create evolution context add primitives used into it.
@@ -48,8 +50,6 @@ EvolutionSpinner::EvolutionSpinner(Account *pAc, QObject* parent)
 	m_context->insert(new TokenT<double>("2000", 2000.0));
 	m_context->insert(new TokenT<double>("5000", 5000.0));
 	m_context->insert(new FeatureSalary);
-
-
 }
 
 void EvolutionSpinner::startEvolution(bool doStart) {

@@ -33,3 +33,12 @@ MainWindow::~MainWindow()
 	delete ui;
 }
 
+void MainWindow::plotMask(QVector<QRectF> vecRect) {
+	qDebug() << vecRect.size();
+	for(const QRectF& rect : vecRect) {
+		QCPItemRect itRect(ui->accountPlot);
+		itRect.setBrush(QBrush(QColor(255, 0, 0, 128)));
+		ui->accountPlot->addItem(&itRect);
+	}
+}
+
