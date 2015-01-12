@@ -23,20 +23,6 @@ using namespace Puppy;
 EvolutionSpinner::EvolutionSpinner(Account *pAc, QObject* parent)
 	: QObject(parent)
 {
-	// Create parameter variables with default values.
-	unsigned int  lPopSize             = POP_SIZE_DEFAULT;
-	unsigned int  lNbrGen              = NBR_GEN_DEFAULT;
-	unsigned int  lNbrPartTournament   = NBR_PART_TOURNAMENT_DEFAULT;
-	unsigned int  lMaxDepth            = MAX_DEPTH_DEFAULT;
-	unsigned int  lMinInitDepth        = MIN_INIT_DEPTH_DEFAULT;
-	unsigned int  lMaxInitDepth        = MAX_INIT_DEPTH_DEFAULT;
-	float         lInitGrowProba       = INIT_GROW_PROBA_DEFAULT;
-	float         lCrossoverProba      = CROSSOVER_PROBA_DEFAULT;
-	float         lCrossDistribProba   = CROSSOVER_DISTRIB_PROBA_DEFAULT;
-	float         lMutStdProba         = MUT_STD_PROBA_DEFAULT;
-	unsigned int  lMutMaxRegenDepth    = MUT_MAX_REGEN_DEPTH_DEFAULT;
-	float         lMutSwapProba        = MUT_SWAP_PROBA_DEFAULT;
-	float         lMutSwapDistribProba = MUT_SWAP_DISTRIB_PROBA_DEFAULT;
 	unsigned long lSeed                = SEED_DEFAULT;
 
 	// Create evolution context add primitives used into it.
@@ -63,6 +49,28 @@ EvolutionSpinner::EvolutionSpinner(Account *pAc, QObject* parent)
 	m_context->insert(new TokenT<double>("5000", 5000.0));
 	m_context->insert(new FeatureSalary);
 
+
+}
+
+void EvolutionSpinner::startEvolution(bool doStart) {
+	if (!doStart)
+		return;
+	m_doSpin = true;
+
+	// Create parameter variables with default values.
+	unsigned int  lPopSize             = POP_SIZE_DEFAULT;
+	unsigned int  lNbrGen              = NBR_GEN_DEFAULT;
+	unsigned int  lNbrPartTournament   = NBR_PART_TOURNAMENT_DEFAULT;
+	unsigned int  lMaxDepth            = MAX_DEPTH_DEFAULT;
+	unsigned int  lMinInitDepth        = MIN_INIT_DEPTH_DEFAULT;
+	unsigned int  lMaxInitDepth        = MAX_INIT_DEPTH_DEFAULT;
+	float         lInitGrowProba       = INIT_GROW_PROBA_DEFAULT;
+	float         lCrossoverProba      = CROSSOVER_PROBA_DEFAULT;
+	float         lCrossDistribProba   = CROSSOVER_DISTRIB_PROBA_DEFAULT;
+	float         lMutStdProba         = MUT_STD_PROBA_DEFAULT;
+	unsigned int  lMutMaxRegenDepth    = MUT_MAX_REGEN_DEPTH_DEFAULT;
+	float         lMutSwapProba        = MUT_SWAP_PROBA_DEFAULT;
+	float         lMutSwapDistribProba = MUT_SWAP_DISTRIB_PROBA_DEFAULT;
 
 	// Initialize population.
 	std::vector<Tree> lPopulation(lPopSize);
@@ -105,5 +113,8 @@ unsigned int EvolutionSpinner::evaluateSymbReg(std::vector<Tree>& ioPopulation,
 		ioPopulation[i].mValid = true;
 		++lNbrEval;
 	}
+	QVector<QRectF> vec;
+	vec.append(QRectF(1,2,3,4));
+	emit sendMask(vec);
 	return lNbrEval;
 }
