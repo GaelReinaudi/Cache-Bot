@@ -49,6 +49,7 @@ EvolutionSpinner::EvolutionSpinner(Account *pAc, QObject* parent)
 	m_context->insert(new TokenT<double>("1000", 1000.0));
 	m_context->insert(new TokenT<double>("2000", 2000.0));
 	m_context->insert(new TokenT<double>("5000", 5000.0));
+
 	m_context->insert(new FeatureSalary);
 }
 
