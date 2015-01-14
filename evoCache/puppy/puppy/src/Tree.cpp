@@ -88,7 +88,7 @@ void Puppy::Tree::interpret(void* outResult, Puppy::Context& ioContext)
 	}
 	else {
 		double& lResult = *(double*)outResult;
-		lResult = -11111.1;
+		lResult = -11111e6;
 	}
 	ioContext.mCallStack.pop_back();
 }

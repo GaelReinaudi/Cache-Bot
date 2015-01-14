@@ -118,7 +118,7 @@ public:
 		AccountFeature::execute(outDatum, ioContext);
 		double& lResult = *(double*)outDatum;
 		if(ioContext.m_isInFeature) {
-			lResult = -40.0;
+			lResult = -40e6;
 			ioContext.m_hasRecursiveFeature = true;
 			return;
 		}
@@ -129,31 +129,32 @@ public:
 		getArgument(5, &m_dayDelta, ioContext);
 		ioContext.m_isInFeature = false;
 		if(ioContext.m_hasRecursiveFeature) {
-			lResult = -20.0;
+			lResult = -20e6;
 			ioContext.m_hasRecursiveFeature = false;
 			return;
 		}
 		if(lResult < 0.0)
 			return;
-		lResult = -10.0;
+		lResult = -10e6;
 		VectorRectF outVecRec;
 		if (m_every < 1 || m_endAgo < 0 || m_dur < 0 || m_amountDelta < 0 || m_amountDelta > m_amount || m_dayDelta < 0) {
-			lResult = -8.0;
+			lResult = -8e6;
 			return;
 		}
-		if (m_dur > m_every * 1024 || m_every > 365) {
-			lResult = -6.0;
+		if (m_dur > m_every * 1024 || m_every > 365 || m_dayDelta >= m_every / 4) {
+			lResult = -6e6;
 			return;
 		}
 		if (m_dayDelta > 5 || m_endAgo > 1e6 || m_amount > 1e6) {
-			lResult = -4.0;
+			lResult = -4e6;
 			return;
 		}
-		lResult = -2.0;
+		lResult = -2e6;
+		double fitness = 0.0;
 		for (int i = m_endAgo; i < m_endAgo + m_dur; i += m_every) {
-			// arbitrary grade based on (valid) input values
-			lResult = m_amount / (1+m_amountDelta) + m_every / (1+m_dayDelta);
-			lResult /= 1024;
+//			// arbitrary grade based on (valid) input values
+//			lResult = m_amount / (1+m_amountDelta) + m_every / (1+m_dayDelta*30);
+//			lResult /= 1e6;
 			QRectF zone;
 			zone.setBottom(m_amount - m_amountDelta);
 			zone.setTop(m_amount + m_amountDelta);
@@ -183,10 +184,12 @@ public:
 					}
 				}
 			}
-			lResult -= 2 * m_amount / (1 + m_amountDelta);
+			fitness -= 1.5 * m_amount / (1 + m_amountDelta) / (1+m_dayDelta);
 foundIt:
-			lResult += m_amount / (1 + m_amountDelta);
+			fitness += m_amount / (1 + m_amountDelta) / (1+m_dayDelta);
 		}
+		if(fitness)
+			lResult = fitness;
 		if(lResult > ioContext.bestResult) {
 			emit evoSpinner()->sendMask(outVecRec);
 			ioContext.bestResult = lResult;

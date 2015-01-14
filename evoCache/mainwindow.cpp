@@ -16,7 +16,7 @@ MainWindow::MainWindow(QString jsonFile, QWidget *parent)
 	ui->accountPlot->loadCompressedAmount(account);
 //	ui->accountPlot->loadAmount(account);
 
-	ui->accountPlot->setPlottingHints(QCP::phFastPolylines | QCP::phCacheLabels);
+//	ui->accountPlot->setPlottingHints(QCP::phFastPolylines | QCP::phCacheLabels);
 
 	// needed to spin a new thread and run the evolution in it
 	m_evoThread = new QThread();
@@ -41,11 +41,11 @@ void MainWindow::plotMask(VectorRectF vecRect) {
 //		qDebug() << rect.left() << rect.right() << rect.top() << rect.bottom();
 		QRectF chartRect = ui->accountPlot->mapDayAgoToPlot(rect);
 		chartRect = kindaLog(chartRect);
-//		qDebug() << QDateTime::fromTime_t(int(chartRect.left())) << QDateTime::fromTime_t(int(chartRect.right())) << chartRect.top() << chartRect.bottom();
+		qDebug() << QDateTime::fromTime_t(int(chartRect.left())) << QDateTime::fromTime_t(int(chartRect.right())) << chartRect.top() << chartRect.bottom();
 		QCPItemRect* itRect = new QCPItemRect(ui->accountPlot);
 		itRect->topLeft->setCoords(chartRect.topLeft());
 		itRect->bottomRight->setCoords(chartRect.bottomRight());
-		itRect->setPen(Qt::NoPen);
+		itRect->setPen(QPen(QBrush(QColor(255, 0, 0, 128)), 3.0));
 		itRect->setBrush(QBrush(QColor(255, 0, 0, 128)));
 		ui->accountPlot->addItem(itRect);
 	}
