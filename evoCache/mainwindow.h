@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QThread>
 #include "ACChart/acustomplot.h"
+#include "EvolutionSpinner.h"
 
 class EvolutionSpinner;
 
@@ -23,7 +24,7 @@ public slots:
 	void handleResults(const QString &) {
 
 	}
-	void plotMask(QVector<QRectF> vecRect);
+	void plotMask(VectorRectF vecRect);
 
 signals:
 	void operate(const QString &);

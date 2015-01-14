@@ -13,12 +13,15 @@ public:
 	void loadCompressedAmount(Account *account);
 	void loadAmount(Account *account);
 
+	QRectF mapDayAgoToPlot(QRectF rectDayAgo) const;
+
 signals:
 
 public slots:
 
 private:
 	enum Mode{linear, logKinda} m_mode;
+	QDate m_lastDate;
 };
 
 #endif // ACUSTOMPLOT_H

@@ -112,7 +112,9 @@ public:
 	std::map<std::string,PrimitiveHandle> mPrimitiveMap;  //!< Name-primitive map.
 	std::vector<unsigned int>             mCallStack;     //!< Execution call stack.
 	Tree*                                 mTree;          //!< Actual tree evaluated.
-
+	bool m_isInFeature = false;
+	bool m_hasRecursiveFeature = false;
+	double bestResult = -9e9;
 	Account* m_pAccount;
 	QVector<QVector<int> > m_dailyAmounts;
 };

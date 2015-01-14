@@ -3,6 +3,7 @@
 
 #include <QtCore>
 #include "puppy/Puppy.hpp"
+#include "EvolutionSpinner.h"
 
 class Add : public Puppy::Primitive
 {
@@ -80,12 +81,13 @@ public:
 class AccountFeature : public Puppy::Primitive
 {
 public:
-	AccountFeature(unsigned int inNumberArguments, std::string inName)
+	AccountFeature(unsigned int inNumberArguments, std::string inName, EvolutionSpinner* evoSpinner)
 		: Primitive(inNumberArguments, inName)
+		, m_evoSpinner(evoSpinner)
 	{
 
 	}
-	virtual ~AccountFeature() { }
+	virtual ~AccountFeature() {	}
 	virtual void execute(void* outDatum, Puppy::Context& ioContext) {
 		Q_UNUSED(outDatum);
 		Q_UNUSED(ioContext);
@@ -97,60 +99,105 @@ public:
 		return true;
 	}
 
+	EvolutionSpinner *evoSpinner() const {
+		return m_evoSpinner;
+	}
+
 protected:
-	int m_endAgo = 0;
-	int m_dur = 0;
+	EvolutionSpinner* m_evoSpinner = 0;
+	double m_endAgo = 0;
+	double m_dur = 0;
 };
 
 class FeatureSalary : public AccountFeature
 {
 public:
-	FeatureSalary() : AccountFeature(6, "SALARY") { }
+	FeatureSalary(EvolutionSpinner* evoSpinner) : AccountFeature(6, "SALARY", evoSpinner) { }
 	virtual ~FeatureSalary() { }
 	virtual void execute(void* outDatum, Puppy::Context& ioContext) {
 		AccountFeature::execute(outDatum, ioContext);
+		double& lResult = *(double*)outDatum;
+		if(ioContext.m_isInFeature) {
+			lResult = -40.0;
+			ioContext.m_hasRecursiveFeature = true;
+			return;
+		}
+		ioContext.m_isInFeature = true;
 		getArgument(2, &m_amount, ioContext);
 		getArgument(3, &m_every, ioContext);
 		getArgument(4, &m_amountDelta, ioContext);
 		getArgument(5, &m_dayDelta, ioContext);
-		double& lResult = *(double*)outDatum;
-		lResult = -1.0;
-		if (m_every < 1 || m_endAgo < 0 || m_dur < 0 || m_amountDelta < 0 || m_amountDelta > m_amount || m_dayDelta < 0)
+		ioContext.m_isInFeature = false;
+		if(ioContext.m_hasRecursiveFeature) {
+			lResult = -20.0;
+			ioContext.m_hasRecursiveFeature = false;
 			return;
-		if (m_dur > m_every<<10 || m_every > 365)
+		}
+		if(lResult < 0.0)
 			return;
-		if (m_dayDelta > 5)
+		lResult = -10.0;
+		VectorRectF outVecRec;
+		if (m_every < 1 || m_endAgo < 0 || m_dur < 0 || m_amountDelta < 0 || m_amountDelta > m_amount || m_dayDelta < 0) {
+			lResult = -8.0;
 			return;
-		// arbitrary grade based on (valid) input values
-		lResult = m_amount - m_amountDelta - m_dayDelta;
+		}
+		if (m_dur > m_every * 1024 || m_every > 365) {
+			lResult = -6.0;
+			return;
+		}
+		if (m_dayDelta > 5 || m_endAgo > 1e6 || m_amount > 1e6) {
+			lResult = -4.0;
+			return;
+		}
+		lResult = -2.0;
 		for (int i = m_endAgo; i < m_endAgo + m_dur; i += m_every) {
+			// arbitrary grade based on (valid) input values
+			lResult = m_amount / (1+m_amountDelta) + m_every / (1+m_dayDelta);
+			lResult /= 1024;
+			QRectF zone;
+			zone.setBottom(m_amount - m_amountDelta);
+			zone.setTop(m_amount + m_amountDelta);
+			zone.setLeft((i + m_dayDelta));
+			zone.setRight((i - m_dayDelta));
+			outVecRec.append(zone);
+			QVector<QVector<int> > copyDailyAmounts = ioContext.m_dailyAmounts;
+
 			for (int j = 0; j <= m_dayDelta; ++j) {
-				if(i + j >= ioContext.m_dailyAmounts.size())
+				if(i + j >= copyDailyAmounts.size())
 					continue;
-				for (int pr : ioContext.m_dailyAmounts[i + j]) {
-					if (pr <= m_amount + m_amountDelta && pr >= m_amount - m_amountDelta) {
-						goto foundIt;
+				else {
+					for (int& pr : copyDailyAmounts[i + j]) {
+						if (pr && pr <= m_amount + m_amountDelta && pr >= m_amount - m_amountDelta) {
+							pr = 0;
+							goto foundIt;
+						}
 					}
 				}
 				// if j not null, we try negative deltas also
-				if (j) {
-					for (int pr : ioContext.m_dailyAmounts[i - j]) {
-						if (pr <= m_amount + m_amountDelta && pr >= m_amount - m_amountDelta) {
+				if (j && j < i) {
+					for (int& pr : copyDailyAmounts[i - j]) {
+						if (pr && pr <= m_amount + m_amountDelta && pr >= m_amount - m_amountDelta) {
+							pr = 0;
 							goto foundIt;
 						}
 					}
 				}
 			}
-		}
-		lResult -= 2 * m_amount;
+			lResult -= 2 * m_amount / (1 + m_amountDelta);
 foundIt:
-		lResult += m_amount;
+			lResult += m_amount / (1 + m_amountDelta);
+		}
+		if(lResult > ioContext.bestResult) {
+			emit evoSpinner()->sendMask(outVecRec);
+			ioContext.bestResult = lResult;
+			QThread::msleep(100);
+		}
 	}
 protected:
-	int m_amount = 0;
-	int m_every = 0;
-	int m_amountDelta = 0;
-	int m_dayDelta = 0;
+	double m_amount = 0;
+	double m_every = 0;
+	double m_amountDelta = 0;
+	double m_dayDelta = 0;
 };
 
 #endif // ACCREGPRIMITS_H
