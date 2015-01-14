@@ -97,17 +97,24 @@ public:
 	{
 		assert(mPrimitiveMap.find(inPrimitive->getName()) == mPrimitiveMap.end());
 		mPrimitiveMap[inPrimitive->getName()] = inPrimitive;
-		if(inPrimitive->getNumberArguments() == 0) mTerminalSet.push_back(inPrimitive);
-		else mFunctionSet.push_back(inPrimitive);
+		if(inPrimitive->getNumberArguments() == 0)
+			mTerminalSet.push_back(inPrimitive);
+		else if(inPrimitive->getNumberArguments() <= 4)
+			mFunctionSet.push_back(inPrimitive);
+		else
+			mAccountFeatureSet.push_back(inPrimitive);
 	}
 
 	Randomizer                            mRandom;        //!< Random number generator.
 	std::vector<PrimitiveHandle>          mFunctionSet;   //!< Set of functions usable to build trees.
+	std::vector<PrimitiveHandle>          mAccountFeatureSet;   //!< Set of account features usable to build trees.
 	std::vector<PrimitiveHandle>          mTerminalSet;   //!< Set of terminals usable to build trees.
 	std::map<std::string,PrimitiveHandle> mPrimitiveMap;  //!< Name-primitive map.
 	std::vector<unsigned int>             mCallStack;     //!< Execution call stack.
 	Tree*                                 mTree;          //!< Actual tree evaluated.
-
+	bool m_isInFeature = false;
+	bool m_hasRecursiveFeature = false;
+	double bestResult = -9e9;
 	Account* m_pAccount;
 	QVector<QVector<int> > m_dailyAmounts;
 };

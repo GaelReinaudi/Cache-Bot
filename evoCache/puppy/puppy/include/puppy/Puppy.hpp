@@ -100,13 +100,15 @@ void initializePopulation(std::vector<Tree>& ioPopulation,
                           unsigned int inMaxDepth=5);
 
 unsigned int initializeTreeFull(Tree& ioTree,
-                                Context& ioContext,
-                                unsigned int inDepth);
+								Context& ioContext,
+								unsigned int inDepth
+								, bool isFirst = false);
 
 unsigned int initializeTreeGrow(Tree& ioTree,
                                 Context& ioContext,
                                 unsigned int inMinDepth,
-                                unsigned int inMaxDepth);
+								unsigned int inMaxDepth
+								, bool isFirst = false);
 
 void applyMutationStandard(std::vector<Tree>& ioPopulation,
                            Context& ioContext,

@@ -3,18 +3,18 @@
 #include "puppy/Puppy.hpp"
 #include "AccRegPrimits.h"
 
-#define POP_SIZE_DEFAULT 100
-#define NBR_GEN_DEFAULT 100
+#define POP_SIZE_DEFAULT 10000
+#define NBR_GEN_DEFAULT 10000
 #define NBR_PART_TOURNAMENT_DEFAULT 2
-#define MAX_DEPTH_DEFAULT 17
+#define MAX_DEPTH_DEFAULT 5
 #define MIN_INIT_DEPTH_DEFAULT 2
 #define MAX_INIT_DEPTH_DEFAULT 5
 #define INIT_GROW_PROBA_DEFAULT 0.5f
 #define CROSSOVER_PROBA_DEFAULT 0.9f
 #define CROSSOVER_DISTRIB_PROBA_DEFAULT 0.9f
-#define MUT_STD_PROBA_DEFAULT 0.05f
+#define MUT_STD_PROBA_DEFAULT 0.45f
 #define MUT_MAX_REGEN_DEPTH_DEFAULT 5
-#define MUT_SWAP_PROBA_DEFAULT 0.05f
+#define MUT_SWAP_PROBA_DEFAULT 0.35f
 #define MUT_SWAP_DISTRIB_PROBA_DEFAULT 0.5f
 #define SEED_DEFAULT 0
 
@@ -49,7 +49,8 @@ EvolutionSpinner::EvolutionSpinner(Account *pAc, QObject* parent)
 	m_context->insert(new TokenT<double>("1000", 1000.0));
 	m_context->insert(new TokenT<double>("2000", 2000.0));
 	m_context->insert(new TokenT<double>("5000", 5000.0));
-	m_context->insert(new FeatureSalary);
+
+	m_context->insert(new FeatureSalary(this));
 }
 
 void EvolutionSpinner::startEvolution(bool doStart) {
@@ -82,6 +83,7 @@ void EvolutionSpinner::startEvolution(bool doStart) {
 	// Evolve population for the given number of generations
 	std::cout << "Starting evolution" << std::endl;
 	for(unsigned int i=1; i<=lNbrGen; ++i) {
+//		m_context->bestResult = 0.0;
 		applySelectionTournament(lPopulation, *m_context, lNbrPartTournament);
 		applyCrossover(lPopulation, *m_context, lCrossoverProba, lCrossDistribProba, lMaxDepth);
 		applyMutationStandard(lPopulation, *m_context, lMutStdProba, lMutMaxRegenDepth, lMaxDepth);
@@ -113,8 +115,5 @@ unsigned int EvolutionSpinner::evaluateSymbReg(std::vector<Tree>& ioPopulation,
 		ioPopulation[i].mValid = true;
 		++lNbrEval;
 	}
-	QVector<QRectF> vec;
-	vec.append(QRectF(1,2,3,4));
-	emit sendMask(vec);
 	return lNbrEval;
 }
