@@ -199,7 +199,7 @@ void Puppy::mateTrees(Puppy::Tree& ioTree1,
 	assert(ioTree2.size() > 0);
 
 	// Crossover loop. Try the given number of attempts to mate two individuals.
-	for(unsigned int i=0; i<7; ++i) {
+	for(unsigned int i=0; i<64; ++i) {
 
 		// Choose a type of node (branch or leaf) following the distribution probability and change the
 		// node for another node of the same tree if the types mismatch.
@@ -234,6 +234,9 @@ void Puppy::mateTrees(Puppy::Tree& ioTree1,
 		unsigned int lNewDepthTree2 =
 				lStack2.size() + ioTree1.getDepth(lChoosenNode1) - 1;
 		if(lNewDepthTree2 > inMaxTreeDepth)
+			continue;
+
+		if(int(ioTree1[lChoosenNode1].mPrimitive->isFeature()) ^ int(ioTree2[lChoosenNode2].mPrimitive->isFeature()))
 			continue;
 
 		// The crossover is valid.

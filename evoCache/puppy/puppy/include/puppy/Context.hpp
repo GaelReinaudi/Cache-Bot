@@ -114,7 +114,7 @@ public:
 	Tree*                                 mTree;          //!< Actual tree evaluated.
 	bool m_isInFeature = false;
 	bool m_hasRecursiveFeature = false;
-	double bestResult = -9e9;
+	bool m_doPlot = false;
 	Account* m_pAccount;
 	QVector<QVector<int> > m_dailyAmounts;
 };

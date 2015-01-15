@@ -36,19 +36,21 @@ MainWindow::~MainWindow()
 
 void MainWindow::plotMask(VectorRectF vecRect) {
 	qDebug() << vecRect.size();
-	ui->accountPlot->clearItems();
-	for(const QRectF& rect : vecRect) {
-//		qDebug() << rect.left() << rect.right() << rect.top() << rect.bottom();
-		QRectF chartRect = ui->accountPlot->mapDayAgoToPlot(rect);
-		chartRect = kindaLog(chartRect);
-		qDebug() << QDateTime::fromTime_t(int(chartRect.left())) << QDateTime::fromTime_t(int(chartRect.right())) << chartRect.top() << chartRect.bottom();
-		QCPItemRect* itRect = new QCPItemRect(ui->accountPlot);
-		itRect->topLeft->setCoords(chartRect.topLeft());
-		itRect->bottomRight->setCoords(chartRect.bottomRight());
-		itRect->setPen(QPen(QBrush(QColor(255, 0, 0, 128)), 3.0));
-		itRect->setBrush(QBrush(QColor(255, 0, 0, 128)));
-		ui->accountPlot->addItem(itRect);
+	if (!vecRect.empty()) {
+		qDebug() << vecRect[0].left() << vecRect[0].right() << vecRect[0].top() << vecRect[0].bottom();
+		ui->accountPlot->clearItems();
+		for(const QRectF& rect : vecRect) {
+			QRectF chartRect = ui->accountPlot->mapDayAgoToPlot(rect);
+			chartRect = kindaLog(chartRect);
+//			qDebug() << QDateTime::fromTime_t(int(chartRect.left())) << QDateTime::fromTime_t(int(chartRect.right())) << chartRect.top() << chartRect.bottom();
+			QCPItemRect* itRect = new QCPItemRect(ui->accountPlot);
+			itRect->topLeft->setCoords(chartRect.topLeft());
+			itRect->bottomRight->setCoords(chartRect.bottomRight());
+			itRect->setPen(QPen(QBrush(QColor(255, 0, 0, 128)), 3.0));
+			itRect->setBrush(QBrush(QColor(255, 0, 0, 128)));
+			ui->accountPlot->addItem(itRect);
+		}
+		ui->accountPlot->replot(QCustomPlot::rpQueued);
 	}
-	ui->accountPlot->replot(QCustomPlot::rpQueued);
 }
 

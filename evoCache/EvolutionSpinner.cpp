@@ -3,12 +3,12 @@
 #include "puppy/Puppy.hpp"
 #include "AccRegPrimits.h"
 
-#define POP_SIZE_DEFAULT 10000
+#define POP_SIZE_DEFAULT 1000
 #define NBR_GEN_DEFAULT 10000
 #define NBR_PART_TOURNAMENT_DEFAULT 2
-#define MAX_DEPTH_DEFAULT 5
-#define MIN_INIT_DEPTH_DEFAULT 2
-#define MAX_INIT_DEPTH_DEFAULT 5
+#define MAX_DEPTH_DEFAULT 8
+#define MIN_INIT_DEPTH_DEFAULT 4
+#define MAX_INIT_DEPTH_DEFAULT 6
 #define INIT_GROW_PROBA_DEFAULT 0.5f
 #define CROSSOVER_PROBA_DEFAULT 0.9f
 #define CROSSOVER_DISTRIB_PROBA_DEFAULT 0.9f
@@ -83,11 +83,20 @@ void EvolutionSpinner::startEvolution(bool doStart) {
 	// Evolve population for the given number of generations
 	std::cout << "Starting evolution" << std::endl;
 	for(unsigned int i=1; i<=lNbrGen; ++i) {
-//		m_context->bestResult = 0.0;
 		applySelectionTournament(lPopulation, *m_context, lNbrPartTournament);
+		auto result = std::minmax_element(lPopulation.begin(), lPopulation.end());
+		Tree bestTree = lPopulation[result.second - lPopulation.begin()];
+		bestTree.mValid = false;
+		m_context->m_doPlot = true;
+		double a;
+		bestTree.interpret(&a, *m_context);
+
 		applyCrossover(lPopulation, *m_context, lCrossoverProba, lCrossDistribProba, lMaxDepth);
 		applyMutationStandard(lPopulation, *m_context, lMutStdProba, lMutMaxRegenDepth, lMaxDepth);
 		applyMutationSwap(lPopulation, *m_context, lMutSwapProba, lMutSwapDistribProba);
+
+		lPopulation.push_back(bestTree);
+
 		evaluateSymbReg(lPopulation, *m_context);
 		calculateStats(lPopulation, i);
 	}
