@@ -40,7 +40,10 @@
 #include "puppy/Context.hpp"
 #include "puppy/Tree.hpp"
 #include "puppy/TokenT.hpp"
-
+#include "log.h"
+#include <string>       // std::string
+#include <iostream>     // std::cout
+#include <sstream>      // std::ostringstream
 
 /*!
  *  \brief Construct a new tree, with given fitness and validity flag.
@@ -88,6 +91,7 @@ void Puppy::Tree::interpret(void* outResult, Puppy::Context& ioContext)
 	}
 	else {
 		double& lResult = *(double*)outResult;
+		LOG() << "Invalid tree: " << toStr() << endl;
 		lResult = -11111e6;
 	}
 	ioContext.mCallStack.pop_back();
@@ -139,4 +143,10 @@ void Puppy::Tree::write(std::ostream& ioOS, unsigned int inIndex) const
 		j += (*this)[j].mSubTreeSize;
 	}
 	if(lNbArgs > 0) ioOS << ')';
+}
+
+QString Puppy::Tree::toStr() const {
+	std::ostringstream stream;
+	write(stream, 0);
+	return QString::fromStdString(stream.str());
 }

@@ -67,6 +67,7 @@
 #include "puppy/Tree.hpp"
 #include "puppy/TokenT.hpp"
 
+#include "log.h"
 
 namespace Puppy {
 
@@ -87,7 +88,7 @@ void exchangeSubTrees(Tree& ioTree1,
                       unsigned int inNode2,
                       const std::vector<unsigned int>& inStack2);
 
-void mateTrees(Tree& ioTree1,
+bool mateTrees(Tree& ioTree1,
                Tree& ioTree2,
                Context& ioContext,
                float inDistribProba=0.9,

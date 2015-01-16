@@ -10,7 +10,7 @@ void FeatureSalary::execute(void *outDatum, Puppy::Context &ioContext) {
 	}
 	ioContext.m_isInFeature = true;
 	getArgument(2, &m_amount, ioContext);
-	getArgument(3, &m_every, ioContext);
+//	getArgument(3, &m_every, ioContext);
 	getArgument(4, &m_amountDelta, ioContext);
 	getArgument(5, &m_dayDelta, ioContext);
 	ioContext.m_isInFeature = false;
@@ -37,6 +37,7 @@ void FeatureSalary::execute(void *outDatum, Puppy::Context &ioContext) {
 	}
 	lResult = -2e6;
 	double fitness = 0.0;
+	double gradePerZone = (m_amount - m_amountDelta) / (1+m_dayDelta);
 	for (int i = m_endAgo; i < m_endAgo + m_dur; i += m_every) {
 		//			// arbitrary grade based on (valid) input values
 		//			lResult = m_amount / (1+m_amountDelta) + m_every / (1+m_dayDelta*30);
@@ -70,9 +71,9 @@ void FeatureSalary::execute(void *outDatum, Puppy::Context &ioContext) {
 				}
 			}
 		}
-		fitness -= 1.5 * (m_amount - m_amountDelta) / (1 + m_amountDelta) / (1+m_dayDelta);
+		fitness -= 1.2 * gradePerZone;
 foundIt:
-		fitness += (m_amount - m_amountDelta) / (1 + m_amountDelta) / (1+m_dayDelta);
+		fitness += gradePerZone;
 	}
 	if(fitness)
 		lResult = fitness;

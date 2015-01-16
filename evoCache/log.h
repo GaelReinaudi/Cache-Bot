@@ -8,11 +8,11 @@ class logger
 public:
 	static QTextStream& stream() {
 		static QFile data("optim.log");
-		static bool ret = data.open(QFile::WriteOnle | QFile::Truncate);
+		static bool ret = data.open(QFile::WriteOnly | QFile::Truncate);
 		static QTextStream optout(&data);
-		return optout << QDateTime::currentDateTime().toString("yyyMMdddTHH:mm:ss.zzz");
+		return optout << QDateTime::currentDateTime().toString("yyyMMdddTHH:mm:ss.zzz ");
 	}
 };
-#define LOG() logger::stream();
+#define LOG() logger::stream()
 
 #endif // LOG_H

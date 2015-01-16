@@ -188,7 +188,7 @@ void Puppy::exchangeSubTrees(Puppy::Tree& ioTree1,
  *  \param inMaxTreeDepth Maximum tree depth allowed.
  *  \ingroup Puppy
  */
-void Puppy::mateTrees(Puppy::Tree& ioTree1,
+bool Puppy::mateTrees(Puppy::Tree& ioTree1,
 					  Puppy::Tree& ioTree2,
 					  Puppy::Context& ioContext,
 					  float inDistribProba,
@@ -240,11 +240,19 @@ void Puppy::mateTrees(Puppy::Tree& ioTree1,
 			continue;
 
 		// The crossover is valid.
+		LOG() << "Mate at #" << i << "  nodes " << lChoosenNode1 << "/" << lChoosenNode2 << endl;
+		LOG() << "Mate:" << ioTree1.toStr() << endl;
+		LOG() << "With:" << ioTree2.toStr() << endl;
 		exchangeSubTrees(ioTree1, lChoosenNode1, lStack1, ioTree2, lChoosenNode2, lStack2);
 		ioTree1.mValid = false;
 		ioTree2.mValid = false;
-		break;
+		LOG() << "  ->:" << ioTree1.toStr() << endl;
+		LOG() << "  ->:" << ioTree2.toStr() << endl;
+		return true;
 	}
+	LOG() << "Not Mate:" << ioTree1.toStr() << endl;
+	LOG() << "    With:" << ioTree2.toStr() << endl;
+	return false;
 }
 
 

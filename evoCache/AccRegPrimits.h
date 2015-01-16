@@ -117,9 +117,9 @@ public:
 	virtual void execute(void* outDatum, Puppy::Context& ioContext);
 protected:
 	double m_amount = 0;
-	double m_every = 0;
-	double m_amountDelta = 0;
-	double m_dayDelta = 0;
+	double m_every = 15;
+	double m_amountDelta = 100;
+	double m_dayDelta = 3;
 };
 
 #endif // ACCREGPRIMITS_H

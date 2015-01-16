@@ -3,12 +3,12 @@
 #include "puppy/Puppy.hpp"
 #include "AccRegPrimits.h"
 
-#define POP_SIZE_DEFAULT 1000
+#define POP_SIZE_DEFAULT 100
 #define NBR_GEN_DEFAULT 10000
 #define NBR_PART_TOURNAMENT_DEFAULT 2
-#define MAX_DEPTH_DEFAULT 8
-#define MIN_INIT_DEPTH_DEFAULT 4
-#define MAX_INIT_DEPTH_DEFAULT 6
+#define MAX_DEPTH_DEFAULT 5
+#define MIN_INIT_DEPTH_DEFAULT 2
+#define MAX_INIT_DEPTH_DEFAULT 3
 #define INIT_GROW_PROBA_DEFAULT 0.5f
 #define CROSSOVER_PROBA_DEFAULT 0.9f
 #define CROSSOVER_DISTRIB_PROBA_DEFAULT 0.9f
@@ -28,7 +28,7 @@ EvolutionSpinner::EvolutionSpinner(Account *pAc, QObject* parent)
 	unsigned long lSeed                = SEED_DEFAULT;
 
 	// Create evolution context add primitives used into it.
-	std::cout << "Creating evolution context" << std::endl;
+	LOG() << "Creating evolution context" << endl;
 	m_context = new Context(pAc);
 	m_context->mRandom.seed(lSeed);
 	m_context->insert(new Add);
@@ -81,8 +81,9 @@ void EvolutionSpinner::startEvolution(bool doStart) {
 	calculateStats(lPopulation, 0);
 
 	// Evolve population for the given number of generations
-	std::cout << "Starting evolution" << std::endl;
+	LOG() << "Starting evolution" << endl;
 	for(unsigned int i=1; i<=lNbrGen; ++i) {
+		LOG() << "Generation " << i << endl;
 		applySelectionTournament(lPopulation, *m_context, lNbrPartTournament);
 		auto result = std::minmax_element(lPopulation.begin(), lPopulation.end());
 		Tree bestTree = lPopulation[result.second - lPopulation.begin()];
@@ -90,6 +91,7 @@ void EvolutionSpinner::startEvolution(bool doStart) {
 		m_context->m_doPlot = true;
 		double a;
 		bestTree.interpret(&a, *m_context);
+		LOG() << "Best tree ("<<a<<"): " << bestTree.toStr() << endl;
 
 		applyCrossover(lPopulation, *m_context, lCrossoverProba, lCrossDistribProba, lMaxDepth);
 		applyMutationStandard(lPopulation, *m_context, lMutStdProba, lMutMaxRegenDepth, lMaxDepth);
@@ -100,13 +102,13 @@ void EvolutionSpinner::startEvolution(bool doStart) {
 		evaluateSymbReg(lPopulation, *m_context);
 		calculateStats(lPopulation, i);
 	}
-	std::cout << "End of evolution" << std::endl;
+	LOG() << "End of evolution" << endl;
 
 	// Outputting best individual
 	std::vector<Tree>::const_iterator lBestIndividual =
 			std::max_element(lPopulation.begin(), lPopulation.end());
-	std::cout << "Best individual at generation " << lNbrGen << " is: ";
-	std::cout << *lBestIndividual << std:: endl;
+	LOG() << "Best individual at generation " << lNbrGen << " is: ";
+	LOG() << lBestIndividual->toStr() << endl;
 
 	std::cout << "Exiting program" << std::endl << std::flush;
 }
@@ -122,6 +124,7 @@ unsigned int EvolutionSpinner::evaluateSymbReg(std::vector<Tree>& ioPopulation,
 		ioPopulation[i].interpret(&lResult, ioContext);
 		ioPopulation[i].mFitness = lResult;
 		ioPopulation[i].mValid = true;
+		LOG() << "Eval tree ("<<lResult<<"): " << ioPopulation[i].toStr() << endl;
 		++lNbrEval;
 	}
 	return lNbrEval;
