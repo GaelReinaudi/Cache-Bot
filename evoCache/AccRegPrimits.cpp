@@ -72,6 +72,7 @@ void FeatureSalary::execute(void *outDatum, Puppy::Context &ioContext) {
 			}
 		}
 		fitness -= 1.2 * gradePerZone;
+// C++ goto
 foundIt:
 		fitness += gradePerZone;
 	}
