@@ -31,50 +31,54 @@ void FeatureSalary::execute(void *outDatum, Puppy::Context &ioContext) {
 		lResult = -6e6;
 		return;
 	}
-	if (m_dayDelta > 5 || m_endAgo > 1e6 || m_amount > 1e6) {
+	if (m_dayDelta > 9 || m_endAgo > 1e6 || m_amount > 1e6) {
 		lResult = -4e6;
 		return;
 	}
 	lResult = -2e6;
 	double fitness = 0.0;
-	double gradePerZone = (m_amount - m_amountDelta) / (1+m_dayDelta);
-	for (int i = m_endAgo; i < m_endAgo + m_dur; i += m_every) {
+	double gradePerZone = (m_amount + m_amountDelta) / (1+m_dayDelta);
+	for (double dblDay = m_endAgo; dblDay < m_endAgo + m_dur; dblDay += m_every) {
+		int dayAgo = dblDay;
 		//			// arbitrary grade based on (valid) input values
 		//			lResult = m_amount / (1+m_amountDelta) + m_every / (1+m_dayDelta*30);
 		//			lResult /= 1e6;
 		QRectF zone;
 		zone.setBottom(m_amount - m_amountDelta);
 		zone.setTop(m_amount + m_amountDelta);
-		zone.setLeft((i + m_dayDelta));
-		zone.setRight((i - m_dayDelta));
+		zone.setLeft((dayAgo + m_dayDelta));
+		zone.setRight((dayAgo - m_dayDelta));
 		outVecRec.append(zone);
 		QVector<QVector<int> > copyDailyAmounts = ioContext.m_dailyAmounts;
 
 		for (int j = 0; j <= m_dayDelta; ++j) {
-			if(i + j >= copyDailyAmounts.size())
+			if(dayAgo + j >= copyDailyAmounts.size())
 				continue;
 			else {
-				for (int& pr : copyDailyAmounts[i + j]) {
+				for (int& pr : copyDailyAmounts[dayAgo + j]) {
 					if (pr && pr <= m_amount + m_amountDelta && pr >= m_amount - m_amountDelta) {
+						fitness += pr;
 						pr = 0;
 						goto foundIt;
 					}
 				}
 			}
 			// if j not null, we try negative deltas also
-			if (j && j < i) {
-				for (int& pr : copyDailyAmounts[i - j]) {
+			if (j && j < dayAgo) {
+				for (int& pr : copyDailyAmounts[dayAgo - j]) {
 					if (pr && pr <= m_amount + m_amountDelta && pr >= m_amount - m_amountDelta) {
+						fitness += pr;
 						pr = 0;
 						goto foundIt;
 					}
 				}
 			}
 		}
-		fitness -= 1.2 * gradePerZone;
+		fitness -= 1 * gradePerZone;
 // C++ goto
 foundIt:
-		fitness += gradePerZone;
+//		fitness += gradePerZone;
+		;
 	}
 	if(fitness)
 		lResult = fitness;

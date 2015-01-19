@@ -281,7 +281,6 @@ inline void Puppy::Primitive::unrefer()
 inline void
 Puppy::Primitive::getArgument(unsigned int inN, void* outResult, Puppy::Context& ioContext)
 {
-  assert(inN >= 0);
   assert(inN < mNumberArguments);
   unsigned int lIndex = ioContext.mCallStack.back() + 1;
   for(unsigned int i=0; i<inN; ++i) lIndex += (*ioContext.mTree)[lIndex].mSubTreeSize;
