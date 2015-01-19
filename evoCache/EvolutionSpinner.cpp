@@ -36,6 +36,9 @@ EvolutionSpinner::EvolutionSpinner(Account *pAc, QObject* parent)
 	m_context->insert(new Multiply);
 	m_context->insert(new Divide);
 	m_context->insert(new Cosinus);
+	m_context->insert(new TokenT<double>("0.1", 0.1));
+	m_context->insert(new TokenT<double>("0.2", 0.2));
+	m_context->insert(new TokenT<double>("0.5", 0.5));
 	m_context->insert(new TokenT<double>("0", 0.0));
 	m_context->insert(new TokenT<double>("1", 1.0));
 	m_context->insert(new TokenT<double>("2", 2.0));
@@ -49,6 +52,9 @@ EvolutionSpinner::EvolutionSpinner(Account *pAc, QObject* parent)
 	m_context->insert(new TokenT<double>("1000", 1000.0));
 	m_context->insert(new TokenT<double>("2000", 2000.0));
 	m_context->insert(new TokenT<double>("5000", 5000.0));
+	m_context->insert(new TokenT<double>("15.208", 15.208));
+	m_context->insert(new TokenT<double>("30.417", 30.417));
+	m_context->insert(new TokenT<double>("365", 365.0));
 
 	m_context->insert(new FeatureSalary(this));
 }
@@ -84,7 +90,6 @@ void EvolutionSpinner::startEvolution(bool doStart) {
 	LOG() << "Starting evolution" << endl;
 	for(unsigned int i=1; i<=lNbrGen; ++i) {
 		LOG() << "Generation " << i << endl;
-		applySelectionTournament(lPopulation, *m_context, lNbrPartTournament);
 		auto result = std::minmax_element(lPopulation.begin(), lPopulation.end());
 		Tree bestTree = lPopulation[result.second - lPopulation.begin()];
 		bestTree.mValid = false;
@@ -93,6 +98,7 @@ void EvolutionSpinner::startEvolution(bool doStart) {
 		bestTree.interpret(&a, *m_context);
 		LOG() << "Best tree ("<<a<<"): " << bestTree.toStr() << endl;
 
+		applySelectionTournament(lPopulation, *m_context, lNbrPartTournament);
 		applyCrossover(lPopulation, *m_context, lCrossoverProba, lCrossDistribProba, lMaxDepth);
 		applyMutationStandard(lPopulation, *m_context, lMutStdProba, lMutMaxRegenDepth, lMaxDepth);
 		applyMutationSwap(lPopulation, *m_context, lMutSwapProba, lMutSwapDistribProba);
