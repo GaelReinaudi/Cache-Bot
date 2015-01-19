@@ -31,24 +31,16 @@ void FeatureSalary::execute(void *outDatum, Puppy::Context &ioContext) {
 		lResult = -6e6;
 		return;
 	}
-	if (m_dayDelta > 9 || m_endAgo > 1e6 || m_amount > 1e6) {
+	if (m_dayDelta > 7 || m_endAgo > 1e6 || m_amount > 1e6) {
 		lResult = -4e6;
 		return;
 	}
 	lResult = -2e6;
 	double fitness = 0.0;
-	double gradePerZone = (m_amount + m_amountDelta) / (1+m_dayDelta);
+	int found = 0;
+	int notFound = 0;
 	for (double dblDay = m_endAgo; dblDay < m_endAgo + m_dur; dblDay += m_every) {
 		int dayAgo = dblDay;
-		//			// arbitrary grade based on (valid) input values
-		//			lResult = m_amount / (1+m_amountDelta) + m_every / (1+m_dayDelta*30);
-		//			lResult /= 1e6;
-		QRectF zone;
-		zone.setBottom(m_amount - m_amountDelta);
-		zone.setTop(m_amount + m_amountDelta);
-		zone.setLeft((dayAgo + m_dayDelta));
-		zone.setRight((dayAgo - m_dayDelta));
-		outVecRec.append(zone);
 		QVector<QVector<int> > copyDailyAmounts = ioContext.m_dailyAmounts;
 
 		for (int j = 0; j <= m_dayDelta; ++j) {
@@ -59,6 +51,7 @@ void FeatureSalary::execute(void *outDatum, Puppy::Context &ioContext) {
 					if (pr && pr <= m_amount + m_amountDelta && pr >= m_amount - m_amountDelta) {
 						fitness += pr;
 						pr = 0;
+						++found;
 						goto foundIt;
 					}
 				}
@@ -69,17 +62,29 @@ void FeatureSalary::execute(void *outDatum, Puppy::Context &ioContext) {
 					if (pr && pr <= m_amount + m_amountDelta && pr >= m_amount - m_amountDelta) {
 						fitness += pr;
 						pr = 0;
+						++found;
 						goto foundIt;
 					}
 				}
 			}
 		}
-		fitness -= 1 * gradePerZone;
+		++notFound;
+		continue;
 // C++ goto
 foundIt:
-//		fitness += gradePerZone;
-		;
+		QRectF zone;
+		zone.setBottom(m_amount - m_amountDelta);
+		zone.setTop(m_amount + m_amountDelta);
+		zone.setLeft((dayAgo + m_dayDelta));
+		zone.setRight((dayAgo - m_dayDelta));
+		outVecRec.append(zone);
+		continue;
 	}
+	if(notFound > 0)
+		fitness -= notFound * (m_amount + m_amountDelta + m_dayDelta * 64);
+
+	//fitness /= 1 + m_amountDelta;
+
 	if(fitness)
 		lResult = fitness;
 	if(ioContext.m_doPlot) {
