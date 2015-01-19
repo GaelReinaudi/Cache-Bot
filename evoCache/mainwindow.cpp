@@ -48,6 +48,7 @@ void MainWindow::plotMask(VectorRectF vecRect) {
 			itRect->bottomRight->setCoords(chartRect.bottomRight());
 			itRect->setPen(QPen(QBrush(QColor(255, 0, 0, 128)), 0.0));
 			itRect->setBrush(QBrush(QColor(255, 0, 0, 128)));
+			itRect->setClipToAxisRect(false);
 			ui->accountPlot->addItem(itRect);
 		}
 		ui->accountPlot->replot(QCustomPlot::rpQueued);

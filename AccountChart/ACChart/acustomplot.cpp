@@ -13,6 +13,7 @@ ACustomPlot::ACustomPlot(QWidget *parent) :
 	setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
 	axisRect(0)->setRangeZoomAxes(xAxis, 0);
 	m_lastDate = QDate(1, 1, 1);
+
 }
 
 void ACustomPlot::loadCompressedAmount(Account* account)
@@ -27,6 +28,8 @@ void ACustomPlot::loadCompressedAmount(Account* account)
 	}
 	qDebug() << m_lastDate;
 	rescaleAxes();
+	xAxis->setRange(xAxis->range().lower - 7*24*3600, xAxis->range().upper + 7*24*3600);
+	yAxis->setRange(yAxis->range().lower - 0.5, yAxis->range().upper + 0.5);
 }
 
 
@@ -42,6 +45,8 @@ void ACustomPlot::loadAmount(Account* account)
 	}
 	qDebug() << m_lastDate;
 	rescaleAxes();
+	xAxis->setRange(xAxis->range().lower - 7*24*3600, xAxis->range().upper + 7*24*3600);
+	yAxis->setRange(yAxis->range().lower - 500, yAxis->range().upper + 500);
 }
 
 QRectF ACustomPlot::mapDayAgoToPlot(QRectF rectDayAgo) const {
