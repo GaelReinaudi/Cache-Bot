@@ -117,7 +117,7 @@ public:
 	virtual void execute(void* outDatum, Puppy::Context& ioContext);
 protected:
 	double m_amount = 0;
-	double m_every = 15;
+	double m_every = 365.0 / 24.0;
 	double m_amountDelta = 100;
 	double m_dayDelta = 3;
 };

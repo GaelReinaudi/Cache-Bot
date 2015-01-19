@@ -46,7 +46,7 @@ void MainWindow::plotMask(VectorRectF vecRect) {
 			QCPItemRect* itRect = new QCPItemRect(ui->accountPlot);
 			itRect->topLeft->setCoords(chartRect.topLeft());
 			itRect->bottomRight->setCoords(chartRect.bottomRight());
-			itRect->setPen(QPen(QBrush(QColor(255, 0, 0, 128)), 2.0));
+			itRect->setPen(QPen(QBrush(QColor(255, 0, 0, 128)), 0.0));
 			itRect->setBrush(QBrush(QColor(255, 0, 0, 128)));
 			ui->accountPlot->addItem(itRect);
 		}
