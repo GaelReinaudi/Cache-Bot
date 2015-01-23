@@ -23,7 +23,7 @@ using namespace Puppy;
 EvolutionSpinner::EvolutionSpinner(Account *pAc, QObject* parent)
 	: QObject(parent)
 {
-	qRegisterMetaType<VectorRectF>("VectorRectF");
+	qRegisterMetaType<ZoneVector>("ZoneVector");
 
 	unsigned long lSeed                = SEED_DEFAULT;
 
