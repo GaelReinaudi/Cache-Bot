@@ -103,6 +103,6 @@ foundIt:
 		emit evoSpinner()->sendMask(outVecZone);
 		qDebug() << m_endAgo << m_dur << m_amount << m_every << m_amountDelta << m_dayDelta;
 		ioContext.m_doPlot = false;
-		QThread::msleep(100);
+		//QThread::msleep(10);
 	}
 }
