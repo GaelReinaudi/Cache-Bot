@@ -23,14 +23,21 @@ void FeatureSalary::execute(void *outDatum, Puppy::Context &ioContext) {
 		return;
 	lResult = -10e6;
 	ZoneVector outVecZone;
-	if (m_every < 1 || m_endAgo < 0 || m_dur < 0 || m_amountDelta < 0 || m_amountDelta > m_amount || m_dayDelta < 0) {
-		lResult = -8e6;
-		return;
-	}
-	if (m_dur > m_every * 1024 || m_every > 365 || m_dayDelta >= m_every / 4) {
-		lResult = -6e6;
-		return;
-	}
+	m_amount = qAbs(m_amount);
+	m_every = qAbs(m_every);
+	m_amountDelta = qAbs(m_amountDelta);
+	m_dayDelta = qAbs(m_dayDelta);
+//	if (m_every < 0 || m_endAgo < 0 || m_dur < 0 || m_amountDelta < 0 || m_dayDelta < 0) {
+//		lResult = -8e6;
+//		return;
+//	}
+	m_dur = qMin(m_dur, m_every * 256);
+	m_amountDelta = qMin(m_amountDelta, m_amount * 0.5);
+	m_dayDelta = qMin(m_dayDelta, m_every * 0.3);
+//	if (m_dayDelta > m_every / 2) {
+//		lResult = -6e6;
+//		return;
+//	}
 	if (m_dayDelta > 17 || m_endAgo > 1e6 || m_amount > 1e6) {
 		lResult = -4e6;
 		return;
@@ -39,9 +46,9 @@ void FeatureSalary::execute(void *outDatum, Puppy::Context &ioContext) {
 	double fitness = 0.0;
 	int found = 0;
 	int notFound = 0;
+	DailyTransactions copyDailyAmounts = ioContext.m_dailyAmounts;
 	for (double dblDay = m_endAgo; dblDay < m_endAgo + m_dur; dblDay += m_every) {
 		int dayAgo = dblDay;
-		QVector<QVector<int> > copyDailyAmounts = ioContext.m_dailyAmounts;
 
 		Zone zone;
 		zone.setBottom(m_amount - m_amountDelta);
@@ -54,10 +61,11 @@ void FeatureSalary::execute(void *outDatum, Puppy::Context &ioContext) {
 			if(dayAgo + j >= copyDailyAmounts.size())
 				continue;
 			else {
-				for (int& pr : copyDailyAmounts[dayAgo + j]) {
-					if (pr && pr <= m_amount + m_amountDelta && pr >= m_amount - m_amountDelta) {
-						fitness += pr;
-						pr = 0;
+				for (Transaction& tr : copyDailyAmounts[dayAgo + j]) {
+					if (!tr.isAccountedFor() && tr.amount() <= m_amount + m_amountDelta && tr.amount() >= m_amount - m_amountDelta) {
+						fitness += tr.amount();
+						fitness -= qAbs(tr.amount() - m_amount);
+						tr.accountFor();
 						++found;
 						goto foundIt;
 					}
@@ -65,10 +73,11 @@ void FeatureSalary::execute(void *outDatum, Puppy::Context &ioContext) {
 			}
 			// if j not null, we try negative deltas also
 			if (j && j < dayAgo) {
-				for (int& pr : copyDailyAmounts[dayAgo - j]) {
-					if (pr && pr <= m_amount + m_amountDelta && pr >= m_amount - m_amountDelta) {
-						fitness += pr;
-						pr = 0;
+				for (Transaction& tr : copyDailyAmounts[dayAgo - j]) {
+					if (!tr.isAccountedFor() && tr.amount() <= m_amount + m_amountDelta && tr.amount() >= m_amount - m_amountDelta) {
+						fitness += tr.amount();
+						fitness -= qAbs(tr.amount() - m_amount);
+						tr.accountFor();
 						++found;
 						goto foundIt;
 					}
@@ -82,15 +91,17 @@ foundIt:
 		outVecZone.last().m_isFilled = true;
 		continue;
 	}
+	//fitness /= qLn(3 + m_dayDelta) + qLn(3 + m_amountDelta);
+//	fitness -= m_dayDelta * 100;
+//	fitness -= m_amountDelta;
 	if(notFound > 0)
 		fitness -= notFound * (m_amount + m_amountDelta + m_dayDelta * 64);
-
-	//fitness /= 1 + m_amountDelta;
 
 	if(fitness)
 		lResult = fitness;
 	if(ioContext.m_doPlot) {
 		emit evoSpinner()->sendMask(outVecZone);
+		qDebug() << m_endAgo << m_dur << m_amount << m_every << m_amountDelta << m_dayDelta;
 		ioContext.m_doPlot = false;
 		QThread::msleep(100);
 	}

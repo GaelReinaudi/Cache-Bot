@@ -93,6 +93,8 @@ public:
 		Q_UNUSED(ioContext);
 		getArgument(0, &m_endAgo, ioContext);
 		getArgument(1, &m_dur, ioContext);
+		m_endAgo = qAbs(m_endAgo);
+		m_dur = qAbs(m_dur);
 	}
 
 	bool isFeature() const override {
