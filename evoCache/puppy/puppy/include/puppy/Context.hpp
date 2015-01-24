@@ -85,7 +85,7 @@ public:
 		m_dailyAmounts.resize(mostDaysAgo + 1);
 		for (const Transaction& trans : pAc->transactions().list()) {
 			int daysAgo = trans.startDate().daysTo(mostRecent);
-			m_dailyAmounts[daysAgo].push_back(trans.amount());
+			m_dailyAmounts[daysAgo].push_back(trans);
 		}
 	}
 
@@ -116,7 +116,7 @@ public:
 	bool m_hasRecursiveFeature = false;
 	bool m_doPlot = false;
 	Account* m_pAccount;
-	QVector<QVector<int> > m_dailyAmounts;
+	DailyTransactions m_dailyAmounts;
 };
 
 }

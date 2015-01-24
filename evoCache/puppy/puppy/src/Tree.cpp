@@ -86,7 +86,7 @@ void Puppy::Tree::interpret(void* outResult, Puppy::Context& ioContext)
 	assert(size() > 0);
 	ioContext.mTree = this;
 	ioContext.mCallStack.push_back(0);
-	if(front().mPrimitive->isFeature()) {
+	if(isValidTree()) {
 		front().mPrimitive->execute(outResult, ioContext);
 	}
 	else {

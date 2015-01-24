@@ -425,7 +425,8 @@ void Puppy::mutateStandard(Puppy::Tree& ioTree,
 	lStack.pop_back();
 	unsigned int lTreeDepth = ioContext.mRandom.rollInteger(1, inMaxRegenDepth);
 	unsigned int lTreeDepth2 = inMaxDepth - lStack.size();
-	if(lTreeDepth2 < lTreeDepth) lTreeDepth = lTreeDepth2;
+	if(lTreeDepth2 < lTreeDepth)
+		lTreeDepth = lTreeDepth2;
 	assert(lTreeDepth > 0);
 	initializeTreeGrow(lNewTree, ioContext, 1, lTreeDepth);
 	lNewTree.insert(lNewTree.end(),
@@ -433,7 +434,10 @@ void Puppy::mutateStandard(Puppy::Tree& ioTree,
 					ioTree.end());
 	unsigned int lDiffSize =
 			ioTree[lMutIndex].mSubTreeSize - lNewTree[lMutIndex].mSubTreeSize;
-	for(unsigned int i=0; i<lStack.size(); ++i) lNewTree[lStack[i]].mSubTreeSize -= lDiffSize;
+	for(unsigned int i=0; i<lStack.size(); ++i)
+		lNewTree[lStack[i]].mSubTreeSize -= lDiffSize;
+	if(!lNewTree.isValidTree())
+		return;
 	ioTree = lNewTree;
 	ioTree.mValid = false;
 }

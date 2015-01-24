@@ -3,18 +3,18 @@
 #include "puppy/Puppy.hpp"
 #include "AccRegPrimits.h"
 
-#define POP_SIZE_DEFAULT 100
-#define NBR_GEN_DEFAULT 10000
+#define POP_SIZE_DEFAULT 200
+#define NBR_GEN_DEFAULT 200
 #define NBR_PART_TOURNAMENT_DEFAULT 2
 #define MAX_DEPTH_DEFAULT 6
 #define MIN_INIT_DEPTH_DEFAULT 2
-#define MAX_INIT_DEPTH_DEFAULT 2
+#define MAX_INIT_DEPTH_DEFAULT 3
 #define INIT_GROW_PROBA_DEFAULT 0.5f
 #define CROSSOVER_PROBA_DEFAULT 0.9f
 #define CROSSOVER_DISTRIB_PROBA_DEFAULT 0.9f
-#define MUT_STD_PROBA_DEFAULT 0.45f
+#define MUT_STD_PROBA_DEFAULT 0.5f
 #define MUT_MAX_REGEN_DEPTH_DEFAULT 5
-#define MUT_SWAP_PROBA_DEFAULT 0.35f
+#define MUT_SWAP_PROBA_DEFAULT 0.5f
 #define MUT_SWAP_DISTRIB_PROBA_DEFAULT 0.5f
 #define SEED_DEFAULT 0
 
@@ -103,6 +103,7 @@ void EvolutionSpinner::startEvolution(bool doStart) {
 		applyMutationStandard(lPopulation, *m_context, lMutStdProba, lMutMaxRegenDepth, lMaxDepth);
 		applyMutationSwap(lPopulation, *m_context, lMutSwapProba, lMutSwapDistribProba);
 
+		bestTree.mValid = false;
 		lPopulation.push_back(bestTree);
 
 		evaluateSymbReg(lPopulation, *m_context);
