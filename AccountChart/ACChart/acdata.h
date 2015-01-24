@@ -23,6 +23,13 @@ public:
 		, m_description(descr)
 	{
 	}
+	Transaction(const Transaction& other) {
+		m_amount = other.m_amount;
+		m_startDate = other.m_startDate;
+		m_description = other.m_description;
+		// fresh un-accounted-for copy
+		m_isAccountedFor = 0;
+	}
 
 	//! json in
 	void read(const QJsonObject &json) {
@@ -53,10 +60,21 @@ public:
 		return m_startDate;
 	}
 
+	void accountFor() {
+		++m_isAccountedFor;
+	}
+	void resetAccountFor() {
+		m_isAccountedFor = 0;
+	}
+	bool isAccountedFor() const {
+		return m_isAccountedFor;
+	}
+
 private:
 	double m_amount = 0.0;
 	QDateTime m_startDate;
 	QString m_description;
+	char m_isAccountedFor = 0;
 };
 
 class Transactions
@@ -90,6 +108,11 @@ public:
 	QList<Transaction>& list() {
 		return m_transList;
 	}
+	void resetAccountFor() {
+		for (auto& trans : list()) {
+			trans.resetAccountFor();
+		}
+	}
 
 private:
 	QList<Transaction> m_transList;
@@ -122,5 +145,7 @@ public:
 private:
 	Transactions m_transactions;
 };
+
+typedef QVector<QVector<Transaction> > DailyTransactions;
 
 #endif // ACDATA_H
