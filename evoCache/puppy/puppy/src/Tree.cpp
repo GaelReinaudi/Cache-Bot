@@ -114,7 +114,8 @@ void Puppy::Tree::setStackToNode(unsigned int inIndex,
 		unsigned int lNbArgs=(*this)[i].mPrimitive->getNumberArguments();
 		unsigned int lChildIndex = i + 1;
 		for(unsigned int j=0; j<lNbArgs; ++j) {
-			if((lChildIndex+(*this)[lChildIndex].mSubTreeSize) > inIndex) break;
+			if((lChildIndex+(*this)[lChildIndex].mSubTreeSize) > inIndex)
+				break;
 			lChildIndex += (*this)[lChildIndex].mSubTreeSize;
 		}
 		assert(lChildIndex < size());

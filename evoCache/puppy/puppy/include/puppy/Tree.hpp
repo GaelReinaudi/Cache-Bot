@@ -93,7 +93,10 @@ public:
 
 	bool isValidTree() {
 		bool isValid = true;
-		isValid &= front().mPrimitive->isFeature();
+		isValid &= front().mPrimitive->isRoot();
+//		for (int i = 0; i < NUM_FEATURES; ++i) {
+//			isValid &= front().mPrimitive->isRoot();
+//		}
 		return isValid;
 	}
 

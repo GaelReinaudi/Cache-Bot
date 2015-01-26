@@ -6,8 +6,8 @@
 #define POP_SIZE_DEFAULT 200
 #define NBR_GEN_DEFAULT 200
 #define NBR_PART_TOURNAMENT_DEFAULT 2
-#define MAX_DEPTH_DEFAULT 6
-#define MIN_INIT_DEPTH_DEFAULT 2
+#define MAX_DEPTH_DEFAULT 7
+#define MIN_INIT_DEPTH_DEFAULT 3
 #define MAX_INIT_DEPTH_DEFAULT 3
 #define INIT_GROW_PROBA_DEFAULT 0.5f
 #define CROSSOVER_PROBA_DEFAULT 0.9f
@@ -56,7 +56,9 @@ EvolutionSpinner::EvolutionSpinner(Account *pAc, QObject* parent)
 	m_context->insert(new TokenT<double>("30.417", 30.417));
 	m_context->insert(new TokenT<double>("365", 365.0));
 
-	m_context->insert(new FeatureSalary(this));
+	m_context->insert(new CacheBotRootPrimitive(this));
+	m_context->insert(new MonthlyPayments(this));
+	m_context->insert(new FeatureFixedIncome(this));
 }
 
 void EvolutionSpinner::startEvolution(bool doStart) {
