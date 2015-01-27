@@ -3,7 +3,7 @@
 #include "puppy/Puppy.hpp"
 #include "AccRegPrimits.h"
 
-#define POP_SIZE_DEFAULT 200
+#define POP_SIZE_DEFAULT 500
 #define NBR_GEN_DEFAULT 200
 #define NBR_PART_TOURNAMENT_DEFAULT 2
 #define MAX_DEPTH_DEFAULT 7
@@ -97,8 +97,10 @@ void EvolutionSpinner::startEvolution(bool doStart) {
 		bestTree.mValid = false;
 		m_context->m_doPlot = true;
 		double a;
+		emit sendClearMask();
 		bestTree.interpret(&a, *m_context);
 		LOG() << "Best tree ("<<a<<"): " << bestTree.toStr() << endl;
+		m_context->m_doPlot = false;
 
 		applySelectionTournament(lPopulation, *m_context, lNbrPartTournament);
 		applyCrossover(lPopulation, *m_context, lCrossoverProba, lCrossDistribProba, lMaxDepth);

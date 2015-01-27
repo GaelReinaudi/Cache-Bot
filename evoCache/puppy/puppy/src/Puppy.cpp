@@ -453,8 +453,11 @@ void Puppy::mutateStandard(Puppy::Tree& ioTree,
 	ioTree.setStackToNode(lMutIndex, lStack);
 	lStack.pop_back();
 	unsigned int lTreeDepth = ioContext.mRandom.rollInteger(1, inMaxRegenDepth);
+	// if feature
+	if(lStack.size() == 1)
+		lTreeDepth = 1 + ioContext.mRandom.rollInteger(1, inMaxRegenDepth - 1);
 	unsigned int lTreeDepth2 = inMaxDepth - lStack.size();
-	LOG() << lMutIndex << lStack.size() << lTreeDepth << lTreeDepth2 << ioTree[lMutIndex].mSubTreeSize << endl;
+//	LOG() << lMutIndex << lStack.size() << lTreeDepth << lTreeDepth2 << ioTree[lMutIndex].mSubTreeSize << endl;
 	if(lTreeDepth2 < lTreeDepth)
 		lTreeDepth = lTreeDepth2;
 	assert(lTreeDepth > 0);

@@ -30,6 +30,7 @@ protected:
 signals:
 	void resultReady(const QString &result);
 	void sendMask(ZoneVector vecRect);
+	void sendClearMask();
 
 private:
 	Puppy::Context* m_context = 0;

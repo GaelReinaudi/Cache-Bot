@@ -26,6 +26,7 @@ MainWindow::MainWindow(QString jsonFile, QWidget *parent)
 	connect(m_evoSpinner, &EvolutionSpinner::resultReady, this, &MainWindow::handleResults);
 	connect(ui->startButton, SIGNAL(clicked(bool)), m_evoSpinner, SLOT(startEvolution(bool)));
 	connect(m_evoSpinner, &EvolutionSpinner::sendMask, this, &MainWindow::plotMask);
+	connect(m_evoSpinner, &EvolutionSpinner::sendClearMask, this, &MainWindow::clearMasks);
 	m_evoThread->start();
 }
 
@@ -34,11 +35,14 @@ MainWindow::~MainWindow()
 	delete ui;
 }
 
+void MainWindow::clearMasks() {
+	ui->accountPlot->clearItems();
+}
+
 void MainWindow::plotMask(ZoneVector vecZone) {
 //	qDebug() << vecZone.size();
 	if (!vecZone.empty()) {
 //		qDebug() << vecZone[0].left() << vecZone[0].right() << vecZone[0].top() << vecZone[0].bottom();
-		ui->accountPlot->clearItems();
 		for(const auto& zone : vecZone) {
 			QRectF chartRect = ui->accountPlot->mapDayAgoToPlot(zone);
 			chartRect = kindaLog(chartRect);

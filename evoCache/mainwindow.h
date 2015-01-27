@@ -25,6 +25,7 @@ public slots:
 
 	}
 	void plotMask(ZoneVector vecZone);
+	void clearMasks();
 
 signals:
 	void operate(const QString &);

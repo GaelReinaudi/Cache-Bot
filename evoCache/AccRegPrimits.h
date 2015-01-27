@@ -167,7 +167,7 @@ class MonthlyPayments : public AccountFeature
 {
 public:
 	MonthlyPayments(EvolutionSpinner* evoSpinner)
-		: AccountFeature(5, "MonthlyPayments", evoSpinner)
+		: AccountFeature(6, "MonthlyPayments", evoSpinner)
 	{ }
 	virtual ~MonthlyPayments() { }
 	virtual void execute(void* outDatum, Puppy::Context& ioContext);
