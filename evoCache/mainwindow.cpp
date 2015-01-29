@@ -28,6 +28,7 @@ MainWindow::MainWindow(QString jsonFile, QWidget *parent)
 	connect(m_evoSpinner, &EvolutionSpinner::sendMask, this, &MainWindow::plotMask);
 	connect(m_evoSpinner, &EvolutionSpinner::sendClearMask, this, &MainWindow::clearMasks);
 	m_evoThread->start();
+	ui->startButton->click();
 }
 
 MainWindow::~MainWindow()
@@ -51,7 +52,7 @@ void MainWindow::plotMask(ZoneVector vecZone) {
 			itRect->topLeft->setCoords(chartRect.topLeft());
 			itRect->bottomRight->setCoords(chartRect.bottomRight());
 			QColor colZone = zone.m_isFilled ? QColor(0, 255, 0, 128) : QColor(255, 0, 0, 128);
-			itRect->setPen(QPen(QBrush(colZone), 0.0));
+			itRect->setPen(QPen(QBrush(colZone), 3.0));
 			itRect->setBrush(QBrush(colZone));
 			itRect->setClipToAxisRect(false);
 			ui->accountPlot->addItem(itRect);

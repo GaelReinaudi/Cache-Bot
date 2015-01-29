@@ -5,7 +5,7 @@
 #include "puppy/Puppy.hpp"
 #include "EvolutionSpinner.h"
 
-static const int NUM_FEATURES = 2;
+static const int NUM_FEATURES = 8;
 
 class Add : public Puppy::Primitive
 {
@@ -20,7 +20,6 @@ public:
 		lResult += lArg2;
 	}
 };
-
 class Add4 : public Puppy::Primitive
 {
 public:
@@ -36,7 +35,6 @@ public:
 		lResult += lArg2 + lArg3 + lArg4;
 	}
 };
-
 class Subtract : public Puppy::Primitive
 {
 public:
@@ -50,7 +48,6 @@ public:
 		lResult -= lArg2;
 	}
 };
-
 class Multiply : public Puppy::Primitive
 {
 public:
@@ -64,7 +61,6 @@ public:
 		lResult *= lArg2;
 	}
 };
-
 class Divide : public Puppy::Primitive
 {
 public:
@@ -81,7 +77,6 @@ public:
 		}
 	}
 };
-
 class Cosinus : public Puppy::Primitive
 {
 public:
@@ -175,7 +170,7 @@ protected:
 	double m_amount = 0;
 	double m_every = 365.25 / 12.0;
 	double m_amountDelta = 100;
-	double m_dayDelta = 3;
+	double m_dayDelta = 5;
 };
 
 #endif // ACCREGPRIMITS_H

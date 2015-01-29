@@ -69,12 +69,12 @@ foundIt:
 		outVecZone.last().m_isFilled = true;
 		continue;
 	}
-	//fitness /= qLn(3 + m_dayDelta) + qLn(3 + m_amountDelta);
-//	fitness -= m_dayDelta * 100;
-//	fitness -= m_amountDelta;
-	if(notFound > 0)
-		fitness -= notFound * (m_amount + m_amountDelta + m_dayDelta * 64);
 
+	fitness -= found * qAbs(m_amountDelta);
+	if(notFound > found / 12)
+		fitness -= (notFound - found / 12) * (qAbs(m_amount) + m_amountDelta + m_dayDelta * 64);
+
+	fitness *= kindaLog(found);
 	if(fitness)
 		lResult = fitness;
 	if(ioContext.m_doPlot) {
@@ -88,12 +88,13 @@ void MonthlyPayments::execute(void *outDatum, Puppy::Context &ioContext) {
 	AccountFeature::execute(outDatum, ioContext);
 	double& lResult = *(double*)outDatum;
 	getArgument(2, &m_amount, ioContext);
+	m_amount = -qAbs(m_amount);
+	m_amountDelta = -0.031 * m_amount;
 //	getArgument(3, &m_every, ioContext);
 	getArgument(3, &m_amountDelta, ioContext);
 	getArgument(4, &m_dayDelta, ioContext);
 	lResult = -10e6;
 	ZoneVector outVecZone;
-	m_amount = -qAbs(m_amount);
 	m_every = qAbs(m_every);
 	m_amountDelta = qAbs(m_amountDelta);
 	m_dayDelta = qAbs(m_dayDelta);
@@ -153,9 +154,12 @@ foundIt:
 		outVecZone.last().m_isFilled = true;
 		continue;
 	}
-	if(notFound > 0)
-		fitness -= notFound * (qAbs(m_amount) + m_amountDelta + m_dayDelta * 64);
+	fitness -= found * qAbs(3*m_amountDelta);
+	fitness /= kindaLog(qMax(1.0,(m_dayDelta - 5)));
+	if(notFound > found / 12)
+		fitness -= (notFound - found / 12) * (qAbs(m_amount) + m_amountDelta + m_dayDelta * 64);
 
+	fitness *= kindaLog(found);
 	if(fitness)
 		lResult = fitness;
 	if(ioContext.m_doPlot) {
