@@ -17,15 +17,17 @@ class Transaction
 {
 public:
 	Transaction() {}
-	Transaction(double amount, QDateTime startDate, QString &descr)
+	Transaction(double amount, QDateTime startDate, double numDays, QString &descr)
 		: m_amount(amount)
 		, m_startDate(startDate)
+		, m_numDays(numDays)
 		, m_description(descr)
 	{
 	}
 	Transaction(const Transaction& other) {
 		m_amount = other.m_amount;
 		m_startDate = other.m_startDate;
+		m_numDays = other.m_numDays;
 		m_description = other.m_description;
 		// fresh un-accounted-for copy
 		m_isAccountedFor = 0;
@@ -36,13 +38,15 @@ public:
 		m_amount = json["amount"].toString().toDouble();
 		uint sec = json["startDate"].toString().toDouble();
 		m_startDate = QDateTime::fromTime_t(sec);
+		m_numDays = json["numDays"].toString().toDouble();
 		m_description = json["descr"].toString();
-		qDebug() << m_amount << sec << m_startDate << m_description;
+		qDebug() << m_amount << sec << m_startDate << m_numDays << m_description;
 	}
 	//! json out
 	void write(QJsonObject &json) const {
 		json["amount"] = m_amount;
 		json["startDate"] = int(m_startDate.toTime_t());
+		json["numDays"] = m_numDays;
 		json["descr"] = m_description;
 	}
 
@@ -51,6 +55,9 @@ public:
 	}
 	double compressedAmount() const{
 		return kindaLog(m_amount);
+	}
+	double numDays() const{
+		return m_numDays;
 	}
 	uint time() const{
 		return m_startDate.toTime_t();
@@ -72,6 +79,7 @@ public:
 
 private:
 	double m_amount = 0.0;
+	double m_numDays = 1.0;
 	QDateTime m_startDate;
 	QString m_description;
 	char m_isAccountedFor = 0;
