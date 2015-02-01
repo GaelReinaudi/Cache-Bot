@@ -19,8 +19,8 @@ public:
 	Transaction() {}
 	Transaction(double amount, QDateTime startDate, double numDays, QString &descr)
 		: m_amount(amount)
-		, m_startDate(startDate)
 		, m_numDays(numDays)
+		, m_startDate(startDate)
 		, m_description(descr)
 	{
 	}

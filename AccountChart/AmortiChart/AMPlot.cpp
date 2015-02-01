@@ -82,7 +82,7 @@ void AMPlot::loadAmount(Account* account)
 	}
 	colorMap->rescaleDataRange(true);
 	rescaleAxes();
-	xAxis->setRange(xAxis->range().lower + 962*3600*24, xAxis->range().upper + amortDur*3600*24);
+	xAxis->setRange(xAxis->range().lower + 0*3600*24, xAxis->range().upper + amortDur*3600*24);
 	yAxis->setRange(yAxis->range().lower - 0.5, yAxis->range().upper + 0.5);
 	replot();
 }
