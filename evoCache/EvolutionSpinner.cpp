@@ -3,12 +3,12 @@
 #include "puppy/Puppy.hpp"
 #include "AccRegPrimits.h"
 
-#define POP_SIZE_DEFAULT 1000
+#define POP_SIZE_DEFAULT 10000
 #define NBR_GEN_DEFAULT 20000
 #define NBR_PART_TOURNAMENT_DEFAULT 4
-#define MAX_DEPTH_DEFAULT 7
+#define MAX_DEPTH_DEFAULT 9
 #define MIN_INIT_DEPTH_DEFAULT 3
-#define MAX_INIT_DEPTH_DEFAULT 3
+#define MAX_INIT_DEPTH_DEFAULT 5
 #define INIT_GROW_PROBA_DEFAULT 0.5f
 #define CROSSOVER_PROBA_DEFAULT 0.8f
 #define CROSSOVER_DISTRIB_PROBA_DEFAULT 0.9f
@@ -51,6 +51,8 @@ EvolutionSpinner::EvolutionSpinner(Account *pAc, QObject* parent)
 	m_context->insert(new TokenT<double>("500", 500.0));
 	m_context->insert(new TokenT<double>("1000", 1000.0));
 	m_context->insert(new TokenT<double>("2000", 2000.0));
+	m_context->insert(new TokenT<double>("3000", 3000.0));
+	m_context->insert(new TokenT<double>("4000", 4000.0));
 	m_context->insert(new TokenT<double>("5000", 5000.0));
 	m_context->insert(new TokenT<double>("15.208", 15.208));
 	m_context->insert(new TokenT<double>("30.417", 30.417));
@@ -135,7 +137,7 @@ unsigned int EvolutionSpinner::evaluateSymbReg(std::vector<Tree>& ioPopulation,
 		ioPopulation[i].interpret(&lResult, ioContext);
 		ioPopulation[i].mFitness = lResult;
 		ioPopulation[i].mValid = true;
-		LOG() << "Eval tree ("<<lResult<<"): " << ioPopulation[i].toStr() << endl;
+		//LOG() << "Eval tree ("<<lResult<<"): " << ioPopulation[i].toStr() << endl;
 		++lNbrEval;
 	}
 	return lNbrEval;
