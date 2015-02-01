@@ -35,15 +35,15 @@ public:
 
 	//! json in
 	void read(const QJsonObject &json) {
-		m_amount = json["amount"].toString().toDouble();
-		uint sec = json["startDate"].toString().toDouble();
-		if(sec)
+		bool ok;
+		m_amount = json["amount"].toString().toDouble(&ok);
+		uint sec = json["startDate"].toString().toDouble(&ok);
+		if(ok)
 			m_startDate = QDateTime::fromTime_t(sec);
 		else {
 			m_amount = -json["amount"].toDouble();
 			m_startDate = QDateTime::fromString(json["date"].toString(), "yyyy-MM-dd");
 		}
-		bool ok;
 		m_numDays = json["numDays"].toString().toDouble(&ok);
 		if(!ok)
 			m_numDays = 1;
@@ -109,6 +109,13 @@ public:
 		QJsonArray npcArray = json["transactions"].toArray();
 		for (int npcIndex = 0; npcIndex < npcArray.size(); ++npcIndex) {
 			QJsonObject npcObject = npcArray[npcIndex].toObject();
+			Transaction tra;
+			tra.read(npcObject);
+			m_transList.append(tra);
+		}
+		QJsonArray npcArrayOld = json["purchases"].toArray();
+		for (int npcIndex = 0; npcIndex < npcArrayOld.size(); ++npcIndex) {
+			QJsonObject npcObject = npcArrayOld[npcIndex].toObject();
 			Transaction tra;
 			tra.read(npcObject);
 			m_transList.append(tra);
