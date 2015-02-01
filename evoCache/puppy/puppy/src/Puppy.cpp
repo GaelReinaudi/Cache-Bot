@@ -200,8 +200,8 @@ bool Puppy::mateTrees(Puppy::Tree& ioTree1,
 	assert(ioTree1.size() > 0);
 	assert(ioTree2.size() > 0);
 
-	LOG() << "Mate:" << ioTree1.toStr() << endl;
-	LOG() << "With:" << ioTree2.toStr() << endl;
+//	LOG() << "Mate:" << ioTree1.toStr() << endl;
+//	LOG() << "With:" << ioTree2.toStr() << endl;
 
 	// Crossover loop. Try the given number of attempts to mate two individuals.
 	for(unsigned int i=0; i<64; ++i) {
@@ -246,18 +246,18 @@ bool Puppy::mateTrees(Puppy::Tree& ioTree1,
 			continue;
 
 		// The crossover is valid.
-		LOG() << "Mate at #" << i << "  nodes " << lChoosenNode1 << "/" << lChoosenNode2 << endl;
-		LOG() << "Mate:" << ioTree1.toStr() << endl;
-		LOG() << "With:" << ioTree2.toStr() << endl;
+//		LOG() << "Mate at #" << i << "  nodes " << lChoosenNode1 << "/" << lChoosenNode2 << endl;
+//		LOG() << "Mate:" << ioTree1.toStr() << endl;
+//		LOG() << "With:" << ioTree2.toStr() << endl;
 		exchangeSubTrees(ioTree1, lChoosenNode1, lStack1, ioTree2, lChoosenNode2, lStack2);
 		ioTree1.mValid = false;
 		ioTree2.mValid = false;
-		LOG() << "  ->:" << ioTree1.toStr() << endl;
-		LOG() << "  ->:" << ioTree2.toStr() << endl;
+//		LOG() << "  ->:" << ioTree1.toStr() << endl;
+//		LOG() << "  ->:" << ioTree2.toStr() << endl;
 		return true;
 	}
-	LOG() << "Not Mate:" << ioTree1.toStr() << endl;
-	LOG() << "    With:" << ioTree2.toStr() << endl;
+//	LOG() << "Not Mate:" << ioTree1.toStr() << endl;
+//	LOG() << "    With:" << ioTree2.toStr() << endl;
 	return false;
 }
 
@@ -422,9 +422,9 @@ void Puppy::applyMutationStandard(std::vector<Puppy::Tree>& ioPopulation,
 {
 	for(unsigned int i=0; i<ioPopulation.size(); ++i) {
 		if(ioContext.mRandom.rollUniform() < inMutationProba) {
-			LOG() << "applyMutationStandard: " << ioPopulation[i].toStr() << endl;
+//			LOG() << "applyMutationStandard: " << ioPopulation[i].toStr() << endl;
 			mutateStandard(ioPopulation[i], ioContext, inMaxRegenDepth, inMaxDepth);
-			LOG() << "-> " << ioPopulation[i].toStr() << endl;
+//			LOG() << "-> " << ioPopulation[i].toStr() << endl;
 		}
 	}
 }
@@ -491,9 +491,9 @@ void Puppy::applyMutationSwap(std::vector<Puppy::Tree>& ioPopulation,
 {
 	for(unsigned int i=0; i<ioPopulation.size(); ++i) {
 		if(ioContext.mRandom.rollUniform() < inMutationProba) {
-			LOG() << "applyMutationSwap: " << ioPopulation[i].toStr() << endl;
+//			LOG() << "applyMutationSwap: " << ioPopulation[i].toStr() << endl;
 			mutateSwap(ioPopulation[i], ioContext, inDistribProba);
-			LOG() << "-> " << ioPopulation[i].toStr() << endl;
+//			LOG() << "-> " << ioPopulation[i].toStr() << endl;
 		}
 	}
 }
