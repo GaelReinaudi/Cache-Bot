@@ -37,8 +37,16 @@ public:
 	void read(const QJsonObject &json) {
 		m_amount = json["amount"].toString().toDouble();
 		uint sec = json["startDate"].toString().toDouble();
-		m_startDate = QDateTime::fromTime_t(sec);
-		m_numDays = json["numDays"].toString().toDouble();
+		if(sec)
+			m_startDate = QDateTime::fromTime_t(sec);
+		else {
+			m_amount = -json["amount"].toDouble();
+			m_startDate = QDateTime::fromString(json["date"].toString(), "yyyy-MM-dd");
+		}
+		bool ok;
+		m_numDays = json["numDays"].toString().toDouble(&ok);
+		if(!ok)
+			m_numDays = 1;
 		m_description = json["descr"].toString();
 		qDebug() << m_amount << sec << m_startDate << m_numDays << m_description;
 	}
@@ -77,6 +85,11 @@ public:
 		return m_isAccountedFor;
 	}
 
+public:
+	static bool earlierThan(const Transaction& first, const Transaction& second) {
+		return first.startDate() < second.startDate();
+	}
+
 private:
 	double m_amount = 0.0;
 	double m_numDays = 1.0;
@@ -93,13 +106,14 @@ public:
 	//! json in
 	void read(const QJsonObject &json) {
 		m_transList.clear();
-		QJsonArray npcArray = json["purchases"].toArray();
+		QJsonArray npcArray = json["transactions"].toArray();
 		for (int npcIndex = 0; npcIndex < npcArray.size(); ++npcIndex) {
 			QJsonObject npcObject = npcArray[npcIndex].toObject();
 			Transaction tra;
 			tra.read(npcObject);
 			m_transList.append(tra);
 		}
+		qSort(m_transList.begin(), m_transList.end(), Transaction::earlierThan);
 		qDebug() << "m_transList count" << m_transList.size();
 	}
 	//! json out
