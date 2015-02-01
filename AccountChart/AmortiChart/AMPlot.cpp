@@ -35,10 +35,12 @@ void AMPlot::loadAmount(Account* account)
 	}
 	qDebug() << m_firstDate << m_lastDate << "days =" << m_firstDate.daysTo(m_lastDate);
 
-	colorMap->data()->setSize(m_firstDate.daysTo(m_lastDate), 32);
+	const int height = 256;
+	const int midHeight = height / 2;
+	colorMap->data()->setSize(m_firstDate.daysTo(m_lastDate), height);
 	colorMap->data()->setRange(
 				QCPRange(QDateTime(m_firstDate).toTime_t(), QDateTime(m_lastDate).toTime_t())
-				, QCPRange(0, colorMap->data()->valueSize()));
+				, QCPRange(-midHeight, -midHeight + colorMap->data()->valueSize()));
 
 	for (int x=0; x < colorMap->data()->keySize(); ++x) {
 		for (int y=0; y < colorMap->data()->valueSize(); ++y) {
@@ -48,31 +50,39 @@ void AMPlot::loadAmount(Account* account)
 	// first amortized transactions
 	double color = 0;
 	int day = 0;
-	for (const Transaction& trans : account->transactions().list()) {
-		int amort = qRound(trans.numDays());
-		if (amort > 1) {
-			int iDay = m_firstDate.daysTo(trans.startDate().date());
-			qDebug() << iDay << amort;
+	int amortDur = 0;
+	int minAmort = 2;
+	int maxAmort = 999999999;
+	for (int minAmort = 2; minAmort > 0; --minAmort) {
+		for (const Transaction& trans : account->transactions().list()) {
+			amortDur = qRound(trans.numDays());
+			//int perDay = qAbs(kindaLog((trans.amount() * 1.0) / amort));
+			int perDay = ((trans.amount() * 1.0) / amortDur);
+			if (amortDur >= minAmort && amortDur < maxAmort) {
+				int iDay = m_firstDate.daysTo(trans.startDate().date());
+				qDebug() << iDay << amortDur << perDay;
 
-			int h = 0;
-			while (colorMap->data()->cell(iDay, h) > 0.0) {
-				++h;
-			}
-			// we look amort day in the future to set the color
-			for (int a = 0; a < amort; ++a) {
-				// the first empty cell of a day can be used
-				h = 0;
-				while (colorMap->data()->cell(iDay + a, h) > 0.0) {
-					++h;
+				int mul = perDay > 0 ? 1 : -1;
+				int h = 0;
+				// we look amort day in the future to set the color
+				for (int a = 0; a < amortDur; ++a) {
+					// the first empty cell of a day can be used
+					h = 0;
+					while (colorMap->data()->cell(iDay + a, midHeight + mul * h) > 0.0) {
+						++h;
+					}
+
+					for (int c = 0; c < qAbs(perDay); ++c)
+						colorMap->data()->setCell(iDay + a, midHeight + mul * (h + c), color);
 				}
-
-				colorMap->data()->setCell(iDay + a, h, color);
+				color = qrand() % 128;
 			}
-			color = qrand() % 128;
 		}
+		maxAmort = minAmort;
 	}
 	colorMap->rescaleDataRange(true);
 	rescaleAxes();
+	xAxis->setRange(xAxis->range().lower + 0*3600*24, xAxis->range().upper + amortDur*3600*24);
 	yAxis->setRange(yAxis->range().lower - 0.5, yAxis->range().upper + 0.5);
 	replot();
 }
