@@ -16,6 +16,7 @@ QRectF kindaLog(QRectF rectLinear);
 class Transaction
 {
 public:
+	enum Type{InternalTransfer = -1, None = 0};
 	Transaction() {}
 	Transaction(double amount, QDateTime startDate, double numDays, QString &descr)
 		: m_amount(amount)
@@ -34,22 +35,7 @@ public:
 	}
 
 	//! json in
-	void read(const QJsonObject &json) {
-		bool ok;
-		m_amount = json["amount"].toString().toDouble(&ok);
-		uint sec = json["startDate"].toString().toDouble(&ok);
-		if(ok)
-			m_startDate = QDateTime::fromTime_t(sec);
-		else {
-			m_amount = -json["amount"].toDouble();
-			m_startDate = QDateTime::fromString(json["date"].toString(), "yyyy-MM-dd");
-		}
-		m_numDays = json["numDays"].toString().toDouble(&ok);
-		if(!ok)
-			m_numDays = 1;
-		m_description = json["descr"].toString();
-		qDebug() << m_amount << sec << m_startDate << m_numDays << m_description;
-	}
+	void read(const QJsonObject &json);
 	//! json out
 	void write(QJsonObject &json) const {
 		json["amount"] = m_amount;
@@ -90,7 +76,12 @@ public:
 		return first.startDate() < second.startDate();
 	}
 
+	int type() const {
+		return m_type;
+	}
+
 private:
+	int m_type = None;
 	double m_amount = 0.0;
 	double m_numDays = 1.0;
 	QDateTime m_startDate;
@@ -104,25 +95,7 @@ public:
 	Transactions() {}
 
 	//! json in
-	void read(const QJsonObject &json) {
-		m_transList.clear();
-		QJsonArray npcArray = json["transactions"].toArray();
-		for (int npcIndex = 0; npcIndex < npcArray.size(); ++npcIndex) {
-			QJsonObject npcObject = npcArray[npcIndex].toObject();
-			Transaction tra;
-			tra.read(npcObject);
-			m_transList.append(tra);
-		}
-		QJsonArray npcArrayOld = json["purchases"].toArray();
-		for (int npcIndex = 0; npcIndex < npcArrayOld.size(); ++npcIndex) {
-			QJsonObject npcObject = npcArrayOld[npcIndex].toObject();
-			Transaction tra;
-			tra.read(npcObject);
-			m_transList.append(tra);
-		}
-		qSort(m_transList.begin(), m_transList.end(), Transaction::earlierThan);
-		qDebug() << "m_transList count" << m_transList.size();
-	}
+	void read(const QJsonObject &json, const QVector<QString>& acIds);
 	//! json out
 	void write(QJsonObject &json) const {
 		QJsonArray npcArray;
@@ -134,7 +107,7 @@ public:
 		json["purchases"] = npcArray;
 	}
 
-	QList<Transaction>& list() {
+	QVector<Transaction>& list() {
 		return m_transList;
 	}
 	void resetAccountFor() {
@@ -143,8 +116,18 @@ public:
 		}
 	}
 
+public:
+	static bool isSymetric(const Transaction& first, const Transaction& second) {
+		if (first.startDate() == second.startDate()) {
+			if (first.amount() == -second.amount()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 private:
-	QList<Transaction> m_transList;
+	QVector<Transaction> m_transList;
 };
 
 class Account
@@ -154,17 +137,7 @@ public:
 
 	// loading the json file
 	// see this: https://qt-project.org/doc/qt-5-snapshot/qtcore-savegame-example.html
-	bool load(QString jsonFile) {
-		QFile loadFile(jsonFile);
-		if (!loadFile.open(QIODevice::ReadOnly)) {
-			qWarning(QString("Couldn't open file %1").arg(QFileInfo(loadFile).absoluteFilePath()).toUtf8());
-			return false;
-		}
-		QByteArray saveData = loadFile.readAll();
-		QJsonDocument loadDoc(QJsonDocument::fromJson(saveData));
-		m_transactions.read(loadDoc.object());
-		return true;
-	}
+	bool load(QString jsonFile);
 
 	Transactions& transactions() {
 		return m_transactions;
@@ -172,6 +145,7 @@ public:
 
 
 private:
+	QVector<QString> m_accountIds;
 	Transactions m_transactions;
 };
 

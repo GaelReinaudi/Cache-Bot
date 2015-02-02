@@ -35,7 +35,7 @@ void AMPlot::loadAmount(Account* account)
 	}
 	qDebug() << m_firstDate << m_lastDate << "days =" << m_firstDate.daysTo(m_lastDate);
 
-	const int height = 256;
+	const int height = 256*64;
 	const int midHeight = height / 2;
 	colorMap->data()->setSize(m_firstDate.daysTo(m_lastDate), height);
 	colorMap->data()->setRange(

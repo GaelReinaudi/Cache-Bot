@@ -28,7 +28,7 @@ MainWindow::MainWindow(QString jsonFile, QWidget *parent)
 	connect(m_evoSpinner, &EvolutionSpinner::sendMask, this, &MainWindow::plotMask);
 	connect(m_evoSpinner, &EvolutionSpinner::sendClearMask, this, &MainWindow::clearMasks);
 	m_evoThread->start();
-	ui->startButton->click();
+//	ui->startButton->click();
 }
 
 MainWindow::~MainWindow()

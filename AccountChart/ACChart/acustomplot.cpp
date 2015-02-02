@@ -10,6 +10,7 @@ ACustomPlot::ACustomPlot(QWidget *parent) :
 	graph(0)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 2.0));
 	xAxis->setTickLabelType(QCPAxis::ltDateTime);
 	xAxis->setDateTimeFormat("yyyy/MM/dd hh");
+	yAxis->setAutoTickCount(10);
 	setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
 	axisRect(0)->setRangeZoomAxes(xAxis, 0);
 	m_lastDate = QDate(1, 1, 1);
