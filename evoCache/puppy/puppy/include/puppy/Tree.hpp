@@ -91,6 +91,15 @@ public:
 	void         setStackToNode(unsigned int inIndex, std::vector<unsigned int>& outCallStack) const;
 	void         write(std::ostream& ioOS, unsigned int inIndex=0) const;
 
+	bool isValidTree() {
+		bool isValid = true;
+		isValid &= front().mPrimitive->isRoot();
+//		for (int i = 0; i < NUM_FEATURES; ++i) {
+//			isValid &= front().mPrimitive->isRoot();
+//		}
+		return isValid;
+	}
+
 	float mFitness;  //!< Fitness value of the GP tree
 	bool  mValid;    //!< Flag indicating whether the fitness is valid.
 

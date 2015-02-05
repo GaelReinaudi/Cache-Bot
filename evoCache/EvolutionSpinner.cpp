@@ -3,16 +3,16 @@
 #include "puppy/Puppy.hpp"
 #include "AccRegPrimits.h"
 
-#define POP_SIZE_DEFAULT 100
-#define NBR_GEN_DEFAULT 10000
-#define NBR_PART_TOURNAMENT_DEFAULT 2
-#define MAX_DEPTH_DEFAULT 6
-#define MIN_INIT_DEPTH_DEFAULT 2
-#define MAX_INIT_DEPTH_DEFAULT 2
+#define POP_SIZE_DEFAULT 10000
+#define NBR_GEN_DEFAULT 20000
+#define NBR_PART_TOURNAMENT_DEFAULT 4
+#define MAX_DEPTH_DEFAULT 9
+#define MIN_INIT_DEPTH_DEFAULT 3
+#define MAX_INIT_DEPTH_DEFAULT 5
 #define INIT_GROW_PROBA_DEFAULT 0.5f
-#define CROSSOVER_PROBA_DEFAULT 0.9f
+#define CROSSOVER_PROBA_DEFAULT 0.8f
 #define CROSSOVER_DISTRIB_PROBA_DEFAULT 0.9f
-#define MUT_STD_PROBA_DEFAULT 0.45f
+#define MUT_STD_PROBA_DEFAULT 0.35f
 #define MUT_MAX_REGEN_DEPTH_DEFAULT 5
 #define MUT_SWAP_PROBA_DEFAULT 0.35f
 #define MUT_SWAP_DISTRIB_PROBA_DEFAULT 0.5f
@@ -23,7 +23,7 @@ using namespace Puppy;
 EvolutionSpinner::EvolutionSpinner(Account *pAc, QObject* parent)
 	: QObject(parent)
 {
-	qRegisterMetaType<VectorRectF>("VectorRectF");
+	qRegisterMetaType<ZoneVector>("ZoneVector");
 
 	unsigned long lSeed                = SEED_DEFAULT;
 
@@ -36,6 +36,9 @@ EvolutionSpinner::EvolutionSpinner(Account *pAc, QObject* parent)
 	m_context->insert(new Multiply);
 	m_context->insert(new Divide);
 	m_context->insert(new Cosinus);
+	m_context->insert(new TokenT<double>("0.1", 0.1));
+	m_context->insert(new TokenT<double>("0.2", 0.2));
+	m_context->insert(new TokenT<double>("0.5", 0.5));
 	m_context->insert(new TokenT<double>("0", 0.0));
 	m_context->insert(new TokenT<double>("1", 1.0));
 	m_context->insert(new TokenT<double>("2", 2.0));
@@ -48,9 +51,16 @@ EvolutionSpinner::EvolutionSpinner(Account *pAc, QObject* parent)
 	m_context->insert(new TokenT<double>("500", 500.0));
 	m_context->insert(new TokenT<double>("1000", 1000.0));
 	m_context->insert(new TokenT<double>("2000", 2000.0));
+	m_context->insert(new TokenT<double>("3000", 3000.0));
+	m_context->insert(new TokenT<double>("4000", 4000.0));
 	m_context->insert(new TokenT<double>("5000", 5000.0));
+	m_context->insert(new TokenT<double>("15.208", 15.208));
+	m_context->insert(new TokenT<double>("30.417", 30.417));
+	m_context->insert(new TokenT<double>("365", 365.0));
 
-	m_context->insert(new FeatureSalary(this));
+	m_context->insert(new CacheBotRootPrimitive(this));
+	m_context->insert(new MonthlyPayments(this));
+	m_context->insert(new FeatureFixedIncome(this));
 }
 
 void EvolutionSpinner::startEvolution(bool doStart) {
@@ -84,19 +94,22 @@ void EvolutionSpinner::startEvolution(bool doStart) {
 	LOG() << "Starting evolution" << endl;
 	for(unsigned int i=1; i<=lNbrGen; ++i) {
 		LOG() << "Generation " << i << endl;
-		applySelectionTournament(lPopulation, *m_context, lNbrPartTournament);
 		auto result = std::minmax_element(lPopulation.begin(), lPopulation.end());
 		Tree bestTree = lPopulation[result.second - lPopulation.begin()];
 		bestTree.mValid = false;
 		m_context->m_doPlot = true;
 		double a;
+		emit sendClearMask();
 		bestTree.interpret(&a, *m_context);
 		LOG() << "Best tree ("<<a<<"): " << bestTree.toStr() << endl;
+		m_context->m_doPlot = false;
 
+		applySelectionTournament(lPopulation, *m_context, lNbrPartTournament);
 		applyCrossover(lPopulation, *m_context, lCrossoverProba, lCrossDistribProba, lMaxDepth);
 		applyMutationStandard(lPopulation, *m_context, lMutStdProba, lMutMaxRegenDepth, lMaxDepth);
 		applyMutationSwap(lPopulation, *m_context, lMutSwapProba, lMutSwapDistribProba);
 
+		bestTree.mValid = false;
 		lPopulation.push_back(bestTree);
 
 		evaluateSymbReg(lPopulation, *m_context);
@@ -124,7 +137,7 @@ unsigned int EvolutionSpinner::evaluateSymbReg(std::vector<Tree>& ioPopulation,
 		ioPopulation[i].interpret(&lResult, ioContext);
 		ioPopulation[i].mFitness = lResult;
 		ioPopulation[i].mValid = true;
-		LOG() << "Eval tree ("<<lResult<<"): " << ioPopulation[i].toStr() << endl;
+		//LOG() << "Eval tree ("<<lResult<<"): " << ioPopulation[i].toStr() << endl;
 		++lNbrEval;
 	}
 	return lNbrEval;

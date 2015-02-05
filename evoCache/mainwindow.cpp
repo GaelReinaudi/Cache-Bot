@@ -26,7 +26,9 @@ MainWindow::MainWindow(QString jsonFile, QWidget *parent)
 	connect(m_evoSpinner, &EvolutionSpinner::resultReady, this, &MainWindow::handleResults);
 	connect(ui->startButton, SIGNAL(clicked(bool)), m_evoSpinner, SLOT(startEvolution(bool)));
 	connect(m_evoSpinner, &EvolutionSpinner::sendMask, this, &MainWindow::plotMask);
+	connect(m_evoSpinner, &EvolutionSpinner::sendClearMask, this, &MainWindow::clearMasks);
 	m_evoThread->start();
+//	ui->startButton->click();
 }
 
 MainWindow::~MainWindow()
@@ -34,20 +36,25 @@ MainWindow::~MainWindow()
 	delete ui;
 }
 
-void MainWindow::plotMask(VectorRectF vecRect) {
-	qDebug() << vecRect.size();
-	if (!vecRect.empty()) {
-		qDebug() << vecRect[0].left() << vecRect[0].right() << vecRect[0].top() << vecRect[0].bottom();
-		ui->accountPlot->clearItems();
-		for(const QRectF& rect : vecRect) {
-			QRectF chartRect = ui->accountPlot->mapDayAgoToPlot(rect);
+void MainWindow::clearMasks() {
+	ui->accountPlot->clearItems();
+}
+
+void MainWindow::plotMask(ZoneVector vecZone) {
+//	qDebug() << vecZone.size();
+	if (!vecZone.empty()) {
+//		qDebug() << vecZone[0].left() << vecZone[0].right() << vecZone[0].top() << vecZone[0].bottom();
+		for(const auto& zone : vecZone) {
+			QRectF chartRect = ui->accountPlot->mapDayAgoToPlot(zone);
 			chartRect = kindaLog(chartRect);
 //			qDebug() << QDateTime::fromTime_t(int(chartRect.left())) << QDateTime::fromTime_t(int(chartRect.right())) << chartRect.top() << chartRect.bottom();
 			QCPItemRect* itRect = new QCPItemRect(ui->accountPlot);
 			itRect->topLeft->setCoords(chartRect.topLeft());
 			itRect->bottomRight->setCoords(chartRect.bottomRight());
-			itRect->setPen(QPen(QBrush(QColor(255, 0, 0, 128)), 0.0));
-			itRect->setBrush(QBrush(QColor(255, 0, 0, 128)));
+			QColor colZone = zone.m_isFilled ? QColor(0, 255, 0, 128) : QColor(255, 0, 0, 128);
+			itRect->setPen(QPen(QBrush(colZone), 3.0));
+			itRect->setBrush(QBrush(colZone));
+			itRect->setClipToAxisRect(false);
 			ui->accountPlot->addItem(itRect);
 		}
 		ui->accountPlot->replot(QCustomPlot::rpQueued);

@@ -85,7 +85,8 @@ Puppy::Primitive& Puppy::Primitive::operator=(const Puppy::Primitive& inRightPri
  */
 Puppy::PrimitiveHandle Puppy::Primitive::giveReference(Puppy::Context& ioContext)
 {
-  return this;
+	Q_UNUSED(ioContext);
+	return this;
 }
 
 
@@ -114,5 +115,5 @@ void Puppy::Primitive::setNumberArguments(unsigned int inNumberArguments)
  *  \param inValue New value to use.
  */
 void Puppy::Primitive::setValue(const void* inValue)
-{ }
+{ Q_UNUSED(inValue); }
 

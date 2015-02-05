@@ -85,7 +85,7 @@ public:
 		m_dailyAmounts.resize(mostDaysAgo + 1);
 		for (const Transaction& trans : pAc->transactions().list()) {
 			int daysAgo = trans.startDate().daysTo(mostRecent);
-			m_dailyAmounts[daysAgo].push_back(trans.amount());
+			m_dailyAmounts[daysAgo].push_back(trans);
 		}
 	}
 
@@ -99,15 +99,18 @@ public:
 		mPrimitiveMap[inPrimitive->getName()] = inPrimitive;
 		if(inPrimitive->getNumberArguments() == 0)
 			mTerminalSet.push_back(inPrimitive);
-		else if(inPrimitive->getNumberArguments() <= 4)
+		else if(!inPrimitive->isFeature())
 			mFunctionSet.push_back(inPrimitive);
-		else
+		else if(!inPrimitive->isRoot())
 			mAccountFeatureSet.push_back(inPrimitive);
+		else
+			mAccountRoot.push_back(inPrimitive);
 	}
 
 	Randomizer                            mRandom;        //!< Random number generator.
 	std::vector<PrimitiveHandle>          mFunctionSet;   //!< Set of functions usable to build trees.
 	std::vector<PrimitiveHandle>          mAccountFeatureSet;   //!< Set of account features usable to build trees.
+	std::vector<PrimitiveHandle>          mAccountRoot;   //!< Set of account features usable to build trees.
 	std::vector<PrimitiveHandle>          mTerminalSet;   //!< Set of terminals usable to build trees.
 	std::map<std::string,PrimitiveHandle> mPrimitiveMap;  //!< Name-primitive map.
 	std::vector<unsigned int>             mCallStack;     //!< Execution call stack.
@@ -116,7 +119,7 @@ public:
 	bool m_hasRecursiveFeature = false;
 	bool m_doPlot = false;
 	Account* m_pAccount;
-	QVector<QVector<int> > m_dailyAmounts;
+	DailyTransactions m_dailyAmounts;
 };
 
 }

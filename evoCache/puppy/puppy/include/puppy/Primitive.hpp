@@ -67,6 +67,9 @@ public:
 	virtual bool isFeature() const {
 		return false;
 	}
+	virtual bool isRoot() const {
+		return false;
+	}
 
 	Primitive& operator=(const Primitive& inRightPrimit);
 

@@ -24,7 +24,8 @@ public slots:
 	void handleResults(const QString &) {
 
 	}
-	void plotMask(VectorRectF vecRect);
+	void plotMask(ZoneVector vecZone);
+	void clearMasks();
 
 signals:
 	void operate(const QString &);

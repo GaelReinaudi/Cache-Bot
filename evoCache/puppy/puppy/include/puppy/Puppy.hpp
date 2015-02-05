@@ -103,13 +103,13 @@ void initializePopulation(std::vector<Tree>& ioPopulation,
 unsigned int initializeTreeFull(Tree& ioTree,
 								Context& ioContext,
 								unsigned int inDepth
-								, bool isFirst = false);
+								, int depthAtCall = 0);
 
 unsigned int initializeTreeGrow(Tree& ioTree,
                                 Context& ioContext,
                                 unsigned int inMinDepth,
 								unsigned int inMaxDepth
-								, bool isFirst = false);
+								, int depthAtCall = 0);
 
 void applyMutationStandard(std::vector<Tree>& ioPopulation,
                            Context& ioContext,

@@ -45,6 +45,7 @@
 #include "puppy/TokenT.hpp"
 #include "puppy/Puppy.hpp"
 
+static const int DEPTH_OF_FEATURES = 1;
 
 /*!
  *  \brief Calculate statistics for the actual population and display results to output stream.
@@ -111,7 +112,8 @@ void Puppy::applyCrossover(std::vector<Tree>& ioPopulation,
 		}
 	}
 	std::random_shuffle(lMateVector.begin(), lMateVector.end(), ioContext.mRandom);
-	if((lMateVector.size() % 2) != 0) lMateVector.pop_back();
+	if((lMateVector.size() % 2) != 0)
+		lMateVector.pop_back();
 
 	//for(unsigned int j=0; j<lMateVector.size(); ++j) {
 	//  std::cout << j << ": " << ioPopulation[lMateVector[j]] << std::endl;
@@ -198,15 +200,19 @@ bool Puppy::mateTrees(Puppy::Tree& ioTree1,
 	assert(ioTree1.size() > 0);
 	assert(ioTree2.size() > 0);
 
+//	LOG() << "Mate:" << ioTree1.toStr() << endl;
+//	LOG() << "With:" << ioTree2.toStr() << endl;
+
 	// Crossover loop. Try the given number of attempts to mate two individuals.
 	for(unsigned int i=0; i<64; ++i) {
 
 		// Choose a type of node (branch or leaf) following the distribution probability and change the
 		// node for another node of the same tree if the types mismatch.
 		bool lNode1IsTerminal = true;
-		if(ioTree1.size() > 1) lNode1IsTerminal = (ioContext.mRandom.rollUniform() >= inDistribProba);
+		if(ioTree1.size() > 1)
+			lNode1IsTerminal = (ioContext.mRandom.rollUniform() >= inDistribProba);
 		unsigned int lChoosenNode1 = ioContext.mRandom((unsigned long)ioTree1.size());
-		while((ioTree1[lChoosenNode1].mPrimitive->getNumberArguments() == 0) != lNode1IsTerminal) {
+		while(lChoosenNode1 == 0 || (ioTree1[lChoosenNode1].mPrimitive->getNumberArguments() == 0) != lNode1IsTerminal) {
 			lChoosenNode1 = ioContext.mRandom((unsigned long)ioTree1.size());
 		}
 
@@ -214,7 +220,7 @@ bool Puppy::mateTrees(Puppy::Tree& ioTree1,
 		if(ioTree2.size() > 1)
 			lNode2IsTerminal = (ioContext.mRandom.rollUniform() >= inDistribProba);
 		unsigned int lChoosenNode2 = ioContext.mRandom((unsigned long)ioTree2.size());
-		while((ioTree2[lChoosenNode2].mPrimitive->getNumberArguments() == 0) != lNode2IsTerminal) {
+		while(lChoosenNode2 == 0 || (ioTree2[lChoosenNode2].mPrimitive->getNumberArguments() == 0) != lNode2IsTerminal) {
 			lChoosenNode2 = ioContext.mRandom((unsigned long)ioTree2.size());
 		}
 
@@ -240,18 +246,18 @@ bool Puppy::mateTrees(Puppy::Tree& ioTree1,
 			continue;
 
 		// The crossover is valid.
-		LOG() << "Mate at #" << i << "  nodes " << lChoosenNode1 << "/" << lChoosenNode2 << endl;
-		LOG() << "Mate:" << ioTree1.toStr() << endl;
-		LOG() << "With:" << ioTree2.toStr() << endl;
+//		LOG() << "Mate at #" << i << "  nodes " << lChoosenNode1 << "/" << lChoosenNode2 << endl;
+//		LOG() << "Mate:" << ioTree1.toStr() << endl;
+//		LOG() << "With:" << ioTree2.toStr() << endl;
 		exchangeSubTrees(ioTree1, lChoosenNode1, lStack1, ioTree2, lChoosenNode2, lStack2);
 		ioTree1.mValid = false;
 		ioTree2.mValid = false;
-		LOG() << "  ->:" << ioTree1.toStr() << endl;
-		LOG() << "  ->:" << ioTree2.toStr() << endl;
+//		LOG() << "  ->:" << ioTree1.toStr() << endl;
+//		LOG() << "  ->:" << ioTree2.toStr() << endl;
 		return true;
 	}
-	LOG() << "Not Mate:" << ioTree1.toStr() << endl;
-	LOG() << "    With:" << ioTree2.toStr() << endl;
+//	LOG() << "Not Mate:" << ioTree1.toStr() << endl;
+//	LOG() << "    With:" << ioTree2.toStr() << endl;
 	return false;
 }
 
@@ -278,9 +284,13 @@ void Puppy::initializePopulation(std::vector<Puppy::Tree>& ioPopulation,
 		ioPopulation[i].mValid = false;
 		unsigned int lInitDepth = ioContext.mRandom.rollInteger(inMinDepth, inMaxDepth);
 		if(ioContext.mRandom.rollUniform() >= inInitGrowProba) {
-			initializeTreeFull(ioPopulation[i], ioContext, lInitDepth, true);
+			initializeTreeFull(ioPopulation[i], ioContext, lInitDepth);
+			LOG() << "initializeTreeFull:" << ioPopulation[i].toStr() << endl;
 		}
-		else initializeTreeGrow(ioPopulation[i], ioContext, inMinDepth, lInitDepth, true);
+		else {
+			initializeTreeGrow(ioPopulation[i], ioContext, inMinDepth, lInitDepth);
+			LOG() << "initializeTreeGrow:" << ioPopulation[i].toStr() << endl;
+		}
 	}
 }
 
@@ -298,7 +308,7 @@ void Puppy::initializePopulation(std::vector<Puppy::Tree>& ioPopulation,
 unsigned int Puppy::initializeTreeFull(Puppy::Tree& ioTree,
 									   Puppy::Context& ioContext,
 									   unsigned int inDepth,
-									   bool isFirst)
+									   int depthAtCall /*= 0*/)
 {
 	assert(inDepth >= 1);
 	if(inDepth == 1) {
@@ -310,16 +320,22 @@ unsigned int Puppy::initializeTreeFull(Puppy::Tree& ioTree,
 	}
 
 	assert(ioContext.mFunctionSet.size() > 0);
-	PrimitiveHandle lFunction = !isFirst
-		? ioContext.mFunctionSet[ioContext.mRandom(ioContext.mFunctionSet.size())]
-		: ioContext.mAccountFeatureSet[ioContext.mRandom(ioContext.mAccountFeatureSet.size())];
-
 	unsigned int lNodeIndex = ioTree.size();
-	ioTree.push_back(Node(lFunction->giveReference(ioContext), 0));
+	if(depthAtCall == 0) {
+		PrimitiveHandle lRoot = ioContext.mAccountRoot[0];
+		ioTree.push_back(Node(lRoot->giveReference(ioContext), 0));
+	}
+	else {
+		PrimitiveHandle lFunction = depthAtCall == DEPTH_OF_FEATURES
+									? ioContext.mAccountFeatureSet[ioContext.mRandom(ioContext.mAccountFeatureSet.size())]
+									: ioContext.mFunctionSet[ioContext.mRandom(ioContext.mFunctionSet.size())];
+		ioTree.push_back(Node(lFunction->giveReference(ioContext), 0));
+	}
 	unsigned int lNbArgs = ioTree[lNodeIndex].mPrimitive->getNumberArguments();
 	unsigned int lTreeSize = 1;
+	++depthAtCall;
 	for(unsigned int i=0; i<lNbArgs; ++i) {
-		lTreeSize += initializeTreeFull(ioTree, ioContext, inDepth-1);
+		lTreeSize += initializeTreeFull(ioTree, ioContext, inDepth-1, depthAtCall);
 	}
 	ioTree[lNodeIndex].mSubTreeSize = lTreeSize;
 	return lTreeSize;
@@ -341,38 +357,47 @@ unsigned int Puppy::initializeTreeGrow(Puppy::Tree& ioTree,
 									   Puppy::Context& ioContext,
 									   unsigned int inMinDepth,
 									   unsigned int inMaxDepth,
-									   bool isFirst)
+									   int depthAtCall)
 {
 	assert(inMinDepth >= 1);
 	assert(inMinDepth <= inMaxDepth);
 
+	unsigned int lNodeIndex = ioTree.size();
 	PrimitiveHandle lPrimit = NULL;
-	if(inMinDepth > 1) {
-		assert(ioContext.mFunctionSet.size() > 0);
-		lPrimit = !isFirst
-				  ? ioContext.mFunctionSet[ioContext.mRandom(ioContext.mFunctionSet.size())]
-				  : ioContext.mAccountFeatureSet[ioContext.mRandom(ioContext.mAccountFeatureSet.size())];
-	}
-	else if(inMaxDepth == 1) {
-		assert(ioContext.mTerminalSet.size() > 0);
-		lPrimit = ioContext.mTerminalSet[ioContext.mRandom(ioContext.mTerminalSet.size())];
+	if(depthAtCall == 0) {
+		PrimitiveHandle lRoot = ioContext.mAccountRoot[0];
+		ioTree.push_back(Node(lRoot->giveReference(ioContext), 1));
 	}
 	else {
-		unsigned int lIndexSel =
-				ioContext.mRandom(ioContext.mFunctionSet.size() + ioContext.mTerminalSet.size());
-		if(lIndexSel >= ioContext.mFunctionSet.size()) {
-			lPrimit = ioContext.mTerminalSet[lIndexSel - ioContext.mFunctionSet.size()];
+		if(inMinDepth > 1) {
+			assert(ioContext.mFunctionSet.size() > 0);
+			lPrimit = depthAtCall == DEPTH_OF_FEATURES
+										? ioContext.mAccountFeatureSet[ioContext.mRandom(ioContext.mAccountFeatureSet.size())]
+										: ioContext.mFunctionSet[ioContext.mRandom(ioContext.mFunctionSet.size())];
 		}
-		else lPrimit = ioContext.mFunctionSet[lIndexSel];
+		else if(inMaxDepth == 1) {
+			assert(ioContext.mTerminalSet.size() > 0);
+			lPrimit = ioContext.mTerminalSet[ioContext.mRandom(ioContext.mTerminalSet.size())];
+		}
+		else {
+			unsigned int lIndexSel =
+					ioContext.mRandom(ioContext.mFunctionSet.size() + ioContext.mTerminalSet.size());
+			if(lIndexSel >= ioContext.mFunctionSet.size()) {
+				lPrimit = ioContext.mTerminalSet[lIndexSel - ioContext.mFunctionSet.size()];
+			}
+			else
+				lPrimit = ioContext.mFunctionSet[lIndexSel];
+			if(depthAtCall == DEPTH_OF_FEATURES)
+				lPrimit = ioContext.mAccountFeatureSet[ioContext.mRandom(ioContext.mAccountFeatureSet.size())];
+		}
+		ioTree.push_back(Node(lPrimit->giveReference(ioContext), 1));
 	}
-
-	unsigned int lNodeIndex = ioTree.size();
-	ioTree.push_back(Node(lPrimit->giveReference(ioContext), 1));
 	unsigned int lTreeSize = 1;
 	unsigned int lMinDepth = (inMinDepth > 1) ? (inMinDepth-1) : 1;
 	unsigned int lNbArgs = ioTree[lNodeIndex].mPrimitive->getNumberArguments();
+	++depthAtCall;
 	for(unsigned int i=0; i<lNbArgs; ++i) {
-		lTreeSize += initializeTreeGrow(ioTree, ioContext, lMinDepth, inMaxDepth-1);
+		lTreeSize += initializeTreeGrow(ioTree, ioContext, lMinDepth, inMaxDepth-1, depthAtCall);
 	}
 	ioTree[lNodeIndex].mSubTreeSize = lTreeSize;
 	return lTreeSize;
@@ -397,7 +422,9 @@ void Puppy::applyMutationStandard(std::vector<Puppy::Tree>& ioPopulation,
 {
 	for(unsigned int i=0; i<ioPopulation.size(); ++i) {
 		if(ioContext.mRandom.rollUniform() < inMutationProba) {
+//			LOG() << "applyMutationStandard: " << ioPopulation[i].toStr() << endl;
 			mutateStandard(ioPopulation[i], ioContext, inMaxRegenDepth, inMaxDepth);
+//			LOG() << "-> " << ioPopulation[i].toStr() << endl;
 		}
 	}
 }
@@ -417,23 +444,33 @@ void Puppy::mutateStandard(Puppy::Tree& ioTree,
 						   unsigned int inMaxDepth)
 {
 	assert(ioTree.size() > 0);
-	unsigned int lMutIndex = ioContext.mRandom(ioTree.size());
+	//unsigned int lMutIndex = ioContext.mRandom(ioTree.size());
+	// mutate after the root.
+	unsigned int lMutIndex = DEPTH_OF_FEATURES + ioContext.mRandom(ioTree.size() - DEPTH_OF_FEATURES);
 	Tree lNewTree;
 	lNewTree.insert(lNewTree.end(), ioTree.begin(), ioTree.begin()+lMutIndex);
 	std::vector<unsigned int> lStack;
 	ioTree.setStackToNode(lMutIndex, lStack);
 	lStack.pop_back();
 	unsigned int lTreeDepth = ioContext.mRandom.rollInteger(1, inMaxRegenDepth);
+	// if feature
+	if(lStack.size() == 1)
+		lTreeDepth = 1 + ioContext.mRandom.rollInteger(1, inMaxRegenDepth - 1);
 	unsigned int lTreeDepth2 = inMaxDepth - lStack.size();
-	if(lTreeDepth2 < lTreeDepth) lTreeDepth = lTreeDepth2;
+//	LOG() << lMutIndex << lStack.size() << lTreeDepth << lTreeDepth2 << ioTree[lMutIndex].mSubTreeSize << endl;
+	if(lTreeDepth2 < lTreeDepth)
+		lTreeDepth = lTreeDepth2;
 	assert(lTreeDepth > 0);
-	initializeTreeGrow(lNewTree, ioContext, 1, lTreeDepth);
+	initializeTreeGrow(lNewTree, ioContext, 1, lTreeDepth, lStack.size());
 	lNewTree.insert(lNewTree.end(),
 					ioTree.begin()+lMutIndex+ioTree[lMutIndex].mSubTreeSize,
 					ioTree.end());
 	unsigned int lDiffSize =
 			ioTree[lMutIndex].mSubTreeSize - lNewTree[lMutIndex].mSubTreeSize;
-	for(unsigned int i=0; i<lStack.size(); ++i) lNewTree[lStack[i]].mSubTreeSize -= lDiffSize;
+	for(unsigned int i=0; i<lStack.size(); ++i)
+		lNewTree[lStack[i]].mSubTreeSize -= lDiffSize;
+	if(!lNewTree.isValidTree())
+		return;
 	ioTree = lNewTree;
 	ioTree.mValid = false;
 }
@@ -454,7 +491,9 @@ void Puppy::applyMutationSwap(std::vector<Puppy::Tree>& ioPopulation,
 {
 	for(unsigned int i=0; i<ioPopulation.size(); ++i) {
 		if(ioContext.mRandom.rollUniform() < inMutationProba) {
+//			LOG() << "applyMutationSwap: " << ioPopulation[i].toStr() << endl;
 			mutateSwap(ioPopulation[i], ioContext, inDistribProba);
+//			LOG() << "-> " << ioPopulation[i].toStr() << endl;
 		}
 	}
 }
@@ -472,15 +511,17 @@ void Puppy::mutateSwap(Puppy::Tree& ioTree,
 					   float inDistribProba)
 {
 	assert(ioTree.size() > 0);
-	unsigned int lMutIndex = ioContext.mRandom(ioTree.size());
+	unsigned int lMutIndex = DEPTH_OF_FEATURES + ioContext.mRandom(ioTree.size() - DEPTH_OF_FEATURES);
 	if(ioTree.size() > 1) {
 		bool lType = (ioContext.mRandom.rollUniform() < inDistribProba);
-		while((ioTree[lMutIndex].mPrimitive->getNumberArguments() != 0) != lType) {
+		while(lMutIndex == 0
+			  || (ioTree[lMutIndex].mPrimitive->getNumberArguments() != 0) != lType) {
 			lMutIndex = ioContext.mRandom(ioTree.size());
 		}
 	}
 
 	unsigned int lNbArgs = ioTree[lMutIndex].mPrimitive->getNumberArguments();
+	bool isFeat = ioTree[lMutIndex].mPrimitive->isFeature();
 	if(lNbArgs == 0) {
 		assert(ioContext.mTerminalSet.size() > 0);
 		PrimitiveHandle lTerminal =
@@ -489,14 +530,24 @@ void Puppy::mutateSwap(Puppy::Tree& ioTree,
 	}
 	else {
 		std::vector<unsigned int> lKArgsFunction;
-		for(unsigned int i=0; i<ioContext.mFunctionSet.size(); ++i) {
-			if(ioContext.mFunctionSet[i]->getNumberArguments() == lNbArgs) {
-				lKArgsFunction.push_back(i);
+		if(!isFeat) {
+			for(unsigned int i=0; i<ioContext.mFunctionSet.size(); ++i) {
+				if(ioContext.mFunctionSet[i]->getNumberArguments() == lNbArgs) {
+					lKArgsFunction.push_back(i);
+				}
+			}
+		}
+		else {
+			for(unsigned int i=0; i<ioContext.mAccountFeatureSet.size(); ++i) {
+				if(ioContext.mAccountFeatureSet[i]->getNumberArguments() == lNbArgs) {
+					lKArgsFunction.push_back(i);
+				}
 			}
 		}
 		if(lKArgsFunction.size() > 0) {
-			PrimitiveHandle lFunction =
-					ioContext.mFunctionSet[lKArgsFunction[ioContext.mRandom(lKArgsFunction.size())]];
+			PrimitiveHandle lFunction = !isFeat
+					? ioContext.mFunctionSet[lKArgsFunction[ioContext.mRandom(lKArgsFunction.size())]]
+					: ioContext.mAccountFeatureSet[lKArgsFunction[ioContext.mRandom(lKArgsFunction.size())]];
 			ioTree[lMutIndex].mPrimitive = lFunction->giveReference(ioContext);
 		}
 	}

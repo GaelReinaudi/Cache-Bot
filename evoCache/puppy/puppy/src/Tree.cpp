@@ -83,10 +83,13 @@ unsigned int Puppy::Tree::getDepth(unsigned int inIndex) const
  */
 void Puppy::Tree::interpret(void* outResult, Puppy::Context& ioContext)
 {
+	for(auto& v: ioContext.m_dailyAmounts)
+		for(auto& t : v)
+			t.resetAccountFor();
 	assert(size() > 0);
 	ioContext.mTree = this;
 	ioContext.mCallStack.push_back(0);
-	if(front().mPrimitive->isFeature()) {
+	if(isValidTree()) {
 		front().mPrimitive->execute(outResult, ioContext);
 	}
 	else {
@@ -114,7 +117,8 @@ void Puppy::Tree::setStackToNode(unsigned int inIndex,
 		unsigned int lNbArgs=(*this)[i].mPrimitive->getNumberArguments();
 		unsigned int lChildIndex = i + 1;
 		for(unsigned int j=0; j<lNbArgs; ++j) {
-			if((lChildIndex+(*this)[lChildIndex].mSubTreeSize) > inIndex) break;
+			if((lChildIndex+(*this)[lChildIndex].mSubTreeSize) > inIndex)
+				break;
 			lChildIndex += (*this)[lChildIndex].mSubTreeSize;
 		}
 		assert(lChildIndex < size());
