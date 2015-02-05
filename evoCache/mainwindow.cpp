@@ -51,7 +51,7 @@ void MainWindow::plotMask(ZoneVector vecZone) {
 			QCPItemRect* itRect = new QCPItemRect(ui->accountPlot);
 			itRect->topLeft->setCoords(chartRect.topLeft());
 			itRect->bottomRight->setCoords(chartRect.bottomRight());
-			QColor colZone = zone.m_isFilled ? QColor(0, 255, 0, 128) : QColor(255, 0, 0, 128);
+            QColor colZone = zone.m_isFilled ? QColor(11, 96, 254, 128) : QColor(239, 64, 53, 128);
 			itRect->setPen(QPen(QBrush(colZone), 3.0));
 			itRect->setBrush(QBrush(colZone));
 			itRect->setClipToAxisRect(false);

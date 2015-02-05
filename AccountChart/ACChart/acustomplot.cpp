@@ -6,8 +6,9 @@ ACustomPlot::ACustomPlot(QWidget *parent) :
 {
 	// setup the chart options
 	addGraph();
-	graph(0)->setLineStyle(QCPGraph::lsNone);
+    graph(0)->setLineStyle(QCPGraph::lsNone);
 	graph(0)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 2.0));
+    graph(0)->setPen(QPen(QColor(40,40,40,255)));
 	xAxis->setTickLabelType(QCPAxis::ltDateTime);
 	xAxis->setDateTimeFormat("yyyy/MM/dd hh");
 	yAxis->setAutoTickCount(10);
