@@ -1,25 +1,35 @@
 #include "AccRegPrimits.h"
 
-void FeatureFixedIncome::execute(void *outDatum, Puppy::Context &ioContext) {
-	AccountFeature::execute(outDatum, ioContext);
-	double& lResult = *(double*)outDatum;
+void FeatureFixedIncome::getArgs(Puppy::Context &ioContext)
+{
 	getArgument(2, &m_amount, ioContext);
 	getArgument(3, &m_every, ioContext);
 	getArgument(4, &m_amountDelta, ioContext);
 	getArgument(5, &m_dayDelta, ioContext);
-	lResult = -10e6;
-	ZoneVector outVecZone;
+}
+
+void FeatureFixedIncome::cleanArgs()
+{
 	m_amount = qAbs(m_amount);
 	m_every = qAbs(m_every);
 	m_amountDelta = qAbs(m_amountDelta);
 	m_dayDelta = qAbs(m_dayDelta);
-	m_dur = qMin(m_dur, m_every * 256);
+	m_every = qMax(qMin(m_every, 365.0), 1.0);
+	m_dur =  qMax(qMin(m_dur, m_every * 256), 50.0);
 	m_amountDelta = qMin(m_amountDelta, m_amount * 0.5);
 	m_dayDelta = qMin(m_dayDelta, m_every * 0.3);
-	if (m_dayDelta > 17 || m_endAgo > 1e6 || m_amount > 1e6) {
-		lResult = -4e6;
-		return;
-	}
+}
+
+void FeatureFixedIncome::execute(void *outDatum, Puppy::Context &ioContext) {
+	AccountFeature::execute(outDatum, ioContext);
+	double& lResult = *(double*)outDatum;
+	ZoneVector outVecZone;
+	getArgs(ioContext);
+	cleanArgs();
+//	if (m_dayDelta > 17 || m_endAgo > 1e6 || m_amount > 1e6) {
+//		lResult = -4e6;
+//		return;
+//	}
 	lResult = -2e6;
 	double fitness = 0.0;
 	int found = 0;
@@ -71,6 +81,8 @@ foundIt:
 	}
 
 	fitness -= found * qAbs(m_amountDelta);
+	fitness -= found * qAbs(m_dayDelta * 256);
+	fitness -= kindaLog(m_endAgo);
 	if(notFound > found / 12)
 		fitness -= (notFound - found / 12) * (qAbs(m_amount) + m_amountDelta + m_dayDelta * 64);
 
@@ -98,8 +110,9 @@ void MonthlyPayments::execute(void *outDatum, Puppy::Context &ioContext) {
 	m_every = qAbs(m_every);
 	m_amountDelta = qAbs(m_amountDelta);
 	m_dayDelta = qAbs(m_dayDelta);
-	m_dur = qMin(m_dur, m_every * 256);
-	m_amountDelta = qMin(m_amountDelta, -m_amount * 0.5);
+	m_every = qMax(qMin(m_every, 365.0), 1.0);
+	m_dur =  qMax(qMin(m_dur, m_every * 256), 30.0);
+	m_amountDelta = qMin(m_amountDelta, m_amount * 0.5);
 	m_dayDelta = qMin(m_dayDelta, m_every * 0.3);
 	if (m_dayDelta > 17 || m_endAgo > 1e6 || m_amount < -1e6) {
 		lResult = -4e6;

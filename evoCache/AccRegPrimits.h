@@ -5,7 +5,7 @@
 #include "puppy/Puppy.hpp"
 #include "EvolutionSpinner.h"
 
-static const int NUM_FEATURES = 8;
+static const int NUM_FEATURES = 6;
 
 class Add : public Puppy::Primitive
 {
@@ -106,6 +106,7 @@ public:
 		getArgument(1, &m_dur, ioContext);
 		m_endAgo = qAbs(m_endAgo);
 		m_dur = qAbs(m_dur);
+		m_endAgo = qMin(m_endAgo, 5 * 365.0);
 	}
 
 	bool isFeature() const override {
@@ -146,16 +147,43 @@ public:
 class FeatureFixedIncome : public AccountFeature
 {
 public:
-	FeatureFixedIncome(EvolutionSpinner* evoSpinner)
-		: AccountFeature(6, "FixedIncome", evoSpinner)
+	FeatureFixedIncome(EvolutionSpinner* evoSpinner, QString featureName = "FixedIncome")
+		: AccountFeature(6, featureName.toStdString(), evoSpinner)
 	{ }
 	virtual ~FeatureFixedIncome() { }
 	virtual void execute(void* outDatum, Puppy::Context& ioContext);
+	virtual void getArgs(Puppy::Context &ioContext);
+	virtual void cleanArgs();
+
 protected:
 	double m_amount = 0;
 	double m_every = 365.0 / 24.0;
 	double m_amountDelta = 100;
 	double m_dayDelta = 3;
+};
+
+class FeatureBiWeeklyIncome : public FeatureFixedIncome
+{
+public:
+	FeatureBiWeeklyIncome(EvolutionSpinner* evoSpinner)
+		: FeatureFixedIncome(evoSpinner, "BiWeeklyIncome")
+	{ }
+	virtual void getArgs(Puppy::Context &ioContext) {
+		FeatureFixedIncome::getArgs(ioContext);
+		m_every = 365.25 / 24.0;
+	}
+};
+
+class FeatureMonthlyIncome : public FeatureFixedIncome
+{
+public:
+	FeatureMonthlyIncome(EvolutionSpinner* evoSpinner)
+		: FeatureFixedIncome(evoSpinner, "MonthlyIncome")
+	{ }
+	virtual void getArgs(Puppy::Context &ioContext) {
+		FeatureFixedIncome::getArgs(ioContext);
+		m_every = 365.25 / 12.0;
+	}
 };
 
 class MonthlyPayments : public AccountFeature
