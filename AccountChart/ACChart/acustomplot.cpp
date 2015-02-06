@@ -19,7 +19,6 @@ ACustomPlot::ACustomPlot(QWidget *parent) :
 	addGraph();
 	graph(1)->setLineStyle(QCPGraph::lsStepLeft);
 	graph(1)->setPen(QPen(Qt::gray));
-	//graph(1)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 2.0));
 	yAxis2->setAutoTickCount(10);
 
 }

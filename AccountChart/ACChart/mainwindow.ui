@@ -34,7 +34,7 @@
      <number>1</number>
     </property>
     <item>
-     <widget class="ACustomplot" name="plot" native="true"/>
+	 <widget class="ACustomPlot" name="plot" native="true"/>
     </item>
    </layout>
   </widget>
@@ -61,7 +61,7 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>ACustomplot</class>
+   <class>ACustomPlot</class>
    <extends>QWidget</extends>
    <header>acustomplot.h</header>
    <container>1</container>
