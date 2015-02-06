@@ -16,6 +16,12 @@ ACustomPlot::ACustomPlot(QWidget *parent) :
 	axisRect(0)->setRangeZoomAxes(xAxis, 0);
 	m_lastDate = QDate(1, 1, 1);
 
+	addGraph();
+	graph(1)->setLineStyle(QCPGraph::lsStepLeft);
+	graph(1)->setPen(QPen(Qt::gray));
+	//graph(1)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 2.0));
+	yAxis2->setAutoTickCount(10);
+
 }
 
 void ACustomPlot::loadCompressedAmount(Account* account)
@@ -27,6 +33,8 @@ void ACustomPlot::loadCompressedAmount(Account* account)
 		if(m_lastDate.daysTo(trans.startDate().date()) > 0)
 			m_lastDate = trans.startDate().date();
 		graph(0)->addData(trans.time(), trans.compressedAmount());
+		m_integral += trans.amount();
+		graph(1)->addData(trans.time(), kindaLog(m_integral));
 	}
 	qDebug() << m_lastDate;
 	rescaleAxes();
