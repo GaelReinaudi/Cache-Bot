@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QThread>
 #include "ACChart/acustomplot.h"
+#include "AmortiChart/AMPlot.h"
 #include "EvolutionSpinner.h"
 
 class EvolutionSpinner;
@@ -32,7 +33,6 @@ signals:
 
 private:
 	Ui::MainWindow *ui;
-	ACustomPlot* m_accountPlot;
 	QThread* m_evoThread;
 	EvolutionSpinner* m_evoSpinner;
 };

@@ -13,10 +13,10 @@ MainWindow::MainWindow(QString jsonFile, QWidget *parent)
 	Account* account = new Account();
 	account->load(jsonFile);
 
-	ui->accountPlot->loadCompressedAmount(account);
-//	ui->accountPlot->loadAmount(account);
+	ui->acPlot->loadCompressedAmount(account);
+	ui->amPlot->loadAmount(account);
 
-//	ui->accountPlot->setPlottingHints(QCP::phFastPolylines | QCP::phCacheLabels);
+//	ui->acPlot->setPlottingHints(QCP::phFastPolylines | QCP::phCacheLabels);
 
 	// needed to spin a new thread and run the evolution in it
 	m_evoThread = new QThread();
@@ -37,7 +37,7 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::clearMasks() {
-	ui->accountPlot->clearItems();
+	ui->acPlot->clearItems();
 }
 
 void MainWindow::plotMask(ZoneVector vecZone) {
@@ -45,19 +45,21 @@ void MainWindow::plotMask(ZoneVector vecZone) {
 	if (!vecZone.empty()) {
 //		qDebug() << vecZone[0].left() << vecZone[0].right() << vecZone[0].top() << vecZone[0].bottom();
 		for(const auto& zone : vecZone) {
-			QRectF chartRect = ui->accountPlot->mapDayAgoToPlot(zone);
+			QRectF chartRect = ui->acPlot->mapDayAgoToPlot(zone);
 			chartRect = kindaLog(chartRect);
 //			qDebug() << QDateTime::fromTime_t(int(chartRect.left())) << QDateTime::fromTime_t(int(chartRect.right())) << chartRect.top() << chartRect.bottom();
-			QCPItemRect* itRect = new QCPItemRect(ui->accountPlot);
+			QCPItemRect* itRect = new QCPItemRect(ui->acPlot);
 			itRect->topLeft->setCoords(chartRect.topLeft());
 			itRect->bottomRight->setCoords(chartRect.bottomRight());
             QColor colZone = zone.m_isFilled ? QColor(11, 96, 254, 128) : QColor(239, 64, 53, 128);
 			itRect->setPen(QPen(QBrush(colZone), 3.0));
 			itRect->setBrush(QBrush(colZone));
 			itRect->setClipToAxisRect(false);
-			ui->accountPlot->addItem(itRect);
+			ui->acPlot->addItem(itRect);
 		}
-		ui->accountPlot->replot(QCustomPlot::rpQueued);
+		ui->acPlot->replot(QCustomPlot::rpQueued);
 	}
+//	ui->amPlot->clearGraphs();
+//	ui->amPlot->replot(QCustomPlot::rpQueued);
 }
 

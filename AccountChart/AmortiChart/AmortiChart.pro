@@ -4,7 +4,8 @@ CONFIG += c++11
 TARGET = AMortiChart
 TEMPLATE = app
 
-INCLUDEPATH += ../ACChart
+INCLUDEPATH += ../ACChart \
+	../
 
 SOURCES += \
 	main.cpp\
