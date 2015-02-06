@@ -3,18 +3,18 @@
 #include "puppy/Puppy.hpp"
 #include "AccRegPrimits.h"
 
-#define POP_SIZE_DEFAULT 10000
+#define POP_SIZE_DEFAULT 5000
 #define NBR_GEN_DEFAULT 20000
-#define NBR_PART_TOURNAMENT_DEFAULT 4
-#define MAX_DEPTH_DEFAULT 9
-#define MIN_INIT_DEPTH_DEFAULT 3
+#define NBR_PART_TOURNAMENT_DEFAULT 2
+#define MAX_DEPTH_DEFAULT 10
+#define MIN_INIT_DEPTH_DEFAULT 4
 #define MAX_INIT_DEPTH_DEFAULT 5
 #define INIT_GROW_PROBA_DEFAULT 0.5f
 #define CROSSOVER_PROBA_DEFAULT 0.8f
 #define CROSSOVER_DISTRIB_PROBA_DEFAULT 0.9f
-#define MUT_STD_PROBA_DEFAULT 0.35f
+#define MUT_STD_PROBA_DEFAULT 0.535f
 #define MUT_MAX_REGEN_DEPTH_DEFAULT 5
-#define MUT_SWAP_PROBA_DEFAULT 0.35f
+#define MUT_SWAP_PROBA_DEFAULT 0.535f
 #define MUT_SWAP_DISTRIB_PROBA_DEFAULT 0.5f
 #define SEED_DEFAULT 0
 
@@ -48,19 +48,22 @@ EvolutionSpinner::EvolutionSpinner(Account *pAc, QObject* parent)
 	m_context->insert(new TokenT<double>("50", 50.0));
 	m_context->insert(new TokenT<double>("100", 100.0));
 	m_context->insert(new TokenT<double>("200", 200.0));
+	m_context->insert(new TokenT<double>("300", 300.0));
 	m_context->insert(new TokenT<double>("500", 500.0));
 	m_context->insert(new TokenT<double>("1000", 1000.0));
 	m_context->insert(new TokenT<double>("2000", 2000.0));
 	m_context->insert(new TokenT<double>("3000", 3000.0));
 	m_context->insert(new TokenT<double>("4000", 4000.0));
 	m_context->insert(new TokenT<double>("5000", 5000.0));
-	m_context->insert(new TokenT<double>("15.208", 15.208));
-	m_context->insert(new TokenT<double>("30.417", 30.417));
-	m_context->insert(new TokenT<double>("365", 365.0));
+	m_context->insert(new TokenT<double>("15.208", 365.25 / 24.0));
+	m_context->insert(new TokenT<double>("30.417", 365.25 / 12.0));
+	m_context->insert(new TokenT<double>("365", 365.25));
+	m_context->insert(new TokenT<double>("182", 365.25 * 0.5));
 
 	m_context->insert(new CacheBotRootPrimitive(this));
-	m_context->insert(new MonthlyPayments(this));
-	m_context->insert(new FeatureFixedIncome(this));
+	m_context->insert(new FeatureBiWeeklyIncome(this));
+	m_context->insert(new FeatureMonthlyIncome(this));
+//	m_context->insert(new MonthlyPayments(this));
 }
 
 void EvolutionSpinner::startEvolution(bool doStart) {

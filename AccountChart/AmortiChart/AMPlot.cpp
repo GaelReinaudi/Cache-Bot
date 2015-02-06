@@ -49,9 +49,7 @@ void AMPlot::loadAmount(Account* account)
 	}
 	// first amortized transactions
 	double color = 0;
-	int day = 0;
 	int amortDur = 0;
-	int minAmort = 2;
 	int maxAmort = 999999999;
 	for (int minAmort = 2; minAmort > 0; --minAmort) {
 		for (const Transaction& trans : account->transactions().list()) {
