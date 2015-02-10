@@ -27,6 +27,7 @@ public slots:
 	}
 	void plotMask(ZoneVector vecZone);
 	void clearMasks();
+	void replotCharts();
 
 signals:
 	void operate(const QString &);
@@ -35,6 +36,7 @@ private:
 	Ui::MainWindow *ui;
 	QThread* m_evoThread;
 	EvolutionSpinner* m_evoSpinner;
+	Account* account;
 };
 
 #endif // MAINWINDOW_H

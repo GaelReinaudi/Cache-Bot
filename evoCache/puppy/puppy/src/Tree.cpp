@@ -85,7 +85,7 @@ void Puppy::Tree::interpret(void* outResult, Puppy::Context& ioContext)
 {
 	for(auto& v: ioContext.m_dailyAmounts)
 		for(auto& t : v)
-			t.resetAccountFor();
+			t->resetAccountFor();
 	assert(size() > 0);
 	ioContext.mTree = this;
 	ioContext.mCallStack.push_back(0);

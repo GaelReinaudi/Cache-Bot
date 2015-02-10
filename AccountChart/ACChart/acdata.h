@@ -61,11 +61,13 @@ public:
 		return m_startDate;
 	}
 
-	void accountFor() {
+	void accountFor(double estimatedNextDay) {
 		++m_isAccountedFor;
+		m_numDays = estimatedNextDay;
 	}
 	void resetAccountFor() {
 		m_isAccountedFor = 0;
+		m_numDays = 1.0;
 	}
 	bool isAccountedFor() const {
 		return m_isAccountedFor;
@@ -149,6 +151,6 @@ private:
 	Transactions m_transactions;
 };
 
-typedef QVector<QVector<Transaction> > DailyTransactions;
+typedef QVector<QVector<Transaction*> > DailyTransactions;
 
 #endif // ACDATA_H

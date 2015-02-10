@@ -29,6 +29,8 @@ AMPlot::AMPlot(QWidget *parent)
 
 void AMPlot::loadAmount(Account* account)
 {
+	graph(0)->clearData();
+	graph(1)->clearData();
 	for (const auto& trans : account->transactions().list()) {
 		if(m_lastDate.daysTo(trans.startDate().date()) > 0)
 			m_lastDate = trans.startDate().date();
@@ -58,6 +60,7 @@ void AMPlot::loadAmount(Account* account)
 	double color = 0;
 	int amortDur = 0;
 	int maxAmort = 999999999;
+	qsrand(55);
 	for (int minAmort = 2; minAmort > 0; --minAmort) {
 		for (const Transaction& trans : account->transactions().list()) {
 			amortDur = qRound(trans.numDays());
@@ -100,7 +103,7 @@ void AMPlot::loadAmount(Account* account)
 
 	colorMap->rescaleDataRange(true);
 	rescaleAxes();
-	xAxis->setRange(xAxis->range().lower + 0*3600*24, xAxis->range().upper + amortDur*3600*24);
+	xAxis->setRange(xAxis->range().lower + 0*3600*24, xAxis->range().upper);// + amortDur*3600*24);
 	yAxis->setRange(yAxis->range().lower - 0.5, yAxis->range().upper + 0.5);
 	double maxY2 = qMax(qAbs(yAxis2->range().lower), qAbs(yAxis2->range().upper));
 	yAxis2->setRange(-maxY2, maxY2);

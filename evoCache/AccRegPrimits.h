@@ -168,8 +168,8 @@ public:
 	FeatureBiWeeklyIncome(EvolutionSpinner* evoSpinner)
 		: FeatureFixedIncome(evoSpinner, "BiWeeklyIncome")
 	{ }
-	virtual void getArgs(Puppy::Context &ioContext) {
-		FeatureFixedIncome::getArgs(ioContext);
+	virtual void cleanArgs() override {
+		FeatureFixedIncome::cleanArgs();
 		m_every = 365.25 / 24.0;
 	}
 };
@@ -180,8 +180,8 @@ public:
 	FeatureMonthlyIncome(EvolutionSpinner* evoSpinner)
 		: FeatureFixedIncome(evoSpinner, "MonthlyIncome")
 	{ }
-	virtual void getArgs(Puppy::Context &ioContext) {
-		FeatureFixedIncome::getArgs(ioContext);
+	virtual void cleanArgs() override {
+		FeatureFixedIncome::cleanArgs();
 		m_every = 365.25 / 12.0;
 	}
 };

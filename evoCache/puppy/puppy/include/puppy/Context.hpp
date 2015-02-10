@@ -83,9 +83,9 @@ public:
 		}
 		qDebug() << "mostRecent" << mostRecent << "mostDaysAgo" << mostDaysAgo;
 		m_dailyAmounts.resize(mostDaysAgo + 1);
-		for (const Transaction& trans : pAc->transactions().list()) {
+		for (Transaction& trans : pAc->transactions().list()) {
 			int daysAgo = trans.startDate().daysTo(mostRecent);
-			m_dailyAmounts[daysAgo].push_back(trans);
+			m_dailyAmounts[daysAgo].push_back(&trans);
 		}
 	}
 

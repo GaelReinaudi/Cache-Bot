@@ -105,6 +105,7 @@ void EvolutionSpinner::startEvolution(bool doStart) {
 		emit sendClearMask();
 		bestTree.interpret(&a, *m_context);
 		LOG() << "Best tree ("<<a<<"): " << bestTree.toStr() << endl;
+		emit needsReplot();
 		m_context->m_doPlot = false;
 
 		applySelectionTournament(lPopulation, *m_context, lNbrPartTournament);

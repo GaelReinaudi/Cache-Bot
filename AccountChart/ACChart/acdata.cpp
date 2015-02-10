@@ -82,7 +82,7 @@ void Transaction::read(const QJsonObject &json) {
 	}
 	m_numDays = json["numDays"].toString().toDouble(&ok);
 	if(!ok)
-		m_numDays = 1;
+		m_numDays = 1.0;
 	m_description = json["descr"].toString();
 	qDebug() << m_amount << sec << m_startDate << m_numDays << m_description;
 }

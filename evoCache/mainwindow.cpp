@@ -10,7 +10,7 @@ MainWindow::MainWindow(QString jsonFile, QWidget *parent)
 
 
 	// an account object that is going to be populated by the json file
-	Account* account = new Account();
+	account = new Account();
 	account->load(jsonFile);
 
 	ui->acPlot->loadCompressedAmount(account);
@@ -27,6 +27,7 @@ MainWindow::MainWindow(QString jsonFile, QWidget *parent)
 	connect(ui->startButton, SIGNAL(clicked(bool)), m_evoSpinner, SLOT(startEvolution(bool)));
 	connect(m_evoSpinner, &EvolutionSpinner::sendMask, this, &MainWindow::plotMask);
 	connect(m_evoSpinner, &EvolutionSpinner::sendClearMask, this, &MainWindow::clearMasks);
+	connect(m_evoSpinner, &EvolutionSpinner::needsReplot, this, &MainWindow::replotCharts);
 	m_evoThread->start();
 //	ui->startButton->click();
 }
@@ -57,9 +58,12 @@ void MainWindow::plotMask(ZoneVector vecZone) {
 			itRect->setClipToAxisRect(false);
 			ui->acPlot->addItem(itRect);
 		}
-		ui->acPlot->replot(QCustomPlot::rpQueued);
 	}
-//	ui->amPlot->clearGraphs();
+}
+
+void MainWindow::replotCharts() {
+	ui->acPlot->replot(QCustomPlot::rpQueued);
+	ui->amPlot->loadAmount(account);
 //	ui->amPlot->replot(QCustomPlot::rpQueued);
 }
 
