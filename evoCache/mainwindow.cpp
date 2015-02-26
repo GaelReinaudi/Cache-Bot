@@ -16,6 +16,9 @@ MainWindow::MainWindow(QString jsonFile, QWidget *parent)
 	ui->acPlot->loadCompressedAmount(account);
 	ui->amPlot->loadAmount(account);
 
+	connect(ui->acPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), ui->amPlot->xAxis, SLOT(setRange(QCPRange)));
+	connect(ui->acPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), ui->amPlot, SLOT(replot()));
+
 //	ui->acPlot->setPlottingHints(QCP::phFastPolylines | QCP::phCacheLabels);
 
 	// needed to spin a new thread and run the evolution in it
@@ -24,7 +27,7 @@ MainWindow::MainWindow(QString jsonFile, QWidget *parent)
 	m_evoSpinner->moveToThread(m_evoThread);
 	connect(m_evoThread, &QThread::finished, m_evoSpinner, &QObject::deleteLater);
 	connect(m_evoSpinner, &EvolutionSpinner::resultReady, this, &MainWindow::handleResults);
-	connect(ui->startButton, SIGNAL(clicked(bool)), m_evoSpinner, SLOT(startEvolution(bool)));
+	connect(ui->startButton, SIGNAL(clicked(bool)), m_evoSpinner, SLOT(startStopEvolution(bool)), Qt::DirectConnection);
 	connect(m_evoSpinner, &EvolutionSpinner::sendMask, this, &MainWindow::plotMask);
 	connect(m_evoSpinner, &EvolutionSpinner::sendClearMask, this, &MainWindow::clearMasks);
 	connect(m_evoSpinner, &EvolutionSpinner::needsReplot, this, &MainWindow::replotCharts);

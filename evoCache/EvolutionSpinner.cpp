@@ -66,11 +66,23 @@ EvolutionSpinner::EvolutionSpinner(Account *pAc, QObject* parent)
 //	m_context->insert(new MonthlyPayments(this));
 }
 
-void EvolutionSpinner::startEvolution(bool doStart) {
-	if (!doStart)
+void EvolutionSpinner::startStopEvolution(bool doStart) {
+	if (!doStart) {
+		m_doSpin = false;
 		return;
+	}
 	m_doSpin = true;
+	static bool once =false;
+	if(!once) {
+		once = true;
+		QTimer::singleShot(0, this, SLOT(runEvolution()));
+	}
+}
 
+void EvolutionSpinner::runEvolution() {
+	while(!m_doSpin)  {
+		QThread::msleep(100);
+	}
 	// Create parameter variables with default values.
 	unsigned int  lPopSize             = POP_SIZE_DEFAULT;
 	unsigned int  lNbrGen              = NBR_GEN_DEFAULT;
@@ -96,6 +108,9 @@ void EvolutionSpinner::startEvolution(bool doStart) {
 	// Evolve population for the given number of generations
 	LOG() << "Starting evolution" << endl;
 	for(unsigned int i=1; i<=lNbrGen; ++i) {
+		while(!m_doSpin)  {
+			QThread::msleep(100);
+		}
 		LOG() << "Generation " << i << endl;
 		auto result = std::minmax_element(lPopulation.begin(), lPopulation.end());
 		Tree bestTree = lPopulation[result.second - lPopulation.begin()];

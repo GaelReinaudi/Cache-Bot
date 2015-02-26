@@ -37,7 +37,7 @@ void AMPlot::loadAmount(Account* account)
 		if(m_firstDate.daysTo(trans.startDate().date()) < 0)
 			m_firstDate = trans.startDate().date();
 	}
-	qDebug() << m_firstDate << m_lastDate << "days =" << m_firstDate.daysTo(m_lastDate);
+	//qDebug() << m_firstDate << m_lastDate << "days =" << m_firstDate.daysTo(m_lastDate);
 	double firstTime = QDateTime(m_firstDate).toTime_t();
 	double lastTime = QDateTime(m_lastDate).toTime_t();
 
@@ -60,7 +60,7 @@ void AMPlot::loadAmount(Account* account)
 	double color = 0;
 	int amortDur = 0;
 	int maxAmort = 999999999;
-	qsrand(55);
+	int colorInc = 0;
 	for (int minAmort = 2; minAmort > 0; --minAmort) {
 		for (const Transaction& trans : account->transactions().list()) {
 			amortDur = qRound(trans.numDays());
@@ -68,7 +68,7 @@ void AMPlot::loadAmount(Account* account)
 			double perDay = trans.amount() / amortDur;
 			if (amortDur >= minAmort && amortDur < maxAmort) {
 				int iDay = m_firstDate.daysTo(trans.startDate().date());
-				qDebug() << iDay << amortDur << perDay;
+				//qDebug() << iDay << amortDur << perDay;
 
 				int mul = perDay > 0.0 ? 1 : -1;
 				int h = 0;
@@ -89,7 +89,8 @@ void AMPlot::loadAmount(Account* account)
 							integral[iDay + a] += trans.amount();
 					}
 				}
-				color = qrand() % 128;
+				colorInc += 111111;
+				color = colorInc % 128;
 			}
 		}
 		maxAmort = minAmort;

@@ -22,7 +22,8 @@ public:
 	EvolutionSpinner(Account* pAc, QObject* parent = 0);
 
 public slots:
-	void startEvolution(bool doStart);
+	void startStopEvolution(bool doStart);
+	void runEvolution();
 
 protected:
 	unsigned int evaluateSymbReg(std::vector<Puppy::Tree> &ioPopulation, Puppy::Context &ioContext);
