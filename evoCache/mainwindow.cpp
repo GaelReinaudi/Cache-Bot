@@ -30,7 +30,7 @@ MainWindow::MainWindow(QString jsonFile, QWidget *parent)
 	connect(ui->startButton, SIGNAL(clicked(bool)), m_evoSpinner, SLOT(startStopEvolution(bool)), Qt::DirectConnection);
 	connect(m_evoSpinner, &EvolutionSpinner::sendMask, this, &MainWindow::plotMask);
 	connect(m_evoSpinner, &EvolutionSpinner::sendClearMask, this, &MainWindow::clearMasks);
-	connect(m_evoSpinner, &EvolutionSpinner::needsReplot, this, &MainWindow::replotCharts);
+	connect(m_evoSpinner, &EvolutionSpinner::needsReplot, this, &MainWindow::replotCharts, Qt::BlockingQueuedConnection);
 	m_evoThread->start();
 //	ui->startButton->click();
 }

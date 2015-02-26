@@ -104,6 +104,7 @@ Puppy::TokenT<T>::TokenT(std::string inName, const T& inToken) :
 template <class T>
 void Puppy::TokenT<T>::execute(void* outDatum, Puppy::Context& ioContext)
 {
+	Q_UNUSED(ioContext);
   T& lResult = *(T*)outDatum;
   lResult = mToken;
 }

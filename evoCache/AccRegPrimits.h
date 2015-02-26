@@ -137,11 +137,19 @@ public:
 		double& lResult = *(double*)outDatum;
 		lResult = 0.0;
 		double lArgi;
-		for(int i = 0; i < getNumberArguments(); ++i) {
+		for(unsigned int i = 0; i < getNumberArguments(); ++i) {
 			getArgument(i, &lArgi, ioContext);
 			lResult += lArgi;
 		}
 	}
+};
+
+class DummyFeature : public AccountFeature
+{
+public:
+	DummyFeature(EvolutionSpinner* evoSpinner, QString featureName = "Dummy")
+			: AccountFeature(6, featureName.toStdString(), evoSpinner)
+	{}
 };
 
 class FeatureFixedIncome : public AccountFeature
@@ -150,7 +158,7 @@ public:
 	FeatureFixedIncome(EvolutionSpinner* evoSpinner, QString featureName = "FixedIncome")
 		: AccountFeature(6, featureName.toStdString(), evoSpinner)
 	{ }
-	virtual ~FeatureFixedIncome() { }
+	~FeatureFixedIncome() { }
 	virtual void execute(void* outDatum, Puppy::Context& ioContext);
 	virtual void getArgs(Puppy::Context &ioContext);
 	virtual void cleanArgs();

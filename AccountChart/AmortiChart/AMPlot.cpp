@@ -86,10 +86,10 @@ void AMPlot::loadAmount(Account* account)
 					if ( iDay + a < totalDays) {
 						integralAmort[iDay + a] += perDay;
 						if (a == 0)
-							integral[iDay + a] += trans.amount();
+							integral[iDay] += trans.amount();
 					}
 				}
-				colorInc += 111111;
+				colorInc += 11111;
 				color = colorInc % 128;
 			}
 		}

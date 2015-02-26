@@ -63,7 +63,7 @@ EvolutionSpinner::EvolutionSpinner(Account *pAc, QObject* parent)
 	m_context->insert(new CacheBotRootPrimitive(this));
 	m_context->insert(new FeatureBiWeeklyIncome(this));
 	m_context->insert(new FeatureMonthlyIncome(this));
-//	m_context->insert(new MonthlyPayments(this));
+	m_context->insert(new DummyFeature(this));
 }
 
 void EvolutionSpinner::startStopEvolution(bool doStart) {
