@@ -13,26 +13,36 @@
 double kindaLog(double amount);
 QRectF kindaLog(QRectF rectLinear);
 
-class Transaction
+#define MAX_HASH_LENGTH 64
+
+class Account;
+
+struct Transaction
 {
+	Account* account = nullptr;
+	QString id; // "pKowox9EaKF14mBJ71m3hnmoPgA3Q0T4rjDox"
+	QString name; // "YARROW HOTEL GRILL" or "STRIKE TECHNOLOG"
+	double camount = 0.0;
+	QDate date; // "2015-01-28"
+	QStringList categories; // ["Food and Drink", "Restaurants"] or ["Transfer", "Payroll"]
+
 public:
-	enum Type{InternalTransfer = -1, None = 0};
-	Transaction() {}
-	Transaction(double amount, QDateTime startDate, double numDays, QString &descr)
-		: m_amount(amount)
-		, m_numDays(numDays)
-		, m_startDate(startDate)
-		, m_description(descr)
-	{
-	}
-	Transaction(const Transaction& other) {
-		m_amount = other.m_amount;
-		m_startDate = other.m_startDate;
-		m_numDays = other.m_numDays;
-		m_description = other.m_description;
-		// fresh un-accounted-for copy
-		m_isAccountedFor = 0;
-	}
+//	Transaction() {}
+//	Transaction(double amount, QDateTime startDate, double numDays, QString &descr)
+//		: m_amount(amount)
+//		, m_numDays(numDays)
+//		, m_startDate(startDate)
+//		, m_description(descr)
+//	{
+//	}
+//	Transaction(const Transaction& other) {s
+//		m_amount = other.m_amount;
+//		m_startDate = other.m_startDate;
+//		m_numDays = other.m_numDays;
+//		m_description = other.m_description;
+//		// fresh un-accounted-for copy
+//		m_isAccountedFor = 0;
+//	}
 
 	//! json in
 	void read(const QJsonObject &json);
@@ -83,7 +93,7 @@ public:
 	}
 
 private:
-	int m_type = None;
+	int m_type = 0;
 	double m_amount = 0.0;
 	double m_numDays = 1.0;
 	QDateTime m_startDate;
@@ -149,6 +159,11 @@ public:
 private:
 	QVector<QString> m_accountIds;
 	Transactions m_transactions;
+};
+
+class Household
+{
+	QVector<Account> m_accounts;
 };
 
 typedef QVector<QVector<Transaction*> > DailyTransactions;

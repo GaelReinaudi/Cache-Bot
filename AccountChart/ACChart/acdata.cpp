@@ -69,20 +69,19 @@ void Transactions::read(const QJsonObject &json, const QVector<QString> &acIds) 
 
 void Transaction::read(const QJsonObject &json) {
 	bool ok;
-	m_amount = json["amount"].toString().toDouble(&ok);
-	uint sec = json["startDate"].toString().toDouble(&ok);
-	if(ok)
-		m_startDate = QDateTime::fromTime_t(sec);
-	else {
-		m_amount = -json["amount"].toDouble();
-		m_startDate = QDateTime::fromString(json["date"].toString(), "yyyy-MM-dd");
-		if (json["name"].toString() == "Online Transfer") {
-			m_type = InternalTransfer;
-		}
+	QString accountStr = json["_account"].toString();
+	QString id = json["_id"].toString();
+	QString name = json["name"].toString();
+	camount = -json["amount"].toDouble();
+	date = QDate::fromString(json["date"].toString(), "yyyy-MM-dd");
+	QJsonArray npcArrayOld = json["category"].toArray();
+	for (int npcIndex = 0; npcIndex < npcArrayOld.size(); ++npcIndex) {
+		categories.append(npcArrayOld[npcIndex].toString());
 	}
-	m_numDays = json["numDays"].toString().toDouble(&ok);
-	if(!ok)
-		m_numDays = 1.0;
-	m_description = json["descr"].toString();
-	qDebug() << m_amount << sec << m_startDate << m_numDays << m_description;
+	LOG() << "Transaction::read() " << m_amount << sec << m_startDate << m_numDays << m_description;
+	LOG() << "cat:["
+	for (QString& s : categories) {
+		LOG() << " " << s;
+	}
+	LOG() << "]" << endl;
 }
