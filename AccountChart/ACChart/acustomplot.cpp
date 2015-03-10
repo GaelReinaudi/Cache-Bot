@@ -32,7 +32,7 @@ void ACustomPlot::loadCompressedAmount(Account* account)
 		if(m_lastDate.daysTo(trans.startDate().date()) > 0)
 			m_lastDate = trans.startDate().date();
 		graph(0)->addData(trans.time(), trans.compressedAmount());
-		m_integral += trans.amount();
+		m_integral += trans.amountDbl();
 		graph(1)->addData(trans.time(), kindaLog(m_integral));
 	}
 	qDebug() << m_lastDate;
@@ -50,7 +50,7 @@ void ACustomPlot::loadAmount(Account* account)
 	for (const auto& trans : account->transactions().list()) {
 		if(m_lastDate.daysTo(trans.startDate().date()) > 0)
 			m_lastDate = trans.startDate().date();
-		graph(0)->addData(trans.time(), trans.amount());
+		graph(0)->addData(trans.time(), trans.amountDbl());
 	}
 	qDebug() << m_lastDate;
 	rescaleAxes();

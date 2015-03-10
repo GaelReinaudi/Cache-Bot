@@ -46,9 +46,9 @@ void FeatureFixedIncome::execute(void *outDatum, Puppy::Context &ioContext) {
 				continue;
 			else {
 				for (auto& t : copyDailyAmounts[dayAgo + j]) {
-					if (!t->isAccountedFor() && t->amount() <= m_amount + m_amountDelta && t->amount() >= m_amount - m_amountDelta) {
-						fitness += qAbs(t->amount());
-						fitness -= qAbs(t->amount() - m_amount);
+					if (!t->isAccountedFor() && t->amountDbl() <= m_amount + m_amountDelta && t->amountDbl() >= m_amount - m_amountDelta) {
+						fitness += qAbs(t->amountDbl());
+						fitness -= qAbs(t->amountDbl() - m_amount);
 						t->accountFor(m_every);
 						++found;
 						goto foundIt;
@@ -58,9 +58,9 @@ void FeatureFixedIncome::execute(void *outDatum, Puppy::Context &ioContext) {
 			// if j not null, we try negative deltas also
 			if (j && j < dayAgo) {
 				for (auto& tr : copyDailyAmounts[dayAgo - j]) {
-					if (!tr->isAccountedFor() && tr->amount() <= m_amount + m_amountDelta && tr->amount() >= m_amount - m_amountDelta) {
-						fitness += qAbs(tr->amount());
-						fitness -= qAbs(tr->amount() - m_amount);
+					if (!tr->isAccountedFor() && tr->amountDbl() <= m_amount + m_amountDelta && tr->amountDbl() >= m_amount - m_amountDelta) {
+						fitness += qAbs(tr->amountDbl());
+						fitness -= qAbs(tr->amountDbl() - m_amount);
 						tr->accountFor(m_every);
 						++found;
 						goto foundIt;
@@ -134,9 +134,9 @@ void MonthlyPayments::execute(void *outDatum, Puppy::Context &ioContext) {
 				continue;
 			else {
 				for (auto& t : copyDailyAmounts[dayAgo + j]) {
-					if (!t->isAccountedFor() && t->amount() <= m_amount + m_amountDelta && t->amount() >= m_amount - m_amountDelta) {
-						fitness += qAbs(t->amount());
-						fitness -= qAbs(t->amount() - m_amount);
+					if (!t->isAccountedFor() && t->amountDbl() <= m_amount + m_amountDelta && t->amountDbl() >= m_amount - m_amountDelta) {
+						fitness += qAbs(t->amountDbl());
+						fitness -= qAbs(t->amountDbl() - m_amount);
 						t->accountFor(m_every);
 						++found;
 						goto foundIt;
@@ -146,9 +146,9 @@ void MonthlyPayments::execute(void *outDatum, Puppy::Context &ioContext) {
 			// if j not null, we try negative deltas also
 			if (j && j < dayAgo) {
 				for (auto& tr : copyDailyAmounts[dayAgo - j]) {
-					if (!tr->isAccountedFor() && tr->amount() <= m_amount + m_amountDelta && tr->amount() >= m_amount - m_amountDelta) {
-						fitness += qAbs(tr->amount());
-						fitness -= qAbs(tr->amount() - m_amount);
+					if (!tr->isAccountedFor() && tr->amountDbl() <= m_amount + m_amountDelta && tr->amountDbl() >= m_amount - m_amountDelta) {
+						fitness += qAbs(tr->amountDbl());
+						fitness -= qAbs(tr->amountDbl() - m_amount);
 						tr->accountFor(m_every);
 						++found;
 						goto foundIt;

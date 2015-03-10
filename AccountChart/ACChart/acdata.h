@@ -22,83 +22,25 @@ struct Transaction
 	Account* account = nullptr;
 	QString id; // "pKowox9EaKF14mBJ71m3hnmoPgA3Q0T4rjDox"
 	QString name; // "YARROW HOTEL GRILL" or "STRIKE TECHNOLOG"
-	double camount = 0.0;
+	double amount = 0.0;
+	int kamount = 0; // integer = round(amount * 1024)
 	QDate date; // "2015-01-28"
 	QStringList categories; // ["Food and Drink", "Restaurants"] or ["Transfer", "Payroll"]
-
-public:
-//	Transaction() {}
-//	Transaction(double amount, QDateTime startDate, double numDays, QString &descr)
-//		: m_amount(amount)
-//		, m_numDays(numDays)
-//		, m_startDate(startDate)
-//		, m_description(descr)
-//	{
-//	}
-//	Transaction(const Transaction& other) {s
-//		m_amount = other.m_amount;
-//		m_startDate = other.m_startDate;
-//		m_numDays = other.m_numDays;
-//		m_description = other.m_description;
-//		// fresh un-accounted-for copy
-//		m_isAccountedFor = 0;
-//	}
 
 	//! json in
 	void read(const QJsonObject &json);
 	//! json out
-	void write(QJsonObject &json) const {
-		json["amount"] = m_amount;
-		json["startDate"] = int(m_startDate.toTime_t());
-		json["numDays"] = m_numDays;
-		json["descr"] = m_description;
-	}
+	void write(QJsonObject &json) const;
 
-	double amount() const{
-		return m_amount;
+	double amountDbl() const {
+		return amount;
 	}
 	double compressedAmount() const{
-		return kindaLog(m_amount);
+		return kindaLog(amountDbl());
 	}
 	double numDays() const{
-		return m_numDays;
+		return 1;
 	}
-	uint time() const{
-		return m_startDate.toTime_t();
-	}
-
-	QDateTime startDate() const {
-		return m_startDate;
-	}
-
-	void accountFor(double estimatedNextDay) {
-		++m_isAccountedFor;
-		m_numDays = estimatedNextDay;
-	}
-	void resetAccountFor() {
-		m_isAccountedFor = 0;
-		m_numDays = 1.0;
-	}
-	bool isAccountedFor() const {
-		return m_isAccountedFor;
-	}
-
-public:
-	static bool earlierThan(const Transaction& first, const Transaction& second) {
-		return first.startDate() < second.startDate();
-	}
-
-	int type() const {
-		return m_type;
-	}
-
-private:
-	int m_type = 0;
-	double m_amount = 0.0;
-	double m_numDays = 1.0;
-	QDateTime m_startDate;
-	QString m_description;
-	char m_isAccountedFor = 0;
 };
 
 class Transactions
@@ -131,7 +73,7 @@ public:
 public:
 	static bool isSymetric(const Transaction& first, const Transaction& second) {
 		if (first.startDate() == second.startDate()) {
-			if (first.amount() == -second.amount()) {
+			if (first.amountDbl() == -second.amountDbl()) {
 				return true;
 			}
 		}

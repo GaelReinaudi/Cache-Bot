@@ -64,8 +64,8 @@ void AMPlot::loadAmount(Account* account)
 	for (int minAmort = 2; minAmort > 0; --minAmort) {
 		for (const Transaction& trans : account->transactions().list()) {
 			amortDur = qRound(trans.numDays());
-			//int perDay = qAbs(kindaLog((trans.amount() * 1.0) / amort));
-			double perDay = trans.amount() / amortDur;
+			//int perDay = qAbs(kindaLog((trans.amountDbl() * 1.0) / amort));
+			double perDay = trans.amountDbl() / amortDur;
 			if (amortDur >= minAmort && amortDur < maxAmort) {
 				int iDay = m_firstDate.daysTo(trans.startDate().date());
 				//qDebug() << iDay << amortDur << perDay;
@@ -86,7 +86,7 @@ void AMPlot::loadAmount(Account* account)
 					if ( iDay + a < totalDays) {
 						integralAmort[iDay + a] += perDay;
 						if (a == 0)
-							integral[iDay] += trans.amount();
+							integral[iDay] += trans.amountDbl();
 					}
 				}
 				colorInc += 11111;
