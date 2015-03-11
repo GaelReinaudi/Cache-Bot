@@ -14,7 +14,6 @@ ACustomPlot::ACustomPlot(QWidget *parent) :
 	yAxis->setAutoTickCount(10);
 	setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
 	axisRect(0)->setRangeZoomAxes(xAxis, 0);
-	m_lastDate = QDate(1, 1, 1);
 
 	addGraph();
 	graph(1)->setLineStyle(QCPGraph::lsStepLeft);
@@ -29,13 +28,10 @@ void ACustomPlot::loadCompressedAmount(Account* account)
 	yAxis->setLabel("log($)");
 	// add the purchase points
 	for (const auto& trans : account->transactions().list()) {
-		if(m_lastDate.daysTo(trans.startDate().date()) > 0)
-			m_lastDate = trans.startDate().date();
-		graph(0)->addData(trans.time(), trans.compressedAmount());
+		graph(0)->addData(trans.time_t(), trans.compressedAmount());
 		m_integral += trans.amountDbl();
-		graph(1)->addData(trans.time(), kindaLog(m_integral));
+		graph(1)->addData(trans.time_t(), kindaLog(m_integral));
 	}
-	qDebug() << m_lastDate;
 	rescaleAxes();
 	//xAxis->setRange(xAxis->range().lower - 7*24*3600, xAxis->range().upper + 7*24*3600);
 	yAxis->setRange(yAxis->range().lower - 0.5, yAxis->range().upper + 0.5);
@@ -48,22 +44,10 @@ void ACustomPlot::loadAmount(Account* account)
 	yAxis->setLabel("$");
 	// add the purchase points
 	for (const auto& trans : account->transactions().list()) {
-		if(m_lastDate.daysTo(trans.startDate().date()) > 0)
-			m_lastDate = trans.startDate().date();
-		graph(0)->addData(trans.time(), trans.amountDbl());
+		graph(0)->addData(trans.time_t(), trans.amountDbl());
 	}
-	qDebug() << m_lastDate;
 	rescaleAxes();
 	xAxis->setRange(xAxis->range().lower - 7*24*3600, xAxis->range().upper + 7*24*3600);
 	yAxis->setRange(yAxis->range().lower - 500, yAxis->range().upper + 500);
-}
-
-QRectF ACustomPlot::mapDayAgoToPlot(QRectF rectDayAgo) const {
-	QRectF chartRect(rectDayAgo);
-	QDate timeLeft = m_lastDate.addDays(-chartRect.left());
-	QDate timeRight = m_lastDate.addDays(-chartRect.right() + 1);
-	chartRect.setLeft(QDateTime(timeLeft).toTime_t());
-	chartRect.setRight(QDateTime(timeRight).toTime_t());
-	return chartRect;
 }
 

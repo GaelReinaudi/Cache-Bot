@@ -22,6 +22,6 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h \
     ../qcustomplot/qcustomplot.h \
     acustomplot.h \
-    acdata.h
+	acdata.h
 
 FORMS    += mainwindow.ui

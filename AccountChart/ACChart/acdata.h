@@ -32,6 +32,9 @@ struct Transaction
 	//! json out
 	void write(QJsonObject &json) const;
 
+	double time_t() const {
+		return (3600.0 * 24.0) * (double(date.toJulianDay()) + 0.5);
+	}
 	double amountDbl() const {
 		return amount;
 	}
@@ -40,6 +43,9 @@ struct Transaction
 	}
 	double numDays() const{
 		return 1;
+	}
+	static bool earlierThan(const Transaction first, const Transaction second) {
+		return first.date < second.date;
 	}
 };
 
@@ -51,33 +57,20 @@ public:
 	//! json in
 	void read(const QJsonObject &json, const QVector<QString>& acIds);
 	//! json out
-	void write(QJsonObject &json) const {
-		QJsonArray npcArray;
-		foreach (const auto tra, m_transList) {
-			QJsonObject npcObject;
-			tra.write(npcObject);
-			npcArray.append(npcObject);
-		}
-		json["purchases"] = npcArray;
-	}
-
-	QVector<Transaction>& list() {
-		return m_transList;
-	}
-	void resetAccountFor() {
-		for (auto& trans : list()) {
-			trans.resetAccountFor();
-		}
-	}
+	void write(QJsonObject &json) const;
 
 public:
 	static bool isSymetric(const Transaction& first, const Transaction& second) {
-		if (first.startDate() == second.startDate()) {
+		if (first.date == second.date) {
 			if (first.amountDbl() == -second.amountDbl()) {
 				return true;
 			}
 		}
 		return false;
+	}
+
+	QVector<Transaction>& list() {
+		return m_transList;
 	}
 
 private:

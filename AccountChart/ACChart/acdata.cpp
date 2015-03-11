@@ -1,5 +1,5 @@
 #include "acdata.h"
-#include "log.h"
+#include "../../evoCache/log.h"
 
 double kindaLog(double amount) {
 	if (amount < 0)
@@ -33,6 +33,7 @@ bool Account::load(QString jsonFile) {
 		if (accountID != "")
 			m_accountIds.push_back(accountID);
 	}
+	qDebug() << m_accountIds;
 	m_transactions.read(json, m_accountIds);
 
 	//m_transactions.cleanSymetricTransaction();
@@ -49,21 +50,25 @@ void Transactions::read(const QJsonObject &json, const QVector<QString> &acIds) 
 		if (acIds.contains(accountTrans)) {
 			Transaction tra;
 			tra.read(npcObject);
+			m_transList.append(tra);
 		}
 		else {
 			qDebug() << "transaction not matching an account:"<< accountTrans
 					 << " object:" << npcObject;
 		}
 	}
-	QJsonArray npcArrayOld = json["purchases"].toArray();
-	for (int npcIndex = 0; npcIndex < npcArrayOld.size(); ++npcIndex) {
-		QJsonObject npcObject = npcArrayOld[npcIndex].toObject();
-		Transaction tra;
-		tra.read(npcObject);
-		m_transList.append(tra);
-	}
 	qSort(m_transList.begin(), m_transList.end(), Transaction::earlierThan);
 	qDebug() << "m_transList count" << m_transList.size();
+}
+
+void Transactions::write(QJsonObject &json) const {
+	QJsonArray npcArray;
+	foreach (const auto tra, m_transList) {
+		QJsonObject npcObject;
+		tra.write(npcObject);
+		npcArray.append(npcObject);
+	}
+	json["purchases"] = npcArray;
 }
 
 void Transaction::read(const QJsonObject &json) {
