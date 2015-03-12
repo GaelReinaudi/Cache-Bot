@@ -14,6 +14,14 @@ QRectF kindaLog(QRectF rectLinear) {
 	return compRect;
 }
 
+unsigned int proximityHashString(const QString &str) {
+	unsigned int ret = 0;
+	for (const QChar& c : str) {
+		ret += c.toUpper().toLatin1();
+	}
+	return ret;
+}
+
 bool Account::load(QString jsonFile) {
 	QFile loadFile(jsonFile);
 	if (!loadFile.open(QIODevice::ReadOnly)) {
@@ -72,10 +80,11 @@ void Transactions::write(QJsonObject &json) const {
 }
 
 void Transaction::read(const QJsonObject &json) {
-	bool ok;
+	bool ok = false;
 	QString accountStr = json["_account"].toString();
 	QString id = json["_id"].toString();
 	QString name = json["name"].toString();
+	nameHash.hash = proximityHashString(name);
 	amount = -json["amount"].toDouble(ok);
 	date = QDate::fromString(json["date"].toString(), "yyyy-MM-dd");
 	QJsonArray npcArrayOld = json["category"].toArray();
@@ -105,3 +114,4 @@ void Transaction::write(QJsonObject &json) const {
 	//		json["numDays"] = m_numDays;
 	//		json["descr"] = m_description;
 }
+

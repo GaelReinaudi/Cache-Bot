@@ -12,10 +12,12 @@
 
 double kindaLog(double amount);
 QRectF kindaLog(QRectF rectLinear);
+unsigned int proximityHashString(const QString& str);
 
 #define MAX_HASH_LENGTH 64
 
 class Account;
+
 
 struct Transaction
 {
@@ -26,6 +28,10 @@ struct Transaction
 	int kamount = 0; // integer = round(amount * 1024)
 	QDate date; // "2015-01-28"
 	QStringList categories; // ["Food and Drink", "Restaurants"] or ["Transfer", "Payroll"]
+	union {
+		unsigned int hash = 0;
+		uchar b[4];
+	} nameHash;
 
 	//! json in
 	void read(const QJsonObject &json);
