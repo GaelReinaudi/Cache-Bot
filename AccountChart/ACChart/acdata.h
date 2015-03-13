@@ -55,32 +55,18 @@ struct Transaction
 	}
 };
 
-class Transactions
+class TransactionBundle
 {
 public:
-	Transactions() {}
-
-	//! json in
-	void read(const QJsonObject &json, const QVector<QString>& acIds);
-	//! json out
-	void write(QJsonObject &json) const;
-
-public:
-	static bool isSymetric(const Transaction& first, const Transaction& second) {
-		if (first.date == second.date) {
-			if (first.amountDbl() == -second.amountDbl()) {
-				return true;
-			}
-		}
-		return false;
+	TransactionBundle() {
+		m_vector.reserve(1024);
 	}
-
-	QVector<Transaction>& list() {
-		return m_transList;
+	Transaction& operator[](int index) {
+		return *m_vector[index];
 	}
 
 private:
-	QVector<Transaction> m_transList;
+	QVector<Transaction*> m_vector;
 };
 
 class Account
@@ -92,13 +78,34 @@ public:
 	// see this: https://qt-project.org/doc/qt-5-snapshot/qtcore-savegame-example.html
 	bool load(QString jsonFile);
 
-	Transactions& transactions() {
+	TransactionBundle transactions() {
 		return m_transactions;
 	}
 
-
 private:
 	QVector<QString> m_accountIds;
+	class Transactions
+	{
+	public:
+		//! json in
+		void read(const QJsonObject &json, const QVector<QString>& acIds);
+		//! json out
+		void write(QJsonObject &json) const;
+		static bool isSymetric(const Transaction& first, const Transaction& second) {
+			if (first.date == second.date) {
+				if (first.amountDbl() == -second.amountDbl()) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		QVector<Transaction>& list() {
+			return m_transList;
+		}
+	private:
+		QVector<Transaction> m_transList;
+	};
 	Transactions m_transactions;
 };
 
