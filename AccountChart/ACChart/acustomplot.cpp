@@ -27,7 +27,7 @@ void ACustomPlot::loadCompressedAmount(Account* account)
 	m_mode = Mode::logKinda;
 	yAxis->setLabel("log($)");
 	// add the purchase points
-	for (const auto& trans : account->transactions().list()) {
+	for (const auto& trans : account->allTransactions().list()) {
 		graph(0)->addData(trans.time_t(), trans.compressedAmount());
 		m_integral += trans.amountDbl();
 		graph(1)->addData(trans.time_t(), kindaLog(m_integral));
@@ -43,7 +43,7 @@ void ACustomPlot::loadAmount(Account* account)
 	m_mode = Mode::linear;
 	yAxis->setLabel("$");
 	// add the purchase points
-	for (const auto& trans : account->transactions().list()) {
+	for (const auto& trans : account->allTransactions().list()) {
 		graph(0)->addData(trans.time_t(), trans.amountDbl());
 	}
 	rescaleAxes();

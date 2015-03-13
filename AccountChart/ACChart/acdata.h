@@ -61,6 +61,13 @@ public:
 	TransactionBundle() {
 		m_vector.reserve(1024);
 	}
+	void clear() {
+		m_vector.clear();
+	}
+	void append(Transaction* pTrans) {
+		m_vector.append(pTrans);
+	}
+
 	Transaction& operator[](int index) {
 		return *m_vector[index];
 	}
@@ -78,8 +85,8 @@ public:
 	// see this: https://qt-project.org/doc/qt-5-snapshot/qtcore-savegame-example.html
 	bool load(QString jsonFile);
 
-	TransactionBundle transactions() {
-		return m_transactions;
+	TransactionBundle& allTransactions() {
+		return m_allTrans;
 	}
 
 private:
@@ -107,6 +114,7 @@ private:
 		QVector<Transaction> m_transList;
 	};
 	Transactions m_transactions;
+	TransactionBundle m_allTrans;
 };
 
 class Household
