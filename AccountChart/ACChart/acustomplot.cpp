@@ -1,36 +1,67 @@
 #include "acustomplot.h"
-#include "acdata.h"
 
 ACustomPlot::ACustomPlot(QWidget *parent) :
 	QCustomPlot(parent)
 {
-	// setup the chart options
-	addGraph();
-    graph(0)->setLineStyle(QCPGraph::lsNone);
-	graph(0)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 2.0));
-    graph(0)->setPen(QPen(QColor(40,40,40,255)));
 	xAxis->setTickLabelType(QCPAxis::ltDateTime);
 	xAxis->setDateTimeFormat("yyyy/MM/dd hh");
 	yAxis->setAutoTickCount(10);
 	setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
 	axisRect(0)->setRangeZoomAxes(xAxis, 0);
+}
 
+void ACustomPlot::makeGraphs(const HashedBundles& hashBundles) {
+	clearGraphs();
+	m_hashGraphs.clear();
+	m_labels.clear();
 	addGraph();
-	graph(1)->setLineStyle(QCPGraph::lsStepLeft);
-	graph(1)->setPen(QPen(Qt::gray));
+	graph(0)->setLineStyle(QCPGraph::lsStepLeft);
+	graph(0)->setPen(QPen(Qt::gray));
 	yAxis2->setAutoTickCount(10);
+	for (const auto& h : hashBundles.keys()) {
+		const TransactionBundle& bundle = hashBundles[h];
+		m_hashGraphs[h] = addGraph();
+		m_hashGraphs[h]->setLineStyle(QCPGraph::lsNone);
+		m_hashGraphs[h]->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 2.0));
+		int r = h % 255;
+		int g = (h >> 1) % 255;
+		int b = (h >> 2) % 255;
+		m_hashGraphs[h]->setPen(QPen(QColor(r,g,b,255)));
+		m_labels.append(bundle.averageName() + "    last : " + bundle[-1].name + "   uniques: " + bundle.uniqueNames().join(" | "));
+	}
+}
 
+void ACustomPlot::showHash(int ithLayer)
+{
+	if (ithLayer < 0) {
+		for (const auto& h : m_hashGraphs.keys()) {
+			m_hashGraphs[h]->setVisible(true);
+		}
+		emit newLabel("");
+	}
+	else {
+		for (const auto& h : m_hashGraphs.keys()) {
+			m_hashGraphs[h]->setVisible(false);
+		}
+		m_hashGraphs[m_hashGraphs.keys()[ithLayer]]->setVisible(true);
+		emit newLabel(m_labels[ithLayer]);
+	}
+	replot();
 }
 
 void ACustomPlot::loadCompressedAmount(Account* account)
 {
-	m_mode = Mode::logKinda;
+	makeGraphs(account->hashBundles());
+
 	yAxis->setLabel("log($)");
 	// add the purchase points
-	for (const auto& trans : account->allTransactions().list()) {
-		graph(0)->addData(trans.time_t(), trans.compressedAmount());
-		m_integral += trans.amountDbl();
-		graph(1)->addData(trans.time_t(), kindaLog(m_integral));
+	TransactionBundle& allTrans = account->transBundle();
+	for (int i = 0; i < allTrans.count(); ++i) {
+		double t = allTrans[i].time_t();
+		uint h = allTrans[i].nameHash.hash;
+		m_integral += allTrans[i].amountDbl();
+		graph(0)->addData(t, kindaLog(m_integral));
+		m_hashGraphs[h]->addData(t, allTrans[i].compressedAmount());
 	}
 	rescaleAxes();
 	//xAxis->setRange(xAxis->range().lower - 7*24*3600, xAxis->range().upper + 7*24*3600);
@@ -40,11 +71,12 @@ void ACustomPlot::loadCompressedAmount(Account* account)
 
 void ACustomPlot::loadAmount(Account* account)
 {
-	m_mode = Mode::linear;
 	yAxis->setLabel("$");
 	// add the purchase points
-	for (const auto& trans : account->allTransactions().list()) {
-		graph(0)->addData(trans.time_t(), trans.amountDbl());
+	TransactionBundle& allTrans = account->transBundle();
+	for (int i = 0; i < allTrans.count(); ++i) {
+		double t = allTrans[i].time_t();
+		graph(0)->addData(t, allTrans[i].compressedAmount());
 	}
 	rescaleAxes();
 	xAxis->setRange(xAxis->range().lower - 7*24*3600, xAxis->range().upper + 7*24*3600);

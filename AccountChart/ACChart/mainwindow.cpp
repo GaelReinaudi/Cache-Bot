@@ -10,9 +10,16 @@ MainWindow::MainWindow(QString jsonFile, QWidget *parent) :
 
 	// an account object that is going to be populated by the json file
 	Account account;
-	account.load(jsonFile);
+	account.loadPlaidJson(jsonFile);
 
 	ui->plot->loadCompressedAmount(&account);
+
+	ui->sliderHash->setRange(-1, ui->plot->hashKeys().count() - 1);
+
+	connect(ui->sliderHash, SIGNAL(valueChanged(int)), ui->plot, SLOT(showHash(int)));
+	connect(ui->sliderHash, SIGNAL(valueChanged(int)), ui->spinHash, SLOT(setValue(int)));
+	connect(ui->spinHash, SIGNAL(valueChanged(int)), ui->sliderHash, SLOT(setValue(int)));
+	connect(ui->plot, SIGNAL(newLabel(QString)), ui->labelBundle, SLOT(setText(QString)));
 }
 
 MainWindow::~MainWindow()

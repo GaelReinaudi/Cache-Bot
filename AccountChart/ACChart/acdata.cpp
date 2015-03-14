@@ -17,12 +17,12 @@ QRectF kindaLog(QRectF rectLinear) {
 unsigned int proximityHashString(const QString &str) {
 	unsigned int ret = 0;
 	for (const QChar& c : str) {
-		ret += c.toUpper().toLatin1();
+		ret += c.toUpper().toLatin1() * 16;
 	}
 	return ret;
 }
 
-bool Account::load(QString jsonFile) {
+bool Account::loadPlaidJson(QString jsonFile) {
 	QFile loadFile(jsonFile);
 	if (!loadFile.open(QIODevice::ReadOnly)) {
 		qWarning(QString("Couldn't open file %1").arg(QFileInfo(loadFile).absoluteFilePath()).toUtf8());
@@ -31,7 +31,7 @@ bool Account::load(QString jsonFile) {
 	QByteArray saveData = loadFile.readAll();
 	QJsonDocument loadDoc(QJsonDocument::fromJson(saveData));
 	const QJsonObject& json = loadDoc.object();
-	m_accountIds.clear();
+//	m_accountIds.clear();
 	QJsonArray npcArrayAccount = json["accounts"].toArray();
 	qDebug() << npcArrayAccount.size();
 	for (int npcIndex = 0; npcIndex < npcArrayAccount.size(); ++npcIndex) {
@@ -46,11 +46,18 @@ bool Account::load(QString jsonFile) {
 
 	//m_transactions.cleanSymetricTransaction();
 
+	// make a bundle of all the transactions
+	transBundle().clear();
+	for (int i = 0; i < m_transactions.transVector.count(); ++i) {
+		transBundle().append(&m_transactions.transVector[i]);
+	}
+	makeHashBundles();
+
 	return true;
 }
 
-void Transactions::read(const QJsonObject &json, const QVector<QString> &acIds) {
-	m_transList.clear();
+void Account::Transactions::read(const QJsonObject &json, const QVector<QString> &acIds) {
+	transVector.clear();
 	QJsonArray npcArray = json["transactions"].toArray();
 	for (int npcIndex = 0; npcIndex < npcArray.size(); ++npcIndex) {
 		QJsonObject npcObject = npcArray[npcIndex].toObject();
@@ -58,20 +65,20 @@ void Transactions::read(const QJsonObject &json, const QVector<QString> &acIds) 
 		if (acIds.contains(accountTrans)) {
 			Transaction tra;
 			tra.read(npcObject);
-			m_transList.append(tra);
+			transVector.append(tra);
 		}
 		else {
-			qDebug() << "transaction not matching an account:"<< accountTrans
-					 << " object:" << npcObject;
+			LOG() << "transaction not matching an account:"<< accountTrans
+				  << " object:" << npcArray[npcIndex].toString() << endl;
 		}
 	}
-	qSort(m_transList.begin(), m_transList.end(), Transaction::earlierThan);
-	qDebug() << "m_transList count" << m_transList.size();
+	qSort(transVector.begin(), transVector.end(), Transaction::earlierThan);
+	qDebug() << "transaction count" << transVector.size();
 }
 
-void Transactions::write(QJsonObject &json) const {
+void Account::Transactions::write(QJsonObject &json) const {
 	QJsonArray npcArray;
-	foreach (const auto tra, m_transList) {
+	foreach (const auto tra, transVector) {
 		QJsonObject npcObject;
 		tra.write(npcObject);
 		npcArray.append(npcObject);
@@ -82,8 +89,8 @@ void Transactions::write(QJsonObject &json) const {
 void Transaction::read(const QJsonObject &json) {
 	bool ok = false;
 	QString accountStr = json["_account"].toString();
-	QString id = json["_id"].toString();
-	QString name = json["name"].toString();
+	id = json["_id"].toString();
+	name = json["name"].toString();
 	nameHash.hash = proximityHashString(name);
 	amount = -json["amount"].toDouble(ok);
 	date = QDate::fromString(json["date"].toString(), "yyyy-MM-dd");

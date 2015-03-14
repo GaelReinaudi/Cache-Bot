@@ -18,7 +18,6 @@ unsigned int proximityHashString(const QString& str);
 
 class Account;
 
-
 struct Transaction
 {
 	Account* account = nullptr;
@@ -67,14 +66,45 @@ public:
 	void append(Transaction* pTrans) {
 		m_vector.append(pTrans);
 	}
-
-	Transaction& operator[](int index) {
-		return *m_vector[index];
+	Transaction& operator[] (int index) {
+		if(index >= 0)
+			return *m_vector[index];
+		return operator[] (index + m_vector.count());
+	}
+	const Transaction& operator[] (int index) const { return const_cast<TransactionBundle*>(this)->operator[](index); }
+	int count() const {
+		return m_vector.count();
+	}
+	QString averageName() const {
+		QVector<uint> sum(64, 0);
+		int tot = m_vector.count();
+		for (int i = 0; i < tot; ++i) {
+			Transaction* t = m_vector[i];
+			for (int c = 0; c < qMin(63, t->name.length()); ++c) {
+				sum[c] += t->name[c].toLatin1();
+			}
+		}
+		char charL[64];
+		for (int c = 0; c < 63; ++c) {
+			charL[c] = sum[c] / tot;
+		}
+		return QString::fromLatin1(charL);
+	}
+	QStringList uniqueNames() const {
+		QStringList ret;
+		for (int i = 0; i < m_vector.count(); ++i) {
+			Transaction* t = m_vector[i];
+			if (!ret.contains(t->name))
+				ret.append(t->name);
+		}
+		return ret;
 	}
 
 private:
 	QVector<Transaction*> m_vector;
 };
+
+typedef QMap<uint, TransactionBundle> HashedBundles;
 
 class Account
 {
@@ -83,17 +113,19 @@ public:
 
 	// loading the json file
 	// see this: https://qt-project.org/doc/qt-5-snapshot/qtcore-savegame-example.html
-	bool load(QString jsonFile);
+	bool loadPlaidJson(QString jsonFile);
 
-	TransactionBundle& allTransactions() {
+	TransactionBundle& transBundle() {
 		return m_allTrans;
+	}
+	QMap<uint, TransactionBundle>& hashBundles() {
+		return m_hashBundles;
 	}
 
 private:
 	QVector<QString> m_accountIds;
-	class Transactions
+	struct Transactions
 	{
-	public:
 		//! json in
 		void read(const QJsonObject &json, const QVector<QString>& acIds);
 		//! json out
@@ -106,15 +138,21 @@ private:
 			}
 			return false;
 		}
-
-		QVector<Transaction>& list() {
-			return m_transList;
-		}
-	private:
-		QVector<Transaction> m_transList;
+		QVector<Transaction> transVector;
 	};
+	//! makes a bundle for each hash value
+	void makeHashBundles() {
+		for (int i = 0; i < transBundle().count(); ++i) {
+			uint h = transBundle()[i].nameHash.hash;
+			m_hashBundles[h].append(&transBundle()[i]);
+		}
+		qDebug() << m_hashBundles.count() << m_hashBundles.keys().first() << m_hashBundles.keys().last();
+	}
+
+private:
 	Transactions m_transactions;
 	TransactionBundle m_allTrans;
+	HashedBundles m_hashBundles;
 };
 
 class Household
