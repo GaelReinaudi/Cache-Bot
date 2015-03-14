@@ -17,10 +17,11 @@ public:
 	}
 
 protected:
-	void makeGraphs(const HashedBundles& hashBundles);
+	void makeGraphs(HashedBundles& hashBundles);
 
 signals:
 	void newLabel(QString);
+	void newSum(double);
 
 public slots:
 	void showHash(int ithLayer);
@@ -29,6 +30,7 @@ private:
 	double m_integral = 0.0;
 	QMap<uint, QCPGraph*> m_hashGraphs;
 	QStringList m_labels;
+	HashedBundles m_hashBund;
 };
 
 #endif // ACUSTOMPLOT_H

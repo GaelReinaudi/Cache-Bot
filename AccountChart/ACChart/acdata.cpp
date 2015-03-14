@@ -17,7 +17,11 @@ QRectF kindaLog(QRectF rectLinear) {
 unsigned int proximityHashString(const QString &str) {
 	unsigned int ret = 0;
 	for (const QChar& c : str) {
-		ret += c.toUpper().toLatin1() * 16;
+		int n = c.toUpper().toLatin1() * 32;
+		// for numbers
+		if (c.isDigit())
+			n = 0;//QChar('#').toLatin1();
+		ret += n;
 	}
 	return ret;
 }
@@ -42,14 +46,14 @@ bool Account::loadPlaidJson(QString jsonFile) {
 			m_accountIds.push_back(accountID);
 	}
 	qDebug() << m_accountIds;
-	m_transactions.read(json, m_accountIds);
+	m_allTransactions.read(json, m_accountIds);
 
 	//m_transactions.cleanSymetricTransaction();
 
 	// make a bundle of all the transactions
-	transBundle().clear();
-	for (int i = 0; i < m_transactions.transVector.count(); ++i) {
-		transBundle().append(&m_transactions.transVector[i]);
+	m_allTrans.clear();
+	for (int i = 0; i < m_allTransactions.count(); ++i) {
+		m_allTrans.append(&m_allTransactions.transArray()[i]);
 	}
 	makeHashBundles();
 
@@ -57,30 +61,28 @@ bool Account::loadPlaidJson(QString jsonFile) {
 }
 
 void Account::Transactions::read(const QJsonObject &json, const QVector<QString> &acIds) {
-	transVector.clear();
+	clear();
 	QJsonArray npcArray = json["transactions"].toArray();
 	for (int npcIndex = 0; npcIndex < npcArray.size(); ++npcIndex) {
 		QJsonObject npcObject = npcArray[npcIndex].toObject();
 		QString accountTrans = npcObject["_account"].toString();
 		if (acIds.contains(accountTrans)) {
-			Transaction tra;
-			tra.read(npcObject);
-			transVector.append(tra);
+			appendNew()->read(npcObject);
 		}
 		else {
 			LOG() << "transaction not matching an account:"<< accountTrans
 				  << " object:" << npcArray[npcIndex].toString() << endl;
 		}
 	}
-	qSort(transVector.begin(), transVector.end(), Transaction::earlierThan);
-	qDebug() << "transaction count" << transVector.size();
+	qSort(m_transArray.begin(), m_transArray.begin() + m_numTrans, Transaction::earlierThan);
+	qDebug() << "transaction count" << count();
 }
 
 void Account::Transactions::write(QJsonObject &json) const {
 	QJsonArray npcArray;
-	foreach (const auto tra, transVector) {
+	for (int i = 0; i < count(); ++i) {
 		QJsonObject npcObject;
-		tra.write(npcObject);
+		m_transArray[i].write(npcObject);
 		npcArray.append(npcObject);
 	}
 	json["purchases"] = npcArray;

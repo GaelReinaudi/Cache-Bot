@@ -15,7 +15,7 @@ QRectF kindaLog(QRectF rectLinear);
 unsigned int proximityHashString(const QString& str);
 
 #define MAX_HASH_LENGTH 64
-
+static const int MAX_TRANSACTION_PER_ACCOUNT = 1024 * 16;
 class Account;
 
 struct Transaction
@@ -38,7 +38,8 @@ struct Transaction
 	void write(QJsonObject &json) const;
 
 	double time_t() const {
-		return (3600.0 * 24.0) * (double(date.toJulianDay()) + 0.5);
+		static const qint64 day0 = QDateTime::fromTime_t(0).date().toJulianDay();
+		return (3600.0 * 24.0) * (double(date.toJulianDay() - day0) + 0.5);
 	}
 	double amountDbl() const {
 		return amount;
@@ -54,7 +55,7 @@ struct Transaction
 	}
 };
 
-class TransactionBundle
+class TransactionBundle : public QObject
 {
 public:
 	TransactionBundle() {
@@ -66,12 +67,11 @@ public:
 	void append(Transaction* pTrans) {
 		m_vector.append(pTrans);
 	}
-	Transaction& operator[] (int index) {
+	Transaction& trans(int index) {
 		if(index >= 0)
 			return *m_vector[index];
-		return operator[] (index + m_vector.count());
+		return trans(index + m_vector.count());
 	}
-	const Transaction& operator[] (int index) const { return const_cast<TransactionBundle*>(this)->operator[](index); }
 	int count() const {
 		return m_vector.count();
 	}
@@ -99,14 +99,22 @@ public:
 		}
 		return ret;
 	}
+	double sumDollar() const {
+		double ret = 0.0;
+		for (int i = 0; i < m_vector.count(); ++i) {
+			Transaction* t = m_vector[i];
+			ret += t->amountDbl();
+		}
+		return ret;
+	}
 
 private:
 	QVector<Transaction*> m_vector;
 };
 
-typedef QMap<uint, TransactionBundle> HashedBundles;
+typedef QMap<uint, TransactionBundle*> HashedBundles;
 
-class Account
+class Account : public QObject
 {
 public:
 	Account() {}
@@ -115,51 +123,52 @@ public:
 	// see this: https://qt-project.org/doc/qt-5-snapshot/qtcore-savegame-example.html
 	bool loadPlaidJson(QString jsonFile);
 
-	TransactionBundle& transBundle() {
-		return m_allTrans;
-	}
-	QMap<uint, TransactionBundle>& hashBundles() {
+	QMap<uint, TransactionBundle*>& hashBundles() {
 		return m_hashBundles;
+	}
+
+	TransactionBundle& allTrans() {
+		return m_allTrans;
 	}
 
 private:
 	QVector<QString> m_accountIds;
 	struct Transactions
 	{
+		Transactions() {}
 		//! json in
 		void read(const QJsonObject &json, const QVector<QString>& acIds);
 		//! json out
 		void write(QJsonObject &json) const;
-		static bool isSymetric(const Transaction& first, const Transaction& second) {
-			if (first.date == second.date) {
-				if (first.amountDbl() == -second.amountDbl()) {
-					return true;
-				}
-			}
-			return false;
-		}
-		QVector<Transaction> transVector;
+		Transaction* transArray() { return &m_transArray[0]; }
+		void clear() { m_numTrans = 0; }
+		int count() const { return m_numTrans; }
+		Transaction* appendNew() { return &m_transArray[m_numTrans++]; }
+	private:
+		std::array<Transaction, MAX_TRANSACTION_PER_ACCOUNT> m_transArray;
+		int m_numTrans = 0;
 	};
 	//! makes a bundle for each hash value
 	void makeHashBundles() {
-		for (int i = 0; i < transBundle().count(); ++i) {
-			uint h = transBundle()[i].nameHash.hash;
-			m_hashBundles[h].append(&transBundle()[i]);
+		for (int i = 0; i < allTrans().count(); ++i) {
+			Transaction& t = allTrans().trans(i);
+			uint h = t.nameHash.hash;
+			if (!m_hashBundles.contains(h))
+				m_hashBundles[h] = new TransactionBundle();
+			m_hashBundles[h]->append(&t);
 		}
 		qDebug() << m_hashBundles.count() << m_hashBundles.keys().first() << m_hashBundles.keys().last();
 	}
 
 private:
-	Transactions m_transactions;
+	Transactions m_allTransactions;
 	TransactionBundle m_allTrans;
 	HashedBundles m_hashBundles;
 };
 
-class Household
+class Household : public QObject
 {
-	QVector<Account> m_accounts;
+	QVector<Account*> m_accounts;
 };
-
-typedef QVector<QVector<Transaction*> > DailyTransactions;
 
 #endif // ACDATA_H
