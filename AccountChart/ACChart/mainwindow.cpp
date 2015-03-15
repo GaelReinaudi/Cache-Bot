@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "acdata.h"
+#include "../../core/acdata.h"
 
 MainWindow::MainWindow(QString jsonFile, QWidget *parent) :
 	QMainWindow(parent),
