@@ -1,5 +1,5 @@
 #include "AMPlot.h"
-#include "ACChart/acdata.h"
+#include "core/acdata.h"
 
 AMPlot::AMPlot(QWidget *parent)
 	: QCustomPlot(parent)
@@ -31,8 +31,8 @@ void AMPlot::loadAmount(Account* account)
 
 	const int height = 256*16;
 	const int midHeight = height / 2;
-	auto firstTrans = account->transactions().list().front();
-	auto lastTrans = account->transactions().list().back();
+	auto firstTrans = account->allTrans().trans(0);
+	auto lastTrans = account->allTrans().trans(-1);
 	colorMap->data()->setSize(1 + firstTrans.date.daysTo(lastTrans.date), height);
 	colorMap->data()->setRange(
 				QCPRange(firstTrans.time_t(), lastTrans.time_t())
@@ -52,8 +52,9 @@ void AMPlot::loadAmount(Account* account)
 	int maxAmort = 999999999;
 	int colorInc = 0;
 	for (int minAmort = 2; minAmort > 0; --minAmort) {
-		for (const Transaction& trans : account->transactions().list()) {
-			amortDur = qRound(trans.numDays());
+		for (int i = 0; i < account->allTrans().count(); ++i) {
+			Transaction& trans = account->allTrans().trans(i);
+			amortDur = 1;//qRound(trans.numDays());
 			//int perDay = qAbs(kindaLog((trans.amountDbl() * 1.0) / amort));
 			double perDay = trans.amountDbl() / amortDur;
 			if (amortDur >= minAmort && amortDur < maxAmort) {

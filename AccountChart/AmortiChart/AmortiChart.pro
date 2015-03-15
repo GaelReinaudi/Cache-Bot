@@ -1,23 +1,25 @@
-QT       += core gui widgets printsupport
+QT     += core gui widgets printsupport
 CONFIG += c++11
 
 TARGET = AMortiChart
 TEMPLATE = app
 
-INCLUDEPATH += ../ACChart \
-	../
+INCLUDEPATH  += \
+	../ \
+	../ACChart \
+	$$PWD/../../
 
 SOURCES += \
 	main.cpp\
     mainwindow.cpp \
 	../qcustomplot/qcustomplot.cpp \
-	../ACChart/acdata.cpp \
+	../../core/acdata.cpp \
 	AMPlot.cpp
 
 HEADERS  += \
 	mainwindow.h \
+	AMPlot.h \
 	../qcustomplot/qcustomplot.h \
-	../ACChart/acdata.h \
-	AMPlot.h
+	$$PWD/../../core/acdata.h
 
 FORMS    += mainwindow.ui
