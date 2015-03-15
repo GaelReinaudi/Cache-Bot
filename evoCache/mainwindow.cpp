@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "ACChart/acdata.h"
+#include "core/acdata.h"
 
 MainWindow::MainWindow(QString jsonFile, QWidget *parent)
 	: QMainWindow(parent)
@@ -11,7 +11,7 @@ MainWindow::MainWindow(QString jsonFile, QWidget *parent)
 
 	// an account object that is going to be populated by the json file
 	account = new Account();
-	account->load(jsonFile);
+	account->loadPlaidJson(jsonFile);
 
 	ui->acPlot->loadCompressedAmount(account);
 	ui->amPlot->loadAmount(account);
@@ -45,23 +45,20 @@ void MainWindow::clearMasks() {
 }
 
 void MainWindow::plotMask(ZoneVector vecZone) {
-//	qDebug() << vecZone.size();
-	if (!vecZone.empty()) {
-//		qDebug() << vecZone[0].left() << vecZone[0].right() << vecZone[0].top() << vecZone[0].bottom();
-		for(const auto& zone : vecZone) {
-			QRectF chartRect = ui->acPlot->mapDayAgoToPlot(zone);
-			chartRect = kindaLog(chartRect);
-//			qDebug() << QDateTime::fromTime_t(int(chartRect.left())) << QDateTime::fromTime_t(int(chartRect.right())) << chartRect.top() << chartRect.bottom();
-			QCPItemRect* itRect = new QCPItemRect(ui->acPlot);
-			itRect->topLeft->setCoords(chartRect.topLeft());
-			itRect->bottomRight->setCoords(chartRect.bottomRight());
-            QColor colZone = zone.m_isFilled ? QColor(11, 96, 254, 128) : QColor(239, 64, 53, 128);
-			itRect->setPen(QPen(QBrush(colZone), 3.0));
-			itRect->setBrush(QBrush(colZone));
-			itRect->setClipToAxisRect(false);
-			ui->acPlot->addItem(itRect);
-		}
-	}
+//	if (!vecZone.empty()) {
+//		for(const auto& zone : vecZone) {
+//			QRectF chartRect = ui->acPlot->mapDayAgoToPlot(zone);
+//			chartRect = kindaLog(chartRect);
+//			QCPItemRect* itRect = new QCPItemRect(ui->acPlot);
+//			itRect->topLeft->setCoords(chartRect.topLeft());
+//			itRect->bottomRight->setCoords(chartRect.bottomRight());
+//            QColor colZone = zone.m_isFilled ? QColor(11, 96, 254, 128) : QColor(239, 64, 53, 128);
+//			itRect->setPen(QPen(QBrush(colZone), 3.0));
+//			itRect->setBrush(QBrush(colZone));
+//			itRect->setClipToAxisRect(false);
+//			ui->acPlot->addItem(itRect);
+//		}
+//	}
 }
 
 void MainWindow::replotCharts() {
