@@ -23,7 +23,7 @@ struct Transaction
 	Account* account = nullptr;
 	QString id; // "pKowox9EaKF14mBJ71m3hnmoPgA3Q0T4rjDox"
 	QString name; // "YARROW HOTEL GRILL" or "STRIKE TECHNOLOG"
-	double amount = 0.0;
+//	double amount = 0.0;
 	int kamount = 0; // integer = round(amount * 1024)
 	QDate date; // "2015-01-28"
 	QStringList categories; // ["Food and Drink", "Restaurants"] or ["Transfer", "Payroll"]
@@ -42,7 +42,7 @@ struct Transaction
 		return (3600.0 * 24.0) * (double(date.toJulianDay() - day0) + 0.5);
 	}
 	double amountDbl() const {
-		return amount;
+		return double(kamount) / 1024.0;
 	}
 	double compressedAmount() const{
 		return kindaLog(amountDbl());
@@ -114,7 +114,7 @@ private:
 
 typedef QMap<uint, TransactionBundle*> HashedBundles;
 
-class Account : public QObject
+class Account// : public QObject
 {
 public:
 	Account() {}
@@ -129,6 +129,12 @@ public:
 
 	TransactionBundle& allTrans() {
 		return m_allTrans;
+	}
+	QDate lastTransactionDate() {
+		return m_allTransactions.transArray()[m_allTransactions.count() - 1].date;
+	}
+	QDate firstTransactionDate() {
+		return m_allTransactions.transArray()[0].date;
 	}
 
 private:

@@ -94,7 +94,7 @@ void Transaction::read(const QJsonObject &json) {
 	id = json["_id"].toString();
 	name = json["name"].toString();
 	nameHash.hash = proximityHashString(name);
-	amount = -json["amount"].toDouble(ok);
+	kamount = -json["amount"].toDouble(ok) * 1024.0;
 	date = QDate::fromString(json["date"].toString(), "yyyy-MM-dd");
 	QJsonArray npcArrayOld = json["category"].toArray();
 	for (int npcIndex = 0; npcIndex < npcArrayOld.size(); ++npcIndex) {
@@ -106,7 +106,7 @@ void Transaction::read(const QJsonObject &json) {
 	out.setFieldWidth(8);
 	out.setPadChar(' ');
 	out.setFieldAlignment(QTextStream::AlignRight);
-	out << "Transaction::read()" << amount << " date " << date.toJulianDay()
+	out << "Transaction::read()" << amountDbl() << " date " << date.toJulianDay()
 		  << " name " << name;
 	out << " cat:[";
 	for (QString& s : categories) {

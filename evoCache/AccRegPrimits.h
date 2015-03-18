@@ -95,32 +95,17 @@ public:
 	AccountFeature(unsigned int inNumberArguments, std::string inName, EvolutionSpinner* evoSpinner)
 		: Primitive(inNumberArguments, inName)
 		, m_evoSpinner(evoSpinner)
-	{
-
-	}
-	virtual ~AccountFeature() {	}
+	{}
+	virtual ~AccountFeature() {}
 	virtual void execute(void* outDatum, Puppy::Context& ioContext) {
 		Q_UNUSED(outDatum);
 		Q_UNUSED(ioContext);
-		getArgument(0, &m_endAgo, ioContext);
-		getArgument(1, &m_dur, ioContext);
-		m_endAgo = qAbs(m_endAgo);
-		m_dur = qAbs(m_dur);
-		m_endAgo = qMin(m_endAgo, 5 * 365.0);
 	}
-
-	bool isFeature() const override {
-		return true;
-	}
-
-	EvolutionSpinner *evoSpinner() const {
-		return m_evoSpinner;
-	}
+	bool isFeature() const override { return true; }
+	EvolutionSpinner *evoSpinner() const { return m_evoSpinner; }
 
 protected:
 	EvolutionSpinner* m_evoSpinner = 0;
-	double m_endAgo = 0;
-	double m_dur = 0;
 };
 
 class CacheBotRootPrimitive : public AccountFeature
@@ -152,61 +137,53 @@ public:
 	{}
 };
 
-class FeatureFixedIncome : public AccountFeature
+class FeaturePeriodicAmount : public AccountFeature
 {
 public:
-	FeatureFixedIncome(EvolutionSpinner* evoSpinner, QString featureName = "FixedIncome")
+	FeaturePeriodicAmount(EvolutionSpinner* evoSpinner, QString featureName = "FixedIncome")
 		: AccountFeature(6, featureName.toStdString(), evoSpinner)
 	{ }
-	~FeatureFixedIncome() { }
-	virtual void execute(void* outDatum, Puppy::Context& ioContext);
-	virtual void getArgs(Puppy::Context &ioContext);
-	virtual void cleanArgs();
+	~FeaturePeriodicAmount() { }
+	virtual void execute(void* outDatum, Puppy::Context& ioContext) {}
+	virtual void getArgs(Puppy::Context &ioContext) {}
+	virtual void cleanArgs() {}
 
-protected:
-	double m_amount = 0;
-	double m_every = 365.0 / 24.0;
-	double m_amountDelta = 100;
-	double m_dayDelta = 3;
 };
 
-class FeatureBiWeeklyIncome : public FeatureFixedIncome
+class FeatureBiWeeklyAmount : public FeaturePeriodicAmount
 {
 public:
-	FeatureBiWeeklyIncome(EvolutionSpinner* evoSpinner)
-		: FeatureFixedIncome(evoSpinner, "BiWeeklyIncome")
+	FeatureBiWeeklyAmount(EvolutionSpinner* evoSpinner)
+		: FeaturePeriodicAmount(evoSpinner, "BiWeeklyIncome")
 	{ }
 	virtual void cleanArgs() override {
-		FeatureFixedIncome::cleanArgs();
-		m_every = 365.25 / 24.0;
+		FeaturePeriodicAmount::cleanArgs();
 	}
 };
 
-class FeatureMonthlyIncome : public FeatureFixedIncome
+class FeatureMonthlyAmount : public FeaturePeriodicAmount
 {
 public:
-	FeatureMonthlyIncome(EvolutionSpinner* evoSpinner)
-		: FeatureFixedIncome(evoSpinner, "MonthlyIncome")
+	FeatureMonthlyAmount(EvolutionSpinner* evoSpinner)
+		: FeaturePeriodicAmount(evoSpinner, "MonthlyIncome")
 	{ }
-	virtual void cleanArgs() override {
-		FeatureFixedIncome::cleanArgs();
-		m_every = 365.25 / 12.0;
+	void getArgs(Puppy::Context &ioContext) override {
+		double a = 0;
+		getArgument(0, &a, ioContext);
+		m_dayOfMonth = a;
+		getArgument(1, &a, ioContext);
+		m_kamount = a * 1024.0;
 	}
-};
+	void cleanArgs() override {
+		FeaturePeriodicAmount::cleanArgs();
+		m_dayOfMonth %= 31;
+		++m_dayOfMonth;
+	}
+	void execute(void* outDatum, Puppy::Context& ioContext) override;
 
-class MonthlyPayments : public AccountFeature
-{
-public:
-	MonthlyPayments(EvolutionSpinner* evoSpinner)
-		: AccountFeature(6, "MonthlyPayments", evoSpinner)
-	{ }
-	virtual ~MonthlyPayments() { }
-	virtual void execute(void* outDatum, Puppy::Context& ioContext);
 protected:
-	double m_amount = 0;
-	double m_every = 365.25 / 12.0;
-	double m_amountDelta = 100;
-	double m_dayDelta = 5;
+	int m_dayOfMonth = 0;
+	int m_kamount = 0;
 };
 
 #endif // ACCREGPRIMITS_H

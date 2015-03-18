@@ -61,8 +61,8 @@ EvolutionSpinner::EvolutionSpinner(Account *pAc, QObject* parent)
 	m_context->insert(new TokenT<double>("182", 365.25 * 0.5));
 
 	m_context->insert(new CacheBotRootPrimitive(this));
-	m_context->insert(new FeatureBiWeeklyIncome(this));
-	m_context->insert(new FeatureMonthlyIncome(this));
+//	m_context->insert(new FeatureBiWeeklyAmount(this));
+	m_context->insert(new FeatureMonthlyAmount(this));
 	m_context->insert(new DummyFeature(this));
 }
 
