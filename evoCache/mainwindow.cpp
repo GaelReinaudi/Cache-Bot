@@ -31,6 +31,8 @@ MainWindow::MainWindow(QString jsonFile, QWidget *parent)
 	connect(m_evoSpinner, &EvolutionSpinner::sendMask, this, &MainWindow::plotMask);
 	connect(m_evoSpinner, &EvolutionSpinner::sendClearMask, this, &MainWindow::clearMasks);
 	connect(m_evoSpinner, &EvolutionSpinner::needsReplot, this, &MainWindow::replotCharts, Qt::BlockingQueuedConnection);
+	connect(m_evoSpinner, &EvolutionSpinner::sendClearList, this, &MainWindow::clearList);
+	connect(m_evoSpinner, &EvolutionSpinner::newList, this, &MainWindow::newList, Qt::BlockingQueuedConnection);
 	m_evoThread->start();
 //	ui->startButton->click();
 }
@@ -64,6 +66,19 @@ void MainWindow::plotMask(ZoneVector vecZone) {
 void MainWindow::replotCharts() {
 	ui->acPlot->replot(QCustomPlot::rpQueued);
 	ui->amPlot->loadAmount(account);
-//	ui->amPlot->replot(QCustomPlot::rpQueued);
+	//	ui->amPlot->replot(QCustomPlot::rpQueued);
+}
+
+void MainWindow::clearList()
+{
+	ui->listBills->clear();
+}
+
+void MainWindow::newList(QStringList strList)
+{
+	ui->listBills->clear();
+	for (const QString& str : strList) {
+		ui->listBills->addItem(str);
+	}
 }
 

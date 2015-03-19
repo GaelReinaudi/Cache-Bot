@@ -28,6 +28,8 @@ public slots:
 	void plotMask(ZoneVector vecZone);
 	void clearMasks();
 	void replotCharts();
+	void clearList();
+	void newList(QStringList strList);
 
 signals:
 	void operate(const QString &);

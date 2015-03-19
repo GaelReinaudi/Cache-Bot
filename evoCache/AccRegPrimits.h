@@ -106,6 +106,7 @@ public:
 
 protected:
 	EvolutionSpinner* m_evoSpinner = 0;
+	TransactionBundle m_bundle;
 };
 
 class CacheBotRootPrimitive : public AccountFeature

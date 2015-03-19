@@ -27,13 +27,15 @@ public slots:
 
 protected:
 	unsigned int evaluateSymbReg(std::vector<Puppy::Tree> &ioPopulation, Puppy::Context &ioContext);
-	void summarize(Puppy::Tree &tree);
+	QStringList summarize(Puppy::Tree &tree);
 
 signals:
 	void resultReady(const QString &result);
 	void sendMask(ZoneVector vecRect);
 	void sendClearMask();
 	void needsReplot();
+	void sendClearList();
+	void newList(QStringList strList);
 
 private:
 	Puppy::Context* m_context = 0;

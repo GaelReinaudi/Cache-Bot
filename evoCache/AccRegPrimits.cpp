@@ -42,19 +42,40 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 
 	float totalOneOverExpDist = 0.0;
 	quint64 localDist = quint64(-1);
+	Transaction* localTrans = 0;
 	// the current target to compare to
 	Transaction* iTarg = &targetTrans[0];
+	m_bundle.clear();
 	for (int i = 0; i < allTrans.count(); ++i) {
 		Transaction& trans = allTrans.trans(i);
-		localDist = qMin(localDist, iTarg->dist(trans));
+		quint64 dist = iTarg->dist(trans);
+		if (dist < localDist) {
+			localDist = dist;
+			localTrans = &trans;
+		}
 
 		// if we get further away by 15 days, we take the next target, or if last trans
 		if (trans.jDay() > 15 + iTarg->jDay() || i == allTrans.count() - 1) {
+			m_bundle.append(localTrans);
+			totalOneOverExpDist += expoInt<64>(-localDist);
 			++iTarg;
-			totalOneOverExpDist += expoInt<128>(-localDist);
+			localTrans = 0;
 			localDist = quint64(-1);
-			continue;
 		}
 	}
 	fitness += totalOneOverExpDist;
+
+	// summary if the QStringList exists
+	if (ioContext.m_sumamryStrList) {
+		QString str;
+		str = QString::fromStdString(getName()) + " ("
+			  + QString::number(m_bundle.count()) +  ") "
+			  + " $" + QString::number(m_kamount / 1024)
+			  + " on the " + QString::number(m_dayOfMonth) + "th";
+		ioContext.m_sumamryStrList->append(str);
+		str = QString("avg label: ") + m_bundle.averageName();
+		ioContext.m_sumamryStrList->append(str);
+		str = QString("tot amount: ") + QString::number(m_bundle.sumDollar());
+		ioContext.m_sumamryStrList->append(str);
+	}
 }

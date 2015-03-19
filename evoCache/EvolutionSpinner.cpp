@@ -3,7 +3,7 @@
 #include "puppy/Puppy.hpp"
 #include "AccRegPrimits.h"
 
-#define POP_SIZE_DEFAULT 500
+#define POP_SIZE_DEFAULT 5000
 #define NBR_GEN_DEFAULT 10000
 #define NBR_PART_TOURNAMENT_DEFAULT 2
 #define MAX_DEPTH_DEFAULT 10
@@ -63,7 +63,7 @@ EvolutionSpinner::EvolutionSpinner(Account *pAc, QObject* parent)
 	m_context->insert(new CacheBotRootPrimitive(this));
 //	m_context->insert(new FeatureBiWeeklyAmount(this));
 	m_context->insert(new FeatureMonthlyAmount(this));
-	m_context->insert(new DummyFeature(this));
+//	m_context->insert(new DummyFeature(this));
 }
 
 void EvolutionSpinner::startStopEvolution(bool doStart) {
@@ -156,16 +156,17 @@ unsigned int EvolutionSpinner::evaluateSymbReg(std::vector<Tree>& ioPopulation,
 	return lNbrEval;
 }
 
-void EvolutionSpinner::summarize(Tree& tree)
+QStringList EvolutionSpinner::summarize(Tree& tree)
 {
-	tree.mValid = false;
-	m_context->m_doPlot = true;
-	double a;
-	//emit sendClearMask();
-	tree.interpret(&a, *m_context);
-	LOG() << "tree ("<<a<<"): " << tree.toStr() << endl;
-	//emit needsReplot();
-	m_context->m_doPlot = false;
+	QStringList retList;
+	//emit sendClearList();
+	double fit = tree.summarize(&retList, *m_context);
+	LOG() << "tree (" << fit << "): " << tree.toStr() << endl;
+	for (const QString& str : retList) {
+		LOG() << "    " << str << endl;
+	}
+	emit newList(retList);
+	return retList;
 }
 
 

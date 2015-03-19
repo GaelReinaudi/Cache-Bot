@@ -86,14 +86,14 @@ struct Transaction
 	quint64 distanceWeighted(const Transaction& other) const {
 		quint64 d = 0;
 		d += wD * quint64(absInt(jDay() - other.jDay()));
-		d += wA * quint64(absInt(kamount - other.kamount));
+		d += (wA * quint64(absInt(kamount - other.kamount))) / quint64(absInt(kamount) + absInt(other.kamount));
 		d += w1 * quint64(absInt(nameHash.hash - other.nameHash.hash));
 		return d;
 	}
 
 	//! distance between this transaction and anther.
 	quint64 dist(const Transaction& other) const {
-		return distanceWeighted<256, 1, 2, 0>(other);
+		return distanceWeighted<256, 1024, 1, 0>(other);
 	}
 };
 
@@ -101,7 +101,7 @@ class TransactionBundle : public QObject
 {
 public:
 	TransactionBundle() {
-		m_vector.reserve(1024);
+		m_vector.reserve(64);
 	}
 	void clear() {
 		m_vector.clear();
