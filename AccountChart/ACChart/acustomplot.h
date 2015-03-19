@@ -22,6 +22,7 @@ protected:
 signals:
 	void newLabel(QString);
 	void newSum(double);
+	void newHashValue(int);
 
 public slots:
 	void showHash(int ithLayer);

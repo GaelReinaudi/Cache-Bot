@@ -123,7 +123,7 @@ void EvolutionSpinner::runEvolution() {
 		applyMutationSwap(lPopulation, *m_context, lMutSwapProba, lMutSwapDistribProba);
 
 		bestTree.mValid = false;
-		lPopulation.push_back(bestTree);
+		//lPopulation.push_back(bestTree);
 
 		evaluateSymbReg(lPopulation, *m_context);
 		calculateStats(lPopulation, i);

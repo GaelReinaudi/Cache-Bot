@@ -21,6 +21,7 @@ MainWindow::MainWindow(QString jsonFile, QWidget *parent) :
 	connect(ui->spinHash, SIGNAL(valueChanged(int)), ui->sliderHash, SLOT(setValue(int)));
 	connect(ui->plot, SIGNAL(newLabel(QString)), ui->labelBundle, SLOT(setText(QString)));
 	connect(ui->plot, SIGNAL(newSum(double)), ui->spinSum, SLOT(setValue(double)));
+	connect(ui->plot, SIGNAL(newHashValue(int)), ui->spinHashVal, SLOT(setValue(int)));
 }
 
 MainWindow::~MainWindow()

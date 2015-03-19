@@ -64,6 +64,22 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QSpinBox" name="spinHashVal">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+        <property name="buttonSymbols">
+         <enum>QAbstractSpinBox::NoButtons</enum>
+        </property>
+        <property name="minimum">
+         <number>-1</number>
+        </property>
+        <property name="maximum">
+         <number>999999999</number>
+        </property>
+       </widget>
+      </item>
      </layout>
     </item>
     <item>
@@ -119,7 +135,7 @@
   <customwidget>
    <class>ACustomPlot</class>
    <extends>QWidget</extends>
-   <header>acustomplot.h</header>
+   <header>ACChart/acustomplot.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

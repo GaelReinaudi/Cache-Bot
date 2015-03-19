@@ -51,6 +51,7 @@ void ACustomPlot::showHash(int ithLayer)
 		emit newLabel(m_labels[ithLayer]);
 		TransactionBundle* bundle = m_hashBund[h];
 		emit newSum(bundle->sumDollar());
+		emit newHashValue(h);
 	}
 	replot();
 }
