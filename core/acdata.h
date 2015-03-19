@@ -9,6 +9,7 @@
 #include <QDebug>
 #include <cmath>
 #include <QRectF>
+#include <QtMath>
 
 double kindaLog(double amount);
 QRectF kindaLog(QRectF rectLinear);
@@ -18,8 +19,27 @@ unsigned int proximityHashString(const QString& str);
 static const int MAX_TRANSACTION_PER_ACCOUNT = 1024 * 16;
 class Account;
 
+static inline
 int absInt(const int& x) {
 	return (x ^ (x >> 31)) - (x >> 31);
+}
+static inline float
+fasterpow2 (float p)
+{
+	float clipp = (p < -126) ? -126.0f : p;
+	union { uint32_t i; float f; } v = { static_cast<uint32_t>( (1 << 23) * (clipp + 126.94269504f) ) };
+	return v.f;
+}
+static inline float
+fasterexp (float p)
+{
+	return fasterpow2 (1.442695040f * p);
+}
+template <int Lambda>
+static inline
+double expoInt(qint64 x)
+{
+	return qExp(double(x) * (1.0 / double(Lambda)));
 }
 
 struct Transaction
@@ -62,17 +82,17 @@ struct Transaction
 		return date.toJulianDay();
 	}
 
-	template <int wD, int wA, int w1, int w2>
-	int distanceWeighted(const Transaction& other) const {
-		int d = 0;
-		d += wD * absInt(jDay() - other.jDay());
-		d += wA * absInt(kamount - other.kamount);
-		d += w1 * absInt(nameHash.hash - other.nameHash.hash);
+	template <quint64 wD, quint64 wA, quint64 w1, quint64 w2>
+	quint64 distanceWeighted(const Transaction& other) const {
+		quint64 d = 0;
+		d += wD * quint64(absInt(jDay() - other.jDay()));
+		d += wA * quint64(absInt(kamount - other.kamount));
+		d += w1 * quint64(absInt(nameHash.hash - other.nameHash.hash));
 		return d;
 	}
 
 	//! distance between this transaction and anther.
-	int dist(const Transaction& other) const {
+	quint64 dist(const Transaction& other) const {
 		return distanceWeighted<256, 1, 2, 0>(other);
 	}
 };

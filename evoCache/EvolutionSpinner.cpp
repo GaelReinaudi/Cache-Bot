@@ -3,8 +3,8 @@
 #include "puppy/Puppy.hpp"
 #include "AccRegPrimits.h"
 
-#define POP_SIZE_DEFAULT 5000
-#define NBR_GEN_DEFAULT 20000
+#define POP_SIZE_DEFAULT 500
+#define NBR_GEN_DEFAULT 10000
 #define NBR_PART_TOURNAMENT_DEFAULT 2
 #define MAX_DEPTH_DEFAULT 10
 #define MIN_INIT_DEPTH_DEFAULT 4
@@ -114,14 +114,8 @@ void EvolutionSpinner::runEvolution() {
 		LOG() << "Generation " << i << endl;
 		auto result = std::minmax_element(lPopulation.begin(), lPopulation.end());
 		Tree bestTree = lPopulation[result.second - lPopulation.begin()];
-		bestTree.mValid = false;
-		m_context->m_doPlot = true;
-		double a;
-		emit sendClearMask();
-		bestTree.interpret(&a, *m_context);
-		LOG() << "Best tree ("<<a<<"): " << bestTree.toStr() << endl;
-		emit needsReplot();
-		m_context->m_doPlot = false;
+
+		summarize(bestTree);
 
 		applySelectionTournament(lPopulation, *m_context, lNbrPartTournament);
 		applyCrossover(lPopulation, *m_context, lCrossoverProba, lCrossDistribProba, lMaxDepth);
@@ -161,3 +155,23 @@ unsigned int EvolutionSpinner::evaluateSymbReg(std::vector<Tree>& ioPopulation,
 	}
 	return lNbrEval;
 }
+
+void EvolutionSpinner::summarize(Tree& tree)
+{
+	tree.mValid = false;
+	m_context->m_doPlot = true;
+	double a;
+	//emit sendClearMask();
+	tree.interpret(&a, *m_context);
+	LOG() << "tree ("<<a<<"): " << tree.toStr() << endl;
+	//emit needsReplot();
+	m_context->m_doPlot = false;
+}
+
+
+
+
+
+
+
+

@@ -144,10 +144,10 @@ public:
 		: AccountFeature(6, featureName.toStdString(), evoSpinner)
 	{ }
 	~FeaturePeriodicAmount() { }
+
 	virtual void execute(void* outDatum, Puppy::Context& ioContext) {}
 	virtual void getArgs(Puppy::Context &ioContext) {}
 	virtual void cleanArgs() {}
-
 };
 
 class FeatureBiWeeklyAmount : public FeaturePeriodicAmount
@@ -165,14 +165,25 @@ class FeatureMonthlyAmount : public FeaturePeriodicAmount
 {
 public:
 	FeatureMonthlyAmount(EvolutionSpinner* evoSpinner)
-		: FeaturePeriodicAmount(evoSpinner, "MonthlyIncome")
+		: FeaturePeriodicAmount(evoSpinner, "MonthlyAmount")
 	{ }
 	void getArgs(Puppy::Context &ioContext) override {
 		double a = 0;
-		getArgument(0, &a, ioContext);
+		int ind = -1;
+		getArgument(++ind, &a, ioContext);
 		m_dayOfMonth = a;
-		getArgument(1, &a, ioContext);
+		getArgument(++ind, &a, ioContext);
 		m_kamount = a * 1024.0;
+
+		int bInd = -1;
+		getArgument(++ind, &a, ioContext);
+		m_b[++bInd] = a;
+		getArgument(++ind, &a, ioContext);
+		m_b[++bInd] = a;
+		getArgument(++ind, &a, ioContext);
+		m_b[++bInd] = a;
+		getArgument(++ind, &a, ioContext);
+		m_b[++bInd] = a;
 	}
 	void cleanArgs() override {
 		FeaturePeriodicAmount::cleanArgs();
@@ -184,6 +195,7 @@ public:
 protected:
 	int m_dayOfMonth = 0;
 	int m_kamount = 0;
+	char m_b[4];
 };
 
 #endif // ACCREGPRIMITS_H
