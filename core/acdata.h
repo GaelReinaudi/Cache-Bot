@@ -18,6 +18,10 @@ unsigned int proximityHashString(const QString& str);
 static const int MAX_TRANSACTION_PER_ACCOUNT = 1024 * 16;
 class Account;
 
+int absInt(const int& x) {
+	return (x ^ (x >> 31)) - (x >> 31);
+}
+
 struct Transaction
 {
 	Account* account = nullptr;
@@ -52,6 +56,24 @@ struct Transaction
 	}
 	static bool earlierThan(const Transaction first, const Transaction second) {
 		return first.date < second.date;
+	}
+	//! julian day
+	int jDay() const {
+		return date.toJulianDay();
+	}
+
+	template <int wD, int wA, int w1, int w2>
+	int distanceWeighted(const Transaction& other) const {
+		int d = 0;
+		d += wD * absInt(jDay() - other.jDay());
+		d += wA * absInt(kamount - other.kamount);
+		d += w1 * absInt(nameHash.hash - other.nameHash.hash);
+		return d;
+	}
+
+	//! distance between this transaction and anther.
+	int dist(const Transaction& other) const {
+		return distanceWeighted<256, 1, 2, 0>(other);
 	}
 };
 
