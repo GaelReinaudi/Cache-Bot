@@ -1,5 +1,5 @@
 #include "acdata.h"
-#include "../../evoCache/log.h"
+#include "../evoCache/log.h"
 
 double kindaLog(double amount) {
 	if (amount < 0)

@@ -3,18 +3,18 @@
 #include "puppy/Puppy.hpp"
 #include "AccRegPrimits.h"
 
-#define POP_SIZE_DEFAULT 5000
+#define POP_SIZE_DEFAULT 500
 #define NBR_GEN_DEFAULT 10000
 #define NBR_PART_TOURNAMENT_DEFAULT 2
 #define MAX_DEPTH_DEFAULT 10
 #define MIN_INIT_DEPTH_DEFAULT 4
-#define MAX_INIT_DEPTH_DEFAULT 5
+#define MAX_INIT_DEPTH_DEFAULT 6
 #define INIT_GROW_PROBA_DEFAULT 0.5f
 #define CROSSOVER_PROBA_DEFAULT 0.8f
 #define CROSSOVER_DISTRIB_PROBA_DEFAULT 0.9f
-#define MUT_STD_PROBA_DEFAULT 0.535f
+#define MUT_STD_PROBA_DEFAULT 0.135f
 #define MUT_MAX_REGEN_DEPTH_DEFAULT 5
-#define MUT_SWAP_PROBA_DEFAULT 0.535f
+#define MUT_SWAP_PROBA_DEFAULT 0.135f
 #define MUT_SWAP_DISTRIB_PROBA_DEFAULT 0.5f
 #define SEED_DEFAULT 0
 
@@ -55,6 +55,12 @@ EvolutionSpinner::EvolutionSpinner(Account *pAc, QObject* parent)
 	m_context->insert(new TokenT<double>("3000", 3000.0));
 	m_context->insert(new TokenT<double>("4000", 4000.0));
 	m_context->insert(new TokenT<double>("5000", 5000.0));
+	m_context->insert(new TokenT<double>("37536", 37536.0));
+	m_context->insert(new TokenT<double>("43872", 43872.0));
+	m_context->insert(new TokenT<double>("52672", 52672.0));
+	m_context->insert(new TokenT<double>("57824", 57824.0));
+	m_context->insert(new TokenT<double>("75936", 75936.0));
+	m_context->insert(new TokenT<double>("76576", 76576.0));
 	m_context->insert(new TokenT<double>("15.208", 365.25 / 24.0));
 	m_context->insert(new TokenT<double>("30.417", 365.25 / 12.0));
 	m_context->insert(new TokenT<double>("365", 365.25));
@@ -159,12 +165,13 @@ unsigned int EvolutionSpinner::evaluateSymbReg(std::vector<Tree>& ioPopulation,
 QStringList EvolutionSpinner::summarize(Tree& tree)
 {
 	QStringList retList;
-	//emit sendClearList();
+	emit sendClearMask();
 	double fit = tree.summarize(&retList, *m_context);
 	LOG() << "tree (" << fit << "): " << tree.toStr() << endl;
 	for (const QString& str : retList) {
 		LOG() << "    " << str << endl;
 	}
+	emit needsReplot();
 	emit newList(retList);
 	return retList;
 }

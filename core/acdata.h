@@ -55,6 +55,8 @@ struct Transaction
 		unsigned int hash = 0;
 		uchar b[4];
 	} nameHash;
+	// used to make the distance arbitrary far from anything
+	int dimensionOfVoid = 0;
 
 	//! json in
 	void read(const QJsonObject &json);
@@ -88,12 +90,14 @@ struct Transaction
 		d += wD * quint64(absInt(jDay() - other.jDay()));
 		d += (wA * quint64(absInt(kamount - other.kamount))) / quint64(absInt(kamount) + absInt(other.kamount));
 		d += w1 * quint64(absInt(nameHash.hash - other.nameHash.hash));
+		d += w2 * quint64(absInt(dimensionOfVoid - other.dimensionOfVoid));
+		//LOG() << "dist " << d << " = day " << jDay() << "-" << other.jDay() << " kamount " << kamount << "-" << other.kamount << " hash " << nameHash.hash << "-" << other.nameHash.hash << endl;
 		return d;
 	}
 
 	//! distance between this transaction and anther.
 	quint64 dist(const Transaction& other) const {
-		return distanceWeighted<256, 1024, 1, 0>(other);
+		return distanceWeighted<256, 1024, 1, 2147483648>(other);
 	}
 };
 

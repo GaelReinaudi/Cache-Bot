@@ -31,7 +31,7 @@ protected:
 
 signals:
 	void resultReady(const QString &result);
-	void sendMask(ZoneVector vecRect);
+	void sendMask(double, double);
 	void sendClearMask();
 	void needsReplot();
 	void sendClearList();

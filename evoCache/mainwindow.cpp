@@ -28,8 +28,8 @@ MainWindow::MainWindow(QString jsonFile, QWidget *parent)
 	connect(m_evoThread, &QThread::finished, m_evoSpinner, &QObject::deleteLater);
 	connect(m_evoSpinner, &EvolutionSpinner::resultReady, this, &MainWindow::handleResults);
 	connect(ui->startButton, SIGNAL(clicked(bool)), m_evoSpinner, SLOT(startStopEvolution(bool)), Qt::DirectConnection);
-	connect(m_evoSpinner, &EvolutionSpinner::sendMask, this, &MainWindow::plotMask);
-	connect(m_evoSpinner, &EvolutionSpinner::sendClearMask, this, &MainWindow::clearMasks);
+	connect(m_evoSpinner, &EvolutionSpinner::sendMask, this, &MainWindow::plotMask, Qt::BlockingQueuedConnection);
+	connect(m_evoSpinner, &EvolutionSpinner::sendClearMask, this, &MainWindow::clearMasks, Qt::BlockingQueuedConnection);
 	connect(m_evoSpinner, &EvolutionSpinner::needsReplot, this, &MainWindow::replotCharts, Qt::BlockingQueuedConnection);
 	connect(m_evoSpinner, &EvolutionSpinner::sendClearList, this, &MainWindow::clearList);
 	connect(m_evoSpinner, &EvolutionSpinner::newList, this, &MainWindow::newList, Qt::BlockingQueuedConnection);
@@ -42,28 +42,26 @@ MainWindow::~MainWindow()
 	delete ui;
 }
 
-void MainWindow::clearMasks() {
+void MainWindow::clearMasks()
+{
 	ui->acPlot->clearItems();
 }
 
-void MainWindow::plotMask(ZoneVector vecZone) {
-//	if (!vecZone.empty()) {
-//		for(const auto& zone : vecZone) {
-//			QRectF chartRect = ui->acPlot->mapDayAgoToPlot(zone);
-//			chartRect = kindaLog(chartRect);
-//			QCPItemRect* itRect = new QCPItemRect(ui->acPlot);
-//			itRect->topLeft->setCoords(chartRect.topLeft());
-//			itRect->bottomRight->setCoords(chartRect.bottomRight());
-//            QColor colZone = zone.m_isFilled ? QColor(11, 96, 254, 128) : QColor(239, 64, 53, 128);
-//			itRect->setPen(QPen(QBrush(colZone), 3.0));
-//			itRect->setBrush(QBrush(colZone));
-//			itRect->setClipToAxisRect(false);
-//			ui->acPlot->addItem(itRect);
-//		}
-//	}
+void MainWindow::plotMask(double x, double y)
+{
+	QCPItemRect* itRect = new QCPItemRect(ui->acPlot);
+	y = kindaLog(y);
+	itRect->topLeft->setCoords(QPointF(x - 4*3600*24, y + 0.1));
+	itRect->bottomRight->setCoords(QPointF(x + 4*3600*24, y - 0.1));
+	QColor colZone = QColor(11, 96, 254, 128);// : QColor(239, 64, 53, 128);
+	itRect->setPen(QPen(QBrush(colZone), 3.0));
+	itRect->setBrush(QBrush(colZone));
+	itRect->setClipToAxisRect(false);
+	ui->acPlot->addItem(itRect);
 }
 
-void MainWindow::replotCharts() {
+void MainWindow::replotCharts()
+{
 	ui->acPlot->replot(QCustomPlot::rpQueued);
 	ui->amPlot->loadAmount(account);
 	//	ui->amPlot->replot(QCustomPlot::rpQueued);

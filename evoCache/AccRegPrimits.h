@@ -146,8 +146,8 @@ public:
 	{ }
 	~FeaturePeriodicAmount() { }
 
-	virtual void execute(void* outDatum, Puppy::Context& ioContext) {}
-	virtual void getArgs(Puppy::Context &ioContext) {}
+	virtual void execute(void* outDatum, Puppy::Context& ioContext) { Q_UNUSED(outDatum); Q_UNUSED(ioContext); }
+	virtual void getArgs(Puppy::Context &ioContext) { Q_UNUSED(ioContext); }
 	virtual void cleanArgs() {}
 };
 
