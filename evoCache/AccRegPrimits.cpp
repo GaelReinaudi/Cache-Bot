@@ -53,17 +53,24 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 			localDist = dist;
 			localTrans = &trans;
 		}
-
 		// if we get further away by 15 days, we take the next target, or if last trans
 		if (trans.jDay() > 15 + iTarg->jDay() || i == allTrans.count() - 1) {
 			m_bundle.append(localTrans);
 			totalOneOverExpDist += expoInt<64>(-localDist);
+			if (iTarg == &targetTrans.last())
+				break;
 			++iTarg;
 			localTrans = 0;
 			localDist = quint64(-1);
 		}
 	}
 	fitness += totalOneOverExpDist;
+
+	// isolate the transaction that were fitted to the target
+	for (int i = 0; i < m_bundle.count(); ++i) {
+		Transaction& t = m_bundle.trans(i);
+		t.dimensionOfVoid = 1;
+	}
 
 	// summary if the QStringList exists
 	if (ioContext.m_sumamryStrList) {
@@ -77,5 +84,14 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 		ioContext.m_sumamryStrList->append(str);
 		str = QString("tot amount: ") + QString::number(m_bundle.sumDollar());
 		ioContext.m_sumamryStrList->append(str);
+		str = QString("----------------------------");
+		ioContext.m_sumamryStrList->append(str);
+
+		for (int i = 0; i < m_bundle.count(); ++i) {
+			Transaction* iTarg = &targetTrans[i];
+			Transaction& t = m_bundle.trans(i);
+			emit evoSpinner()->sendMask(iTarg->time_t(), iTarg->amountDbl());
+			emit evoSpinner()->sendMask(t.time_t(), t.amountDbl());
+		}
 	}
 }
