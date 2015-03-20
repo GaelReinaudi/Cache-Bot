@@ -195,7 +195,7 @@ public:
 
 protected:
 	int m_dayOfMonth = 0;
-	int m_kamount = 0;
+	qint64 m_kamount = 0;
 	char m_b[4];
 };
 

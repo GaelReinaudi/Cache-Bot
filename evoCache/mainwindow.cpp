@@ -28,7 +28,7 @@ MainWindow::MainWindow(QString jsonFile, QWidget *parent)
 	connect(m_evoThread, &QThread::finished, m_evoSpinner, &QObject::deleteLater);
 	connect(m_evoSpinner, &EvolutionSpinner::resultReady, this, &MainWindow::handleResults);
 	connect(ui->startButton, SIGNAL(clicked(bool)), m_evoSpinner, SLOT(startStopEvolution(bool)), Qt::DirectConnection);
-	connect(m_evoSpinner, &EvolutionSpinner::sendMask, this, &MainWindow::plotMask, Qt::BlockingQueuedConnection);
+	connect(m_evoSpinner, &EvolutionSpinner::sendMask, this, &MainWindow::plotMask);
 	connect(m_evoSpinner, &EvolutionSpinner::sendClearMask, this, &MainWindow::clearMasks, Qt::BlockingQueuedConnection);
 	connect(m_evoSpinner, &EvolutionSpinner::needsReplot, this, &MainWindow::replotCharts, Qt::BlockingQueuedConnection);
 	connect(m_evoSpinner, &EvolutionSpinner::sendClearList, this, &MainWindow::clearList);
@@ -53,7 +53,7 @@ void MainWindow::plotMask(double x, double y)
 	y = kindaLog(y);
 	itRect->topLeft->setCoords(QPointF(x - 4*3600*24, y + 0.1));
 	itRect->bottomRight->setCoords(QPointF(x + 4*3600*24, y - 0.1));
-	QColor colZone = QColor(11, 96, 254, 128);// : QColor(239, 64, 53, 128);
+	QColor colZone = QColor(11, 96, 254, 64);// : QColor(239, 64, 53, 128);
 	itRect->setPen(QPen(QBrush(colZone), 3.0));
 	itRect->setBrush(QBrush(colZone));
 	itRect->setClipToAxisRect(false);
@@ -63,7 +63,7 @@ void MainWindow::plotMask(double x, double y)
 void MainWindow::replotCharts()
 {
 	ui->acPlot->replot(QCustomPlot::rpQueued);
-	ui->amPlot->loadAmount(account);
+	//ui->amPlot->loadAmount(account);
 	//	ui->amPlot->replot(QCustomPlot::rpQueued);
 }
 

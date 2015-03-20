@@ -20,6 +20,10 @@ static const int MAX_TRANSACTION_PER_ACCOUNT = 1024 * 16;
 class Account;
 
 static inline
+qint64 absInt(const qint64& x) {
+	return qAbs(x);
+}
+static inline
 int absInt(const int& x) {
 	return (x ^ (x >> 31)) - (x >> 31);
 }
@@ -48,11 +52,11 @@ struct Transaction
 	QString id; // "pKowox9EaKF14mBJ71m3hnmoPgA3Q0T4rjDox"
 	QString name; // "YARROW HOTEL GRILL" or "STRIKE TECHNOLOG"
 //	double amount = 0.0;
-	int kamount = 0; // integer = round(amount * 1024)
+	qint64 kamount = 0; // integer = round(amount * 1024)
 	QDate date; // "2015-01-28"
 	QStringList categories; // ["Food and Drink", "Restaurants"] or ["Transfer", "Payroll"]
 	union {
-		unsigned int hash = 0;
+		int hash = 0;
 		uchar b[4];
 	} nameHash;
 	// used to make the distance arbitrary far from anything
@@ -85,19 +89,19 @@ struct Transaction
 	}
 
 	template <quint64 wD, quint64 wA, quint64 w1, quint64 w2>
-	quint64 distanceWeighted(const Transaction& other) const {
-		quint64 d = 0;
-		d += wD * quint64(absInt(jDay() - other.jDay()));
-		d += (wA * quint64(absInt(kamount - other.kamount))) / quint64(absInt(kamount) + absInt(other.kamount));
-		d += w1 * quint64(absInt(nameHash.hash - other.nameHash.hash));
-		d += w2 * quint64(absInt(dimensionOfVoid - other.dimensionOfVoid));
+	qint64 distanceWeighted(const Transaction& other) const {
+		qint64 d = 0;
+		d += wD * (absInt(jDay() - other.jDay()));
+		d += (qint64(wA) * (absInt(kamount - other.kamount))) / (absInt(kamount) + absInt(other.kamount));
+		d += qint64(w1) * qint64(absInt(nameHash.hash - other.nameHash.hash)) / 32;
+		d += qint64(w2) * qint64(absInt(dimensionOfVoid - other.dimensionOfVoid));
 		//LOG() << "dist " << d << " = day " << jDay() << "-" << other.jDay() << " kamount " << kamount << "-" << other.kamount << " hash " << nameHash.hash << "-" << other.nameHash.hash << endl;
 		return d;
 	}
 
 	//! distance between this transaction and anther.
 	quint64 dist(const Transaction& other) const {
-		return distanceWeighted<256, 1024, 1, 2147483648>(other);
+		return distanceWeighted<32, 128, 1, 1<<20>(other);
 	}
 };
 

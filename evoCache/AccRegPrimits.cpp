@@ -30,7 +30,7 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 		targetTrans.last().nameHash.b[0] = m_b[0];
 		targetTrans.last().nameHash.b[1] = m_b[1];
 		targetTrans.last().nameHash.b[2] = m_b[2];
-		targetTrans.last().nameHash.b[3] = m_b[3];
+//		targetTrans.last().nameHash.b[3] = m_b[3];
 		currentDate = currentDate.addMonths(1);
 	}
 	if (targetTrans.count() == 0) {
@@ -80,6 +80,9 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 			  + " $" + QString::number(m_kamount / 1024)
 			  + " on the " + QString::number(m_dayOfMonth) + "th";
 		ioContext.m_sumamryStrList->append(str);
+		str = QString("hash: ") + QString::number(m_bundle.trans(0).nameHash.hash);
+		str += QString("  fitness: ") + QString::number(fitness);
+		ioContext.m_sumamryStrList->append(str);
 		str = QString("avg label: ") + m_bundle.averageName();
 		ioContext.m_sumamryStrList->append(str);
 		str = QString("tot amount: ") + QString::number(m_bundle.sumDollar());
@@ -91,7 +94,7 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 			Transaction* iTarg = &targetTrans[i];
 			Transaction& t = m_bundle.trans(i);
 			emit evoSpinner()->sendMask(iTarg->time_t(), iTarg->amountDbl());
-			emit evoSpinner()->sendMask(t.time_t(), t.amountDbl());
+			//emit evoSpinner()->sendMask(t.time_t(), t.amountDbl());
 		}
 	}
 }
