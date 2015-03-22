@@ -5,7 +5,7 @@
 #include "puppy/Puppy.hpp"
 #include "EvolutionSpinner.h"
 
-static const int NUM_FEATURES = 6;
+static const int NUM_FEATURES = 10;
 
 class Add : public Puppy::Primitive
 {
@@ -196,7 +196,7 @@ public:
 protected:
 	int m_dayOfMonth = 0;
 	int m_kla = 0;
-	char m_b[4];
+	int m_b[4];
 };
 
 #endif // ACCREGPRIMITS_H

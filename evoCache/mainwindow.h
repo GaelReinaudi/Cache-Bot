@@ -25,7 +25,7 @@ public slots:
 	void handleResults(const QString &) {
 
 	}
-	void plotMask(double x, double y);
+	void plotMask(double x, double y, bool isTarget);
 	void clearMasks();
 	void replotCharts();
 	void clearList();

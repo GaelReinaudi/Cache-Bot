@@ -31,7 +31,7 @@ protected:
 
 signals:
 	void resultReady(const QString &result);
-	void sendMask(double, double);
+	void sendMask(double, double, bool);
 	void sendClearMask();
 	void needsReplot();
 	void sendClearList();

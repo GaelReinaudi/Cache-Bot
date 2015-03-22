@@ -48,13 +48,13 @@ void MainWindow::clearMasks()
 	ui->acPlot->clearItems();
 }
 
-void MainWindow::plotMask(double x, double y)
+void MainWindow::plotMask(double x, double y, bool isTarget)
 {
 	QCPItemRect* itRect = new QCPItemRect(ui->acPlot);
 	y = kindaLog(y);
-	itRect->topLeft->setCoords(QPointF(x - 4*3600*24, y + 0.1));
-	itRect->bottomRight->setCoords(QPointF(x + 4*3600*24, y - 0.1));
-	QColor colZone = QColor(11, 96, 254, 64);// : QColor(239, 64, 53, 128);
+	itRect->topLeft->setCoords(QPointF(x - 4*3600*24, y + 16*0.01));
+	itRect->bottomRight->setCoords(QPointF(x + 4*3600*24, y - 16*0.01));
+	QColor colZone = isTarget ? QColor(239, 64, 53, 128) : QColor(0, 64, 253, 128);
 	itRect->setPen(QPen(QBrush(colZone), 3.0));
 	itRect->setBrush(QBrush(colZone));
 	itRect->setClipToAxisRect(false);

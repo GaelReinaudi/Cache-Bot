@@ -18,7 +18,7 @@ unsigned int proximityHashString(const QString& str);
 #define MAX_HASH_LENGTH 64
 static const int MAX_TRANSACTION_PER_ACCOUNT = 1024 * 16;
 static const int KLA_MULTIPLICATOR = 100;
-static const int KA_MULTIPLICATOR = 1024;
+static const int KA_MULTIPLICATOR = 1000;
 
 class Account;
 
@@ -54,7 +54,7 @@ struct Transaction
 private:
 	//	double amount = 0.0;
 		qint64 kamount = 0; // integer = round(amount * Mult)
-		int kla = 0; // Mult * kindaLog(amount)
+		double kla = 0; // Mult * kindaLog(amount)
 public:
 	Account* account = nullptr;
 	QString id; // "pKowox9EaKF14mBJ71m3hnmoPgA3Q0T4rjDox"
@@ -75,13 +75,13 @@ public:
 
 	double time_t() const {
 		static const qint64 day0 = QDateTime::fromTime_t(0).date().toJulianDay();
-		return (3600.0 * 24.0) * (double(date.toJulianDay() - day0) + 0.5);
+		return (3600.0 * 24.0) * (double(date.toJulianDay() - day0) - 0.3125);
 	}
 	void setAmount(double amntDbl) {
 		 kamount = double(KA_MULTIPLICATOR) * amntDbl;
 		 kla = double(KLA_MULTIPLICATOR) * kindaLog(amntDbl);
 	}
-	void setKLA(int newKLA) {
+	void setKLA(double newKLA) {
 		kla = newKLA;
 		kamount = KA_MULTIPLICATOR * unKindaLog(double(newKLA) / double(KLA_MULTIPLICATOR));
 	}
@@ -118,7 +118,7 @@ public:
 
 	//! distance between this transaction and anther.
 	inline quint64 dist(const Transaction& other) const {
-		return distanceWeighted<8, 4, 16, 1>(other);
+		return distanceWeighted<1, 1, 64, 1>(other);
 	}
 };
 
@@ -173,6 +173,10 @@ public:
 			ret += t->amountDbl();
 		}
 		return ret;
+	}
+	double averageKLA() const {
+		double ret = sumDollar() / m_vector.count();
+		return kindaLog(ret) * KLA_MULTIPLICATOR;
 	}
 
 private:

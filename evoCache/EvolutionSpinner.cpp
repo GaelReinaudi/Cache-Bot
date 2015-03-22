@@ -3,18 +3,18 @@
 #include "puppy/Puppy.hpp"
 #include "AccRegPrimits.h"
 
-#define POP_SIZE_DEFAULT 1000
+#define POP_SIZE_DEFAULT 200
 #define NBR_GEN_DEFAULT 10000
 #define NBR_PART_TOURNAMENT_DEFAULT 2
-#define MAX_DEPTH_DEFAULT 10
-#define MIN_INIT_DEPTH_DEFAULT 4
-#define MAX_INIT_DEPTH_DEFAULT 6
-#define INIT_GROW_PROBA_DEFAULT 0.5f
+#define MAX_DEPTH_DEFAULT 5
+#define MIN_INIT_DEPTH_DEFAULT 3
+#define MAX_INIT_DEPTH_DEFAULT 5
+#define INIT_GROW_PROBA_DEFAULT 0.15f
 #define CROSSOVER_PROBA_DEFAULT 0.8f
 #define CROSSOVER_DISTRIB_PROBA_DEFAULT 0.9f
-#define MUT_STD_PROBA_DEFAULT 0.35f
+#define MUT_STD_PROBA_DEFAULT 0.535f
 #define MUT_MAX_REGEN_DEPTH_DEFAULT 5
-#define MUT_SWAP_PROBA_DEFAULT 0.35f
+#define MUT_SWAP_PROBA_DEFAULT 0.535f
 #define MUT_SWAP_DISTRIB_PROBA_DEFAULT 0.5f
 #define SEED_DEFAULT 0
 
@@ -48,18 +48,14 @@ EvolutionSpinner::EvolutionSpinner(Account *pAc, QObject* parent)
 	m_context->insert(new TokenT<double>("4", 4.0));
 	m_context->insert(new TokenT<double>("5", 5.0));
 	m_context->insert(new TokenT<double>("10", 10.0));
-	m_context->insert(new TokenT<double>("20", 20.0));
-	m_context->insert(new TokenT<double>("50", 50.0));
-	m_context->insert(new TokenT<double>("100", 100.0));
-	m_context->insert(new TokenT<double>("200", 200.0));
-	m_context->insert(new TokenT<double>("500", 500.0));
-	m_context->insert(new TokenT<double>("1000", 1000.0));
-	m_context->insert(new TokenT<double>("2000", 2000.0));
-	m_context->insert(new TokenT<double>("2P8", 2<<8));
-	m_context->insert(new TokenT<double>("2P12", 2<<12));
-	m_context->insert(new TokenT<double>("2P16", 2<<16));
-	m_context->insert(new TokenT<double>("2P20", 2<<20));
-	m_context->insert(new TokenT<double>("2P24", 2<<24));
+	for (int i = 0; i < pAc->hashBundles().count(); ++i) {
+		int h = pAc->hashBundles().keys()[i];
+		if (pAc->hashBundles()[h]->count() > 10) {
+			double avgKLA = pAc->hashBundles()[h]->averageKLA();
+			m_context->insert(new TokenT<double>(QString("h%1").arg(i).toStdString(), h));
+			m_context->insert(new TokenT<double>(QString("kla%1").arg(i).toStdString(), avgKLA));
+		}
+	}
 
 	m_context->insert(new CacheBotRootPrimitive(this));
 //	m_context->insert(new FeatureBiWeeklyAmount(this));
@@ -124,7 +120,7 @@ void EvolutionSpinner::runEvolution() {
 		applyMutationSwap(lPopulation, *m_context, lMutSwapProba, lMutSwapDistribProba);
 
 		bestTree.mValid = false;
-		lPopulation.push_back(bestTree);
+		//lPopulation.push_back(bestTree);
 
 		evaluateSymbReg(lPopulation, *m_context);
 		calculateStats(lPopulation, i);

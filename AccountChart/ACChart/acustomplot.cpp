@@ -5,7 +5,7 @@ ACustomPlot::ACustomPlot(QWidget *parent) :
 {
 	xAxis->setTickLabelType(QCPAxis::ltDateTime);
 	xAxis->setDateTimeFormat("yyyy/MM/dd hh");
-	yAxis->setAutoTickCount(10);
+	yAxis->setAutoTickCount(18);
 	setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
 	axisRect(0)->setRangeZoomAxes(xAxis, 0);
 }
