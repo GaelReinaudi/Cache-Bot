@@ -12,11 +12,14 @@
 #include <QtMath>
 
 double kindaLog(double amount);
-QRectF kindaLog(QRectF rectLinear);
+double unKindaLog(double kindaLogAmount);
 unsigned int proximityHashString(const QString& str);
 
 #define MAX_HASH_LENGTH 64
 static const int MAX_TRANSACTION_PER_ACCOUNT = 1024 * 16;
+static const int KLA_MULTIPLICATOR = 100;
+static const int KA_MULTIPLICATOR = 1024;
+
 class Account;
 
 static inline
@@ -24,7 +27,7 @@ qint64 absInt(const qint64& x) {
 	return qAbs(x);
 }
 static inline
-int absInt(const int& x) {
+qint64 absInt(const qint32& x) {
 	return (x ^ (x >> 31)) - (x >> 31);
 }
 static inline float
@@ -48,11 +51,14 @@ double expoInt(qint64 x)
 
 struct Transaction
 {
+private:
+	//	double amount = 0.0;
+		qint64 kamount = 0; // integer = round(amount * Mult)
+		int kla = 0; // Mult * kindaLog(amount)
+public:
 	Account* account = nullptr;
 	QString id; // "pKowox9EaKF14mBJ71m3hnmoPgA3Q0T4rjDox"
 	QString name; // "YARROW HOTEL GRILL" or "STRIKE TECHNOLOG"
-//	double amount = 0.0;
-	qint64 kamount = 0; // integer = round(amount * 1024)
 	QDate date; // "2015-01-28"
 	QStringList categories; // ["Food and Drink", "Restaurants"] or ["Transfer", "Payroll"]
 	union {
@@ -71,8 +77,19 @@ struct Transaction
 		static const qint64 day0 = QDateTime::fromTime_t(0).date().toJulianDay();
 		return (3600.0 * 24.0) * (double(date.toJulianDay() - day0) + 0.5);
 	}
+	void setAmount(double amntDbl) {
+		 kamount = double(KA_MULTIPLICATOR) * amntDbl;
+		 kla = double(KLA_MULTIPLICATOR) * kindaLog(amntDbl);
+	}
+	void setKLA(int newKLA) {
+		kla = newKLA;
+		kamount = KA_MULTIPLICATOR * unKindaLog(double(newKLA) / double(KLA_MULTIPLICATOR));
+	}
+	int amountInt() const {
+		return kla;
+	}
 	double amountDbl() const {
-		return double(kamount) / 1024.0;
+		return double(kamount) / double(KA_MULTIPLICATOR);
 	}
 	double compressedAmount() const{
 		return kindaLog(amountDbl());
@@ -84,24 +101,24 @@ struct Transaction
 		return first.date < second.date;
 	}
 	//! julian day
-	int jDay() const {
+	qint64 jDay() const {
 		return date.toJulianDay();
 	}
 
 	template <quint64 wD, quint64 wA, quint64 w1, quint64 w2>
 	qint64 distanceWeighted(const Transaction& other) const {
 		qint64 d = 0;
-		d += wD * (absInt(jDay() - other.jDay()));
-		d += (qint64(wA) * (absInt(kamount - other.kamount))) / (absInt(kamount) + absInt(other.kamount));
-		d += qint64(w1) * qint64(absInt(nameHash.hash - other.nameHash.hash)) / 32;
-		d += qint64(w2) * qint64(absInt(dimensionOfVoid - other.dimensionOfVoid));
+		d += qint64(wD) * (absInt(jDay() - other.jDay()));
+		d += qint64(wA) * (absInt(amountInt() - other.amountInt()));
+		d += qint64(w1) * qint64(absInt(nameHash.hash - other.nameHash.hash));
+		d += qint64(1<<20) * qint64(absInt(dimensionOfVoid - other.dimensionOfVoid));
 		//LOG() << "dist " << d << " = day " << jDay() << "-" << other.jDay() << " kamount " << kamount << "-" << other.kamount << " hash " << nameHash.hash << "-" << other.nameHash.hash << endl;
 		return d;
 	}
 
 	//! distance between this transaction and anther.
-	quint64 dist(const Transaction& other) const {
-		return distanceWeighted<32, 128, 1, 1<<20>(other);
+	inline quint64 dist(const Transaction& other) const {
+		return distanceWeighted<8, 4, 16, 1>(other);
 	}
 };
 

@@ -15,6 +15,7 @@ MainWindow::MainWindow(QString jsonFile, QWidget *parent)
 
 	ui->acPlot->loadCompressedAmount(account);
 	ui->amPlot->loadAmount(account);
+	ui->amPlot->hide();
 
 	connect(ui->acPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), ui->amPlot->xAxis, SLOT(setRange(QCPRange)));
 	connect(ui->acPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), ui->amPlot, SLOT(replot()));
@@ -34,7 +35,7 @@ MainWindow::MainWindow(QString jsonFile, QWidget *parent)
 	connect(m_evoSpinner, &EvolutionSpinner::sendClearList, this, &MainWindow::clearList);
 	connect(m_evoSpinner, &EvolutionSpinner::newList, this, &MainWindow::newList, Qt::BlockingQueuedConnection);
 	m_evoThread->start();
-//	ui->startButton->click();
+	ui->startButton->click();
 }
 
 MainWindow::~MainWindow()

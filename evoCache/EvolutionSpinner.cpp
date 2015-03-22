@@ -3,7 +3,7 @@
 #include "puppy/Puppy.hpp"
 #include "AccRegPrimits.h"
 
-#define POP_SIZE_DEFAULT 500
+#define POP_SIZE_DEFAULT 1000
 #define NBR_GEN_DEFAULT 10000
 #define NBR_PART_TOURNAMENT_DEFAULT 2
 #define MAX_DEPTH_DEFAULT 10
@@ -12,9 +12,9 @@
 #define INIT_GROW_PROBA_DEFAULT 0.5f
 #define CROSSOVER_PROBA_DEFAULT 0.8f
 #define CROSSOVER_DISTRIB_PROBA_DEFAULT 0.9f
-#define MUT_STD_PROBA_DEFAULT 0.135f
+#define MUT_STD_PROBA_DEFAULT 0.35f
 #define MUT_MAX_REGEN_DEPTH_DEFAULT 5
-#define MUT_SWAP_PROBA_DEFAULT 0.135f
+#define MUT_SWAP_PROBA_DEFAULT 0.35f
 #define MUT_SWAP_DISTRIB_PROBA_DEFAULT 0.5f
 #define SEED_DEFAULT 0
 
@@ -38,33 +38,28 @@ EvolutionSpinner::EvolutionSpinner(Account *pAc, QObject* parent)
 	m_context->insert(new Cosinus);
 	m_context->insert(new TokenT<double>("0.1", 0.1));
 	m_context->insert(new TokenT<double>("0.2", 0.2));
+	m_context->insert(new TokenT<double>("0.3", 0.3));
+	m_context->insert(new TokenT<double>("0.4", 0.4));
 	m_context->insert(new TokenT<double>("0.5", 0.5));
 	m_context->insert(new TokenT<double>("0", 0.0));
 	m_context->insert(new TokenT<double>("1", 1.0));
 	m_context->insert(new TokenT<double>("2", 2.0));
+	m_context->insert(new TokenT<double>("3", 3.0));
+	m_context->insert(new TokenT<double>("4", 4.0));
 	m_context->insert(new TokenT<double>("5", 5.0));
 	m_context->insert(new TokenT<double>("10", 10.0));
 	m_context->insert(new TokenT<double>("20", 20.0));
 	m_context->insert(new TokenT<double>("50", 50.0));
 	m_context->insert(new TokenT<double>("100", 100.0));
 	m_context->insert(new TokenT<double>("200", 200.0));
-	m_context->insert(new TokenT<double>("300", 300.0));
 	m_context->insert(new TokenT<double>("500", 500.0));
 	m_context->insert(new TokenT<double>("1000", 1000.0));
 	m_context->insert(new TokenT<double>("2000", 2000.0));
-	m_context->insert(new TokenT<double>("3000", 3000.0));
-	m_context->insert(new TokenT<double>("4000", 4000.0));
-	m_context->insert(new TokenT<double>("5000", 5000.0));
-	m_context->insert(new TokenT<double>("37536", 37536.0));
-	m_context->insert(new TokenT<double>("43872", 43872.0));
-	m_context->insert(new TokenT<double>("52672", 52672.0));
-	m_context->insert(new TokenT<double>("57824", 57824.0));
-	m_context->insert(new TokenT<double>("75936", 75936.0));
-	m_context->insert(new TokenT<double>("76576", 76576.0));
-	m_context->insert(new TokenT<double>("15.208", 365.25 / 24.0));
-	m_context->insert(new TokenT<double>("30.417", 365.25 / 12.0));
-	m_context->insert(new TokenT<double>("365", 365.25));
-	m_context->insert(new TokenT<double>("182", 365.25 * 0.5));
+	m_context->insert(new TokenT<double>("2P8", 2<<8));
+	m_context->insert(new TokenT<double>("2P12", 2<<12));
+	m_context->insert(new TokenT<double>("2P16", 2<<16));
+	m_context->insert(new TokenT<double>("2P20", 2<<20));
+	m_context->insert(new TokenT<double>("2P24", 2<<24));
 
 	m_context->insert(new CacheBotRootPrimitive(this));
 //	m_context->insert(new FeatureBiWeeklyAmount(this));
@@ -129,7 +124,7 @@ void EvolutionSpinner::runEvolution() {
 		applyMutationSwap(lPopulation, *m_context, lMutSwapProba, lMutSwapDistribProba);
 
 		bestTree.mValid = false;
-		//lPopulation.push_back(bestTree);
+		lPopulation.push_back(bestTree);
 
 		evaluateSymbReg(lPopulation, *m_context);
 		calculateStats(lPopulation, i);

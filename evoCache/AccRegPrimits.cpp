@@ -26,7 +26,7 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 		currentDate = currentDate.addDays(targetDayThisMonth - currentDate.day());
 		targetTrans.append(Transaction());
 		targetTrans.last().date = currentDate;
-		targetTrans.last().kamount = m_kamount;
+		targetTrans.last().setKLA(m_kla);
 		targetTrans.last().nameHash.b[0] = m_b[0];
 		targetTrans.last().nameHash.b[1] = m_b[1];
 		targetTrans.last().nameHash.b[2] = m_b[2];
@@ -34,14 +34,17 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 		currentDate = currentDate.addMonths(1);
 	}
 	if (targetTrans.count() == 0) {
-		LOG() << "MonthlyAmount(0 TARGET): day "<<m_dayOfMonth<<" amount "<<(m_kamount/1024) << endl;
+		LOG() << "MonthlyAmount(0 TARGET): day "<<m_dayOfMonth<<" kla "<< m_kla << endl;
 	}
 	else {
-		//LOG() << "MonthlyAmount("<<targetTrans.count()<<" TARGET): day "<<m_dayOfMonth<<" amount "<<(m_kamount/1024)<<" hash "<<targetTrans.first().nameHash.hash << endl;
+//		LOG() << "MonthlyAmount("<<targetTrans.count()<<" TARGET): day "<<m_dayOfMonth<<" kla"<< m_kla <<"="<<targetTrans.first().amountDbl() << " h=" <<targetTrans.first().nameHash.hash << endl;
+	}
+	if (double(m_kla) / KLA_MULTIPLICATOR < -6 || double(m_kla) / KLA_MULTIPLICATOR > 6) {
+		fitness = -5;
 	}
 
-	float totalOneOverExpDist = 0.0;
-	quint64 localDist = quint64(-1);
+	double totalOneOverExpDist = 0.0;
+	quint64 localDist = 18446744073709551615ULL;
 	Transaction* localTrans = 0;
 	// the current target to compare to
 	Transaction* iTarg = &targetTrans[0];
@@ -53,9 +56,12 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 			localDist = dist;
 			localTrans = &trans;
 		}
+		Q_ASSERT(localDist < 18446744073709551615ULL);
+		static const int LIMIT_DIST_TRANS = 128;
 		// if we get further away by 15 days, we take the next target, or if last trans
 		if (trans.jDay() > 15 + iTarg->jDay() || i == allTrans.count() - 1) {
-			m_bundle.append(localTrans);
+			if (localDist < LIMIT_DIST_TRANS)
+				m_bundle.append(localTrans);
 			totalOneOverExpDist += expoInt<64>(-localDist);
 			if (iTarg == &targetTrans.last())
 				break;
@@ -64,26 +70,36 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 			localDist = quint64(-1);
 		}
 	}
-	fitness += totalOneOverExpDist;
+	// only sum that add up to > $10
+	if (qAbs(m_bundle.sumDollar()) > 10) {
+		fitness += totalOneOverExpDist;
+		fitness += qAbs(kindaLog(m_bundle.sumDollar())) * totalOneOverExpDist / m_bundle.count();
+	}
 
 	// isolate the transaction that were fitted to the target
 	for (int i = 0; i < m_bundle.count(); ++i) {
 		Transaction& t = m_bundle.trans(i);
-		t.dimensionOfVoid = 1;
+		Q_ASSERT(t.dimensionOfVoid == 0);
+		++t.dimensionOfVoid;
 	}
 
 	// summary if the QStringList exists
-	if (ioContext.m_sumamryStrList) {
+	if (ioContext.m_sumamryStrList && m_bundle.count()) {
 		QString str;
 		str = QString::fromStdString(getName()) + " ("
-			  + QString::number(m_bundle.count()) +  ") "
-			  + " $" + QString::number(m_kamount / 1024)
-			  + " on the " + QString::number(m_dayOfMonth) + "th";
+			+ QString::number(m_bundle.count()) +  ") "
+			+ " kl$ " + QString::number(double(m_kla) / KLA_MULTIPLICATOR)
+			+ " / " + QString::number(kindaLog(m_bundle.sumDollar() / m_bundle.count()))
+			+ " = " + QString::number(unKindaLog(double(m_kla) / KLA_MULTIPLICATOR))
+			+ " / " + QString::number(m_bundle.sumDollar() / m_bundle.count());
 		ioContext.m_sumamryStrList->append(str);
-		str = QString("hash: ") + QString::number(m_bundle.trans(0).nameHash.hash);
+		str = QString("On the ") + QString::number(m_dayOfMonth) + "th, ";
+		str += QString("hash: ") + QString::number(m_bundle.trans(0).nameHash.hash);
 		str += QString("  fitness: ") + QString::number(fitness);
 		ioContext.m_sumamryStrList->append(str);
-		str = QString("avg label: ") + m_bundle.averageName();
+//		str = QString("avg label: ") + m_bundle.averageName();
+//		ioContext.m_sumamryStrList->append(str);
+		str = QString("all label: ") + m_bundle.uniqueNames().join(" | ");
 		ioContext.m_sumamryStrList->append(str);
 		str = QString("tot amount: ") + QString::number(m_bundle.sumDollar());
 		ioContext.m_sumamryStrList->append(str);

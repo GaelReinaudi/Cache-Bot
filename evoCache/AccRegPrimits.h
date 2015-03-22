@@ -80,7 +80,7 @@ public:
 class Cosinus : public Puppy::Primitive
 {
 public:
-	Cosinus() : Primitive(2, "COS") { }
+	Cosinus() : Primitive(1, "COS") { }
 	virtual ~Cosinus() { }
 	virtual void execute(void* outDatum, Puppy::Context& ioContext) {
 		double& lResult = *(double*)outDatum;
@@ -174,7 +174,7 @@ public:
 		getArgument(++ind, &a, ioContext);
 		m_dayOfMonth = a;
 		getArgument(++ind, &a, ioContext);
-		m_kamount = a * 1024.0;
+		m_kla = a;
 
 		int bInd = -1;
 		getArgument(++ind, &a, ioContext);
@@ -195,7 +195,7 @@ public:
 
 protected:
 	int m_dayOfMonth = 0;
-	qint64 m_kamount = 0;
+	int m_kla = 0;
 	char m_b[4];
 };
 

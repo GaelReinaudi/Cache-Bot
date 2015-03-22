@@ -3,21 +3,20 @@
 
 double kindaLog(double amount) {
 	if (amount < 0)
-		return -log10(-amount+1.0);
-	return log10(amount+1.0);
+		return -qLn(-amount+1.0) * 0.43429448190325182765112891891661; // 1 / 2.3025850929940456840179914546844;
+	return qLn(amount+1.0) * 0.43429448190325182765112891891661; // 1 / 2.3025850929940456840179914546844;
 }
-
-QRectF kindaLog(QRectF rectLinear) {
-	QRectF compRect(rectLinear);
-	compRect.setBottom(kindaLog(compRect.bottom()));
-	compRect.setTop(kindaLog(compRect.top()));
-	return compRect;
+double unKindaLog(double kindaLogAmount)
+{
+	if (kindaLogAmount < 0)
+		return 1.0 - qExp(-kindaLogAmount * 2.3025850929940456840179914546844); // 1 / 0.43429448190325182765112891891661
+	return -1.0 + qExp(kindaLogAmount * 2.3025850929940456840179914546844); // 1 / 0.43429448190325182765112891891661
 }
 
 unsigned int proximityHashString(const QString &str) {
 	unsigned int ret = 0;
 	for (const QChar& c : str) {
-		int n = c.toUpper().toLatin1() * 32;
+		int n = c.toUpper().toLatin1() * 1;
 		// for numbers
 		if (c.isDigit())
 			n = 0;//QChar('#').toLatin1();
@@ -94,7 +93,7 @@ void Transaction::read(const QJsonObject &json) {
 	id = json["_id"].toString();
 	name = json["name"].toString();
 	nameHash.hash = proximityHashString(name);
-	kamount = -json["amount"].toDouble(ok) * 1024.0;
+	setAmount(-json["amount"].toDouble(ok));
 	date = QDate::fromString(json["date"].toString(), "yyyy-MM-dd");
 	QJsonArray npcArrayOld = json["category"].toArray();
 	for (int npcIndex = 0; npcIndex < npcArrayOld.size(); ++npcIndex) {
@@ -123,4 +122,6 @@ void Transaction::write(QJsonObject &json) const {
 	//		json["numDays"] = m_numDays;
 	//		json["descr"] = m_description;
 }
+
+
 
