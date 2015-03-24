@@ -65,6 +65,7 @@ public:
 		int hash = 0;
 		uchar b[4];
 	} nameHash;
+	int indexHash = -1;
 	// used to make the distance arbitrary far from anything
 	int dimensionOfVoid = 0;
 
@@ -105,20 +106,21 @@ public:
 		return date.toJulianDay();
 	}
 
-	template <quint64 wD, quint64 wA, quint64 w1, quint64 w2>
+	template <quint64 wD, quint64 wA, quint64 wH, quint64 wIH>
 	qint64 distanceWeighted(const Transaction& other) const {
 		qint64 d = 0;
 		d += qint64(wD) * (absInt(jDay() - other.jDay()));
 		d += qint64(wA) * (absInt(amountInt() - other.amountInt()));
-		d += qint64(w1) * qint64(absInt(nameHash.hash - other.nameHash.hash));
-		d += qint64(1<<20) * qint64(absInt(dimensionOfVoid - other.dimensionOfVoid));
+		d += qint64(wH) * qint64(absInt(nameHash.hash - other.nameHash.hash));
+		d += qint64(wIH) * qint64(absInt(indexHash - other.indexHash));
 		//LOG() << "dist " << d << " = day " << jDay() << "-" << other.jDay() << " kamount " << kamount << "-" << other.kamount << " hash " << nameHash.hash << "-" << other.nameHash.hash << endl;
+		d += qint64(1<<20) * qint64(absInt(dimensionOfVoid - other.dimensionOfVoid));
 		return d;
 	}
 
 	//! distance between this transaction and anther.
 	inline quint64 dist(const Transaction& other) const {
-		return distanceWeighted<1, 1, 64, 1>(other);
+		return distanceWeighted<1, 1, 64, 0>(other);
 	}
 };
 
@@ -198,7 +200,9 @@ public:
 		return m_hashBundles;
 	}
 
-	TransactionBundle& allTrans() {
+	TransactionBundle& allTrans(int filterHash = -1) {
+		if (filterHash >= 0)
+			return *m_hashBundles[filterHash];
 		return m_allTrans;
 	}
 	QDate lastTransactionDate() {
@@ -234,6 +238,14 @@ private:
 				m_hashBundles[h] = new TransactionBundle();
 			m_hashBundles[h]->append(&t);
 		}
+		// assigns the index of the hash to the transactions
+		for (int i = 0; i < hashBundles().count(); ++i) {
+			int h = hashBundles().keys()[i];
+			for (int j = 0; j < hashBundles()[h]->count(); ++j) {
+				hashBundles()[h]->trans(j).indexHash = i;
+			}
+		}
+
 		qDebug() << m_hashBundles.count() << m_hashBundles.keys().first() << m_hashBundles.keys().last();
 	}
 

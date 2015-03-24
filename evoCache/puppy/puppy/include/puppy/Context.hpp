@@ -101,6 +101,7 @@ public:
 	bool m_hasRecursiveFeature = false;
 	QStringList* m_sumamryStrList = 0;
 	Account* m_pAccount;
+	int filterHashIndex = -1;
 };
 
 }

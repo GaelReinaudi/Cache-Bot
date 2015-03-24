@@ -5,7 +5,7 @@
 #include "puppy/Puppy.hpp"
 #include "EvolutionSpinner.h"
 
-static const int NUM_FEATURES = 10;
+static const int NUM_FEATURES = 1;
 
 class Add : public Puppy::Primitive
 {

@@ -4,7 +4,7 @@
 #include "AccRegPrimits.h"
 
 #define POP_SIZE_DEFAULT 200
-#define NBR_GEN_DEFAULT 10000
+#define NBR_GEN_DEFAULT 5
 #define NBR_PART_TOURNAMENT_DEFAULT 2
 #define MAX_DEPTH_DEFAULT 5
 #define MIN_INIT_DEPTH_DEFAULT 3
@@ -36,6 +36,11 @@ EvolutionSpinner::EvolutionSpinner(Account *pAc, QObject* parent)
 	m_context->insert(new Multiply);
 	m_context->insert(new Divide);
 	m_context->insert(new Cosinus);
+	m_context->insert(new TokenT<double>("0.01", 0.01));
+	m_context->insert(new TokenT<double>("0.02", 0.02));
+	m_context->insert(new TokenT<double>("0.03", 0.03));
+	m_context->insert(new TokenT<double>("0.04", 0.04));
+	m_context->insert(new TokenT<double>("0.05", 0.05));
 	m_context->insert(new TokenT<double>("0.1", 0.1));
 	m_context->insert(new TokenT<double>("0.2", 0.2));
 	m_context->insert(new TokenT<double>("0.3", 0.3));
@@ -52,7 +57,7 @@ EvolutionSpinner::EvolutionSpinner(Account *pAc, QObject* parent)
 		int h = pAc->hashBundles().keys()[i];
 		if (pAc->hashBundles()[h]->count() > 10) {
 			double avgKLA = pAc->hashBundles()[h]->averageKLA();
-			m_context->insert(new TokenT<double>(QString("h%1").arg(i).toStdString(), h));
+			m_context->insert(new TokenT<double>(QString("h%1").arg(i).toStdString(), i));
 			m_context->insert(new TokenT<double>(QString("kla%1").arg(i).toStdString(), avgKLA));
 		}
 	}
@@ -95,6 +100,8 @@ void EvolutionSpinner::runEvolution() {
 	float         lMutSwapProba        = MUT_SWAP_PROBA_DEFAULT;
 	float         lMutSwapDistribProba = MUT_SWAP_DISTRIB_PROBA_DEFAULT;
 
+	for (int h = 0; h < 227; ++h) {
+	m_context->filterHashIndex = h;
 	// Initialize population.
 	std::vector<Tree> lPopulation(lPopSize);
 	std::cout << "Initializing population" << std::endl;
@@ -132,7 +139,7 @@ void EvolutionSpinner::runEvolution() {
 			std::max_element(lPopulation.begin(), lPopulation.end());
 	LOG() << "Best individual at generation " << lNbrGen << " is: ";
 	LOG() << lBestIndividual->toStr() << endl;
-
+}
 	std::cout << "Exiting program" << std::endl << std::flush;
 }
 

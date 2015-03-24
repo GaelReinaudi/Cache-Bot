@@ -10,29 +10,41 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 
 	fitness = 0.0;
 
-	TransactionBundle& allTrans = ioContext.m_pAccount->allTrans();
+	int filterHashIndex = ioContext.filterHashIndex;
+	int filterHash = filterHashIndex < 0 ? -1 : ioContext.m_pAccount->hashBundles().keys()[filterHashIndex];
+
+	TransactionBundle& allTrans = ioContext.m_pAccount->allTrans(filterHash);
 	QDate lastDate = ioContext.m_pAccount->lastTransactionDate();
-	QDate iniDate = ioContext.m_pAccount->firstTransactionDate().addMonths(1);
+	QDate iniDate = ioContext.m_pAccount->firstTransactionDate();
 
 	QVector<Transaction> targetTrans;
 	QDate currentDate = iniDate;
 	while (currentDate < lastDate) {
 		// the target day of this month. If neg, make it count from the end of the month.
 		int targetDayThisMonth = qMin(m_dayOfMonth, currentDate.daysInMonth());
+		targetDayThisMonth = qMax(targetDayThisMonth, 1 - currentDate.daysInMonth());
 		while (targetDayThisMonth <= 0)
 			targetDayThisMonth += currentDate.daysInMonth();
 
 		// move current date to the correct target day that month
 		currentDate = currentDate.addDays(targetDayThisMonth - currentDate.day());
+		// assert that it is 30ish days after the previous date
+		assert(targetTrans.count() == 0 || qAbs(targetTrans.last().date.daysTo(currentDate) - 30) <= 2);
+
 		targetTrans.append(Transaction());
 		targetTrans.last().date = currentDate;
 		targetTrans.last().setKLA(m_kla);
-		targetTrans.last().nameHash.hash = 0;
-		targetTrans.last().nameHash.hash += m_b[0] * 1 << 0;
-		targetTrans.last().nameHash.hash += m_b[1] * 1 << 4;
-		targetTrans.last().nameHash.hash += m_b[2] * 1 << 8;
-		targetTrans.last().nameHash.hash += m_b[3] * 1 << 12;
+		targetTrans.last().indexHash = 0;
+		targetTrans.last().indexHash += m_b[0] * 1 << 0;
+		targetTrans.last().indexHash += m_b[1] * 1 << 4;
+		targetTrans.last().indexHash += m_b[2] * 1 << 8;
+		targetTrans.last().indexHash += m_b[3] * 1 << 12;
 		targetTrans.last().nameHash.hash = m_b[0];
+		// if we are forcing a given hashed bundle
+		if (filterHashIndex >= 0) {
+			targetTrans.last().indexHash = filterHashIndex;
+			targetTrans.last().nameHash.hash = filterHash;
+		}
 		currentDate = currentDate.addMonths(1);
 	}
 	if (targetTrans.count() == 0) {
@@ -51,6 +63,9 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 	// the current target to compare to
 	Transaction* iTarg = &targetTrans[0];
 	m_bundle.clear();
+	if (ioContext.m_sumamryStrList) {
+		m_bundle.clear();
+	}
 	for (int i = 0; i < allTrans.count(); ++i) {
 		Transaction& trans = allTrans.trans(i);
 		quint64 dist = iTarg->dist(trans);
@@ -58,20 +73,26 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 			localDist = dist;
 			localTrans = &trans;
 		}
-		Q_ASSERT(localDist < 18446744073709551615ULL / 1024ULL);
+		Q_ASSERT(localDist < 18446744073709551615ULL);
 		static const int LIMIT_DIST_TRANS = 32;
 		// if we get further away by 15 days, we take the next target, or if last trans
 		if (trans.jDay() > 15 + iTarg->jDay() || i == allTrans.count() - 1) {
 			if (localDist < LIMIT_DIST_TRANS) {
 				m_bundle.append(localTrans);
-//				totalOneOverExpDist += expoInt<64>(-localDist);
-				totalOneOverExpDist += 1.0 / (1.0 + localDist);
+				// isolate the transaction that were fitted to the target
+				Q_ASSERT(localTrans->dimensionOfVoid == 0);
+				localTrans->dimensionOfVoid++;
 			}
+//				totalOneOverExpDist += expoInt<64>(-localDist);
+				totalOneOverExpDist += 1.0 / (1 + localDist);
 			if (iTarg == &targetTrans.last())
 				break;
 			++iTarg;
 			localTrans = 0;
 			localDist = quint64(-1);
+			// keep this last trans in the pool if it was not just added
+			if (&trans != localTrans)
+				--i;
 		}
 	}
 	// only sum that add up to > $10
@@ -81,12 +102,12 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 		fitness /= targetTrans.count();
 	}
 
-	// isolate the transaction that were fitted to the target
-	for (int i = 0; i < m_bundle.count(); ++i) {
-		Transaction& t = m_bundle.trans(i);
-		Q_ASSERT(t.dimensionOfVoid == 0);
-		++t.dimensionOfVoid;
-	}
+//	// isolate the transaction that were fitted to the target
+//	for (int i = 0; i < m_bundle.count(); ++i) {
+//		Transaction& t = m_bundle.trans(i);
+//		Q_ASSERT(t.dimensionOfVoid == 0);
+//		++t.dimensionOfVoid;
+//	}
 
 	// summary if the QStringList exists
 	if (ioContext.m_sumamryStrList && m_bundle.count()) {
