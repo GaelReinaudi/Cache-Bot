@@ -120,7 +120,7 @@ public:
 
 	//! distance between this transaction and anther.
 	inline quint64 dist(const Transaction& other) const {
-		return distanceWeighted<1, 1, 64, 0>(other);
+		return distanceWeighted<8, 2, 128, 0>(other);
 	}
 };
 

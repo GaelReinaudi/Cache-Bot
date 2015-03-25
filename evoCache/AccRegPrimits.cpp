@@ -14,7 +14,7 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 	int filterHash = filterHashIndex < 0 ? -1 : ioContext.m_pAccount->hashBundles().keys()[filterHashIndex];
 
 	TransactionBundle& allTrans = ioContext.m_pAccount->allTrans(filterHash);
-	QDate lastDate = ioContext.m_pAccount->lastTransactionDate();
+	QDate lastDate = ioContext.m_pAccount->lastTransactionDate().addDays(-4);
 	QDate iniDate = ioContext.m_pAccount->firstTransactionDate();
 
 	QVector<Transaction> targetTrans;
@@ -66,6 +66,9 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 	if (ioContext.m_sumamryStrList) {
 		m_bundle.clear();
 	}
+	int consecMonth = 0;
+	int consecMonthBeforeMissed = 0;
+	int consecMissed = 0;
 	for (int i = 0; i < allTrans.count(); ++i) {
 		Transaction& trans = allTrans.trans(i);
 		quint64 dist = iTarg->dist(trans);
@@ -82,9 +85,19 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 				// isolate the transaction that were fitted to the target
 				Q_ASSERT(localTrans->dimensionOfVoid == 0);
 				localTrans->dimensionOfVoid++;
+				if(consecMonth == 0) {
+					consecMonthBeforeMissed = 0;
+				}
+				++consecMonthBeforeMissed;
+				++consecMonth;
+				consecMissed = 0;
+			}
+			else {
+				consecMonth = 0;
+				++consecMissed;
 			}
 //				totalOneOverExpDist += expoInt<64>(-localDist);
-				totalOneOverExpDist += 1.0 / (1 + localDist);
+				totalOneOverExpDist += 4.0 / (4 + localDist);
 			if (iTarg == &targetTrans.last())
 				break;
 			++iTarg;
@@ -98,8 +111,9 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 	// only sum that add up to > $10
 	if (qAbs(m_bundle.sumDollar()) > 10) {
 		fitness += totalOneOverExpDist;
-		fitness += qAbs(kindaLog(m_bundle.sumDollar())) * totalOneOverExpDist / m_bundle.count();
-		fitness /= targetTrans.count();
+		//fitness += qAbs(kindaLog(m_bundle.sumDollar())) * totalOneOverExpDist / m_bundle.count();
+		fitness *= consecMonthBeforeMissed + consecMonth;
+		fitness /= 4 + consecMissed;
 	}
 
 //	// isolate the transaction that were fitted to the target
@@ -128,6 +142,8 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 		str = QString("all label: ") + m_bundle.uniqueNames().join(" | ");
 		ioContext.m_sumamryStrList->append(str);
 		str = QString("tot amount: ") + QString::number(m_bundle.sumDollar());
+		str += QString(" since : ") + QString::number(consecMonthBeforeMissed);
+		str += QString(" last missed: ") + QString::number(consecMissed);
 		ioContext.m_sumamryStrList->append(str);
 		str = QString("----------------------------");
 		ioContext.m_sumamryStrList->append(str);

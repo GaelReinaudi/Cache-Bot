@@ -3,8 +3,8 @@
 #include "puppy/Puppy.hpp"
 #include "AccRegPrimits.h"
 
-#define POP_SIZE_DEFAULT 200
-#define NBR_GEN_DEFAULT 5
+#define POP_SIZE_DEFAULT 500
+#define NBR_GEN_DEFAULT 20
 #define NBR_PART_TOURNAMENT_DEFAULT 2
 #define MAX_DEPTH_DEFAULT 5
 #define MIN_INIT_DEPTH_DEFAULT 3
@@ -100,8 +100,12 @@ void EvolutionSpinner::runEvolution() {
 	float         lMutSwapProba        = MUT_SWAP_PROBA_DEFAULT;
 	float         lMutSwapDistribProba = MUT_SWAP_DISTRIB_PROBA_DEFAULT;
 
-	for (int h = 0; h < 227; ++h) {
-	m_context->filterHashIndex = h;
+QMap<double, QStringList> output;
+for (int j = 0; j < m_context->m_pAccount->hashBundles().count(); ++j) {
+	int h = m_context->m_pAccount->hashBundles().keys()[j];
+	if (m_context->m_pAccount->hashBundles()[h]->count() < 5)
+		continue;
+	m_context->filterHashIndex = j;
 	// Initialize population.
 	std::vector<Tree> lPopulation(lPopSize);
 	std::cout << "Initializing population" << std::endl;
@@ -135,12 +139,26 @@ void EvolutionSpinner::runEvolution() {
 	LOG() << "End of evolution" << endl;
 
 	// Outputting best individual
-	std::vector<Tree>::const_iterator lBestIndividual =
+	std::vector<Tree>::iterator lBestIndividual =
 			std::max_element(lPopulation.begin(), lPopulation.end());
 	LOG() << "Best individual at generation " << lNbrGen << " is: ";
 	LOG() << lBestIndividual->toStr() << endl;
+
+	QString strBest = summarize(*lBestIndividual);
+	QString strFit = strBest.mid(strBest.indexOf("fitness: ") + 9).mid(0, 5).trimmed();
+	LOG() << "AAAAAAAAAAAAAAAAAA " << strBest << endl;
+	double fitness = strFit.toDouble();
+	output[fitness].append(strBest);
 }
-	std::cout << "Exiting program" << std::endl << std::flush;
+
+	for (int i = output.count() - 1; i >= 0; --i) {
+		double fit = output.keys()[i];
+		LOG() << "-------------------------------- " << fit << " --------------------------------" << endl;
+		for (const auto& str : output[fit])
+		LOG() << str << endl;
+	}
+
+	std::cout << "Exiting program " << output.count() << endl << std::flush;
 }
 
 unsigned int EvolutionSpinner::evaluateSymbReg(std::vector<Tree>& ioPopulation,
@@ -160,7 +178,7 @@ unsigned int EvolutionSpinner::evaluateSymbReg(std::vector<Tree>& ioPopulation,
 	return lNbrEval;
 }
 
-QStringList EvolutionSpinner::summarize(Tree& tree)
+QString EvolutionSpinner::summarize(Tree& tree)
 {
 	QStringList retList;
 	emit sendClearMask();
@@ -171,7 +189,7 @@ QStringList EvolutionSpinner::summarize(Tree& tree)
 	}
 	emit needsReplot();
 	emit newList(retList);
-	return retList;
+	return retList.join('\n');
 }
 
 
