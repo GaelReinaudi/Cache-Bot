@@ -4,7 +4,7 @@
 #include "AccRegPrimits.h"
 
 #define POP_SIZE_DEFAULT 500
-#define NBR_GEN_DEFAULT 20
+#define NBR_GEN_DEFAULT 40
 #define NBR_PART_TOURNAMENT_DEFAULT 2
 #define MAX_DEPTH_DEFAULT 5
 #define MIN_INIT_DEPTH_DEFAULT 3
@@ -55,7 +55,8 @@ EvolutionSpinner::EvolutionSpinner(Account *pAc, QObject* parent)
 	m_context->insert(new TokenT<double>("10", 10.0));
 	for (int i = 0; i < pAc->hashBundles().count(); ++i) {
 		int h = pAc->hashBundles().keys()[i];
-		if (pAc->hashBundles()[h]->count() > 10) {
+		//if (pAc->hashBundles()[h]->count() > 10)
+		{
 			double avgKLA = pAc->hashBundles()[h]->averageKLA();
 			m_context->insert(new TokenT<double>(QString("h%1").arg(i).toStdString(), i));
 			m_context->insert(new TokenT<double>(QString("kla%1").arg(i).toStdString(), avgKLA));
@@ -103,8 +104,8 @@ void EvolutionSpinner::runEvolution() {
 QMap<double, QStringList> output;
 for (int j = 0; j < m_context->m_pAccount->hashBundles().count(); ++j) {
 	int h = m_context->m_pAccount->hashBundles().keys()[j];
-	if (m_context->m_pAccount->hashBundles()[h]->count() < 5)
-		continue;
+//	if (m_context->m_pAccount->hashBundles()[h]->count() < 3)
+//		continue;
 	m_context->filterHashIndex = j;
 	// Initialize population.
 	std::vector<Tree> lPopulation(lPopSize);
