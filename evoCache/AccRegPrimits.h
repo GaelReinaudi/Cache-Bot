@@ -193,10 +193,22 @@ public:
 	}
 	void execute(void* outDatum, Puppy::Context& ioContext) override;
 
+	double billProbability() const {
+		double proba = m_fitness;
+		proba *= m_consecMonthBeforeMissed;
+		proba /= 4 + 2 * m_consecMissed;
+		return proba;
+	}
+
 protected:
 	int m_dayOfMonth = 0;
 	int m_kla = 0;
 	int m_b[4];
+	// characteristics
+	double m_fitness = 0.0;
+	int m_consecMonthBeforeMissed = 0;
+	int m_consecMonth = 0;
+	int m_consecMissed = 0;
 };
 
 #endif // ACCREGPRIMITS_H

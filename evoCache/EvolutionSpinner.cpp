@@ -4,7 +4,7 @@
 #include "AccRegPrimits.h"
 
 #define POP_SIZE_DEFAULT 500
-#define NBR_GEN_DEFAULT 40
+#define NBR_GEN_DEFAULT 20
 #define NBR_PART_TOURNAMENT_DEFAULT 2
 #define MAX_DEPTH_DEFAULT 5
 #define MIN_INIT_DEPTH_DEFAULT 3
@@ -55,7 +55,7 @@ EvolutionSpinner::EvolutionSpinner(Account *pAc, QObject* parent)
 	m_context->insert(new TokenT<double>("10", 10.0));
 	for (int i = 0; i < pAc->hashBundles().count(); ++i) {
 		int h = pAc->hashBundles().keys()[i];
-		//if (pAc->hashBundles()[h]->count() > 10)
+		if (pAc->hashBundles()[h]->count() > 1)
 		{
 			double avgKLA = pAc->hashBundles()[h]->averageKLA();
 			m_context->insert(new TokenT<double>(QString("h%1").arg(i).toStdString(), i));
@@ -104,8 +104,8 @@ void EvolutionSpinner::runEvolution() {
 QMap<double, QStringList> output;
 for (int j = 0; j < m_context->m_pAccount->hashBundles().count(); ++j) {
 	int h = m_context->m_pAccount->hashBundles().keys()[j];
-//	if (m_context->m_pAccount->hashBundles()[h]->count() < 3)
-//		continue;
+	if (m_context->m_pAccount->hashBundles()[h]->count() <= 1)
+		continue;
 	m_context->filterHashIndex = j;
 	// Initialize population.
 	std::vector<Tree> lPopulation(lPopSize);
@@ -146,13 +146,13 @@ for (int j = 0; j < m_context->m_pAccount->hashBundles().count(); ++j) {
 	LOG() << lBestIndividual->toStr() << endl;
 
 	QString strBest = summarize(*lBestIndividual);
-	QString strFit = strBest.mid(strBest.indexOf("fitness: ") + 9).mid(0, 5).trimmed();
+	QString strFit = strBest.mid(strBest.indexOf("billProba: ") + 11).mid(0, 5).trimmed();
 	LOG() << "AAAAAAAAAAAAAAAAAA " << strBest << endl;
-	double fitness = strFit.toDouble();
-	output[fitness].append(strBest);
+	double billProba = strFit.toDouble();
+	output[billProba].append(strBest);
 }
 
-	for (int i = output.count() - 1; i >= 0; --i) {
+	for (int i = 0; i < output.count(); ++i) {
 		double fit = output.keys()[i];
 		LOG() << "-------------------------------- " << fit << " --------------------------------" << endl;
 		for (const auto& str : output[fit])
