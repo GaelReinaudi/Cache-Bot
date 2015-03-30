@@ -10,6 +10,7 @@
 #include <cmath>
 #include <QRectF>
 #include <QtMath>
+#include <array>
 
 double kindaLog(double amount);
 double unKindaLog(double kindaLogAmount);
