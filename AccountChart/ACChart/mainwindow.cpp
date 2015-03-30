@@ -12,7 +12,8 @@ MainWindow::MainWindow(QString jsonFile, QWidget *parent) :
 	Account account;
 	account.loadPlaidJson(jsonFile);
 
-	ui->plot->loadCompressedAmount(&account);
+    ui->plot->loadCompressedAmount(&account);
+//    ui->plot->loadAmount(&account);
 
 	ui->sliderHash->setRange(-1, ui->plot->hashKeys().count() - 1);
 
