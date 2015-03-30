@@ -3,12 +3,12 @@
 void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 {
 	AccountFeature::execute(outDatum, ioContext);
-	double& fitness = *(double*)outDatum;
+	double& output = *(double*)outDatum;
 
 	getArgs(ioContext);
 	cleanArgs();
 
-	fitness = 0.0;
+	m_fitness = 0.0;
 
 	int filterHashIndex = ioContext.filterHashIndex;
 	int filterHash = filterHashIndex < 0 ? -1 : ioContext.m_pAccount->hashBundles().keys()[filterHashIndex];
@@ -54,7 +54,7 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 //		LOG() << "MonthlyAmount("<<targetTrans.count()<<" TARGET): day "<<m_dayOfMonth<<" kla"<< m_kla <<"="<<targetTrans.first().amountDbl() << " h=" <<targetTrans.first().nameHash.hash << endl;
 	}
 	if (double(m_kla) < -6 * KLA_MULTIPLICATOR || double(m_kla) > 6 * KLA_MULTIPLICATOR) {
-		fitness = -1;
+		double fitness = -1;
 	}
 
 	double totalOneOverExpDist = 0.0;
@@ -66,9 +66,9 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 	if (ioContext.m_sumamryStrList) {
 		m_bundle.clear();
 	}
-	int consecMonth = 0;
-	int consecMonthBeforeMissed = 0;
-	int consecMissed = 0;
+	m_consecMonth = 0;
+	m_consecMonthBeforeMissed = 0;
+	m_consecMissed = 0;
 	for (int i = 0; i < allTrans.count(); ++i) {
 		Transaction& trans = allTrans.trans(i);
 		quint64 dist = iTarg->dist(trans);
@@ -85,16 +85,16 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 				// isolate the transaction that were fitted to the target
 				Q_ASSERT(localTrans->dimensionOfVoid == 0);
 				localTrans->dimensionOfVoid++;
-				if(consecMonth == 0) {
-					consecMonthBeforeMissed = 0;
+				if(m_consecMonth == 0) {
+					m_consecMonthBeforeMissed = 0;
 				}
-				++consecMonthBeforeMissed;
-				++consecMonth;
-				consecMissed = 0;
+				++m_consecMonthBeforeMissed;
+				++m_consecMonth;
+				m_consecMissed = 0;
 			}
 			else {
-				consecMonth = 0;
-				++consecMissed;
+				m_consecMonth = 0;
+				++m_consecMissed;
 			}
 //				totalOneOverExpDist += expoInt<64>(-localDist);
 				totalOneOverExpDist += 4.0 / (4 + localDist);
@@ -108,13 +108,14 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 				--i;
 		}
 	}
-	// only sum that add up to > $10
-	if (qAbs(m_bundle.sumDollar()) > 10) {
-		fitness += totalOneOverExpDist;
-		//fitness += qAbs(kindaLog(m_bundle.sumDollar())) * totalOneOverExpDist / m_bundle.count();
-		fitness *= consecMonthBeforeMissed + consecMonth;
-		fitness /= 4 + consecMissed;
+	// only sum that add up to > $N
+	if (qAbs(m_bundle.sumDollar()) > 1) {
+		m_fitness += totalOneOverExpDist;
+		//m_fitness += qAbs(kindaLog(m_bundle.sumDollar())) * totalOneOverExpDist / m_bundle.count();
+		//m_fitness *= m_consecMonthBeforeMissed;
+		//m_fitness /= 2 + m_consecMissed;
 	}
+	output = m_fitness;
 
 //	// isolate the transaction that were fitted to the target
 //	for (int i = 0; i < m_bundle.count(); ++i) {
@@ -135,15 +136,17 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 		ioContext.m_sumamryStrList->append(str);
 		str = QString("On the ") + QString::number(m_dayOfMonth) + "th, ";
 		str += QString("hash: ") + QString::number(m_bundle.trans(0).nameHash.hash);
-		str += QString("  fitness: ") + QString::number(fitness);
+		str += QString("  ind: ") + QString::number(m_bundle.trans(0).indexHash);
+		str += QString("  fitness: ") + QString::number(m_fitness);
+		str += QString("  billProba: ") + QString::number(billProbability());
 		ioContext.m_sumamryStrList->append(str);
 //		str = QString("avg label: ") + m_bundle.averageName();
 //		ioContext.m_sumamryStrList->append(str);
 		str = QString("all label: ") + m_bundle.uniqueNames().join(" | ");
 		ioContext.m_sumamryStrList->append(str);
 		str = QString("tot amount: ") + QString::number(m_bundle.sumDollar());
-		str += QString(" since : ") + QString::number(consecMonthBeforeMissed);
-		str += QString(" last missed: ") + QString::number(consecMissed);
+		str += QString(" since : ") + QString::number(m_consecMonthBeforeMissed);
+		str += QString(" last missed: ") + QString::number(m_consecMissed);
 		ioContext.m_sumamryStrList->append(str);
 		str = QString("----------------------------");
 		ioContext.m_sumamryStrList->append(str);

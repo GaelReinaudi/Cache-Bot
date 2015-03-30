@@ -17,8 +17,8 @@ unsigned int proximityHashString(const QString& str);
 
 #define MAX_HASH_LENGTH 64
 static const int MAX_TRANSACTION_PER_ACCOUNT = 1024 * 16;
-static const int KLA_MULTIPLICATOR = 100;
-static const int KA_MULTIPLICATOR = 1000;
+static const int KLA_MULTIPLICATOR = 128;
+static const int KA_MULTIPLICATOR = 1024;
 
 class Account;
 
