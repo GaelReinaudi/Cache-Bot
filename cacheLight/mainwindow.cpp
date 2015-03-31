@@ -28,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	m_account.loadPlaidJson("../cacheLight/input.json");
 
-	ui->spinBox->setValue(1600);
+	ui->spinBox->setValue(600);
 	ui->spinBox->editingFinished();
 }
 
@@ -40,9 +40,9 @@ MainWindow::~MainWindow()
 void MainWindow::onWheelEvent(QWheelEvent * wEv)
 {
 	m_lastBal = ui->spinBox->value();
-	int step = 100 * qrand() / RAND_MAX;
+	int step = 200 * qrand() / RAND_MAX;
 	if(wEv->delta() > 0)
-		ui->spinBox->setValue(m_lastBal - 2 * step);
+		ui->spinBox->setValue(m_lastBal + step);
 	else
 		ui->spinBox->setValue(m_lastBal - step);
 	updateChart();
@@ -67,7 +67,7 @@ void MainWindow::updateChart()
 void MainWindow::makePredictiPlot()
 {
 	ui->plot->graph(2)->clearData();
-	double minPredict = 9999999;
+	double minPredict = m_lastBal;
 	for(int i = 0; i < m_account.m_predicted.count(); ++i) {
 		Transaction* trans = m_account.m_predicted.transArray() + i;
 		int dayTo = m_date.daysTo(trans->date);
@@ -76,7 +76,7 @@ void MainWindow::makePredictiPlot()
 			double val = d.value + trans->amountDbl();
 			ui->plot->graph(1)->addData(d.key+0.1, val);
 			ui->spinBox->setValue(val);
-			minPredict = val;
+			minPredict = qMin(minPredict, val);
 		}
 		if(dayTo > 0 && dayTo < 16) {
 			// first point predicted
@@ -91,12 +91,13 @@ void MainWindow::makePredictiPlot()
 			minPredict = qMin(minPredict, predVal);
 		}
 	}
+
 	if(minPredict <= 0) {
 		ui->plot->setBackground(QBrush(Qt::red));
 	}
 	else {
 		int greenVal = qMin(255.0, minPredict);
-		ui->plot->setBackground(QBrush(QColor(255 - greenVal, greenVal, 0, 64)));
+		ui->plot->setBackground(QBrush(QColor(255 - greenVal, greenVal, 0)));
 	}
 }
 
