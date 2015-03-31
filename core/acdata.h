@@ -218,9 +218,9 @@ private:
 	{
 		Transactions() {}
 		//! json in
-		void read(const QJsonObject &json, const QVector<QString>& acIds);
+		void read(const QJsonArray& npcArray, const QVector<QString>& onlyAcIds = QVector<QString>());
 		//! json out
-		void write(QJsonObject &json) const;
+		void write(QJsonArray &npcArray) const;
 		Transaction* transArray() { return &m_transArray[0]; }
 		void clear() { m_numTrans = 0; }
 		int count() const { return m_numTrans; }
@@ -253,6 +253,10 @@ private:
 	Transactions m_allTransactions;
 	TransactionBundle m_allTrans;
 	HashedBundles m_hashBundles;
+
+public:
+	// for predicted transcations
+	Transactions m_predicted;
 };
 
 class Household : public QObject

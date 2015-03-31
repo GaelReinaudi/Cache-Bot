@@ -104,7 +104,7 @@ void EvolutionSpinner::runEvolution() {
 QMap<double, QStringList> output;
 for (int j = 0; j < m_context->m_pAccount->hashBundles().count(); ++j) {
 	int h = m_context->m_pAccount->hashBundles().keys()[j];
-	if (m_context->m_pAccount->hashBundles()[h]->count() <= 1)
+	if (m_context->m_pAccount->hashBundles()[h]->count() < 2)
 		continue;
 	m_context->filterHashIndex = j;
 	// Initialize population.

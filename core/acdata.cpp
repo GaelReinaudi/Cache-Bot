@@ -45,7 +45,9 @@ bool Account::loadPlaidJson(QString jsonFile) {
 			m_accountIds.push_back(accountID);
 	}
 	qDebug() << m_accountIds;
-	m_allTransactions.read(json, m_accountIds);
+	m_allTransactions.read(json["transactions"].toArray(), m_accountIds);
+
+	m_predicted.read(json["predicted"].toArray());
 
 	//m_transactions.cleanSymetricTransaction();
 
@@ -59,13 +61,12 @@ bool Account::loadPlaidJson(QString jsonFile) {
 	return true;
 }
 
-void Account::Transactions::read(const QJsonObject &json, const QVector<QString> &acIds) {
+void Account::Transactions::read(const QJsonArray& npcArray, const QVector<QString> &onlyAcIds /*= anyID*/) {
 	clear();
-	QJsonArray npcArray = json["transactions"].toArray();
 	for (int npcIndex = 0; npcIndex < npcArray.size(); ++npcIndex) {
 		QJsonObject npcObject = npcArray[npcIndex].toObject();
 		QString accountTrans = npcObject["_account"].toString();
-		if (acIds.contains(accountTrans)) {
+		if (onlyAcIds.isEmpty() || onlyAcIds.contains(accountTrans)) {
 			appendNew()->read(npcObject);
 		}
 		else {
@@ -77,14 +78,12 @@ void Account::Transactions::read(const QJsonObject &json, const QVector<QString>
 	qDebug() << "transaction count" << count();
 }
 
-void Account::Transactions::write(QJsonObject &json) const {
-	QJsonArray npcArray;
+void Account::Transactions::write(QJsonArray& npcArray) const {
 	for (int i = 0; i < count(); ++i) {
 		QJsonObject npcObject;
 		m_transArray[i].write(npcObject);
 		npcArray.append(npcObject);
 	}
-	json["purchases"] = npcArray;
 }
 
 void Transaction::read(const QJsonObject &json) {
