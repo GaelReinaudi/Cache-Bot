@@ -1,11 +1,8 @@
 #include "AMPlot.h"
-#include "ACChart/acdata.h"
+#include "core/acdata.h"
 
 AMPlot::AMPlot(QWidget *parent)
 	: QCustomPlot(parent)
-	, m_lastDate(QDate(1, 1, 1))
-	, m_firstDate(QDate(11111, 1, 1))
-
 {
 	colorMap = new QCPColorMap(xAxis, yAxis);
 	addPlottable(colorMap);
@@ -31,21 +28,14 @@ void AMPlot::loadAmount(Account* account)
 {
 	graph(0)->clearData();
 	graph(1)->clearData();
-	for (const auto& trans : account->transactions().list()) {
-		if(m_lastDate.daysTo(trans.startDate().date()) > 0)
-			m_lastDate = trans.startDate().date();
-		if(m_firstDate.daysTo(trans.startDate().date()) < 0)
-			m_firstDate = trans.startDate().date();
-	}
-	//qDebug() << m_firstDate << m_lastDate << "days =" << m_firstDate.daysTo(m_lastDate);
-	double firstTime = QDateTime(m_firstDate).toTime_t();
-	double lastTime = QDateTime(m_lastDate).toTime_t();
 
 	const int height = 256*16;
 	const int midHeight = height / 2;
-	colorMap->data()->setSize(m_firstDate.daysTo(m_lastDate), height);
+	auto firstTrans = account->allTrans().trans(0);
+	auto lastTrans = account->allTrans().trans(-1);
+	colorMap->data()->setSize(1 + firstTrans.date.daysTo(lastTrans.date), height);
 	colorMap->data()->setRange(
-				QCPRange(firstTime, lastTime)
+				QCPRange(firstTrans.time_t(), lastTrans.time_t())
 				, QCPRange(-midHeight, -midHeight + colorMap->data()->valueSize()));
 
 	int totalDays = colorMap->data()->keySize() + 60;
@@ -62,12 +52,13 @@ void AMPlot::loadAmount(Account* account)
 	int maxAmort = 999999999;
 	int colorInc = 0;
 	for (int minAmort = 2; minAmort > 0; --minAmort) {
-		for (const Transaction& trans : account->transactions().list()) {
-			amortDur = qRound(trans.numDays());
-			//int perDay = qAbs(kindaLog((trans.amount() * 1.0) / amort));
-			double perDay = trans.amount() / amortDur;
+		for (int i = 0; i < account->allTrans().count(); ++i) {
+			Transaction& trans = account->allTrans().trans(i);
+			amortDur = 1;//qRound(trans.numDays());
+			//int perDay = qAbs(kindaLog((trans.amountDbl() * 1.0) / amort));
+			double perDay = trans.amountDbl() / amortDur;
 			if (amortDur >= minAmort && amortDur < maxAmort) {
-				int iDay = m_firstDate.daysTo(trans.startDate().date());
+				int iDay = firstTrans.date.daysTo(trans.date);
 				//qDebug() << iDay << amortDur << perDay;
 
 				int mul = perDay > 0.0 ? 1 : -1;
@@ -86,7 +77,7 @@ void AMPlot::loadAmount(Account* account)
 					if ( iDay + a < totalDays) {
 						integralAmort[iDay + a] += perDay;
 						if (a == 0)
-							integral[iDay] += trans.amount();
+							integral[iDay] += trans.amountDbl();
 					}
 				}
 				colorInc += 11111;
@@ -98,8 +89,8 @@ void AMPlot::loadAmount(Account* account)
 	for (int x=1; x < totalDays; ++x) {
 		integral[x] += integral[x - 1];
 		integralAmort[x] += integralAmort[x - 1];
-		graph(0)->addData(firstTime + double(x) * 86400.0, integral[x]);
-		graph(1)->addData(firstTime + double(x) * 86400.0, integralAmort[x]);
+		graph(0)->addData(firstTrans.time_t() + double(x) * 86400.0, integral[x]);
+		graph(1)->addData(firstTrans.time_t() + double(x) * 86400.0, integralAmort[x]);
 	}
 
 	colorMap->rescaleDataRange(true);

@@ -99,6 +99,7 @@ public:
 //		}
 		return isValid;
 	}
+	double summarize(QStringList *strList, Context& ioContext);
 
 	float mFitness;  //!< Fitness value of the GP tree
 	bool  mValid;    //!< Flag indicating whether the fitness is valid.

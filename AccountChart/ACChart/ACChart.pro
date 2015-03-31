@@ -1,10 +1,4 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2014-12-13T16:12:19
-#
-#-------------------------------------------------
-
-QT       += core gui printsupport
+QT += core gui printsupport
 CONFIG += c++11
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -12,16 +6,21 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = ACChart
 TEMPLATE = app
 
+INCLUDEPATH += \
+	$$PWD/../.. \
+	$$PWD/..
 
-SOURCES += main.cpp\
-        mainwindow.cpp \
-    ../qcustomplot/qcustomplot.cpp \
-    acustomplot.cpp \
-    acdata.cpp
+SOURCES += \
+	main.cpp \
+	mainwindow.cpp \
+	acustomplot.cpp \
+	../qcustomplot/qcustomplot.cpp \
+	../../core/acdata.cpp
 
-HEADERS  += mainwindow.h \
-    ../qcustomplot/qcustomplot.h \
-    acustomplot.h \
-    acdata.h
+HEADERS  += \
+	mainwindow.h \
+	acustomplot.h \
+	core/acdata.h \
+	../qcustomplot/qcustomplot.h
 
 FORMS    += mainwindow.ui

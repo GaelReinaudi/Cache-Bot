@@ -1,35 +1,33 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2014-12-15T23:41:16
-#
-#-------------------------------------------------
-
-QT       += core gui widgets printsupport
-CONFIG+=c++11
+QT += core gui widgets printsupport
+CONFIG += c++11
 
 INCLUDEPATH  += ./ \
 	$$PWD/puppy/puppy/include \
 	$$PWD/../AccountChart \
+	$$PWD/../
 
 TARGET = evoCache
 TEMPLATE = app
 
-SOURCES += main.cpp\
-		mainwindow.cpp\
+SOURCES += \
+	main.cpp\
+	mainwindow.cpp\
 	$$PWD/puppy/puppy/src/Primitive.cpp \
 	$$PWD/puppy/puppy/src/Puppy.cpp \
 	$$PWD/puppy/puppy/src/Tree.cpp \
 	$$PWD/../AccountChart/qcustomplot/qcustomplot.cpp \
 	$$PWD/../AccountChart/ACChart/acustomplot.cpp \
-	$$PWD/../AccountChart/ACChart/acdata.cpp \
 	$$PWD/../AccountChart/AmortiChart/AMPlot.cpp \
+	$$PWD/../core/acdata.cpp \
 	EvolutionSpinner.cpp \
     AccRegPrimits.cpp
 
-HEADERS  += mainwindow.h \
+HEADERS  += \
+	mainwindow.h \
+	$$PWD/log.h \
 	$$PWD/../AccountChart/qcustomplot/qcustomplot.h \
 	$$PWD/../AccountChart/ACChart/acustomplot.h \
-	$$PWD/../AccountChart/ACChart/acdata.h \
+	$$PWD/../core/acdata.h \
 	$$PWD/../AccountChart/AmortiChart/AMPlot.h \
 	puppy/Primitive.hpp \
 	puppy/PrimitiveHandle.hpp \
@@ -39,7 +37,6 @@ HEADERS  += mainwindow.h \
 	puppy/Randomizer.hpp \
 	puppy/Token.hpp \
 	puppy/Tree.hpp \
-	$$PWD/log.h \
     EvolutionSpinner.h \
     AccRegPrimits.h
 

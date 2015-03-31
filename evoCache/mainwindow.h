@@ -25,9 +25,11 @@ public slots:
 	void handleResults(const QString &) {
 
 	}
-	void plotMask(ZoneVector vecZone);
+	void plotMask(double x, double y, bool isTarget);
 	void clearMasks();
 	void replotCharts();
+	void clearList();
+	void newList(QStringList strList);
 
 signals:
 	void operate(const QString &);

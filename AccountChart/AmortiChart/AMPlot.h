@@ -18,8 +18,6 @@ public slots:
 
 private:
 	QCPColorMap *colorMap = 0;
-	QDate m_lastDate;
-	QDate m_firstDate;
 };
 
 #endif // AMPLOT_H

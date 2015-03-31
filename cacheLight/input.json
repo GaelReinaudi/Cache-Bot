@@ -1,0 +1,264 @@
+{
+  "predicted": [
+    {
+      "amount": 2000,
+      "date": "2015-04-30"
+    },
+    {
+      "amount": 2000,
+      "date": "2015-05-30"
+    },
+    {
+      "amount": 2000,
+      "date": "2015-06-30"
+    },
+    {
+      "amount": 2000,
+      "date": "2015-07-30"
+    },
+    {
+      "amount": 2000,
+      "date": "2015-08-30"
+    },
+    {
+      "amount": 2000,
+      "date": "2015-09-30"
+    },
+    {
+      "amount": 1500,
+      "date": "2015-04-17"
+    },
+    {
+      "amount": 1500,
+      "date": "2015-05-17"
+    },
+    {
+      "amount": 1500,
+      "date": "2015-06-17"
+    },
+    {
+      "amount": 1500,
+      "date": "2015-07-17"
+    },
+    {
+      "amount": 1500,
+      "date": "2015-08-17"
+    },
+    {
+      "amount": 1500,
+      "date": "2015-09-17"
+    },
+    {
+      "amount": -3000,
+      "date": "2015-04-04"
+    },
+    {
+      "amount": -3000,
+      "date": "2015-05-04"
+    },
+    {
+      "amount": -3000,
+      "date": "2015-06-04"
+    },
+    {
+      "amount": -3000,
+      "date": "2015-07-04"
+    },
+    {
+      "amount": -3000,
+      "date": "2015-08-04"
+    },
+    {
+      "amount": -3000,
+      "date": "2015-09-04"
+    },
+    {
+      "amount": -3000,
+      "date": "2015-04-19"
+    },
+    {
+      "amount": -3000,
+      "date": "2015-05-19"
+    },
+    {
+      "amount": -3000,
+      "date": "2015-06-19"
+    },
+    {
+      "amount": -3000,
+      "date": "2015-07-19"
+    },
+    {
+      "amount": -3000,
+      "date": "2015-08-19"
+    },
+    {
+      "amount": -3000,
+      "date": "2015-09-19"
+    }
+  ],
+  "accounts": [
+    {
+      "_id": "aZrYrdv4AZSNDY9Q0NYAiNaeMn9ADKS1pebo4",
+      "meta": {
+        "limit": 17000,
+        "number": "7970",
+        "name": "Ultimate Rewards Credit Card"
+      },
+      "balance": {
+        "available": 15919.6,
+        "current": 702.33
+      },
+      "type": "credit",
+      "institution_type": "chase",
+      "_user": "zJyKyaw6mJi0aLgr40LxCjwPgYE40QinY3RoM",
+      "_item": "L6797qOXx6h6JaBd86arhVEMx6zw9aiB74a1B"
+    },
+    {
+      "_id": "4MP1PnqvwMhjeLEKpjLAc6ed1JKRONcn6Q8wE",
+      "meta": {
+        "limit": 2000,
+        "number": "8959",
+        "name": "Ultimate Rewards Credit Card"
+      },
+      "balance": {
+        "available": 1901,
+        "current": 99
+      },
+      "type": "credit",
+      "institution_type": "chase",
+      "_user": "zJyKyaw6mJi0aLgr40LxCjwPgYE40QinY3RoM",
+      "_item": "L6797qOXx6h6JaBd86arhVEMx6zw9aiB74a1B"
+    },
+    {
+      "_id": "rm5L5rOQEmUqJKy8YqKOumKRDoraMPFw58ePK",
+      "meta": {
+        "number": "5513",
+        "name": "Chase Plus Savings"
+      },
+      "balance": {
+        "available": 32700.84,
+        "current": 32700.84
+      },
+      "subtype": "saving",
+      "type": "depository",
+      "institution_type": "chase",
+      "_user": "zJyKyaw6mJi0aLgr40LxCjwPgYE40QinY3RoM",
+      "_item": "L6797qOXx6h6JaBd86arhVEMx6zw9aiB74a1B"
+    },
+    {
+      "_id": "j1RzR3ZgM1F73g6qQ7gXTzmd8ZAqjXcjMXm91",
+      "meta": {
+        "number": "1100",
+        "name": "Premier Plus Ckg"
+      },
+      "balance": {
+        "available": 1014.26,
+        "current": 1014.26
+      },
+      "subtype": "checking",
+      "type": "depository",
+      "institution_type": "chase",
+      "_user": "zJyKyaw6mJi0aLgr40LxCjwPgYE40QinY3RoM",
+      "_item": "L6797qOXx6h6JaBd86arhVEMx6zw9aiB74a1B"
+    },
+    {
+      "_id": "kVMEe90djLS6o8M6qBm8FeyOPoo39ecvdPbOE",
+      "meta": {
+        "number": "6550",
+        "name": "Unifrance Checking"
+      },
+      "balance": {
+        "available": 231.04,
+        "current": 231.04
+      },
+      "subtype": "checking",
+      "type": "depository",
+      "institution_type": "chase",
+      "_user": "v1DMew5KEvt10qd1QLRqtBvbPveXbpC7XXoLX",
+      "_item": "KR3jXn5y4BuL43NLQ0R3IV43Pm4mvbtvnn0jD"
+    },
+    {
+      "_id": "v1DMew5KEvt10qd1QLRqtBr5PooRxBC0Dyp48",
+      "meta": {
+        "number": "3783",
+        "name": "Unifrance Saving"
+      },
+      "balance": {
+        "available": 100.37,
+        "current": 100.37
+      },
+      "subtype": "saving",
+      "type": "depository",
+      "institution_type": "chase",
+      "_user": "v1DMew5KEvt10qd1QLRqtBvbPveXbpC7XXoLX",
+      "_item": "KR3jXn5y4BuL43NLQ0R3IV43Pm4mvbtvnn0jD"
+    }
+  ],
+  "transactions": [
+    {
+      "_account": "j1RzR3ZgM1F73g6qQ7gXTzmd8ZAqjXcjMXm91",
+      "_id": "9MQyQxkaPMhQmZz67QZDSVpRYZNOkvuxzK4Y8",
+      "amount": -3013.38,
+      "date": "2015-01-30",
+      "name": "STRIKE TECHNOLOG",
+      "meta": {
+        "payer": "STRIKE TECHNOLOG",
+        "ppd_id": "9002543127",
+        "reason": "PAYROLL",
+        "location": {}
+      },
+      "pending": false,
+      "score": {},
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer",
+        "Payroll"
+      ],
+      "category_id": "21009000"
+    },
+    {
+      "_account": "j1RzR3ZgM1F73g6qQ7gXTzmd8ZAqjXcjMXm91",
+      "_id": "7z3B3xyr9zTZjBRd8ZBJTgVJyxd3AmC5rqEvE",
+      "amount": -0.02,
+      "date": "2015-01-30",
+      "name": "Interest Payment",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "score": {},
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Interest",
+        "Interest Charged"
+      ],
+      "category_id": "15002000"
+    },
+    {
+      "_account": "rm5L5rOQEmUqJKy8YqKOumKRDoraMPFw58ePK",
+      "_id": "L6797qOXx6h6JaBd86arhVm7yQK8ORuB74aqp",
+      "amount": -0.84,
+      "date": "2015-01-30",
+      "name": "Interest Payment",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "score": {},
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Interest",
+        "Interest Charged"
+      ],
+      "category_id": "15002000"
+    }
+  ],
+  "access_token": "f202f5004003ff51b7cc7e60523b7a43f2c7ded0b453c0dcf0182ff5e86da2ba4cb13093f023199c81a34ef3f9b9a76c52026810fe333695908aca980cc457d3f2a90070725b35804ed61aceb531269e"
+}

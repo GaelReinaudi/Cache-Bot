@@ -3,13 +3,13 @@
 #include "puppy/Puppy.hpp"
 #include "AccRegPrimits.h"
 
-#define POP_SIZE_DEFAULT 5000
-#define NBR_GEN_DEFAULT 20000
+#define POP_SIZE_DEFAULT 500
+#define NBR_GEN_DEFAULT 20
 #define NBR_PART_TOURNAMENT_DEFAULT 2
-#define MAX_DEPTH_DEFAULT 10
-#define MIN_INIT_DEPTH_DEFAULT 4
+#define MAX_DEPTH_DEFAULT 5
+#define MIN_INIT_DEPTH_DEFAULT 3
 #define MAX_INIT_DEPTH_DEFAULT 5
-#define INIT_GROW_PROBA_DEFAULT 0.5f
+#define INIT_GROW_PROBA_DEFAULT 0.15f
 #define CROSSOVER_PROBA_DEFAULT 0.8f
 #define CROSSOVER_DISTRIB_PROBA_DEFAULT 0.9f
 #define MUT_STD_PROBA_DEFAULT 0.535f
@@ -36,34 +36,37 @@ EvolutionSpinner::EvolutionSpinner(Account *pAc, QObject* parent)
 	m_context->insert(new Multiply);
 	m_context->insert(new Divide);
 	m_context->insert(new Cosinus);
+	m_context->insert(new TokenT<double>("0.01", 0.01));
+	m_context->insert(new TokenT<double>("0.02", 0.02));
+	m_context->insert(new TokenT<double>("0.03", 0.03));
+	m_context->insert(new TokenT<double>("0.04", 0.04));
+	m_context->insert(new TokenT<double>("0.05", 0.05));
 	m_context->insert(new TokenT<double>("0.1", 0.1));
 	m_context->insert(new TokenT<double>("0.2", 0.2));
+	m_context->insert(new TokenT<double>("0.3", 0.3));
+	m_context->insert(new TokenT<double>("0.4", 0.4));
 	m_context->insert(new TokenT<double>("0.5", 0.5));
 	m_context->insert(new TokenT<double>("0", 0.0));
 	m_context->insert(new TokenT<double>("1", 1.0));
 	m_context->insert(new TokenT<double>("2", 2.0));
+	m_context->insert(new TokenT<double>("3", 3.0));
+	m_context->insert(new TokenT<double>("4", 4.0));
 	m_context->insert(new TokenT<double>("5", 5.0));
 	m_context->insert(new TokenT<double>("10", 10.0));
-	m_context->insert(new TokenT<double>("20", 20.0));
-	m_context->insert(new TokenT<double>("50", 50.0));
-	m_context->insert(new TokenT<double>("100", 100.0));
-	m_context->insert(new TokenT<double>("200", 200.0));
-	m_context->insert(new TokenT<double>("300", 300.0));
-	m_context->insert(new TokenT<double>("500", 500.0));
-	m_context->insert(new TokenT<double>("1000", 1000.0));
-	m_context->insert(new TokenT<double>("2000", 2000.0));
-	m_context->insert(new TokenT<double>("3000", 3000.0));
-	m_context->insert(new TokenT<double>("4000", 4000.0));
-	m_context->insert(new TokenT<double>("5000", 5000.0));
-	m_context->insert(new TokenT<double>("15.208", 365.25 / 24.0));
-	m_context->insert(new TokenT<double>("30.417", 365.25 / 12.0));
-	m_context->insert(new TokenT<double>("365", 365.25));
-	m_context->insert(new TokenT<double>("182", 365.25 * 0.5));
+	for (int i = 0; i < pAc->hashBundles().count(); ++i) {
+		int h = pAc->hashBundles().keys()[i];
+		if (pAc->hashBundles()[h]->count() > 1)
+		{
+			double avgKLA = pAc->hashBundles()[h]->averageKLA();
+			m_context->insert(new TokenT<double>(QString("h%1").arg(i).toStdString(), i));
+			m_context->insert(new TokenT<double>(QString("kla%1").arg(i).toStdString(), avgKLA));
+		}
+	}
 
 	m_context->insert(new CacheBotRootPrimitive(this));
-	m_context->insert(new FeatureBiWeeklyIncome(this));
-	m_context->insert(new FeatureMonthlyIncome(this));
-	m_context->insert(new DummyFeature(this));
+//	m_context->insert(new FeatureBiWeeklyAmount(this));
+	m_context->insert(new FeatureMonthlyAmount(this));
+//	m_context->insert(new DummyFeature(this));
 }
 
 void EvolutionSpinner::startStopEvolution(bool doStart) {
@@ -98,6 +101,12 @@ void EvolutionSpinner::runEvolution() {
 	float         lMutSwapProba        = MUT_SWAP_PROBA_DEFAULT;
 	float         lMutSwapDistribProba = MUT_SWAP_DISTRIB_PROBA_DEFAULT;
 
+QMap<double, QStringList> output;
+for (int j = 0; j < m_context->m_pAccount->hashBundles().count(); ++j) {
+	int h = m_context->m_pAccount->hashBundles().keys()[j];
+	if (m_context->m_pAccount->hashBundles()[h]->count() < 2)
+		continue;
+	m_context->filterHashIndex = j;
 	// Initialize population.
 	std::vector<Tree> lPopulation(lPopSize);
 	std::cout << "Initializing population" << std::endl;
@@ -114,14 +123,8 @@ void EvolutionSpinner::runEvolution() {
 		LOG() << "Generation " << i << endl;
 		auto result = std::minmax_element(lPopulation.begin(), lPopulation.end());
 		Tree bestTree = lPopulation[result.second - lPopulation.begin()];
-		bestTree.mValid = false;
-		m_context->m_doPlot = true;
-		double a;
-		emit sendClearMask();
-		bestTree.interpret(&a, *m_context);
-		LOG() << "Best tree ("<<a<<"): " << bestTree.toStr() << endl;
-		emit needsReplot();
-		m_context->m_doPlot = false;
+
+		summarize(bestTree);
 
 		applySelectionTournament(lPopulation, *m_context, lNbrPartTournament);
 		applyCrossover(lPopulation, *m_context, lCrossoverProba, lCrossDistribProba, lMaxDepth);
@@ -129,7 +132,7 @@ void EvolutionSpinner::runEvolution() {
 		applyMutationSwap(lPopulation, *m_context, lMutSwapProba, lMutSwapDistribProba);
 
 		bestTree.mValid = false;
-		lPopulation.push_back(bestTree);
+		//lPopulation.push_back(bestTree);
 
 		evaluateSymbReg(lPopulation, *m_context);
 		calculateStats(lPopulation, i);
@@ -137,12 +140,26 @@ void EvolutionSpinner::runEvolution() {
 	LOG() << "End of evolution" << endl;
 
 	// Outputting best individual
-	std::vector<Tree>::const_iterator lBestIndividual =
+	std::vector<Tree>::iterator lBestIndividual =
 			std::max_element(lPopulation.begin(), lPopulation.end());
 	LOG() << "Best individual at generation " << lNbrGen << " is: ";
 	LOG() << lBestIndividual->toStr() << endl;
 
-	std::cout << "Exiting program" << std::endl << std::flush;
+	QString strBest = summarize(*lBestIndividual);
+	QString strFit = strBest.mid(strBest.indexOf("billProba: ") + 11).mid(0, 5).trimmed();
+	LOG() << "AAAAAAAAAAAAAAAAAA " << strBest << endl;
+	double billProba = strFit.toDouble();
+	output[billProba].append(strBest);
+}
+
+	for (int i = 0; i < output.count(); ++i) {
+		double fit = output.keys()[i];
+		LOG() << "-------------------------------- " << fit << " --------------------------------" << endl;
+		for (const auto& str : output[fit])
+		LOG() << str << endl;
+	}
+
+	std::cout << "Exiting program " << output.count() << endl << std::flush;
 }
 
 unsigned int EvolutionSpinner::evaluateSymbReg(std::vector<Tree>& ioPopulation,
@@ -161,3 +178,25 @@ unsigned int EvolutionSpinner::evaluateSymbReg(std::vector<Tree>& ioPopulation,
 	}
 	return lNbrEval;
 }
+
+QString EvolutionSpinner::summarize(Tree& tree)
+{
+	QStringList retList;
+	emit sendClearMask();
+	double fit = tree.summarize(&retList, *m_context);
+	LOG() << "tree (" << fit << "): " << tree.toStr() << endl;
+	for (const QString& str : retList) {
+		LOG() << "    " << str << endl;
+	}
+	emit needsReplot();
+	emit newList(retList);
+	return retList.join('\n');
+}
+
+
+
+
+
+
+
+

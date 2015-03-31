@@ -43,7 +43,7 @@
 #include "puppy/PrimitiveHandle.hpp"
 #include "puppy/Primitive.hpp"
 #include "puppy/Randomizer.hpp"
-#include "ACChart/acdata.h"
+#include "core/acdata.h"
 
 namespace Puppy {
 
@@ -69,24 +69,6 @@ public:
 		mTree(NULL)
 	  , m_pAccount(pAc)
 	{
-		QDateTime mostRecent;
-		int mostDaysAgo = 0;
-		for (const Transaction& trans : pAc->transactions().list()) {
-			int daysToNewMostRecent = trans.startDate().daysTo(mostRecent);
-			if (daysToNewMostRecent <= 0) {
-				mostRecent = trans.startDate();
-				mostDaysAgo += -daysToNewMostRecent;
-			}
-			else if (daysToNewMostRecent > mostDaysAgo) {
-				mostDaysAgo = daysToNewMostRecent;
-			}
-		}
-		qDebug() << "mostRecent" << mostRecent << "mostDaysAgo" << mostDaysAgo;
-		m_dailyAmounts.resize(mostDaysAgo + 1);
-		for (Transaction& trans : pAc->transactions().list()) {
-			int daysAgo = trans.startDate().daysTo(mostRecent);
-			m_dailyAmounts[daysAgo].push_back(&trans);
-		}
 	}
 
 	/*!
@@ -117,9 +99,9 @@ public:
 	Tree*                                 mTree;          //!< Actual tree evaluated.
 	bool m_isInFeature = false;
 	bool m_hasRecursiveFeature = false;
-	bool m_doPlot = false;
+	QStringList* m_sumamryStrList = 0;
 	Account* m_pAccount;
-	DailyTransactions m_dailyAmounts;
+	int filterHashIndex = -1;
 };
 
 }
