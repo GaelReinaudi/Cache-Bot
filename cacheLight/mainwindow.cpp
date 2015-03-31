@@ -74,9 +74,11 @@ void MainWindow::makePredictiPlot()
 		if(dayTo == 0) {
 			QCPData d = ui->plot->graph(1)->data()->last();
 			double val = d.value + trans->amountDbl();
-			ui->plot->graph(1)->addData(d.key+0.1, val);
-			ui->spinBox->setValue(val);
 			minPredict = qMin(minPredict, val);
+			for (auto dat = ui->plot->graph(1)->data()->begin(); dat != ui->plot->graph(1)->data()->end(); ++dat) {
+				dat->value += trans->amountDbl();
+			}
+			ui->spinBox->setValue(val);
 		}
 		if(dayTo > 0 && dayTo < 16) {
 			// first point predicted
