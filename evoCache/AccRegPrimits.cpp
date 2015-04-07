@@ -63,7 +63,7 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 	// the current target to compare to
 	Transaction* iTarg = &targetTrans[0];
 	m_bundle.clear();
-	if (ioContext.m_sumamryStrList) {
+	if (ioContext.m_summaryStrList) {
 		m_bundle.clear();
 	}
 	m_consecMonth = 0;
@@ -77,7 +77,7 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 			localTrans = &trans;
 		}
 		Q_ASSERT(localDist < 18446744073709551615ULL);
-		static const int LIMIT_DIST_TRANS = 32;
+		static const int LIMIT_DIST_TRANS = 64;
 		// if we get further away by 15 days, we take the next target, or if last trans
 		if (trans.jDay() > 15 + iTarg->jDay() || i == allTrans.count() - 1) {
 			if (localDist < LIMIT_DIST_TRANS) {
@@ -125,7 +125,7 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 //	}
 
 	// summary if the QStringList exists
-	if (ioContext.m_sumamryStrList && m_bundle.count()) {
+	if (ioContext.m_summaryStrList && m_bundle.count()) {
 		QString str;
 		str = QString::fromStdString(getName()) + " ("
 			+ QString::number(m_bundle.count()) +  ") "
@@ -133,23 +133,23 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 			+ " / " + QString::number(kindaLog(m_bundle.sumDollar() / m_bundle.count()))
 			+ " = " + QString::number(unKindaLog(double(m_kla) / KLA_MULTIPLICATOR))
 			+ " / " + QString::number(m_bundle.sumDollar() / m_bundle.count());
-		ioContext.m_sumamryStrList->append(str);
+		ioContext.m_summaryStrList->append(str);
 		str = QString("On the ") + QString::number(m_dayOfMonth) + "th, ";
 		str += QString("hash: ") + QString::number(m_bundle.trans(0).nameHash.hash);
 		str += QString("  ind: ") + QString::number(m_bundle.trans(0).indexHash);
 		str += QString("  fitness: ") + QString::number(m_fitness);
 		str += QString("  billProba: ") + QString::number(billProbability());
-		ioContext.m_sumamryStrList->append(str);
+		ioContext.m_summaryStrList->append(str);
 //		str = QString("avg label: ") + m_bundle.averageName();
 //		ioContext.m_sumamryStrList->append(str);
 		str = QString("all label: ") + m_bundle.uniqueNames().join(" | ");
-		ioContext.m_sumamryStrList->append(str);
+		ioContext.m_summaryStrList->append(str);
 		str = QString("tot amount: ") + QString::number(m_bundle.sumDollar());
 		str += QString(" since : ") + QString::number(m_consecMonthBeforeMissed);
 		str += QString(" last missed: ") + QString::number(m_consecMissed);
-		ioContext.m_sumamryStrList->append(str);
+		ioContext.m_summaryStrList->append(str);
 		str = QString("----------------------------");
-		ioContext.m_sumamryStrList->append(str);
+		ioContext.m_summaryStrList->append(str);
 
 		for (int i = 0; i < targetTrans.count(); ++i) {
 			Transaction* iTarg = &targetTrans[i];

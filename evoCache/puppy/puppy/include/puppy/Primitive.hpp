@@ -78,7 +78,7 @@ public:
    *  \param outDatum Result of the execution.
    *  \param ioContext Evolutionary context.
    */
-	virtual void execute(void* outDatum, Context& ioContext) =0;
+	virtual void execute(void* outDatum, Context& ioContext) = 0;
 
 	inline  std::string     getName() const;
 	inline  unsigned int    getNumberArguments() const;

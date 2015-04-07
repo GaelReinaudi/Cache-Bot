@@ -94,12 +94,15 @@ public:
 	bool isValidTree() {
 		bool isValid = true;
 		isValid &= front().mPrimitive->isRoot();
-//		for (int i = 0; i < NUM_FEATURES; ++i) {
-//			isValid &= front().mPrimitive->isRoot();
-//		}
 		return isValid;
 	}
 	double summarize(QStringList *strList, Context& ioContext);
+
+	std::vector<unsigned int> getFeatureStack(int indFeature, Context& ioContext) {
+		std::vector<unsigned int> ret;
+		setStackToNode(indFeature, ret);
+		return ret;
+	}
 
 	float mFitness;  //!< Fitness value of the GP tree
 	bool  mValid;    //!< Flag indicating whether the fitness is valid.

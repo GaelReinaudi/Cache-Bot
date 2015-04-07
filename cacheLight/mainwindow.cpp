@@ -1,6 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+const int dayPast = 60;
+const int dayFuture = 120;
+
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow)
@@ -58,7 +61,7 @@ void MainWindow::updateChart()
 
 	makePredictiPlot();
 
-	ui->plot->xAxis->setRange(t - 15, t + 15);
+	ui->plot->xAxis->setRange(t - dayPast, t + dayFuture);
 	ui->plot->yAxis->rescale();
 	ui->plot->yAxis->setRange(-100, ui->plot->yAxis->range().upper + 100);
 	ui->plot->replot();
@@ -80,7 +83,7 @@ void MainWindow::makePredictiPlot()
 			}
 			ui->spinBox->setValue(val);
 		}
-		if(dayTo > 0 && dayTo < 16) {
+		if(dayTo > 0 && dayTo < dayFuture) {
 			// first point predicted
 			if(ui->plot->graph(2)->data()->isEmpty()) {
 				QCPData d = ui->plot->graph(1)->data()->last();
@@ -98,7 +101,7 @@ void MainWindow::makePredictiPlot()
 		ui->plot->setBackground(QBrush(Qt::red));
 	}
 	else {
-		int greenVal = qMin(255.0, minPredict);
+		int greenVal = qMin(4*255.0, minPredict) / 4;
 		ui->plot->setBackground(QBrush(QColor(255 - greenVal, greenVal, 0)));
 	}
 }

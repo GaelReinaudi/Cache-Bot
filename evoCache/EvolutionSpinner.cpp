@@ -58,7 +58,7 @@ EvolutionSpinner::EvolutionSpinner(Account *pAc, QObject* parent)
 		if (pAc->hashBundles()[h]->count() > 1)
 		{
 			double avgKLA = pAc->hashBundles()[h]->averageKLA();
-			m_context->insert(new TokenT<double>(QString("h%1").arg(i).toStdString(), i));
+			m_context->insert(new TokenT<double>(QString("h%1").arg(i).toStdString(), h));
 			m_context->insert(new TokenT<double>(QString("kla%1").arg(i).toStdString(), avgKLA));
 		}
 	}
@@ -146,6 +146,10 @@ for (int j = 0; j < m_context->m_pAccount->hashBundles().count(); ++j) {
 	LOG() << lBestIndividual->toStr() << endl;
 
 	QString strBest = summarize(*lBestIndividual);
+
+	std::vector<unsigned int> outCallStack = (*lBestIndividual).getFeatureStack(1, *m_context);
+	qDebug() << QVector<unsigned int>::fromStdVector(outCallStack);
+
 	QString strFit = strBest.mid(strBest.indexOf("billProba: ") + 11).mid(0, 5).trimmed();
 	LOG() << "AAAAAAAAAAAAAAAAAA " << strBest << endl;
 	double billProba = strFit.toDouble();

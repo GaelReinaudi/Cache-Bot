@@ -69,7 +69,8 @@ unsigned int Puppy::Tree::getDepth(unsigned int inIndex) const
 	unsigned int j = inIndex + 1;
 	for(unsigned int i=0; i<lNbArgs; ++i) {
 		unsigned int lChildDepth = getDepth(j) + 1;
-		if(lChildDepth > lDepth) lDepth = lChildDepth;
+		if(lChildDepth > lDepth)
+			lDepth = lChildDepth;
 		j += (*this)[j].mSubTreeSize;
 	}
 	return lDepth;
@@ -104,10 +105,10 @@ void Puppy::Tree::interpret(void* outResult, Puppy::Context& ioContext)
 double Puppy::Tree::summarize(QStringList *strList, Puppy::Context &ioContext)
 {
 	mValid = false;
-	ioContext.m_sumamryStrList = strList;
+	ioContext.m_summaryStrList = strList;
 	double fit;
 	interpret(&fit, ioContext);
-	ioContext.m_sumamryStrList = 0;
+	ioContext.m_summaryStrList = 0;
 	return fit;
 }
 

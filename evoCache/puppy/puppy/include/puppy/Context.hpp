@@ -99,7 +99,7 @@ public:
 	Tree*                                 mTree;          //!< Actual tree evaluated.
 	bool m_isInFeature = false;
 	bool m_hasRecursiveFeature = false;
-	QStringList* m_sumamryStrList = 0;
+	QStringList* m_summaryStrList = 0;
 	Account* m_pAccount;
 	int filterHashIndex = -1;
 };

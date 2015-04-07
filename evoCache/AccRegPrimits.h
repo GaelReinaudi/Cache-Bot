@@ -5,7 +5,8 @@
 #include "puppy/Puppy.hpp"
 #include "EvolutionSpinner.h"
 
-static const int NUM_FEATURES = 1;
+static const int MAX_NUM_FEATURES = 20;
+static int LIMIT_NUM_FEATURES = 1;
 
 class Add : public Puppy::Primitive
 {
@@ -113,7 +114,7 @@ class CacheBotRootPrimitive : public AccountFeature
 {
 public:
 	CacheBotRootPrimitive(EvolutionSpinner* evoSpinner)
-		: AccountFeature(NUM_FEATURES, "ROOT", evoSpinner)
+		: AccountFeature(MAX_NUM_FEATURES, "ROOT", evoSpinner)
 	{ }
 	virtual ~CacheBotRootPrimitive() { }
 	bool isRoot() const override {
@@ -123,7 +124,7 @@ public:
 		double& lResult = *(double*)outDatum;
 		lResult = 0.0;
 		double lArgi;
-		for(unsigned int i = 0; i < getNumberArguments(); ++i) {
+		for(unsigned int i = 0; i < LIMIT_NUM_FEATURES; ++i) {
 			getArgument(i, &lArgi, ioContext);
 			lResult += lArgi;
 		}
