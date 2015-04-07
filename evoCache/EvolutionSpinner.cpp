@@ -147,7 +147,7 @@ for (int j = 0; j < m_context->m_pAccount->hashBundles().count(); ++j) {
 
 	QString strBest = summarize(*lBestIndividual);
 
-	std::vector<unsigned int> outCallStack = (*lBestIndividual).getFeatureStack(1, *m_context);
+	std::vector<unsigned int> outCallStack = (*lBestIndividual).getFeatureStack(0, *m_context);
 	qDebug() << QVector<unsigned int>::fromStdVector(outCallStack);
 
 	QString strFit = strBest.mid(strBest.indexOf("billProba: ") + 11).mid(0, 5).trimmed();

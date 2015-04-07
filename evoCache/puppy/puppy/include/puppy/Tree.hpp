@@ -100,7 +100,15 @@ public:
 
 	std::vector<unsigned int> getFeatureStack(int indFeature, Context& ioContext) {
 		std::vector<unsigned int> ret;
-		setStackToNode(indFeature, ret);
+		unsigned int i = 0;
+		ret.push_back(i);
+		unsigned int lNbArgs=(*this)[i].mPrimitive->getNumberArguments();
+		assert(indFeature < lNbArgs);
+		unsigned int lChildIndex = i + 1;
+		for(unsigned int j=0; j<indFeature; ++j) {
+			lChildIndex += (*this)[lChildIndex].mSubTreeSize;
+		}
+		ret.push_back(lChildIndex);
 		return ret;
 	}
 
