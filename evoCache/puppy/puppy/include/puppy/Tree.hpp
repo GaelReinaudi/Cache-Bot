@@ -98,7 +98,7 @@ public:
 	}
 	double summarize(QStringList *strList, Context& ioContext);
 
-	std::vector<unsigned int> getFeatureStack(int indFeature, Context& ioContext) {
+	std::vector<unsigned int> getFeatureStack(unsigned int indFeature, Context& ioContext) {
 		std::vector<unsigned int> ret;
 		unsigned int i = 0;
 		ret.push_back(i);

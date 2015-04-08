@@ -3,6 +3,8 @@
 #include "puppy/Puppy.hpp"
 #include "AccRegPrimits.h"
 
+const double THRESHOLD_PROBA_BILL = 1.0;
+
 #define POP_SIZE_DEFAULT 150
 #define NBR_GEN_DEFAULT 20
 #define NBR_PART_TOURNAMENT_DEFAULT 2
@@ -57,9 +59,9 @@ EvolutionSpinner::EvolutionSpinner(Account *pAc, QObject* parent)
 		int h = pAc->hashBundles().keys()[i];
 		if (pAc->hashBundles()[h]->count() > 1)
 		{
-			double avgKLA = pAc->hashBundles()[h]->averageKLA();
+			int avgKLA = pAc->hashBundles()[h]->averageKLA();
 			m_context->insert(new TokenT<double>(QString("h%1").arg(h).toStdString(), h));
-			m_context->insert(new TokenT<double>(QString("kla%1").arg(i).toStdString(), avgKLA));
+			m_context->insertIfNotThere(new TokenT<double>(QString("kla%1").arg(avgKLA).toStdString(), avgKLA));
 		}
 	}
 
@@ -102,6 +104,7 @@ void EvolutionSpinner::runEvolution() {
 	float         lMutSwapDistribProba = MUT_SWAP_DISTRIB_PROBA_DEFAULT;
 
 QMap<double, QStringList> output;
+QVector<Tree> bestPreEvoTrees;
 for (int j = 0; j < m_context->m_pAccount->hashBundles().count(); ++j) {
 	int h = m_context->m_pAccount->hashBundles().keys()[j];
 	if (m_context->m_pAccount->hashBundles()[h]->count() < 2)
@@ -147,13 +150,17 @@ for (int j = 0; j < m_context->m_pAccount->hashBundles().count(); ++j) {
 
 	QString strBest = summarize(*lBestIndividual);
 
-	std::vector<unsigned int> outCallStack = (*lBestIndividual).getFeatureStack(0, *m_context);
-	qDebug() << QVector<unsigned int>::fromStdVector(outCallStack);
+//	std::vector<unsigned int> outCallStack = (*lBestIndividual).getFeatureStack(0, *m_context);
+//	qDebug() << QVector<unsigned int>::fromStdVector(outCallStack);
 
 	QString strFit = strBest.mid(strBest.indexOf("billProba: ") + 11).mid(0, 5).trimmed();
 	LOG() << "AAAAAAAAAAAAAAAAAA " << strBest << endl;
 	double billProba = strFit.toDouble();
 	output[billProba].append(strBest);
+	if(billProba > THRESHOLD_PROBA_BILL || bestPreEvoTrees.isEmpty()) {
+		(*lBestIndividual).mValid = false;
+		bestPreEvoTrees.push_back(*lBestIndividual);
+	}
 }
 
 	for (int i = 0; i < output.count(); ++i) {
@@ -162,6 +169,46 @@ for (int j = 0; j < m_context->m_pAccount->hashBundles().count(); ++j) {
 		for (const auto& str : output[fit])
 		LOG() << str << endl;
 	}
+
+	// run again with full transactions
+	LIMIT_NUM_FEATURES = MAX_NUM_FEATURES;
+	m_context->filterHashIndex = -1;
+	// Initialize population.
+	std::vector<Tree> lPopulation(0);
+	std::cout << "Initializing population" << std::endl;
+//	initializePopulation(lPopulation, *m_context, lInitGrowProba, lMinInitDepth, lMaxInitDepth);
+	for(int i = 0; i < lPopSize; ++i) {
+		lPopulation.push_back(bestPreEvoTrees.at(i % bestPreEvoTrees.size()));
+//		lPopulation[i] = bestPreEvoTrees.at(i % bestPreEvoTrees.size());
+	}
+	evaluateSymbReg(lPopulation, *m_context);
+	calculateStats(lPopulation, 0);
+
+	// Evolve population for the given number of generations
+	LOG() << "Starting evolution" << endl;
+	for(unsigned int i=1; i<=100*lNbrGen; ++i) {
+		while(!m_doSpin)  {
+			QThread::msleep(100);
+		}
+		LOG() << "Generation " << i << endl;
+		auto result = std::minmax_element(lPopulation.begin(), lPopulation.end());
+		Tree bestTree = lPopulation[result.second - lPopulation.begin()];
+
+		LOG() << summarize(bestTree) << endl;
+
+		applySelectionTournament(lPopulation, *m_context, lNbrPartTournament);
+		applyCrossover(lPopulation, *m_context, lCrossoverProba, lCrossDistribProba, lMaxDepth);
+//		applyMutationStandard(lPopulation, *m_context, lMutStdProba, lMutMaxRegenDepth, lMaxDepth);
+//		applyMutationSwap(lPopulation, *m_context, lMutSwapProba, lMutSwapDistribProba);
+
+		bestTree.mValid = false;
+		//lPopulation.push_back(bestTree);
+
+		evaluateSymbReg(lPopulation, *m_context);
+		calculateStats(lPopulation, i);
+	}
+	LOG() << "End of evolution" << endl;
+
 
 	std::cout << "Exiting program " << output.count() << endl << std::flush;
 }

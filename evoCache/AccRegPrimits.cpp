@@ -25,6 +25,23 @@ Puppy::Primitive::tryReplaceArgumentNode(unsigned int inN, std::string primName,
 					 , newTree, 0, newStack);
 
 	ioContext.mCallStack.pop_back();
+
+	// make all unused features to be the same
+	newStack.push_back(1);
+	unsigned int tempStack = ioContext.mCallStack.back();
+	ioContext.mCallStack.pop_back();
+	for (unsigned int iFeat = MAX_NUM_FEATURES - 1; iFeat >= LIMIT_NUM_FEATURES; --iFeat) {
+		Tree dupTree = Tree(*ioContext.mTree);
+		unsigned int indexFeat = ioContext.mCallStack.back() + 1;
+		for(unsigned int j=0; j<iFeat; ++j)
+			indexFeat += (*ioContext.mTree)[indexFeat].mSubTreeSize;
+		ioContext.mCallStack.push_back(indexFeat);
+		exchangeSubTrees(*ioContext.mTree, indexFeat, ioContext.mCallStack
+						 , dupTree, 1, newStack);
+		ioContext.mCallStack.pop_back();
+	}
+	ioContext.mCallStack.push_back(tempStack);
+
 	return true;
 }
 
@@ -148,18 +165,20 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 //	}
 
 	// summary if the QStringList exists
-	if (ioContext.m_summaryStrList && m_bundle.count()) {
+	if (ioContext.m_summaryStrList) {
 		QString str;
-		str = QString::fromStdString(getName()) + " ("
-			+ QString::number(m_bundle.count()) +  ") "
-			+ " kl$ " + QString::number(double(m_kla) / KLA_MULTIPLICATOR)
-			+ " / " + QString::number(kindaLog(m_bundle.sumDollar() / m_bundle.count()))
-			+ " = " + QString::number(unKindaLog(double(m_kla) / KLA_MULTIPLICATOR))
-			+ " / " + QString::number(m_bundle.sumDollar() / m_bundle.count());
-		ioContext.m_summaryStrList->append(str);
-		str = QString("On the ") + QString::number(m_dayOfMonth) + "th, ";
-		str += QString("hash: ") + QString::number(m_bundle.trans(0).nameHash.hash);
-		str += QString("  ind: ") + QString::number(m_bundle.trans(0).indexHash);
+		if(m_bundle.count()) {
+			str = QString::fromStdString(getName()) + " ("
+				  + QString::number(m_bundle.count()) +  ") "
+				  + " kl$ " + QString::number(double(m_kla) / KLA_MULTIPLICATOR)
+				  + " / " + QString::number(kindaLog(m_bundle.sumDollar() / m_bundle.count()))
+				  + " = " + QString::number(unKindaLog(double(m_kla) / KLA_MULTIPLICATOR))
+				  + " / " + QString::number(m_bundle.sumDollar() / m_bundle.count());
+			ioContext.m_summaryStrList->append(str);
+			str = QString("On the ") + QString::number(m_dayOfMonth) + "th, ";
+			str += QString("hash: ") + QString::number(m_bundle.trans(0).nameHash.hash);
+			str += QString("  ind: ") + QString::number(m_bundle.trans(0).indexHash);
+		}
 		str += QString("  fitness: ") + QString::number(m_fitness);
 		str += QString("  billProba: ") + QString::number(billProbability());
 		ioContext.m_summaryStrList->append(str);
@@ -182,5 +201,6 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 			Transaction& t = m_bundle.trans(i);
 			emit evoSpinner()->sendMask(t.time_t(), t.amountDbl(), false);
 		}
+		qDebug() << targetTrans.count() << m_bundle.count();
 	}
 }

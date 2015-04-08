@@ -173,11 +173,15 @@ public:
 	{ }
 	void getArgs(Puppy::Context &ioContext) override {
 		// if we are forcing a given hashed bundle
+		m_filterHash = -1;
 		int filterHashIndex = ioContext.filterHashIndex;
 		if(filterHashIndex >= 0) {
 			m_filterHash = ioContext.m_pAccount->hashBundles().keys()[filterHashIndex];
+			int avgKLA = ioContext.m_pAccount->hashBundles()[m_filterHash]->averageKLA();
 			std::string nodeName = QString("h%1").arg(m_filterHash).toStdString();
+			std::string klaName = QString("kla%1").arg(avgKLA).toStdString();
 			bool ok = tryReplaceArgumentNode(2, nodeName.c_str(), ioContext);
+			ok &= tryReplaceArgumentNode(3, klaName.c_str(), ioContext);
 			if(!ok) {
 				LOG() << "Could not replace the node with " << nodeName.c_str() << endl;
 			}

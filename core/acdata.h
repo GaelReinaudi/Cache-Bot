@@ -177,7 +177,7 @@ public:
 		}
 		return ret;
 	}
-	double averageKLA() const {
+	int averageKLA() const {
 		double ret = sumDollar() / m_vector.count();
 		return kindaLog(ret) * KLA_MULTIPLICATOR;
 	}

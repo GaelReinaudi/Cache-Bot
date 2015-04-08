@@ -88,6 +88,11 @@ public:
 		else
 			mAccountRoot.push_back(inPrimitive);
 	}
+	inline void insertIfNotThere(PrimitiveHandle inPrimitive)
+	{
+		if(mPrimitiveMap.find(inPrimitive->getName()) == mPrimitiveMap.end())
+			insert(inPrimitive);
+	}
 
 	Randomizer                            mRandom;        //!< Random number generator.
 	std::vector<PrimitiveHandle>          mFunctionSet;   //!< Set of functions usable to build trees.
