@@ -92,13 +92,14 @@ protected:
 	inline void getArgument(unsigned int inN, void* outResult, Context& ioContext);
 	void setName(std::string inName);
 	void setNumberArguments(unsigned int inNumberArguments);
+	bool tryReplaceArgumentNode(unsigned int inN, std::string primName, Context& ioContext);
 
 private:
 
 	std::string  mName;             //!< Name of the primitive.
 	unsigned int mNumberArguments;  //!< Number of arguments of the primitive.
 	unsigned int mRefCounter;       //!< Primitive's reference counter.
-
+	
 };
 
 }

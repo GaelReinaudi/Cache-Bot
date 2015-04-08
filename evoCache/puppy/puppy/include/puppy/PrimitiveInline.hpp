@@ -42,6 +42,7 @@
 #include "puppy/Primitive.hpp"
 #include "puppy/Context.hpp"
 #include "puppy/Tree.hpp"
+#include "log.h"
 
 
 /*!
@@ -283,7 +284,8 @@ Puppy::Primitive::getArgument(unsigned int inN, void* outResult, Puppy::Context&
 {
   assert(inN < mNumberArguments);
   unsigned int lIndex = ioContext.mCallStack.back() + 1;
-  for(unsigned int i=0; i<inN; ++i) lIndex += (*ioContext.mTree)[lIndex].mSubTreeSize;
+  for(unsigned int i=0; i<inN; ++i)
+	  lIndex += (*ioContext.mTree)[lIndex].mSubTreeSize;
   ioContext.mCallStack.push_back(lIndex);
   (*ioContext.mTree)[lIndex].mPrimitive->execute(outResult, ioContext);
   ioContext.mCallStack.pop_back();

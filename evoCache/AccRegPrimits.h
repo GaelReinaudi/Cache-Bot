@@ -108,6 +108,8 @@ public:
 protected:
 	EvolutionSpinner* m_evoSpinner = 0;
 	TransactionBundle m_bundle;
+	// if any, the hash to filter the transaction on
+	int m_filterHash = -1;
 };
 
 class CacheBotRootPrimitive : public AccountFeature
@@ -170,6 +172,17 @@ public:
 		: FeaturePeriodicAmount(evoSpinner, "MonthlyAmount")
 	{ }
 	void getArgs(Puppy::Context &ioContext) override {
+		// if we are forcing a given hashed bundle
+		int filterHashIndex = ioContext.filterHashIndex;
+		if(filterHashIndex >= 0) {
+			m_filterHash = ioContext.m_pAccount->hashBundles().keys()[filterHashIndex];
+			std::string nodeName = QString("h%1").arg(m_filterHash).toStdString();
+			bool ok = tryReplaceArgumentNode(2, nodeName.c_str(), ioContext);
+			if(!ok) {
+				LOG() << "Could not replace the node with " << nodeName.c_str() << endl;
+			}
+		}
+
 		double a = 0;
 		int ind = -1;
 		getArgument(++ind, &a, ioContext);

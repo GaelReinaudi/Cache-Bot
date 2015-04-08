@@ -3,7 +3,7 @@
 #include "puppy/Puppy.hpp"
 #include "AccRegPrimits.h"
 
-#define POP_SIZE_DEFAULT 500
+#define POP_SIZE_DEFAULT 150
 #define NBR_GEN_DEFAULT 20
 #define NBR_PART_TOURNAMENT_DEFAULT 2
 #define MAX_DEPTH_DEFAULT 5
@@ -58,7 +58,7 @@ EvolutionSpinner::EvolutionSpinner(Account *pAc, QObject* parent)
 		if (pAc->hashBundles()[h]->count() > 1)
 		{
 			double avgKLA = pAc->hashBundles()[h]->averageKLA();
-			m_context->insert(new TokenT<double>(QString("h%1").arg(i).toStdString(), h));
+			m_context->insert(new TokenT<double>(QString("h%1").arg(h).toStdString(), h));
 			m_context->insert(new TokenT<double>(QString("kla%1").arg(i).toStdString(), avgKLA));
 		}
 	}

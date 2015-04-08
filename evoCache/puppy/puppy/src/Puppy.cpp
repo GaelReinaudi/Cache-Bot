@@ -180,7 +180,6 @@ void Puppy::exchangeSubTrees(Puppy::Tree& ioTree1,
 		ioTree2[inStack2[j]].mSubTreeSize += lDiffSize;
 }
 
-
 /*!
  *  \brief Mate two GP trees for crossover.
  *  \param ioTree1 First tree to mate.

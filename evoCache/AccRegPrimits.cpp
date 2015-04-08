@@ -1,5 +1,33 @@
 #include "AccRegPrimits.h"
 
+inline bool
+Puppy::Primitive::tryReplaceArgumentNode(unsigned int inN, std::string primName, Context &ioContext)
+{
+	assert(inN < mNumberArguments);
+	auto iterPrim = ioContext.mPrimitiveMap.find(primName);
+	if(iterPrim == ioContext.mPrimitiveMap.end()) {
+		LOG() << "Could not find the primitive " << primName.c_str() << endl;
+		return false;
+	}
+	// make a tree made of only that primitive to later use the swap node function
+	Tree newTree;
+	std::vector<unsigned int> newStack;
+	newStack.push_back(0);
+	newTree.push_back(Node(iterPrim->second->giveReference(ioContext), 1));
+
+	// index in current tree
+	unsigned int lIndex = ioContext.mCallStack.back() + 1;
+	for(unsigned int i=0; i<inN; ++i)
+		lIndex += (*ioContext.mTree)[lIndex].mSubTreeSize;
+	ioContext.mCallStack.push_back(lIndex);
+
+	exchangeSubTrees(*ioContext.mTree, lIndex, ioContext.mCallStack
+					 , newTree, 0, newStack);
+
+	ioContext.mCallStack.pop_back();
+	return true;
+}
+
 void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 {
 	AccountFeature::execute(outDatum, ioContext);
@@ -10,10 +38,7 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 
 	m_fitness = 0.0;
 
-	int filterHashIndex = ioContext.filterHashIndex;
-	int filterHash = filterHashIndex < 0 ? -1 : ioContext.m_pAccount->hashBundles().keys()[filterHashIndex];
-
-	TransactionBundle& allTrans = ioContext.m_pAccount->allTrans(filterHash);
+	TransactionBundle& allTrans = ioContext.m_pAccount->allTrans(m_filterHash);
 	QDate lastDate = ioContext.m_pAccount->lastTransactionDate().addDays(-4);
 	QDate iniDate = ioContext.m_pAccount->firstTransactionDate();
 
@@ -35,16 +60,14 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 		targetTrans.last().date = currentDate;
 		targetTrans.last().setKLA(m_kla);
 		targetTrans.last().indexHash = 0;
-		targetTrans.last().indexHash += m_b[0] * 1 << 0;
-		targetTrans.last().indexHash += m_b[1] * 1 << 4;
-		targetTrans.last().indexHash += m_b[2] * 1 << 8;
-		targetTrans.last().indexHash += m_b[3] * 1 << 12;
+//		targetTrans.last().indexHash += m_b[0] * 1 << 0;
+//		targetTrans.last().indexHash += m_b[1] * 1 << 4;
+//		targetTrans.last().indexHash += m_b[2] * 1 << 8;
+//		targetTrans.last().indexHash += m_b[3] * 1 << 12;
 		targetTrans.last().nameHash.hash = m_b[0];
-		// if we are forcing a given hashed bundle
-		if (filterHashIndex >= 0) {
-			targetTrans.last().indexHash = filterHashIndex;
-			targetTrans.last().nameHash.hash = filterHash;
-		}
+//		if (m_filterHash >= 0) {
+//			targetTrans.last().nameHash.hash = m_filterHash;
+//		}
 		currentDate = currentDate.addMonths(1);
 	}
 	if (targetTrans.count() == 0) {
