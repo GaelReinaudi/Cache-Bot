@@ -2,8 +2,8 @@
 #include "ui_mainwindow.h"
 #include "core/acdata.h"
 
-MainWindow::MainWindow(QString jsonFile, QWidget *parent)
-	: QMainWindow(parent)
+MainWindow::MainWindow(QString jsonFile, int afterJday)
+	: QMainWindow()
 	, ui(new Ui::MainWindow)
 {
 	ui->setupUi(this);
@@ -11,7 +11,7 @@ MainWindow::MainWindow(QString jsonFile, QWidget *parent)
 
 	// an account object that is going to be populated by the json file
 	account = new Account();
-	account->loadPlaidJson(jsonFile);
+	account->loadPlaidJson(jsonFile, afterJday);
 
 	ui->acPlot->loadCompressedAmount(account);
 	ui->amPlot->loadAmount(account);
