@@ -25,7 +25,7 @@ unsigned int proximityHashString(const QString &str) {
 	return ret;
 }
 
-bool Account::loadPlaidJson(QString jsonFile) {
+bool Account::loadPlaidJson(QString jsonFile, int afterJday) {
 	QFile loadFile(jsonFile);
 	if (!loadFile.open(QIODevice::ReadOnly)) {
 		qWarning(QString("Couldn't open file %1").arg(QFileInfo(loadFile).absoluteFilePath()).toUtf8());
@@ -45,7 +45,7 @@ bool Account::loadPlaidJson(QString jsonFile) {
 			m_accountIds.push_back(accountID);
 	}
 	qDebug() << m_accountIds;
-	m_allTransactions.read(json["transactions"].toArray(), m_accountIds);
+	m_allTransactions.read(json["transactions"].toArray(), afterJday, m_accountIds);
 
 	m_predicted.read(json["predicted"].toArray());
 
@@ -61,13 +61,15 @@ bool Account::loadPlaidJson(QString jsonFile) {
 	return true;
 }
 
-void Account::Transactions::read(const QJsonArray& npcArray, const QVector<QString> &onlyAcIds /*= anyID*/) {
+void Account::Transactions::read(const QJsonArray& npcArray, int afterJday, const QVector<QString> &onlyAcIds /*= anyID*/) {
 	clear();
 	for (int npcIndex = 0; npcIndex < npcArray.size(); ++npcIndex) {
 		QJsonObject npcObject = npcArray[npcIndex].toObject();
 		QString accountTrans = npcObject["_account"].toString();
 		if (onlyAcIds.isEmpty() || onlyAcIds.contains(accountTrans)) {
 			appendNew()->read(npcObject);
+			if (last()->jDay() < afterJday)
+				removeLast();
 		}
 		else {
 			LOG() << "transaction not matching an account:"<< accountTrans

@@ -195,7 +195,7 @@ public:
 
 	// loading the json file
 	// see this: https://qt-project.org/doc/qt-5-snapshot/qtcore-savegame-example.html
-	bool loadPlaidJson(QString jsonFile);
+	bool loadPlaidJson(QString jsonFile, int afterJday);
 
 	QMap<uint, TransactionBundle*>& hashBundles() {
 		return m_hashBundles;
@@ -219,13 +219,15 @@ private:
 	{
 		Transactions() {}
 		//! json in
-		void read(const QJsonArray& npcArray, const QVector<QString>& onlyAcIds = QVector<QString>());
+		void read(const QJsonArray& npcArray, int afterJday = 0, const QVector<QString>& onlyAcIds = QVector<QString>());
 		//! json out
 		void write(QJsonArray &npcArray) const;
 		Transaction* transArray() { return &m_transArray[0]; }
 		void clear() { m_numTrans = 0; }
 		int count() const { return m_numTrans; }
 		Transaction* appendNew() { return &m_transArray[m_numTrans++]; }
+		Transaction* last() { return &m_transArray[m_numTrans - 1]; }
+		void removeLast() { m_numTrans--; }
 	private:
 		std::array<Transaction, MAX_TRANSACTION_PER_ACCOUNT> m_transArray;
 		int m_numTrans = 0;
