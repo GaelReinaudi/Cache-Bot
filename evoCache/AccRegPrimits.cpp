@@ -153,7 +153,7 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 		m_fitness += totalOneOverExpDist;
 		//m_fitness += qAbs(kindaLog(m_bundle.sumDollar())) * totalOneOverExpDist / m_bundle.count();
 		//m_fitness *= m_consecMonthBeforeMissed;
-		//m_fitness /= 2 + m_consecMissed;
+		m_fitness *= 1.0 + (1.0 / (1.0 + m_consecMissed));
 	}
 	output = m_fitness;
 
@@ -201,6 +201,6 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 			Transaction& t = m_bundle.trans(i);
 			emit evoSpinner()->sendMask(t.time_t(), t.amountDbl(), false);
 		}
-		qDebug() << targetTrans.count() << m_bundle.count();
+		//qDebug() << targetTrans.count() << m_bundle.count();
 	}
 }
