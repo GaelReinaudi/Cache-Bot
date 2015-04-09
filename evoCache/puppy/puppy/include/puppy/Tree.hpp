@@ -96,7 +96,6 @@ public:
 		isValid &= front().mPrimitive->isRoot();
 		return isValid;
 	}
-	double summarize(QStringList *strList, Context& ioContext);
 
 	std::vector<unsigned int> getFeatureStack(unsigned int indFeature, Context& ioContext) {
 		std::vector<unsigned int> ret;

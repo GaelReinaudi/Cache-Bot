@@ -105,6 +105,7 @@ public:
 	bool m_isInFeature = false;
 	bool m_hasRecursiveFeature = false;
 	QStringList* m_summaryStrList = 0;
+	QMap<double, QVector<Transaction> >* m_mapPredicted = 0;
 	Account* m_pAccount;
 	int filterHashIndex = -1;
 };

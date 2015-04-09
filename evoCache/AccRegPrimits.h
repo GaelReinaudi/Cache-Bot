@@ -218,6 +218,8 @@ public:
 		return proba;
 	}
 
+	QVector<Transaction> targetTransactions(QDate iniDate, QDate lastDate);
+
 protected:
 	int m_dayOfMonth = 0;
 	int m_kla = 0;

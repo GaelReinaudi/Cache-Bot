@@ -3,7 +3,7 @@
 #include "puppy/Puppy.hpp"
 #include "AccRegPrimits.h"
 
-const double THRESHOLD_PROBA_BILL = 0.5;
+const double THRESHOLD_PROBA_BILL = 1.5;
 
 #define POP_SIZE_DEFAULT 500
 #define NBR_GEN_DEFAULT 20
@@ -212,7 +212,8 @@ for (int j = 0; j < m_context->m_pAccount->hashBundles().count(); ++j) {
 	}
 	LOG() << "End of evolution" << endl;
 
-	summarize(veryBestTree);
+	QVector<Transaction> futureTransactions = predictTrans(veryBestTree, THRESHOLD_PROBA_BILL);
+//	m_context->m_pAccount->toJson(futureTransactions, "predicted");
 
 	std::cout << "Exiting program " << output.count() << endl << std::flush;
 }
@@ -238,7 +239,12 @@ QString EvolutionSpinner::summarize(Tree& tree)
 {
 	QStringList retList;
 	emit sendClearMask();
-	double fit = tree.summarize(&retList, *m_context);
+	tree.mValid = false;
+	m_context->m_summaryStrList = &retList;
+	double fit;
+	tree.interpret(&fit, *m_context);
+	m_context->m_summaryStrList = 0;
+
 	LOG() << "tree (" << fit << "): " << tree.toStr() << endl;
 	for (const QString& str : retList) {
 		LOG() << "    " << str << endl;
@@ -248,7 +254,21 @@ QString EvolutionSpinner::summarize(Tree& tree)
 	return retList.join('\n');
 }
 
+QVector<Transaction> EvolutionSpinner::predictTrans(Tree& tree, double threshProba)
+{
+	QVector<Transaction> ret;
+	QMap<double, QVector<Transaction> > mapFitPredicted;
+	m_context->m_mapPredicted = &mapFitPredicted;
+	summarize(tree);
+	m_context->m_mapPredicted = 0;
 
+	for (int i = 0; i < mapFitPredicted.count(); ++i) {
+		double proBill = mapFitPredicted.keys()[i];
+		if (proBill > threshProba)
+			ret += mapFitPredicted[proBill];
+	}
+	return ret;
+}
 
 
 

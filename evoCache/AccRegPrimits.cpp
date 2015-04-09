@@ -45,20 +45,8 @@ Puppy::Primitive::tryReplaceArgumentNode(unsigned int inN, std::string primName,
 	return true;
 }
 
-void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
+QVector<Transaction> FeatureMonthlyAmount::targetTransactions(QDate iniDate, QDate lastDate)
 {
-	AccountFeature::execute(outDatum, ioContext);
-	double& output = *(double*)outDatum;
-
-	getArgs(ioContext);
-	cleanArgs();
-
-	m_fitness = 0.0;
-
-	TransactionBundle& allTrans = ioContext.m_pAccount->allTrans(m_filterHash);
-	QDate lastDate = ioContext.m_pAccount->lastTransactionDate().addDays(-4);
-	QDate iniDate = ioContext.m_pAccount->firstTransactionDate();
-
 	QVector<Transaction> targetTrans;
 	QDate currentDate = iniDate;
 	while (currentDate < lastDate) {
@@ -77,16 +65,28 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 		targetTrans.last().date = currentDate;
 		targetTrans.last().setKLA(m_kla);
 		targetTrans.last().indexHash = 0;
-//		targetTrans.last().indexHash += m_b[0] * 1 << 0;
-//		targetTrans.last().indexHash += m_b[1] * 1 << 4;
-//		targetTrans.last().indexHash += m_b[2] * 1 << 8;
-//		targetTrans.last().indexHash += m_b[3] * 1 << 12;
 		targetTrans.last().nameHash.hash = m_b[0];
-//		if (m_filterHash >= 0) {
-//			targetTrans.last().nameHash.hash = m_filterHash;
-//		}
 		currentDate = currentDate.addMonths(1);
 	}
+
+	return targetTrans;
+}
+
+void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
+{
+	AccountFeature::execute(outDatum, ioContext);
+	double& output = *(double*)outDatum;
+
+	getArgs(ioContext);
+	cleanArgs();
+
+	m_fitness = 0.0;
+
+	TransactionBundle& allTrans = ioContext.m_pAccount->allTrans(m_filterHash);
+	QDate lastDate = ioContext.m_pAccount->lastTransactionDate().addDays(-4);
+	QDate iniDate = ioContext.m_pAccount->firstTransactionDate();
+
+	QVector<Transaction> targetTrans = targetTransactions(iniDate, lastDate);
 	if (targetTrans.count() == 0) {
 		LOG() << "MonthlyAmount(0 TARGET): day "<<m_dayOfMonth<<" kla "<< m_kla << endl;
 	}
@@ -103,8 +103,10 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 	// the current target to compare to
 	Transaction* iTarg = &targetTrans[0];
 	m_bundle.clear();
+	QVector<Transaction> predictTrans;
 	if (ioContext.m_summaryStrList) {
 		m_bundle.clear();
+		predictTrans = targetTransactions(lastDate, lastDate.addDays(365));
 	}
 	m_consecMonth = 0;
 	m_consecMonthBeforeMissed = 0;
@@ -166,6 +168,10 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 
 	// summary if the QStringList exists
 	if (ioContext.m_summaryStrList) {
+		double billPro = billProbability();
+		if(ioContext.m_mapPredicted) {
+			(*(ioContext.m_mapPredicted))[billPro] += predictTrans;
+		}
 		QString str;
 		if(m_bundle.count()) {
 			str = QString::fromStdString(getName()) + " ("
@@ -180,7 +186,7 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 			str += QString("  ind: ") + QString::number(m_bundle.trans(0).indexHash);
 		}
 		str += QString("  fitness: ") + QString::number(m_fitness);
-		str += QString("  billProba: ") + QString::number(billProbability());
+		str += QString("  billProba: ") + QString::number(billPro);
 		ioContext.m_summaryStrList->append(str);
 //		str = QString("avg label: ") + m_bundle.averageName();
 //		ioContext.m_sumamryStrList->append(str);

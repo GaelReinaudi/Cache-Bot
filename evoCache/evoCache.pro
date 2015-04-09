@@ -29,14 +29,14 @@ HEADERS  += \
 	$$PWD/../AccountChart/ACChart/acustomplot.h \
 	$$PWD/../core/acdata.h \
 	$$PWD/../AccountChart/AmortiChart/AMPlot.h \
-	puppy/Primitive.hpp \
-	puppy/PrimitiveHandle.hpp \
-	puppy/PrimitiveInline.hpp \
-	puppy/Puppy.hpp \
-	puppy/Context.hpp \
-	puppy/Randomizer.hpp \
-	puppy/Token.hpp \
-	puppy/Tree.hpp \
+	$$PWD/puppy/Primitive.hpp \
+	$$PWD/puppy/PrimitiveHandle.hpp \
+	$$PWD/puppy/PrimitiveInline.hpp \
+	$$PWD/puppy/Puppy.hpp \
+	$$PWD/puppy/Context.hpp \
+	$$PWD/puppy/Randomizer.hpp \
+	$$PWD/puppy/Token.hpp \
+	$$PWD/puppy/Tree.hpp \
     EvolutionSpinner.h \
     AccRegPrimits.h
 

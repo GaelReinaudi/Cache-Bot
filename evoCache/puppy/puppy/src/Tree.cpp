@@ -102,17 +102,6 @@ void Puppy::Tree::interpret(void* outResult, Puppy::Context& ioContext)
 	ioContext.mCallStack.pop_back();
 }
 
-double Puppy::Tree::summarize(QStringList *strList, Puppy::Context &ioContext)
-{
-	mValid = false;
-	ioContext.m_summaryStrList = strList;
-	double fit;
-	interpret(&fit, ioContext);
-	ioContext.m_summaryStrList = 0;
-	return fit;
-}
-
-
 /*!
  *  \brief Set call stack to include the correctly refer to a given node.
  *  \param inIndex Node index to which call stack must be set.
