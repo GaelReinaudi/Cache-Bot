@@ -186,7 +186,7 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 			str += QString("  ind: ") + QString::number(m_bundle.trans(0).indexHash);
 		}
 		str += QString("  fitness: ") + QString::number(m_fitness);
-		str += QString("  billProba: ") + QString::number(billPro);
+		str += QString("  billProba: %1       ").arg(billPro);
 		ioContext.m_summaryStrList->append(str);
 //		str = QString("avg label: ") + m_bundle.averageName();
 //		ioContext.m_sumamryStrList->append(str);

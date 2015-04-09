@@ -26,7 +26,8 @@ unsigned int proximityHashString(const QString &str) {
 }
 
 bool Account::loadPlaidJson(QString jsonFile, int afterJday) {
-	QFile loadFile(jsonFile);
+	m_jsonFilePath = jsonFile;
+	QFile loadFile(m_jsonFilePath);
 	if (!loadFile.open(QIODevice::ReadOnly)) {
 		qWarning(QString("Couldn't open file %1").arg(QFileInfo(loadFile).absoluteFilePath()).toUtf8());
 		return false;
@@ -34,7 +35,7 @@ bool Account::loadPlaidJson(QString jsonFile, int afterJday) {
 	QByteArray saveData = loadFile.readAll();
 	QJsonDocument loadDoc(QJsonDocument::fromJson(saveData));
 	const QJsonObject& json = loadDoc.object();
-//	m_accountIds.clear();
+
 	QJsonArray npcArrayAccount = json["accounts"].toArray();
 	qDebug() << npcArrayAccount.size();
 	for (int npcIndex = 0; npcIndex < npcArrayAccount.size(); ++npcIndex) {
@@ -58,6 +59,37 @@ bool Account::loadPlaidJson(QString jsonFile, int afterJday) {
 	}
 	makeHashBundles();
 
+	return true;
+}
+
+bool Account::toJson(QVector<Transaction> transactions, QString category)
+{
+	QFile loadFile(m_jsonFilePath);
+	if (!loadFile.open(QIODevice::ReadOnly)) {
+		qWarning(QString("Couldn't open file %1").arg(QFileInfo(loadFile).absoluteFilePath()).toUtf8());
+		return false;
+	}
+	QByteArray saveData = loadFile.readAll();
+	QJsonDocument loadDoc(QJsonDocument::fromJson(saveData));
+	QJsonObject json = loadDoc.object();
+
+	QJsonArray transArray;
+	for (int i = 0; i < transactions.count(); ++i) {
+		QJsonObject obj;
+		transactions[i].write(obj);
+		transArray.append(obj);
+	}
+	json[category] = transArray;
+	qDebug() << transactions.count();
+	//qDebug() << json["predicted"];
+
+	QFile writeFile(m_jsonFilePath + ".out");
+	if (!writeFile.open(QIODevice::WriteOnly)) {
+		qWarning(QString("Couldn't open file %1").arg(QFileInfo(writeFile).absoluteFilePath()).toUtf8());
+		return false;
+	}
+	QJsonDocument saveDoc(json);
+	writeFile.write(saveDoc.toJson());
 	return true;
 }
 
@@ -118,10 +150,10 @@ void Transaction::read(const QJsonObject &json) {
 }
 
 void Transaction::write(QJsonObject &json) const {
-	json["amount"] = amountDbl();
-	//		json["startDate"] = int(m_startDate.toTime_t());
-	//		json["numDays"] = m_numDays;
-	//		json["descr"] = m_description;
+	json["name"] = name;
+	json["hash"] = nameHash.hash;
+	json["amount"] = -amountDbl();
+	json["date"] = date.toString("yyyy-MM-dd");
 }
 
 

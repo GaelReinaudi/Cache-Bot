@@ -3,7 +3,7 @@
 #include "puppy/Puppy.hpp"
 #include "AccRegPrimits.h"
 
-const double THRESHOLD_PROBA_BILL = 1.5;
+const double THRESHOLD_PROBA_BILL = 1.0;
 
 #define POP_SIZE_DEFAULT 500
 #define NBR_GEN_DEFAULT 20
@@ -153,7 +153,7 @@ for (int j = 0; j < m_context->m_pAccount->hashBundles().count(); ++j) {
 //	std::vector<unsigned int> outCallStack = (*lBestIndividual).getFeatureStack(0, *m_context);
 //	qDebug() << QVector<unsigned int>::fromStdVector(outCallStack);
 
-	QString strFit = strBest.mid(strBest.indexOf("billProba: ") + 11).mid(0, 5).trimmed();
+	QString strFit = strBest.mid(strBest.indexOf("billProba: ") + 11).mid(0, 6).trimmed();
 	LOG() << "AAAAAAAAAAAAAAAAAA " << strBest << endl;
 	double billProba = strFit.toDouble();
 	output[billProba].append(strBest);
@@ -175,9 +175,10 @@ for (int j = 0; j < m_context->m_pAccount->hashBundles().count(); ++j) {
 	m_context->filterHashIndex = -1;
 	Tree veryBestTree;
 	// Initialize population.
-	std::vector<Tree> lPopulation(0);
+	std::vector<Tree> lPopulation(0*lPopSize);
 	std::cout << "Initializing population" << std::endl;
-//	initializePopulation(lPopulation, *m_context, lInitGrowProba, lMinInitDepth, lMaxInitDepth);
+	initializePopulation(lPopulation, *m_context, lInitGrowProba, lMinInitDepth, lMaxInitDepth);
+	qDebug() << bestPreEvoTrees.count();
 	for(int i = 0; i < 5*lPopSize; ++i) {
 		lPopulation.push_back(bestPreEvoTrees.at(i % bestPreEvoTrees.size()));
 //		lPopulation[i] = bestPreEvoTrees.at(i % bestPreEvoTrees.size());
@@ -205,7 +206,7 @@ for (int j = 0; j < m_context->m_pAccount->hashBundles().count(); ++j) {
 		applyMutationSwap(lPopulation, *m_context, lMutSwapProba, lMutSwapDistribProba);
 
 		bestTree.mValid = false;
-		//lPopulation.push_back(bestTree);
+		lPopulation.push_back(bestTree);
 
 		evaluateSymbReg(lPopulation, *m_context);
 		calculateStats(lPopulation, i);
@@ -213,7 +214,7 @@ for (int j = 0; j < m_context->m_pAccount->hashBundles().count(); ++j) {
 	LOG() << "End of evolution" << endl;
 
 	QVector<Transaction> futureTransactions = predictTrans(veryBestTree, THRESHOLD_PROBA_BILL);
-//	m_context->m_pAccount->toJson(futureTransactions, "predicted");
+	m_context->m_pAccount->toJson(futureTransactions, "predicted");
 
 	std::cout << "Exiting program " << output.count() << endl << std::flush;
 }

@@ -121,7 +121,7 @@ public:
 
 	//! distance between this transaction and anther.
 	inline quint64 dist(const Transaction& other) const {
-		return distanceWeighted<8, 2, 128, 0>(other);
+		return distanceWeighted<8, 1, 128, 0>(other);
 	}
 };
 
@@ -196,6 +196,7 @@ public:
 	// loading the json file
 	// see this: https://qt-project.org/doc/qt-5-snapshot/qtcore-savegame-example.html
 	bool loadPlaidJson(QString jsonFile, int afterJday);
+	bool toJson(QVector<Transaction> transactions, QString category);
 
 	QMap<uint, TransactionBundle*>& hashBundles() {
 		return m_hashBundles;
@@ -253,6 +254,7 @@ private:
 	}
 
 private:
+	QString m_jsonFilePath;
 	Transactions m_allTransactions;
 	TransactionBundle m_allTrans;
 	HashedBundles m_hashBundles;
