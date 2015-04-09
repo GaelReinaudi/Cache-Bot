@@ -3,9 +3,9 @@
 #include "puppy/Puppy.hpp"
 #include "AccRegPrimits.h"
 
-const double THRESHOLD_PROBA_BILL = 1.0;
+const double THRESHOLD_PROBA_BILL = 0.5;
 
-#define POP_SIZE_DEFAULT 150
+#define POP_SIZE_DEFAULT 500
 #define NBR_GEN_DEFAULT 20
 #define NBR_PART_TOURNAMENT_DEFAULT 2
 #define MAX_DEPTH_DEFAULT 5
@@ -173,11 +173,12 @@ for (int j = 0; j < m_context->m_pAccount->hashBundles().count(); ++j) {
 	// run again with full transactions
 	LIMIT_NUM_FEATURES = MAX_NUM_FEATURES;
 	m_context->filterHashIndex = -1;
+	Tree veryBestTree;
 	// Initialize population.
 	std::vector<Tree> lPopulation(0);
 	std::cout << "Initializing population" << std::endl;
 //	initializePopulation(lPopulation, *m_context, lInitGrowProba, lMinInitDepth, lMaxInitDepth);
-	for(int i = 0; i < lPopSize; ++i) {
+	for(int i = 0; i < 5*lPopSize; ++i) {
 		lPopulation.push_back(bestPreEvoTrees.at(i % bestPreEvoTrees.size()));
 //		lPopulation[i] = bestPreEvoTrees.at(i % bestPreEvoTrees.size());
 	}
@@ -187,19 +188,21 @@ for (int j = 0; j < m_context->m_pAccount->hashBundles().count(); ++j) {
 	// Evolve population for the given number of generations
 	LOG() << "Starting evolution" << endl;
 	for(unsigned int i=1; i<=100*lNbrGen; ++i) {
-		while(!m_doSpin)  {
-			QThread::msleep(100);
+		if(!m_doSpin)  {
+			break;
 		}
 		LOG() << "Generation " << i << endl;
 		auto result = std::minmax_element(lPopulation.begin(), lPopulation.end());
 		Tree bestTree = lPopulation[result.second - lPopulation.begin()];
 
-		LOG() << summarize(bestTree) << endl;
+		if (bestTree.mFitness > veryBestTree.mFitness)
+			veryBestTree = bestTree;
+		summarize(bestTree);
 
 		applySelectionTournament(lPopulation, *m_context, lNbrPartTournament);
 		applyCrossover(lPopulation, *m_context, lCrossoverProba, lCrossDistribProba, lMaxDepth);
-//		applyMutationStandard(lPopulation, *m_context, lMutStdProba, lMutMaxRegenDepth, lMaxDepth);
-//		applyMutationSwap(lPopulation, *m_context, lMutSwapProba, lMutSwapDistribProba);
+		applyMutationStandard(lPopulation, *m_context, lMutStdProba, lMutMaxRegenDepth, lMaxDepth);
+		applyMutationSwap(lPopulation, *m_context, lMutSwapProba, lMutSwapDistribProba);
 
 		bestTree.mValid = false;
 		//lPopulation.push_back(bestTree);
@@ -209,6 +212,7 @@ for (int j = 0; j < m_context->m_pAccount->hashBundles().count(); ++j) {
 	}
 	LOG() << "End of evolution" << endl;
 
+	summarize(veryBestTree);
 
 	std::cout << "Exiting program " << output.count() << endl << std::flush;
 }
