@@ -1,16 +1,17 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-const int dayPast = 60;
-const int dayFuture = 120;
+const int dayPast = 10;
+const int dayFuture = 30;
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow)
 {
 	ui->setupUi(this);
-	ui->plot->xAxis->setVisible(false);
-	ui->plot->yAxis->setVisible(false);
+//	ui->plot->xAxis->setVisible(false);
+//	ui->plot->yAxis->setVisible(false);
+	ui->plot->yAxis->setSubTickCount(10);
 
 	ui->plot->addGraph();
 	ui->plot->graph(0)->setPen(QPen(QBrush(Qt::magenta), 5.0));
@@ -29,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	m_date = QDate::currentDate();
 	m_d0 = m_date.toJulianDay();
 
-	m_account.loadPlaidJson("../cacheLight/input.json");
+	m_account.loadPlaidJson("../cacheLight/input.json", 0);
 
 	ui->spinBox->setValue(600);
 	ui->spinBox->editingFinished();
@@ -45,7 +46,7 @@ void MainWindow::onWheelEvent(QWheelEvent * wEv)
 	m_lastBal = ui->spinBox->value();
 	int step = 200 * qrand() / RAND_MAX;
 	if(wEv->delta() > 0)
-		ui->spinBox->setValue(m_lastBal + step);
+		ui->spinBox->setValue(m_lastBal + 1);
 	else
 		ui->spinBox->setValue(m_lastBal - step);
 	updateChart();
@@ -61,7 +62,7 @@ void MainWindow::updateChart()
 
 	makePredictiPlot();
 
-	ui->plot->xAxis->setRange(t - dayPast, t + dayFuture);
+	ui->plot->xAxis->setRange(t - dayPast*0-3, t + dayFuture*0+5);
 	ui->plot->yAxis->rescale();
 	ui->plot->yAxis->setRange(-100, ui->plot->yAxis->range().upper + 100);
 	ui->plot->replot();
@@ -75,14 +76,14 @@ void MainWindow::makePredictiPlot()
 		Transaction* trans = m_account.m_predicted.transArray() + i;
 		int dayTo = m_date.daysTo(trans->date);
 		if(dayTo == 0) {
-			QCPData d = ui->plot->graph(1)->data()->last();
-			double val = d.value + trans->amountDbl();
-			minPredict = qMin(minPredict, val);
 			for (auto dat = ui->plot->graph(1)->data()->begin(); dat != ui->plot->graph(1)->data()->end(); ++dat) {
 				dat->value += trans->amountDbl();
 			}
-			ui->spinBox->setValue(val);
+			minPredict = m_lastBal = ui->plot->graph(1)->data()->last().value;
+			ui->spinBox->setValue(m_lastBal);
+			qDebug() << "today" << trans->amountDbl();
 		}
+		double smallInc = 1e-3;
 		if(dayTo > 0 && dayTo < dayFuture) {
 			// first point predicted
 			if(ui->plot->graph(2)->data()->isEmpty()) {
@@ -92,8 +93,13 @@ void MainWindow::makePredictiPlot()
 			QCPData d1 = ui->plot->graph(1)->data()->last();
 			QCPData d2 = ui->plot->graph(2)->data()->last();
 			double predVal = d2.value + trans->amountDbl();
-			ui->plot->graph(2)->addData(d1.key + dayTo, predVal);
+			double t = d1.key + dayTo;
+			if (t <= d2.key)
+				t = d2.key + smallInc;
+			ui->plot->graph(2)->addData(t, predVal);
 			minPredict = qMin(minPredict, predVal);
+			if(dayTo < 5)
+				qDebug() << "fut" << dayTo << trans->amountDbl() << t;
 		}
 	}
 
