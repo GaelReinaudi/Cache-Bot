@@ -27,6 +27,7 @@ private:
 	QDate m_date;
 	int m_d0 = 0;
 	int m_lastBal = 0;
+	int m_ipb = 0;
 	// account to read predicted transactions from
 	Account m_account;
 };
