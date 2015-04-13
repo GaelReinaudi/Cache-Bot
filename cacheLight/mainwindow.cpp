@@ -52,6 +52,18 @@ MainWindow::~MainWindow()
 	delete ui;
 }
 
+bool MainWindow::wasPredicted(Transaction &trans)
+{
+	for(int i = 0; i < m_account.m_predicted.count(); ++i) {
+		Transaction* pred = m_account.m_predicted.transArray() + i;
+		if(pred->dist(trans) < 128) {
+			qDebug() << "observing predicted transaction";
+			return true;
+		}
+	}
+	return false;
+}
+
 void MainWindow::onWheelEvent(QWheelEvent * wEv)
 {
 	TransactionBundle& real = m_account.allTrans();
@@ -66,6 +78,10 @@ void MainWindow::onWheelEvent(QWheelEvent * wEv)
 		int addDay = 1;
 		if(m_ipb < real.count()) {
 			Transaction& newTrans = real.trans(m_ipb);
+			// is this transaction predicted in a way?
+			if (wasPredicted(newTrans)) {
+				newTrans.flags = Transaction::CameTrue;
+			}
 			ui->spinBox->setValue(m_lastBal + newTrans.amountDbl());
 			// if new date, move forward
 			addDay = newTrans.jDay() - real.trans(m_ipb - 1).jDay();
@@ -98,14 +114,19 @@ void MainWindow::makePredictiPlot()
 	double minPredict = m_lastBal;
 	for(int i = 0; i < m_account.m_predicted.count(); ++i) {
 		Transaction* trans = m_account.m_predicted.transArray() + i;
+		// not do anything if it already came true
+		if (trans->flags == Transaction::CameTrue) {
+			qDebug() << "not charting prediction that came true";
+			continue;
+		}
 		int dayTo = m_date.daysTo(trans->date);
 		if(dayTo == 0) {
 			for (auto dat = ui->plot->graph(1)->data()->begin(); dat != ui->plot->graph(1)->data()->end(); ++dat) {
-//				dat->value += trans->amountDbl();
+				dat->value += trans->amountDbl();
 			}
 			minPredict = m_lastBal = ui->plot->graph(1)->data()->last().value;
 			ui->spinBox->setValue(m_lastBal);
-			//qDebug() << "today" << trans->amountDbl();
+			//qDebug() << "predicted today" << trans->amountDbl();
 		}
 		double smallInc = 1e-3;
 		if(dayTo > 0 && dayTo < dayFuture) {
