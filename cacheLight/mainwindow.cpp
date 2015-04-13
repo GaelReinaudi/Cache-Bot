@@ -5,6 +5,8 @@ const int dayPast = 10;
 const int dayFuture = 30;
 const int playBackStartAgo = 365;
 
+double smallInc = 1e-3;
+
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow)
@@ -26,25 +28,31 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->plot->graph(2)->setLineStyle(QCPGraph::lsStepLeft);
 	ui->plot->graph(2)->setPen(QPen(QBrush(Qt::gray), 5.0));
 
-	connect(ui->spinBox, SIGNAL(editingFinished()), this, SLOT(updateChart()));
+//	connect(ui->spinBox, SIGNAL(editingFinished()), this, SLOT(updateChart()));
 	connect(ui->plot, SIGNAL(mouseWheel(QWheelEvent*)), this, SLOT(onWheelEvent(QWheelEvent*)));
 
 	m_account.loadPlaidJson("../cacheLight/input.json", 0);
 
 	// transaction at the starting date of the playback
 	TransactionBundle& real = m_account.allTrans();
-	m_date = real.trans(-1).date;//QDate::currentDate();
+	m_date = real.trans(-1).date.addDays(-playBackStartAgo);//QDate::currentDate();
 	m_d0 = m_date.toJulianDay();
 
 	for (int i = 0; i < real.count(); ++i) {
-		if (real.trans(i).jDay() >= m_d0 - playBackStartAgo) {
+		if (real.trans(i).date >= m_date) {
 			m_ipb = i;
 			break;
 		}
 	}
+	// trick predictions at time of playback
+	for (int i = 0; i < m_account.m_predicted.count(); ++i) {
+		(m_account.m_predicted.transArray()+i)->date = (m_account.m_predicted.transArray()+i)->date.addDays(-playBackStartAgo);
+	}
 
-	ui->spinBox->setValue(600);
+	m_lastBal = 600;
+	ui->spinBox->setValue(m_lastBal);
 	ui->spinBox->editingFinished();
+	updateChart();
 }
 
 MainWindow::~MainWindow()
@@ -56,8 +64,9 @@ bool MainWindow::wasPredicted(Transaction &trans)
 {
 	for(int i = 0; i < m_account.m_predicted.count(); ++i) {
 		Transaction* pred = m_account.m_predicted.transArray() + i;
+		//qDebug() << pred->jDay() << trans.jDay();
 		if(pred->dist(trans) < 128) {
-			qDebug() << "observing predicted transaction";
+			qDebug() << "observing predicted transaction" << pred->dist(trans) << trans.name;
 			return true;
 		}
 	}
@@ -68,10 +77,10 @@ void MainWindow::onWheelEvent(QWheelEvent * wEv)
 {
 	TransactionBundle& real = m_account.allTrans();
 
-	m_lastBal = ui->spinBox->value();
-	int step = 200 * qrand() / RAND_MAX;
+//	m_lastBal = ui->spinBox->value();
+	//int step = 200 * qrand() / RAND_MAX;
 	if(wEv->delta() > 0) {
-		ui->spinBox->setValue(m_lastBal + 0);
+		ui->spinBox->setValue(m_lastBal);
 		m_date = m_date.addDays(1);
 	}
 	else {
@@ -80,9 +89,14 @@ void MainWindow::onWheelEvent(QWheelEvent * wEv)
 			Transaction& newTrans = real.trans(m_ipb);
 			// is this transaction predicted in a way?
 			if (wasPredicted(newTrans)) {
+				qDebug() << "prediction that came true";
 				newTrans.flags = Transaction::CameTrue;
 			}
-			ui->spinBox->setValue(m_lastBal + newTrans.amountDbl());
+			else {
+				double delta = newTrans.amountDbl();
+				m_lastBal += delta;
+				ui->spinBox->setValue(m_lastBal);
+			}
 			// if new date, move forward
 			addDay = newTrans.jDay() - real.trans(m_ipb - 1).jDay();
 			qDebug() << newTrans.amountDbl() << newTrans.name;
@@ -95,8 +109,13 @@ void MainWindow::onWheelEvent(QWheelEvent * wEv)
 
 void MainWindow::updateChart()
 {
-	m_lastBal = ui->spinBox->value();
+	//m_lastBal = ui->spinBox->value();
 	double t = m_date.toJulianDay() - m_d0;
+	if(!ui->plot->graph(1)->data()->isEmpty()) {
+		QCPData d1 = ui->plot->graph(1)->data()->last();
+		if (t <= d1.key)
+			t = d1.key + smallInc;
+	}
 	qDebug() << t << m_lastBal;
 	ui->plot->graph(1)->addData(t, m_lastBal);
 
@@ -122,13 +141,13 @@ void MainWindow::makePredictiPlot()
 		int dayTo = m_date.daysTo(trans->date);
 		if(dayTo == 0) {
 			for (auto dat = ui->plot->graph(1)->data()->begin(); dat != ui->plot->graph(1)->data()->end(); ++dat) {
-				dat->value += trans->amountDbl();
+				//dat->value += trans->amountDbl();
 			}
-			minPredict = m_lastBal = ui->plot->graph(1)->data()->last().value;
+			m_lastBal = ui->plot->graph(1)->data()->last().value;
 			ui->spinBox->setValue(m_lastBal);
+			minPredict = m_lastBal;
 			//qDebug() << "predicted today" << trans->amountDbl();
 		}
-		double smallInc = 1e-3;
 		if(dayTo > 0 && dayTo < dayFuture) {
 			// first point predicted
 			if(ui->plot->graph(2)->data()->isEmpty()) {

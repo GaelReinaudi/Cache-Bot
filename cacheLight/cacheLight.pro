@@ -4,14 +4,15 @@ CONFIG += c++11
 INCLUDEPATH  += ./ \
 	$$PWD/../ \
 	$$PWD/../AccountChart/ \
-	$$PWD/../AccountChart/qcustomplot/
+	$$PWD/../AccountChart/qcustomplot /
+	$$PWD/../core/
 
 TARGET = cacheLight
 TEMPLATE = app
 
 SOURCES += \
-	main.cpp\
-	mainwindow.cpp\
+	main.cpp \
+	mainwindow.cpp \
 	$$PWD/../AccountChart/qcustomplot/qcustomplot.cpp \
 	$$PWD/../core/acdata.cpp
 

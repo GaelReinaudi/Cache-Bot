@@ -62,14 +62,16 @@ public:
 	QString name; // "YARROW HOTEL GRILL" or "STRIKE TECHNOLOG"
 	QDate date; // "2015-01-28"
 	QStringList categories; // ["Food and Drink", "Restaurants"] or ["Transfer", "Payroll"]
-	enum { None, Predicted, CameTrue } flags = None ;
 	union {
 		int hash = 0;
 		uchar b[4];
 	} nameHash;
 	int indexHash = -1;
 	// used to make the distance arbitrary far from anything
-	int dimensionOfVoid = 0;
+//	int dimensionOfVoid = 0;
+
+	enum Flag { None = 0x0, Predicted = 0x1, CameTrue = 0x2 };
+	int flags = 0;
 
 	//! json in
 	void read(const QJsonObject &json);
@@ -116,7 +118,7 @@ public:
 		d += qint64(wH) * qint64(absInt(nameHash.hash - other.nameHash.hash));
 		d += qint64(wIH) * qint64(absInt(indexHash - other.indexHash));
 		//LOG() << "dist " << d << " = day " << jDay() << "-" << other.jDay() << " kamount " << kamount << "-" << other.kamount << " hash " << nameHash.hash << "-" << other.nameHash.hash << endl;
-		d += qint64(1<<20) * qint64(absInt(dimensionOfVoid - other.dimensionOfVoid));
+//		d += qint64(1<<20) * qint64(absInt(dimensionOfVoid - other.dimensionOfVoid));
 		return d;
 	}
 
