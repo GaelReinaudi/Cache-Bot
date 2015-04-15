@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>421</width>
+    <width>785</width>
     <height>596</height>
    </rect>
   </property>
@@ -64,7 +64,11 @@
      </layout>
     </item>
     <item>
-     <widget class="QCustomPlot" name="plot" native="true"/>
+     <widget class="QCustomPlot" name="plot" native="true">
+      <property name="focusPolicy">
+       <enum>Qt::StrongFocus</enum>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -73,7 +77,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>421</width>
+     <width>785</width>
      <height>21</height>
     </rect>
    </property>

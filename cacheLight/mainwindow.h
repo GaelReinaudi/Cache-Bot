@@ -17,10 +17,12 @@ public:
 	explicit MainWindow(QWidget *parent = 0);
 	~MainWindow();
 	bool wasPredicted(Transaction& trans);
+	void keyPressEvent(QKeyEvent *event);
 
 protected slots:
 	void updateChart();
 	void makePredictiPlot();
+	void makePastiPlot();
 	void onWheelEvent(QWheelEvent*wEv);
 
 private:

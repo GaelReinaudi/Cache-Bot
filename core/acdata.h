@@ -17,7 +17,7 @@ double unKindaLog(double kindaLogAmount);
 unsigned int proximityHashString(const QString& str);
 
 #define MAX_HASH_LENGTH 64
-static const int MAX_TRANSACTION_PER_ACCOUNT = 1024 * 16;
+static const int MAX_TRANSACTION_PER_ACCOUNT = 1024 * 8;
 static const int KLA_MULTIPLICATOR = 128;
 static const int KA_MULTIPLICATOR = 1024;
 
@@ -68,7 +68,7 @@ public:
 	} nameHash;
 	int indexHash = -1;
 	// used to make the distance arbitrary far from anything
-//	int dimensionOfVoid = 0;
+	int dimensionOfVoid = 0;
 
 	enum Flag { None = 0x0, Predicted = 0x1, CameTrue = 0x2 };
 	int flags = 0;
@@ -118,7 +118,7 @@ public:
 		d += qint64(wH) * qint64(absInt(nameHash.hash - other.nameHash.hash));
 		d += qint64(wIH) * qint64(absInt(indexHash - other.indexHash));
 		//LOG() << "dist " << d << " = day " << jDay() << "-" << other.jDay() << " kamount " << kamount << "-" << other.kamount << " hash " << nameHash.hash << "-" << other.nameHash.hash << endl;
-//		d += qint64(1<<20) * qint64(absInt(dimensionOfVoid - other.dimensionOfVoid));
+		d += qint64(1<<20) * qint64(absInt(dimensionOfVoid - other.dimensionOfVoid));
 		return d;
 	}
 
@@ -198,7 +198,7 @@ public:
 
 	// loading the json file
 	// see this: https://qt-project.org/doc/qt-5-snapshot/qtcore-savegame-example.html
-	bool loadPlaidJson(QString jsonFile, int afterJday);
+	bool loadPlaidJson(QString jsonFile, int afterJday, int beforeJday);
 	bool toJson(QVector<Transaction> transactions, QString category);
 
 	QMap<uint, TransactionBundle*>& hashBundles() {
@@ -223,7 +223,7 @@ private:
 	{
 		Transactions() {}
 		//! json in
-		void read(const QJsonArray& npcArray, int afterJday = 0, const QVector<QString>& onlyAcIds = QVector<QString>());
+		void read(const QJsonArray& npcArray, int afterJday = 0, int beforeJday = 0, const QVector<QString>& onlyAcIds = QVector<QString>());
 		//! json out
 		void write(QJsonArray &npcArray) const;
 		Transaction* transArray() { return &m_transArray[0]; }

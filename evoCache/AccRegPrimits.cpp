@@ -106,7 +106,7 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 	QVector<Transaction> predictTrans;
 	if (ioContext.m_summaryStrList) {
 		m_bundle.clear();
-		predictTrans = targetTransactions(lastDate, lastDate.addDays(365));
+		predictTrans = targetTransactions(iniDate, lastDate.addDays(365));
 	}
 	m_consecMonth = 0;
 	m_consecMonthBeforeMissed = 0;
