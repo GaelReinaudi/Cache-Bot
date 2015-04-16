@@ -6,7 +6,7 @@ const int dayFuture = 60;
 const int playBackStartAgo = 210;
 
 double smallInc = 1e-3;
-double slushAmmount = 10000.0;
+double slushAmmount = 0*10000.0;
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
