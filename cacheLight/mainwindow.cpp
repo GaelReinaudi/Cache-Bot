@@ -6,6 +6,7 @@ const int dayFuture = 60;
 const int playBackStartAgo = 210;
 
 double smallInc = 1e-3;
+double slushAmmount = 10000.0;
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
@@ -30,6 +31,9 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->plot->addGraph();
 	ui->plot->graph(3)->setLineStyle(QCPGraph::lsStepLeft);
 	ui->plot->graph(3)->setPen(QPen(QBrush(Qt::lightGray), 5.0));
+
+	ui->plot->addGraph();
+	ui->plot->graph(4)->setPen(QPen((QColor(255, 0, 0, 128)), 5.0));
 
 //	connect(ui->spinBox, SIGNAL(editingFinished()), this, SLOT(updateChart()));
 	connect(ui->plot, SIGNAL(mouseWheel(QWheelEvent*)), this, SLOT(onWheelEvent(QWheelEvent*)));
@@ -99,9 +103,36 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 		qDebug() << newTrans.amountDbl() << newTrans.name;
 	}
 	m_date = m_date.addDays(addDay);
+	double posSlope = qMax(0.0, m_minSlope);
+	m_slushThreshold += posSlope * addDay / 10.0;
+	ui->spinSlushThresh->setValue(m_slushThreshold);
 	++m_ipb;
 
 	updateChart();
+}
+
+int MainWindow::computeMinSlopeOver(int numDays)
+{
+	m_minSlope = 9999.9;
+	int dayMin = 0;
+	double tToday = m_date.toJulianDay() - m_d0;
+	double yToday = m_slushThreshold;
+	QCPDataMap *pDat = ui->plot->graph(2)->data();
+	QMap<double, QCPData>::iterator it = pDat->begin();
+	while(it != pDat->end() && it->key < tToday + numDays + 1) {
+		if (it->key > tToday) {
+			double y = it->value - slushAmmount;
+			double slope = (y - yToday) / qMax(1.0, it->key - tToday);
+			if(slope < m_minSlope) {
+				m_minSlope = slope;
+				dayMin = it->key;
+			}
+		}
+		++it;
+	}
+	if (m_minSlope == 9999.9)
+		m_minSlope = 0.0;
+	return dayMin;
 }
 
 void MainWindow::onWheelEvent(QWheelEvent * wEv)
@@ -133,6 +164,7 @@ void MainWindow::updateChart()
 
 	makePredictiPlot();
 	makePastiPlot();
+	makeMinSlope();
 
 	ui->plot->xAxis->setRange(t - dayPast, t + dayFuture);
 	ui->plot->yAxis->rescale();
@@ -230,5 +262,22 @@ void MainWindow::makePastiPlot()
 			}
 		}
 	}
+}
+
+void MainWindow::makeMinSlope()
+{
+	QCPGraph* graph = ui->plot->graph(4);
+	graph->clearData();
+	QCPData d1 = ui->plot->graph(1)->data()->last();
+	if(graph->data()->isEmpty()) {
+		graph->addData(d1.key, m_slushThreshold);
+	}
+	double dayMin = computeMinSlopeOver(dayFuture) - d1.key;
+	double minSlope = qMax(0.0, m_minSlope);
+	graph->addData(d1.key + dayFuture, m_slushThreshold + minSlope * dayFuture);
+	graph->addData(d1.key + dayMin, m_slushThreshold + minSlope * dayMin);
+	graph->addData(d1.key + dayMin + 0.001, m_slushThreshold + minSlope * dayMin + slushAmmount);
+	graph->addData(d1.key + dayMin + 0.002, m_slushThreshold + minSlope * dayMin);
+	graph->addData(d1.key + dayFuture + 0.003, m_slushThreshold + minSlope * dayFuture);
 }
 
