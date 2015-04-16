@@ -104,7 +104,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 	}
 	m_date = m_date.addDays(addDay);
 	double posSlope = qMax(0.0, m_minSlope);
-	m_slushThreshold += posSlope * addDay / 10.0;
+	m_slushThreshold += posSlope * addDay / 2.0;
 	ui->spinSlushThresh->setValue(m_slushThreshold);
 	++m_ipb;
 
