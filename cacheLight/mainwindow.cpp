@@ -6,9 +6,10 @@ const int dayFuture = 60;
 const int playBackStartAgo = 210;
 
 double smallInc = 1e-3;
-double iniBalance = 10000.0;
+double iniBalance = 3000.0;
 double slushAmmount = 1000.0;
 QString jsonFile = "../cacheLight/chrisPurchases.json";
+//QString jsonFile = "../cacheLight/input.json";
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
@@ -41,6 +42,11 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(ui->plot, SIGNAL(mouseWheel(QWheelEvent*)), this, SLOT(onWheelEvent(QWheelEvent*)));
 
 	m_account.loadPlaidJson(jsonFile, 0, 0);
+	ui->costLive50SpinBox->setValue(m_account.costLiving(0.50));
+	ui->costLive75SpinBox->setValue(m_account.costLiving(0.75));
+	ui->costLive90SpinBox->setValue(m_account.costLiving(0.90));
+	ui->costLive95SpinBox->setValue(m_account.costLiving(0.95));
+	ui->costLive99SpinBox->setValue(m_account.costLiving(0.99));
 
 	// transaction at the starting date of the playback
 	TransactionBundle& real = m_account.allTrans();
@@ -107,7 +113,9 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 	}
 	m_date = m_date.addDays(addDay);
 	double posSlope = qMax(0.0, m_minSlope);
-	m_slushThreshold += posSlope * addDay / 2.0;
+	double extraToday = posSlope * addDay / 2.0;
+	m_slushThreshold += extraToday;
+	ui->extraTodaySpinBox->setValue(extraToday);
 	ui->spinSlushThresh->setValue(m_slushThreshold);
 	++m_ipb;
 

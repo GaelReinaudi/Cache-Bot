@@ -93,6 +93,27 @@ bool Account::toJson(QVector<Transaction> transactions, QString category)
 	return true;
 }
 
+double Account::costLiving(double withinPercentileCost)
+{
+	QVector<double> costs;
+	for (int i = 0; i < allTrans().count(); ++i) {
+		double amnt = allTrans().trans(i).amountDbl();
+		if (amnt < 0.0) {
+			costs.append(amnt);
+		}
+	}
+	qSort(costs);
+	double avg = 0.0;
+	int lastCostsInd = costs.count() * withinPercentileCost;
+	for (int i = 0; i < lastCostsInd; ++i) {
+		avg += costs[i];
+	}
+	double numDays = firstTransactionDate().daysTo(lastTransactionDate());
+	avg /= numDays;
+	qDebug() << "cost of living (L="<<lastCostsInd<<")" << avg;
+	return avg;
+}
+
 void Account::Transactions::read(const QJsonArray& npcArray, int afterJday, int beforeJday, const QVector<QString> &onlyAcIds /*= anyID*/) {
 	clear();
 	for (int npcIndex = 0; npcIndex < npcArray.size(); ++npcIndex) {

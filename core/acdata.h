@@ -216,6 +216,8 @@ public:
 	QDate firstTransactionDate() {
 		return m_allTransactions.transArray()[0].date;
 	}
+	// gives the daily average of outcome for the withinPercentileCost outgoing transactions
+	double costLiving(double withinPercentileCost);
 
 private:
 	QVector<QString> m_accountIds;
