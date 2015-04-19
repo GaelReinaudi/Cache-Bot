@@ -34,6 +34,7 @@ private:
 	double m_lastBal = 0.0;
 	double m_slushThreshold = 0.0;
 	double m_minSlope = 0.0;
+	double m_extraToday = -1.0;
 	int m_ipb = 0;
 	// account to read predicted transactions from
 	Account m_account;

@@ -7,7 +7,7 @@ const int playBackStartAgo = 210;
 
 double smallInc = 1e-3;
 double iniBalance = 3000.0;
-double slushAmmount = 1000.0;
+double slushAmmount = 500.0;
 QString jsonFile = "../cacheLight/chrisPurchases.json";
 //QString jsonFile = "../cacheLight/input.json";
 
@@ -127,8 +127,12 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 	m_date = m_date.addDays(addDay);
 	double posSlope = qMax(0.0, m_minSlope);
 	double extraToday = posSlope * addDay / 2.0;
-	m_slushThreshold += extraToday;
-	ui->extraTodaySpinBox->setValue(extraToday);
+	if(m_extraToday < 0.0)
+		m_extraToday = extraToday;
+	m_extraToday *= 0.8;
+	m_extraToday += 0.2 * extraToday;
+	m_slushThreshold += m_extraToday;
+	ui->extraTodaySpinBox->setValue(m_extraToday);
 	ui->spinSlushThresh->setValue(m_slushThreshold);
 
 	updateChart();
