@@ -93,12 +93,24 @@ bool MainWindow::wasPredicted(Transaction &trans)
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
+	int maxDayMove = 1;
+	int minDayMove = 0;
+	if(event->key() == Qt::Key_Up)
+		minDayMove = 1;
 	TransactionBundle& real = m_account.allTrans();
 	int addDay = 1;
 	if(m_ipb < real.count()) {
 		Transaction& newTrans = real.trans(m_ipb);
+		// if new date, move forward
+		addDay = newTrans.jDay() - m_date.toJulianDay();
+		qDebug() << newTrans.amountDbl() << newTrans.name << newTrans.date;
+		if (addDay > maxDayMove) {
+			// revert the soon to come increment so that we add a day and come back to this trans
+			--m_ipb;
+			addDay = maxDayMove;
+		}
 		// is this transaction predicted in a way?
-		if (wasPredicted(newTrans)) {
+		else if (wasPredicted(newTrans)) {
 			qDebug() << "prediction that came true";
 			newTrans.flags = Transaction::CameTrue;
 		}
@@ -107,9 +119,10 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 			m_lastBal += delta;
 			ui->spinBox->setValue(m_lastBal);
 		}
-		// if new date, move forward
-		addDay = newTrans.jDay() - m_date.toJulianDay();
-		qDebug() << newTrans.amountDbl() << newTrans.name << newTrans.date;
+		++m_ipb;
+	}
+	if (addDay < minDayMove) {
+		return keyPressEvent(event);
 	}
 	m_date = m_date.addDays(addDay);
 	double posSlope = qMax(0.0, m_minSlope);
@@ -117,7 +130,6 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 	m_slushThreshold += extraToday;
 	ui->extraTodaySpinBox->setValue(extraToday);
 	ui->spinSlushThresh->setValue(m_slushThreshold);
-	++m_ipb;
 
 	updateChart();
 }

@@ -99,7 +99,7 @@ double Account::costLiving(double withinPercentileCost)
 	for (int i = 0; i < allTrans().count(); ++i) {
 		double amnt = allTrans().trans(i).amountDbl();
 		if (amnt < 0.0) {
-			costs.append(amnt);
+			costs.append(-amnt);
 		}
 	}
 	qSort(costs);
