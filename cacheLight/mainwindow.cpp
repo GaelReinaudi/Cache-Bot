@@ -242,11 +242,11 @@ void MainWindow::makePredictiPlot()
 		}
 	}
 
-	if(minPredict <= 0) {
+	if(minPredict <= m_slushThreshold) {
 		ui->plot->setBackground(QBrush(Qt::red));
 	}
 	else {
-		int greenVal = qMin(4*255.0, minPredict) / 4;
+		int greenVal = qMin(4*255.0, minPredict - m_slushThreshold) / 4;
 		ui->plot->setBackground(QBrush(QColor(255 - greenVal, greenVal, 0)));
 	}
 }
