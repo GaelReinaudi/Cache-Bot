@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QDate>
 #include "core/acdata.h"
+#include "qcustomplot.h"
 
 namespace Ui {
 class MainWindow;
@@ -38,6 +39,7 @@ private:
 	int m_ipb = 0;
 	// account to read predicted transactions from
 	Account m_account;
+	QCPBars *pBars = 0;
 };
 
 #endif // MAINWINDOW_H

@@ -18,6 +18,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->setupUi(this);
 //	ui->plot->xAxis->setVisible(false);
 //	ui->plot->yAxis->setVisible(false);
+	ui->plot->yAxis2->setVisible(true);
 	ui->plot->yAxis->setSubTickCount(10);
 
 	ui->plot->addGraph();
@@ -37,6 +38,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	ui->plot->addGraph();
 	ui->plot->graph(4)->setPen(QPen((QColor(255, 0, 0, 128)), 5.0));
+
+	pBars = new QCPBars(ui->plot->xAxis, ui->plot->yAxis2);
+	ui->plot->addPlottable(pBars);
+	pBars->setName("Extra");
+	pBars->setPen(QColor(150, 222, 0));
+	pBars->setBrush(QColor(150, 222, 0, 70));
 
 //	connect(ui->spinBox, SIGNAL(editingFinished()), this, SLOT(updateChart()));
 	connect(ui->plot, SIGNAL(mouseWheel(QWheelEvent*)), this, SLOT(onWheelEvent(QWheelEvent*)));
@@ -140,6 +147,8 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 	m_slushThreshold += m_extraToday;
 	ui->extraTodaySpinBox->setValue(m_extraToday);
 	ui->spinSlushThresh->setValue(m_slushThreshold);
+	pBars->addData(m_date.toJulianDay() - m_d0, m_extraToday);
+	ui->plot->yAxis2->rescale();
 
 	updateChart();
 }
