@@ -42,8 +42,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	pBars = new QCPBars(ui->plot->xAxis, ui->plot->yAxis2);
 	ui->plot->addPlottable(pBars);
 	pBars->setName("Extra");
-	pBars->setPen(QColor(150, 222, 0));
-	pBars->setBrush(QColor(150, 222, 0, 70));
+	pBars->setPen(QColor(255, 131, 0));
+	pBars->setBrush(QColor(255, 131, 0, 50));
 
 //	connect(ui->spinBox, SIGNAL(editingFinished()), this, SLOT(updateChart()));
 	connect(ui->plot, SIGNAL(mouseWheel(QWheelEvent*)), this, SLOT(onWheelEvent(QWheelEvent*)));
@@ -137,12 +137,12 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 	if(m_extraToday < 0.0)
 		m_extraToday = extraToday;
 	if(extraToday > m_extraToday) {
-		m_extraToday *= 0.9;
-		m_extraToday += 0.1 * extraToday;
+		m_extraToday *= 0.95;
+		m_extraToday += 0.05 * extraToday;
 	}
 	else {
-		m_extraToday *= 0.8;
-		m_extraToday += 0.2 * extraToday;
+		m_extraToday *= 0.9;
+		m_extraToday += 0.1 * extraToday;
 	}
 	m_slushThreshold += m_extraToday;
 	ui->extraTodaySpinBox->setValue(m_extraToday);
