@@ -13,10 +13,12 @@ TEMPLATE = lib
 
 DEFINES += CACHEREST_LIBRARY
 
-SOURCES += cacherest.cpp
+SOURCES += cacherest.cpp \
+	httprequestworker.cpp
 
 HEADERS += cacherest.h\
-        cacherest_global.h
+        cacherest_global.h \
+    httprequestworker.h
 
 unix {
     target.path = /usr/lib

@@ -1,6 +1,7 @@
 #include "cacherest.h"
 
 
-CacheRest::CacheRest()
+CacheRest::CacheRest(QObject *parent)
+	: QObject(parent)
 {
 }
