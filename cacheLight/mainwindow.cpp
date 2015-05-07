@@ -163,7 +163,7 @@ int MainWindow::computeMinSlopeOver(int numDays)
 	QMap<double, QCPData>::iterator it = pDat->begin();
 	while(it != pDat->end() && it->key < tToday + numDays + 1) {
 		if (it->key > tToday) {
-			double effectiveSlushforDay = slushAmmount * (0.5 + 0.5 * (it->key - tToday) / 30.0);
+			double effectiveSlushforDay = slushAmmount * (0.5 + 1.0 * (it->key - tToday) / 30.0);
 			double y = it->value - effectiveSlushforDay;
 			double slope = (y - yToday) / qMax(1.0, it->key - tToday);
 			if(slope < m_minSlope) {
@@ -174,7 +174,7 @@ int MainWindow::computeMinSlopeOver(int numDays)
 		++it;
 	}
 	if (m_minSlope == 9999.9) {
-		double effectiveSlushforDay = slushAmmount * (0.5 + 0.5 * (numDays) / 30.0);
+		double effectiveSlushforDay = slushAmmount * (0.5 + 1.0 * (numDays) / 30.0);
 		m_minSlope = (m_lastBal - effectiveSlushforDay - m_slushThreshold) / numDays;// / 2.0;
 		dayMin = tToday + numDays;
 	}
@@ -320,7 +320,7 @@ void MainWindow::makeMinSlope()
 	}
 	double dayMin = computeMinSlopeOver(dayFuture) - tToday;
 	double minSlope = qMax(0.0, m_minSlope);
-	double effectiveSlushforDay = slushAmmount * (0.5 + 0.5 * (dayMin) / 30.0);
+	double effectiveSlushforDay = slushAmmount * (0.5 + 1.0 * (dayMin) / 30.0);
 	graph->addData(tToday + dayFuture, m_slushThreshold + minSlope * dayFuture);
 	graph->addData(tToday + dayMin, m_slushThreshold + minSlope * dayMin);
 	graph->addData(tToday + dayMin + 0.001, m_slushThreshold + minSlope * dayMin + effectiveSlushforDay);
