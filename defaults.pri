@@ -1,0 +1,2 @@
+INCLUDEPATH += $$PWD/cacheRest
+SRC_DIR = $$PWD

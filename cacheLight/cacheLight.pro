@@ -1,3 +1,5 @@
+include(../defaults.pri)
+
 QT += core gui widgets printsupport
 CONFIG += c++11
 
@@ -25,3 +27,4 @@ HEADERS  += \
 FORMS    += mainwindow.ui
 
 
+LIBS += -L../cacheRest -lcacheRest

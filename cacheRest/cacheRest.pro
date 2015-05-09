@@ -1,12 +1,7 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2015-05-06T20:31:41
-#
-#-------------------------------------------------
-
-QT       += network testlib
-
+include(../defaults.pri)
+QT       += network
 QT       -= gui
+CONFIG += static
 
 TARGET = cacheRest
 TEMPLATE = lib
@@ -20,7 +15,3 @@ HEADERS += cacherest.h\
         cacherest_global.h \
     httprequestworker.h
 
-unix {
-    target.path = /usr/lib
-    INSTALLS += target
-}
