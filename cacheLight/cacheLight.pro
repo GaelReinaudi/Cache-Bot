@@ -1,6 +1,10 @@
 include(../defaults.pri)
 
 QT += core gui widgets printsupport
+
+TARGET = cacheLight
+TEMPLATE = app
+
 CONFIG += c++11
 
 INCLUDEPATH  += ./ \
@@ -9,8 +13,6 @@ INCLUDEPATH  += ./ \
 	$$PWD/../AccountChart/qcustomplot /
 	$$PWD/../core/
 
-TARGET = cacheLight
-TEMPLATE = app
 
 SOURCES += \
 	main.cpp \
@@ -27,4 +29,4 @@ HEADERS  += \
 FORMS    += mainwindow.ui
 
 
-LIBS += -L../cacheRest -lcacheRest
+LIBS += -L../cacheRest/$${DEBUGRELEASE} -lcacheRest

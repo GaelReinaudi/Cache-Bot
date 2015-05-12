@@ -1,14 +1,15 @@
 include(../defaults.pri)
 TEMPLATE = app
 QT       += testlib
+QT       += network
 QT       -= gui
 
+CONFIG   += testCase
 CONFIG   += console
 CONFIG   -= app_bundle
-CONFIG   -= qt
 
 SOURCES += main.cpp
+HEADERS += main.h
 
-LIBS += \
-	-lunittest++ \
-	-L../cacheRest -lcacheRest
+LIBS += -L../cacheRest/$${DEBUGRELEASE} -lcacheRest
+

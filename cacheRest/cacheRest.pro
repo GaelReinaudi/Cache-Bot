@@ -1,10 +1,11 @@
 include(../defaults.pri)
-QT       += network
 QT       -= gui
-CONFIG += static
+QT       += network
 
 TARGET = cacheRest
 TEMPLATE = lib
+
+#CONFIG += static
 
 DEFINES += CACHEREST_LIBRARY
 

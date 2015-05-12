@@ -4,6 +4,8 @@
 #include "cacherest_global.h"
 #include "httprequestworker.h"
 
+// http://www.creativepulse.gr/en/blog/2014/restful-api-requests-using-qt-cpp-for-linux-mac-osx-ms-windows
+
 class CACHERESTSHARED_EXPORT CacheRest : public QObject
 {
 public:
