@@ -1,4 +1,5 @@
 #include <QtTest/QTest>
+#include <QSignalSpy>
 #include "cacherest.h"
 
 class MyFirstTest: public QObject
@@ -14,10 +15,10 @@ private slots:
 
 		QNetworkReply *reply = manager->get(request);
 		connect(reply, SIGNAL(readyRead()), this, SLOT(slotReadyRead()));
-		connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-				this, SLOT(slotError(QNetworkReply::NetworkError)));
-		connect(reply, SIGNAL(sslErrors(QList<QSslError>)),
-				this, SLOT(slotSslErrors(QList<QSslError>)));	}
+
+		QSignalSpy spy(reply, SIGNAL(readyRead()));
+		QCOMPARE(spy.count(), 1); // make sure the signal was emitted exactly one time
+	}
 
 	void myFirstTest()
 	{ QVERIFY(1 == 1); }
@@ -30,7 +31,10 @@ private slots:
 	void slotReadyRead() {
 		QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
 		if (reply) {
+			qDebug("slotReadyRead with reply");
 			qDebug(reply->readAll());
 		}
+		else
+			qDebug("no reply yet");
 	}
 };

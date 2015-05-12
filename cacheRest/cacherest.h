@@ -1,6 +1,7 @@
 #ifndef CACHEREST_H
 #define CACHEREST_H
 
+#include <QNetworkCookieJar>
 #include "cacherest_global.h"
 #include "httprequestworker.h"
 

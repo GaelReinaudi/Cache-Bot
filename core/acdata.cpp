@@ -32,8 +32,8 @@ bool Account::loadPlaidJson(QString jsonFile, int afterJday, int beforeJday) {
 		qWarning(QString("Couldn't open file %1").arg(QFileInfo(loadFile).absoluteFilePath()).toUtf8());
 		return false;
 	}
-	QByteArray saveData = loadFile.readAll();
-	QJsonDocument loadDoc(QJsonDocument::fromJson(saveData));
+	QByteArray jsonData = loadFile.readAll();
+	QJsonDocument loadDoc(QJsonDocument::fromJson(jsonData));
 	const QJsonObject& json = loadDoc.object();
 
 	QJsonArray npcArrayAccount = json["accounts"].toArray();
