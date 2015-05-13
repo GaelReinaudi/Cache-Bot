@@ -25,14 +25,18 @@ unsigned int proximityHashString(const QString &str) {
 	return ret;
 }
 
-bool Account::loadPlaidJson(QString jsonFile, int afterJday, int beforeJday) {
-	m_jsonFilePath = jsonFile;
-	QFile loadFile(m_jsonFilePath);
-	if (!loadFile.open(QIODevice::ReadOnly)) {
-		qWarning(QString("Couldn't open file %1").arg(QFileInfo(loadFile).absoluteFilePath()).toUtf8());
-		return false;
-	}
-	QByteArray jsonData = loadFile.readAll();
+void Account::loadJsonData(QByteArray jsonData, int afterJday, int beforeJday)
+{
+//	qDebug() << jsonData;
+//	QFile writeFile("test.out");
+//	if (!writeFile.open(QIODevice::WriteOnly|QIODevice::Append)) {
+//		qWarning(QString("Couldn't open file %1").arg(QFileInfo(writeFile).absoluteFilePath()).toUtf8());
+//		return;
+//	}
+//	writeFile.write(jsonData);
+//	writeFile.close();
+//	return;
+
 	QJsonDocument loadDoc(QJsonDocument::fromJson(jsonData));
 	const QJsonObject& json = loadDoc.object();
 
@@ -58,6 +62,17 @@ bool Account::loadPlaidJson(QString jsonFile, int afterJday, int beforeJday) {
 		m_allTrans.append(&m_allTransactions.transArray()[i]);
 	}
 	makeHashBundles();
+}
+
+bool Account::loadPlaidJson(QString jsonFile, int afterJday, int beforeJday) {
+	m_jsonFilePath = jsonFile;
+	QFile loadFile(m_jsonFilePath);
+	if (!loadFile.open(QIODevice::ReadOnly)) {
+		qWarning(QString("Couldn't open file %1").arg(QFileInfo(loadFile).absoluteFilePath()).toUtf8());
+		return false;
+	}
+	QByteArray jsonData = loadFile.readAll();
+	loadJsonData(jsonData, beforeJday, afterJday);
 
 	return true;
 }

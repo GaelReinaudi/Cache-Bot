@@ -23,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	manager->setCookieJar(cookieJar);
 	QNetworkRequest request;
 	request.setUrl(QUrl("https://cache-heroku.herokuapp.com/login"));
+	request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
 	QNetworkReply *reply = manager->post(request, "email=cache-bot&password=)E[ls$=1IC1A$}Boji'W@zOX_<H<*n");
 	connect(reply, SIGNAL(readyRead()), this, SLOT(slotReadyRead()));

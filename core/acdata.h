@@ -198,7 +198,8 @@ public:
 
 	// loading the json file
 	// see this: https://qt-project.org/doc/qt-5-snapshot/qtcore-savegame-example.html
-	bool loadPlaidJson(QString jsonFile, int afterJday, int beforeJday);
+	bool loadPlaidJson(QString jsonFile, int afterJday = 0, int beforeJday = 0);
+	void loadJsonData(QByteArray jsonData, int afterJday = 0, int beforeJday = 0);
 	bool toJson(QVector<Transaction> transactions, QString category);
 
 	QMap<uint, TransactionBundle*>& hashBundles() {
