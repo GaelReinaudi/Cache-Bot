@@ -2,39 +2,69 @@
 #include <QSignalSpy>
 #include "cacherest.h"
 
-class MyFirstTest: public QObject
+class ServerTest: public QObject
 {
 	Q_OBJECT
-private slots:
-	void testGET() {
-		// curl -ipv4 --insecure --cookie-jar jarfile -d "email=gael.reinaudi@gmail.com&password=wwwwwwww" -X POST https://cache-heroku.herokuapp.com/login
-		// curl -ipv4 --insecure --cookie jarfile -H "Accept: application/json" -X GET https://cache-heroku.herokuapp.com:443/bank/f202f5004003ff51b7cc7e60523b7a43d541b38246c4abc0b765306e977126540f731d94478de121c44d5c214382d36cb3c1f3c4e117a532fc78a8b078c320bb24f671bbd0199ea599c15349d2b3d820
-		QNetworkAccessManager *manager = new QNetworkAccessManager(this);
-		QNetworkRequest request;
-		request.setUrl(QUrl("https://cache-heroku.herokuapp.com/login"));
-
-		QNetworkReply *reply = manager->get(request);
-		connect(reply, SIGNAL(readyRead()), this, SLOT(slotReadyRead()));
-
-		QSignalSpy spy(reply, SIGNAL(readyRead()));
-		QCOMPARE(spy.count(), 1); // make sure the signal was emitted exactly one time
+public:
+	ServerTest() {
+		m_cacheRest = new CacheRest(this);
 	}
 
-	void myFirstTest()
-	{ QVERIFY(1 == 1); }
-	void mySecondTest()
-	{ QVERIFY(1 != 2); }
-	void cleanupTestCase()
-	{ qDebug("called after myFirstTest and mySecondTest"); }
-
 private slots:
-	void slotReadyRead() {
-		QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
-		if (reply) {
-			qDebug("slotReadyRead with reply");
-			qDebug(reply->readAll());
-		}
-		else
-			qDebug("no reply yet");
+	void wrongCredentials() {
+		m_cacheRest->login("InvalidUser", "InvalidPassword");
+		QSignalSpy spyLogin(m_cacheRest->worker, SIGNAL(repliedLogin(QString)));
+		QVERIFY(spyLogin.wait());
+		QCOMPARE(spyLogin.count(), 1); // make sure the signal was emitted exactly one time
+		QList<QVariant> arguments = spyLogin.takeFirst();
+		QVERIFY(arguments.at(0).toString() == "Moved Temporarily. Redirecting to /login");
+
+		m_cacheRest->getUserIds();
+		QSignalSpy spyIds(m_cacheRest->worker, SIGNAL(repliedIds(QString)));
+		QVERIFY(spyIds.wait());
+		QCOMPARE(spyIds.count(), 1); // make sure the signal was emitted exactly one time
+		arguments = spyIds.takeFirst();
+		QVERIFY(arguments.at(0).toString() == "{\"error\":\"Not authenticated for this route.\"}");
 	}
+
+	void getIds() {
+		m_cacheRest->login("cache-bot", ")E[ls$=1IC1A$}Boji'W@zOX_<H<*n");
+		QSignalSpy spyLogin(m_cacheRest->worker, SIGNAL(repliedLogin(QString)));
+		QVERIFY(spyLogin.wait());
+		QCOMPARE(spyLogin.count(), 1); // make sure the signal was emitted exactly one time
+		QList<QVariant> arguments = spyLogin.takeFirst();
+		QVERIFY(arguments.at(0).toString() == "Moved Temporarily. Redirecting to /login");
+
+		m_cacheRest->getUserIds();
+		QSignalSpy spyIds(m_cacheRest->worker, SIGNAL(repliedIds(QString)));
+		QVERIFY(spyIds.wait());
+		QCOMPARE(spyIds.count(), 1);
+		arguments = spyIds.takeFirst();
+		m_userIds = arguments.at(0).toString();
+		QVERIFY(arguments.at(0).toString().startsWith("{\"user_ids\":["));
+	}
+
+	void verifyChrisId() {
+		QVERIFY(m_userIds.contains("552d7ba7be082c0300169ed5"));
+	}
+
+	void verifyGaelId() {
+		QVERIFY(m_userIds.contains("55496831ceb5b20300ea0cf1"));
+	}
+
+
+	void getUseraData() {
+		m_cacheRest->getUserData("55496831ceb5b20300ea0cf1");
+		QSignalSpy spyUserData(m_cacheRest->worker, SIGNAL(repliedUserData(QString)));
+		QVERIFY(spyUserData.wait(10000));
+		QCOMPARE(spyUserData.count(), 1);
+		QList<QVariant> arguments = spyUserData.takeFirst();
+		//qDebug() << arguments.at(0).toString();
+		QVERIFY(arguments.at(0).toString().startsWith("{\"accounts\":"));
+	}
+
+private:
+	CacheRest* m_cacheRest = 0;
+	QString m_userIds;
 };
+

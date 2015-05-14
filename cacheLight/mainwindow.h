@@ -6,6 +6,7 @@
 #include "core/acdata.h"
 #include "qcustomplot.h"
 #include "cacherest.h"
+#include <QNetworkCookieJar>
 
 namespace Ui {
 class MainWindow;

@@ -3,6 +3,7 @@
 #include <QUrl>
 #include <QFileInfo>
 #include <QBuffer>
+#include <QNetworkCookieJar>
 
 
 HttpRequestInput::HttpRequestInput() {
@@ -40,7 +41,11 @@ HttpRequestWorker::HttpRequestWorker(QObject *parent)
 {
 	qsrand(QDateTime::currentDateTime().toTime_t());
 
+	// curl -ipv4 --insecure --cookie-jar jarfile -d "email=gael.reinaudi@gmail.com&password=wwwwwwww" -X POST https://cache-heroku.herokuapp.com/login
+	// curl -ipv4 --insecure --cookie jarfile -H "Accept: application/json" -X GET https://cache-heroku.herokuapp.com:443/bank/f202f5004003ff51b7cc7e60523b7a43d541b38246c4abc0b765306e977126540f731d94478de121c44d5c214382d36cb3c1f3c4e117a532fc78a8b078c320bb24f671bbd0199ea599c15349d2b3d820
 	manager = new QNetworkAccessManager(this);
+	QNetworkCookieJar* cookieJar = new QNetworkCookieJar(0);
+	manager->setCookieJar(cookieJar);
 	connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(on_manager_finished(QNetworkReply*)));
 }
 
@@ -92,7 +97,7 @@ QString HttpRequestWorker::http_attribute_encode(QString attribute_name, QString
 	return QString("%1=\"%2\"; %1*=utf-8''%3").arg(attribute_name, result, result_utf8);
 }
 
-void HttpRequestWorker::execute(HttpRequestInput *input) {
+QNetworkReply* HttpRequestWorker::execute(HttpRequestInput *input) {
 
 	// reset variables
 
@@ -247,26 +252,27 @@ void HttpRequestWorker::execute(HttpRequestInput *input) {
 		request.setHeader(QNetworkRequest::ContentTypeHeader, "multipart/form-data; boundary=" + boundary);
 	}
 
+	QNetworkReply* reply = 0;
 	if (input->http_method == "GET") {
-		manager->get(request);
+		reply = manager->get(request);
 	}
 	else if (input->http_method == "POST") {
-		manager->post(request, request_content);
+		reply = manager->post(request, request_content);
 	}
 	else if (input->http_method == "PUT") {
-		manager->put(request, request_content);
+		reply = manager->put(request, request_content);
 	}
 	else if (input->http_method == "HEAD") {
-		manager->head(request);
+		reply = manager->head(request);
 	}
 	else if (input->http_method == "DELETE") {
-		manager->deleteResource(request);
+		reply = manager->deleteResource(request);
 	}
 	else {
 		QBuffer buff(&request_content);
-		manager->sendCustomRequest(request, input->http_method.toLatin1(), &buff);
+		reply = manager->sendCustomRequest(request, input->http_method.toLatin1(), &buff);
 	}
-
+	return reply;
 }
 
 void HttpRequestWorker::on_manager_finished(QNetworkReply *reply) {
@@ -281,4 +287,17 @@ void HttpRequestWorker::on_manager_finished(QNetworkReply *reply) {
 	reply->deleteLater();
 
 	emit on_execution_finished(this);
+
+//	qDebug(response);
+	if(reply->request().url() == QUrl(LoginRoute)) {
+		emit repliedLogin(response);
+	}
+	else if(reply->request().url() == QUrl(IdsRoute)) {
+		emit repliedIds(response);
+	}
+	//if(reply->request().url().toString().startsWith(QString(UserDataRoute).chop(2))) {
+	else {
+		emit repliedUserData(response);
+	}
 }
+

@@ -1,7 +1,6 @@
 #ifndef CACHEREST_H
 #define CACHEREST_H
 
-#include <QNetworkCookieJar>
 #include "cacherest_global.h"
 #include "httprequestworker.h"
 
@@ -13,6 +12,10 @@ public:
 	CacheRest(QObject *parent = 0);
 
 public:
+	void login(QString username, QString password);
+	void getUserIds();
+	void getUserData(QString userId);
+
 	void testGET() {
 		QString url_str = "http://www.example.com/path/to/page.php";
 
@@ -34,6 +37,8 @@ public:
 		connect(worker, SIGNAL(on_execution_finished(HttpRequestWorker*)), this, SLOT(handle_result(HttpRequestWorker*)));
 		worker->execute(&input);
 	}
+
+	HttpRequestWorker *worker = 0;
 };
 
 #endif // CACHEREST_H

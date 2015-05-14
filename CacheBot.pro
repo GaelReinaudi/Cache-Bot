@@ -3,7 +3,7 @@ CONFIG += ordered
 
 SUBDIRS = \
     cacheRest \
-    cacheLight \
+#    cacheLight \
 	tests
 	
 cacheLight.depends = cacheRest

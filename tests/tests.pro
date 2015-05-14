@@ -4,9 +4,10 @@ QT       += testlib
 QT       += network
 QT       -= gui
 
-CONFIG   += testCase
-CONFIG   += console
-CONFIG   -= app_bundle
+CONFIG   += c++11
+#CONFIG   += testCase
+#CONFIG   += console
+#CONFIG   -= app_bundle
 
 SOURCES += main.cpp
 HEADERS += main.h
