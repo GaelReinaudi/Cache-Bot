@@ -5,6 +5,9 @@
 #include "puppy/Puppy.hpp"
 #include "EvolutionSpinner.h"
 
+static const int MAX_NUM_FEATURES = 20;
+static int LIMIT_NUM_FEATURES = 1;
+
 class Add : public Puppy::Primitive
 {
 public:
@@ -18,7 +21,21 @@ public:
 		lResult += lArg2;
 	}
 };
-
+class Add4 : public Puppy::Primitive
+{
+public:
+	Add4() : Primitive(4, "ADD4") { }
+	virtual ~Add4() {}
+	virtual void execute(void* outDatum, Puppy::Context& ioContext)  {
+		double& lResult = *(double*)outDatum;
+		double lArg2, lArg3, lArg4;
+		getArgument(0, &lResult, ioContext);
+		getArgument(1, &lArg2, ioContext);
+		getArgument(2, &lArg3, ioContext);
+		getArgument(3, &lArg4, ioContext);
+		lResult += lArg2 + lArg3 + lArg4;
+	}
+};
 class Subtract : public Puppy::Primitive
 {
 public:
@@ -32,7 +49,6 @@ public:
 		lResult -= lArg2;
 	}
 };
-
 class Multiply : public Puppy::Primitive
 {
 public:
@@ -46,7 +62,6 @@ public:
 		lResult *= lArg2;
 	}
 };
-
 class Divide : public Puppy::Primitive
 {
 public:
@@ -63,11 +78,10 @@ public:
 		}
 	}
 };
-
 class Cosinus : public Puppy::Primitive
 {
 public:
-	Cosinus() : Primitive(2, "COS") { }
+	Cosinus() : Primitive(1, "COS") { }
 	virtual ~Cosinus() { }
 	virtual void execute(void* outDatum, Puppy::Context& ioContext) {
 		double& lResult = *(double*)outDatum;
@@ -76,50 +90,145 @@ public:
 	}
 };
 
-
-
 class AccountFeature : public Puppy::Primitive
 {
 public:
 	AccountFeature(unsigned int inNumberArguments, std::string inName, EvolutionSpinner* evoSpinner)
 		: Primitive(inNumberArguments, inName)
 		, m_evoSpinner(evoSpinner)
-	{
-
-	}
-	virtual ~AccountFeature() {	}
+	{}
+	virtual ~AccountFeature() {}
 	virtual void execute(void* outDatum, Puppy::Context& ioContext) {
 		Q_UNUSED(outDatum);
 		Q_UNUSED(ioContext);
-		getArgument(0, &m_endAgo, ioContext);
-		getArgument(1, &m_dur, ioContext);
 	}
-
-	bool isFeature() const override {
-		return true;
-	}
-
-	EvolutionSpinner *evoSpinner() const {
-		return m_evoSpinner;
-	}
+	bool isFeature() const override { return true; }
+	EvolutionSpinner *evoSpinner() const { return m_evoSpinner; }
 
 protected:
 	EvolutionSpinner* m_evoSpinner = 0;
-	double m_endAgo = 0;
-	double m_dur = 0;
+	TransactionBundle m_bundle;
+	// if any, the hash to filter the transaction on
+	int m_filterHash = -1;
 };
 
-class FeatureSalary : public AccountFeature
+class CacheBotRootPrimitive : public AccountFeature
 {
 public:
-	FeatureSalary(EvolutionSpinner* evoSpinner) : AccountFeature(6, "SALARY", evoSpinner) { }
-	virtual ~FeatureSalary() { }
-	virtual void execute(void* outDatum, Puppy::Context& ioContext);
+	CacheBotRootPrimitive(EvolutionSpinner* evoSpinner)
+		: AccountFeature(MAX_NUM_FEATURES, "ROOT", evoSpinner)
+	{ }
+	virtual ~CacheBotRootPrimitive() { }
+	bool isRoot() const override {
+		return true;
+	}
+	void execute(void* outDatum, Puppy::Context& ioContext) override {
+		double& lResult = *(double*)outDatum;
+		lResult = 0.0;
+		double lArgi;
+		for(unsigned int i = 0; i < LIMIT_NUM_FEATURES; ++i) {
+			getArgument(i, &lArgi, ioContext);
+			lResult += lArgi;
+		}
+	}
+};
+
+class DummyFeature : public AccountFeature
+{
+public:
+	DummyFeature(EvolutionSpinner* evoSpinner, QString featureName = "Dummy")
+			: AccountFeature(6, featureName.toStdString(), evoSpinner)
+	{}
+};
+
+class FeaturePeriodicAmount : public AccountFeature
+{
+public:
+	FeaturePeriodicAmount(EvolutionSpinner* evoSpinner, QString featureName = "FixedIncome")
+		: AccountFeature(6, featureName.toStdString(), evoSpinner)
+	{ }
+	~FeaturePeriodicAmount() { }
+
+	virtual void execute(void* outDatum, Puppy::Context& ioContext) { Q_UNUSED(outDatum); Q_UNUSED(ioContext); }
+	virtual void getArgs(Puppy::Context &ioContext) { Q_UNUSED(ioContext); }
+	virtual void cleanArgs() {}
+};
+
+class FeatureBiWeeklyAmount : public FeaturePeriodicAmount
+{
+public:
+	FeatureBiWeeklyAmount(EvolutionSpinner* evoSpinner)
+		: FeaturePeriodicAmount(evoSpinner, "BiWeeklyIncome")
+	{ }
+	virtual void cleanArgs() override {
+		FeaturePeriodicAmount::cleanArgs();
+	}
+};
+
+class FeatureMonthlyAmount : public FeaturePeriodicAmount
+{
+public:
+	FeatureMonthlyAmount(EvolutionSpinner* evoSpinner)
+		: FeaturePeriodicAmount(evoSpinner, "MonthlyAmount")
+	{ }
+	void getArgs(Puppy::Context &ioContext) override {
+		// if we are forcing a given hashed bundle
+		m_filterHash = -1;
+		int filterHashIndex = ioContext.filterHashIndex;
+		if(filterHashIndex >= 0) {
+			m_filterHash = ioContext.m_pAccount->hashBundles().keys()[filterHashIndex];
+			int avgKLA = ioContext.m_pAccount->hashBundles()[m_filterHash]->averageKLA();
+			std::string nodeName = QString("h%1").arg(m_filterHash).toStdString();
+			std::string nodeKLA = QString("kla%1").arg(avgKLA).toStdString();
+			bool ok = tryReplaceArgumentNode(2, nodeName.c_str(), ioContext);
+			ok &= tryReplaceArgumentNode(3, nodeKLA.c_str(), ioContext);
+			if(!ok) {
+				LOG() << "Could not replace the node with " << nodeName.c_str() << endl;
+			}
+		}
+
+		double a = 0;
+		int ind = -1;
+		getArgument(++ind, &a, ioContext);
+		m_dayOfMonth = a;
+		getArgument(++ind, &a, ioContext);
+		m_kla = a;
+
+		int bInd = -1;
+		getArgument(++ind, &a, ioContext);
+		m_b[++bInd] = a;
+		getArgument(++ind, &a, ioContext);
+		m_b[++bInd] = a;
+		getArgument(++ind, &a, ioContext);
+		m_b[++bInd] = a;
+		getArgument(++ind, &a, ioContext);
+		m_b[++bInd] = a;
+	}
+	void cleanArgs() override {
+		FeaturePeriodicAmount::cleanArgs();
+		m_dayOfMonth %= 31;
+		++m_dayOfMonth;
+	}
+	void execute(void* outDatum, Puppy::Context& ioContext) override;
+
+	double billProbability() const {
+		double proba = m_fitness;
+		proba *= m_consecMonthBeforeMissed;
+		proba /= 4 + 2 * m_consecMissed;
+		return proba;
+	}
+
+	QVector<Transaction> targetTransactions(QDate iniDate, QDate lastDate);
+
 protected:
-	double m_amount = 0;
-	double m_every = 15;
-	double m_amountDelta = 100;
-	double m_dayDelta = 3;
+	int m_dayOfMonth = 0;
+	int m_kla = 0;
+	int m_b[4];
+	// characteristics
+	double m_fitness = 0.0;
+	int m_consecMonthBeforeMissed = 0;
+	int m_consecMonth = 0;
+	int m_consecMissed = 0;
 };
 
 #endif // ACCREGPRIMITS_H

@@ -1,0 +1,6436 @@
+{
+  "accounts": [
+    {
+      "_id": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "meta": {
+        "limit": null,
+        "name": "BofA Core Checking",
+        "number": "9827",
+        "official_name": "BofA Core Checking"
+      },
+      "balance": {
+        "available": 3534.47,
+        "current": 1094.67
+      },
+      "type": "depository",
+      "institution_type": "bofa",
+      "_item": "m16OQaV5veuKgmgKZo06uVEPbRLMrZFmAmPXM"
+    },
+    {
+      "_id": "pB1Rn0EgreIvm0mvKLE1IArOoX9m98u7eVe8L",
+      "meta": {
+        "limit": null,
+        "name": "Regular Savings",
+        "number": "1983",
+        "official_name": "Regular Savings"
+      },
+      "balance": {
+        "available": 500,
+        "current": 1000
+      },
+      "type": "depository",
+      "institution_type": "bofa",
+      "_item": "m16OQaV5veuKgmgKZo06uVEPbRLMrZFmAmPXM"
+    },
+    {
+      "_id": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "meta": {
+        "official_name": "BankAmericard Rewards Platinum Plus Visa",
+        "number": "2187",
+        "name": "BankAmericard Rewards Platinum Plus Visa",
+        "limit": 5000
+      },
+      "balance": {
+        "available": 1102.44,
+        "current": 1102.44
+      },
+      "type": "credit",
+      "institution_type": "bofa",
+      "_user": "R0rDk6LVgEfVnanVk5MDtZLDpmkzB0FKpK3NV",
+      "_item": "m16OQaV5veuKgmgKZo06uVEPbRLMrZFmAmPXM"
+    }
+  ],
+  "transactions": [
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "BnwgbQ7vA5ID6n6DxBeYu6zPA9Yg4zixgovJQ",
+      "amount": 4.25,
+      "date": "2015-03-18",
+      "name": "La Boulange de Cole",
+      "meta": {
+        "location": {
+          "address": "1000 Cole St",
+          "city": "San Francisco",
+          "coordinates": {
+            "lat": 37.76475885438304,
+            "lon": -122.4496221542358
+          },
+          "state": "CA",
+          "zip": "94117"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants",
+        "Cafe"
+      ],
+      "category_id": "13005047",
+      "score": {
+        "location": {
+          "address": 0.5,
+          "city": 1,
+          "state": 1,
+          "zip": 0.5
+        },
+        "name": 0.5
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "1aby3ZKVrqCNjVjN3Xk3h08dQ1g0RKC6ao19M",
+      "amount": 11.58,
+      "date": "2015-03-17",
+      "name": "Alpha Market",
+      "meta": {
+        "location": {
+          "address": "960  Cole St",
+          "city": "San Francisco",
+          "coordinates": {
+            "lat": 37.765053,
+            "lon": -122.449524
+          },
+          "state": "CA",
+          "zip": "94117"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Shops",
+        "Food and Beverage Store"
+      ],
+      "category_id": "19025000",
+      "score": {
+        "location": {
+          "address": 1,
+          "city": 1,
+          "state": 1,
+          "zip": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "nPLMQROo0eUkRaRk80j0iOwLd4RxpbTjY1qYw",
+      "amount": 758.56,
+      "date": "2015-03-16",
+      "name": "Online Banking payment to CRD 2187 Confirmation#",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "digital"
+      },
+      "category": [
+        "Transfer"
+      ],
+      "category_id": "21000000",
+      "score": {
+        "location": {},
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "QvjLKw69gVfK040KNZVZSO3Maow81nT95Ab5x",
+      "amount": 33.98,
+      "date": "2015-03-16",
+      "name": "Whole Foods",
+      "meta": {
+        "location": {
+          "address": "1150 Ocean Ave",
+          "city": "San Francisco",
+          "coordinates": {
+            "lat": 37.723976,
+            "lon": -122.455009
+          },
+          "state": "CA",
+          "store_number": "690",
+          "zip": "94112"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Shops",
+        "Supermarkets and Groceries"
+      ],
+      "category_id": "19047000",
+      "score": {
+        "location": {
+          "address": 0.2,
+          "city": 1,
+          "state": 1,
+          "zip": 0.2
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "7oMj0NrL6ACmB0BmNA7Ai1rZgmVpzNc8abzam",
+      "amount": -3.26,
+      "date": "2015-03-16",
+      "name": "INTEREST REF PURCHASES MAR",
+      "meta": {
+        "location": {
+          "store_number": "2015"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "unresolved"
+      },
+      "score": {
+        "location": {},
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "9gR4rKa1D0IAZVZAJrXrTzyjVvpanJU6LvrLA",
+      "amount": -0.06,
+      "date": "2015-03-16",
+      "name": "INTEREST REF CASH ADVANCES MAR",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "VaJBjyqwgVCjgmgj07K7t4Z3pVRP6EFndPade",
+      "amount": -758.56,
+      "date": "2015-03-16",
+      "name": "Online payment from CHK 9",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "Okvw35dgEVf3yjy31JXJcxLY9Eb613UpzQNzy",
+      "amount": 1.2,
+      "date": "2015-03-16",
+      "name": "BART-CLIPPER W OAKLAND",
+      "meta": {
+        "location": {
+          "state": "CA"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "score": {
+        "location": {
+          "state": 1
+        },
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "gnXoQg54BeI1xYx1aP7Ps8E7nd0DRQU6vrbv7",
+      "amount": 5,
+      "date": "2015-03-16",
+      "name": "CLIPPER SERVICE",
+      "meta": {
+        "location": {
+          "city": "San Francisco",
+          "state": "CA",
+          "store_number": "3106"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "score": {
+        "location": {
+          "city": 1,
+          "state": 1
+        },
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "omDEQBMbjecA010AYNxNTYVpyE0z7oTrnRknv",
+      "amount": 7.37,
+      "date": "2015-03-16",
+      "name": "Walgreens",
+      "meta": {
+        "location": {
+          "address": "1899 Fillmore St",
+          "city": "San Francisco",
+          "coordinates": {
+            "lat": 37.786762,
+            "lon": -122.433716
+          },
+          "state": "CA",
+          "store_number": "6557",
+          "zip": "94115"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Shops",
+        "Pharmacies"
+      ],
+      "category_id": "19043000",
+      "score": {
+        "location": {
+          "address": 0.2,
+          "city": 1,
+          "state": 1,
+          "zip": 0.2
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "R0rDk6LVgEfVnanVk595Seg5jxOP7mt9pXdpm",
+      "amount": 3.28,
+      "date": "2015-03-16",
+      "name": "Walgreens",
+      "meta": {
+        "location": {
+          "address": "1899 Fillmore St",
+          "city": "San Francisco",
+          "coordinates": {
+            "lat": 37.786762,
+            "lon": -122.433716
+          },
+          "state": "CA",
+          "store_number": "6557",
+          "zip": "94115"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Shops",
+        "Pharmacies"
+      ],
+      "category_id": "19043000",
+      "score": {
+        "location": {
+          "address": 0.2,
+          "city": 1,
+          "state": 1,
+          "zip": 0.2
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "E6DV91OrjgfMkPkMmKRKcxjrXadN1DUdeO5eR",
+      "amount": 10.86,
+      "date": "2015-03-16",
+      "name": "Val de Cole",
+      "meta": {
+        "location": {
+          "address": "906 Cole St",
+          "city": "San Francisco",
+          "coordinates": {
+            "lat": 37.76562621065989,
+            "lon": -122.4498283876123
+          },
+          "state": "CA",
+          "zip": "94117"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Shops",
+        "Food and Beverage Store",
+        "Beer, Wine and Spirits"
+      ],
+      "category_id": "19025004",
+      "score": {
+        "location": {
+          "address": 0.5,
+          "city": 1,
+          "state": 1,
+          "zip": 0.5
+        },
+        "name": 0.5
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "MykXqrNmgYcN1m1Noa4auV4Az8NgrOH07vk7Y",
+      "_pendingTransaction": "MykXqrNmgYcN1m1Noa4rSZXdbkVB33FpPn18P",
+      "amount": 1.95,
+      "date": "2015-03-16",
+      "name": "Peet's Coffee & Tea",
+      "meta": {
+        "location": {
+          "state": "CA",
+          "store_number": "21502"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants",
+        "Coffee Shop"
+      ],
+      "category_id": "13005043",
+      "score": {
+        "location": {
+          "state": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "bOEx71aALeTdAmAd9BRBSJBzernKovUPVkdVQ",
+      "amount": 3.25,
+      "date": "2015-03-16",
+      "name": "Walgreens",
+      "meta": {
+        "location": {
+          "address": "1899 Fillmore St",
+          "city": "San Francisco",
+          "coordinates": {
+            "lat": 37.786762,
+            "lon": -122.433716
+          },
+          "state": "CA",
+          "store_number": "6557",
+          "zip": "94115"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Shops",
+        "Pharmacies"
+      ],
+      "category_id": "19043000",
+      "score": {
+        "location": {
+          "address": 0.2,
+          "city": 1,
+          "state": 1,
+          "zip": 0.2
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "E6DV91OrjgfMkPkMmKRMCQQxNaZgbDT6zYyYb",
+      "amount": 12.97,
+      "date": "2015-03-13",
+      "name": "Alpha Market",
+      "meta": {
+        "location": {
+          "address": "960  Cole St",
+          "city": "San Francisco",
+          "coordinates": {
+            "lat": 37.765053,
+            "lon": -122.449524
+          },
+          "state": "CA",
+          "zip": "94117"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Shops",
+        "Food and Beverage Store"
+      ],
+      "category_id": "19025000",
+      "score": {
+        "location": {
+          "address": 1,
+          "city": 1,
+          "state": 1,
+          "zip": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "MykXqrNmgYcN1m1Noa4NUZZVg8jydOHdE1j1r",
+      "amount": 8,
+      "date": "2015-03-13",
+      "name": "GP*TRADING POST MODERN",
+      "meta": {
+        "location": {
+          "city": "San Francisco",
+          "state": "CA"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants"
+      ],
+      "category_id": "13005000",
+      "score": {
+        "location": {
+          "city": 1,
+          "state": 1
+        },
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "R0rDk6LVgEfVnanVk59otjv9gNbELNtq1Ekgw",
+      "amount": 25,
+      "date": "2015-03-12",
+      "name": "LATE FEE FOR PAYMENT DUE",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "unresolved"
+      },
+      "score": {
+        "location": {},
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "aVMag14k6pHVYKYVwr3qcKwzqRvw8ASy465Ae",
+      "amount": 2.99,
+      "date": "2015-03-11",
+      "name": "Walgreens",
+      "meta": {
+        "location": {
+          "address": "1899 Fillmore St",
+          "city": "San Francisco",
+          "coordinates": {
+            "lat": 37.786762,
+            "lon": -122.433716
+          },
+          "state": "CA",
+          "store_number": "6557",
+          "zip": "94115"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Shops",
+        "Pharmacies"
+      ],
+      "category_id": "19043000",
+      "score": {
+        "location": {
+          "address": 0.2,
+          "city": 1,
+          "state": 1,
+          "zip": 0.2
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "E6DV91OrjgfMkPkMmKRAU1eZVdz36xHJ5g8no",
+      "amount": 67.88,
+      "date": "2015-03-10",
+      "name": "BILL PAYMENT",
+      "meta": {
+        "payment_processor": "AT&T",
+        "location": {
+          "state": "TX"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "score": {
+        "location": {
+          "state": 1
+        },
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "R0rDk6LVgEfVnanVk59qI7LbYOdy6eS4dOoqj",
+      "amount": 18,
+      "date": "2015-03-10",
+      "name": "HEROKU",
+      "meta": {
+        "location": {
+          "state": "CA"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "score": {
+        "location": {
+          "state": 1
+        },
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "QvjLKw69gVfK040KNZVbI16DywdLQOHzbNM4v",
+      "amount": 8.48,
+      "date": "2015-03-10",
+      "name": "Alpha Market",
+      "meta": {
+        "location": {
+          "address": "960  Cole St",
+          "city": "San Francisco",
+          "coordinates": {
+            "lat": 37.765053,
+            "lon": -122.449524
+          },
+          "state": "CA",
+          "zip": "94117"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Shops",
+        "Food and Beverage Store"
+      ],
+      "category_id": "19025000",
+      "score": {
+        "location": {
+          "address": 1,
+          "city": 1,
+          "state": 1,
+          "zip": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "nPLMQROo0eUkRaRk80jqHpaenRDNJOS0qrNpo",
+      "amount": 2.75,
+      "date": "2015-03-10",
+      "name": "Blue Bottle Coffee Co",
+      "meta": {
+        "payment_processor": "Square",
+        "location": {
+          "address": "66 Mint St",
+          "city": "San Francisco",
+          "coordinates": {
+            "lat": 37.78234,
+            "lon": -122.407562
+          },
+          "state": "CA",
+          "zip": "94103"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants"
+      ],
+      "category_id": "13005000",
+      "score": {
+        "location": {
+          "address": 0.5,
+          "city": 1,
+          "state": 1,
+          "zip": 0.5
+        },
+        "name": 0.5
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "pB1Rn0EgreIvm0mvKLndUbLMgmrjOVcZQvD4M",
+      "amount": 19.92,
+      "date": "2015-03-10",
+      "name": "Safeway",
+      "meta": {
+        "location": {
+          "address": "1335 Webster St Ste 2",
+          "city": "San Francisco",
+          "coordinates": {
+            "lat": 37.78291,
+            "lon": -122.431123
+          },
+          "state": "CA",
+          "store_number": "00015073",
+          "zip": "94115"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Shops",
+        "Supermarkets and Groceries"
+      ],
+      "category_id": "19047000",
+      "score": {
+        "location": {
+          "address": 0.2,
+          "city": 1,
+          "state": 1,
+          "zip": 0.2
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "ryqnYxQ9aecjKXKjzNkXU01mpOB3JecbwQDgM",
+      "amount": -2000.01,
+      "date": "2015-03-09",
+      "name": "Online Banking transfer from SAV 1983 Confirmation#",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "digital"
+      },
+      "category": [
+        "Transfer"
+      ],
+      "category_id": "21000000",
+      "score": {
+        "location": {},
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "j6Y7QvgJKmfegxgeKknxSQ5zobDJgrh3jp7wx",
+      "_pendingTransaction": "BnwgbQ7vA5ID6n6DxBe1cM7Ney8PyLh4gVmdj",
+      "amount": 100,
+      "date": "2015-03-09",
+      "name": "ATM WITHDRAWAL",
+      "meta": {
+        "location": {
+          "state": "NY"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer",
+        "Withdrawal",
+        "ATM"
+      ],
+      "category_id": "21012002",
+      "score": {
+        "location": {
+          "state": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "pB1Rn0EgreIvm0mvKLE1IArOoX9m98u7eVe8L",
+      "_id": "489AkjvdxyfZLkLZgYVkS3r6ob45APsqnV479",
+      "amount": 2000.01,
+      "date": "2015-03-09",
+      "name": "Online Banking transfer to CHK 9827 Confirmation#",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "digital"
+      },
+      "category": [
+        "Transfer"
+      ],
+      "category_id": "21000000",
+      "score": {
+        "location": {},
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "3J7kKxAMa3CZ3K3ZDokKSxB1K8DbzEcLANgx5",
+      "amount": 68,
+      "date": "2015-03-09",
+      "name": "CLIPPER SERVICE",
+      "meta": {
+        "location": {
+          "city": "San Francisco",
+          "state": "CA",
+          "store_number": "3106"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "score": {
+        "location": {
+          "city": 1,
+          "state": 1
+        },
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "KByn1OpZgXIV4k4VorNkhD6AoLmaVdhNmPoXV",
+      "amount": 1.58,
+      "date": "2015-03-09",
+      "name": "PARADIES # 059 Q02",
+      "meta": {
+        "location": {
+          "city": "Milwaukee",
+          "state": "WI"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "score": {
+        "location": {
+          "city": 1,
+          "state": 1
+        },
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "PA06ydw7gVuybrbyV8mrsMKERnA5x3uJAzNKX",
+      "amount": 20.49,
+      "date": "2015-03-09",
+      "name": "Shell",
+      "meta": {
+        "location": {
+          "state": "RI"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Travel",
+        "Gas Stations"
+      ],
+      "category_id": "22009000",
+      "score": {
+        "location": {
+          "state": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "vvKwXmNd6efx0Y0xZzdYHndPwNmJBDhg0ae8Q",
+      "amount": 58.37,
+      "date": "2015-03-09",
+      "name": "Budget Car Rental",
+      "meta": {
+        "location": {
+          "address": "8808 23rd Ave",
+          "city": "East Elmhurst",
+          "coordinates": {
+            "lat": 40.767376,
+            "lon": -73.881594
+          },
+          "state": "NY",
+          "zip": "11369"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Travel",
+        "Car and Truck Rentals"
+      ],
+      "category_id": "22005000",
+      "score": {
+        "location": {
+          "address": 1,
+          "city": 1,
+          "state": 1,
+          "zip": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "1aby3ZKVrqCNjVjN3XkVi9r7Y3XBbJIAgk74R",
+      "amount": 7.72,
+      "date": "2015-03-09",
+      "name": "Antonio's Pizza",
+      "meta": {
+        "location": {
+          "address": "258  Thayer St",
+          "city": "Providence",
+          "coordinates": {
+            "lat": 41.828869,
+            "lon": -71.40093
+          },
+          "state": "RI",
+          "zip": "02906"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants"
+      ],
+      "category_id": "13005000",
+      "score": {
+        "location": {
+          "address": 1,
+          "city": 1,
+          "state": 1,
+          "zip": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "BnwgbQ7vA5ID6n6DxBenUOe4no7XjghN7KbLn",
+      "amount": 5.9,
+      "date": "2015-03-09",
+      "name": "Colectivo Coffee",
+      "meta": {
+        "location": {
+          "address": "225 Saint Paul Ave",
+          "city": "Milwaukee",
+          "coordinates": {
+            "lat": 43.034841,
+            "lon": -87.908304
+          },
+          "state": "WI",
+          "zip": "53202"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants"
+      ],
+      "category_id": "13005000",
+      "score": {
+        "location": {
+          "address": 0.5,
+          "city": 1,
+          "state": 1,
+          "zip": 0.5
+        },
+        "name": 0.5
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "04o3Bbm9jPHxYVYx7jaVHvQqXB61eViJvYqj3",
+      "amount": 2.32,
+      "date": "2015-03-09",
+      "name": "Dunkin' Donuts",
+      "meta": {
+        "location": {
+          "address": "859 Boston Post Rd",
+          "city": "Milford",
+          "coordinates": {
+            "lat": 41.231655,
+            "lon": -73.052818
+          },
+          "state": "CT",
+          "store_number": "349419",
+          "zip": "06460"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants",
+        "Donuts"
+      ],
+      "category_id": "13005036",
+      "score": {
+        "location": {
+          "address": 1,
+          "city": 1,
+          "state": 1,
+          "zip": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "kLd9Qv78ket3o5o3OpM5SnXP1JR5exhEv8ejg",
+      "amount": 3.8,
+      "date": "2015-03-09",
+      "name": "Dunkin' Donuts",
+      "meta": {
+        "location": {
+          "address": "3015 Stratton St",
+          "city": "Flushing",
+          "coordinates": {
+            "lat": 40.769765,
+            "lon": -73.834617
+          },
+          "state": "NY",
+          "store_number": "342262",
+          "zip": "11354"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants",
+        "Donuts"
+      ],
+      "category_id": "13005036",
+      "score": {
+        "location": {
+          "address": 0.2,
+          "city": 1,
+          "state": 1,
+          "zip": 0.2
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "yrvDQ3wL1etZ4O4Z3wLOSaVq0YOXLxiag5BM5",
+      "amount": 9.7,
+      "date": "2015-03-09",
+      "name": "ExxonMobil",
+      "meta": {
+        "location": {
+          "address": "1358  Post Rd",
+          "city": "Darien",
+          "coordinates": {
+            "lat": 41.069759,
+            "lon": -73.476646
+          },
+          "state": "CT",
+          "store_number": "97424048",
+          "zip": "06820"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Travel",
+        "Gas Stations"
+      ],
+      "category_id": "22009000",
+      "score": {
+        "location": {
+          "address": 1,
+          "city": 1,
+          "state": 1,
+          "zip": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "q3PQNjR74eU0ZqZ0eLkqS3nvkYJpaOsnEK0km",
+      "amount": 1.06,
+      "date": "2015-03-09",
+      "name": "Shell",
+      "meta": {
+        "location": {
+          "state": "RI"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Travel",
+        "Gas Stations"
+      ],
+      "category_id": "22009000",
+      "score": {
+        "location": {
+          "state": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "DwL97nVj0bu3n1n36yR1SVBmoORrY6sgRkL6Q",
+      "amount": 3,
+      "date": "2015-03-09",
+      "name": "Saint Frank Coffee",
+      "meta": {
+        "payment_processor": "Square",
+        "location": {
+          "address": "2340 Polk St",
+          "city": "San Francisco",
+          "coordinates": {
+            "lat": 37.798477,
+            "lon": -122.422035
+          },
+          "state": "CA",
+          "zip": "94109"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Shops",
+        "Food and Beverage Store"
+      ],
+      "category_id": "19025000",
+      "score": {
+        "location": {
+          "address": 1,
+          "city": 1,
+          "state": 1,
+          "zip": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "AQdbopgAkZtV9o9V3qOohrZqV6nONXsjnL49q",
+      "amount": 8.1,
+      "date": "2015-03-09",
+      "name": "BART-CLIPPER SFO CONCRS",
+      "meta": {
+        "location": {
+          "state": "CA"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "score": {
+        "location": {
+          "state": 1
+        },
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "m16OQaV5veuKgmgKZoNJHQ08NDqxbQcrR7MZ5",
+      "_pendingTransaction": "KByn1OpZgXIV4k4VorNmSaj71aEvX1Tdnqxxj",
+      "amount": 2.5,
+      "date": "2015-03-07",
+      "name": "La Colombe",
+      "meta": {
+        "location": {
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.746119763223625,
+            "lon": -73.98478493103883
+          },
+          "state": "NY"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants",
+        "Coffee Shop"
+      ],
+      "category_id": "13005043",
+      "score": {
+        "location": {
+          "address": 1,
+          "city": 1,
+          "state": 1,
+          "zip": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "dEQ8zAJ01eU6dvd69VmMT1JkX6EVr1C0k5b4Z",
+      "amount": 21.28,
+      "date": "2015-03-07",
+      "name": "U.S. Post Office",
+      "meta": {
+        "location": {
+          "address": "Main St",
+          "city": "Essex",
+          "coordinates": {
+            "lat": 41.352714,
+            "lon": -72.389775
+          },
+          "state": "CT",
+          "zip": "06426"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Community",
+        "Government Departments and Agencies"
+      ],
+      "category_id": "12009000",
+      "score": {
+        "location": {
+          "address": 0.2,
+          "city": 1,
+          "state": 1,
+          "zip": 0.2
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "z401Qv6DPeH5LXL5m6DjF4jMR0ZK54HAaPO5j",
+      "amount": 1.8,
+      "date": "2015-03-07",
+      "name": "McDonald's",
+      "meta": {
+        "location": {
+          "address": "1376 Boston Post Rd",
+          "city": "Milford",
+          "coordinates": {
+            "lat": 41.240711,
+            "lon": -73.034172
+          },
+          "state": "CT",
+          "store_number": "6150",
+          "zip": "06460"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants",
+        "Fast Food"
+      ],
+      "category_id": "13005032",
+      "score": {
+        "location": {
+          "address": 0.2,
+          "city": 1,
+          "state": 1,
+          "zip": 0.2
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "omDEQBMbjecA010AYNxmFYMKoPdO4pfJpVn0a",
+      "amount": -100,
+      "date": "2015-03-06",
+      "name": "OVERDRAFT PROTECTION FROM",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer",
+        "Credit"
+      ],
+      "category_id": "21005000",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "5ZVvA50wdKI8AVA8jmv5fkOpPD4BrwtDyY7m7",
+      "amount": 100,
+      "date": "2015-03-06",
+      "name": "OVERDRAFT PROTECTION TO",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "ZZokxeK1gVIx6D6xy9zpTbQrA7yxvMC4X5qPM",
+      "amount": 10,
+      "date": "2015-03-06",
+      "name": "OVERDRAFT PROTECTION",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "unresolved"
+      },
+      "score": {
+        "location": {},
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "ZZokxeK1gVIx6D6xy9zAfQj7abae1gt4X5BrK",
+      "amount": 2000,
+      "date": "2015-03-05",
+      "name": "Check",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer",
+        "Withdrawal",
+        "Check"
+      ],
+      "category_id": "21012001",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "8mErjR4DLvcxDjDxQq0dfpE1VdV4qaH1pqeAR",
+      "amount": 2.75,
+      "date": "2015-03-05",
+      "name": "RESTRANT JOE COFFEE C",
+      "meta": {
+        "payment_processor": "Square",
+        "location": {
+          "city": "New York",
+          "state": "NY"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants"
+      ],
+      "category_id": "13005000",
+      "score": {
+        "location": {
+          "city": 1,
+          "state": 1
+        },
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "NKAdBrebmVIBv0vBaeEmsngPkVXdOet3XMKQq",
+      "amount": 2.5,
+      "date": "2015-03-03",
+      "name": "LA COLOMBE HUDSON",
+      "meta": {
+        "location": {
+          "city": "New York",
+          "state": "NY"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "score": {
+        "location": {
+          "city": 1,
+          "state": 1
+        },
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "XJZy4B3LgOCe565eBVdphPJY8Lzy1qt6V17yq",
+      "amount": 19.63,
+      "date": "2015-03-03",
+      "name": "Trader Joe's",
+      "meta": {
+        "location": {
+          "address": "2075 Broadway",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.778554,
+            "lon": -73.982172
+          },
+          "state": "NY",
+          "store_number": "542",
+          "zip": "10023"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Shops",
+        "Supermarkets and Groceries"
+      ],
+      "category_id": "19047000",
+      "score": {
+        "location": {
+          "address": 0.2,
+          "city": 1,
+          "state": 1,
+          "zip": 0.2
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "w0k6QoewLYfeAEAe7QwrC4w8OEjZqOFy7X7J7",
+      "amount": 100,
+      "date": "2015-03-02",
+      "name": "ATM WITHDRAWAL",
+      "meta": {
+        "location": {
+          "city": "New York",
+          "state": "NY"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer",
+        "Withdrawal",
+        "ATM"
+      ],
+      "category_id": "21012002",
+      "score": {
+        "location": {
+          "city": 1,
+          "state": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "pB1Rn0EgreIvm0mvKLE1IArOoX9m98u7eVe8L",
+      "_id": "L3KpP0X5MVUPaAaPv4XdCbEnwAx6owUm575jv",
+      "amount": -2500,
+      "date": "2015-03-02",
+      "name": "Online Banking transfer from CHK 4916 Confirmation#",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "digital"
+      },
+      "category": [
+        "Transfer"
+      ],
+      "category_id": "21000000",
+      "score": {
+        "location": {},
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "65O0vzj6wkIRgvgRBMkns9eAa3p0VacynKnZ5",
+      "amount": 2.5,
+      "date": "2015-03-02",
+      "name": "LA COLOMBE HUDSON",
+      "meta": {
+        "location": {
+          "city": "New York",
+          "state": "NY"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "score": {
+        "location": {
+          "city": 1,
+          "state": 1
+        },
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "Y85Ka9yDgVfaLzLa6AwmCm5PYE7okYswLjL7k",
+      "amount": 3,
+      "date": "2015-03-02",
+      "name": "Lost Weekend NYC",
+      "meta": {
+        "payment_processor": "Square",
+        "location": {
+          "address": "45 Orchard St",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.716256,
+            "lon": -73.991185
+          },
+          "state": "NY",
+          "zip": "10002"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants",
+        "Coffee Shop"
+      ],
+      "category_id": "13005043",
+      "score": {
+        "location": {
+          "address": 1,
+          "city": 1,
+          "state": 1,
+          "zip": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "dEQ8zAJ01eU6dvd69VmAhYLxw6X1pwUyApAPZ",
+      "amount": 7.57,
+      "date": "2015-03-02",
+      "name": "P.s Burgers",
+      "meta": {
+        "location": {
+          "address": "35 Carmine St",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.730274,
+            "lon": -74.00341
+          },
+          "state": "NY",
+          "zip": "10014"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants"
+      ],
+      "category_id": "13005000",
+      "score": {
+        "location": {
+          "address": 1,
+          "city": 1,
+          "state": 1,
+          "zip": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "z401Qv6DPeH5LXL5m6DrIBwV60R436Cd7Y7kj",
+      "amount": 3,
+      "date": "2015-03-02",
+      "name": "Lost Weekend NYC",
+      "meta": {
+        "payment_processor": "Square",
+        "location": {
+          "address": "45 Orchard St",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.716256,
+            "lon": -73.991185
+          },
+          "state": "NY",
+          "zip": "10002"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants",
+        "Coffee Shop"
+      ],
+      "category_id": "13005043",
+      "score": {
+        "location": {
+          "address": 1,
+          "city": 1,
+          "state": 1,
+          "zip": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "eRnZQg8jPetL5n5L71p3TB56bwmOVbCk0o09A",
+      "amount": 26,
+      "date": "2015-03-02",
+      "name": "Mughlai Indian Cuisine",
+      "meta": {
+        "location": {
+          "address": "320  Columbus Ave",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.779613,
+            "lon": -73.977638
+          },
+          "state": "NY",
+          "zip": "10023"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants"
+      ],
+      "category_id": "13005000",
+      "score": {
+        "location": {
+          "address": 1,
+          "city": 1,
+          "state": 1,
+          "zip": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "L3KpP0X5MVUPaAaPv4XdCbEnwAx6owUm575je",
+      "amount": 21,
+      "date": "2015-03-02",
+      "name": "Upper West Side Pet Care",
+      "meta": {
+        "location": {
+          "address": "240 83rd St",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.786145,
+            "lon": -73.977775
+          },
+          "state": "NY",
+          "zip": "10024"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Service",
+        "Veterinarians"
+      ],
+      "category_id": "18069000",
+      "score": {
+        "location": {
+          "address": 1,
+          "city": 1,
+          "state": 1,
+          "zip": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "m16OQaV5veuKgmgKZoNAfvLwPDNQRPC3aYaE5",
+      "amount": 3,
+      "date": "2015-03-02",
+      "name": "Lost Weekend NYC",
+      "meta": {
+        "payment_processor": "Square",
+        "location": {
+          "address": "45 Orchard St",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.716256,
+            "lon": -73.991185
+          },
+          "state": "NY",
+          "zip": "10002"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants",
+        "Coffee Shop"
+      ],
+      "category_id": "13005043",
+      "score": {
+        "location": {
+          "address": 1,
+          "city": 1,
+          "state": 1,
+          "zip": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "w0k6QoewLYfeAEAe7QwrC4w8OEjZqOFy7X7JE",
+      "amount": 11.5,
+      "date": "2015-03-02",
+      "name": "Chipotle Mexican Grill",
+      "meta": {
+        "location": {
+          "address": "2  Broadway",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.704521,
+            "lon": -74.012833
+          },
+          "state": "NY",
+          "store_number": "0642",
+          "zip": "10004"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants",
+        "Fast Food"
+      ],
+      "category_id": "13005032",
+      "score": {
+        "location": {
+          "address": 0.2,
+          "city": 1,
+          "state": 1,
+          "zip": 0.2
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "1aby3ZKVrqCNjVjN3XkBUB3LapYbjaCj5D5rw",
+      "amount": 12,
+      "date": "2015-02-28",
+      "name": "GH GITHUB.COM 25V75",
+      "meta": {
+        "location": {
+          "state": "CA"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "score": {
+        "location": {
+          "state": 1
+        },
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "DwL97nVj0bu3n1n36yRACrOk5xoYL5IVedeQ8",
+      "amount": 11.97,
+      "date": "2015-02-28",
+      "name": "Ehrlich Wines & Spirits",
+      "meta": {
+        "location": {
+          "address": "222  Amsterdam Ave",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.777252,
+            "lon": -73.982829
+          },
+          "state": "NY",
+          "zip": "10023"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Shops",
+        "Food and Beverage Store",
+        "Beer/Wine and Spirits"
+      ],
+      "category_id": "19025004",
+      "score": {
+        "location": {
+          "address": 1,
+          "city": 1,
+          "state": 1,
+          "zip": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "PA06ydw7gVuybrbyV8m9I5nN78Rxr7u1LjL59",
+      "amount": 5.6,
+      "date": "2015-02-27",
+      "name": "Southwest Airlines",
+      "meta": {
+        "location": {
+          "state": "TX"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "digital"
+      },
+      "category": [
+        "Travel",
+        "Airlines and Aviation Services"
+      ],
+      "category_id": "22001000",
+      "score": {
+        "location": {
+          "state": 1
+        },
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "q3PQNjR74eU0ZqZ0eLk8CpYbNrkaBNfBR4R5M",
+      "amount": 18,
+      "date": "2015-02-26",
+      "name": "TRAVEL INSURANCE POLICY",
+      "meta": {
+        "location": {
+          "state": "VA"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "score": {
+        "location": {
+          "state": 1
+        },
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "BnwgbQ7vA5ID6n6DxBeKCXo8PznjRPHdm5mRE",
+      "amount": 5.43,
+      "date": "2015-02-26",
+      "name": "Duane Reade",
+      "meta": {
+        "location": {
+          "address": "67 Broad St",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.704546,
+            "lon": -74.01138
+          },
+          "state": "NY",
+          "store_number": "14480",
+          "zip": "10004"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Shops",
+        "Pharmacies"
+      ],
+      "category_id": "19043000",
+      "score": {
+        "location": {
+          "address": 0.2,
+          "city": 1,
+          "state": 1,
+          "zip": 0.2
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "3J7kKxAMa3CZ3K3ZDokyCb8NJ4KzoJU7XdXMg",
+      "amount": 2.49,
+      "date": "2015-02-25",
+      "name": "Hudson Square Pharmacy",
+      "meta": {
+        "location": {
+          "address": "345 Hudson St",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.72789663397213,
+            "lon": -74.00722347094514
+          },
+          "state": "NY",
+          "zip": "10014"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Shops",
+        "Pharmacies"
+      ],
+      "category_id": "19043000",
+      "score": {
+        "location": {
+          "address": 0.5,
+          "city": 1,
+          "state": 1,
+          "zip": 0.5
+        },
+        "name": 0.5
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "KByn1OpZgXIV4k4VorN6faL9ewoVjeF1OJOKq",
+      "amount": 23.89,
+      "date": "2015-02-24",
+      "name": "Gourmet Garage",
+      "meta": {
+        "location": {
+          "address": "117 7th Ave S",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.733963,
+            "lon": -74.002438
+          },
+          "state": "NY",
+          "zip": "10014"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Service",
+        "Automotive",
+        "Maintenance and Repair"
+      ],
+      "category_id": "18006003",
+      "score": {
+        "location": {
+          "address": 0.5,
+          "city": 1,
+          "state": 1,
+          "zip": 0.5
+        },
+        "name": 0.5
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "yrvDQ3wL1etZ4O4Z3wLpCXYrwP0LZwH3wYwPy",
+      "amount": 5.73,
+      "date": "2015-02-24",
+      "name": "Whole Foods",
+      "meta": {
+        "location": {
+          "address": "10 Columbus Cir Ste SC101",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.767664,
+            "lon": -73.982415
+          },
+          "state": "NY",
+          "store_number": "10236",
+          "zip": "10019"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Shops",
+        "Supermarkets and Groceries"
+      ],
+      "category_id": "19047000",
+      "score": {
+        "location": {
+          "address": 0.2,
+          "city": 1,
+          "state": 1,
+          "zip": 0.2
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "65O0vzj6wkIRgvgRBMkns9eAa3p0VacynKnZ4",
+      "amount": 15,
+      "date": "2015-02-23",
+      "name": "JESS.CORDING GM",
+      "meta": {
+        "payment_processor": "Square Cash",
+        "location": {
+          "state": "CA"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "digital"
+      },
+      "score": {
+        "location": {
+          "state": 1
+        },
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "pB1Rn0EgreIvm0mvKLE1IArOoX9m98u7eVe8L",
+      "_id": "DwL97nVj0bu3n1n36yRACrOk5xoYL5IVedeQo",
+      "amount": -0.01,
+      "date": "2015-02-23",
+      "name": "INTEREST",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Interest",
+        "Interest Earned"
+      ],
+      "category_id": "15001000",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "dEQ8zAJ01eU6dvd69VmAhYLxw6X1pwUyApAPz",
+      "amount": 40,
+      "date": "2015-02-23",
+      "name": "MTA MVM*HOUSTON STREET",
+      "meta": {
+        "location": {
+          "city": "New York",
+          "state": "NY"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "score": {
+        "location": {
+          "city": 1,
+          "state": 1
+        },
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "m16OQaV5veuKgmgKZoNAfvLwPDNQRPC3aYaEw",
+      "amount": -99,
+      "date": "2015-02-23",
+      "name": "AmazonPrime Membership amzn.com/prmeNV",
+      "meta": {
+        "location": {
+          "state": "NV"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "score": {
+        "location": {
+          "state": 1
+        },
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "kLd9Qv78ket3o5o3OpMjC5JMVo1eAVu3k1kZA",
+      "amount": 3,
+      "date": "2015-02-23",
+      "name": "LA COLOMBE HUDSON",
+      "meta": {
+        "location": {
+          "city": "New York",
+          "state": "NY"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "score": {
+        "location": {
+          "city": 1,
+          "state": 1
+        },
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "z401Qv6DPeH5LXL5m6DrIBwV60R436Cd7Y7ky",
+      "amount": 34,
+      "date": "2015-02-23",
+      "name": "Anfora",
+      "meta": {
+        "location": {
+          "address": "34 8th Ave",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.73801856494529,
+            "lon": -74.004296853917
+          },
+          "state": "NY",
+          "zip": "10014"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Bar",
+        "Wine Bar"
+      ],
+      "category_id": "13001001",
+      "score": {
+        "location": {
+          "address": 1,
+          "city": 1,
+          "state": 1,
+          "zip": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "AQdbopgAkZtV9o9V3qO8Tdx04YqJnAuNZJJgJ",
+      "amount": 18.5,
+      "date": "2015-02-21",
+      "name": "Ehrlich Wines & Spirits",
+      "meta": {
+        "location": {
+          "address": "222  Amsterdam Ave",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.777252,
+            "lon": -73.982829
+          },
+          "state": "NY",
+          "zip": "10023"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Shops",
+        "Food and Beverage Store",
+        "Beer/Wine and Spirits"
+      ],
+      "category_id": "19025004",
+      "score": {
+        "location": {
+          "address": 1,
+          "city": 1,
+          "state": 1,
+          "zip": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "dEQ8zAJ01eU6dvd69Vmkhdq0Ba34j3c08V8E0",
+      "amount": 11.95,
+      "date": "2015-02-20",
+      "name": "Murray's Cheese",
+      "meta": {
+        "location": {
+          "address": "89 E 42nd St",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.752306,
+            "lon": -73.977744
+          },
+          "state": "NY",
+          "zip": "10017"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants"
+      ],
+      "category_id": "13005000",
+      "score": {
+        "location": {
+          "address": 0.5,
+          "city": 1,
+          "state": 1,
+          "zip": 0.5
+        },
+        "name": 0.5
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "m16OQaV5veuKgmgKZoNLHy5Z6EkpAkirmJmqd",
+      "amount": 3.75,
+      "date": "2015-02-20",
+      "name": "AMY'S BREAD THE VILL",
+      "meta": {
+        "location": {
+          "city": "New York",
+          "state": "NY"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "score": {
+        "location": {
+          "city": 1,
+          "state": 1
+        },
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "w0k6QoewLYfeAEAe7Qw3CvxmpgPMXPhdeqe9L",
+      "amount": 20.19,
+      "date": "2015-02-20",
+      "name": "ADOBE SYSTEMS INC.",
+      "meta": {
+        "location": {
+          "state": "CA"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Shops",
+        "Computers and Electronics"
+      ],
+      "category_id": "19013000",
+      "score": {
+        "location": {
+          "state": 1
+        },
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "z401Qv6DPeH5LXL5m6DJCbepzXN8ANsAzqzN1",
+      "amount": 3,
+      "date": "2015-02-20",
+      "name": "LA COLOMBE HUDSON",
+      "meta": {
+        "location": {
+          "city": "New York",
+          "state": "NY"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "score": {
+        "location": {
+          "city": 1,
+          "state": 1
+        },
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "j6Y7QvgJKmfegxgeKk0BuEdL9REDDEuj5gNkm",
+      "amount": 2.5,
+      "date": "2015-02-19",
+      "name": "LA COLOMBE HUDSON",
+      "meta": {
+        "location": {
+          "city": "New York",
+          "state": "NY"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "score": {
+        "location": {
+          "city": 1,
+          "state": 1
+        },
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "ryqnYxQ9aecjKXKjzN4PS9RvgZ9BB9cwNqmjg",
+      "amount": 99,
+      "date": "2015-02-19",
+      "name": "AmazonPrime Membership amzn.com/prmeNV",
+      "meta": {
+        "location": {
+          "state": "NV"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "score": {
+        "location": {
+          "state": 1
+        },
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "5ZVvA50wdKI8AVA8jmKACVar083rEXH4MjZbz",
+      "_pendingTransaction": "kLd9Qv78ket3o5o3OpRmiLrVnmpzDPt0YE01j",
+      "amount": 2.5,
+      "date": "2015-02-18",
+      "name": "LA COLOMBE HUDSON",
+      "meta": {
+        "location": {
+          "city": "New York",
+          "state": "NY"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "score": {
+        "location": {
+          "city": 1,
+          "state": 1
+        },
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "bOEx71aALeTdAmAd9BrAtB19KDR9nPHDREMxN",
+      "amount": 5.43,
+      "date": "2015-02-18",
+      "name": "Duane Reade",
+      "meta": {
+        "location": {
+          "address": "279 W 125th St",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.810009,
+            "lon": -73.950401
+          },
+          "state": "NY",
+          "store_number": "14185",
+          "zip": "10027"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Shops",
+        "Pharmacies"
+      ],
+      "category_id": "19043000",
+      "score": {
+        "location": {
+          "address": 0.2,
+          "city": 1,
+          "state": 1,
+          "zip": 0.2
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "omDEQBMbjecA010AYNy0IVg4zk140LHbgmvdP",
+      "amount": 83.99,
+      "date": "2015-02-18",
+      "name": "Banana Republic",
+      "meta": {
+        "location": {
+          "address": "111 8th Ave Frnt 3",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.740786,
+            "lon": -74.001976
+          },
+          "state": "NY",
+          "store_number": "8247",
+          "zip": "10011"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Shops",
+        "Clothing and Accessories"
+      ],
+      "category_id": "19012000",
+      "score": {
+        "location": {
+          "address": 0.2,
+          "city": 1,
+          "state": 1,
+          "zip": 0.2
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "ZZokxeK1gVIx6D6xy9r6hDgvenXvP0CkoYnzE",
+      "amount": 9.17,
+      "date": "2015-02-18",
+      "name": "Whole Foods",
+      "meta": {
+        "location": {
+          "address": "270 Greenwich St Frnt 4",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.715259,
+            "lon": -74.011411
+          },
+          "state": "NY",
+          "store_number": "10236",
+          "zip": "10007"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Shops",
+        "Supermarkets and Groceries"
+      ],
+      "category_id": "19047000",
+      "score": {
+        "location": {
+          "address": 0.2,
+          "city": 1,
+          "state": 1,
+          "zip": 0.2
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "Y85Ka9yDgVfaLzLa6A4dUjg89Zvb5BsdV6JEq",
+      "_pendingTransaction": "m16OQaV5veuKgmgKZo8Efka9wMxpB5HQPNmBO",
+      "amount": 3,
+      "date": "2015-02-17",
+      "name": "LA COLOMBE HUDSON",
+      "meta": {
+        "location": {
+          "city": "New York",
+          "state": "NY"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "score": {
+        "location": {
+          "city": 1,
+          "state": 1
+        },
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "eRnZQg8jPetL5n5L71KgcyQA0gL95JU7VvnN4",
+      "_pendingTransaction": "eRnZQg8jPetL5n5L71KahyEJbJ4LaVSYKaa4j",
+      "amount": 20.39,
+      "date": "2015-02-17",
+      "name": "Whole Foods",
+      "meta": {
+        "location": {
+          "address": "798 Columbus Ave",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.794868,
+            "lon": -73.966262
+          },
+          "state": "NY",
+          "store_number": "10236",
+          "zip": "10025"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Shops",
+        "Supermarkets and Groceries"
+      ],
+      "category_id": "19047000",
+      "score": {
+        "location": {
+          "address": 0.2,
+          "city": 1,
+          "state": 1,
+          "zip": 0.2
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "7oMj0NrL6ACmB0BmNADoUmXBRyLebzfkPK0AO",
+      "_pendingTransaction": "Jq3QDbn8MVCD595Dpjk8fKmz6LR1rjsqRk00x",
+      "amount": 14.1,
+      "date": "2015-02-17",
+      "name": "Essen",
+      "meta": {
+        "location": {
+          "address": "515  Madison Ave  Frnt 2",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.759854,
+            "lon": -73.973931
+          },
+          "state": "NY",
+          "zip": "10022"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants"
+      ],
+      "category_id": "13005000",
+      "score": {
+        "location": {
+          "address": 0.5,
+          "city": 1,
+          "state": 1,
+          "zip": 0.5
+        },
+        "name": 0.5
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "gnXoQg54BeI1xYx1aPykHdLz1ampgRh47Q8mv",
+      "_pendingTransaction": "m16OQaV5veuKgmgKZo8YtJ3kOovg3jHQPN8wR",
+      "amount": 5,
+      "date": "2015-02-17",
+      "name": "Dunkin' Donuts",
+      "meta": {
+        "location": {
+          "address": "2424 Broadway",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.790377,
+            "lon": -73.974697
+          },
+          "state": "NY",
+          "store_number": "340355",
+          "zip": "10024"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants",
+        "Donuts"
+      ],
+      "category_id": "13005036",
+      "score": {
+        "location": {
+          "address": 0.2,
+          "city": 1,
+          "state": 1,
+          "zip": 0.2
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "NKAdBrebmVIBv0vBaejZiPv69gadbVFQk3Qq5",
+      "_pendingTransaction": "XJZy4B3LgOCe565eBV0ZinqYod4od6tyn6zmN",
+      "amount": 21.76,
+      "date": "2015-02-16",
+      "name": "Ehrlich Wines & Spirits",
+      "meta": {
+        "location": {
+          "address": "222  Amsterdam Ave",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.777252,
+            "lon": -73.982829
+          },
+          "state": "NY",
+          "zip": "10023"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Shops",
+        "Food and Beverage Store",
+        "Beer/Wine and Spirits"
+      ],
+      "category_id": "19025004",
+      "score": {
+        "location": {
+          "address": 1,
+          "city": 1,
+          "state": 1,
+          "zip": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "dEQ8zAJ01eU6dvd69VBOUAkkbMoe4ptLRDLMj",
+      "_pendingTransaction": "7oMj0NrL6ACmB0BmNAD6twnz5abboAUELY3o5",
+      "amount": 3.81,
+      "date": "2015-02-16",
+      "name": "Jackson Square Pharmacy",
+      "meta": {
+        "location": {
+          "address": "302 W 12th St Frnt 1",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.737409,
+            "lon": -74.004541
+          },
+          "state": "NY",
+          "zip": "10014"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Shops",
+        "Pharmacies"
+      ],
+      "category_id": "19043000",
+      "score": {
+        "location": {
+          "address": 0.5,
+          "city": 1,
+          "state": 1,
+          "zip": 0.5
+        },
+        "name": 0.5
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "m16OQaV5veuKgmgKZo8xTm88MXBKpRfQPNQzY",
+      "_pendingTransaction": "nPLMQROo0eUkRaRk80VotMD6kRrvaKUN97jD7",
+      "amount": 46,
+      "date": "2015-02-16",
+      "name": "Bettola",
+      "meta": {
+        "location": {
+          "address": "412 Amsterdam Ave Frnt 1",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.783671,
+            "lon": -73.978148
+          },
+          "state": "NY",
+          "zip": "10024"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants"
+      ],
+      "category_id": "13005000",
+      "score": {
+        "location": {
+          "address": 1,
+          "city": 1,
+          "state": 1,
+          "zip": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "7oMj0NrL6ACmB0BmNAD4SpomgNBDzJCELYE1R",
+      "_pendingTransaction": "vvKwXmNd6efx0Y0xZzNDTBynLR44vZIzbgMAk",
+      "amount": 5.42,
+      "date": "2015-02-16",
+      "name": "Jackson Square Pharmacy",
+      "meta": {
+        "location": {
+          "address": "302 W 12th St Frnt 1",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.737409,
+            "lon": -74.004541
+          },
+          "state": "NY",
+          "zip": "10014"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Shops",
+        "Pharmacies"
+      ],
+      "category_id": "19043000",
+      "score": {
+        "location": {
+          "address": 0.5,
+          "city": 1,
+          "state": 1,
+          "zip": 0.5
+        },
+        "name": 0.5
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "w0k6QoewLYfeAEAe7Q6viPXY4YA45dtgbrdqO",
+      "_pendingTransaction": "Y85Ka9yDgVfaLzLa6A4yIJgqN7NkMQFYb9XyL",
+      "amount": 14.1,
+      "date": "2015-02-13",
+      "name": "Masala Times NY",
+      "meta": {
+        "location": {
+          "state": "NY"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants"
+      ],
+      "category_id": "13005000",
+      "score": {
+        "location": {
+          "state": 1
+        },
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "L3KpP0X5MVUPaAaPv4DgIkOka4vzM8haQ8O1L",
+      "_pendingTransaction": "ryqnYxQ9aecjKXKjzN4qSxOOK3e0JpcVdEbrZ",
+      "amount": 18,
+      "date": "2015-02-11",
+      "name": "HEROKU",
+      "meta": {
+        "location": {
+          "state": "CA"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "unresolved"
+      },
+      "score": {
+        "location": {
+          "state": 1
+        },
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "DwL97nVj0bu3n1n36yZ0H8d8n1BqMgt0rgLP1",
+      "_pendingTransaction": "q3PQNjR74eU0ZqZ0eLgQCarbQndKaAHPMnMpP",
+      "amount": 2.06,
+      "date": "2015-02-11",
+      "name": "Pret A Manger",
+      "meta": {
+        "location": {
+          "address": "60 Broad St",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.705287,
+            "lon": -74.011682
+          },
+          "state": "NY",
+          "zip": "10004"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants"
+      ],
+      "category_id": "13005000",
+      "score": {
+        "location": {
+          "address": 0.5,
+          "city": 1,
+          "state": 1,
+          "zip": 0.5
+        },
+        "name": 0.5
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "AQdbopgAkZtV9o9V3qZ0FDe8j5o58JHQyj4KP",
+      "amount": 1.99,
+      "date": "2015-02-10",
+      "name": "Iconic Café",
+      "meta": {
+        "location": {
+          "address": "238 Lafayette Street",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.7226225150181,
+            "lon": -73.9970429899412
+          },
+          "state": "NY",
+          "zip": "10012"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants",
+        "Coffee Shop"
+      ],
+      "category_id": "13005043",
+      "score": {
+        "location": {
+          "address": 1,
+          "city": 1,
+          "state": 1,
+          "zip": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "65O0vzj6wkIRgvgRBMQNu7Rr8rvQDVtmrYzP8",
+      "_pendingTransaction": "Jq3QDbn8MVCD595DpjkKuMooJwRM3RcmBok0a",
+      "amount": 5,
+      "date": "2015-02-10",
+      "name": "La Colombe",
+      "meta": {
+        "location": {
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.746119763223625,
+            "lon": -73.98478493103883
+          },
+          "state": "NY"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants",
+        "Coffee Shop"
+      ],
+      "category_id": "13005043",
+      "score": {
+        "location": {
+          "address": 1,
+          "city": 1,
+          "state": 1,
+          "zip": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "w0k6QoewLYfeAEAe7Q6mI17oMoyxLqHgbrzVV",
+      "amount": 20,
+      "date": "2015-02-10",
+      "name": "El Centro",
+      "meta": {
+        "location": {
+          "address": "824 9th Ave",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.765972,
+            "lon": -73.986717
+          },
+          "state": "NY",
+          "zip": "10019"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants"
+      ],
+      "category_id": "13005000",
+      "score": {
+        "location": {
+          "address": 1,
+          "city": 1,
+          "state": 1,
+          "zip": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "kLd9Qv78ket3o5o3OpR7HzYoaEBEoOI0YEeQX",
+      "amount": 9,
+      "date": "2015-02-10",
+      "name": "METRO-NORTH TVM & TOM",
+      "meta": {
+        "location": {
+          "city": "New York",
+          "state": "NY"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "score": {
+        "location": {
+          "city": 1,
+          "state": 1
+        },
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "AQdbopgAkZtV9o9V3qZ0FDen8ja7qkfQyj4K4",
+      "_pendingTransaction": "pB1Rn0EgreIvm0mvKLRvHVKRp6KNPMu3z1Qmv",
+      "amount": 9,
+      "date": "2015-02-10",
+      "name": "METRO-NORTH TVM & TOM",
+      "meta": {
+        "location": {
+          "city": "New York",
+          "state": "NY"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "score": {
+        "location": {
+          "city": 1,
+          "state": 1
+        },
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "vvKwXmNd6efx0Y0xZzNKIjPkADdw9OhVONXKw",
+      "amount": 40,
+      "date": "2015-02-09",
+      "name": "MTA MVM*116TH ST/COLUMB",
+      "meta": {
+        "location": {
+          "city": "New York",
+          "state": "NY"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "score": {
+        "location": {
+          "city": 1,
+          "state": 1
+        },
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "AQdbopgAkZtV9o9V3qZYiDq5LXZVpwhM8gY3R",
+      "amount": -5,
+      "date": "2015-02-09",
+      "name": "WPY*Extra Credit General",
+      "meta": {
+        "location": {
+          "city": "Palo Alto",
+          "state": "CA"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Community",
+        "Organizations and Associations"
+      ],
+      "category_id": "12015000",
+      "score": {
+        "location": {
+          "city": 1,
+          "state": 1
+        },
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "65O0vzj6wkIRgvgRBMQRS7D3JRY516twvo9p6",
+      "amount": 12,
+      "date": "2015-02-06",
+      "name": "Monthly Maintenance Fee",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Bank Fees"
+      ],
+      "category_id": "10000000",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "dEQ8zAJ01eU6dvd69VBvFOpYJB78Q7FLAqNEv",
+      "amount": -2560.11,
+      "date": "2015-02-04",
+      "name": "Online Banking transfer from SAV 1983 Confirmation#",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer"
+      ],
+      "category_id": "21000000",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "R0rDk6LVgEfVnanVk5mauOvMVvdMALHoXkBAZ",
+      "amount": 1090.16,
+      "date": "2015-02-04",
+      "name": "Check",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer",
+        "Withdrawal",
+        "Check"
+      ],
+      "category_id": "21012001",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "pB1Rn0EgreIvm0mvKLE1IArOoX9m98u7eVe8L",
+      "_id": "w0k6QoewLYfeAEAe7Q6ETAq4bp73Q7Sg7E39p",
+      "amount": 2560.11,
+      "date": "2015-02-04",
+      "name": "Online Banking transfer to CHK 9827 Confirmation#",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer"
+      ],
+      "category_id": "21000000",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "QvjLKw69gVfK040KNZr4iwjYVjdY56HMAKd0a",
+      "_pendingTransaction": "m16OQaV5veuKgmgKZo8kcx0b3VjBRjIvpwPNM",
+      "amount": 8.67,
+      "date": "2015-02-04",
+      "name": "Trader Joe's",
+      "meta": {
+        "location": {
+          "address": "2073 Broadway",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.778504,
+            "lon": -73.982092
+          },
+          "state": "NY",
+          "store_number": "542",
+          "zip": "10023"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Shops",
+        "Supermarkets and Groceries"
+      ],
+      "category_id": "19047000",
+      "score": {
+        "location": {
+          "address": 1,
+          "city": 1,
+          "state": 1,
+          "zip": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "04o3Bbm9jPHxYVYx7j8rTxYJEL8v7qFvYnprm",
+      "_pendingTransaction": "MykXqrNmgYcN1m1NoazdfoyBvapmZVcwz3404",
+      "amount": 3.91,
+      "date": "2015-02-02",
+      "name": "Dunkin' Donuts",
+      "meta": {
+        "location": {
+          "address": "1  New York Plz  Fl CONC14",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.7018,
+            "lon": -74.0113
+          },
+          "state": "NY",
+          "store_number": "340355",
+          "zip": "10004"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants",
+        "Donuts"
+      ],
+      "category_id": "13005036",
+      "score": {
+        "location": {
+          "address": 0.2,
+          "city": 1,
+          "state": 1,
+          "zip": 0.2
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "vvKwXmNd6efx0Y0xZzNmT0ar4Xjn1PH0a1Zmw",
+      "_pendingTransaction": "65O0vzj6wkIRgvgRBMQLuJ7oe8qdj7TpOx0OQ",
+      "amount": 32.3,
+      "date": "2015-02-02",
+      "name": "Whole Foods",
+      "meta": {
+        "location": {
+          "address": "10 Columbus Cir Ste SC101",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.767664,
+            "lon": -73.982415
+          },
+          "state": "NY",
+          "store_number": "10236",
+          "zip": "10019"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Shops",
+        "Supermarkets and Groceries"
+      ],
+      "category_id": "19047000",
+      "score": {
+        "location": {
+          "address": 0.2,
+          "city": 1,
+          "state": 1,
+          "zip": 0.2
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "AQdbopgAkZtV9o9V3qZRUgQdm3DrvqcnL1V6R",
+      "_pendingTransaction": "L3KpP0X5MVUPaAaPv4DBImkaEYR3dkuRVeoV5",
+      "amount": 2.25,
+      "date": "2015-02-02",
+      "name": "Ground Support",
+      "meta": {
+        "location": {
+          "address": "399 W Broadway   Frnt 2",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.72417,
+            "lon": -74.002038
+          },
+          "state": "NY",
+          "zip": "10012"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants"
+      ],
+      "category_id": "13005000",
+      "score": {
+        "location": {
+          "address": 0.5,
+          "city": 1,
+          "state": 1,
+          "zip": 0.5
+        },
+        "name": 0.5
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "kLd9Qv78ket3o5o3OpRXCdKy0QznAPHv8V5RV",
+      "_pendingTransaction": "1aby3ZKVrqCNjVjN3Xo9fZovynwKOzs69pbRd",
+      "amount": 65,
+      "date": "2015-02-02",
+      "name": "Arte Cafe",
+      "meta": {
+        "location": {
+          "address": "106 W 73rd St",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.778072,
+            "lon": -73.978874
+          },
+          "state": "NY",
+          "zip": "10023"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants"
+      ],
+      "category_id": "13005000",
+      "score": {
+        "location": {
+          "address": 1,
+          "city": 1,
+          "state": 1,
+          "zip": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "BnwgbQ7vA5ID6n6DxBp1hLEELra8a6cOVY4My",
+      "_pendingTransaction": "PA06ydw7gVuybrbyV84KHnY5vgowQeSbEe4AV",
+      "amount": 8.37,
+      "date": "2015-01-31",
+      "name": "Five Guys",
+      "meta": {
+        "location": {
+          "address": "296 Bleecker St",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.732288,
+            "lon": -74.003914
+          },
+          "state": "NY",
+          "store_number": "296",
+          "zip": "10014"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants"
+      ],
+      "category_id": "13005000",
+      "score": {
+        "location": {
+          "address": 0,
+          "city": 1,
+          "state": 1,
+          "zip": 0
+        },
+        "name": 0.8
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "w0k6QoewLYfeAEAe7Q6qCv7a3deJP0iD5YnRv",
+      "amount": 82.48,
+      "date": "2015-01-30",
+      "name": "BILL PAYMENT",
+      "meta": {
+        "payment_processor": "AT&T",
+        "location": {
+          "state": "TX"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Service",
+        "Telecommunication Services"
+      ],
+      "category_id": "18063000",
+      "score": {
+        "location": {
+          "state": 1
+        },
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "L3KpP0X5MVUPaAaPv4DYC0OR97rL5ZSRVe6Jd",
+      "_pendingTransaction": "DwL97nVj0bu3n1n36yZAF3eYVnEYKAIOmDPQK",
+      "amount": 8.66,
+      "date": "2015-01-30",
+      "name": "Potjanee Thai Restaurant",
+      "meta": {
+        "payment_processor": "Square",
+        "location": {
+          "address": "48 Carmine St",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.729812,
+            "lon": -74.003412
+          },
+          "state": "NY",
+          "zip": "10014"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants",
+        "Thai"
+      ],
+      "category_id": "13005004",
+      "score": {
+        "location": {
+          "address": 0.8,
+          "city": 1,
+          "state": 1,
+          "zip": 0.8
+        },
+        "name": 0.8
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "NKAdBrebmVIBv0vBaejmSRXqjVpxrJT8EaDpd",
+      "amount": -439.9,
+      "date": "2015-01-29",
+      "name": "Online Banking transfer from SAV 1983 Confirmation#",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer"
+      ],
+      "category_id": "21000000",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "XJZy4B3LgOCe565eBV0puQz9rLB4aMCKZmgOy",
+      "amount": 1198.51,
+      "date": "2015-01-29",
+      "name": "Online Banking payment to CRD 2187 Confirmation#",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer"
+      ],
+      "category_id": "21000000",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "pB1Rn0EgreIvm0mvKLE1IArOoX9m98u7eVe8L",
+      "_id": "Y85Ka9yDgVfaLzLa6A48uQavonQOKzfEZBOnn",
+      "amount": -2500,
+      "date": "2015-01-29",
+      "name": "Online Banking transfer from CHK 4916 Confirmation#",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer"
+      ],
+      "category_id": "21000000",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "pB1Rn0EgreIvm0mvKLE1IArOoX9m98u7eVe8L",
+      "_id": "eRnZQg8jPetL5n5L71KYuXNLOKXjoZiNZEOLk",
+      "amount": 439.9,
+      "date": "2015-01-29",
+      "name": "Online Banking transfer to CHK 9827 Confirmation#",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer"
+      ],
+      "category_id": "21000000",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "nPLMQROo0eUkRaRk80VpsrZeDao4AmuVweZMq",
+      "amount": -1198.51,
+      "date": "2015-01-29",
+      "name": "ONLINE PAYMENT FROM CHK 9",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "unresolved"
+      },
+      "score": {
+        "location": {},
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "pB1Rn0EgreIvm0mvKLRpukoMrLP0J4Im5ko7a",
+      "_pendingTransaction": "PA06ydw7gVuybrbyV84vSk40gjD8pbHbEe0d4",
+      "amount": 2.69,
+      "date": "2015-01-29",
+      "name": "Gristedes",
+      "meta": {
+        "location": {
+          "address": "4037 Broadway",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.842285,
+            "lon": -73.939451
+          },
+          "state": "NY",
+          "store_number": "504",
+          "zip": "10032"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Service",
+        "Financial",
+        "Banking and Finance"
+      ],
+      "category_id": "18020012",
+      "score": {
+        "location": {
+          "address": 0,
+          "city": 1,
+          "state": 1,
+          "zip": 0
+        },
+        "name": 0.8
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "BnwgbQ7vA5ID6n6DxBpKHoN8MBOakMUOVYA1z",
+      "amount": 100,
+      "date": "2015-01-28",
+      "name": "ATM WITHDRAWAL",
+      "meta": {
+        "location": {
+          "city": "Manhattan",
+          "state": "NY"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer",
+        "Withdrawal",
+        "ATM"
+      ],
+      "category_id": "21012002",
+      "score": {
+        "location": {
+          "city": 1,
+          "state": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "3J7kKxAMa3CZ3K3ZDoVyi8ZNpQxMVpSOEp9ae",
+      "_pendingTransaction": "xjALQJd6DeI8kvk89dLrsVZN6Ld0a7SVPDB3m",
+      "amount": 33.74,
+      "date": "2015-01-28",
+      "name": "Duane Reade",
+      "meta": {
+        "location": {
+          "address": "67 Broad St",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.704546,
+            "lon": -74.01138
+          },
+          "state": "NY",
+          "store_number": "14408",
+          "zip": "10004"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Shops",
+        "Pharmacies"
+      ],
+      "category_id": "19043000",
+      "score": {
+        "location": {
+          "address": 0,
+          "city": 1,
+          "state": 1,
+          "zip": 0
+        },
+        "name": 0.8
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "yrvDQ3wL1etZ4O4Z3wDpiYpr63aAk6iJbN4mX",
+      "_pendingTransaction": "3J7kKxAMa3CZ3K3ZDoVpcABPpNM8nacOEpMJ9",
+      "amount": 12,
+      "date": "2015-01-28",
+      "name": "GH GITHUB.COM 25V75",
+      "meta": {
+        "location": {
+          "state": "CA"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "digital"
+      },
+      "category": [
+        "Shops",
+        "Computers and Electronics"
+      ],
+      "category_id": "19013000",
+      "score": {
+        "location": {
+          "state": 1
+        },
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "KByn1OpZgXIV4k4VorZ6tLN9qnDx1qTzqRprQ",
+      "_pendingTransaction": "Jq3QDbn8MVCD595DpjkmSrBMOZe0dacxNOEV7",
+      "amount": 15.48,
+      "date": "2015-01-28",
+      "name": "Duane Reade",
+      "meta": {
+        "location": {
+          "address": "67 Broad St",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.704546,
+            "lon": -74.01138
+          },
+          "state": "NY",
+          "store_number": "14480",
+          "zip": "10004"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Shops",
+        "Pharmacies"
+      ],
+      "category_id": "19043000",
+      "score": {
+        "location": {
+          "address": 0,
+          "city": 1,
+          "state": 1,
+          "zip": 0
+        },
+        "name": 0.8
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "ryqnYxQ9aecjKXKjzN4mfvBqdEZ8mncnkm364",
+      "_pendingTransaction": "nPLMQROo0eUkRaRk80VVixjNjjqzr1SNZNZd3",
+      "amount": 5.75,
+      "date": "2015-01-27",
+      "name": "Dunkin' Donuts",
+      "meta": {
+        "location": {
+          "address": "2424 Broadway",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.790377,
+            "lon": -73.974697
+          },
+          "state": "NY",
+          "store_number": "341139",
+          "zip": "10024"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants",
+        "Donuts"
+      ],
+      "category_id": "13005036",
+      "score": {
+        "location": {
+          "address": 0,
+          "city": 1,
+          "state": 1,
+          "zip": 0
+        },
+        "name": 0.8
+      }
+    },
+    {
+      "_account": "pB1Rn0EgreIvm0mvKLE1IArOoX9m98u7eVe8L",
+      "_id": "MykXqrNmgYcN1m1NoazeC8A0zdyRa1hwz1DBm",
+      "amount": -0.01,
+      "date": "2015-01-26",
+      "name": "INTEREST",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Interest",
+        "Interest Earned"
+      ],
+      "category_id": "15001000",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "Y85Ka9yDgVfaLzLa6A4JSNmoEa6vkeTEZVNyk",
+      "amount": 40,
+      "date": "2015-01-26",
+      "name": "MTA MVM*HOUSTON STREET",
+      "meta": {
+        "location": {
+          "city": "New York",
+          "state": "NY"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Travel",
+        "Public Transportation Services"
+      ],
+      "category_id": "22014000",
+      "score": {
+        "location": {
+          "city": 1,
+          "state": 1
+        },
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "q3PQNjR74eU0ZqZ0eLgrIEp09p6X15iAgXqQY",
+      "_pendingTransaction": "65O0vzj6wkIRgvgRBMQ1hQjrb7o4r4smRmxNg",
+      "amount": 4.88,
+      "date": "2015-01-26",
+      "name": "Jackson Square Pharmacy",
+      "meta": {
+        "location": {
+          "address": "302 W 12th St Frnt 1",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.737409,
+            "lon": -74.004541
+          },
+          "state": "NY",
+          "zip": "10014"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Shops",
+        "Pharmacies"
+      ],
+      "category_id": "19043000",
+      "score": {
+        "location": {
+          "address": 0,
+          "city": 1,
+          "state": 1,
+          "zip": 0
+        },
+        "name": 0.8
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "PA06ydw7gVuybrbyV84NTk5yL5jOoeTbEkgVR",
+      "_pendingTransaction": "m16OQaV5veuKgmgKZo8qtmDNJ81eyphQjQboX",
+      "amount": 2.17,
+      "date": "2015-01-26",
+      "name": "Jackson Square Pharmacy",
+      "meta": {
+        "location": {
+          "address": "302 W 12th St Frnt 1",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.737409,
+            "lon": -74.004541
+          },
+          "state": "NY",
+          "zip": "10014"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Shops",
+        "Pharmacies"
+      ],
+      "category_id": "19043000",
+      "score": {
+        "location": {
+          "address": 0,
+          "city": 1,
+          "state": 1,
+          "zip": 0
+        },
+        "name": 0.8
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "gnXoQg54BeI1xYx1aPyRFdaaVNDm5RSaPaVQp",
+      "_pendingTransaction": "PA06ydw7gVuybrbyV845hxz8r9veOySDPDzwx",
+      "amount": 20.19,
+      "date": "2015-01-24",
+      "name": "ADOBE SYSTEMS INC.",
+      "meta": {
+        "location": {
+          "state": "CA"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Shops",
+        "Computers and Electronics"
+      ],
+      "category_id": "19013000",
+      "score": {
+        "location": {
+          "state": 1
+        },
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "Okvw35dgEVf3yjy31J8MHmxmVobddBteEejNn",
+      "_pendingTransaction": "MykXqrNmgYcN1m1NoazKcwPQENZxvkiR63L6m",
+      "amount": 23,
+      "date": "2015-01-21",
+      "name": "VON",
+      "meta": {
+        "location": {
+          "city": "New York",
+          "state": "NY"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants"
+      ],
+      "category_id": "13005000",
+      "score": {
+        "location": {
+          "city": 1,
+          "state": 1
+        },
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "VaJBjyqwgVCjgmgj07MnHx4xXqRwwQsYgYva0",
+      "_pendingTransaction": "z401Qv6DPeH5LXL5m61euxJ7p7orOosO1b0P4",
+      "amount": 10.55,
+      "date": "2015-01-21",
+      "name": "Murray's Cheese",
+      "meta": {
+        "location": {
+          "address": "89 E 42nd St",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.752306,
+            "lon": -73.977744
+          },
+          "state": "NY",
+          "zip": "10017"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants"
+      ],
+      "category_id": "13005000",
+      "score": {
+        "location": {
+          "address": 0,
+          "city": 1,
+          "state": 1,
+          "zip": 0
+        },
+        "name": 0.8
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "R0rDk6LVgEfVnanVk5m4T6prXKp18ESypZLqP",
+      "amount": 100,
+      "date": "2015-01-20",
+      "name": "ATM WITHDRAWAL",
+      "meta": {
+        "location": {
+          "state": "NY"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer",
+        "Withdrawal",
+        "ATM"
+      ],
+      "category_id": "21012002",
+      "score": {
+        "location": {
+          "state": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "XJZy4B3LgOCe565eBV07hqZ6RVYOQMF4DNJaK",
+      "amount": 6.75,
+      "date": "2015-01-20",
+      "name": "Taim",
+      "meta": {
+        "location": {
+          "address": "220 Waverly Pl",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.73592,
+            "lon": -74.001945
+          },
+          "state": "NY",
+          "zip": "10014"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants"
+      ],
+      "category_id": "13005000",
+      "score": {
+        "location": {
+          "address": 0.8,
+          "city": 1,
+          "state": 1,
+          "zip": 0.8
+        },
+        "name": 0.8
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "pB1Rn0EgreIvm0mvKLR4hOE3RxXpk4HJXwK46",
+      "_pendingTransaction": "gnXoQg54BeI1xYx1aPRwuaPaN5kq0jU4N1RVj",
+      "amount": 9.5,
+      "date": "2015-01-20",
+      "name": "Ocean Wine Spirits",
+      "meta": {
+        "location": {
+          "address": "297 Grand St",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.717403,
+            "lon": -73.992012
+          },
+          "state": "NY",
+          "zip": "10002"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Shops",
+        "Food and Beverage Store",
+        "Beer/Wine and Spirits"
+      ],
+      "category_id": "19025004",
+      "score": {
+        "location": {
+          "address": 0.8,
+          "city": 1,
+          "state": 1,
+          "zip": 0.8
+        },
+        "name": 0.8
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "7oMj0NrL6ACmB0BmNADjhwv3qy5DrvCQand5E",
+      "_pendingTransaction": "bOEx71aALeTdAmAd9BDkfJNVQw15EncrR7B7B",
+      "amount": 1.79,
+      "date": "2015-01-20",
+      "name": "Murray's Cheese",
+      "meta": {
+        "location": {
+          "address": "89 E 42nd St",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.752306,
+            "lon": -73.977744
+          },
+          "state": "NY",
+          "zip": "10017"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants"
+      ],
+      "category_id": "13005000",
+      "score": {
+        "location": {
+          "address": 0,
+          "city": 1,
+          "state": 1,
+          "zip": 0
+        },
+        "name": 0.8
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "gnXoQg54BeI1xYx1aPy6crYJyakwEYuqvj0KA",
+      "_pendingTransaction": "m16OQaV5veuKgmgKZoqgFoMV8qBXobIeKx77X",
+      "amount": 1.79,
+      "date": "2015-01-20",
+      "name": "Murray's Cheese",
+      "meta": {
+        "location": {
+          "address": "89 E 42nd St",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.752306,
+            "lon": -73.977744
+          },
+          "state": "NY",
+          "zip": "10017"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants"
+      ],
+      "category_id": "13005000",
+      "score": {
+        "location": {
+          "address": 0,
+          "city": 1,
+          "state": 1,
+          "zip": 0
+        },
+        "name": 0.8
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "bOEx71aALeTdAmAd9BroUZm9QEPbBmiqVzMDd",
+      "_pendingTransaction": "omDEQBMbjecA010AYNwVsYMJN6gnd0fQgjYje",
+      "amount": 3.27,
+      "date": "2015-01-20",
+      "name": "Dunkin' Donuts",
+      "meta": {
+        "location": {
+          "address": "2424 Broadway",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.790377,
+            "lon": -73.974697
+          },
+          "state": "NY",
+          "store_number": "340355",
+          "zip": "10024"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants",
+        "Donuts"
+      ],
+      "category_id": "13005036",
+      "score": {
+        "location": {
+          "address": 0,
+          "city": 1,
+          "state": 1,
+          "zip": 0
+        },
+        "name": 0.8
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "VaJBjyqwgVCjgmgj07Mxsv5XgPvyEJSrdMyjX",
+      "_pendingTransaction": "bOEx71aALeTdAmAd9BDAiNxQagDK1ohrR7zw1",
+      "amount": 3.27,
+      "date": "2015-01-20",
+      "name": "Dunkin' Donuts",
+      "meta": {
+        "location": {
+          "address": "1  New York Plz  Fl CONC14",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.7018,
+            "lon": -74.0113
+          },
+          "state": "NY",
+          "store_number": "340355",
+          "zip": "10004"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants",
+        "Donuts"
+      ],
+      "category_id": "13005036",
+      "score": {
+        "location": {
+          "address": 0,
+          "city": 1,
+          "state": 1,
+          "zip": 0
+        },
+        "name": 0.8
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "omDEQBMbjecA010AYNy5hPZ4NdL9VZcBnEvbd",
+      "_pendingTransaction": "QvjLKw69gVfK040KNZresvy88M9JXAsdVmp54",
+      "amount": 5,
+      "date": "2015-01-20",
+      "name": "WPY*EXTRA CREDIT GENER",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Community",
+        "Organizations and Associations"
+      ],
+      "category_id": "12015000",
+      "score": {
+        "location": {},
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "NKAdBrebmVIBv0vBaejnseK3M4PwRJuRg6AL0",
+      "_pendingTransaction": "Okvw35dgEVf3yjy31J8VF74KebMoBpt5jK0jP",
+      "amount": 20.34,
+      "date": "2015-01-20",
+      "name": "WHOLEFDS HOU",
+      "meta": {
+        "location": {
+          "city": "New York",
+          "state": "NY",
+          "store_number": "10236"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Shops",
+        "Supermarkets and Groceries"
+      ],
+      "category_id": "19047000",
+      "score": {
+        "location": {
+          "city": 1,
+          "state": 1
+        },
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "9gR4rKa1D0IAZVZAJrKmhXKLMaX9JdsdL9Oxx",
+      "_pendingTransaction": "dEQ8zAJ01eU6dvd69VBXu1krbn1kv8IbwaMVx",
+      "amount": 6.99,
+      "date": "2015-01-20",
+      "name": "AMAZON MKTPLACE PMTS",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Shops",
+        "Bookstores"
+      ],
+      "category_id": "19009000",
+      "score": {
+        "location": {},
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "q3PQNjR74eU0ZqZ0eL5vt0qOZXMZj0sk9V3RR",
+      "_pendingTransaction": "nPLMQROo0eUkRaRk80dJTowpO80kXPf0naAKv",
+      "amount": 4,
+      "date": "2015-01-17",
+      "name": "La Colombe",
+      "meta": {
+        "location": {
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.746119763223625,
+            "lon": -73.98478493103883
+          },
+          "state": "NY"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants",
+        "Coffee Shop"
+      ],
+      "category_id": "13005043",
+      "score": {
+        "location": {
+          "address": 0.8,
+          "city": 1,
+          "state": 1,
+          "zip": 0.8
+        },
+        "name": 0.8
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "1aby3ZKVrqCNjVjN3XZQI5xJvQdvD5h4ypL5d",
+      "_pendingTransaction": "eRnZQg8jPetL5n5L71qgFegP0xYQazukwYNrN",
+      "amount": 71,
+      "date": "2015-01-17",
+      "name": "CHEZ MOI",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants"
+      ],
+      "category_id": "13005000",
+      "score": {
+        "location": {},
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "gnXoQg54BeI1xYx1aPRxHZxyM3jD4RS4N1jLw",
+      "_pendingTransaction": "Y85Ka9yDgVfaLzLa6A7dFrZx9qNg4Riw0YEPg",
+      "amount": 3,
+      "date": "2015-01-16",
+      "name": "Ground Support",
+      "meta": {
+        "location": {
+          "address": "399 W Broadway   Frnt 2",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.72417,
+            "lon": -74.002038
+          },
+          "state": "NY",
+          "zip": "10012"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants"
+      ],
+      "category_id": "13005000",
+      "score": {
+        "location": {
+          "address": 0.8,
+          "city": 1,
+          "state": 1,
+          "zip": 0.8
+        },
+        "name": 0.8
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "489AkjvdxyfZLkLZgYznI5kLEZaLyOtJX8ZdV",
+      "amount": 7.88,
+      "date": "2015-01-15",
+      "name": "Murray's Cheese",
+      "meta": {
+        "location": {
+          "address": "89 E 42nd St",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.752306,
+            "lon": -73.977744
+          },
+          "state": "NY",
+          "zip": "10017"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants"
+      ],
+      "category_id": "13005000",
+      "score": {
+        "location": {
+          "address": 0,
+          "city": 1,
+          "state": 1,
+          "zip": 0
+        },
+        "name": 0.8
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "m16OQaV5veuKgmgKZoqnfdnXBamYbgT3VQZky",
+      "amount": 39.74,
+      "date": "2015-01-14",
+      "name": "MOO.COM",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "digital"
+      },
+      "category": [
+        "Shops",
+        "Office Supplies"
+      ],
+      "category_id": "19039000",
+      "score": {
+        "location": {},
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "z401Qv6DPeH5LXL5m6Ekf9k7vPYd5LUdgR5yY",
+      "amount": 52.13,
+      "date": "2015-01-14",
+      "name": "DNH*GODADDY.COM",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "digital"
+      },
+      "category": [
+        "Service",
+        "Computers"
+      ],
+      "category_id": "18012000",
+      "score": {
+        "location": {},
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "Okvw35dgEVf3yjy31JoEtBavJ4azjQsVwe9Y5",
+      "amount": 2.17,
+      "date": "2015-01-14",
+      "name": "Jackson Square Pharmacy",
+      "meta": {
+        "location": {
+          "address": "302 W 12th St Frnt 1",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.737409,
+            "lon": -74.004541
+          },
+          "state": "NY",
+          "zip": "10014"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Shops",
+        "Pharmacies"
+      ],
+      "category_id": "19043000",
+      "score": {
+        "location": {
+          "address": 0,
+          "city": 1,
+          "state": 1,
+          "zip": 0
+        },
+        "name": 0.8
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "VaJBjyqwgVCjgmgj074VtQD7JkDn8mtXRYKBY",
+      "amount": 18,
+      "date": "2015-01-14",
+      "name": "HEROKU",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Service",
+        "Computers"
+      ],
+      "category_id": "18012000",
+      "score": {
+        "location": {},
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "1aby3ZKVrqCNjVjN3XZwUBkRgj5Jg7Hjr48bd",
+      "amount": 80,
+      "date": "2015-01-12",
+      "name": "ATM WITHDRAWAL",
+      "meta": {
+        "location": {
+          "city": "New York",
+          "state": "NY"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer",
+        "Withdrawal",
+        "ATM"
+      ],
+      "category_id": "21012002",
+      "score": {
+        "location": {
+          "city": 1,
+          "state": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "PA06ydw7gVuybrbyV87jc5oJjry3jEi15K3wv",
+      "amount": -1499.31,
+      "date": "2015-01-12",
+      "name": "Online Banking transfer from SAV 1983 Confirmation#",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer"
+      ],
+      "category_id": "21000000",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "w0k6QoewLYfeAEAe7QZdS41EppJo3xtyJ3od7",
+      "amount": -700,
+      "date": "2015-01-12",
+      "name": "OVERDRAFT PROTECTION FROM",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer",
+        "Credit"
+      ],
+      "category_id": "21005000",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "pB1Rn0EgreIvm0mvKLE1IArOoX9m98u7eVe8L",
+      "_id": "65O0vzj6wkIRgvgRBMVoI973OOxrkQHyZjL04",
+      "amount": 1499.31,
+      "date": "2015-01-12",
+      "name": "Online Banking transfer to CHK 9827 Confirmation#",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer"
+      ],
+      "category_id": "21000000",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "DwL97nVj0bu3n1n36yP6sVebJXAmEDCVQ6ybm",
+      "amount": 1200,
+      "date": "2015-01-09",
+      "name": "Check",
+      "meta": {
+        "location": {
+          "store_number": "1095"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer",
+        "Withdrawal",
+        "Check"
+      ],
+      "category_id": "21012001",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "pB1Rn0EgreIvm0mvKLE1IArOoX9m98u7eVe8L",
+      "_id": "vvKwXmNd6efx0Y0xZzazIvkqQdOgd4HkP86aE",
+      "amount": 500.7,
+      "date": "2015-01-08",
+      "name": "Online Banking payment to CRD 2187 Confirmation#",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer"
+      ],
+      "category_id": "21000000",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "8mErjR4DLvcxDjDxQqM7CKAOxJj5KLCJkVdZe",
+      "amount": 1068.61,
+      "date": "2015-01-06",
+      "name": "Check",
+      "meta": {
+        "location": {
+          "store_number": "1099"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer",
+        "Withdrawal",
+        "Check"
+      ],
+      "category_id": "21012001",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "pB1Rn0EgreIvm0mvKLE1IArOoX9m98u7eVe8L",
+      "_id": "MykXqrNmgYcN1m1Noa7LFonNEemM1ViwpgyD4",
+      "amount": -2500,
+      "date": "2014-12-31",
+      "name": "Online Banking transfer from CHK 4916 Confirmation#",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer"
+      ],
+      "category_id": "21000000",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "gnXoQg54BeI1xYx1aPRdfdYM8zXnXAhmKEy3w",
+      "_pendingTransaction": "z401Qv6DPeH5LXL5m6EYfoj8L1OV6di5nkXxd",
+      "amount": 19.99,
+      "date": "2014-12-26",
+      "name": "BRENDA OSBORN",
+      "meta": {
+        "payment_processor": "Square Cash",
+        "location": {
+          "state": "CA"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "unresolved"
+      },
+      "score": {
+        "location": {
+          "state": 1
+        },
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "pB1Rn0EgreIvm0mvKLE1IArOoX9m98u7eVe8L",
+      "_id": "Jq3QDbn8MVCD595DpjVmfKmeVd7aAJux738xv",
+      "amount": -0.01,
+      "date": "2014-12-24",
+      "name": "INTEREST",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Interest"
+      ],
+      "category_id": "15000000",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "BnwgbQ7vA5ID6n6DxB7ptQ1QEQQbvjULPa8qV",
+      "amount": -13.51,
+      "date": "2014-12-22",
+      "name": "BRENDA OS REFUND",
+      "meta": {
+        "payment_processor": "Square Cash",
+        "location": {
+          "city": "San Francisco",
+          "state": "CA"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer",
+        "Deposit"
+      ],
+      "category_id": "21007000",
+      "score": {
+        "location": {
+          "city": 1,
+          "state": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "BnwgbQ7vA5ID6n6DxB7XfyQBb8PjpYfO7R0O9",
+      "amount": 20.19,
+      "date": "2014-12-20",
+      "name": "ADOBE SYSTEMS INC.",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Shops",
+        "Computers and Electronics"
+      ],
+      "category_id": "19013000",
+      "score": {
+        "location": {},
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "3J7kKxAMa3CZ3K3ZDo0XC6RQ3NJzvYsOAMjOo",
+      "amount": 21.5,
+      "date": "2014-12-19",
+      "name": "METRO-NORTH TOMTVM2",
+      "meta": {
+        "location": {
+          "address": "347 MADISON AVE FL 8",
+          "city": "New York",
+          "state": "NY",
+          "zip": "10017"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Travel",
+        "Rail"
+      ],
+      "category_id": "22015000",
+      "score": {
+        "location": {
+          "address": 0.8,
+          "city": 1,
+          "state": 1,
+          "zip": 0.8
+        },
+        "name": 0.8
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "yrvDQ3wL1etZ4O4Z3wKzCQ53JrwLjmTJgPnJR",
+      "amount": 18,
+      "date": "2014-12-17",
+      "name": "HEROKU",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Service",
+        "Computers"
+      ],
+      "category_id": "18012000",
+      "score": {
+        "location": {},
+        "name": 0.2
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "KByn1OpZgXIV4k4Vor78IQOn89eVy0TzmKBzm",
+      "amount": 7.6,
+      "date": "2014-12-16",
+      "name": "Fresh Tortillas Express",
+      "meta": {
+        "location": {
+          "address": "206  Varick St",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.728745,
+            "lon": -74.005058
+          },
+          "state": "NY",
+          "zip": "10014"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants"
+      ],
+      "category_id": "13005000",
+      "score": {
+        "location": {
+          "address": 0.8,
+          "city": 1,
+          "state": 1,
+          "zip": 0.8
+        },
+        "name": 0.8
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "PA06ydw7gVuybrbyV87Ni0LOP9VPJbhbA58b1",
+      "amount": 1.09,
+      "date": "2014-12-16",
+      "name": "Dunkin' Donuts",
+      "meta": {
+        "location": {
+          "address": "75  Christopher St  Frnt 2",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.733661,
+            "lon": -74.003424
+          },
+          "state": "NY",
+          "store_number": "340355",
+          "zip": "10014"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants",
+        "Donuts"
+      ],
+      "category_id": "13005036",
+      "score": {
+        "location": {
+          "address": 0,
+          "city": 1,
+          "state": 1,
+          "zip": 0
+        },
+        "name": 0.8
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "q3PQNjR74eU0ZqZ0eL5rTQ9XweLwDohAE5LAx",
+      "amount": 6.75,
+      "date": "2014-12-16",
+      "name": "Taim",
+      "meta": {
+        "location": {
+          "address": "220 Waverly Pl",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.73592,
+            "lon": -74.001945
+          },
+          "state": "NY",
+          "zip": "10014"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants"
+      ],
+      "category_id": "13005000",
+      "score": {
+        "location": {
+          "address": 0.8,
+          "city": 1,
+          "state": 1,
+          "zip": 0.8
+        },
+        "name": 0.8
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "BnwgbQ7vA5ID6n6DxB7XfyQBvV5vN6tO7R0Oj",
+      "amount": 6.52,
+      "date": "2014-12-16",
+      "name": "Murray's Cheese",
+      "meta": {
+        "location": {
+          "address": "89 E 42nd St",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.752306,
+            "lon": -73.977744
+          },
+          "state": "NY",
+          "zip": "10017"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants"
+      ],
+      "category_id": "13005000",
+      "score": {
+        "location": {
+          "address": 0,
+          "city": 1,
+          "state": 1,
+          "zip": 0
+        },
+        "name": 0.8
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "L3KpP0X5MVUPaAaPv4VQTb59O7KJ8Mhae9mor",
+      "amount": 80,
+      "date": "2014-12-15",
+      "name": "ATM WITHDRAWAL",
+      "meta": {
+        "location": {
+          "city": "New York",
+          "state": "NY"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer",
+        "Withdrawal",
+        "ATM"
+      ],
+      "category_id": "21012002",
+      "score": {
+        "location": {
+          "city": 1,
+          "state": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "3J7kKxAMa3CZ3K3ZDo0XC6RQgwqgZahOAMjOL",
+      "amount": 4,
+      "date": "2014-12-15",
+      "name": "Ground Support",
+      "meta": {
+        "location": {
+          "address": "399 W Broadway   Frnt 2",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.72417,
+            "lon": -74.002038
+          },
+          "state": "NY",
+          "zip": "10012"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants"
+      ],
+      "category_id": "13005000",
+      "score": {
+        "location": {
+          "address": 0.8,
+          "city": 1,
+          "state": 1,
+          "zip": 0.8
+        },
+        "name": 0.8
+      }
+    },
+    {
+      "_account": "BnwgbQ7vA5ID6n6DxB7XfyQ5oaJRL4I40yqZJ",
+      "_id": "489AkjvdxyfZLkLZgYzpCyn89dB3XxuZnzBZ8",
+      "amount": 7.6,
+      "date": "2014-12-15",
+      "name": "Fresh Tortillas Express",
+      "meta": {
+        "location": {
+          "address": "206  Varick St",
+          "city": "New York",
+          "coordinates": {
+            "lat": 40.728745,
+            "lon": -74.005058
+          },
+          "state": "NY",
+          "zip": "10014"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "place"
+      },
+      "category": [
+        "Food and Drink",
+        "Restaurants"
+      ],
+      "category_id": "13005000",
+      "score": {
+        "location": {
+          "address": 0.8,
+          "city": 1,
+          "state": 1,
+          "zip": 0.8
+        },
+        "name": 0.8
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "q3PQNjR74eU0ZqZ0eLRycxMXN5mjw3uJR7NJM",
+      "amount": 12,
+      "date": "2014-12-10",
+      "name": "Monthly Maintenance Fee",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Bank Fees"
+      ],
+      "category_id": "10000000",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "Y85Ka9yDgVfaLzLa6AvKSMPoaNkRkmTneVebo",
+      "amount": 960.19,
+      "date": "2014-12-04",
+      "name": "Online Banking payment to CRD 7946 Confirmation#",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer"
+      ],
+      "category_id": "21000000",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "z401Qv6DPeH5LXL5m6B0i1V4JY3L3BizAxAQw",
+      "amount": 80,
+      "date": "2014-12-04",
+      "name": "ATM WITHDRAWAL",
+      "meta": {
+        "location": {
+          "city": "New York",
+          "state": "NY"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer",
+        "Withdrawal",
+        "ATM"
+      ],
+      "category_id": "21012002",
+      "score": {
+        "location": {
+          "city": 1,
+          "state": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "m16OQaV5veuKgmgKZo06uVwQjmRgRvImrOrPp",
+      "amount": -2567.98,
+      "date": "2014-12-04",
+      "name": "Online Banking transfer from SAV 1983 Confirmation#",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer"
+      ],
+      "category_id": "21000000",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "pB1Rn0EgreIvm0mvKLE1IArOoX9m98u7eVe8L",
+      "_id": "BnwgbQ7vA5ID6n6DxBvPFL8j09R1RXU84o4Xb",
+      "amount": 2567.98,
+      "date": "2014-12-04",
+      "name": "Online Banking transfer to CHK 9827 Confirmation#",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer"
+      ],
+      "category_id": "21000000",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "dEQ8zAJ01eU6dvd69Va8Fvx1ZApOpYC80r0Rq",
+      "amount": 1038,
+      "date": "2014-12-03",
+      "name": "Check",
+      "meta": {
+        "location": {
+          "store_number": "1100"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer",
+        "Withdrawal",
+        "Check"
+      ],
+      "category_id": "21012001",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "pB1Rn0EgreIvm0mvKLE1IArOoX9m98u7eVe8L",
+      "_id": "3J7kKxAMa3CZ3K3ZDonOSkNzeAo5obSzD8Dkq",
+      "amount": -2500,
+      "date": "2014-12-03",
+      "name": "Online Banking transfer from CHK 4916 Confirmation#",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer"
+      ],
+      "category_id": "21000000",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "w0k6QoewLYfeAEAe7QzkuD8Zd6qAq4Ced1db1",
+      "amount": 2.5,
+      "date": "2014-11-24",
+      "name": "EFX WITHDRWL",
+      "meta": {
+        "location": {
+          "city": "New York",
+          "state": "NY"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Bank Fees"
+      ],
+      "category_id": "10000000",
+      "score": {
+        "location": {
+          "city": 1,
+          "state": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "65O0vzj6wkIRgvgRBM0biKA0zjVJV9TV050rx",
+      "amount": 81.9,
+      "date": "2014-11-24",
+      "name": "EFX WITHDRWL",
+      "meta": {
+        "location": {
+          "city": "New York",
+          "state": "NY"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer",
+        "Withdrawal"
+      ],
+      "category_id": "21012000",
+      "score": {
+        "location": {
+          "city": 1,
+          "state": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "pB1Rn0EgreIvm0mvKLE1IArOoX9m98u7eVe8L",
+      "_id": "yrvDQ3wL1etZ4O4Z3wnvSKrL8zZ4ZXTDX6X8b",
+      "amount": -0.01,
+      "date": "2014-11-21",
+      "name": "INTEREST",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Interest"
+      ],
+      "category_id": "15000000",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "L3KpP0X5MVUPaAaPv4n6fKn67domobTdowoQp",
+      "amount": 60,
+      "date": "2014-11-19",
+      "name": "ATM WITHDRAWAL",
+      "meta": {
+        "location": {
+          "city": "New York",
+          "state": "NY"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer",
+        "Withdrawal",
+        "ATM"
+      ],
+      "category_id": "21012002",
+      "score": {
+        "location": {
+          "city": 1,
+          "state": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "DwL97nVj0bu3n1n36yx8hJkYDNLpLrFzY1YrP",
+      "amount": 60,
+      "date": "2014-11-13",
+      "name": "ATM WITHDRAWAL",
+      "meta": {
+        "location": {
+          "city": "New York",
+          "state": "NY"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer",
+        "Withdrawal",
+        "ATM"
+      ],
+      "category_id": "21012002",
+      "score": {
+        "location": {
+          "city": 1,
+          "state": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "pB1Rn0EgreIvm0mvKLE1IArOoX9m98u7eVe8L",
+      "_id": "KByn1OpZgXIV4k4VorAjt59VRPj3jaILdkdbB",
+      "amount": 529.04,
+      "date": "2014-11-12",
+      "name": "Online Banking payment to CRD 7946 Confirmation#",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer"
+      ],
+      "category_id": "21000000",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "1aby3ZKVrqCNjVjN3XyxSZLbPKjvjBFobKbZP",
+      "amount": 12,
+      "date": "2014-11-06",
+      "name": "Monthly Maintenance Fee",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Bank Fees"
+      ],
+      "category_id": "10000000",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "PA06ydw7gVuybrbyV8X6TqNxBkrZr5cawkw66",
+      "amount": 23,
+      "date": "2014-11-06",
+      "name": "CHECK ORDER00035 DES:FEE ID:U056189531 INDN:CHRISTOPHER OSBORN ID:XXXXX00035 PPD",
+      "meta": {
+        "location": {
+          "state": "CO"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Bank Fees"
+      ],
+      "category_id": "10000000",
+      "score": {
+        "location": {
+          "state": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "q3PQNjR74eU0ZqZ0eLRPSzbayEBZBpCxNXNMp",
+      "amount": 80,
+      "date": "2014-11-06",
+      "name": "ATM WITHDRAWAL",
+      "meta": {
+        "location": {
+          "city": "New York",
+          "state": "NY"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer",
+        "Withdrawal",
+        "ATM"
+      ],
+      "category_id": "21012002",
+      "score": {
+        "location": {
+          "city": 1,
+          "state": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "8mErjR4DLvcxDjDxQqv7TaB8xM0r7juBD0nN3",
+      "amount": 280,
+      "date": "2014-10-29",
+      "name": "ATM WITHDRAWAL",
+      "meta": {
+        "location": {
+          "state": "NY"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer",
+        "Withdrawal",
+        "ATM"
+      ],
+      "category_id": "21012002",
+      "score": {
+        "location": {
+          "state": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "ZZokxeK1gVIx6D6xy9dkTgOmr5kdNyFjmOdNO",
+      "amount": 60,
+      "date": "2014-10-28",
+      "name": "ATM WITHDRAWAL",
+      "meta": {
+        "location": {
+          "city": "New York",
+          "state": "NY"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer",
+        "Withdrawal",
+        "ATM"
+      ],
+      "category_id": "21012002",
+      "score": {
+        "location": {
+          "city": 1,
+          "state": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "VaJBjyqwgVCjgmgj07XBCMJ636VP4OsYE4zgD",
+      "amount": 580,
+      "date": "2014-10-27",
+      "name": "Check",
+      "meta": {
+        "location": {
+          "store_number": "1096"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer",
+        "Withdrawal",
+        "Check"
+      ],
+      "category_id": "21012001",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "Okvw35dgEVf3yjy31J5whOJ1Y1E6x5hebxZE3",
+      "amount": 1900,
+      "date": "2014-10-27",
+      "name": "Check",
+      "meta": {
+        "location": {
+          "store_number": "1097"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer",
+        "Withdrawal",
+        "Check"
+      ],
+      "category_id": "21012001",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "xjALQJd6DeI8kvk89d5Au54azoKz61fydn8N9",
+      "amount": -1000,
+      "date": "2014-10-27",
+      "name": "Online Banking transfer from SAV 1983 Confirmation#",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer"
+      ],
+      "category_id": "21000000",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "Jq3QDbn8MVCD595DpjrKFpgdqY8qObfqynRra",
+      "amount": -2000,
+      "date": "2014-10-27",
+      "name": "Online Banking transfer from SAV 1983 Confirmation#",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer"
+      ],
+      "category_id": "21000000",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "pB1Rn0EgreIvm0mvKLE1IArOoX9m98u7eVe8L",
+      "_id": "8mErjR4DLvcxDjDxQqv7TaB8pnOp4ocBD0nN5",
+      "amount": -2000,
+      "date": "2014-10-27",
+      "name": "Online Banking transfer from CHK 4916 Confirmation#",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer"
+      ],
+      "category_id": "21000000",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "pB1Rn0EgreIvm0mvKLE1IArOoX9m98u7eVe8L",
+      "_id": "z401Qv6DPeH5LXL5m6B0i1aK6NwVNBcRLvzDw",
+      "amount": 1000,
+      "date": "2014-10-27",
+      "name": "Online Banking transfer to CHK 9827 Confirmation#",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer"
+      ],
+      "category_id": "21000000",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "pB1Rn0EgreIvm0mvKLE1IArOoX9m98u7eVe8L",
+      "_id": "m16OQaV5veuKgmgKZo06uV1xPkLwkvtQ9Bmnp",
+      "amount": 2000,
+      "date": "2014-10-27",
+      "name": "Online Banking transfer to CHK 9827 Confirmation#",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer"
+      ],
+      "category_id": "21000000",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "pB1Rn0EgreIvm0mvKLE1IArOoX9m98u7eVe8L",
+      "_id": "omDEQBMbjecA010AYNQDigmbmbVLNySyw7NYO",
+      "amount": -0.01,
+      "date": "2014-10-27",
+      "name": "INTEREST",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Interest"
+      ],
+      "category_id": "15000000",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "pB1Rn0EgreIvm0mvKLE1IArOoX9m98u7eVe8L",
+      "_id": "5ZVvA50wdKI8AVA8jmQ6uaKqKqVXvJT1voaed",
+      "amount": 3,
+      "date": "2014-10-27",
+      "name": "Fee For Checks And/Or Withdrawals Over Limit",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Bank Fees"
+      ],
+      "category_id": "10000000",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "pB1Rn0EgreIvm0mvKLE1IArOoX9m98u7eVe8L",
+      "_id": "ZZokxeK1gVIx6D6xy9dkTgOmQ8VQeRHjmOdN4",
+      "amount": -2000,
+      "date": "2014-10-21",
+      "name": "Online Banking transfer from CHK 4916 Confirmation#",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer"
+      ],
+      "category_id": "21000000",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "xjALQJd6DeI8kvk89d5Au54343Vb8piydn8Nm",
+      "amount": 60,
+      "date": "2014-10-20",
+      "name": "ATM WITHDRAWAL",
+      "meta": {
+        "location": {
+          "city": "New York",
+          "state": "NY"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer",
+        "Withdrawal",
+        "ATM"
+      ],
+      "category_id": "21012002",
+      "score": {
+        "location": {
+          "city": 1,
+          "state": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "Jq3QDbn8MVCD595DpjrKFpgAgArLyNtqynRr7",
+      "amount": -374,
+      "date": "2014-10-15",
+      "name": "Online Banking transfer from SAV 1983 Confirmation#",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer"
+      ],
+      "category_id": "21000000",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "pB1Rn0EgreIvm0mvKLE1IArOoX9m98u7eVe8L",
+      "_id": "5ZVvA50wdKI8AVA8jmQ6uaKMO57O0yc1voaeB",
+      "amount": 374,
+      "date": "2014-10-15",
+      "name": "Online Banking transfer to CHK 9827 Confirmation#",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer"
+      ],
+      "category_id": "21000000",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "R0rDk6LVgEfVnanVk5MDtZB757xPe9UoneKmQ",
+      "amount": 80,
+      "date": "2014-10-14",
+      "name": "ATM WITHDRAWAL",
+      "meta": {
+        "location": {
+          "city": "Essex",
+          "state": "CT"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer",
+        "Withdrawal",
+        "ATM"
+      ],
+      "category_id": "21012002",
+      "score": {
+        "location": {
+          "city": 1,
+          "state": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "8mErjR4DLvcxDjDxQqv7TaBKBKZwzXTBD0nNJ",
+      "amount": 12,
+      "date": "2014-10-10",
+      "name": "Monthly Maintenance Fee",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Bank Fees"
+      ],
+      "category_id": "10000000",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "ZZokxeK1gVIx6D6xy9dkTgO9O9D0JwSjmOdNz",
+      "amount": 60,
+      "date": "2014-10-09",
+      "name": "ATM WITHDRAWAL",
+      "meta": {
+        "location": {
+          "city": "New York",
+          "state": "NY"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer",
+        "Withdrawal",
+        "ATM"
+      ],
+      "category_id": "21012002",
+      "score": {
+        "location": {
+          "city": 1,
+          "state": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "eRnZQg8jPetL5n5L71DZIM81bJ56JBtYXnLgm",
+      "amount": 820,
+      "date": "2014-10-02",
+      "name": "Check",
+      "meta": {
+        "location": {
+          "store_number": "1094"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer",
+        "Withdrawal",
+        "Check"
+      ],
+      "category_id": "21012001",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "Y85Ka9yDgVfaLzLa6AvKSMedYB5PBmtYDJnXo",
+      "amount": 80,
+      "date": "2014-10-02",
+      "name": "ATM WITHDRAWAL",
+      "meta": {
+        "location": {
+          "city": "New York",
+          "state": "NY"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer",
+        "Withdrawal",
+        "ATM"
+      ],
+      "category_id": "21012002",
+      "score": {
+        "location": {
+          "city": 1,
+          "state": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "5ZVvA50wdKI8AVA8jmQ6uaKMpdbex4u1voaeP",
+      "amount": -1200,
+      "date": "2014-10-01",
+      "name": "Online Banking transfer from SAV 1983 Confirmation#",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer"
+      ],
+      "category_id": "21000000",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "pB1Rn0EgreIvm0mvKLE1IArOoX9m98u7eVe8L",
+      "_id": "bOEx71aALeTdAmAd9Bwxt1Oo4mYprEton1YBk",
+      "amount": -1500,
+      "date": "2014-10-01",
+      "name": "Online Banking transfer from CHK 4916 Confirmation#",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer"
+      ],
+      "category_id": "21000000",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "pB1Rn0EgreIvm0mvKLE1IArOoX9m98u7eVe8L",
+      "_id": "omDEQBMbjecA010AYNQDigm7MXaMzvHyw7NY4",
+      "amount": 1200,
+      "date": "2014-10-01",
+      "name": "Online Banking transfer to CHK 9827 Confirmation#",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer"
+      ],
+      "category_id": "21000000",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "omDEQBMbjecA010AYNQDigm7KZDAEdFyw7NYY",
+      "amount": 80,
+      "date": "2014-09-22",
+      "name": "ATM WITHDRAWAL",
+      "meta": {
+        "location": {
+          "city": "New York",
+          "state": "NY"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer",
+        "Withdrawal",
+        "ATM"
+      ],
+      "category_id": "21012002",
+      "score": {
+        "location": {
+          "city": 1,
+          "state": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "pB1Rn0EgreIvm0mvKLE1IArOoX9m98u7eVe8L",
+      "_id": "VaJBjyqwgVCjgmgj07XBCMJ6rdA5vniYE4z37",
+      "amount": 1403.34,
+      "date": "2014-09-19",
+      "name": "Online Banking payment to CRD 7946 Confirmation#",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer"
+      ],
+      "category_id": "21000000",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "pB1Rn0EgreIvm0mvKLE1IArOoX9m98u7eVe8L",
+      "_id": "Okvw35dgEVf3yjy31J5whOJ18AZk7zsebxZv6",
+      "amount": -1000,
+      "date": "2014-09-18",
+      "name": "Online Banking transfer from CHK 4916 Confirmation#",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer"
+      ],
+      "category_id": "21000000",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "MykXqrNmgYcN1m1Noa5YSKLrAr8gVDsO9XBrD",
+      "amount": 80,
+      "date": "2014-09-11",
+      "name": "ATM WITHDRAWAL",
+      "meta": {
+        "location": {
+          "state": "NY"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer",
+        "Withdrawal",
+        "ATM"
+      ],
+      "category_id": "21012002",
+      "score": {
+        "location": {
+          "state": 1
+        },
+        "name": 1
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "E6DV91OrjgfMkPkMmKNvsM41r1aNxms8PQZRP",
+      "amount": 12,
+      "date": "2014-09-10",
+      "name": "Monthly Maintenance Fee",
+      "meta": {
+        "location": {}
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Bank Fees"
+      ],
+      "category_id": "10000000",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    },
+    {
+      "_account": "nPLMQROo0eUkRaRk80bLc8DJZxzRzEHMQyQ9n",
+      "_id": "QvjLKw69gVfK040KNZBLuPq1M1o8OrHMLOwqo",
+      "amount": 900,
+      "date": "2014-09-10",
+      "name": "Check",
+      "meta": {
+        "location": {
+          "store_number": "1091"
+        }
+      },
+      "pending": false,
+      "type": {
+        "primary": "special"
+      },
+      "category": [
+        "Transfer",
+        "Withdrawal",
+        "Check"
+      ],
+      "category_id": "21012001",
+      "score": {
+        "location": {},
+        "name": 1
+      }
+    }
+  ],
+  "access_token": "f202f5004003ff51b7cc7e60523b7a435106c297114ce14fa0fed80942a19da5372d34be761f3050656f5125d5d5d6a1650696ae0b0b67389aaec116bf1d9bfdb17d8521290089078ec126a8ad245c0b"
+}

@@ -69,7 +69,8 @@ unsigned int Puppy::Tree::getDepth(unsigned int inIndex) const
 	unsigned int j = inIndex + 1;
 	for(unsigned int i=0; i<lNbArgs; ++i) {
 		unsigned int lChildDepth = getDepth(j) + 1;
-		if(lChildDepth > lDepth) lDepth = lChildDepth;
+		if(lChildDepth > lDepth)
+			lDepth = lChildDepth;
 		j += (*this)[j].mSubTreeSize;
 	}
 	return lDepth;
@@ -83,10 +84,14 @@ unsigned int Puppy::Tree::getDepth(unsigned int inIndex) const
  */
 void Puppy::Tree::interpret(void* outResult, Puppy::Context& ioContext)
 {
+	for(int i = 0; i < ioContext.m_pAccount->allTrans().count(); ++i) {
+		// reset the dimensionOfVoid
+		ioContext.m_pAccount->allTrans().trans(i).dimensionOfVoid = 0;
+	}
 	assert(size() > 0);
 	ioContext.mTree = this;
 	ioContext.mCallStack.push_back(0);
-	if(front().mPrimitive->isFeature()) {
+	if(isValidTree()) {
 		front().mPrimitive->execute(outResult, ioContext);
 	}
 	else {
@@ -96,7 +101,6 @@ void Puppy::Tree::interpret(void* outResult, Puppy::Context& ioContext)
 	}
 	ioContext.mCallStack.pop_back();
 }
-
 
 /*!
  *  \brief Set call stack to include the correctly refer to a given node.
@@ -114,7 +118,8 @@ void Puppy::Tree::setStackToNode(unsigned int inIndex,
 		unsigned int lNbArgs=(*this)[i].mPrimitive->getNumberArguments();
 		unsigned int lChildIndex = i + 1;
 		for(unsigned int j=0; j<lNbArgs; ++j) {
-			if((lChildIndex+(*this)[lChildIndex].mSubTreeSize) > inIndex) break;
+			if((lChildIndex+(*this)[lChildIndex].mSubTreeSize) > inIndex)
+				break;
 			lChildIndex += (*this)[lChildIndex].mSubTreeSize;
 		}
 		assert(lChildIndex < size());

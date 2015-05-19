@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QThread>
 #include "ACChart/acustomplot.h"
+#include "AmortiChart/AMPlot.h"
 #include "EvolutionSpinner.h"
 
 class EvolutionSpinner;
@@ -17,23 +18,27 @@ class MainWindow : public QMainWindow
 	Q_OBJECT
 
 public:
-	explicit MainWindow(QString jsonFile, QWidget *parent = 0);
+	explicit MainWindow(QString jsonFile, int afterJday = 0, int beforeJday = 0);
 	~MainWindow();
 
 public slots:
 	void handleResults(const QString &) {
 
 	}
-	void plotMask(VectorRectF vecRect);
+	void plotMask(double x, double y, bool isTarget);
+	void clearMasks();
+	void replotCharts();
+	void clearList();
+	void newList(QStringList strList);
 
 signals:
 	void operate(const QString &);
 
 private:
 	Ui::MainWindow *ui;
-	ACustomPlot* m_accountPlot;
 	QThread* m_evoThread;
 	EvolutionSpinner* m_evoSpinner;
+	Account* account;
 };
 
 #endif // MAINWINDOW_H

@@ -91,6 +91,26 @@ public:
 	void         setStackToNode(unsigned int inIndex, std::vector<unsigned int>& outCallStack) const;
 	void         write(std::ostream& ioOS, unsigned int inIndex=0) const;
 
+	bool isValidTree() {
+		bool isValid = true;
+		isValid &= front().mPrimitive->isRoot();
+		return isValid;
+	}
+
+	std::vector<unsigned int> getFeatureStack(unsigned int indFeature, Context& ioContext) {
+		std::vector<unsigned int> ret;
+		unsigned int i = 0;
+		ret.push_back(i);
+		unsigned int lNbArgs=(*this)[i].mPrimitive->getNumberArguments();
+		assert(indFeature < lNbArgs);
+		unsigned int lChildIndex = i + 1;
+		for(unsigned int j=0; j<indFeature; ++j) {
+			lChildIndex += (*this)[lChildIndex].mSubTreeSize;
+		}
+		ret.push_back(lChildIndex);
+		return ret;
+	}
+
 	float mFitness;  //!< Fitness value of the GP tree
 	bool  mValid;    //!< Flag indicating whether the fitness is valid.
 

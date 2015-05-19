@@ -2,7 +2,7 @@
 #define ACUSTOMPLOT_H
 
 #include "../qcustomplot/qcustomplot.h"
-class Account;
+#include "core/acdata.h"
 
 class ACustomPlot : public QCustomPlot
 {
@@ -12,16 +12,26 @@ public:
 
 	void loadCompressedAmount(Account *account);
 	void loadAmount(Account *account);
+	QList<uint> hashKeys() {
+		return m_hashGraphs.keys();
+	}
 
-	QRectF mapDayAgoToPlot(QRectF rectDayAgo) const;
+protected:
+	void makeGraphs(HashedBundles& hashBundles);
 
 signals:
+	void newLabel(QString);
+	void newSum(double);
+	void newHashValue(int);
 
 public slots:
+	void showHash(int ithLayer);
 
 private:
-	enum Mode{linear, logKinda} m_mode;
-	QDate m_lastDate;
+	double m_integral = 0.0;
+	QMap<uint, QCPGraph*> m_hashGraphs;
+	QStringList m_labels;
+	HashedBundles m_hashBund;
 };
 
 #endif // ACUSTOMPLOT_H

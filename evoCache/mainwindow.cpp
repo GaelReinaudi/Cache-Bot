@@ -1,22 +1,26 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "ACChart/acdata.h"
+#include "core/acdata.h"
 
-MainWindow::MainWindow(QString jsonFile, QWidget *parent)
-	: QMainWindow(parent)
+MainWindow::MainWindow(QString jsonFile, int afterJday, int beforeJday)
+	: QMainWindow()
 	, ui(new Ui::MainWindow)
 {
 	ui->setupUi(this);
 
 
 	// an account object that is going to be populated by the json file
-	Account* account = new Account();
-	account->load(jsonFile);
+	account = new Account();
+	account->loadPlaidJson(jsonFile, afterJday, beforeJday);
 
-	ui->accountPlot->loadCompressedAmount(account);
-//	ui->accountPlot->loadAmount(account);
+	ui->acPlot->loadCompressedAmount(account);
+	ui->amPlot->loadAmount(account);
+	ui->amPlot->hide();
 
-//	ui->accountPlot->setPlottingHints(QCP::phFastPolylines | QCP::phCacheLabels);
+	connect(ui->acPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), ui->amPlot->xAxis, SLOT(setRange(QCPRange)));
+	connect(ui->acPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), ui->amPlot, SLOT(replot()));
+
+//	ui->acPlot->setPlottingHints(QCP::phFastPolylines | QCP::phCacheLabels);
 
 	// needed to spin a new thread and run the evolution in it
 	m_evoThread = new QThread();
@@ -24,9 +28,14 @@ MainWindow::MainWindow(QString jsonFile, QWidget *parent)
 	m_evoSpinner->moveToThread(m_evoThread);
 	connect(m_evoThread, &QThread::finished, m_evoSpinner, &QObject::deleteLater);
 	connect(m_evoSpinner, &EvolutionSpinner::resultReady, this, &MainWindow::handleResults);
-	connect(ui->startButton, SIGNAL(clicked(bool)), m_evoSpinner, SLOT(startEvolution(bool)));
+	connect(ui->startButton, SIGNAL(clicked(bool)), m_evoSpinner, SLOT(startStopEvolution(bool)), Qt::DirectConnection);
 	connect(m_evoSpinner, &EvolutionSpinner::sendMask, this, &MainWindow::plotMask);
+	connect(m_evoSpinner, &EvolutionSpinner::sendClearMask, this, &MainWindow::clearMasks, Qt::BlockingQueuedConnection);
+	connect(m_evoSpinner, &EvolutionSpinner::needsReplot, this, &MainWindow::replotCharts, Qt::BlockingQueuedConnection);
+	connect(m_evoSpinner, &EvolutionSpinner::sendClearList, this, &MainWindow::clearList);
+	connect(m_evoSpinner, &EvolutionSpinner::newList, this, &MainWindow::newList, Qt::BlockingQueuedConnection);
 	m_evoThread->start();
+	ui->startButton->click();
 }
 
 MainWindow::~MainWindow()
@@ -34,23 +43,41 @@ MainWindow::~MainWindow()
 	delete ui;
 }
 
-void MainWindow::plotMask(VectorRectF vecRect) {
-	qDebug() << vecRect.size();
-	if (!vecRect.empty()) {
-		qDebug() << vecRect[0].left() << vecRect[0].right() << vecRect[0].top() << vecRect[0].bottom();
-		ui->accountPlot->clearItems();
-		for(const QRectF& rect : vecRect) {
-			QRectF chartRect = ui->accountPlot->mapDayAgoToPlot(rect);
-			chartRect = kindaLog(chartRect);
-//			qDebug() << QDateTime::fromTime_t(int(chartRect.left())) << QDateTime::fromTime_t(int(chartRect.right())) << chartRect.top() << chartRect.bottom();
-			QCPItemRect* itRect = new QCPItemRect(ui->accountPlot);
-			itRect->topLeft->setCoords(chartRect.topLeft());
-			itRect->bottomRight->setCoords(chartRect.bottomRight());
-			itRect->setPen(QPen(QBrush(QColor(255, 0, 0, 128)), 2.0));
-			itRect->setBrush(QBrush(QColor(255, 0, 0, 128)));
-			ui->accountPlot->addItem(itRect);
-		}
-		ui->accountPlot->replot(QCustomPlot::rpQueued);
+void MainWindow::clearMasks()
+{
+	ui->acPlot->clearItems();
+}
+
+void MainWindow::plotMask(double x, double y, bool isTarget)
+{
+	QCPItemRect* itRect = new QCPItemRect(ui->acPlot);
+	y = kindaLog(y);
+	itRect->topLeft->setCoords(QPointF(x - 4*3600*24, y + (10+6*isTarget)*0.01));
+	itRect->bottomRight->setCoords(QPointF(x + 4*3600*24, y - (10+6*isTarget)*0.01));
+	QColor colZone = isTarget ? QColor(239, 64, 53, 128) : QColor(0, 64, 253, 128);
+	itRect->setPen(QPen(QBrush(colZone), 3.0));
+	itRect->setBrush(QBrush(colZone));
+	itRect->setClipToAxisRect(false);
+	ui->acPlot->addItem(itRect);
+}
+
+void MainWindow::replotCharts()
+{
+	ui->acPlot->replot(QCustomPlot::rpQueued);
+	//ui->amPlot->loadAmount(account);
+	//	ui->amPlot->replot(QCustomPlot::rpQueued);
+}
+
+void MainWindow::clearList()
+{
+	ui->listBills->clear();
+}
+
+void MainWindow::newList(QStringList strList)
+{
+	ui->listBills->clear();
+	for (const QString& str : strList) {
+		ui->listBills->addItem(str);
 	}
 }
 

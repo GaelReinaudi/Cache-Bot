@@ -43,7 +43,7 @@
 #include "puppy/PrimitiveHandle.hpp"
 #include "puppy/Primitive.hpp"
 #include "puppy/Randomizer.hpp"
-#include "ACChart/acdata.h"
+#include "core/acdata.h"
 
 namespace Puppy {
 
@@ -69,24 +69,6 @@ public:
 		mTree(NULL)
 	  , m_pAccount(pAc)
 	{
-		QDateTime mostRecent;
-		int mostDaysAgo = 0;
-		for (const Transaction& trans : pAc->transactions().list()) {
-			int daysToNewMostRecent = trans.startDate().daysTo(mostRecent);
-			if (daysToNewMostRecent <= 0) {
-				mostRecent = trans.startDate();
-				mostDaysAgo += -daysToNewMostRecent;
-			}
-			else if (daysToNewMostRecent > mostDaysAgo) {
-				mostDaysAgo = daysToNewMostRecent;
-			}
-		}
-		qDebug() << "mostRecent" << mostRecent << "mostDaysAgo" << mostDaysAgo;
-		m_dailyAmounts.resize(mostDaysAgo + 1);
-		for (const Transaction& trans : pAc->transactions().list()) {
-			int daysAgo = trans.startDate().daysTo(mostRecent);
-			m_dailyAmounts[daysAgo].push_back(trans.amount());
-		}
 	}
 
 	/*!
@@ -99,24 +81,33 @@ public:
 		mPrimitiveMap[inPrimitive->getName()] = inPrimitive;
 		if(inPrimitive->getNumberArguments() == 0)
 			mTerminalSet.push_back(inPrimitive);
-		else if(inPrimitive->getNumberArguments() <= 4)
+		else if(!inPrimitive->isFeature())
 			mFunctionSet.push_back(inPrimitive);
-		else
+		else if(!inPrimitive->isRoot())
 			mAccountFeatureSet.push_back(inPrimitive);
+		else
+			mAccountRoot.push_back(inPrimitive);
+	}
+	inline void insertIfNotThere(PrimitiveHandle inPrimitive)
+	{
+		if(mPrimitiveMap.find(inPrimitive->getName()) == mPrimitiveMap.end())
+			insert(inPrimitive);
 	}
 
 	Randomizer                            mRandom;        //!< Random number generator.
 	std::vector<PrimitiveHandle>          mFunctionSet;   //!< Set of functions usable to build trees.
 	std::vector<PrimitiveHandle>          mAccountFeatureSet;   //!< Set of account features usable to build trees.
+	std::vector<PrimitiveHandle>          mAccountRoot;   //!< Set of account features usable to build trees.
 	std::vector<PrimitiveHandle>          mTerminalSet;   //!< Set of terminals usable to build trees.
 	std::map<std::string,PrimitiveHandle> mPrimitiveMap;  //!< Name-primitive map.
 	std::vector<unsigned int>             mCallStack;     //!< Execution call stack.
 	Tree*                                 mTree;          //!< Actual tree evaluated.
 	bool m_isInFeature = false;
 	bool m_hasRecursiveFeature = false;
-	bool m_doPlot = false;
+	QStringList* m_summaryStrList = 0;
+	QMap<double, QVector<Transaction> >* m_mapPredicted = 0;
 	Account* m_pAccount;
-	QVector<QVector<int> > m_dailyAmounts;
+	int filterHashIndex = -1;
 };
 
 }
