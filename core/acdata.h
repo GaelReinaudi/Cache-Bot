@@ -12,14 +12,7 @@
 #include <QtMath>
 #include <array>
 
-double kindaLog(double amount);
-double unKindaLog(double kindaLogAmount);
-unsigned int proximityHashString(const QString& str);
-
-#define MAX_HASH_LENGTH 64
-static const int MAX_TRANSACTION_PER_ACCOUNT = 1024 * 8;
-static const int KLA_MULTIPLICATOR = 128;
-static const int KA_MULTIPLICATOR = 1024;
+#include "common.h"
 
 class Account;
 

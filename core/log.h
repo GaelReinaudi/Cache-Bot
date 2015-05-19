@@ -1,8 +1,6 @@
 #ifndef LOG_H
 #define LOG_H
 
-#include <qapplication.h>
-
 class logger
 {
 public:

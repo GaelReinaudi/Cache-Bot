@@ -2,9 +2,10 @@ TEMPLATE = subdirs
 CONFIG += ordered
 
 SUBDIRS = \
-    cacheRest \
-#    cacheLight \
+	core \
+	cacheRest \
+	cacheLight \
 	tests
 	
-cacheLight.depends = cacheRest
-tests.depends = cacheRest
+cacheLight.depends = cacheRest,core
+tests.depends = cacheRest,core
