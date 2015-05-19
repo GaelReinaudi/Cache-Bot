@@ -252,6 +252,7 @@ QNetworkReply* HttpRequestWorker::execute(HttpRequestInput *input) {
 		request.setHeader(QNetworkRequest::ContentTypeHeader, "multipart/form-data; boundary=" + boundary);
 	}
 
+	qDebug() << "Sending to" << input->url_str;
 	QNetworkReply* reply = 0;
 	if (input->http_method == "GET") {
 		reply = manager->get(request);
@@ -288,7 +289,7 @@ void HttpRequestWorker::on_manager_finished(QNetworkReply *reply) {
 
 	emit on_execution_finished(this);
 
-//	qDebug(response);
+	qDebug() << "response is" << response;
 	if(reply->request().url() == QUrl(LoginRoute)) {
 		emit repliedLogin(response);
 	}

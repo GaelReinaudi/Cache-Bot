@@ -59,7 +59,7 @@ private slots:
 		QVERIFY(spyUserData.wait(10000));
 		QCOMPARE(spyUserData.count(), 1);
 		QList<QVariant> arguments = spyUserData.takeFirst();
-		//qDebug() << arguments.at(0).toString();
+		qDebug() << arguments.at(0).toString();
 		QVERIFY(arguments.at(0).toString().startsWith("{\"accounts\":"));
 	}
 
