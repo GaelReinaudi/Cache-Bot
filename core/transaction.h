@@ -3,10 +3,11 @@
 
 #include "common.h"
 
-class Transaction : public DBobj
+class Transaction// : public DBobj
 {
 public:
-	Transaction() {}
+	Transaction()
+	{}
 private:
 	//	double amount = 0.0;
 		qint64 kamount = 0; // integer = round(amount * Mult)

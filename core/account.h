@@ -6,7 +6,7 @@
 
 typedef QMap<uint, TransactionBundle*> HashedBundles;
 
-class Account// : public QObject
+class Account : public DBobj
 {
 public:
 	Account() {}

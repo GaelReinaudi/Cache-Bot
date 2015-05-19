@@ -26,4 +26,13 @@ void CacheRest::getUserData(QString userId)
 	HttpRequestInput httpRequest(UserDataRoute.arg(userId), "POST");
 	worker->execute(&httpRequest);
 }
+//void CacheRest::getUserData2(QString userId, User *pUserToInject)
+//{
+//	HttpRequestInput httpRequest(UserDataRoute.arg(userId), "POST");
+//	worker->execute(&httpRequest);
+//	if (pUserToInject) {
+//		QObject::connect(worker, SIGNAL(repliedUserData(QString)), pUserToInject, SLOT(injectJsonString(QString)));
+//	}
+//}
+
 

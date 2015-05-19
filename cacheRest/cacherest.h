@@ -3,6 +3,7 @@
 
 #include "cacherest_global.h"
 #include "httprequestworker.h"
+#include "user.h"
 
 // http://www.creativepulse.gr/en/blog/2014/restful-api-requests-using-qt-cpp-for-linux-mac-osx-ms-windows
 
@@ -15,6 +16,13 @@ public:
 	void login(QString username, QString password);
 	void getUserIds();
 	void getUserData(QString userId);
+//	void getUserData2(QString userId, User *pUserToInject);
+	User* newUser(QString userId) {
+		User* pUser = new User(userId);
+		//getUserData(userId, pUser);
+		return pUser;
+	}
+
 
 public:
 	HttpRequestWorker *worker = 0;

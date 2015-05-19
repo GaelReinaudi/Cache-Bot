@@ -33,9 +33,17 @@ static inline double expoInt(qint64 x) {
 
 
 
-class DBobj
+class DBobj : public QObject
 {
-private:
+	Q_OBJECT
+
+public:
+	DBobj() {}
+	DBobj(QString id) {
+		m_id = id;
+	}
+
+protected:
 	QString m_id;
 };
 
