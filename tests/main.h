@@ -53,15 +53,25 @@ private slots:
 	}
 
 
-	void getUseraData() {
-		m_cacheRest->getUserData("55518f01574600030092a822");
+	void userNoBank() {
+		m_cacheRest->getUserData("552d7ba7be082c0300169ed5");
 		QSignalSpy spyUserData(m_cacheRest->worker, SIGNAL(repliedUserData(QString)));
 		QVERIFY(spyUserData.wait(10000));
 		QCOMPARE(spyUserData.count(), 1);
 		QList<QVariant> arguments = spyUserData.takeFirst();
 		qDebug() << arguments.at(0).toString();
-		QVERIFY(arguments.at(0).toString().startsWith("{\"accounts\":"));
+		QVERIFY(arguments.at(0).toString().startsWith("{\"error\":\"No banks for this user.\"}"));
 	}
+
+//	void getUseraData() {
+//		m_cacheRest->getUserData("552d7ba7be082c0300169ed5");
+//		QSignalSpy spyUserData(m_cacheRest->worker, SIGNAL(repliedUserData(QString)));
+//		QVERIFY(spyUserData.wait(10000));
+//		QCOMPARE(spyUserData.count(), 1);
+//		QList<QVariant> arguments = spyUserData.takeFirst();
+//		qDebug() << arguments.at(0).toString();
+//		QVERIFY(arguments.at(0).toString().startsWith("{\"accounts\":"));
+//	}
 
 private:
 	CacheRest* m_cacheRest = 0;
