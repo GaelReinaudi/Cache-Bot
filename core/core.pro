@@ -9,14 +9,16 @@ CONFIG += staticlib
 SOURCES += \
 	acdata.cpp \
     common.cpp \
-    user.cpp
+    user.cpp \
+    transaction.cpp
 
 
 HEADERS += \
 	acdata.h \
 	common.h \
 	log.h \
-    user.h
+    user.h \
+    transaction.h
 
 unix {
     target.path = /usr/lib
