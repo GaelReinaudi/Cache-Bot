@@ -6,7 +6,7 @@ TARGET = cacheRest
 TEMPLATE = lib
 
 CONFIG += c++11
-#CONFIG += static
+CONFIG += static
 
 DEFINES += CACHEREST_LIBRARY
 

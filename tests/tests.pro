@@ -12,5 +12,9 @@ CONFIG   += c++11
 SOURCES += main.cpp
 HEADERS += main.h
 
+unix {
+LIBS += -L../cacheRest/ -lcacheRest
+}
+win32 {
 LIBS += -L../cacheRest/$${DEBUGRELEASE} -lcacheRest
-
+}
