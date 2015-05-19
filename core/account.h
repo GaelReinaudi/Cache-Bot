@@ -1,21 +1,8 @@
 #ifndef ACDATA_H
 #define ACDATA_H
 
-#include <QDateTime>
-#include <QJsonObject>
-#include <QJsonArray>
-#include <QJsonDocument>
-#include <QFileInfo>
-#include <QDebug>
-#include <cmath>
-#include <QRectF>
-#include <QtMath>
-#include <array>
-
 #include "common.h"
 #include "transaction.h"
-
-class Account;
 
 typedef QMap<uint, TransactionBundle*> HashedBundles;
 

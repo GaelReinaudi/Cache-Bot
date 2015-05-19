@@ -7,17 +7,17 @@ TEMPLATE = lib
 CONFIG += staticlib
 
 SOURCES += \
-	acdata.cpp \
-    common.cpp \
+	common.cpp \
+	account.cpp \
     user.cpp \
-    transaction.cpp
+	transaction.cpp
 
 
 HEADERS += \
-	acdata.h \
 	common.h \
 	log.h \
-    user.h \
+	account.h \
+	user.h \
     transaction.h
 
 unix {

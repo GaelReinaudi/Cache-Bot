@@ -1,4 +1,4 @@
-#include "acdata.h"
+#include "account.h"
 
 void Account::loadJsonData(QByteArray jsonData, int afterJday, int beforeJday)
 {

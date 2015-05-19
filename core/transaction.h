@@ -53,9 +53,6 @@ public:
 	double compressedAmount() const{
 		return kindaLog(amountDbl());
 	}
-	double numDays() const{
-		return 1;
-	}
 	static bool earlierThan(const Transaction first, const Transaction second) {
 		return first.date < second.date;
 	}
@@ -81,6 +78,7 @@ public:
 		return distanceWeighted<8, 1, 128, 0>(other);
 	}
 };
+
 
 class TransactionBundle : public QObject
 {
