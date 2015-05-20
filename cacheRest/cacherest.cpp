@@ -21,18 +21,20 @@ void CacheRest::getUserIds()
 	worker->execute(&httpRequest);
 }
 
-void CacheRest::getUserData(QString userId)
+void CacheRest::getUserData(QString userId, User *pUserToInject /*= 0*/)
 {
 	HttpRequestInput httpRequest(UserDataRoute.arg(userId), "POST");
 	worker->execute(&httpRequest);
+	if (pUserToInject) {
+		QObject::connect(worker, SIGNAL(repliedUserData(QString)), pUserToInject, SLOT(injectJsonString(QString)));
+	}
 }
-//void CacheRest::getUserData2(QString userId, User *pUserToInject)
-//{
-//	HttpRequestInput httpRequest(UserDataRoute.arg(userId), "POST");
-//	worker->execute(&httpRequest);
-//	if (pUserToInject) {
-//		QObject::connect(worker, SIGNAL(repliedUserData(QString)), pUserToInject, SLOT(injectJsonString(QString)));
-//	}
-//}
+
+User *CacheRest::newUser(QString userId)
+{
+	User* pUser = new User(userId);
+	getUserData(userId, pUser);
+	return pUser;
+}
 
 

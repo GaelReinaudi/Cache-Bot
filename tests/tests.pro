@@ -11,3 +11,12 @@ QT       -= gui
 SOURCES += main.cpp
 HEADERS += main.h
 
+
+unix {
+LIBS += -L../cacheRest/ -lcacheRest
+LIBS += -L../core/ -lcore
+}
+win32 {
+LIBS += -L../cacheRest/$${DEBUGRELEASE} -lcacheRest
+LIBS += -L../core/$${DEBUGRELEASE} -lcore
+}

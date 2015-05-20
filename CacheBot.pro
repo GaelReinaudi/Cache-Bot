@@ -7,5 +7,6 @@ SUBDIRS = \
 	cacheLight \
 	tests
 	
+cacheRest.depends = core
 cacheLight.depends = cacheRest,core
 tests.depends = cacheRest,core

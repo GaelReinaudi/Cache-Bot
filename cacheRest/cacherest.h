@@ -15,13 +15,8 @@ public:
 public:
 	void login(QString username, QString password);
 	void getUserIds();
-	void getUserData(QString userId);
-//	void getUserData2(QString userId, User *pUserToInject);
-	User* newUser(QString userId) {
-		User* pUser = new User(userId);
-		//getUserData(userId, pUser);
-		return pUser;
-	}
+	void getUserData(QString userId, User *pUserToInject = 0);
+	User* newUser(QString userId);
 
 
 public:
