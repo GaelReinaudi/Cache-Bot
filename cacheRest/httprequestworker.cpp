@@ -116,7 +116,6 @@ QNetworkReply* HttpRequestWorker::execute(HttpRequestInput *input) {
 		input->var_layout = input->http_method == "GET" || input->http_method == "HEAD" ? ADDRESS : URL_ENCODED;
 	}
 	if (!input->jsonObject.isEmpty()) {
-		input->http_method == "POST";
 		input->var_layout = JSON;
 	}
 

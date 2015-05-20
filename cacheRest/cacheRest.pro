@@ -16,7 +16,7 @@ HEADERS += \
 	cacherest.h
 
 unix {
-LIBS += -L../bin -lcore
+LIBS += -L../bin/$${DEBUGRELEASE} -lcore
 }
 win32 {
 LIBS += -L../bin/$${DEBUGRELEASE} -lcore

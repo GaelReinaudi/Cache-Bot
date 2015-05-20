@@ -12,8 +12,8 @@ SOURCES += main.cpp
 HEADERS += main.h
 
 unix {
-LIBS += -L../bin/ -lcacheRest
-LIBS += -L../bin/ -lcore
+LIBS += -L../bin/$${DEBUGRELEASE} -lcacheRest
+LIBS += -L../bin/$${DEBUGRELEASE} -lcore
 }
 win32 {
 LIBS += -L../bin/$${DEBUGRELEASE} -lcacheRest
