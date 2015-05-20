@@ -5,7 +5,6 @@ CacheRest::CacheRest(QObject *parent)
 	: QObject(parent)
 {
 	worker = new HttpRequestWorker(this);
-	//	QObject::connect(reply, &QNetworkReply::finished, worker, &HttpRequestWorker::on_login_finished);
 }
 
 void CacheRest::login(QString username, QString password) {

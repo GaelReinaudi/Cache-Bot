@@ -8,7 +8,7 @@ class Account;
 class CORESHARED_EXPORT Bank : public DBobj
 {
 public:
-	Bank();
+	Bank() {}
 
 private:
 	QList<Account*> m_accounts;
@@ -25,6 +25,9 @@ public:
 
 public slots:
 	void injectJsonString(QString jsonStr);
+
+signals:
+	void injected();
 
 private:
 	QList<Bank*> m_banks;

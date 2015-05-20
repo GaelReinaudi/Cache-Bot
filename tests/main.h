@@ -75,6 +75,15 @@ private slots:
 
 	void injectData() {
 		m_testUser = m_cacheRest->newUser("552d7ba7be082c0300169ed5");
+		QSignalSpy spyUserData(m_cacheRest->worker, SIGNAL(repliedUserData(QString)));
+		QVERIFY(spyUserData.wait(10000));
+		QSignalSpy spyInjectUser(m_testUser, SIGNAL(injected()));
+		QVERIFY(spyInjectUser.wait(10000));
+		//QVERIFY(m_userData.("{\"accounts\":"));
+	}
+
+	void sendExtraCash() {
+		//m_testUser->sendExtraCash
 	}
 
 private:
