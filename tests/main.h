@@ -77,8 +77,6 @@ private slots:
 		m_testUser = CacheRest::Instance()->newUser("552d7ba7be082c0300169ed5");
 		QSignalSpy spyUserData(CacheRest::Instance()->worker, SIGNAL(repliedUserData(QString)));
 		QVERIFY(spyUserData.wait(10000));
-		QSignalSpy spyInjectUser(m_testUser, SIGNAL(injected()));
-		QVERIFY(spyInjectUser.wait(10000));
 		//QVERIFY(m_userData.("{\"accounts\":"));
 	}
 

@@ -7,6 +7,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QJsonObject>
+#include <QJsonDocument>
 
 static const QString LoginRoute = "https://cache-heroku.herokuapp.com/login";
 static const QString IdsRoute = "https://cache-heroku.herokuapp.com/cache-bot/user_ids";

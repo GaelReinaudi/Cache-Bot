@@ -116,6 +116,7 @@ QNetworkReply* HttpRequestWorker::execute(HttpRequestInput *input) {
 		input->var_layout = input->http_method == "GET" || input->http_method == "HEAD" ? ADDRESS : URL_ENCODED;
 	}
 	if (!input->jsonObject.isEmpty()) {
+		input->http_method == "POST";
 		input->var_layout = JSON;
 	}
 
@@ -241,26 +242,12 @@ QNetworkReply* HttpRequestWorker::execute(HttpRequestInput *input) {
 	}
 	else if (input->var_layout == JSON) {
 		QString new_line = "\r\n";
-
-		// add variables
-		foreach (QString key, input->vars.keys()) {
-			// add boundary
-			request_content.append(new_line);
-
-			// add header
-			request_content.append("Content-Disposition: form-data; ");
-			request_content.append(http_attribute_encode("name", key));
-			request_content.append(new_line);
-			request_content.append("Content-Type: text/plain");
-			request_content.append(new_line);
-
-			// add header to body splitter
-			request_content.append(new_line);
-
-			// add variable content
-			request_content.append(input->vars.value(key));
-			request_content.append(new_line);
-		}
+		request_content.append("Content-Type: application/json");
+		request_content.append(new_line);
+		request_content.append("Content-Length: application/json");
+		request_content.append(new_line);
+		QJsonDocument jsonDoc(input->jsonObject);
+		request_content.append(jsonDoc.toJson());
 	}
 
 
