@@ -2,6 +2,7 @@
 #define COMMON_H
 
 #include <QtCore>
+#include "core_global.h"
 #include "log.h"
 
 static const int MAX_TRANSACTION_PER_ACCOUNT = 1024 * 8;
@@ -33,7 +34,7 @@ static inline double expoInt(qint64 x) {
 
 
 
-class DBobj : public QObject
+class CORESHARED_EXPORT DBobj : public QObject
 {
 	Q_OBJECT
 

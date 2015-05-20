@@ -6,7 +6,7 @@
 
 typedef QMap<uint, TransactionBundle*> HashedBundles;
 
-class Account : public DBobj
+class CORESHARED_EXPORT Account : public DBobj
 {
 public:
 	Account() {}

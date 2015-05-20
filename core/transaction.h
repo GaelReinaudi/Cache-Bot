@@ -1,9 +1,10 @@
 #ifndef TRANSACTION_H
 #define TRANSACTION_H
 
+#include "core_global.h"
 #include "common.h"
 
-class Transaction// : public DBobj
+class CORESHARED_EXPORT Transaction// : public DBobj
 {
 public:
 	Transaction()
@@ -81,7 +82,7 @@ public:
 };
 
 
-class TransactionBundle : public QObject
+class CORESHARED_EXPORT TransactionBundle : public QObject
 {
 public:
 	TransactionBundle() {

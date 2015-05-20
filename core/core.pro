@@ -4,7 +4,8 @@ QT       -= gui
 TARGET = core
 TEMPLATE = lib
 
-CONFIG += staticlib
+#CONFIG += staticlib
+DEFINES += CORE_LIBRARY
 
 SOURCES += \
 	common.cpp \
@@ -14,13 +15,10 @@ SOURCES += \
 
 
 HEADERS += \
+	core_global.h \
 	common.h \
 	log.h \
 	account.h \
 	user.h \
     transaction.h
 
-unix {
-    target.path = /usr/lib
-    INSTALLS += target
-}

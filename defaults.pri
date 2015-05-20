@@ -10,3 +10,6 @@ DEBUGRELEASE = debug
 else {
 DEBUGRELEASE = release
 }
+
+DESTDIR = $$PWD/bin/$${DEBUGRELEASE}
+

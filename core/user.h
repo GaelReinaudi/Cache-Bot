@@ -1,29 +1,27 @@
 #ifndef USER_H
 #define USER_H
 
+#include "core_global.h"
 #include "common.h"
 class Account;
 
-class Bank : public DBobj
+class CORESHARED_EXPORT Bank : public DBobj
 {
 public:
-	Bank()
-	{}
+	Bank();
 
 private:
 	QList<Account*> m_accounts;
 };
 
-class User : public DBobj
+class CORESHARED_EXPORT User : public DBobj
 {
+	Q_OBJECT
+
 public:
-	User(QString userId)
-		: DBobj(userId)
-	{}
+	User(QString userId);
 
-	void readJson() {
-
-	}
+	void readJson();
 
 public slots:
 	void injectJsonString(QString jsonStr);

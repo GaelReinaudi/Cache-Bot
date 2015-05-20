@@ -5,20 +5,19 @@ QT       += network
 TARGET = cacheRest
 TEMPLATE = lib
 
-CONFIG += static
-#DEFINES += CACHEREST_LIBRARY
+DEFINES += CACHEREST_LIBRARY
 
 SOURCES += cacherest.cpp \
 	httprequestworker.cpp
 
-HEADERS += cacherest.h\
-        cacherest_global.h \
-    httprequestworker.h
-
+HEADERS += \
+	cacherest_global.h \
+	httprequestworker.h \
+	cacherest.h
 
 unix {
-LIBS += -L../core/ -lcore
+LIBS += -L../bin/ -lcore
 }
 win32 {
-LIBS += -L../core/$${DEBUGRELEASE} -lcore
+LIBS += -L../bin/$${DEBUGRELEASE} -lcore
 }
