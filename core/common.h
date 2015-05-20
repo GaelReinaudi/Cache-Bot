@@ -44,6 +44,10 @@ public:
 		m_id = id;
 	}
 
+	QString id() const {
+		return m_id;
+	}
+
 protected:
 	QString m_id;
 };

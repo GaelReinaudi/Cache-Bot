@@ -22,7 +22,7 @@ void CacheRest::getUserIds()
 
 void CacheRest::getUserData(QString userId, User *pUserToInject /*= 0*/)
 {
-	HttpRequestInput httpRequest(UserDataRoute.arg(userId), "POST");
+	HttpRequestInput httpRequest(UserDataRoute + QString("/%1").arg(userId), "POST");
 	worker->execute(&httpRequest);
 	if (pUserToInject) {
 		QObject::connect(worker, SIGNAL(repliedUserData(QString)), pUserToInject, SLOT(injectJsonString(QString)));
@@ -34,6 +34,15 @@ User *CacheRest::newUser(QString userId)
 	User* pUser = new User(userId);
 	getUserData(userId, pUser);
 	return pUser;
+}
+
+void CacheRest::sendExtraCash(QString userId, double valExtra)
+{
+	HttpRequestInput httpRequest(SendExtraCashRoute + QString("/%1").arg(userId), "POST");
+	QJsonObject json;
+	json.insert("amount", valExtra);
+	httpRequest.add_json(json);
+	worker->execute(&httpRequest);
 }
 
 

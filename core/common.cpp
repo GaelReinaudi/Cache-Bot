@@ -23,4 +23,3 @@ unsigned int proximityHashString(const QString &str) {
 	}
 	return ret;
 }
-

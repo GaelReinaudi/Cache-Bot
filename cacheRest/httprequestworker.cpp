@@ -115,6 +115,9 @@ QNetworkReply* HttpRequestWorker::execute(HttpRequestInput *input) {
 	if (input->var_layout == NOT_SET) {
 		input->var_layout = input->http_method == "GET" || input->http_method == "HEAD" ? ADDRESS : URL_ENCODED;
 	}
+	if (!input->jsonObject.isEmpty()) {
+		input->var_layout = JSON;
+	}
 
 
 	// prepare request content
@@ -143,9 +146,7 @@ QNetworkReply* HttpRequestWorker::execute(HttpRequestInput *input) {
 			}
 		}
 	}
-	else {
-		// variable layout is MULTIPART
-
+	else if (input->var_layout == MULTIPART) {
 		boundary = "__-----------------------"
 			+ QString::number(QDateTime::currentDateTime().toTime_t())
 			+ QString::number(qrand());
@@ -238,6 +239,29 @@ QNetworkReply* HttpRequestWorker::execute(HttpRequestInput *input) {
 		request_content.append(boundary);
 		request_content.append(boundary_delimiter);
 	}
+	else if (input->var_layout == JSON) {
+		QString new_line = "\r\n";
+
+		// add variables
+		foreach (QString key, input->vars.keys()) {
+			// add boundary
+			request_content.append(new_line);
+
+			// add header
+			request_content.append("Content-Disposition: form-data; ");
+			request_content.append(http_attribute_encode("name", key));
+			request_content.append(new_line);
+			request_content.append("Content-Type: text/plain");
+			request_content.append(new_line);
+
+			// add header to body splitter
+			request_content.append(new_line);
+
+			// add variable content
+			request_content.append(input->vars.value(key));
+			request_content.append(new_line);
+		}
+	}
 
 
 	// prepare connection
@@ -250,6 +274,9 @@ QNetworkReply* HttpRequestWorker::execute(HttpRequestInput *input) {
 	}
 	else if (input->var_layout == MULTIPART) {
 		request.setHeader(QNetworkRequest::ContentTypeHeader, "multipart/form-data; boundary=" + boundary);
+	}
+	else if (input->var_layout == JSON) {
+		request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 	}
 
 	qDebug() << "Sending to" << input->url_str;
@@ -296,7 +323,7 @@ void HttpRequestWorker::on_manager_finished(QNetworkReply *reply) {
 	else if(reply->request().url() == QUrl(IdsRoute)) {
 		emit repliedIds(response);
 	}
-	//if(reply->request().url().toString().startsWith(QString(UserDataRoute).chop(2))) {
+	//if(reply->request().url().toString().startsWith(UserDataRoute)) {
 	else {
 		emit repliedUserData(response);
 	}

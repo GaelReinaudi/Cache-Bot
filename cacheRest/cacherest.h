@@ -9,14 +9,21 @@
 
 class CACHERESTSHARED_EXPORT CacheRest : public QObject
 {
-public:
+private:
 	CacheRest(QObject *parent = 0);
+
+public:
+	static CacheRest* Instance(QObject *parent = 0) {
+		static CacheRest* pThisStatic = new CacheRest(parent);
+		return pThisStatic;
+	}
 
 public:
 	void login(QString username, QString password);
 	void getUserIds();
 	void getUserData(QString userId, User *pUserToInject = 0);
 	User* newUser(QString userId);
+	void sendExtraCash(QString userId, double valExtra);
 
 
 public:
