@@ -83,7 +83,7 @@ private slots:
 	void sendExtraCash() {
 		double extra = 20.0;
 		CacheRest::Instance()->sendExtraCash(m_testUser->id(), extra);
-		QSignalSpy spyExtraCash(CacheRest::Instance()->worker, SIGNAL(repliedUserData(QString)));
+		QSignalSpy spyExtraCash(CacheRest::Instance()->worker, SIGNAL(repliedExtraCache(QString)));
 		QVERIFY(spyExtraCash.wait(10000));
 	}
 
