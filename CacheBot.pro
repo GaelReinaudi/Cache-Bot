@@ -7,8 +7,10 @@ SUBDIRS = \
 	core \
 	cacheRest \
 	cacheLight \
-	tests
+	tests \
+    extraCash
 	
 cacheRest.depends = core
 cacheLight.depends = cacheRest,core
 tests.depends = cacheRest,core
+extraCash.depends = cacheRest,core

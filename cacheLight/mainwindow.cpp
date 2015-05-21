@@ -7,9 +7,9 @@ const int playBackStartAgo = 210;
 
 double smallInc = 1e-3;
 double iniBalance = 3000.0;
-double slushAmmount = 500.0;
-QString jsonFile = "../cacheLight/chrisPurchases.json";
-//QString jsonFile = "../cacheLight/input.json";
+double slushAmmount = 5000.0;
+//QString jsonFile = "../../cacheLight/chrisPurchases.json";
+QString jsonFile = "../../cacheLight/input.json";
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),

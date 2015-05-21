@@ -99,8 +99,10 @@ double Account::costLiving(double withinPercentileCost)
 		avg += costs[i];
 	}
 	double numDays = firstTransactionDate().daysTo(lastTransactionDate());
-	avg /= numDays;
-	qDebug() << "cost of living (L="<<lastCostsInd<<")" << avg;
+	if(numDays) {
+		avg /= numDays;
+		qDebug() << "cost of living (L="<<lastCostsInd<<")" << avg;
+	}
 	return avg;
 }
 

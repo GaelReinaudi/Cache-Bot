@@ -240,13 +240,16 @@ QNetworkReply* HttpRequestWorker::execute(HttpRequestInput *input) {
 		request_content.append(boundary_delimiter);
 	}
 	else if (input->var_layout == JSON) {
-		QString new_line = "\r\n";
-		request_content.append("Content-Type: application/json");
-		request_content.append(new_line);
-		request_content.append("Content-Length: application/json");
-		request_content.append(new_line);
+		QString new_line = "\n";
 		QJsonDocument jsonDoc(input->jsonObject);
-		request_content.append(jsonDoc.toJson());
+		QByteArray jsonByte = jsonDoc.toJson(QJsonDocument::Compact);
+		request_content.append("Content-Type: application/json");
+//		request_content.append(new_line);
+//		request_content.append("Content-Length: ");
+//		request_content.append(QString::number(jsonByte.size()));
+		request_content.append(new_line);
+		request_content.append("extraCash = ");
+		request_content.append(jsonByte);
 	}
 
 
@@ -272,6 +275,7 @@ QNetworkReply* HttpRequestWorker::execute(HttpRequestInput *input) {
 	}
 	else if (input->http_method == "POST") {
 		reply = manager->post(request, request_content);
+		qDebug() << request_content;
 	}
 	else if (input->http_method == "PUT") {
 		reply = manager->put(request, request_content);
@@ -309,9 +313,11 @@ void HttpRequestWorker::on_manager_finished(QNetworkReply *reply) {
 	else if(reply->request().url() == QUrl(IdsRoute)) {
 		emit repliedIds(response);
 	}
-	//if(reply->request().url().toString().startsWith(UserDataRoute)) {
-	else {
+	else if(reply->request().url().toString().startsWith(UserDataRoute)) {
 		emit repliedUserData(response);
+	}
+	else if(reply->request().url().toString().startsWith(SendExtraCashRoute)) {
+		emit repliedExtraCache(response);
 	}
 }
 

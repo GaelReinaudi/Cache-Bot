@@ -12,7 +12,7 @@
 static const QString LoginRoute = "https://cache-heroku.herokuapp.com/login";
 static const QString IdsRoute = "https://cache-heroku.herokuapp.com/cache-bot/user_ids";
 static const QString UserDataRoute = "https://cache-heroku.herokuapp.com/cache-bot/data";
-static const QString SendExtraCashRoute = "https://cache-heroku.herokuapp.com/cache-bot/extracash";
+static const QString SendExtraCashRoute = "https://cache-heroku.herokuapp.com/cache-bot/extraCash";
 
 enum HttpRequestVarLayout {NOT_SET, ADDRESS, URL_ENCODED, MULTIPART, JSON};
 
@@ -68,6 +68,7 @@ signals:
 	void repliedLogin(QString);
 	void repliedIds(QString);
 	void repliedUserData(QString);
+	void repliedExtraCache(QString);
 
 private:
 	QNetworkAccessManager *manager;
