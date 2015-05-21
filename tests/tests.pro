@@ -12,7 +12,7 @@ SOURCES += main.cpp
 HEADERS += main.h
 
 unix {
-LIBS += -L../bin -lcacheRest
+LIBS += -L../bin -lcacherest
 LIBS += -L../bin -lcore
 }
 win32 {
