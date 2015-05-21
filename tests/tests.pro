@@ -20,3 +20,8 @@ LIBS += -L$${SRC_DIR}/bin/$${DEBUGRELEASE} -lcacheRest
 LIBS += -L$${SRC_DIR}/bin/$${DEBUGRELEASE} -lcore
 }
 
+@
+unix:!mac{
+QMAKE_LFLAGS += -Wl,--rpath=\$ORIGIN
+}
+@
