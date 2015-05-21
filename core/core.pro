@@ -22,3 +22,7 @@ HEADERS += \
 	user.h \
     transaction.h
 
+unix {
+	target.path = /usr/lib
+	INSTALLS += target
+}

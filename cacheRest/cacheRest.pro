@@ -21,3 +21,8 @@ LIBS += -L$${SRC_DIR}/bin/$${DEBUGRELEASE} -lcore
 win32 {
 LIBS += -L$${SRC_DIR}/bin/$${DEBUGRELEASE} -lcore
 }
+
+unix {
+	target.path = /usr/lib
+	INSTALLS += target
+}

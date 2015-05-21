@@ -1,0 +1,12 @@
+#ifndef CACHECORE_GLOBAL_H
+#define CACHECORE_GLOBAL_H
+
+#include <QtCore/qglobal.h>
+
+#if defined(CACHECORE_LIBRARY)
+#  define CACHECORESHARED_EXPORT Q_DECL_EXPORT
+#else
+#  define CACHECORESHARED_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // CACHECORE_GLOBAL_H
