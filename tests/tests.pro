@@ -21,8 +21,10 @@ LIBS += -L$${SRC_DIR}/bin/$${DEBUGRELEASE} -lcore
 }
 
 # to use libraries in directory of executable
+@
 unix:!mac{
 QMAKE_LFLAGS += -Wl,--rpath=\$ORIGIN
 QMAKE_LFLAGS += -Wl,--rpath=\$ORIGIN/lib
 QMAKE_LFLAGS += -Wl,--rpath=\$ORIGIN/libs
 }
+@
