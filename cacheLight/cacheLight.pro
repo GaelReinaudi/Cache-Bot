@@ -24,8 +24,8 @@ HEADERS  += \
 FORMS    += mainwindow.ui
 
 unix {
-LIBS += -L../bin/$${DEBUGRELEASE} -lcacheRest
-LIBS += -L../bin/$${DEBUGRELEASE} -lcore
+LIBS += -L../bin -lcacheRest
+LIBS += -L../bin -lcore
 }
 win32 {
 LIBS += -L../bin/$${DEBUGRELEASE} -lcacheRest
