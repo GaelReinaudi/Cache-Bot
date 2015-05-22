@@ -16,19 +16,16 @@ app.get('/sample', function(req, res) {
 
 app.get('/cache-bot/extraCash/:user_id', function(req, res) {
 	console.log('POST to /cache-bot/extracash/:user_id')
-	if (isCacheBot(req, res)) {
-			if (req.params.user_id == null) {
-				var response = {
-					"error" : "Cannot find either req.params.user_id in POST URL"
-				}
-				res.send(200, response)
-			} else {
-				var response = {
-					"success" : "Successfully parsed extra cash for user."
-				}
-				res.send(200, response)
-			}
+	if (req.params.user_id == null) {
+		var response = {
+			"error" : "Cannot find either req.params.user_id in POST URL"
 		}
+		res.send(200, response)
+	} else {
+		var response = {
+			"success" : "Successfully parsed extra cash for user."
+		}
+		res.send(200, response)
 	}
 });
 
