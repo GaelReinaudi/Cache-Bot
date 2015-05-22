@@ -41,7 +41,9 @@ void CacheRest::sendExtraCash(QString userId, double valExtra)
 	HttpRequestInput httpRequest(SendExtraCashRoute + QString("/%1").arg(userId), "POST");
 	QJsonObject json;
 	json.insert("amount", valExtra);
-	httpRequest.add_json(json);
+	QJsonObject jsonExtraCash;
+	jsonExtraCash.insert("extraCash", json);
+	httpRequest.add_json(jsonExtraCash);
 	worker->execute(&httpRequest);
 }
 

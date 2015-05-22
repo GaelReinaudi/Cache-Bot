@@ -242,7 +242,7 @@ QNetworkReply* HttpRequestWorker::execute(HttpRequestInput *input) {
 	else if (input->var_layout == JSON) {
 		QString new_line = "\n";
 		QJsonDocument jsonDoc(input->jsonObject);
-		m_jsonByte = QByteArray("{\"extraCash\" : ") + jsonDoc.toJson(QJsonDocument::Compact) + QByteArray("}");
+		m_jsonByte = QByteArray(jsonDoc.toJson(QJsonDocument::Compact));
 		request_content.append(m_jsonByte);
 		// clean object to not have JSON next time
 		input->jsonObject = QJsonObject();
