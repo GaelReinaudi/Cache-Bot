@@ -29,11 +29,6 @@ app.get('/cache-bot/extraCash/:user_id', function(req, res) {
 				res.send(200, response)
 			}
 		}
-	} else {
-		var response = {
-			"error" : "Not authenticated as cache-bot."
-		}
-		res.send(200, response)
 	}
 });
 
