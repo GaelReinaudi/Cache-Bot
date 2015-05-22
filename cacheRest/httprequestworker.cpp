@@ -242,14 +242,10 @@ QNetworkReply* HttpRequestWorker::execute(HttpRequestInput *input) {
 	else if (input->var_layout == JSON) {
 		QString new_line = "\n";
 		QJsonDocument jsonDoc(input->jsonObject);
-		QByteArray jsonByte = jsonDoc.toJson(QJsonDocument::Compact);
-		request_content.append("Content-Type: application/json");
-//		request_content.append(new_line);
-//		request_content.append("Content-Length: ");
-//		request_content.append(QString::number(jsonByte.size()));
-		request_content.append(new_line);
-		request_content.append("extraCash = ");
-		request_content.append(jsonByte);
+		m_jsonByte = QByteArray("{\"extraCash\" : ") + jsonDoc.toJson(QJsonDocument::Compact) + QByteArray("}");
+		request_content.append(m_jsonByte);
+		// clean object to not have JSON next time
+		input->jsonObject = QJsonObject();
 	}
 
 
@@ -266,6 +262,7 @@ QNetworkReply* HttpRequestWorker::execute(HttpRequestInput *input) {
 	}
 	else if (input->var_layout == JSON) {
 		request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+		request.setHeader(QNetworkRequest::ContentLengthHeader, QString::number(m_jsonByte.size()));
 	}
 
 	qDebug() << "Sending to" << input->url_str;

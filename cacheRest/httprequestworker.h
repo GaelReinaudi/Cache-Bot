@@ -72,6 +72,7 @@ signals:
 
 private:
 	QNetworkAccessManager *manager;
+	QByteArray m_jsonByte;
 
 public slots:
 	void on_manager_finished(QNetworkReply *reply);

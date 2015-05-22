@@ -1,3 +1,3 @@
 #include "main.h"
 
-QTEST_MAIN(ServerTest)
+QTEST_GUILESS_MAIN(ServerTest)
