@@ -21,8 +21,8 @@ app.get('/cache-bot/extraCash/:user_id', function(req, res) {
 	}
 	res.send(200, response)
 
-    var deploySh = spawn('fab', [ '-l' ], {
-      cwd: '/home/ubuntu/Cache-Bot/expressjs',
+    var deploySh = spawn('./test', [ 'extraCash:' + req.params.user_id ], {
+      cwd: '/home/ubuntu/Cache-Bot/tests',
       env:_.extend(process.env, { PATH: process.env.PATH + ':/usr/local/bin' })
     });
 
