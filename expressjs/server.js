@@ -14,20 +14,12 @@ app.get('/sample', function(req, res) {
     res.send('this is a sample route');  
 });
 
-app.post('/cache-bot/extraCash/:user_id', function(req, res) {
+app.get('/cache-bot/extraCash/:user_id', function(req, res) {
 	console.log('POST to /cache-bot/extracash/:user_id')
 	if (isCacheBot(req, res)) {
-		console.log('req.body.extraCash: ' + util.inspect(req.body.extraCash))
-		if (req.body.extraCash == null) {
-			var response = {
-				"error" : "Cannot parse JSON."
-			}
-			res.send(200, response)
-		} else {
-			var extraCash = req.body.extraCash
-			if (req.params.user_id == null || extraCash.amount == null) {
+			if (req.params.user_id == null) {
 				var response = {
-					"error" : "Cannot find either req.params.user_id in POST URL or req.body.extraCash.amount in supplied JSON."
+					"error" : "Cannot find either req.params.user_id in POST URL"
 				}
 				res.send(200, response)
 			} else {
