@@ -6,12 +6,43 @@ var spawn = require('child_process').spawn;
 
 // sample route
 app.get('/sample', function(req, res) {
-   var _ = require('underscore'); // for some utility goodness
-   var deploySh = spawn('sh', [ 'test.sh' ], {
-     cwd: '/home/ubuntu/Cache-Bot/expressjs',
-     env:_.extend(process.env, { PATH: process.env.PATH + ':/usr/local/bin' })
-   });
-   res.send('this is a sample route');  
+    var _ = require('underscore'); // for some utility goodness
+    var deploySh = spawn('sh', [ 'test.sh' ], {
+      cwd: '/home/ubuntu/Cache-Bot/expressjs',
+      env:_.extend(process.env, { PATH: process.env.PATH + ':/usr/local/bin' })
+    });
+    res.send('this is a sample route');  
+});
+
+app.post('/cache-bot/extraCash/:user_id', function(req, res) {
+	console.log('POST to /cache-bot/extracash/:user_id')
+	if (isCacheBot(req, res)) {
+		console.log('req.body.extraCash: ' + util.inspect(req.body.extraCash))
+		if (req.body.extraCash == null) {
+			var response = {
+				"error" : "Cannot parse JSON."
+			}
+			res.send(200, response)
+		} else {
+			var extraCash = req.body.extraCash
+			if (req.params.user_id == null || extraCash.amount == null) {
+				var response = {
+					"error" : "Cannot find either req.params.user_id in POST URL or req.body.extraCash.amount in supplied JSON."
+				}
+				res.send(200, response)
+			} else {
+				var response = {
+					"success" : "Successfully parsed extra cash for user."
+				}
+				res.send(200, response)
+			}
+		}
+	} else {
+		var response = {
+			"error" : "Not authenticated as cache-bot."
+		}
+		res.send(200, response)
+	}
 });
 
 // Start the server
