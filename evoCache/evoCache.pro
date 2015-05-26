@@ -1,6 +1,7 @@
 include(../defaults.pri)
 
-QT += core gui widgets printsupport network
+QT += core
+QT -= gui
 
 TARGET = evoCache
 TEMPLATE = app
@@ -12,24 +13,24 @@ INCLUDEPATH  += ./ \
 
 SOURCES += \
 	main.cpp\
-	mainwindow.cpp\
+	evolver.cpp\
 	$$PWD/puppy/puppy/src/Primitive.cpp \
 	$$PWD/puppy/puppy/src/Puppy.cpp \
 	$$PWD/puppy/puppy/src/Tree.cpp \
-	$$PWD/../AccountChart/qcustomplot/qcustomplot.cpp \
-	$$PWD/../AccountChart/ACChart/acustomplot.cpp \
-	$$PWD/../AccountChart/AmortiChart/AMPlot.cpp \
+#	$$PWD/../AccountChart/qcustomplot/qcustomplot.cpp \
+#	$$PWD/../AccountChart/ACChart/acustomplot.cpp \
+#	$$PWD/../AccountChart/AmortiChart/AMPlot.cpp \
 	$$PWD/../core/common.cpp \
 	EvolutionSpinner.cpp \
     AccRegPrimits.cpp
 
 HEADERS  += \
-	mainwindow.h \
+	evolver.h \
 	$$PWD/log.h \
-	$$PWD/../AccountChart/qcustomplot/qcustomplot.h \
-	$$PWD/../AccountChart/ACChart/acustomplot.h \
+#	$$PWD/../AccountChart/qcustomplot/qcustomplot.h \
+#	$$PWD/../AccountChart/ACChart/acustomplot.h \
 #	$$PWD/../core/account.h \
-	$$PWD/../AccountChart/AmortiChart/AMPlot.h \
+#	$$PWD/../AccountChart/AmortiChart/AMPlot.h \
 	$$PWD/puppy/Primitive.hpp \
 	$$PWD/puppy/PrimitiveHandle.hpp \
 	$$PWD/puppy/PrimitiveInline.hpp \

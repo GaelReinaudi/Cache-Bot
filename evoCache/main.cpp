@@ -1,9 +1,9 @@
-#include "mainwindow.h"
-#include <QApplication>
+#include "evolver.h"
+#include <QCoreApplication>
 
 int main(int argc, char *argv[])
 {
-	QApplication a(argc, argv);
+	QCoreApplication a(argc, argv);
 	QString jsonFile = "../../data/adelineGaelTransactions.json";
 	int afterJday = 0;
 	int beforeJday = 0;
@@ -16,8 +16,7 @@ int main(int argc, char *argv[])
 	if(argc > 3) {
 		beforeJday = QString(argv[3]).toInt();
 	}
-	MainWindow w(jsonFile, afterJday, beforeJday);
-	w.show();
+	Evolver w(jsonFile, afterJday, beforeJday);
 
 	return a.exec();
 }
