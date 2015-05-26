@@ -65,7 +65,7 @@ private slots:
 		QCOMPARE(spyUserData.count(), 1);
 		QList<QVariant> arguments = spyUserData.takeFirst();
 		qDebug() << arguments.at(0).toString();
-		QVERIFY(arguments.at(0).toString().startsWith("{\"error\":\"No banks for this user.\"}"));
+		QVERIFY(arguments.at(0).toString().startsWith("{\"error\":{}"));
 	}
 
 	void getUseraData() {

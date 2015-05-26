@@ -220,6 +220,7 @@ for (int j = 0; j < m_context->m_pAccount->hashBundles().count(); ++j) {
 	m_context->m_pAccount->toJson(futureTransactions, "predicted");
 
 	std::cout << "Exiting program " << output.count() << endl << std::flush;
+	qApp->exit();
 }
 
 unsigned int EvolutionSpinner::evaluateSymbReg(std::vector<Tree>& ioPopulation,
