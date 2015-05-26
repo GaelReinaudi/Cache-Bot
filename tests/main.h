@@ -20,7 +20,7 @@ private slots:
 		QVERIFY(spyLogin.wait());
 		QCOMPARE(spyLogin.count(), 1); // make sure the signal was emitted exactly one time
 		QList<QVariant> arguments = spyLogin.takeFirst();
-		QVERIFY(arguments.at(0).toString() == "Moved Temporarily. Redirecting to /login");
+		QVERIFY(arguments.at(0).toString() == StringLoggedInReply);
 
 		CacheRest::Instance()->getUserIds();
 		QSignalSpy spyIds(CacheRest::Instance()->worker, SIGNAL(repliedIds(QString)));
@@ -30,19 +30,21 @@ private slots:
 		QVERIFY(arguments.at(0).toString() == "{\"error\":\"Not authenticated for this route.\"}");
 	}
 
-	void getIds() {
-		CacheRest::Instance()->login("cache-bot", ")E[ls$=1IC1A$}Boji'W@zOX_<H<*n");
+	void loginCacheBot() {
+		CacheRest::Instance()->login();
 		QSignalSpy spyLogin(CacheRest::Instance()->worker, SIGNAL(repliedLogin(QString)));
-		QVERIFY(spyLogin.wait());
-		QCOMPARE(spyLogin.count(), 1); // make sure the signal was emitted exactly one time
+		bool loggedIn = spyLogin.wait();
 		QList<QVariant> arguments = spyLogin.takeFirst();
-		QVERIFY(arguments.at(0).toString() == "Moved Temporarily. Redirecting to /login");
+		QVERIFY(loggedIn);
+		QVERIFY(arguments.at(0).toString() == StringLoggedInReply);
+	}
 
+	void getIds() {
 		CacheRest::Instance()->getUserIds();
 		QSignalSpy spyIds(CacheRest::Instance()->worker, SIGNAL(repliedIds(QString)));
 		QVERIFY(spyIds.wait());
 		QCOMPARE(spyIds.count(), 1);
-		arguments = spyIds.takeFirst();
+		QList<QVariant> arguments = spyIds.takeFirst();
 		m_userIds = arguments.at(0).toString();
 		QVERIFY(arguments.at(0).toString().startsWith("{\"user_ids\":["));
 	}

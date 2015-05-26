@@ -1,6 +1,7 @@
 include(../defaults.pri)
 
 QT += core
+QT += network
 QT -= gui
 
 TARGET = evoCache

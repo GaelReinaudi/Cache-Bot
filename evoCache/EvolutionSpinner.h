@@ -19,8 +19,9 @@ class EvolutionSpinner : public QObject
 	Q_OBJECT
 
 public:
-	EvolutionSpinner(Account* pAc, QObject* parent = 0);
+	EvolutionSpinner(QObject* parent = 0);
 
+	void init(Account *pAc);
 public slots:
 	void startStopEvolution(bool doStart);
 	void runEvolution();

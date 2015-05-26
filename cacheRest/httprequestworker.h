@@ -14,6 +14,8 @@ static const QString IdsRoute = "https://cache-heroku.herokuapp.com/cache-bot/us
 static const QString UserDataRoute = "https://cache-heroku.herokuapp.com/cache-bot/data";
 static const QString SendExtraCashRoute = "https://cache-heroku.herokuapp.com/cache-bot/extraCash";
 
+static const QString StringLoggedInReply = "Moved Temporarily. Redirecting to /login";
+
 enum HttpRequestVarLayout {NOT_SET, ADDRESS, URL_ENCODED, MULTIPART, JSON};
 
 
@@ -66,6 +68,7 @@ public:
 signals:
 	void on_execution_finished(HttpRequestWorker *worker);
 	void repliedLogin(QString);
+	void loggedIn(bool);
 	void repliedIds(QString);
 	void repliedUserData(QString);
 	void repliedExtraCache(QString);

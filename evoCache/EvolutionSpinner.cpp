@@ -22,11 +22,14 @@ const double THRESHOLD_PROBA_BILL = 1.0;
 
 using namespace Puppy;
 
-EvolutionSpinner::EvolutionSpinner(Account *pAc, QObject* parent)
+EvolutionSpinner::EvolutionSpinner(QObject* parent)
 	: QObject(parent)
 {
 	qRegisterMetaType<ZoneVector>("ZoneVector");
+}
 
+void EvolutionSpinner::init(Account *pAc)
+{
 	unsigned long lSeed                = SEED_DEFAULT;
 
 	// Create evolution context add primitives used into it.
