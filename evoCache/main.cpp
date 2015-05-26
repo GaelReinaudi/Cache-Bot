@@ -5,7 +5,7 @@
 int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
-    QString jsonFile;// = "/Users/alecto/Cache-Bot/data/chrisPurchases.json";
+	QString jsonFile = "../../data/adelineGaelTransactions.json";
 	int afterJday = 0;
 	int beforeJday = 0;
 	if(argc > 1) {

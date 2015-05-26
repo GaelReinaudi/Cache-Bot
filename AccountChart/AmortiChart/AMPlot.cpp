@@ -1,5 +1,5 @@
 #include "AMPlot.h"
-#include "core/acdata.h"
+#include "core/account.h"
 
 AMPlot::AMPlot(QWidget *parent)
 	: QCustomPlot(parent)

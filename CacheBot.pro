@@ -6,11 +6,13 @@ CONFIG += ordered
 SUBDIRS = \
 	core \
 	cacheRest \
-	cacheLight \
 	tests \
+	evoCache \
+	cacheLight \
     extraCash
 	
 cacheRest.depends = core
+evoCache.depends = cacheRest,core
 cacheLight.depends = cacheRest,core
 tests.depends = cacheRest,core
 extraCash.depends = cacheRest,core

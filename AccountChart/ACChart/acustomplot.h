@@ -2,7 +2,7 @@
 #define ACUSTOMPLOT_H
 
 #include "../qcustomplot/qcustomplot.h"
-#include "core/acdata.h"
+#include "core/account.h"
 
 class ACustomPlot : public QCustomPlot
 {

@@ -2,6 +2,9 @@
 #include <QSignalSpy>
 #include "cacherest.h"
 
+#define TEST_USER_ID_1 "55518f01574600030092a822" // cache-bot
+#define TEST_USER_ID_2 "55518f01574600030092a822"
+
 class ServerTest: public QObject
 {
 	Q_OBJECT
@@ -54,7 +57,7 @@ private slots:
 
 
 	void userNoBank() {
-		CacheRest::Instance()->getUserData("552d7ba7be082c0300169ed5");
+		CacheRest::Instance()->getUserData(TEST_USER_ID_1);
 		QSignalSpy spyUserData(CacheRest::Instance()->worker, SIGNAL(repliedUserData(QString)));
 		QVERIFY(spyUserData.wait(10000));
 		QCOMPARE(spyUserData.count(), 1);

@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "core/acdata.h"
+#include "core/account.h"
 
 MainWindow::MainWindow(QString jsonFile, int afterJday, int beforeJday)
 	: QMainWindow()
