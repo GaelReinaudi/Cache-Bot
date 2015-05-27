@@ -3,7 +3,8 @@
 #include "cacherest.h"
 
 #define TEST_USER_ID_1 "55518f01574600030092a822" // cache-bot
-#define TEST_USER_ID_2 "55518f01574600030092a822"
+#define TEST_USER_ID_2 "556502390fbee50300e6d07c" // chris
+#define TEST_USER_ID_3 "556502390fbee50300e6d07c" // gael
 
 class ServerTest: public QObject
 {
@@ -50,11 +51,11 @@ private slots:
 	}
 
 	void verifyChrisId() {
-		QVERIFY(m_userIds.contains("552d7ba7be082c0300169ed5"));
+		QVERIFY(m_userIds.contains(TEST_USER_ID_2));
 	}
 
 	void verifyGaelId() {
-		QVERIFY(m_userIds.contains("55496831ceb5b20300ea0cf1"));
+		QVERIFY(m_userIds.contains(TEST_USER_ID_3));
 	}
 
 
@@ -69,7 +70,7 @@ private slots:
 	}
 
 	void getUseraData() {
-		CacheRest::Instance()->getUserData("552d7ba7be082c0300169ed5");
+		CacheRest::Instance()->getUserData(TEST_USER_ID_2);
 		QSignalSpy spyUserData(CacheRest::Instance()->worker, SIGNAL(repliedUserData(QString)));
 		QVERIFY(spyUserData.wait(10000));
 //		QCOMPARE(spyUserData.count(), 1);
@@ -79,7 +80,7 @@ private slots:
 	}
 
 	void injectData() {
-		m_testUser = CacheRest::Instance()->newUser("552d7ba7be082c0300169ed5");
+		m_testUser = CacheRest::Instance()->newUser(TEST_USER_ID_2);
 		QSignalSpy spyUserData(CacheRest::Instance()->worker, SIGNAL(repliedUserData(QString)));
 		QVERIFY(spyUserData.wait(10000));
 		//QVERIFY(m_userData.("{\"accounts\":"));

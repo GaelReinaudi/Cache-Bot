@@ -75,7 +75,7 @@ private:
 	}
 
 private:
-	QString m_jsonFilePath;
+	QString m_jsonFilePath = "predicted";
 	Transactions m_allTransactions;
 	TransactionBundle m_allTrans;
 	HashedBundles m_hashBundles;

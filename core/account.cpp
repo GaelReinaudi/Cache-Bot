@@ -55,11 +55,13 @@ bool Account::loadPlaidJson(QString jsonFile, int afterJday, int beforeJday) {
 bool Account::toJson(QVector<Transaction> transactions, QString category)
 {
 	QFile loadFile(m_jsonFilePath);
+	QByteArray saveData;
 	if (!loadFile.open(QIODevice::ReadOnly)) {
 		qWarning(QString("Couldn't open file %1").arg(QFileInfo(loadFile).absoluteFilePath()).toUtf8());
-		return false;
+		//return false;
 	}
-	QByteArray saveData = loadFile.readAll();
+	else
+		saveData = loadFile.readAll();
 	QJsonDocument loadDoc(QJsonDocument::fromJson(saveData));
 	QJsonObject json = loadDoc.object();
 
