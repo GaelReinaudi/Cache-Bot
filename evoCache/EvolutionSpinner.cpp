@@ -182,44 +182,46 @@ for (int j = 0; j < m_context->m_pAccount->hashBundles().count(); ++j) {
 	std::cout << "Initializing population" << std::endl;
 	initializePopulation(lPopulation, *m_context, lInitGrowProba, lMinInitDepth, lMaxInitDepth);
 	qDebug() << bestPreEvoTrees.count();
-	for(int i = 0; i < 5*lPopSize; ++i) {
-		lPopulation.push_back(bestPreEvoTrees.at(i % bestPreEvoTrees.size()));
-//		lPopulation[i] = bestPreEvoTrees.at(i % bestPreEvoTrees.size());
-	}
-	evaluateSymbReg(lPopulation, *m_context);
-	calculateStats(lPopulation, 0);
-
-	// Evolve population for the given number of generations
-	LOG() << "Starting evolution" << endl;
-	for(unsigned int i=1; i<=10*lNbrGen; ++i) {
-		if(!m_doSpin)  {
-			break;
+	if(bestPreEvoTrees.count()) {
+		for(int i = 0; i < 5*lPopSize; ++i) {
+			lPopulation.push_back(bestPreEvoTrees.at(i % bestPreEvoTrees.size()));
+//			lPopulation[i] = bestPreEvoTrees.at(i % bestPreEvoTrees.size());
 		}
-		LOG() << "Generation " << i << endl;
-		auto result = std::minmax_element(lPopulation.begin(), lPopulation.end());
-		Tree bestTree = lPopulation[result.second - lPopulation.begin()];
-
-		if (bestTree.mFitness > veryBestTree.mFitness)
-			veryBestTree = bestTree;
-		summarize(bestTree);
-
-		applySelectionTournament(lPopulation, *m_context, lNbrPartTournament);
-		applyCrossover(lPopulation, *m_context, lCrossoverProba, lCrossDistribProba, lMaxDepth);
-		applyMutationStandard(lPopulation, *m_context, lMutStdProba, lMutMaxRegenDepth, lMaxDepth);
-		applyMutationSwap(lPopulation, *m_context, lMutSwapProba, lMutSwapDistribProba);
-
-		bestTree.mValid = false;
-		lPopulation.push_back(bestTree);
-
 		evaluateSymbReg(lPopulation, *m_context);
-		calculateStats(lPopulation, i);
+		calculateStats(lPopulation, 0);
+
+		// Evolve population for the given number of generations
+		LOG() << "Starting evolution" << endl;
+		for(unsigned int i=1; i<=10*lNbrGen; ++i) {
+			if(!m_doSpin)  {
+				break;
+			}
+			LOG() << "Generation " << i << endl;
+			auto result = std::minmax_element(lPopulation.begin(), lPopulation.end());
+			Tree bestTree = lPopulation[result.second - lPopulation.begin()];
+
+			if (bestTree.mFitness > veryBestTree.mFitness)
+				veryBestTree = bestTree;
+			summarize(bestTree);
+
+			applySelectionTournament(lPopulation, *m_context, lNbrPartTournament);
+			applyCrossover(lPopulation, *m_context, lCrossoverProba, lCrossDistribProba, lMaxDepth);
+			applyMutationStandard(lPopulation, *m_context, lMutStdProba, lMutMaxRegenDepth, lMaxDepth);
+			applyMutationSwap(lPopulation, *m_context, lMutSwapProba, lMutSwapDistribProba);
+
+			bestTree.mValid = false;
+			lPopulation.push_back(bestTree);
+
+			evaluateSymbReg(lPopulation, *m_context);
+			calculateStats(lPopulation, i);
+		}
+		LOG() << "End of evolution" << endl;
+
+		QVector<Transaction> futureTransactions = predictTrans(veryBestTree, THRESHOLD_PROBA_BILL);
+		m_context->m_pAccount->toJson(futureTransactions, "predicted");
+
 	}
-	LOG() << "End of evolution" << endl;
-
-	QVector<Transaction> futureTransactions = predictTrans(veryBestTree, THRESHOLD_PROBA_BILL);
-	m_context->m_pAccount->toJson(futureTransactions, "predicted");
-
-	std::cout << "Exiting program " << output.count() << endl << std::flush;
+	std::cout << "Exiting program " << output.count() << std::endl << std::flush;
 	qApp->exit();
 }
 

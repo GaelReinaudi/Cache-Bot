@@ -16,8 +16,8 @@ int main(int argc, char *argv[])
 			}
 		}
 	}
-	Evolver w(jsonFileOrUser, afterJday, beforeJday);
-//	Evolver w(jsonFileOrUser);
+//	Evolver w(jsonFileOrUser, afterJday, beforeJday);
+	Evolver w(jsonFileOrUser);
 
 	return a.exec();
 }

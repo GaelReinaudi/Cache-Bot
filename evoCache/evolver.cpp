@@ -52,7 +52,7 @@ void Evolver::onLoggedIn(bool didLogin)
 
 void Evolver::onRepliedUserData(QString strData)
 {
-	m_account->loadPlaidJson(strData);
+	m_account->loadJsonData(strData.toUtf8());
 	m_evoSpinner->init(m_account);
 
 	emit initialized(true);

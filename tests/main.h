@@ -4,7 +4,7 @@
 
 #define TEST_USER_ID_1 "55518f01574600030092a822" // cache-bot
 #define TEST_USER_ID_2 "556502390fbee50300e6d07c" // chris
-#define TEST_USER_ID_3 "556502390fbee50300e6d07c" // gael
+#define TEST_USER_ID_3 "55653f1f2dea2e0300e39b64" // gael
 
 class ServerTest: public QObject
 {
@@ -21,14 +21,16 @@ private slots:
 		QVERIFY(spyLogin.wait());
 		QCOMPARE(spyLogin.count(), 1); // make sure the signal was emitted exactly one time
 		QList<QVariant> arguments = spyLogin.takeFirst();
-		QVERIFY(arguments.at(0).toString() == StringLoggedInReply);
+		QCOMPARE(arguments.at(0).toString()
+				 , StringLoggedInReply);
 
 		CacheRest::Instance()->getUserIds();
 		QSignalSpy spyIds(CacheRest::Instance()->worker, SIGNAL(repliedIds(QString)));
 		QVERIFY(spyIds.wait());
 		QCOMPARE(spyIds.count(), 1); // make sure the signal was emitted exactly one time
 		arguments = spyIds.takeFirst();
-		QVERIFY(arguments.at(0).toString() == "{\"error\":\"Not authenticated for this route.\"}");
+		QCOMPARE(arguments.at(0).toString()
+				 , QString("{\"error\":\"Not authenticated for this route.\"}"));
 	}
 
 	void loginCacheBot() {
@@ -37,7 +39,8 @@ private slots:
 		bool loggedIn = spyLogin.wait();
 		QList<QVariant> arguments = spyLogin.takeFirst();
 		QVERIFY(loggedIn);
-		QVERIFY(arguments.at(0).toString() == StringLoggedInReply);
+		QCOMPARE(arguments.at(0).toString()
+				 , StringLoggedInReply);
 	}
 
 	void getIds() {
@@ -47,7 +50,8 @@ private slots:
 		QCOMPARE(spyIds.count(), 1);
 		QList<QVariant> arguments = spyIds.takeFirst();
 		m_userIds = arguments.at(0).toString();
-		QVERIFY(arguments.at(0).toString().startsWith("{\"user_ids\":["));
+		QSTARTSWITH(arguments.at(0).toString()
+					, "{\"user_ids\":[");
 	}
 
 	void verifyChrisId() {
@@ -66,24 +70,25 @@ private slots:
 		QCOMPARE(spyUserData.count(), 1);
 		QList<QVariant> arguments = spyUserData.takeFirst();
 		qDebug() << arguments.at(0).toString();
-		QVERIFY(arguments.at(0).toString().startsWith("{\"error\":{}"));
+		QSTARTSWITH(arguments.at(0).toString()
+					, "{\"error\":{}");
 	}
 
 	void getUseraData() {
 		CacheRest::Instance()->getUserData(TEST_USER_ID_2);
 		QSignalSpy spyUserData(CacheRest::Instance()->worker, SIGNAL(repliedUserData(QString)));
 		QVERIFY(spyUserData.wait(10000));
-//		QCOMPARE(spyUserData.count(), 1);
+		QCOMPARE(spyUserData.count(), 1);
 		QList<QVariant> arguments = spyUserData.takeFirst();
 		m_userData = arguments.at(0).toString();
-//		QVERIFY(m_userData.startsWith("{\"accounts\":"));
+		QSTARTSWITH(m_userData
+					, "{\"accounts\":");
 	}
 
 	void injectData() {
 		m_testUser = CacheRest::Instance()->newUser(TEST_USER_ID_2);
-		QSignalSpy spyUserData(CacheRest::Instance()->worker, SIGNAL(repliedUserData(QString)));
-		QVERIFY(spyUserData.wait(10000));
-		//QVERIFY(m_userData.("{\"accounts\":"));
+		QSignalSpy spyInjectData(CacheRest::Instance()->worker, SIGNAL(repliedUserData(QString)));
+		QVERIFY(spyInjectData.wait(10000));
 	}
 
 	void sendExtraCash() {
@@ -94,7 +99,6 @@ private slots:
 	}
 
 private:
-//	CacheRest* m_cacheRest = 0;
 	QString m_userIds;
 	QString m_userData;
 	User* m_testUser = 0;

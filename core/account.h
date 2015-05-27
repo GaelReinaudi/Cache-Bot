@@ -71,7 +71,7 @@ private:
 			}
 		}
 
-		qDebug() << m_hashBundles.count() << m_hashBundles.keys().first() << m_hashBundles.keys().last();
+		//qDebug() << m_hashBundles.count() << m_hashBundles.keys().first() << m_hashBundles.keys().last();
 	}
 
 private:
