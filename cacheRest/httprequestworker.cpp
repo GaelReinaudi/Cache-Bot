@@ -303,7 +303,7 @@ void HttpRequestWorker::on_manager_finished(QNetworkReply *reply) {
 
 	emit on_execution_finished(this);
 
-	qDebug() << "response is" << response.left(128);
+	qDebug() << "response is" << response.left(256);
 	if(reply->request().url() == QUrl(LoginRoute)) {
 		emit repliedLogin(response);
 		if(response == StringLoggedInReply) {

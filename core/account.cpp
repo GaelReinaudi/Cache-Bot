@@ -16,20 +16,19 @@ void Account::loadJsonData(QByteArray jsonData, int afterJday, int beforeJday)
 	const QJsonObject& json = loadDoc.object();
 
 	QJsonArray npcArrayAccount = json["accounts"].toArray();
-	qDebug() << npcArrayAccount.size();
 	for (int npcIndex = 0; npcIndex < npcArrayAccount.size(); ++npcIndex) {
 		QJsonObject npcObject = npcArrayAccount[npcIndex].toObject();
 		QString accountID = npcObject["_id"].toString();
 		Q_ASSERT(!accountID.isEmpty());
 		if (accountID != "")
 			m_accountIds.push_back(accountID);
+
 	}
-	qDebug() << m_accountIds;
-	m_allTransactions.read(json["transactions"].toArray(), afterJday, beforeJday, m_accountIds);
+	qDebug() << "Accont Ids:" << m_accountIds;
+	//qDebug() << jsonData;
 
+	m_allTransactions.read(json["transactions"].toArray(), afterJday, beforeJday);//, m_accountIds);
 	m_predicted.read(json["predicted"].toArray());
-
-	//m_transactions.cleanSymetricTransaction();
 
 	// make a bundle of all the transactions
 	m_allTrans.clear();
@@ -109,13 +108,12 @@ double Account::costLiving(double withinPercentileCost)
 }
 
 void Account::Transactions::read(const QJsonArray& npcArray, int afterJday, int beforeJday, const QVector<QString> &onlyAcIds /*= anyID*/) {
-	clear();
 	for (int npcIndex = 0; npcIndex < npcArray.size(); ++npcIndex) {
 		QJsonObject npcObject = npcArray[npcIndex].toObject();
 		QString accountTrans = npcObject["_account"].toString();
 		if (onlyAcIds.isEmpty() || onlyAcIds.contains(accountTrans)) {
 			appendNew()->read(npcObject);
-			if (last()->jDay() < afterJday
+			if ((afterJday && last()->jDay() < afterJday)
 					|| (beforeJday && last()->jDay() > beforeJday)
 					|| last()->name.contains("Online Transfer")
 					|| last()->name.contains("Credit Card Payment")
@@ -129,7 +127,7 @@ void Account::Transactions::read(const QJsonArray& npcArray, int afterJday, int 
 		}
 	}
 	qSort(m_transArray.begin(), m_transArray.begin() + m_numTrans, Transaction::earlierThan);
-	qDebug() << "transaction count" << count();
+	qDebug() << "transaction loaded " << count() << "/" << npcArray.size();
 }
 
 void Account::Transactions::write(QJsonArray& npcArray) const {

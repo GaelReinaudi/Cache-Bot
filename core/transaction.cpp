@@ -7,7 +7,7 @@ void Transaction::read(const QJsonObject &json) {
 	name = json["name"].toString();
 	nameHash.hash = proximityHashString(name);
 	setAmount(-json["amount"].toDouble(ok));
-	date = QDate::fromString(json["date"].toString(), "yyyy-MM-dd");
+	date = QDate::fromString(json["date"].toString().left(10), "yyyy-MM-dd");
 	QJsonArray npcArrayOld = json["category"].toArray();
 	for (int npcIndex = 0; npcIndex < npcArrayOld.size(); ++npcIndex) {
 		categories.append(npcArrayOld[npcIndex].toString());

@@ -62,7 +62,6 @@ private slots:
 		QVERIFY(m_userIds.contains(TEST_USER_ID_3));
 	}
 
-
 	void NoUserData() {
 		CacheRest::Instance()->getUserData("NotAnExistingUser");
 		QSignalSpy spyNoUserData(CacheRest::Instance()->worker, SIGNAL(repliedUserData(QString)));
