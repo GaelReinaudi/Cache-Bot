@@ -9,6 +9,7 @@ DEFINES += CORE_LIBRARY
 
 SOURCES += \
 	common.cpp \
+	log.cpp \
 	account.cpp \
     user.cpp \
 	transaction.cpp

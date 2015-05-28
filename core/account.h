@@ -9,7 +9,7 @@ typedef QMap<uint, TransactionBundle*> HashedBundles;
 class CORESHARED_EXPORT Account : public DBobj
 {
 public:
-	Account() {}
+	Account();
 
 	// loading the json file
 	// see this: https://qt-project.org/doc/qt-5-snapshot/qtcore-savegame-example.html

@@ -1,5 +1,13 @@
 #include "account.h"
 
+QStringList s_excludeNameTransContain;
+
+Account::Account() {
+	s_excludeNameTransContain.append("Online Transfer");
+	s_excludeNameTransContain.append("Credit Card Payment");
+	s_excludeNameTransContain.append("ment to Chase c");
+}
+
 void Account::loadJsonData(QByteArray jsonData, int afterJday, int beforeJday)
 {
 //	qDebug() << jsonData;
@@ -113,13 +121,18 @@ void Account::Transactions::read(const QJsonArray& npcArray, int afterJday, int 
 		QString accountTrans = npcObject["_account"].toString();
 		if (onlyAcIds.isEmpty() || onlyAcIds.contains(accountTrans)) {
 			appendNew()->read(npcObject);
-			if ((afterJday && last()->jDay() < afterJday)
-					|| (beforeJday && last()->jDay() > beforeJday)
-					|| last()->name.contains("Online Transfer")
-					|| last()->name.contains("Credit Card Payment")
-					|| last()->name.contains("ment to Chase c")
-					)
+			if ((afterJday && last()->jDay() < afterJday) || (beforeJday && last()->jDay() > beforeJday)) {
 				removeLast();
+				continue;
+			}
+			for (QString& nono : s_excludeNameTransContain) {
+				if (last()->name.contains(nono)) {
+					removeLast();
+					LOG() << "removed transaction because it looks like an internal transfer based on name containing"
+						  << nono << endl;
+					break;
+				}
+			}
 		}
 		else {
 			LOG() << "transaction not matching an account:"<< accountTrans

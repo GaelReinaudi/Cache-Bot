@@ -1,17 +1,35 @@
 #ifndef LOG_H
 #define LOG_H
+#include <QTextStream>
+#include <QFile>
+#include <QMutexLocker>
+#include <QDateTime>
 
 class logger
 {
 public:
-	static QTextStream& stream() {
-		static QFile data("optim.log");
-		static bool ret = data.open(QFile::WriteOnly | QFile::Truncate);
-		ret |= true;
-		static QTextStream optout(&data);
+	static logger* Instance() {
+		if(!s_pLog) {
+			s_pLog = new logger();
+			s_pLog->data.setFileName(QString("optim.log"));
+			static bool ret = s_pLog->data.open(QFile::WriteOnly | QFile::Truncate);
+			if(ret)
+				ret = false;
+			s_pLog->optout.setDevice(&s_pLog->data);
+		}
+		return s_pLog;
+	}
+
+	QTextStream& stream() {
+		QMutexLocker locker(&logMutex);
 		return optout << QDateTime::currentDateTime().toString("HH:mm:ss.zzz ");
 	}
+	QTextStream optout;//(&data);
+	QFile data;//(QString("optim.log"));
+	static logger* s_pLog;
+	QMutex logMutex;
 };
-#define LOG() logger::stream()
+
+#define LOG() logger::Instance()->stream()
 
 #endif // LOG_H
