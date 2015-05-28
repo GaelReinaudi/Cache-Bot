@@ -11,7 +11,7 @@ void User::readJson() {
 
 void User::injectJsonString(QString jsonStr)
 {
-	qDebug() << "injecting" << jsonStr;
+	qDebug() << "injecting" << jsonStr.left(128);
 	QJsonDocument jsonDoc(QJsonDocument::fromJson(jsonStr.toUtf8()));
 	const QJsonObject& jsonObj = jsonDoc.object();
 

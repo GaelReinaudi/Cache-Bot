@@ -63,19 +63,29 @@ private slots:
 	}
 
 
+	void NoUserData() {
+		CacheRest::Instance()->getUserData("NotAnExistingUser");
+		QSignalSpy spyNoUserData(CacheRest::Instance()->worker, SIGNAL(repliedUserData(QString)));
+		QVERIFY(spyNoUserData.wait(10000));
+		QCOMPARE(spyNoUserData.count(), 1);
+		QList<QVariant> arguments = spyNoUserData.takeFirst();
+		QSTARTSWITH(arguments.at(0).toString()
+					, "{\"error\":{\"message\":\"Cast to ObjectId failed");
+	}
+
 	void userNoBank() {
 		CacheRest::Instance()->getUserData(TEST_USER_ID_1);
 		QSignalSpy spyUserData(CacheRest::Instance()->worker, SIGNAL(repliedUserData(QString)));
 		QVERIFY(spyUserData.wait(10000));
 		QCOMPARE(spyUserData.count(), 1);
 		QList<QVariant> arguments = spyUserData.takeFirst();
-		qDebug() << arguments.at(0).toString();
+		//qDebug() << arguments.at(0).toString();
 		QSTARTSWITH(arguments.at(0).toString()
-					, "{\"error\":{}");
+					, "{\"accounts\":[],\"transactions\":[],\"access_tokens\":[]");
 	}
 
 	void getUseraData() {
-		CacheRest::Instance()->getUserData(TEST_USER_ID_2);
+		CacheRest::Instance()->getUserData(TEST_USER_ID_3);
 		QSignalSpy spyUserData(CacheRest::Instance()->worker, SIGNAL(repliedUserData(QString)));
 		QVERIFY(spyUserData.wait(10000));
 		QCOMPARE(spyUserData.count(), 1);
