@@ -102,10 +102,15 @@ public:
 		Q_UNUSED(outDatum);
 		Q_UNUSED(ioContext);
 	}
-	virtual QJsonObject toJson() {
+	virtual QJsonObject toJson(Puppy::Context& ioContext) {
 		QJsonObject retObj;
 		retObj.insert("name", QString::fromStdString(getName()));
 		retObj.insert("numArgs", int(getNumberArguments()));
+		for (int i = 0; i < getNumberArguments(); ++i) {
+			double lArgi = 0;
+			getArgument(i, &lArgi, ioContext);
+			retObj.insert(QString("arg%1").arg(i, 2, QChar('0')), lArgi);
+		}
 		return retObj;
 	}
 	bool isFeature() const override { return true; }
@@ -145,7 +150,7 @@ public:
 	DummyFeature(EvolutionSpinner* evoSpinner, QString featureName = "Dummy")
 			: AccountFeature(6, featureName.toStdString(), evoSpinner)
 	{}
-	QJsonObject toJson() override { return QJsonObject(); }
+//	QJsonObject toJson() override { return QJsonObject(); }
 };
 
 class FeaturePeriodicAmount : public AccountFeature
@@ -156,7 +161,7 @@ public:
 	{ }
 	~FeaturePeriodicAmount() { }
 
-	virtual void execute(void* outDatum, Puppy::Context& ioContext) { Q_UNUSED(outDatum); Q_UNUSED(ioContext); }
+//	virtual void execute(void* outDatum, Puppy::Context& ioContext) { Q_UNUSED(outDatum); Q_UNUSED(ioContext); }
 	virtual void getArgs(Puppy::Context &ioContext) { Q_UNUSED(ioContext); }
 	virtual void cleanArgs() {}
 };

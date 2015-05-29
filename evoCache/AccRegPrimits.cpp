@@ -180,24 +180,29 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 				  + " / " + QString::number(kindaLog(m_bundle.sumDollar() / m_bundle.count()))
 				  + " = " + QString::number(unKindaLog(double(m_kla) / KLA_MULTIPLICATOR))
 				  + " / " + QString::number(m_bundle.sumDollar() / m_bundle.count());
-			ioContext.m_summaryStrList->append(str);
+			ioContext.m_summaryStrList->insert("info", str);
 			str = QString("On the ") + QString::number(m_dayOfMonth) + "th, ";
 			str += QString("hash: ") + QString::number(m_bundle.trans(0).nameHash.hash);
 			str += QString("  ind: ") + QString::number(m_bundle.trans(0).indexHash);
+			ioContext.m_summaryStrList->insert("dayOfMonth", m_dayOfMonth);
+			ioContext.m_summaryStrList->insert("hash", m_bundle.trans(0).nameHash.hash);
+			ioContext.m_summaryStrList->insert("indH", m_bundle.trans(0).indexHash);
 		}
 		str += QString("  fitness: ") + QString::number(m_fitness);
 		str += QString("  billProba: %1       ").arg(billPro);
-		ioContext.m_summaryStrList->append(str);
-//		str = QString("avg label: ") + m_bundle.averageName();
-//		ioContext.m_sumamryStrList->append(str);
+		ioContext.m_summaryStrList->insert("fitness", m_fitness);
+		ioContext.m_summaryStrList->insert("billProba", billPro);
+//		ioContext.m_summaryStrList->insert("info2", str);
 		str = QString("all label: ") + m_bundle.uniqueNames().join(" | ");
-		ioContext.m_summaryStrList->append(str);
+		ioContext.m_summaryStrList->insert("labels", QJsonArray::fromStringList(m_bundle.uniqueNames()));
+//		ioContext.m_summaryStrList->insert("info3", str);
 		str = QString("tot amount: ") + QString::number(m_bundle.sumDollar());
 		str += QString(" since : ") + QString::number(m_consecMonthBeforeMissed);
 		str += QString(" last missed: ") + QString::number(m_consecMissed);
-		ioContext.m_summaryStrList->append(str);
-		str = QString("----------------------------");
-		ioContext.m_summaryStrList->append(str);
+		ioContext.m_summaryStrList->insert("tot$", m_bundle.sumDollar());
+		ioContext.m_summaryStrList->insert("consecutive", m_consecMonthBeforeMissed);
+		ioContext.m_summaryStrList->insert("cons-missed", m_consecMissed);
+//		ioContext.m_summaryStrList->insert("info4", str);
 
 		for (int i = 0; i < targetTrans.count(); ++i) {
 			Transaction* iTarg = &targetTrans[i];

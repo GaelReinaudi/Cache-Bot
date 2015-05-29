@@ -151,15 +151,15 @@ for (int j = 0; j < m_context->m_pAccount->hashBundles().count(); ++j) {
 	LOG() << "Best individual at generation " << lNbrGen << " is: ";
 	LOG() << lBestIndividual->toStr() << endl;
 
-	QString strBest = summarize(*lBestIndividual);
+	QString jsonBest = summarize(*lBestIndividual);
 
 //	std::vector<unsigned int> outCallStack = (*lBestIndividual).getFeatureStack(0, *m_context);
 //	qDebug() << QVector<unsigned int>::fromStdVector(outCallStack);
 
-	QString strFit = strBest.mid(strBest.indexOf("billProba: ") + 11).mid(0, 6).trimmed();
-	LOG() << "AAAAAAAAAAAAAAAAAA " << strBest << endl;
+	QString strFit = jsonBest.mid(jsonBest.indexOf("billProba: ") + 11).mid(0, 6).trimmed();
+	LOG() << "AAAAAAAAAAAAAAAAAA " << jsonBest << endl;
 	double billProba = strFit.toDouble();
-	output[billProba].append(strBest);
+	output[billProba].append(jsonBest);
 	if(billProba > THRESHOLD_PROBA_BILL || bestPreEvoTrees.isEmpty()) {
 		(*lBestIndividual).mValid = false;
 		bestPreEvoTrees.push_back(*lBestIndividual);
@@ -192,7 +192,7 @@ for (int j = 0; j < m_context->m_pAccount->hashBundles().count(); ++j) {
 
 		// Evolve population for the given number of generations
 		LOG() << "Starting evolution" << endl;
-		for(unsigned int i=1; i<=10*lNbrGen; ++i) {
+		for(unsigned int i=1; i<=1 + 0* 10*lNbrGen; ++i) {
 			if(!m_doSpin)  {
 				break;
 			}
@@ -244,27 +244,27 @@ unsigned int EvolutionSpinner::evaluateSymbReg(std::vector<Tree>& ioPopulation,
 
 QString EvolutionSpinner::summarize(Tree& tree)
 {
-	QStringList retList;
+	QJsonObject jsonObj;
 	emit sendClearMask();
 	tree.mValid = false;
-	m_context->m_summaryStrList = &retList;
+	m_context->m_summaryStrList = &jsonObj;
 	double fit;
 	tree.interpret(&fit, *m_context);
 	m_context->m_summaryStrList = 0;
 
+	QString jsonStr = QJsonDocument(jsonObj).toJson();
 	LOG() << "tree (" << fit << "): " << tree.toStr() << endl;
-	for (const QString& str : retList) {
-		LOG() << "    " << str << endl;
-	}
+	LOG() << "    " << jsonStr << endl;
 	emit needsReplot();
-	emit newList(retList);
-	return retList.join('\n');
+	//emit newList(jsonStr);
+	return jsonStr;
 }
 
 QVector<Transaction> EvolutionSpinner::predictTrans(Tree& tree, double threshProba)
 {
 	QVector<Transaction> ret;
 	QMap<double, QVector<Transaction> > mapFitPredicted;
+	// makes the summary to compute predictions
 	m_context->m_mapPredicted = &mapFitPredicted;
 	summarize(tree);
 	m_context->m_mapPredicted = 0;
