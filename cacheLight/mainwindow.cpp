@@ -109,7 +109,7 @@ bool MainWindow::wasPredicted(Transaction &trans)
 	for(int i = 0; i < m_account.m_predicted.count(); ++i) {
 		Transaction* pred = m_account.m_predicted.transArray() + i;
 		//qDebug() << pred->jDay() << trans.jDay();
-		if(pred->dist(trans) < 128) {
+		if(pred->dist(trans) < 1024) {
 			qDebug() << "observing predicted transaction" << pred->dist(trans) << trans.name;
 			return true;
 		}

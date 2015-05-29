@@ -109,7 +109,7 @@ public:
 		for (int i = 0; i < getNumberArguments(); ++i) {
 			double lArgi = 0;
 			getArgument(i, &lArgi, ioContext);
-			retObj.insert(QString("arg%1").arg(i, 2, QChar('0')), lArgi);
+			retObj.insert(QString("arg%1").arg(i), lArgi);
 		}
 		return retObj;
 	}
@@ -221,6 +221,19 @@ public:
 		m_dayOfMonth %= 31;
 		++m_dayOfMonth;
 	}
+
+	virtual QJsonObject toJson(Puppy::Context& ioContext) {
+		QJsonObject retObj = FeaturePeriodicAmount::toJson(ioContext);
+		retObj.insert("dayOfMonth", m_dayOfMonth);
+		retObj.insert("fitness", m_fitness);
+		retObj.insert("billProba", m_billProba);
+		retObj.insert("labels", QJsonArray::fromStringList(m_bundle.uniqueNames()));
+		retObj.insert("tot$", m_bundle.sumDollar());
+		retObj.insert("consecutive", m_consecMonthBeforeMissed);
+		retObj.insert("cons-missed", m_consecMissed);
+		return retObj;
+	}
+
 	void execute(void* outDatum, Puppy::Context& ioContext) override;
 
 	double billProbability() const {
@@ -241,6 +254,7 @@ protected:
 	int m_consecMonthBeforeMissed = 0;
 	int m_consecMonth = 0;
 	int m_consecMissed = 0;
+	int m_billProba = 0;
 };
 
 #endif // ACCREGPRIMITS_H

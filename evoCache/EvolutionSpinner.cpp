@@ -156,7 +156,7 @@ for (int j = 0; j < m_context->m_pAccount->hashBundles().count(); ++j) {
 //	std::vector<unsigned int> outCallStack = (*lBestIndividual).getFeatureStack(0, *m_context);
 //	qDebug() << QVector<unsigned int>::fromStdVector(outCallStack);
 
-	QString strFit = jsonBest.mid(jsonBest.indexOf("billProba: ") + 11).mid(0, 6).trimmed();
+	QString strFit = jsonBest.mid(jsonBest.indexOf("billProba\": ") + 12).mid(0, 6).trimmed();
 	LOG() << "AAAAAAAAAAAAAAAAAA " << jsonBest << endl;
 	double billProba = strFit.toDouble();
 	output[billProba].append(jsonBest);
@@ -192,7 +192,7 @@ for (int j = 0; j < m_context->m_pAccount->hashBundles().count(); ++j) {
 
 		// Evolve population for the given number of generations
 		LOG() << "Starting evolution" << endl;
-		for(unsigned int i=1; i<=1 + 0* 10*lNbrGen; ++i) {
+		for(unsigned int i=1; i<=1*lNbrGen; ++i) {
 			if(!m_doSpin)  {
 				break;
 			}
@@ -245,12 +245,13 @@ unsigned int EvolutionSpinner::evaluateSymbReg(std::vector<Tree>& ioPopulation,
 QString EvolutionSpinner::summarize(Tree& tree)
 {
 	QJsonObject jsonObj;
+	jsonObj.insert("Features", QJsonArray());
 	emit sendClearMask();
 	tree.mValid = false;
-	m_context->m_summaryStrList = &jsonObj;
+	m_context->m_summaryJsonObj = &jsonObj;
 	double fit;
 	tree.interpret(&fit, *m_context);
-	m_context->m_summaryStrList = 0;
+	m_context->m_summaryJsonObj = 0;
 
 	QString jsonStr = QJsonDocument(jsonObj).toJson();
 	LOG() << "tree (" << fit << "): " << tree.toStr() << endl;

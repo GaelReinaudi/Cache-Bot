@@ -104,7 +104,7 @@ public:
 	Tree*                                 mTree;          //!< Actual tree evaluated.
 	bool m_isInFeature = false;
 	bool m_hasRecursiveFeature = false;
-	QJsonObject* m_summaryStrList = 0;
+	QJsonObject* m_summaryJsonObj = 0;
 	QMap<double, QVector<Transaction> >* m_mapPredicted = 0;
 	Account* m_pAccount;
 	int filterHashIndex = -1;
