@@ -254,7 +254,7 @@ protected:
 	int m_consecMonthBeforeMissed = 0;
 	int m_consecMonth = 0;
 	int m_consecMissed = 0;
-	int m_billProba = 0;
+	double m_billProba = 0;
 };
 
 #endif // ACCREGPRIMITS_H
