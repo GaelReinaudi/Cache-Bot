@@ -11,9 +11,11 @@ static const int KA_MULTIPLICATOR = 1024;
 
 #define QSTARTSWITH(actual, expected) QCOMPARE(actual.left(QString(expected).length()), QString(expected))
 
-double kindaLog(double amount);
-double unKindaLog(double kindaLogAmount);
-unsigned int proximityHashString(const QString& str);
+double CORESHARED_EXPORT kindaLog(double amount);
+double CORESHARED_EXPORT unKindaLog(double kindaLogAmount);
+qint64 CORESHARED_EXPORT proximityHashString(const QString& str);
+qint64 CORESHARED_EXPORT proximityHashString2(const QString& str);
+qint64 CORESHARED_EXPORT stringHashDistance(qint64 h1, qint64 h2);
 
 static inline qint64 absInt(const qint64& x) {
 	return qAbs(x);

@@ -102,6 +102,12 @@ public:
 		Q_UNUSED(outDatum);
 		Q_UNUSED(ioContext);
 	}
+	virtual QJsonObject toJson() {
+		QJsonObject retObj;
+		retObj.insert("name", QString::fromStdString(getName()));
+		retObj.insert("numArgs", int(getNumberArguments()));
+		return retObj;
+	}
 	bool isFeature() const override { return true; }
 	EvolutionSpinner *evoSpinner() const { return m_evoSpinner; }
 
@@ -139,6 +145,7 @@ public:
 	DummyFeature(EvolutionSpinner* evoSpinner, QString featureName = "Dummy")
 			: AccountFeature(6, featureName.toStdString(), evoSpinner)
 	{}
+	QJsonObject toJson() override { return QJsonObject(); }
 };
 
 class FeaturePeriodicAmount : public AccountFeature

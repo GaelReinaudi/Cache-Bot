@@ -173,7 +173,7 @@ for (int j = 0; j < m_context->m_pAccount->hashBundles().count(); ++j) {
 		LOG() << str << endl;
 	}
 
-	// run again with full transactions
+	// run again with full features
 	LIMIT_NUM_FEATURES = MAX_NUM_FEATURES;
 	m_context->filterHashIndex = -1;
 	Tree veryBestTree;

@@ -27,9 +27,13 @@ void Account::loadJsonData(QByteArray jsonData, int afterJday, int beforeJday)
 	for (int npcIndex = 0; npcIndex < npcArrayAccount.size(); ++npcIndex) {
 		QJsonObject npcObject = npcArrayAccount[npcIndex].toObject();
 		QString accountID = npcObject["_id"].toString();
+		int accountLast4Digits = npcObject["meta"].toObject()["number"].toInt();
+		QString accountName = npcObject["meta"].toObject()["name"].toString();
+		QString accountType = npcObject["type"].toString();
 		Q_ASSERT(!accountID.isEmpty());
 		if (accountID != "")
 			m_accountIds.push_back(accountID);
+		LOG() << "read account:" << accountID << ": " << accountName << "(" << accountLast4Digits << "): " << accountType << endl;
 
 	}
 	qDebug() << "Accont Ids:" << m_accountIds;
@@ -67,8 +71,9 @@ bool Account::toJson(QVector<Transaction> transactions, QString category)
 		qWarning(QString("Couldn't open file %1").arg(QFileInfo(loadFile).absoluteFilePath()).toUtf8());
 		//return false;
 	}
-	else
+	else {
 		saveData = loadFile.readAll();
+	}
 	QJsonDocument loadDoc(QJsonDocument::fromJson(saveData));
 	QJsonObject json = loadDoc.object();
 

@@ -12,8 +12,8 @@ double unKindaLog(double kindaLogAmount)
 	return -1.0 + qExp(kindaLogAmount * 2.3025850929940456840179914546844); // 1 / 0.43429448190325182765112891891661
 }
 
-unsigned int proximityHashString(const QString &str) {
-	unsigned int ret = 0;
+qint64 proximityHashString(const QString &str) {
+	qint64 ret = 0;
 	for (const QChar& c : str) {
 		int n = c.toUpper().toLatin1() * 1;
 		// for numbers
@@ -22,4 +22,23 @@ unsigned int proximityHashString(const QString &str) {
 		ret += n;
 	}
 	return ret;
+}
+
+qint64 proximityHashString2(const QString &str) {
+	qint64 ret = 0;
+	for (const QChar& c : str) {
+		int n = c.toUpper().toLatin1() * 1;
+		// getting the index from symbol '!' == 21
+		n -= QChar('!').toLatin1();
+		if (n > 0 && n < 64) {
+			ret |= quint64(1) << n;
+		}
+	}
+	return ret;
+}
+
+
+qint64 stringHashDistance(qint64 h1, qint64 h2)
+{
+	return absInt(h1 - h2);
 }

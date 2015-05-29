@@ -21,7 +21,7 @@ SOURCES += \
 #	$$PWD/../AccountChart/qcustomplot/qcustomplot.cpp \
 #	$$PWD/../AccountChart/ACChart/acustomplot.cpp \
 #	$$PWD/../AccountChart/AmortiChart/AMPlot.cpp \
-	$$PWD/../core/common.cpp \
+#	$$PWD/../core/common.cpp \
 	EvolutionSpinner.cpp \
     AccRegPrimits.cpp
 
