@@ -190,7 +190,7 @@ for (int j = 0; j < m_context->m_pAccount->hashBundles().count(); ++j) {
 
 		// Evolve population for the given number of generations
 		LOG() << "Starting evolution" << endl;
-		for(unsigned int i=1; i<=1*lNbrGen; ++i) {
+		for(unsigned int i=1; i<=10*lNbrGen; ++i) {
 			if(!m_doSpin)  {
 				break;
 			}
@@ -251,7 +251,7 @@ QJsonObject EvolutionSpinner::summarize(Tree& tree)
 	tree.interpret(&fit, *m_context);
 	m_context->m_summaryJsonObj = 0;
 
-	QString jsonStr = QJsonDocument(jsonObj).toJson();
+	QString jsonStr = QJsonDocument(jsonObj).toJson(QJsonDocument::Compact);
 	LOG() << "tree (" << fit << "): " << tree.toStr() << endl;
 	LOG() << "    " << jsonStr << endl;
 	emit needsReplot();
