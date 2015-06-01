@@ -13,6 +13,7 @@ static const QString LoginRoute = "https://cache-heroku.herokuapp.com/login";
 static const QString IdsRoute = "https://cache-heroku.herokuapp.com/cache-bot/user_ids";
 static const QString UserDataRoute = "https://cache-heroku.herokuapp.com/cache-bot/data";
 static const QString SendExtraCashRoute = "https://cache-heroku.herokuapp.com/cache-bot/extraCash";
+static const QString SendNewbotRoute = "https://cache-heroku.herokuapp.com/cache-bot/newBot";
 
 static const QString StringLoggedInReply = "Moved Temporarily. Redirecting to /login";
 

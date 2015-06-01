@@ -24,6 +24,7 @@ public:
 	void getUserData(QString userId, User *pUserToInject = 0);
 	User* newUser(QString userId);
 	void sendExtraCash(QString userId, double valExtra);
+	void sendNewBot(QString userId, QJsonObject newBot);
 
 
 public:

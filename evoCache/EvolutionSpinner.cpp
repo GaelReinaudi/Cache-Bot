@@ -268,7 +268,7 @@ QVector<Transaction> EvolutionSpinner::predictTrans(Tree& tree, double threshPro
 	// makes the summary to compute predictions
 	m_context->m_mapPredicted = &mapFitPredicted;
 	summarize(tree);
-	m_context->m_mapPredicted = 0;
+	m_context->m_mapPredicted = nullptr;
 
 	for (int i = 0; i < mapFitPredicted.count(); ++i) {
 		double proBill = mapFitPredicted.keys()[i];

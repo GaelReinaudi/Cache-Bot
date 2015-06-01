@@ -47,4 +47,10 @@ void CacheRest::sendExtraCash(QString userId, double valExtra)
 	worker->execute(&httpRequest);
 }
 
+void CacheRest::sendNewBot(QString userId, QJsonObject newBot)
+{
+	HttpRequestInput httpRequest(SendNewbotRoute + QString("/%1").arg(userId), "POST");
+	httpRequest.add_json(newBot);
+	worker->execute(&httpRequest);
+}
 

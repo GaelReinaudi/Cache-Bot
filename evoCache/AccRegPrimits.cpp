@@ -166,7 +166,7 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 //		++t.dimensionOfVoid;
 //	}
 
-	// summary if the QStringList exists
+	// summary if the json object exists
 	if (ioContext.m_summaryJsonObj) {
 		m_billProba = billProbability();
 		if(ioContext.m_mapPredicted) {
