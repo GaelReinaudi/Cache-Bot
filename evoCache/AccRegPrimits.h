@@ -231,6 +231,22 @@ public:
 		retObj.insert("tot$", m_bundle.sumDollar());
 		retObj.insert("consecutive", m_consecMonthBeforeMissed);
 		retObj.insert("cons-missed", m_consecMissed);
+
+		if(m_bundle.count()) {
+			QString str = QString::fromStdString(getName()) + " ("
+				  + QString::number(m_bundle.count()) +  ") "
+				  + " kl$ " + QString::number(double(m_kla) / KLA_MULTIPLICATOR)
+				  + " / " + QString::number(kindaLog(m_bundle.sumDollar() / m_bundle.count()))
+				  + " = " + QString::number(unKindaLog(double(m_kla) / KLA_MULTIPLICATOR))
+				  + " / " + QString::number(m_bundle.sumDollar() / m_bundle.count());
+			retObj.insert("info", str);
+			str = QString("On the ") + QString::number(m_dayOfMonth) + "th, ";
+			str += QString("hash: ") + QString::number(m_bundle.trans(0).nameHash.hash);
+			str += QString("  ind: ") + QString::number(m_bundle.trans(0).indexHash);
+			retObj.insert("hash", m_bundle.trans(0).nameHash.hash);
+			retObj.insert("indH", m_bundle.trans(0).indexHash);
+		}
+
 		return retObj;
 	}
 

@@ -106,7 +106,7 @@ void EvolutionSpinner::runEvolution() {
 	float         lMutSwapProba        = MUT_SWAP_PROBA_DEFAULT;
 	float         lMutSwapDistribProba = MUT_SWAP_DISTRIB_PROBA_DEFAULT;
 
-QMap<double, QStringList> output;
+QMap<double, QJsonArray> output;
 QVector<Tree> bestPreEvoTrees;
 for (int j = 0; j < m_context->m_pAccount->hashBundles().count(); ++j) {
 	int h = m_context->m_pAccount->hashBundles().keys()[j];
@@ -150,16 +150,13 @@ for (int j = 0; j < m_context->m_pAccount->hashBundles().count(); ++j) {
 			std::max_element(lPopulation.begin(), lPopulation.end());
 	LOG() << "Best individual at generation " << lNbrGen << " is: ";
 	LOG() << lBestIndividual->toStr() << endl;
-
-	QString jsonBest = summarize(*lBestIndividual);
-
 //	std::vector<unsigned int> outCallStack = (*lBestIndividual).getFeatureStack(0, *m_context);
 //	qDebug() << QVector<unsigned int>::fromStdVector(outCallStack);
 
-	QString strFit = jsonBest.mid(jsonBest.indexOf("billProba\": ") + 12).mid(0, 6).trimmed();
-	LOG() << "AAAAAAAAAAAAAAAAAA " << jsonBest << endl;
-	double billProba = strFit.toDouble();
+	QJsonObject jsonBest = summarize(*lBestIndividual);
+	double billProba = jsonBest["Features"].toArray().first().toObject()["billProba"].toDouble();
 	output[billProba].append(jsonBest);
+	qDebug() << "billProba" << billProba;
 	if(billProba > THRESHOLD_PROBA_BILL || bestPreEvoTrees.isEmpty()) {
 		(*lBestIndividual).mValid = false;
 		bestPreEvoTrees.push_back(*lBestIndividual);
@@ -169,8 +166,9 @@ for (int j = 0; j < m_context->m_pAccount->hashBundles().count(); ++j) {
 	for (int i = 0; i < output.count(); ++i) {
 		double fit = output.keys()[i];
 		LOG() << "-------------------------------- " << fit << " --------------------------------" << endl;
-		for (const auto& str : output[fit])
-		LOG() << str << endl;
+		for (const auto& jsonTree : output[fit]) {
+			LOG() << QJsonDocument(jsonTree.toObject()).toJson() << endl;
+		}
 	}
 
 	// run again with full features
@@ -242,7 +240,7 @@ unsigned int EvolutionSpinner::evaluateSymbReg(std::vector<Tree>& ioPopulation,
 	return lNbrEval;
 }
 
-QString EvolutionSpinner::summarize(Tree& tree)
+QJsonObject EvolutionSpinner::summarize(Tree& tree)
 {
 	QJsonObject jsonObj;
 	jsonObj.insert("Features", QJsonArray());
@@ -258,7 +256,7 @@ QString EvolutionSpinner::summarize(Tree& tree)
 	LOG() << "    " << jsonStr << endl;
 	emit needsReplot();
 	//emit newList(jsonStr);
-	return jsonStr;
+	return jsonObj;
 }
 
 QVector<Transaction> EvolutionSpinner::predictTrans(Tree& tree, double threshProba)

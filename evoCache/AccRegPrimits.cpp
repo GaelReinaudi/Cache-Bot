@@ -172,42 +172,10 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 		if(ioContext.m_mapPredicted) {
 			(*(ioContext.m_mapPredicted))[m_billProba] += predictTrans;
 		}
-		QString str;
-		if(m_bundle.count()) {
-			str = QString::fromStdString(getName()) + " ("
-				  + QString::number(m_bundle.count()) +  ") "
-				  + " kl$ " + QString::number(double(m_kla) / KLA_MULTIPLICATOR)
-				  + " / " + QString::number(kindaLog(m_bundle.sumDollar() / m_bundle.count()))
-				  + " = " + QString::number(unKindaLog(double(m_kla) / KLA_MULTIPLICATOR))
-				  + " / " + QString::number(m_bundle.sumDollar() / m_bundle.count());
-			ioContext.m_summaryJsonObj->insert("info", str);
-			str = QString("On the ") + QString::number(m_dayOfMonth) + "th, ";
-			str += QString("hash: ") + QString::number(m_bundle.trans(0).nameHash.hash);
-			str += QString("  ind: ") + QString::number(m_bundle.trans(0).indexHash);
-			ioContext.m_summaryJsonObj->insert("hash", m_bundle.trans(0).nameHash.hash);
-			ioContext.m_summaryJsonObj->insert("indH", m_bundle.trans(0).indexHash);
-		}
-//		str += QString("  fitness: ") + QString::number(m_fitness);
-//		str += QString("  billProba: %1       ").arg(m_billProba);
-//		ioContext.m_summaryStrList->insert("info2", str);
-//		str = QString("all label: ") + m_bundle.uniqueNames().join(" | ");
-//		ioContext.m_summaryStrList->insert("info3", str);
-//		str = QString("tot amount: ") + QString::number(m_bundle.sumDollar());
-//		str += QString(" since : ") + QString::number(m_consecMonthBeforeMissed);
-//		str += QString(" last missed: ") + QString::number(m_consecMissed);
-//		ioContext.m_summaryStrList->insert("info4", str);
 
 		QJsonArray features = (*ioContext.m_summaryJsonObj)["Features"].toArray();
 		features.append(toJson(ioContext));
 		ioContext.m_summaryJsonObj->insert("Features", features);
-
-		ioContext.m_summaryJsonObj->insert("dayOfMonth", m_dayOfMonth);
-		ioContext.m_summaryJsonObj->insert("fitness", m_fitness);
-		ioContext.m_summaryJsonObj->insert("billProba", m_billProba);
-		ioContext.m_summaryJsonObj->insert("labels", QJsonArray::fromStringList(m_bundle.uniqueNames()));
-		ioContext.m_summaryJsonObj->insert("tot$", m_bundle.sumDollar());
-		ioContext.m_summaryJsonObj->insert("consecutive", m_consecMonthBeforeMissed);
-		ioContext.m_summaryJsonObj->insert("cons-missed", m_consecMissed);
 
 		for (int i = 0; i < targetTrans.count(); ++i) {
 			Transaction* iTarg = &targetTrans[i];

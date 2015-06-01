@@ -28,7 +28,7 @@ public slots:
 
 protected:
 	unsigned int evaluateSymbReg(std::vector<Puppy::Tree> &ioPopulation, Puppy::Context &ioContext);
-	QString summarize(Puppy::Tree &tree);
+	QJsonObject summarize(Puppy::Tree &tree);
 	QVector<Transaction> predictTrans(Puppy::Tree &tree, double threshProba);
 
 signals:
