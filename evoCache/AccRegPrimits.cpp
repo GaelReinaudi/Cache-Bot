@@ -120,8 +120,8 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 		}
 		Q_ASSERT(localDist < 18446744073709551615ULL);
 		static const int LIMIT_DIST_TRANS = 64 * 8;
-		// if we get further away by 15 days, we take the next target, or if last trans
-		if (trans.jDay() > 15 + iTarg->jDay() || i == allTrans.count() - 1) {
+		// if we get further away by approxSpacingPayment() / 2 days, we take the next target, or if last trans
+		if (trans.jDay() > approxSpacingPayment() / 2 + iTarg->jDay() || i == allTrans.count() - 1) {
 			if (localDist < LIMIT_DIST_TRANS) {
 				m_bundle.append(localTrans);
 				// isolate the transaction that were fitted to the target
@@ -187,4 +187,33 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 		}
 		//qDebug() << targetTrans.count() << m_bundle.count();
 	}
+}
+
+QVector<Transaction> FeatureBiWeeklyAmount::targetTransactions(QDate iniDate, QDate lastDate)
+{
+	QVector<Transaction> targetTrans;
+	QDate currentDate = iniDate;
+	while (currentDate < lastDate) {
+		// the target day of this month. If neg, make it count from the end of the month.
+		int targetDayThisMonth = qMin(m_dayOfMonth2, currentDate.daysInMonth());
+		targetDayThisMonth = qMax(targetDayThisMonth, 1 - currentDate.daysInMonth());
+		while (targetDayThisMonth <= 0)
+			targetDayThisMonth += currentDate.daysInMonth();
+
+		// move current date to the correct target day that month
+		currentDate = currentDate.addDays(targetDayThisMonth - currentDate.day());
+		// assert that it is 30ish days after the previous date
+		assert(targetTrans.count() == 0 || qAbs(targetTrans.last().date.daysTo(currentDate) - 30) <= 2);
+
+		targetTrans.append(Transaction());
+		targetTrans.last().date = currentDate;
+		targetTrans.last().setKLA(m_kla);
+		targetTrans.last().indexHash = 0;
+		targetTrans.last().nameHash.hash = m_b[0];
+		currentDate = currentDate.addMonths(1);
+	}
+
+	targetTrans += (FeatureMonthlyAmount::targetTransactions(iniDate, lastDate));
+	qSort(targetTrans.begin(), targetTrans.end(), Transaction::earlierThan);
+	return targetTrans;
 }

@@ -69,7 +69,7 @@ void EvolutionSpinner::init(Account *pAc)
 	}
 
 	m_context->insert(new CacheBotRootPrimitive(this));
-//	m_context->insert(new FeatureBiWeeklyAmount(this));
+	m_context->insert(new FeatureBiWeeklyAmount(this));
 	m_context->insert(new FeatureMonthlyAmount(this));
 //	m_context->insert(new DummyFeature(this));
 }
@@ -219,6 +219,7 @@ for (int j = 0; j < m_context->m_pAccount->hashBundles().count(); ++j) {
 		m_context->m_pAccount->toJson(futureTransactions, "predicted");
 
 	}
+
 	std::cout << "Exiting program " << output.count() << std::endl << std::flush;
 	qApp->exit();
 }
@@ -251,7 +252,7 @@ QJsonObject EvolutionSpinner::summarize(Tree& tree)
 	tree.interpret(&fit, *m_context);
 	m_context->m_summaryJsonObj = 0;
 
-	QString jsonStr = QJsonDocument(jsonObj).toJson(QJsonDocument::Compact);
+	QString jsonStr = QJsonDocument(jsonObj).toJson(/*QJsonDocument::Compact*/);
 	LOG() << "tree (" << fit << "): " << tree.toStr() << endl;
 	LOG() << "    " << jsonStr << endl;
 	emit needsReplot();

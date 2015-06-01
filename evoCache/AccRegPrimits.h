@@ -161,20 +161,10 @@ public:
 	{ }
 	~FeaturePeriodicAmount() { }
 
+	virtual int approxSpacingPayment() = 0;
 //	virtual void execute(void* outDatum, Puppy::Context& ioContext) { Q_UNUSED(outDatum); Q_UNUSED(ioContext); }
 	virtual void getArgs(Puppy::Context &ioContext) { Q_UNUSED(ioContext); }
 	virtual void cleanArgs() {}
-};
-
-class FeatureBiWeeklyAmount : public FeaturePeriodicAmount
-{
-public:
-	FeatureBiWeeklyAmount(EvolutionSpinner* evoSpinner)
-		: FeaturePeriodicAmount(evoSpinner, "BiWeeklyIncome")
-	{ }
-	virtual void cleanArgs() override {
-		FeaturePeriodicAmount::cleanArgs();
-	}
 };
 
 class FeatureMonthlyAmount : public FeaturePeriodicAmount
@@ -183,6 +173,10 @@ public:
 	FeatureMonthlyAmount(EvolutionSpinner* evoSpinner)
 		: FeaturePeriodicAmount(evoSpinner, "MonthlyAmount")
 	{ }
+	FeatureMonthlyAmount(EvolutionSpinner* evoSpinner, QString featureName)
+		: FeaturePeriodicAmount(evoSpinner, featureName)
+	{ }
+	int approxSpacingPayment() override { return 31; }
 	void getArgs(Puppy::Context &ioContext) override {
 		// if we are forcing a given hashed bundle
 		m_filterHash = -1;
@@ -259,7 +253,7 @@ public:
 		return proba;
 	}
 
-	QVector<Transaction> targetTransactions(QDate iniDate, QDate lastDate);
+	virtual QVector<Transaction> targetTransactions(QDate iniDate, QDate lastDate);
 
 protected:
 	int m_dayOfMonth = 0;
@@ -271,6 +265,29 @@ protected:
 	int m_consecMonth = 0;
 	int m_consecMissed = 0;
 	double m_billProba = 0;
+};
+
+class FeatureBiWeeklyAmount : public FeatureMonthlyAmount
+{
+public:
+	FeatureBiWeeklyAmount(EvolutionSpinner* evoSpinner)
+		: FeatureMonthlyAmount(evoSpinner, "BiWeeklyIncome")
+	{ }
+	int approxSpacingPayment() override { return 15; }
+	virtual void cleanArgs() override {
+		m_dayOfMonth2 = (m_dayOfMonth / 32) % 31;
+		++m_dayOfMonth2;
+		FeatureMonthlyAmount::cleanArgs();
+	}
+	QJsonObject toJson(Puppy::Context& ioContext) override {
+		QJsonObject retObj = FeatureMonthlyAmount::toJson(ioContext);
+		retObj.insert("dayOfMonth2", m_dayOfMonth2);
+		return retObj;
+	}
+	QVector<Transaction> targetTransactions(QDate iniDate, QDate lastDate) override;
+
+protected:
+	int m_dayOfMonth2 = 0;
 };
 
 #endif // ACCREGPRIMITS_H
