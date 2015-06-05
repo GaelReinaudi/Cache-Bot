@@ -173,9 +173,11 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 			(*(ioContext.m_mapPredicted))[m_billProba] += predictTrans;
 		}
 
-		QJsonArray features = (*ioContext.m_summaryJsonObj)["Features"].toArray();
-		features.append(toJson(ioContext));
-		ioContext.m_summaryJsonObj->insert("Features", features);
+		if(m_billProba > 1.0) {
+			QJsonArray features = (*ioContext.m_summaryJsonObj)["Features"].toArray();
+			features.append(toJson(ioContext));
+			ioContext.m_summaryJsonObj->insert("Features", features);
+		}
 
 		for (int i = 0; i < targetTrans.count(); ++i) {
 			Transaction* iTarg = &targetTrans[i];
