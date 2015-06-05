@@ -21,9 +21,17 @@ Evolver::Evolver(QString userID)
 	, m_userId(userID)
 {
 	CacheRest::Instance()->login();
-	connect(CacheRest::Instance()->worker, SIGNAL(loggedIn(bool)), this, SLOT(onLoggedIn(bool)));
+//	connect(CacheRest::Instance()->worker, SIGNAL(loggedIn(bool)), this, SLOT(onLoggedIn(bool)));
 
 	init();
+
+
+
+
+	QString jsonFileOrUser = "../../data/adelineGaelTransactions.json";
+	m_account->loadPlaidJson(jsonFileOrUser, 0, 0);
+	m_evoSpinner->init(m_account);
+	emit initialized(true);
 }
 
 Evolver::~Evolver()
