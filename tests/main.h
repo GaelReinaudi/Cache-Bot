@@ -2,9 +2,9 @@
 #include <QSignalSpy>
 #include "cacherest.h"
 
-#define TEST_USER_ID_1 "55518f01574600030092a822" // cache-bot
-#define TEST_USER_ID_2 "556502390fbee50300e6d07c" // chris
-#define TEST_USER_ID_3 "55653f1f2dea2e0300e39b64" // gael
+#define TEST_USER_ID_1 "5570af987fc12dfc45f4ddba" // cache-bot
+#define TEST_USER_ID_2 "5570af987fc12dfc45f4ddba" // chris
+#define TEST_USER_ID_3 "5570af987fc12dfc45f4ddba" // gael
 
 class ServerTest: public QObject
 {
@@ -22,7 +22,7 @@ private slots:
 		QCOMPARE(spyLogin.count(), 1); // make sure the signal was emitted exactly one time
 		QList<QVariant> arguments = spyLogin.takeFirst();
 		QCOMPARE(arguments.at(0).toString()
-				 , StringLoggedInReply);
+				 , StringLoggedInReplyFailure);
 
 		CacheRest::Instance()->getUserIds();
 		QSignalSpy spyIds(CacheRest::Instance()->worker, SIGNAL(repliedIds(QString)));
@@ -40,7 +40,7 @@ private slots:
 		QList<QVariant> arguments = spyLogin.takeFirst();
 		QVERIFY(loggedIn);
 		QCOMPARE(arguments.at(0).toString()
-				 , StringLoggedInReply);
+				 , StringLoggedInReplySuccess);
 	}
 
 	void getIds() {
@@ -104,6 +104,14 @@ private slots:
 		double extra = 20.0;
 		CacheRest::Instance()->sendExtraCash(m_testUser->id(), extra);
 		QSignalSpy spyExtraCash(CacheRest::Instance()->worker, SIGNAL(repliedExtraCache(QString)));
+		QVERIFY(spyExtraCash.wait(10000));
+	}
+
+	void sendNewBot() {
+		QJsonObject json;
+		json.insert("vvvvvvvvvvvvv", 5.365);
+		CacheRest::Instance()->sendNewBot(m_testUser->id(), json);
+		QSignalSpy spyExtraCash(CacheRest::Instance()->worker, SIGNAL(repliedSendNewBot(QString)));
 		QVERIFY(spyExtraCash.wait(10000));
 	}
 
