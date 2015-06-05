@@ -13,12 +13,14 @@ class Evolver : public QObject
 public:
 	explicit Evolver(QString jsonFile, int afterJday, int beforeJday);
 	explicit Evolver(QString userID);
-	~Evolver() {}
+	~Evolver();
 
 	void init();
 public slots:
 	void onLoggedIn(bool didLogin);
 	void onRepliedUserData(QString strData);
+	void onFinishedEvolution(QJsonObject finalBotObject);
+	void onRepliedSendNewBot(QString strData);
 
 signals:
 	void initialized(bool);

@@ -38,6 +38,7 @@ signals:
 	void needsReplot();
 	void sendClearList();
 	void newList(QStringList strList);
+	void finishedEvolution(QJsonObject);
 
 private:
 	Puppy::Context* m_context = 0;

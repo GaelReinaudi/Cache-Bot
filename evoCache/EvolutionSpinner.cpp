@@ -5,7 +5,7 @@
 
 const double THRESHOLD_PROBA_BILL = 1.0;
 
-#define POP_SIZE_DEFAULT 500
+#define POP_SIZE_DEFAULT 5
 #define NBR_GEN_DEFAULT 20
 #define NBR_PART_TOURNAMENT_DEFAULT 2
 #define MAX_DEPTH_DEFAULT 5
@@ -108,6 +108,7 @@ void EvolutionSpinner::runEvolution() {
 
 QMap<double, QJsonArray> output;
 QVector<Tree> bestPreEvoTrees;
+QJsonObject finalBotObject;
 for (int j = 0; j < m_context->m_pAccount->hashBundles().count(); ++j) {
 	int h = m_context->m_pAccount->hashBundles().keys()[j];
 	if (m_context->m_pAccount->hashBundles()[h]->count() < 2)
@@ -200,7 +201,7 @@ for (int j = 0; j < m_context->m_pAccount->hashBundles().count(); ++j) {
 
 			if (bestTree.mFitness > veryBestTree.mFitness)
 				veryBestTree = bestTree;
-			summarize(bestTree);
+			finalBotObject = summarize(bestTree);
 
 			applySelectionTournament(lPopulation, *m_context, lNbrPartTournament);
 			applyCrossover(lPopulation, *m_context, lCrossoverProba, lCrossDistribProba, lMaxDepth);
@@ -220,8 +221,10 @@ for (int j = 0; j < m_context->m_pAccount->hashBundles().count(); ++j) {
 
 	}
 
-	std::cout << "Exiting program " << output.count() << std::endl << std::flush;
-	qApp->exit();
+	m_doSpin = false;
+	qDebug() << "Exiting evolution. Features with positive fitness:" << finalBotObject["Features"].toArray().count();
+	emit finishedEvolution(finalBotObject);
+//	qApp->exit();
 }
 
 unsigned int EvolutionSpinner::evaluateSymbReg(std::vector<Tree>& ioPopulation,
