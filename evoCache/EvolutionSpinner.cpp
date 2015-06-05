@@ -155,7 +155,7 @@ for (int j = 0; j < m_context->m_pAccount->hashBundles().count(); ++j) {
 //	qDebug() << QVector<unsigned int>::fromStdVector(outCallStack);
 
 	QJsonObject jsonBest = summarize(*lBestIndividual);
-	double billProba = jsonBest["Features"].toArray().first().toObject()["billProba"].toDouble();
+	double billProba = jsonBest["features"].toArray().first().toObject()["billProba"].toDouble();
 	output[billProba].append(jsonBest);
 	qDebug() << "billProba" << billProba;
 	if(billProba > THRESHOLD_PROBA_BILL || bestPreEvoTrees.isEmpty()) {
@@ -222,7 +222,7 @@ for (int j = 0; j < m_context->m_pAccount->hashBundles().count(); ++j) {
 	}
 
 	m_doSpin = false;
-	qDebug() << "Exiting evolution. Features with positive fitness:" << finalBotObject["Features"].toArray().count();
+	qDebug() << "Exiting evolution. Features with positive fitness:" << finalBotObject["features"].toArray().count();
 	emit finishedEvolution(finalBotObject);
 //	qApp->exit();
 }
@@ -247,7 +247,7 @@ unsigned int EvolutionSpinner::evaluateSymbReg(std::vector<Tree>& ioPopulation,
 QJsonObject EvolutionSpinner::summarize(Tree& tree)
 {
 	QJsonObject jsonObj;
-	jsonObj.insert("Features", QJsonArray());
+	jsonObj.insert("features", QJsonArray());
 	emit sendClearMask();
 	tree.mValid = false;
 	m_context->m_summaryJsonObj = &jsonObj;

@@ -106,11 +106,13 @@ public:
 		QJsonObject retObj;
 		retObj.insert("name", QString::fromStdString(getName()));
 		retObj.insert("numArgs", int(getNumberArguments()));
+		QJsonArray argList;
 		for (int i = 0; i < getNumberArguments(); ++i) {
 			double lArgi = 0;
 			getArgument(i, &lArgi, ioContext);
-			retObj.insert(QString("arg%1").arg(i), lArgi);
+			argList.append(lArgi);
 		}
+		retObj.insert("args", argList);
 		return retObj;
 	}
 	bool isFeature() const override { return true; }

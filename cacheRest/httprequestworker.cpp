@@ -325,5 +325,8 @@ void HttpRequestWorker::on_manager_finished(QNetworkReply *reply) {
 	else if(reply->request().url().toString().startsWith(SendNewBotRoute)) {
 		emit repliedSendNewBot(response);
 	}
+	else if(reply->request().url().toString().startsWith(BestBotRoute)) {
+		emit repliedBestBot(response);
+	}
 }
 

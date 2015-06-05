@@ -2,9 +2,9 @@
 #include <QSignalSpy>
 #include "cacherest.h"
 
-#define TEST_USER_ID_1 "5570af987fc12dfc45f4ddba" // cache-bot
-#define TEST_USER_ID_2 "5570af987fc12dfc45f4ddba" // chris
-#define TEST_USER_ID_3 "5570af987fc12dfc45f4ddba" // gael
+#define TEST_USER_ID_1 "5571bce7cba52508182a7838" // cache-bot
+#define TEST_USER_ID_2 "5571bce7cba52508182a7838" // chris
+#define TEST_USER_ID_3 "5571bce7cba52508182a7838" // gael
 
 class ServerTest: public QObject
 {
@@ -107,12 +107,22 @@ private slots:
 		QVERIFY(spyExtraCash.wait(10000));
 	}
 
-	void sendNewBot() {
-		QJsonObject json;
-		json.insert("vvvvvvvvvvvvv", 5.365);
-		CacheRest::Instance()->sendNewBot(m_testUser->id(), json);
-		QSignalSpy spyExtraCash(CacheRest::Instance()->worker, SIGNAL(repliedSendNewBot(QString)));
-		QVERIFY(spyExtraCash.wait(10000));
+//	void sendNewBot() {
+//		QJsonObject json;
+//		json.insert("vvvvvvvvvvvvv", 5.365);
+//		CacheRest::Instance()->sendNewBot(m_testUser->id(), json);
+//		QSignalSpy spyExtraCash(CacheRest::Instance()->worker, SIGNAL(repliedSendNewBot(QString)));
+//		QVERIFY(spyExtraCash.wait(10000));
+//	}
+
+	void getBestBot() {
+		CacheRest::Instance()->getBestBot(TEST_USER_ID_3);
+		QSignalSpy spyBestBot(CacheRest::Instance()->worker, SIGNAL(repliedBestBot(QString)));
+		QVERIFY(spyBestBot.wait(10000));
+		QCOMPARE(spyBestBot.count(), 1);
+		QList<QVariant> arguments = spyBestBot.takeFirst();
+		QString bestBotJson = arguments.at(0).toString();
+		QVERIFY(bestBotJson.contains("features\":"));
 	}
 
 private:
