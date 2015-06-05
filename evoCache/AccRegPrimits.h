@@ -5,7 +5,7 @@
 #include "puppy/Puppy.hpp"
 #include "EvolutionSpinner.h"
 
-static const int MAX_NUM_FEATURES = 20;
+static const int MAX_NUM_FEATURES = 2;
 static unsigned int LIMIT_NUM_FEATURES = 1;
 
 class Add : public Puppy::Primitive
