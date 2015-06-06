@@ -56,3 +56,9 @@ void CacheRest::sendNewBot(QString userId, QJsonObject newBot)
 	worker->execute(&httpRequest);
 }
 
+void CacheRest::getBestBot(QString userId, User *pUserToInject /*= 0*/)
+{
+	HttpRequestInput httpRequest(BestBotRoute + QString("/%1").arg(userId), "POST");
+	worker->execute(&httpRequest);
+}
+

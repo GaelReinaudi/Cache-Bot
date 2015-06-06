@@ -176,7 +176,7 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 		if(m_billProba > 1.0) {
 			QJsonArray features = (*ioContext.m_summaryJsonObj)["Features"].toArray();
 			features.append(toJson(ioContext));
-			ioContext.m_summaryJsonObj->insert("Features", features);
+			ioContext.m_summaryJsonObj->insert("features", features);
 		}
 
 		for (int i = 0; i < targetTrans.count(); ++i) {

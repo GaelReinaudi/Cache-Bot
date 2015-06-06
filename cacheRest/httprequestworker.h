@@ -16,6 +16,7 @@ static const QString IdsRoute = server + "/cache-bot/user_ids";
 static const QString UserDataRoute = server + "/cache-bot/data";
 static const QString SendExtraCashRoute = server + "/cache-bot/extraCash";
 static const QString SendNewBotRoute = server + "/cache-bot/newBot";
+static const QString BestBotRoute = server + "/cache-bot/bestBot";
 
 static const QString StringLoggedInReplySuccess = "Moved Temporarily. Redirecting to /loginSuccess";
 static const QString StringLoggedInReplyFailure = "Moved Temporarily. Redirecting to /loginFailure";
@@ -77,6 +78,7 @@ signals:
 	void repliedUserData(QString);
 	void repliedExtraCache(QString);
 	void repliedSendNewBot(QString);
+	void repliedBestBot(QString);
 
 private:
 	QNetworkAccessManager *manager;
