@@ -1,3 +1,4 @@
+#include "extraCache.h"
 #include <QCoreApplication>
 
 int main(int argc, char *argv[])
