@@ -8,12 +8,14 @@ TEMPLATE = lib
 DEFINES += CACHEREST_LIBRARY
 
 SOURCES += cacherest.cpp \
-	httprequestworker.cpp
+	httprequestworker.cpp \
+    cacheAccountConnector.cpp
 
 HEADERS += \
 	cacherest_global.h \
 	httprequestworker.h \
-	cacherest.h
+	cacherest.h \
+    cacheAccountConnector.h
 
 unix {
 LIBS += -L$${SRC_DIR}/bin/$${DEBUGRELEASE} -lcore

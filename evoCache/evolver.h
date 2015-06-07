@@ -3,10 +3,11 @@
 
 #include <QThread>
 #include "EvolutionSpinner.h"
+#include "cacheAccountConnector.h"
 
 class EvolutionSpinner;
 
-class Evolver : public QObject
+class Evolver : public CacheAccountConnector
 {
 	Q_OBJECT
 
@@ -16,11 +17,14 @@ public:
 	~Evolver();
 
 	void init();
-public slots:
-	void onLoggedIn(bool didLogin);
-	void onRepliedUserData(QString strData);
+
+protected:
+	void onLoggedIn(bool didLogin) override;
+	void onRepliedUserData(QString strData) override;
+	void onRepliedSendNewBot(QString strData) override;
+
+protected slots:
 	void onFinishedEvolution(QJsonObject finalBotObject);
-	void onRepliedSendNewBot(QString strData);
 
 signals:
 	void initialized(bool);
@@ -28,8 +32,6 @@ signals:
 private:
 	QThread* m_evoThread;
 	EvolutionSpinner* m_evoSpinner;
-	Account* m_account;
-	QString m_userId;
 };
 
 #endif // EVOLVER_H
