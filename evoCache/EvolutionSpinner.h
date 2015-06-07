@@ -32,6 +32,7 @@ protected:
 	QVector<Transaction> predictTrans(Puppy::Tree &tree, double threshProba);
 
 signals:
+	void initialized(bool);
 	void resultReady(const QString &result);
 	void sendMask(double, double, bool);
 	void sendClearMask();

@@ -31,7 +31,7 @@ void CacheAccountConnector::onLoggedIn(bool didLogin)
 
 void CacheAccountConnector::onRepliedUserData(QString strData)
 {
-	Q_UNUSED(strData);
+	account()->loadJsonData(strData.toUtf8());
 }
 
 void CacheAccountConnector::onRepliedSendNewBot(QString strData)

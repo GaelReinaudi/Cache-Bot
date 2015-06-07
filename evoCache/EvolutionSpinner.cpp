@@ -72,6 +72,7 @@ void EvolutionSpinner::init(Account *pAc)
 	m_context->insert(new FeatureBiWeeklyAmount(this));
 	m_context->insert(new FeatureMonthlyAmount(this));
 //	m_context->insert(new DummyFeature(this));
+	emit initialized(true);
 }
 
 void EvolutionSpinner::startStopEvolution(bool doStart) {
