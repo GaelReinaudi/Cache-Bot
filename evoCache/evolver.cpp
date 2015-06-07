@@ -22,9 +22,8 @@ Evolver::Evolver(QString userID)
 
 
 	QString jsonFileOrUser = "../../data/adelineGaelTransactions.json";
-	m_account->loadPlaidJson(jsonFileOrUser, 0, 0);
-	m_evoSpinner->init(m_account);
-	emit initialized(true);
+	account()->loadPlaidJson(jsonFileOrUser, 0, 0);
+	m_evoSpinner->init(account());
 }
 
 Evolver::~Evolver()
@@ -49,8 +48,7 @@ void Evolver::init()
 void Evolver::onLoggedIn(bool didLogin)
 {
 	if(didLogin) {
-		CacheRest::Instance()->getUserData(m_userId);
-		connect(CacheRest::Instance()->worker, SIGNAL(repliedUserData(QString)), this, SLOT(onRepliedUserData(QString)));
+
 	}
 	else {
 		qWarning() << "could not log into the server";

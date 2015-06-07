@@ -19,6 +19,7 @@ public:
 	void init();
 
 protected:
+	void onLoggedIn(bool didLogin);
 	void onRepliedUserData(QString strData) override;
 	void onRepliedSendNewBot(QString strData) override;
 
