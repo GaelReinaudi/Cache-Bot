@@ -98,6 +98,7 @@ public:
 	}
 
 	std::vector<unsigned int> getFeatureStack(unsigned int indFeature, Context& ioContext) {
+		Q_UNUSED(ioContext);
 		std::vector<unsigned int> ret;
 		unsigned int i = 0;
 		ret.push_back(i);
