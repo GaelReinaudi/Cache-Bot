@@ -4,12 +4,12 @@
 int main(int argc, char *argv[])
 {
 	QCoreApplication a(argc, argv);
-
-	QString userId;
-	if(argc > 1) {
-		userId = argv[1];
+	if(argc < 2) {
+		qDebug() << "needs an argument";
+		return 0;
 	}
-	extraCache w(userId);
+	QString userID = argv[1];
+	extraCache w(userID);
 
 	return a.exec();
 }

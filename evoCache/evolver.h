@@ -1,9 +1,9 @@
 #ifndef EVOLVER_H
 #define EVOLVER_H
 
-#include <QThread>
 #include "EvolutionSpinner.h"
 #include "cacheAccountConnector.h"
+#include <QThread>
 
 class EvolutionSpinner;
 
