@@ -1,9 +1,11 @@
 #include "cacherest.h"
 
+CacheRest* CacheRest::pThisStatic = nullptr;
 
 CacheRest::CacheRest(QObject *parent)
 	: QObject(parent)
 {
+	qDebug() << "creating CacheRest instance...............................";
 	worker = new HttpRequestWorker(this);
 }
 

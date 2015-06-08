@@ -14,7 +14,9 @@ private:
 
 public:
 	static CacheRest* Instance(QObject *parent = 0) {
-		static CacheRest* pThisStatic = new CacheRest(parent);
+		if(!pThisStatic) {
+			pThisStatic = new CacheRest(parent);
+		}
 		return pThisStatic;
 	}
 
@@ -27,9 +29,10 @@ public:
 	void sendNewBot(QString userId, QJsonObject newBot);
 	void getBestBot(QString userId, User *pUserToInject = 0);
 
-
 public:
 	HttpRequestWorker *worker = 0;
+private:
+	static CacheRest* pThisStatic;
 };
 
 #endif // CACHEREST_H
