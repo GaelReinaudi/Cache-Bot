@@ -17,13 +17,6 @@ Evolver::Evolver(QString userID)
 	: CacheAccountConnector(userID)
 {
 	init();
-
-
-
-
-	QString jsonFileOrUser = "../../data/adelineGaelTransactions.json";
-	account()->loadPlaidJson(jsonFileOrUser, 0, 0);
-	m_evoSpinner->init(account());
 }
 
 Evolver::~Evolver()
@@ -45,20 +38,12 @@ void Evolver::init()
 	m_evoThread->start();
 }
 
-void Evolver::onLoggedIn(bool didLogin)
-{
-	if(didLogin) {
-
-	}
-	else {
-		qWarning() << "could not log into the server";
-	}
-}
-
 void Evolver::onRepliedUserData(QString strData)
 {
-	CacheAccountConnector::onRepliedUserData(strData);
-
+//	CacheAccountConnector::onRepliedUserData(strData);
+	Q_UNUSED(strData);
+	QString jsonFileOrUser = "../../data/adelineGaelTransactions.json";
+	account()->loadPlaidJson(jsonFileOrUser, 0, 0);
 	m_evoSpinner->init(account());
 }
 
