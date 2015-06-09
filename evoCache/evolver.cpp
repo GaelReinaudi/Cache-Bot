@@ -2,16 +2,6 @@
 #include "account.h"
 #include "cacherest.h"
 
-Evolver::Evolver(QString jsonFile, int afterJday, int beforeJday)
-	: CacheAccountConnector("")
-{
-	init();
-
-	account()->loadPlaidJson(jsonFile, afterJday, beforeJday);
-	m_evoSpinner->init(account());
-
-	emit initialized(true);
-}
 
 Evolver::Evolver(QString userID)
 	: CacheAccountConnector(userID)
@@ -38,11 +28,11 @@ void Evolver::init()
 	m_evoThread->start();
 }
 
-void Evolver::onRepliedUserData(QString strData)
+void Evolver::onUserInjected()
 {
-	CacheAccountConnector::onRepliedUserData(strData);
+	CacheAccountConnector::onUserInjected();
 
-	m_evoSpinner->init(account());
+//	m_evoSpinner->init(user());
 }
 
 void Evolver::onFinishedEvolution(QJsonObject finalBotObject)

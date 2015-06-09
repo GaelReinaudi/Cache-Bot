@@ -7,15 +7,15 @@ extraCache::extraCache(QString userID)
 {
 }
 
-void extraCache::onRepliedUserData(QString strData)
+void extraCache::onUserInjected()
 {
-	CacheAccountConnector::onRepliedUserData(strData);
+	CacheAccountConnector::onUserInjected();
 	CacheRest::Instance()->getBestBot(userID());
 	connect(CacheRest::Instance()->worker, SIGNAL(repliedBestBot(QString)), this, SLOT(repliedBestBot(QString)));
 }
 
 void extraCache::repliedBestBot(QString strData)
 {
+	qApp->exit();
 	qDebug() << strData;
-	account()->loadJsonData(strData.toUtf8());
 }

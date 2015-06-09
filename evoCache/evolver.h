@@ -12,14 +12,13 @@ class Evolver : public CacheAccountConnector
 	Q_OBJECT
 
 public:
-	explicit Evolver(QString jsonFile, int afterJday, int beforeJday);
 	explicit Evolver(QString userID);
 	~Evolver();
 
 	void init();
 
 protected:
-	void onRepliedUserData(QString strData) override;
+	void onUserInjected() override;
 	void onRepliedSendNewBot(QString strData) override;
 
 protected slots:

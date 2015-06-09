@@ -43,8 +43,12 @@ class CORESHARED_EXPORT DBobj : public QObject
 	Q_OBJECT
 
 public:
-	DBobj() {}
-	DBobj(QString id) {
+	DBobj(QObject* parent = 0)
+		:QObject(parent)
+	{}
+	DBobj(QString id, QObject* parent = 0)
+		:QObject(parent)
+	{
 		m_id = id;
 	}
 

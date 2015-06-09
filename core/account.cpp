@@ -36,7 +36,7 @@ void Account::loadJsonData(QByteArray jsonData, int afterJday, int beforeJday)
 		LOG() << "read account:" << accountID << ": " << accountName << "(" << accountLast4Digits << "): " << accountType << endl;
 
 	}
-	qDebug() << "Accont Ids:" << m_accountIds;
+	qDebug() << "Account Ids:" << m_accountIds;
 	//qDebug() << jsonData;
 
 	m_allTransactions.read(json["transactions"].toArray(), afterJday, beforeJday);//, m_accountIds);

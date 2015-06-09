@@ -15,17 +15,17 @@ public:
 	~CacheAccountConnector();
 
 	QString userID() const { return m_userId; }
-	Account* account() const { return m_account; }
+	User* user() const { return m_user; }
 
 protected slots:
 	virtual void onLoggedIn(bool didLogin);
-	virtual void onRepliedUserData(QString strData);
+	virtual void onUserInjected();
 	virtual void onRepliedSendNewBot(QString strData);
 	virtual void repliedBestBot(QString strData);
 
 private:
 	QString m_userId;
-	Account* m_account;
+	User* m_user;
 
 };
 

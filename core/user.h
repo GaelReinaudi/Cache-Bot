@@ -8,10 +8,16 @@ class Account;
 class CORESHARED_EXPORT Bank : public DBobj
 {
 public:
-	Bank() {}
+	Bank(QJsonObject jsonBank, QObject* parent = 0)
+		:DBobj(jsonBank["_id"].toString(), parent)
+	{
+		Q_ASSERT(!jsonBank["_id"].toString().isEmpty());
+		m_accessToken = jsonBank["_id"].toString();
+	}
 
 private:
 	QList<Account*> m_accounts;
+	QString m_accessToken;
 };
 
 class CORESHARED_EXPORT User : public DBobj
@@ -19,7 +25,9 @@ class CORESHARED_EXPORT User : public DBobj
 	Q_OBJECT
 
 public:
-	User(QString userId);
+	User(QString userId, QObject* parent = 0)
+		:DBobj(userId, parent)
+	{}
 
 	void readJson();
 

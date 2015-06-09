@@ -6,8 +6,6 @@ CacheAccountConnector::CacheAccountConnector(QString userID)
 	: QObject()
 	, m_userId(userID)
 {
-	m_account = new Account();
-
 	// login as cache-bot
 	CacheRest::Instance()->login();
 	connect(CacheRest::Instance()->worker, SIGNAL(loggedIn(bool)), this, SLOT(onLoggedIn(bool)));
@@ -15,14 +13,15 @@ CacheAccountConnector::CacheAccountConnector(QString userID)
 
 CacheAccountConnector::~CacheAccountConnector()
 {
-	delete m_account;
+	delete m_user;
 }
 
 void CacheAccountConnector::onLoggedIn(bool didLogin)
 {
 	if(didLogin) {
-		CacheRest::Instance()->getUserData(userID());
-		connect(CacheRest::Instance()->worker, SIGNAL(repliedUserData(QString)), this, SLOT(onRepliedUserData(QString)));
+		m_user = new User(userID());
+		CacheRest::Instance()->getUserData(userID(), m_user);
+		connect(m_user, SIGNAL(injected()), this, SLOT(onUserInjected()));
 		connect(CacheRest::Instance()->worker, SIGNAL(repliedBestBot(QString)), this, SLOT(repliedBestBot(QString)));
 	}
 	else {
@@ -30,9 +29,9 @@ void CacheAccountConnector::onLoggedIn(bool didLogin)
 	}
 }
 
-void CacheAccountConnector::onRepliedUserData(QString strData)
+void CacheAccountConnector::onUserInjected()
 {
-	account()->loadJsonData(strData.toUtf8());
+	qDebug() << "CacheAccountConnector has a user injected object";
 }
 
 void CacheAccountConnector::onRepliedSendNewBot(QString strData)

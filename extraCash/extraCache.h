@@ -12,7 +12,7 @@ public:
 	extraCache(QString userID);
 
 protected:
-	void onRepliedUserData(QString strData) override;
+	void onUserInjected() override;
 	void repliedBestBot(QString strData) override;
 
 };
