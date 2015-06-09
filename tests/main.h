@@ -2,9 +2,9 @@
 #include <QSignalSpy>
 #include "cacherest.h"
 
-#define TEST_USER_ID_1 "5570af987fc12dfc45f4ddba" // cache-bot
-#define TEST_USER_ID_2 "5570af987fc12dfc45f4ddba" // chris
-#define TEST_USER_ID_3 "5570af987fc12dfc45f4ddba" // gael
+#define TEST_USER_ID_1 "55518f01574600030092a822" // cache-bot
+#define TEST_USER_ID_2 "556502390fbee50300e6d07c" // chris
+#define TEST_USER_ID_3 "55653f1f2dea2e0300e39b64" // gael
 
 class ServerTest: public QObject
 {

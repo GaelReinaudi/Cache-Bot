@@ -9,8 +9,8 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 
-static const QString server = "http://127.0.0.1:8080";
-//static const QString server = "https://cache-heroku.herokuapp.com";
+//static const QString server = "http://127.0.0.1:8080";
+static const QString server = "https://cache-heroku.herokuapp.com";
 static const QString LoginRoute = server + "/login";
 static const QString IdsRoute = server + "/cache-bot/user_ids";
 static const QString UserDataRoute = server + "/cache-bot/data";
