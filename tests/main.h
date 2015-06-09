@@ -80,7 +80,7 @@ private slots:
 		QList<QVariant> arguments = spyUserData.takeFirst();
 		//qDebug() << arguments.at(0).toString();
 		QSTARTSWITH(arguments.at(0).toString()
-					, "{\"accounts\":[],\"transactions\":[],\"access_tokens\":[]");
+					, "{\"user\":");
 	}
 
 	void getUseraData() {
@@ -91,7 +91,7 @@ private slots:
 		QList<QVariant> arguments = spyUserData.takeFirst();
 		m_userData = arguments.at(0).toString();
 		QSTARTSWITH(m_userData
-					, "{\"accounts\":");
+					, "{\"user\":");
 	}
 
 	void injectData() {
