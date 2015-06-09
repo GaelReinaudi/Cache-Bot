@@ -9,7 +9,7 @@ void User::readJson() {
 
 }
 
-void User::injectJsonString(QString jsonStr)
+void User::injectJsonData(QString jsonStr)
 {
 	qDebug() << "injecting" << jsonStr.left(128);
 	QJsonDocument jsonDoc(QJsonDocument::fromJson(jsonStr.toUtf8()));
@@ -22,5 +22,10 @@ void User::injectJsonString(QString jsonStr)
 //		QString accountID = npcObject["_id"].toString();
 //	}
 	emit injected();
+}
+
+void User::injectJsonBot(QString jsonStr)
+{
+
 }
 

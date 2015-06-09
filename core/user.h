@@ -24,7 +24,8 @@ public:
 	void readJson();
 
 public slots:
-	void injectJsonString(QString jsonStr);
+	void injectJsonData(QString jsonStr);
+	void injectJsonBot(QString jsonStr);
 
 signals:
 	void injected();

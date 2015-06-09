@@ -27,7 +27,7 @@ void CacheRest::getUserData(QString userId, User *pUserToInject /*= 0*/)
 	HttpRequestInput httpRequest(UserDataRoute + QString("/%1").arg(userId), "POST");
 	worker->execute(&httpRequest);
 	if (pUserToInject) {
-		QObject::connect(worker, SIGNAL(repliedUserData(QString)), pUserToInject, SLOT(injectJsonString(QString)));
+		QObject::connect(worker, SIGNAL(repliedUserData(QString)), pUserToInject, SLOT(injectJsonData(QString)));
 	}
 }
 
@@ -62,5 +62,8 @@ void CacheRest::getBestBot(QString userId, User *pUserToInject /*= 0*/)
 {
 	HttpRequestInput httpRequest(BestBotRoute + QString("/%1").arg(userId), "POST");
 	worker->execute(&httpRequest);
+	if (pUserToInject) {
+		QObject::connect(worker, SIGNAL(repliedBestBot(QString)), pUserToInject, SLOT(injectJsonBot(QString)));
+	}
 }
 

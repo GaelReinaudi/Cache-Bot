@@ -10,6 +10,11 @@ class extraCache : public CacheAccountConnector
 
 public:
 	extraCache(QString userID);
+
+protected:
+	void onRepliedUserData(QString strData) override;
+	void repliedBestBot(QString strData) override;
+
 };
 
 #endif // EXTRACACHE_H

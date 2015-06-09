@@ -21,6 +21,7 @@ protected slots:
 	virtual void onLoggedIn(bool didLogin);
 	virtual void onRepliedUserData(QString strData);
 	virtual void onRepliedSendNewBot(QString strData);
+	virtual void repliedBestBot(QString strData);
 
 private:
 	QString m_userId;

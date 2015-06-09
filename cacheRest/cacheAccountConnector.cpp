@@ -23,6 +23,7 @@ void CacheAccountConnector::onLoggedIn(bool didLogin)
 	if(didLogin) {
 		CacheRest::Instance()->getUserData(userID());
 		connect(CacheRest::Instance()->worker, SIGNAL(repliedUserData(QString)), this, SLOT(onRepliedUserData(QString)));
+		connect(CacheRest::Instance()->worker, SIGNAL(repliedBestBot(QString)), this, SLOT(repliedBestBot(QString)));
 	}
 	else {
 		qWarning() << "could not log into the server";
@@ -35,6 +36,11 @@ void CacheAccountConnector::onRepliedUserData(QString strData)
 }
 
 void CacheAccountConnector::onRepliedSendNewBot(QString strData)
+{
+	Q_UNUSED(strData);
+}
+
+void CacheAccountConnector::repliedBestBot(QString strData)
 {
 	Q_UNUSED(strData);
 }
