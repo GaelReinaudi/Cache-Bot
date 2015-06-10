@@ -1,4 +1,5 @@
 #include "user.h"
+#include "bot.h"
 
 void User::injectJsonData(QString jsonStr)
 {
@@ -60,7 +61,19 @@ void User::injectJsonData(QString jsonStr)
 
 void User::injectJsonBot(QString jsonStr)
 {
+	qDebug() << "injecting" << jsonStr.left(1024);
+	QJsonDocument jsonDoc(QJsonDocument::fromJson(jsonStr.toUtf8()));
+	const QJsonObject& jsonObj = jsonDoc.object();
 
+	QFile sampleReturn("jsonBot.json");
+	sampleReturn.open(QFile::WriteOnly | QFile::Truncate);
+	QTextStream fileout(&sampleReturn);
+	fileout << jsonDoc.toJson(QJsonDocument::Indented);
+
+	m_bestBot = new Bot(jsonObj, this);
+
+
+	emit botInjected();
 }
 
 double User::costLiving(double withinPercentileCost)

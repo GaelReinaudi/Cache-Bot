@@ -13,7 +13,7 @@ public:
 
 protected:
 	void onUserInjected() override;
-	void onRepliedBestBot(QString strData) override;
+	void onBotInjected() override;
 
 };
 

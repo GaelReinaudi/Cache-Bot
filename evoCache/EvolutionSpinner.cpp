@@ -68,10 +68,10 @@ void EvolutionSpinner::init(User* pUser)
 		}
 	}
 
-	m_context->insert(new CacheBotRootPrimitive(this));
-	m_context->insert(new FeatureBiWeeklyAmount(this));
-	m_context->insert(new FeatureMonthlyAmount(this));
-//	m_context->insert(new DummyFeature(this));
+	m_context->insert(new CacheBotRootPrimitive());
+	m_context->insert(new FeatureBiWeeklyAmount());
+	m_context->insert(new FeatureMonthlyAmount());
+//	m_context->insert(new DummyFeature());
 	emit initialized(true);
 }
 

@@ -20,6 +20,7 @@ public:
 protected slots:
 	virtual void onLoggedIn(bool didLogin);
 	virtual void onUserInjected();
+	virtual void onBotInjected();
 	virtual void onRepliedSendNewBot(QString strData);
 	virtual void onRepliedBestBot(QString strData);
 

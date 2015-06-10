@@ -1,4 +1,5 @@
 include(../defaults.pri)
+include(../evoCache/puppy/puppy.pri)
 QT       -= gui
 
 TARGET = core
@@ -12,7 +13,8 @@ SOURCES += \
 	log.cpp \
 	account.cpp \
     user.cpp \
-	transaction.cpp
+	transaction.cpp \
+    bot.cpp
 
 
 HEADERS += \
@@ -21,7 +23,8 @@ HEADERS += \
 	log.h \
 	account.h \
 	user.h \
-    transaction.h
+    transaction.h \
+    bot.h
 
 unix {
 	target.path = /usr/lib

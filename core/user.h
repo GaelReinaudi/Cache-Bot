@@ -5,7 +5,7 @@
 #include "common.h"
 #include "transaction.h"
 #include "account.h"
-//class Account;
+class Bot;
 
 class CORESHARED_EXPORT Bank : public DBobj
 {
@@ -70,6 +70,7 @@ protected:
 
 signals:
 	void injected();
+	void botInjected();
 
 private:
 	//! makes a bundle for each hash value
@@ -99,6 +100,7 @@ private:
 	StaticTransactionArray m_allTransactions;
 	HashedBundles m_hashBundles;
 	TransactionBundle m_allTransBundle;
+	Bot* m_bestBot;
 };
 
 #endif // USER_H

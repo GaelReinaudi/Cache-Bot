@@ -22,6 +22,7 @@ void CacheAccountConnector::onLoggedIn(bool didLogin)
 		m_user = new User(userID());
 		CacheRest::Instance()->getUserData(userID(), m_user);
 		connect(m_user, SIGNAL(injected()), this, SLOT(onUserInjected()));
+		connect(m_user, SIGNAL(botInjected()), this, SLOT(onBotInjected()));
 		connect(CacheRest::Instance()->worker, SIGNAL(repliedBestBot(QString)), this, SLOT(onRepliedBestBot(QString)));
 	}
 	else {
@@ -32,6 +33,11 @@ void CacheAccountConnector::onLoggedIn(bool didLogin)
 void CacheAccountConnector::onUserInjected()
 {
 	qDebug() << "CacheAccountConnector has a user injected object";
+}
+
+void CacheAccountConnector::onBotInjected()
+{
+	qDebug() << "CacheAccountConnector has a bot injected object";
 }
 
 void CacheAccountConnector::onRepliedSendNewBot(QString strData)

@@ -3,7 +3,6 @@
 
 #include <QtCore>
 #include "puppy/Puppy.hpp"
-#include "EvolutionSpinner.h"
 
 static const int MAX_NUM_FEATURES = 20;
 static unsigned int LIMIT_NUM_FEATURES = 1;
@@ -93,9 +92,8 @@ public:
 class AccountFeature : public Puppy::Primitive
 {
 public:
-	AccountFeature(unsigned int inNumberArguments, std::string inName, EvolutionSpinner* evoSpinner)
+	AccountFeature(unsigned int inNumberArguments, std::string inName)
 		: Primitive(inNumberArguments, inName)
-		, m_evoSpinner(evoSpinner)
 	{}
 	virtual ~AccountFeature() {}
 	virtual void execute(void* outDatum, Puppy::Context& ioContext) {
@@ -116,10 +114,8 @@ public:
 		return retObj;
 	}
 	bool isFeature() const override { return true; }
-	EvolutionSpinner *evoSpinner() const { return m_evoSpinner; }
 
 protected:
-	EvolutionSpinner* m_evoSpinner = 0;
 	TransactionBundle m_bundle;
 	// if any, the hash to filter the transaction on
 	int m_filterHash = -1;
@@ -128,8 +124,8 @@ protected:
 class CacheBotRootPrimitive : public AccountFeature
 {
 public:
-	CacheBotRootPrimitive(EvolutionSpinner* evoSpinner)
-		: AccountFeature(MAX_NUM_FEATURES, "ROOT", evoSpinner)
+	CacheBotRootPrimitive()
+		: AccountFeature(MAX_NUM_FEATURES, "ROOT")
 	{ }
 	virtual ~CacheBotRootPrimitive() { }
 	bool isRoot() const override {
@@ -149,8 +145,8 @@ public:
 class DummyFeature : public AccountFeature
 {
 public:
-	DummyFeature(EvolutionSpinner* evoSpinner, QString featureName = "Dummy")
-			: AccountFeature(6, featureName.toStdString(), evoSpinner)
+	DummyFeature(QString featureName = "Dummy")
+			: AccountFeature(6, featureName.toStdString())
 	{}
 //	QJsonObject toJson() override { return QJsonObject(); }
 };
@@ -158,8 +154,8 @@ public:
 class FeaturePeriodicAmount : public AccountFeature
 {
 public:
-	FeaturePeriodicAmount(EvolutionSpinner* evoSpinner, QString featureName = "FixedIncome")
-		: AccountFeature(6, featureName.toStdString(), evoSpinner)
+	FeaturePeriodicAmount(QString featureName = "FixedIncome")
+		: AccountFeature(6, featureName.toStdString())
 	{ }
 	~FeaturePeriodicAmount() { }
 
@@ -172,11 +168,11 @@ public:
 class FeatureMonthlyAmount : public FeaturePeriodicAmount
 {
 public:
-	FeatureMonthlyAmount(EvolutionSpinner* evoSpinner)
-		: FeaturePeriodicAmount(evoSpinner, "MonthlyAmount")
+	FeatureMonthlyAmount()
+		: FeaturePeriodicAmount("MonthlyAmount")
 	{ }
-	FeatureMonthlyAmount(EvolutionSpinner* evoSpinner, QString featureName)
-		: FeaturePeriodicAmount(evoSpinner, featureName)
+	FeatureMonthlyAmount(QString featureName)
+		: FeaturePeriodicAmount(featureName)
 	{ }
 	int approxSpacingPayment() override { return 31; }
 	void getArgs(Puppy::Context &ioContext) override {
@@ -274,8 +270,8 @@ protected:
 class FeatureBiWeeklyAmount : public FeatureMonthlyAmount
 {
 public:
-	FeatureBiWeeklyAmount(EvolutionSpinner* evoSpinner)
-		: FeatureMonthlyAmount(evoSpinner, "BiWeeklyIncome")
+	FeatureBiWeeklyAmount()
+		: FeatureMonthlyAmount("BiWeeklyIncome")
 	{ }
 	int approxSpacingPayment() override { return 15; }
 	virtual void cleanArgs() override {
