@@ -34,10 +34,10 @@ public:
 	// gives the daily average of outcome for the withinPercentileCost outgoing transactions
 	double costLiving(double withinPercentileCost);
 
-	TransactionBundle& allTrans(int filterHash) {
-//		if (filterHash >= 0)
+	TransactionBundle& transBundle(int filterHash) {
+		if (filterHash >= 0)
 			return *m_hashBundles[filterHash];
-//		return m_allTrans;
+		return m_allTransBundle;
 	}
 	QMap<uint, TransactionBundle*>& hashBundles() {
 		return m_hashBundles;
@@ -80,6 +80,7 @@ private:
 			if (!m_hashBundles.contains(h))
 				m_hashBundles[h] = new TransactionBundle();
 			m_hashBundles[h]->append(&t);
+			m_allTransBundle.append(&t);
 		}
 		// assigns the index of the hash to the transactions
 		for (int i = 0; i < hashBundles().count(); ++i) {
@@ -97,6 +98,7 @@ private:
 	QVector<Account*> m_accounts;
 	StaticTransactionArray m_allTransactions;
 	HashedBundles m_hashBundles;
+	TransactionBundle m_allTransBundle;
 };
 
 #endif // USER_H

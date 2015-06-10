@@ -13,11 +13,12 @@ void User::injectJsonData(QString jsonStr)
 
 	//////// "user"
 	QJsonObject jsonUser = jsonObj["user"].toObject();
-	qDebug() << "user" << jsonUser["_id"].toString() << ":" << jsonObj["local"].toObject()["email"].toString();
-	Q_ASSERT(jsonUser["_id"].toString() == id());
+	qDebug() << "user" << jsonUser["_id"].toString() << ":" << jsonUser["local"].toObject()["email"].toString();
+	Q_ASSERT_X(jsonUser["_id"].toString() == id(), "injectJsonData", jsonUser["_id"].toString().toUtf8() + " != " + id().toUtf8());
 
 	//////// "banks"
 	QJsonArray jsonBankArray = jsonObj["banks"].toArray();
+	qDebug() << jsonBankArray.size() << "banks";
 	for (int iB = 0; iB < jsonBankArray.size(); ++iB) {
 		QJsonObject jsonBank = jsonBankArray[iB].toObject();
 		Bank* pBank = new Bank(jsonBank, this);

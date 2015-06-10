@@ -67,7 +67,7 @@ public:
    */
 	inline Context(User* pUser) :
 		mTree(NULL)
-	  , m_pAccount(pUser)
+	  , m_pUser(pUser)
 	{
 	}
 
@@ -106,7 +106,7 @@ public:
 	bool m_hasRecursiveFeature = false;
 	QJsonObject* m_summaryJsonObj = 0;
 	QMap<double, QVector<Transaction> >* m_mapPredicted = 0;
-	User* m_pAccount;
+	User* m_pUser;
 	int filterHashIndex = -1;
 };
 

@@ -82,9 +82,10 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 
 	m_fitness = 0.0;
 
-	TransactionBundle& allTrans = ioContext.m_pAccount->allTrans(m_filterHash);
-	QDate lastDate = ioContext.m_pAccount->allTrans().lastTransactionDate().addDays(-4);
-	QDate iniDate = ioContext.m_pAccount->allTrans().firstTransactionDate();
+	// will be ALL the transactions if m_filterHash < 0
+	auto& allTrans = ioContext.m_pUser->transBundle(m_filterHash);
+	QDate lastDate = ioContext.m_pUser->allTrans().lastTransactionDate();//.addDays(-4);
+	QDate iniDate = ioContext.m_pUser->allTrans().firstTransactionDate();
 
 	QVector<Transaction> targetTrans = targetTransactions(iniDate, lastDate);
 	if (targetTrans.count() == 0) {

@@ -32,7 +32,7 @@ void Evolver::onUserInjected()
 {
 	CacheAccountConnector::onUserInjected();
 
-//	m_evoSpinner->init(user());
+	m_evoSpinner->init(user());
 }
 
 void Evolver::onFinishedEvolution(QJsonObject finalBotObject)

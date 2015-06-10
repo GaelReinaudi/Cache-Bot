@@ -73,16 +73,16 @@ MainWindow::~MainWindow()
 
 void MainWindow::init()
 {
-	m_account = new User("QJsonObject()", this);
+	m_pUser = new User("QJsonObject()", this);
 //	m_account->loadPlaidJson(jsonFile, 0, 0);
-	ui->costLive50SpinBox->setValue(m_account->costLiving(0.50));
-	ui->costLive75SpinBox->setValue(m_account->costLiving(0.75));
-	ui->costLive90SpinBox->setValue(m_account->costLiving(0.90));
-	ui->costLive95SpinBox->setValue(m_account->costLiving(0.95));
-	ui->costLive99SpinBox->setValue(m_account->costLiving(0.99));
+	ui->costLive50SpinBox->setValue(m_pUser->costLiving(0.50));
+	ui->costLive75SpinBox->setValue(m_pUser->costLiving(0.75));
+	ui->costLive90SpinBox->setValue(m_pUser->costLiving(0.90));
+	ui->costLive95SpinBox->setValue(m_pUser->costLiving(0.95));
+	ui->costLive99SpinBox->setValue(m_pUser->costLiving(0.99));
 
 	// transaction at the starting date of the playback
-	auto& real = m_account->allTrans();
+	auto& real = m_pUser->allTrans();
 	m_date = real.lastTransactionDate().addDays(-playBackStartAgo);
 	m_d0 = m_date.toJulianDay();
 	qDebug() << "m_date" << m_date;
@@ -108,7 +108,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 	int minDayMove = 0;
 	if(event->key() == Qt::Key_Up)
 		minDayMove = 1;
-	auto& real = m_account->allTrans();
+	auto& real = m_pUser->allTrans();
 	int addDay = 1;
 	if(m_ipb < real.count()) {
 		Transaction& newTrans = real.trans(m_ipb);
@@ -221,8 +221,8 @@ void MainWindow::makePredictiPlot()
 {
 	ui->plot->graph(2)->clearData();
 	double minPredict = m_lastBal;
-	for(int i = 0; i < m_account->predictedTransactions().count(); ++i) {
-		Transaction* trans = m_account->predictedTransactions()[i];
+	for(int i = 0; i < m_pUser->predictedTransactions().count(); ++i) {
+		Transaction* trans = m_pUser->predictedTransactions()[i];
 		// not do anything if it already came true
 		if (trans->flags == Transaction::CameTrue) {
 			qDebug() << "not charting prediction that came true";
@@ -272,8 +272,8 @@ void MainWindow::makePastiPlot()
 	QCPGraph* graph = ui->plot->graph(3);
 	graph->clearData();
 	double minPredict = m_lastBal;
-	for(int i = m_account->predictedTransactions().count() - 1; i >= 0; --i) {
-		Transaction* trans = m_account->predictedTransactions()[i];
+	for(int i = m_pUser->predictedTransactions().count() - 1; i >= 0; --i) {
+		Transaction* trans = m_pUser->predictedTransactions()[i];
 //		// not do anything if it already came true
 //		if (trans->flags == Transaction::CameTrue) {
 //			qDebug() << "not charting prediction that came true";

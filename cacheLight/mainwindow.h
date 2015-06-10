@@ -70,7 +70,7 @@ private:
 	double m_extraToday = -1.0;
 	int m_ipb = 0;
 	// account to read predicted transactions from
-	User* m_account;
+	User* m_pUser;
 	QCPBars *pBars = 0;
 };
 

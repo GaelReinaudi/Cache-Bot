@@ -110,14 +110,14 @@ void EvolutionSpinner::runEvolution() {
 QMap<double, QJsonArray> output;
 QVector<Tree> bestPreEvoTrees;
 QJsonObject finalBotObject;
-for (int j = 0; j < m_context->m_pAccount->hashBundles().count(); ++j) {
-	int h = m_context->m_pAccount->hashBundles().keys()[j];
-	if (m_context->m_pAccount->hashBundles()[h]->count() < 2)
+for (int j = 0; j < m_context->m_pUser->hashBundles().count(); ++j) {
+	int h = m_context->m_pUser->hashBundles().keys()[j];
+	if (m_context->m_pUser->hashBundles()[h]->count() < 2)
 		continue;
 	m_context->filterHashIndex = j;
 	// Initialize population.
 	std::vector<Tree> lPopulation(lPopSize);
-	std::cout << "Initializing population" << std::endl;
+	std::cout << "Initializing population for hash " << h << std::endl;
 	initializePopulation(lPopulation, *m_context, lInitGrowProba, lMinInitDepth, lMaxInitDepth);
 	evaluateSymbReg(lPopulation, *m_context);
 	calculateStats(lPopulation, 0);
