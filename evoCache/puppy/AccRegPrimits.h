@@ -106,7 +106,7 @@ public:
 		retObj.insert("numArgs", int(getNumberArguments()));
 		QJsonArray argList;
 		for (int i = 0; i < getNumberArguments(); ++i) {
-			double lArgi = 0;
+			double lArgi = 0.0;
 			getArgument(i, &lArgi, ioContext);
 			argList.append(lArgi);
 		}
@@ -125,9 +125,12 @@ class CacheBotRootPrimitive : public AccountFeature
 {
 public:
 	CacheBotRootPrimitive()
-		: AccountFeature(MAX_NUM_FEATURES, "ROOT")
+		: AccountFeature(MAX_NUM_FEATURES, rootName().toStdString())
 	{ }
 	virtual ~CacheBotRootPrimitive() { }
+	static QString rootName() {
+		return "ROOT";
+	}
 	bool isRoot() const override {
 		return true;
 	}

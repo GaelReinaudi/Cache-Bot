@@ -7,10 +7,12 @@ void User::injectJsonData(QString jsonStr)
 	QJsonDocument jsonDoc(QJsonDocument::fromJson(jsonStr.toUtf8()));
 	const QJsonObject& jsonObj = jsonDoc.object();
 
-	QFile sampleReturn("jsonData.json");
-	sampleReturn.open(QFile::WriteOnly | QFile::Truncate);
-	QTextStream fileout(&sampleReturn);
-	fileout << jsonDoc.toJson(QJsonDocument::Indented);
+	{
+		QFile sampleReturn("jsonData.json");
+		sampleReturn.open(QFile::WriteOnly | QFile::Truncate);
+		QTextStream fileout(&sampleReturn);
+		fileout << jsonDoc.toJson(QJsonDocument::Indented);
+	}
 
 	//////// "user"
 	QJsonObject jsonUser = jsonObj["user"].toObject();
@@ -65,13 +67,20 @@ void User::injectJsonBot(QString jsonStr)
 	QJsonDocument jsonDoc(QJsonDocument::fromJson(jsonStr.toUtf8()));
 	const QJsonObject& jsonObj = jsonDoc.object();
 
-	QFile sampleReturn("jsonBot.json");
-	sampleReturn.open(QFile::WriteOnly | QFile::Truncate);
-	QTextStream fileout(&sampleReturn);
-	fileout << jsonDoc.toJson(QJsonDocument::Indented);
+	{
+		QFile sampleReturn("jsonBot.json");
+		sampleReturn.open(QFile::WriteOnly | QFile::Truncate);
+		QTextStream fileout(&sampleReturn);
+		fileout << jsonDoc.toJson(QJsonDocument::Indented);
+	}
 
+	// remake the context just in case
+	if(m_botContext)
+		delete m_botContext;
+	m_botContext = new BotContext(this);
 	m_bestBot = new Bot(jsonObj, this);
-
+	m_bestBot->init(m_botContext);
+	m_bestBot->summarize(m_botContext);
 
 	emit botInjected();
 }

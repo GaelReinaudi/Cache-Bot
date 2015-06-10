@@ -43,6 +43,7 @@
 #include "puppy/PrimitiveHandle.hpp"
 #include "puppy/Primitive.hpp"
 #include "puppy/Context.hpp"
+#include <QString>
 
 namespace Puppy {
 

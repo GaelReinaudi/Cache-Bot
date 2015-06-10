@@ -18,7 +18,6 @@ const double THRESHOLD_PROBA_BILL = 1.0;
 #define MUT_MAX_REGEN_DEPTH_DEFAULT 5
 #define MUT_SWAP_PROBA_DEFAULT 0.535f
 #define MUT_SWAP_DISTRIB_PROBA_DEFAULT 0.5f
-#define SEED_DEFAULT 0
 
 using namespace Puppy;
 
@@ -30,48 +29,8 @@ EvolutionSpinner::EvolutionSpinner(QObject* parent)
 
 void EvolutionSpinner::init(User* pUser)
 {
-	unsigned long lSeed                = SEED_DEFAULT;
-
 	// Create evolution context add primitives used into it.
-	LOG() << "Creating evolution context" << endl;
-	m_context = new Context(pUser);
-	m_context->mRandom.seed(lSeed);
-	m_context->insert(new Add);
-	m_context->insert(new Subtract);
-	m_context->insert(new Multiply);
-	m_context->insert(new Divide);
-	m_context->insert(new Cosinus);
-	m_context->insert(new TokenT<double>("0.01", 0.01));
-	m_context->insert(new TokenT<double>("0.02", 0.02));
-	m_context->insert(new TokenT<double>("0.03", 0.03));
-	m_context->insert(new TokenT<double>("0.04", 0.04));
-	m_context->insert(new TokenT<double>("0.05", 0.05));
-	m_context->insert(new TokenT<double>("0.1", 0.1));
-	m_context->insert(new TokenT<double>("0.2", 0.2));
-	m_context->insert(new TokenT<double>("0.3", 0.3));
-	m_context->insert(new TokenT<double>("0.4", 0.4));
-	m_context->insert(new TokenT<double>("0.5", 0.5));
-	m_context->insert(new TokenT<double>("0", 0.0));
-	m_context->insert(new TokenT<double>("1", 1.0));
-	m_context->insert(new TokenT<double>("2", 2.0));
-	m_context->insert(new TokenT<double>("3", 3.0));
-	m_context->insert(new TokenT<double>("4", 4.0));
-	m_context->insert(new TokenT<double>("5", 5.0));
-	m_context->insert(new TokenT<double>("10", 10.0));
-	for (int i = 0; i < pUser->hashBundles().count(); ++i) {
-		int h = pUser->hashBundles().keys()[i];
-		if (pUser->hashBundles()[h]->count() > 1)
-		{
-			int avgKLA = pUser->hashBundles()[h]->averageKLA();
-			m_context->insert(new TokenT<double>(QString("h%1").arg(h).toStdString(), h));
-			m_context->insertIfNotThere(new TokenT<double>(QString("kla%1").arg(avgKLA).toStdString(), avgKLA));
-		}
-	}
-
-	m_context->insert(new CacheBotRootPrimitive());
-	m_context->insert(new FeatureBiWeeklyAmount());
-	m_context->insert(new FeatureMonthlyAmount());
-//	m_context->insert(new DummyFeature());
+	m_context = new BotContext(pUser);
 	emit initialized(true);
 }
 
@@ -107,63 +66,63 @@ void EvolutionSpinner::runEvolution() {
 	float         lMutSwapProba        = MUT_SWAP_PROBA_DEFAULT;
 	float         lMutSwapDistribProba = MUT_SWAP_DISTRIB_PROBA_DEFAULT;
 
-QMap<double, QJsonArray> output;
-QVector<Tree> bestPreEvoTrees;
-QJsonObject finalBotObject;
-for (int j = 0; j < m_context->m_pUser->hashBundles().count(); ++j) {
-	int h = m_context->m_pUser->hashBundles().keys()[j];
-	if (m_context->m_pUser->hashBundles()[h]->count() < 2)
-		continue;
-	m_context->filterHashIndex = j;
-	// Initialize population.
-	std::vector<Tree> lPopulation(lPopSize);
-	std::cout << "Initializing population for hash " << h << std::endl;
-	initializePopulation(lPopulation, *m_context, lInitGrowProba, lMinInitDepth, lMaxInitDepth);
-	evaluateSymbReg(lPopulation, *m_context);
-	calculateStats(lPopulation, 0);
-
-	// Evolve population for the given number of generations
-	LOG() << "Starting evolution" << endl;
-	for(unsigned int i=1; i<=lNbrGen; ++i) {
-		while(!m_doSpin)  {
-			QThread::msleep(100);
-		}
-		LOG() << "Generation " << i << endl;
-		auto result = std::minmax_element(lPopulation.begin(), lPopulation.end());
-		Tree bestTree = lPopulation[result.second - lPopulation.begin()];
-
-		summarize(bestTree);
-
-		applySelectionTournament(lPopulation, *m_context, lNbrPartTournament);
-		applyCrossover(lPopulation, *m_context, lCrossoverProba, lCrossDistribProba, lMaxDepth);
-		applyMutationStandard(lPopulation, *m_context, lMutStdProba, lMutMaxRegenDepth, lMaxDepth);
-		applyMutationSwap(lPopulation, *m_context, lMutSwapProba, lMutSwapDistribProba);
-
-		bestTree.mValid = false;
-		//lPopulation.push_back(bestTree);
-
+	QMap<double, QJsonArray> output;
+	QVector<Tree> bestPreEvoTrees;
+	QJsonObject finalBotObject;
+	for (int j = 0; j < m_context->m_pUser->hashBundles().count(); ++j) {
+		int h = m_context->m_pUser->hashBundles().keys()[j];
+		if (m_context->m_pUser->hashBundles()[h]->count() < 2)
+			continue;
+		m_context->filterHashIndex = j;
+		// Initialize population.
+		std::vector<Tree> lPopulation(lPopSize);
+		std::cout << "Initializing population for hash " << h << std::endl;
+		initializePopulation(lPopulation, *m_context, lInitGrowProba, lMinInitDepth, lMaxInitDepth);
 		evaluateSymbReg(lPopulation, *m_context);
-		calculateStats(lPopulation, i);
-	}
-	LOG() << "End of evolution" << endl;
+		calculateStats(lPopulation, 0);
 
-	// Outputting best individual
-	std::vector<Tree>::iterator lBestIndividual =
-			std::max_element(lPopulation.begin(), lPopulation.end());
-	LOG() << "Best individual at generation " << lNbrGen << " is: ";
-	LOG() << lBestIndividual->toStr() << endl;
-//	std::vector<unsigned int> outCallStack = (*lBestIndividual).getFeatureStack(0, *m_context);
-//	qDebug() << QVector<unsigned int>::fromStdVector(outCallStack);
+		// Evolve population for the given number of generations
+		LOG() << "Starting evolution" << endl;
+		for(unsigned int i=1; i<=lNbrGen; ++i) {
+			while(!m_doSpin)  {
+				QThread::msleep(100);
+			}
+			LOG() << "Generation " << i << endl;
+			auto result = std::minmax_element(lPopulation.begin(), lPopulation.end());
+			Tree bestTree = lPopulation[result.second - lPopulation.begin()];
 
-	QJsonObject jsonBest = summarize(*lBestIndividual);
-	double billProba = jsonBest["features"].toArray().first().toObject()["billProba"].toDouble();
-	output[billProba].append(jsonBest);
-	qDebug() << "billProba" << billProba;
-	if(billProba > THRESHOLD_PROBA_BILL || bestPreEvoTrees.isEmpty()) {
-		(*lBestIndividual).mValid = false;
-		bestPreEvoTrees.push_back(*lBestIndividual);
+			summarize(bestTree);
+
+			applySelectionTournament(lPopulation, *m_context, lNbrPartTournament);
+			applyCrossover(lPopulation, *m_context, lCrossoverProba, lCrossDistribProba, lMaxDepth);
+			applyMutationStandard(lPopulation, *m_context, lMutStdProba, lMutMaxRegenDepth, lMaxDepth);
+			applyMutationSwap(lPopulation, *m_context, lMutSwapProba, lMutSwapDistribProba);
+
+			bestTree.mValid = false;
+			//lPopulation.push_back(bestTree);
+
+			evaluateSymbReg(lPopulation, *m_context);
+			calculateStats(lPopulation, i);
+		}
+		LOG() << "End of evolution" << endl;
+
+		// Outputting best individual
+		std::vector<Tree>::iterator lBestIndividual =
+				std::max_element(lPopulation.begin(), lPopulation.end());
+		LOG() << "Best individual at generation " << lNbrGen << " is: ";
+		LOG() << lBestIndividual->toStr() << endl;
+//		std::vector<unsigned int> outCallStack = (*lBestIndividual).getFeatureStack(0, *m_context);
+//		qDebug() << QVector<unsigned int>::fromStdVector(outCallStack);
+
+		QJsonObject jsonBest = summarize(*lBestIndividual);
+		double billProba = jsonBest["features"].toArray().first().toObject()["billProba"].toDouble();
+		output[billProba].append(jsonBest);
+		qDebug() << "billProba" << billProba;
+		if(billProba > THRESHOLD_PROBA_BILL || bestPreEvoTrees.isEmpty()) {
+			(*lBestIndividual).mValid = false;
+			bestPreEvoTrees.push_back(*lBestIndividual);
+		}
 	}
-}
 
 	for (int i = 0; i < output.count(); ++i) {
 		double fit = output.keys()[i];

@@ -3,7 +3,7 @@
 #include <QObject>
 #include <QRectF>
 
-#include "puppy/Puppy.hpp"
+#include "bot.h"
 
 class Zone : public QRectF
 {
@@ -42,7 +42,7 @@ signals:
 	void finishedEvolution(QJsonObject);
 
 private:
-	Puppy::Context* m_context = 0;
+	BotContext* m_context = 0;
 	int m_gen = 0;
 	volatile bool m_doSpin = false;
 };

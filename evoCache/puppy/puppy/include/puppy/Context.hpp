@@ -43,6 +43,7 @@
 #include "puppy/PrimitiveHandle.hpp"
 #include "puppy/Primitive.hpp"
 #include "puppy/Randomizer.hpp"
+#include "puppy/TokenT.hpp"
 #include "user.h"
 
 namespace Puppy {
@@ -92,6 +93,28 @@ public:
 	{
 		if(mPrimitiveMap.find(inPrimitive->getName()) == mPrimitiveMap.end())
 			insert(inPrimitive);
+	}
+	inline bool hasPrimitive(QString name)
+	{
+		if(mPrimitiveMap.find(name.toStdString()) == mPrimitiveMap.end())
+			return false;
+		return true;
+	}
+	inline PrimitiveHandle getPrimitiveByName(QString name)
+	{
+		std::string stdname = name.toStdString();
+		if (hasPrimitive(name)) {
+			return mPrimitiveMap[stdname];
+		}
+		// else, is this a number ?
+		bool yes = false;
+		double val = name.toDouble(&yes);
+		if (yes) {
+			PrimitiveHandle newTerminal = new TokenT<double>(stdname, val);
+			insert(newTerminal);
+			return newTerminal;
+		}
+		return new TokenT<double>(std::string("ERROR_NAME_NOT_FOUND_AND_COULDNT_BE_CONVERTED"), 3.141592);
 	}
 
 	Randomizer                            mRandom;        //!< Random number generator.
