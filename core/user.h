@@ -3,7 +3,9 @@
 
 #include "core_global.h"
 #include "common.h"
-class Account;
+#include "transaction.h"
+#include "account.h"
+//class Account;
 
 class CORESHARED_EXPORT Bank : public DBobj
 {
@@ -14,6 +16,7 @@ public:
 		Q_ASSERT(!jsonBank["_id"].toString().isEmpty());
 		m_accessToken = jsonBank["_id"].toString();
 	}
+	QString accessToken() const { return m_accessToken; }
 
 private:
 	QString m_accessToken;
@@ -28,19 +31,35 @@ public:
 		:DBobj(userId, parent)
 	{}
 
-	Account *globalAccount() const;
+	double costLiving(double withinPercentileCost);
 
 public slots:
 	void injectJsonData(QString jsonStr);
 	void injectJsonBot(QString jsonStr);
 
+protected:
+	Bank* getBankByToken(QString bankTok) const {
+		for (Bank* pB : m_banks) {
+			if(pB->accessToken() == bankTok)
+				return pB;
+		}
+		return 0;
+	}
+	Account* getAccountByPlaidId(QString plaidId) const {
+		for (Account* pA : m_accounts) {
+			if(pA->plaidId() == plaidId)
+				return pA;
+		}
+		return 0;
+	}
+
 signals:
 	void injected();
 
 private:
-	QList<Bank*> m_banks;
-	QList<Account*> m_accounts;
-	Account* m_globalAccount;
+	QVector<Bank*> m_banks;
+	QVector<Account*> m_accounts;
+	StaticTransactionArray m_allTransactions;
 };
 
 #endif // USER_H

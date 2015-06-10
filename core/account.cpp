@@ -1,32 +1,21 @@
 #include "account.h"
 
-QStringList s_excludeNameTransContain;
-
 Account::Account(QJsonObject jsonAcc, QObject *parent)
 	:DBobj(jsonAcc["_id"].toString(), parent)
 {
-	s_excludeNameTransContain.append("Online Transfer");
-	s_excludeNameTransContain.append("Credit Card Payment");
-	s_excludeNameTransContain.append("ment to Chase c");
-
 	loadJsonData(jsonAcc);
 }
 
 void Account::loadJsonData(QJsonObject json, int afterJday, int beforeJday)
 {
-	QJsonArray npcArrayAccount = json["accounts"].toArray();
-	for (int npcIndex = 0; npcIndex < npcArrayAccount.size(); ++npcIndex) {
-		QJsonObject npcObject = npcArrayAccount[npcIndex].toObject();
-		QString accountID = npcObject["_id"].toString();
-		int accountLast4Digits = npcObject["meta"].toObject()["number"].toInt();
-		QString accountName = npcObject["meta"].toObject()["name"].toString();
-		QString accountType = npcObject["type"].toString();
-		Q_ASSERT(!accountID.isEmpty());
-		LOG() << "read account:" << accountID << ": " << accountName << "(" << accountLast4Digits << "): " << accountType << endl;
+	QString accountID = json["_id"].toString();
+	m_plaidId = json["plaid_id"].toString();
+	int accountLast4Digits = json["meta"].toObject()["number"].toInt();
+	QString accountName = json["meta"].toObject()["name"].toString();
+	QString accountType = json["type"].toString();
+	Q_ASSERT(!accountID.isEmpty());
+	LOG() << "read account:" << accountID << ": " << accountName << "(" << accountLast4Digits << "): " << accountType << endl;
 
-	}
-
-	m_allTransactions.read(json["transactions"].toArray(), afterJday, beforeJday);
 	m_predicted.read(json["predicted"].toArray());
 
 	// make a bundle of all the transactions
@@ -88,62 +77,4 @@ bool Account::toJson(QVector<Transaction> transactions, QString category)
 	return true;
 }
 
-double Account::costLiving(double withinPercentileCost)
-{
-	QVector<double> costs;
-	for (int i = 0; i < allTrans().count(); ++i) {
-		double amnt = allTrans().trans(i).amountDbl();
-		if (amnt < 0.0) {
-			costs.append(-amnt);
-		}
-	}
-	qSort(costs);
-	double avg = 0.0;
-	int lastCostsInd = costs.count() * withinPercentileCost;
-	for (int i = 0; i < lastCostsInd; ++i) {
-		avg += costs[i];
-	}
-	double numDays = firstTransactionDate().daysTo(lastTransactionDate());
-	if(numDays) {
-		avg /= numDays;
-		qDebug() << "cost of living (L="<<lastCostsInd<<")" << avg;
-	}
-	return avg;
-}
-
-void Account::Transactions::read(const QJsonArray& npcArray, int afterJday, int beforeJday, const QVector<QString> &onlyAcIds /*= anyID*/) {
-	for (int npcIndex = 0; npcIndex < npcArray.size(); ++npcIndex) {
-		QJsonObject npcObject = npcArray[npcIndex].toObject();
-		QString accountTrans = npcObject["_account"].toString();
-		if (onlyAcIds.isEmpty() || onlyAcIds.contains(accountTrans)) {
-			appendNew()->read(npcObject);
-			if ((afterJday && last()->jDay() < afterJday) || (beforeJday && last()->jDay() > beforeJday)) {
-				removeLast();
-				continue;
-			}
-			for (QString& nono : s_excludeNameTransContain) {
-				if (last()->name.contains(nono)) {
-					removeLast();
-					LOG() << "removed transaction because it looks like an internal transfer based on name containing"
-						  << nono << endl;
-					break;
-				}
-			}
-		}
-		else {
-			LOG() << "transaction not matching an account:"<< accountTrans
-				  << " object:" << npcArray[npcIndex].toString() << endl;
-		}
-	}
-	qSort(m_transArray.begin(), m_transArray.begin() + m_numTrans, Transaction::earlierThan);
-	qDebug() << "transaction loaded " << count() << "/" << npcArray.size();
-}
-
-void Account::Transactions::write(QJsonArray& npcArray) const {
-	for (int i = 0; i < count(); ++i) {
-		QJsonObject npcObject;
-		m_transArray[i].write(npcObject);
-		npcArray.append(npcObject);
-	}
-}
 
