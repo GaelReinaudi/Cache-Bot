@@ -43,7 +43,7 @@
 #include "puppy/PrimitiveHandle.hpp"
 #include "puppy/Primitive.hpp"
 #include "puppy/Randomizer.hpp"
-#include "core/account.h"
+#include "user.h"
 
 namespace Puppy {
 
@@ -65,9 +65,9 @@ public:
 	/*!
    *  \brief Build an evolutionary context.
    */
-	inline Context(Account* pAc) :
+	inline Context(User* pUser) :
 		mTree(NULL)
-	  , m_pAccount(pAc)
+	  , m_pAccount(pUser)
 	{
 	}
 
@@ -106,7 +106,7 @@ public:
 	bool m_hasRecursiveFeature = false;
 	QJsonObject* m_summaryJsonObj = 0;
 	QMap<double, QVector<Transaction> >* m_mapPredicted = 0;
-	Account* m_pAccount;
+	User* m_pAccount;
 	int filterHashIndex = -1;
 };
 

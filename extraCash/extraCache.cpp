@@ -11,10 +11,10 @@ void extraCache::onUserInjected()
 {
 	CacheAccountConnector::onUserInjected();
 	CacheRest::Instance()->getBestBot(userID());
-	connect(CacheRest::Instance()->worker, SIGNAL(repliedBestBot(QString)), this, SLOT(repliedBestBot(QString)));
+	connect(CacheRest::Instance()->worker, SIGNAL(onRepliedBestBot(QString)), this, SLOT(onRepliedBestBot(QString)));
 }
 
-void extraCache::repliedBestBot(QString strData)
+void extraCache::onRepliedBestBot(QString strData)
 {
 	qApp->exit();
 	qDebug() << strData;

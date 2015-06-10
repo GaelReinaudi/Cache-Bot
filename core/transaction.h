@@ -92,7 +92,11 @@ struct StaticTransactionArray
 	Transaction& trans(int i) { return m_transArray[i]; }
 	void clear() { m_numTrans = 0; }
 	int count() const { return m_numTrans; }
-	Transaction* appendNew() { return &m_transArray[m_numTrans++]; }
+	Transaction* appendNew(Account* pInAcc) {
+		Transaction* pNewTrans = &m_transArray[m_numTrans++];
+		pNewTrans->account = pInAcc;
+		return pNewTrans;
+	}
 	Transaction* last() { return &m_transArray[m_numTrans - 1]; }
 	void removeLast() { m_numTrans--; }
 	void sort() {

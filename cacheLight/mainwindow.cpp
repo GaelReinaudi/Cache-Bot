@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "cacherest.h"
 
 const int dayPast = 60;
 const int dayFuture = 60;
@@ -8,8 +9,8 @@ const int playBackStartAgo = 210;
 double smallInc = 1e-3;
 double iniBalance = 3000.0;
 double slushAmmount = 5000.0;
-//QString jsonFile = "../../cacheLight/chrisPurchases.json";
-QString jsonFile = "../../cacheLight/input.json";
+QString jsonFile = "../../cacheLight/jsonDataChris_2015-06-10.json";
+//QString jsonFile = "../../cacheLight/input.json";
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
@@ -72,8 +73,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::init()
 {
-	m_account = new Account(QJsonObject(), this);
-	m_account->loadPlaidJson(jsonFile, 0, 0);
+	m_account = new User("QJsonObject()", this);
+//	m_account->loadPlaidJson(jsonFile, 0, 0);
 	ui->costLive50SpinBox->setValue(m_account->costLiving(0.50));
 	ui->costLive75SpinBox->setValue(m_account->costLiving(0.75));
 	ui->costLive90SpinBox->setValue(m_account->costLiving(0.90));
@@ -81,8 +82,8 @@ void MainWindow::init()
 	ui->costLive99SpinBox->setValue(m_account->costLiving(0.99));
 
 	// transaction at the starting date of the playback
-	TransactionBundle& real = m_account->allTrans();
-	m_date = real.trans(-1).date.addDays(-playBackStartAgo);//QDate::currentDate();
+	auto& real = m_account->allTrans();
+	m_date = real.lastTransactionDate().addDays(-playBackStartAgo);
 	m_d0 = m_date.toJulianDay();
 	qDebug() << "m_date" << m_date;
 
@@ -101,26 +102,13 @@ void MainWindow::init()
 	updateChart();
 }
 
-bool MainWindow::wasPredicted(Transaction &trans)
-{
-	for(int i = 0; i < m_account->m_predicted.count(); ++i) {
-		Transaction* pred = m_account->m_predicted.transArray() + i;
-		//qDebug() << pred->jDay() << trans.jDay();
-		if(pred->dist(trans) < 1024) {
-			qDebug() << "observing predicted transaction" << pred->dist(trans) << trans.name;
-			return true;
-		}
-	}
-	return false;
-}
-
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
 	int maxDayMove = 1;
 	int minDayMove = 0;
 	if(event->key() == Qt::Key_Up)
 		minDayMove = 1;
-	TransactionBundle& real = m_account->allTrans();
+	auto& real = m_account->allTrans();
 	int addDay = 1;
 	if(m_ipb < real.count()) {
 		Transaction& newTrans = real.trans(m_ipb);
@@ -131,11 +119,6 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 			// revert the soon to come increment so that we add a day and come back to this trans
 			--m_ipb;
 			addDay = maxDayMove;
-		}
-		// is this transaction predicted in a way?
-		else if (wasPredicted(newTrans)) {
-			qDebug() << "prediction that came true";
-			newTrans.flags = Transaction::CameTrue;
 		}
 		else {
 			double delta = newTrans.amountDbl();
@@ -238,8 +221,8 @@ void MainWindow::makePredictiPlot()
 {
 	ui->plot->graph(2)->clearData();
 	double minPredict = m_lastBal;
-	for(int i = 0; i < m_account->m_predicted.count(); ++i) {
-		Transaction* trans = m_account->m_predicted.transArray() + i;
+	for(int i = 0; i < m_account->predictedTransactions().count(); ++i) {
+		Transaction* trans = m_account->predictedTransactions()[i];
 		// not do anything if it already came true
 		if (trans->flags == Transaction::CameTrue) {
 			qDebug() << "not charting prediction that came true";
@@ -289,8 +272,8 @@ void MainWindow::makePastiPlot()
 	QCPGraph* graph = ui->plot->graph(3);
 	graph->clearData();
 	double minPredict = m_lastBal;
-	for(int i = m_account->m_predicted.count() - 1; i >= 0; --i) {
-		Transaction* trans = m_account->m_predicted.transArray() + i;
+	for(int i = m_account->predictedTransactions().count() - 1; i >= 0; --i) {
+		Transaction* trans = m_account->predictedTransactions()[i];
 //		// not do anything if it already came true
 //		if (trans->flags == Transaction::CameTrue) {
 //			qDebug() << "not charting prediction that came true";

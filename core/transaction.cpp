@@ -47,7 +47,7 @@ void StaticTransactionArray::read(const QJsonArray& npcArray, int afterJday, int
 		QJsonObject jsonTrans = npcArray[npcIndex].toObject();
 		QString accountTrans = jsonTrans["_account"].toString();
 		if (onlyAcIds.isEmpty() || onlyAcIds.contains(accountTrans)) {
-			appendNew()->read(jsonTrans);
+			appendNew(0)->read(jsonTrans);
 			if ((afterJday && last()->jDay() < afterJday) || (beforeJday && last()->jDay() > beforeJday)) {
 				removeLast();
 				continue;

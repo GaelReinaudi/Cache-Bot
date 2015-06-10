@@ -19,7 +19,6 @@ class MainWindow : public QMainWindow
 public:
 	explicit MainWindow(QWidget *parent = 0);
 	~MainWindow();
-	bool wasPredicted(Transaction& trans);
 	void keyPressEvent(QKeyEvent *event);
 	int computeMinSlopeOver(int numDays);
 
@@ -71,7 +70,7 @@ private:
 	double m_extraToday = -1.0;
 	int m_ipb = 0;
 	// account to read predicted transactions from
-	Account* m_account;
+	User* m_account;
 	QCPBars *pBars = 0;
 };
 

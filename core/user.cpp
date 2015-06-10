@@ -13,7 +13,7 @@ void User::injectJsonData(QString jsonStr)
 
 	//////// "user"
 	QJsonObject jsonUser = jsonObj["user"].toObject();
-	//qDebug() << jsonUser["_id"].toString() << id();
+	qDebug() << "user" << jsonUser["_id"].toString() << ":" << jsonObj["local"].toObject()["email"].toString();
 	Q_ASSERT(jsonUser["_id"].toString() == id());
 
 	//////// "banks"
@@ -26,7 +26,7 @@ void User::injectJsonData(QString jsonStr)
 
 	//////// "accounts"
 	QJsonArray jsonAccountArray = jsonObj["accounts"].toArray();
-	qDebug() << jsonAccountArray.size();
+	qDebug() << jsonAccountArray.size() << "accounts";
 	for (int iA = 0; iA < jsonAccountArray.size(); ++iA) {
 		QJsonObject jsonAcc = jsonAccountArray[iA].toObject();
 		QString bankTok = jsonAcc["access_token"].toString();
@@ -37,22 +37,22 @@ void User::injectJsonData(QString jsonStr)
 
 	//////// "transactions"
 	QJsonArray jsonTransArray = jsonObj["transactions"].toArray();
-	qDebug() << jsonTransArray.size();
-//	m_allTransactions.read(jsonTransArray);
+	qDebug() << jsonTransArray.size() << "transactions";
 	for (int iT = 0; iT < jsonTransArray.size(); ++iT) {
 		QJsonObject jsonTrans = jsonTransArray[iT].toObject();
 		QString acPlaidId = jsonTrans["plaid_account"].toString();
-		Account* pAccount = getAccountByPlaidId(acPlaidId);
-		m_allTransactions.appendNew()->read(jsonTrans);
-		m_allTransactions.last()->account = pAccount;
+		Account* pInAcc = getAccountByPlaidId(acPlaidId);
+		m_allTransactions.appendNew(pInAcc)->read(jsonTrans);
 	}
 	m_allTransactions.sort();
 
-	//////// complete Accounts with transaction pointers
+	//////// complete Accounts with transaction pointers in bundles
 	for (int i = 0; i < m_allTransactions.count(); ++i) {
 		Transaction* pT = &m_allTransactions.transArray()[i];
 		pT->account->append(pT);
 	}
+
+	makeHashBundles();
 
 	emit injected();
 }

@@ -16,14 +16,14 @@ void Account::loadJsonData(QJsonObject json, int afterJday, int beforeJday)
 	Q_ASSERT(!accountID.isEmpty());
 	LOG() << "read account:" << accountID << ": " << accountName << "(" << accountLast4Digits << "): " << accountType << endl;
 
-	m_predicted.read(json["predicted"].toArray());
-
-	// make a bundle of all the transactions
-	m_allTrans.clear();
-	for (int i = 0; i < m_allTransactions.count(); ++i) {
-		m_allTrans.append(&m_allTransactions.transArray()[i]);
-	}
-	makeHashBundles();
+//	predictedTransactions().read(json["predicted"].toArray());
+//
+//	// make a bundle of all the transactions
+//	m_allTrans.clear();
+//	for (int i = 0; i < m_allTransactions.count(); ++i) {
+//		m_allTrans.append(&m_allTransactions.transArray()[i]);
+//	}
+//	makeHashBundles();
 }
 
 bool Account::loadPlaidJson(QString jsonFile, int afterJday, int beforeJday) {

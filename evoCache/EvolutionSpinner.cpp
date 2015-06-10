@@ -28,13 +28,13 @@ EvolutionSpinner::EvolutionSpinner(QObject* parent)
 	qRegisterMetaType<ZoneVector>("ZoneVector");
 }
 
-void EvolutionSpinner::init(Account *pAc)
+void EvolutionSpinner::init(User* pUser)
 {
 	unsigned long lSeed                = SEED_DEFAULT;
 
 	// Create evolution context add primitives used into it.
 	LOG() << "Creating evolution context" << endl;
-	m_context = new Context(pAc);
+	m_context = new Context(pUser);
 	m_context->mRandom.seed(lSeed);
 	m_context->insert(new Add);
 	m_context->insert(new Subtract);
@@ -58,11 +58,11 @@ void EvolutionSpinner::init(Account *pAc)
 	m_context->insert(new TokenT<double>("4", 4.0));
 	m_context->insert(new TokenT<double>("5", 5.0));
 	m_context->insert(new TokenT<double>("10", 10.0));
-	for (int i = 0; i < pAc->hashBundles().count(); ++i) {
-		int h = pAc->hashBundles().keys()[i];
-		if (pAc->hashBundles()[h]->count() > 1)
+	for (int i = 0; i < pUser->hashBundles().count(); ++i) {
+		int h = pUser->hashBundles().keys()[i];
+		if (pUser->hashBundles()[h]->count() > 1)
 		{
-			int avgKLA = pAc->hashBundles()[h]->averageKLA();
+			int avgKLA = pUser->hashBundles()[h]->averageKLA();
 			m_context->insert(new TokenT<double>(QString("h%1").arg(h).toStdString(), h));
 			m_context->insertIfNotThere(new TokenT<double>(QString("kla%1").arg(avgKLA).toStdString(), avgKLA));
 		}
@@ -218,7 +218,7 @@ for (int j = 0; j < m_context->m_pAccount->hashBundles().count(); ++j) {
 		LOG() << "End of evolution" << endl;
 
 		QVector<Transaction> futureTransactions = predictTrans(veryBestTree, THRESHOLD_PROBA_BILL);
-		m_context->m_pAccount->toJson(futureTransactions, "predicted");
+//		m_context->m_pAccount->toJson(futureTransactions, "predicted");
 
 	}
 

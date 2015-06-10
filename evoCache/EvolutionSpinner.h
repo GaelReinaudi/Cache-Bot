@@ -21,7 +21,7 @@ class EvolutionSpinner : public QObject
 public:
 	EvolutionSpinner(QObject* parent = 0);
 
-	void init(Account *pAc);
+	void init(User *pUser);
 public slots:
 	void startStopEvolution(bool doStart);
 	void runEvolution();
