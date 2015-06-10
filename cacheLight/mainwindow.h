@@ -57,7 +57,6 @@ private slots:
 		QByteArray jsonData = reply->readAll();
 		qDebug(jsonData);
 		return;
-		m_account.loadJsonData(jsonData);
 	}
 private:
 	QNetworkAccessManager *manager = 0;
@@ -72,7 +71,7 @@ private:
 	double m_extraToday = -1.0;
 	int m_ipb = 0;
 	// account to read predicted transactions from
-	Account m_account;
+	Account* m_account;
 	QCPBars *pBars = 0;
 };
 

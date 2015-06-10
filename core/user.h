@@ -16,7 +16,6 @@ public:
 	}
 
 private:
-	QList<Account*> m_accounts;
 	QString m_accessToken;
 };
 
@@ -29,7 +28,7 @@ public:
 		:DBobj(userId, parent)
 	{}
 
-	void readJson();
+	Account *globalAccount() const;
 
 public slots:
 	void injectJsonData(QString jsonStr);
@@ -40,6 +39,8 @@ signals:
 
 private:
 	QList<Bank*> m_banks;
+	QList<Account*> m_accounts;
+	Account* m_globalAccount;
 };
 
 #endif // USER_H

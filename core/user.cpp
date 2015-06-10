@@ -1,8 +1,5 @@
 #include "user.h"
-
-void User::readJson() {
-
-}
+#include "account.h"
 
 void User::injectJsonData(QString jsonStr)
 {
@@ -34,9 +31,8 @@ void User::injectJsonData(QString jsonStr)
 	for (int iA = 0; iA < jsonAccountArray.size(); ++iA) {
 		QJsonObject jsonAcc = jsonAccountArray[iA].toObject();
 		QString bankTok = jsonAcc["access_token"].toString();
-//		Bank* pBank = getBankByToken(bankTok);
-//		Account* pAcc = new Account(jsonAcc, pBank);
-//		pBank->m_accounts.push_back(pAcc);
+		Account* pAcc = new Account(jsonAcc, this);
+		m_accounts.push_back(pAcc);
 	}
 	emit injected();
 }
@@ -45,4 +41,10 @@ void User::injectJsonBot(QString jsonStr)
 {
 
 }
+
+Account *User::globalAccount() const
+{
+	return m_globalAccount;
+}
+
 

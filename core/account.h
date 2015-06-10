@@ -9,12 +9,12 @@ typedef QMap<uint, TransactionBundle*> HashedBundles;
 class CORESHARED_EXPORT Account : public DBobj
 {
 public:
-	Account();
+	Account(QJsonObject jsonAcc, QObject* parent = 0);
 
 	// loading the json file
 	// see this: https://qt-project.org/doc/qt-5-snapshot/qtcore-savegame-example.html
 	bool loadPlaidJson(QString jsonFile, int afterJday = 0, int beforeJday = 0);
-	void loadJsonData(QByteArray jsonData, int afterJday = 0, int beforeJday = 0);
+	void loadJsonData(QJsonObject json, int afterJday = 0, int beforeJday = 0);
 	bool toJson(QVector<Transaction> transactions, QString category);
 
 	QMap<uint, TransactionBundle*>& hashBundles() {
@@ -36,7 +36,6 @@ public:
 	double costLiving(double withinPercentileCost);
 
 private:
-	QVector<QString> m_accountIds;
 	struct Transactions
 	{
 		Transactions() {}
@@ -85,9 +84,9 @@ public:
 	Transactions m_predicted;
 };
 
-class Household : public QObject
-{
-	QVector<Account*> m_accounts;
-};
+//class Household : public QObject
+//{
+//	QVector<User*> m_users;
+//};
 
 #endif // ACDATA_H

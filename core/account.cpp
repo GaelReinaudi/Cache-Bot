@@ -2,27 +2,18 @@
 
 QStringList s_excludeNameTransContain;
 
-Account::Account() {
+Account::Account(QJsonObject jsonAcc, QObject *parent)
+	:DBobj(jsonAcc["_id"].toString(), parent)
+{
 	s_excludeNameTransContain.append("Online Transfer");
 	s_excludeNameTransContain.append("Credit Card Payment");
 	s_excludeNameTransContain.append("ment to Chase c");
+
+	loadJsonData(jsonAcc);
 }
 
-void Account::loadJsonData(QByteArray jsonData, int afterJday, int beforeJday)
+void Account::loadJsonData(QJsonObject json, int afterJday, int beforeJday)
 {
-//	qDebug() << jsonData;
-//	QFile writeFile("test.out");
-//	if (!writeFile.open(QIODevice::WriteOnly|QIODevice::Append)) {
-//		qWarning(QString("Couldn't open file %1").arg(QFileInfo(writeFile).absoluteFilePath()).toUtf8());
-//		return;
-//	}
-//	writeFile.write(jsonData);
-//	writeFile.close();
-//	return;
-
-	QJsonDocument loadDoc(QJsonDocument::fromJson(jsonData));
-	const QJsonObject& json = loadDoc.object();
-
 	QJsonArray npcArrayAccount = json["accounts"].toArray();
 	for (int npcIndex = 0; npcIndex < npcArrayAccount.size(); ++npcIndex) {
 		QJsonObject npcObject = npcArrayAccount[npcIndex].toObject();
@@ -31,15 +22,11 @@ void Account::loadJsonData(QByteArray jsonData, int afterJday, int beforeJday)
 		QString accountName = npcObject["meta"].toObject()["name"].toString();
 		QString accountType = npcObject["type"].toString();
 		Q_ASSERT(!accountID.isEmpty());
-		if (accountID != "")
-			m_accountIds.push_back(accountID);
 		LOG() << "read account:" << accountID << ": " << accountName << "(" << accountLast4Digits << "): " << accountType << endl;
 
 	}
-	qDebug() << "Account Ids:" << m_accountIds;
-	//qDebug() << jsonData;
 
-	m_allTransactions.read(json["transactions"].toArray(), afterJday, beforeJday);//, m_accountIds);
+	m_allTransactions.read(json["transactions"].toArray(), afterJday, beforeJday);
 	m_predicted.read(json["predicted"].toArray());
 
 	// make a bundle of all the transactions
@@ -58,7 +45,11 @@ bool Account::loadPlaidJson(QString jsonFile, int afterJday, int beforeJday) {
 		return false;
 	}
 	QByteArray jsonData = loadFile.readAll();
-	loadJsonData(jsonData, beforeJday, afterJday);
+
+	QJsonDocument loadDoc(QJsonDocument::fromJson(jsonData));
+	const QJsonObject& json = loadDoc.object();
+
+	loadJsonData(json, beforeJday, afterJday);
 
 	return true;
 }
