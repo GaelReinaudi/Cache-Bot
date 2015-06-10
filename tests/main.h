@@ -116,7 +116,7 @@ private slots:
 	}
 
 	void getBestBot() {
-		CacheRest::Instance()->getBestBot(TEST_USER_ID_3);
+		CacheRest::Instance()->getBestBot(TEST_USER_ID_2);
 		QSignalSpy spyBestBot(CacheRest::Instance()->worker, SIGNAL(repliedBestBot(QString)));
 		QVERIFY(spyBestBot.wait(10000));
 		QCOMPARE(spyBestBot.count(), 1);
