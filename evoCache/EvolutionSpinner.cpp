@@ -102,8 +102,8 @@ void EvolutionSpinner::runEvolution() {
 			//lPopulation.push_back(bestTree);
 
 			evaluateSymbReg(lPopulation, *m_context);
-			calculateStats(lPopulation, i);
 		}
+		calculateStats(lPopulation, lNbrGen);
 		LOG() << "End of evolution" << endl;
 
 		// Outputting best individual

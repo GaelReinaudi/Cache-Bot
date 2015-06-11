@@ -7,20 +7,20 @@ var _ = require('underscore'); // for some utility goodness
 
 // sample route
 app.get('/sample', function(req, res) {
-    var deploySh = child_process.spawn('sh', [ 'test.sh' ], {
-      cwd: '/home/ubuntu/Cache-Bot/expressjs',
-      env:_.extend(process.env, { PATH: process.env.PATH + ':/usr/local/bin' })
+    var deploySh = child_process.spawn('sh', 
+        [ 'test.sh' ], {
+        cwd: '/home/ubuntu/Cache-Bot/expressjs',
+        env:_.extend(process.env, { PATH: process.env.PATH + ':/usr/local/bin' })
     });
     res.send('this is a sample route');
 });
 
-app.get('/cache-bot/extraCash/:user_id', function(req, res) {
+app.get('/cache-bot/fullAnalysis/:user_id', function(req, res) {
     console.log('POST to /cache-bot/extracash/:user_id')
 
-//    var deploySh = spawn('./test', [ 'extraCash:' + req.params.user_id ], {
-    var deploySh = child_process.execFileSync('extraCash',
-        ["123456",], {
-        cwd: '../bin/release',
+    var deploySh = child_process.spawn('sh',
+        ['fullAnalysis.sh', req.params.user_id], {
+        cwd: '/home/ubuntu/Cache-Bot/bin/release',
         env:_.extend(process.env, { PATH: process.env.PATH + ':./' })
     });
     console.log(deploySh)
