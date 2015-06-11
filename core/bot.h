@@ -85,7 +85,9 @@ public:
 		qDebug() << m_botStrings;
 	}
 	void init(BotContext* context) {
+		LIMIT_NUM_FEATURES = MAX_NUM_FEATURES;
 		Puppy::initializeTree(m_puppyTree, *context, m_botStrings);
+		qDebug() << m_puppyTree.toStr();
 	}
 
 	QJsonObject summarize(BotContext* context)

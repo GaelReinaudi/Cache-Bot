@@ -1,5 +1,6 @@
 #include "user.h"
 #include "bot.h"
+#include "fund.h"
 
 void User::injectJsonData(QString jsonStr)
 {
@@ -55,6 +56,20 @@ void User::injectJsonData(QString jsonStr)
 		Transaction* pT = &m_allTransactions.transArray()[i];
 		pT->account->append(pT);
 	}
+
+	//////// "funds"
+	QJsonArray jsonFundArray = jsonObj["funds"].toArray();
+	qDebug() << jsonFundArray.size() << "funds";
+	for (int iF = 0; iF < jsonFundArray.size(); ++iF) {
+		QJsonObject jsonFund = jsonFundArray[iF].toObject();
+		Fund* pFund = new Fund(jsonFund, this);
+		if (pFund->name() == "Extra cash") {
+			m_extraCacheFund = pFund;
+			// set the cashes of the "Extra cash" fund
+			m_extraCacheFund->populate(jsonObj["cashes"].toArray());
+		}
+	}
+
 
 	makeHashBundles();
 

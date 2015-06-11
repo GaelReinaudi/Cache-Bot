@@ -342,57 +342,32 @@ unsigned int Puppy::initializeTreeFull(Puppy::Tree& ioTree,
 
 unsigned int Puppy::initializeTree(Puppy::Tree& ioTree,
 									   Puppy::Context& ioContext,
-									   QStringList& NodeNames,
+									   QStringList& nodeNames,
 									   int depthAtCall /*= 0*/)
 {
-	//for (QString& name : NodeNames)
-	QString name = NodeNames.takeFirst();
-	{
-		PrimitiveHandle prim = ioContext.getPrimitiveByName(name);
-		if(depthAtCall == 0) {
-			PrimitiveHandle lRoot = ioContext.mAccountRoot[0];
-			Q_ASSERT(prim == lRoot);
-		}
-		unsigned int lNodeIndex = ioTree.size();
-		ioTree.push_back(Node(prim->giveReference(ioContext), 0));
-		unsigned int lNbArgs = ioTree[lNodeIndex].mPrimitive->getNumberArguments();
-		unsigned int lTreeSize = 1;
-		++depthAtCall;
-		for(unsigned int i=0; i<lNbArgs; ++i) {
-			lTreeSize += initializeTree(ioTree, ioContext, NodeNames, depthAtCall);
-		}
-		ioTree[lNodeIndex].mSubTreeSize = lTreeSize;
-		return lTreeSize;
+	QString name = "0";
+	// if we exausted the nodeNames, it should be because we have only that meany feature
+	if (nodeNames.isEmpty()) {
+		Q_ASSERT(depthAtCall == DEPTH_OF_FEATURES);
 	}
-
-//	assert(inDepth >= 1);
-//	if(inDepth == 1) {
-//		assert(ioContext.mTerminalSet.size() > 0);
-//		PrimitiveHandle lTerminal =
-//				ioContext.mTerminalSet[ioContext.mRandom(ioContext.mTerminalSet.size())];
-//		ioTree.push_back(Node(lTerminal->giveReference(ioContext), 1));
-//		return 1;
-//	}
-
-//	unsigned int lNodeIndex = ioTree.size();
-//	if(depthAtCall == 0) {
-//		PrimitiveHandle lRoot = ioContext.mAccountRoot[0];
-//		ioTree.push_back(Node(lRoot->giveReference(ioContext), 0));
-//	}
-//	else {
-//		PrimitiveHandle lFunction = depthAtCall == DEPTH_OF_FEATURES
-//									? ioContext.mAccountFeatureSet[ioContext.mRandom(ioContext.mAccountFeatureSet.size())]
-//									: ioContext.mFunctionSet[ioContext.mRandom(ioContext.mFunctionSet.size())];
-//		ioTree.push_back(Node(lFunction->giveReference(ioContext), 0));
-//	}
-//	unsigned int lNbArgs = ioTree[lNodeIndex].mPrimitive->getNumberArguments();
-//	unsigned int lTreeSize = 1;
-//	++depthAtCall;
-//	for(unsigned int i=0; i<lNbArgs; ++i) {
-//		lTreeSize += initializeTreeFull(ioTree, ioContext, inDepth-1, depthAtCall);
-//	}
-//	ioTree[lNodeIndex].mSubTreeSize = lTreeSize;
-//	return lTreeSize;
+	else {
+		name = nodeNames.takeFirst();
+	}
+	PrimitiveHandle prim = ioContext.getPrimitiveByName(name);
+	if(depthAtCall == 0) {
+		PrimitiveHandle lRoot = ioContext.mAccountRoot[0];
+		Q_ASSERT(prim == lRoot);
+	}
+	unsigned int lNodeIndex = ioTree.size();
+	ioTree.push_back(Node(prim->giveReference(ioContext), 0));
+	unsigned int lNbArgs = ioTree[lNodeIndex].mPrimitive->getNumberArguments();
+	unsigned int lTreeSize = 1;
+	++depthAtCall;
+	for(unsigned int i=0; i<lNbArgs; ++i) {
+		lTreeSize += initializeTree(ioTree, ioContext, nodeNames, depthAtCall);
+	}
+	ioTree[lNodeIndex].mSubTreeSize = lTreeSize;
+	return lTreeSize;
 }
 
 

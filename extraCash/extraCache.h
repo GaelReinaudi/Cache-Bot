@@ -15,6 +15,9 @@ protected:
 	void onUserInjected() override;
 	void onBotInjected() override;
 
+private:
+	QDate m_date;
+	int m_d0 = 0;
 };
 
 #endif // EXTRACACHE_H

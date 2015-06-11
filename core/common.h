@@ -51,6 +51,7 @@ public:
 	{
 		m_id = id;
 	}
+	~DBobj() {}
 
 	QString id() const {
 		return m_id;

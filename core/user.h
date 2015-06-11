@@ -7,6 +7,7 @@
 #include "account.h"
 class Bot;
 class BotContext;
+class Fund;
 
 class CORESHARED_EXPORT Bank : public DBobj
 {
@@ -103,6 +104,7 @@ private:
 	TransactionBundle m_allTransBundle;
 	Bot* m_bestBot = 0;
 	BotContext* m_botContext = 0;
+	Fund* m_extraCacheFund = 0;
 };
 
 #endif // USER_H
