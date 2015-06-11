@@ -9,6 +9,7 @@ typedef QMap<uint, TransactionBundle*> HashedBundles;
 class CORESHARED_EXPORT Account : public DBobj
 {
 public:
+	enum Type{Unknown = 0x0, Checking = 0x1, Saving = 0x2, Credit = 0x4};
 	Account(QJsonObject jsonAcc, QObject* parent = 0);
 
 	// loading the json file
@@ -26,10 +27,18 @@ public:
 //	// gives the daily average of outcome for the withinPercentileCost outgoing transactions
 //	double costLiving(double withinPercentileCost);
 
+	double balance() const{
+		return m_balance;
+	}
+
+	Type type() const{ return m_type; }
+
 private:
 	QString m_plaidId;
 	QString m_jsonFilePath = "predicted";
 	TransactionBundle m_allTrans;
+	double m_balance = 0.0;
+	Type m_type = Type::Unknown;
 };
 
 //class Household : public QObject

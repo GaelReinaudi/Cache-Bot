@@ -48,7 +48,19 @@ public:
 		return m_allTransactions;
 	}
 	// TEMP
-	QVector<Transaction*> predictedTransactions() { return QVector<Transaction*>(); }
+	QVector<Transaction*> predictedTransactions() {
+		return QVector<Transaction*>();
+	}
+
+	double balance(Account::Type flagType) const {
+		double bal = 0.0;
+		for (Account* pAcc : m_accounts) {
+			if (pAcc->type() & flagType) {
+				bal += pAcc->balance();
+			}
+		}
+		return bal;
+	}
 
 public slots:
 	void injectJsonData(QString jsonStr);

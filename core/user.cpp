@@ -67,6 +67,7 @@ void User::injectJsonData(QString jsonStr)
 			m_extraCacheFund = pFund;
 			// set the cashes of the "Extra cash" fund
 			m_extraCacheFund->populate(jsonObj["cashes"].toArray());
+			qDebug() << m_extraCacheFund->cashes().size() << "Extra Cashes";
 		}
 	}
 

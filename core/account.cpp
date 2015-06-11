@@ -16,6 +16,18 @@ void Account::loadJsonData(QJsonObject json, int afterJday, int beforeJday)
 	Q_ASSERT(!accountID.isEmpty());
 	LOG() << "read account:" << accountID << ": " << accountName << "(" << accountLast4Digits << "): " << accountType << endl;
 
+	// quick and dirty account type
+	QString metaName = json["meta"].toObject()["name"].toString();
+	if (metaName.contains("saving", Qt::CaseInsensitive)) {
+		m_type = Type::Saving;
+	}
+	if (metaName.contains("checking", Qt::CaseInsensitive)) {
+		m_type = Type::Checking;
+	}
+	if (metaName.contains("credit", Qt::CaseInsensitive)) {
+		m_type = Type::Credit;
+	}
+
 //	predictedTransactions().read(json["predicted"].toArray());
 //
 //	// make a bundle of all the transactions
@@ -76,5 +88,7 @@ bool Account::toJson(QVector<Transaction> transactions, QString category)
 	writeFile.write(saveDoc.toJson());
 	return true;
 }
+
+
 
 
