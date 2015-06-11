@@ -1,0 +1,1653 @@
+11:30:18.226
+read account:55650277792b6d5daa598298: Regular Savings(1983): depository
+read account:55650277792b6d5daa598299: BofA Core Checking(9827): depository
+read account:55650277792b6d5daa598297: BankAmericard Rewards Platinum Plus Visa(2187): credit
+Transaction::read()     -20   date  2457169   name BART-CLIPPER M   cat:[          Travel        Public Transportation Services       ] account                
+Transaction::read()-2.14941   date  2457169   name Zing! Cafe   cat:[        Food and Drink        Restaurants            Cafe       ] account                
+Transaction::read()     -20   date  2457169   name BART-CLIPPER ASHBY   cat:[       ] account                
+Transaction::read()-5.30957   date  2457169   name  Safeway   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()     -20   date  2457170   name BART-CLIPPER M   cat:[          Travel        Public Transportation Services       ] account                
+Transaction::read()     -60   date  2457170   name ATM Withdrawal   cat:[        Transfer        Withdrawal       ] account                
+Transaction::read()     800   date  2457170   name BKOFAMERICA MOBILE 3355629622 DEPOSIT *MOBILE NJ   cat:[        Transfer         Deposit           Check       ] account                
+Transaction::read()    2000   date  2457170   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()-2.14941   date  2457170   name Zing! Cafe   cat:[        Food and Drink        Restaurants            Cafe       ] account                
+Transaction::read()-3.89941   date  2457171   name      CVS   cat:[           Shops        Pharmacies       ] account                
+Transaction::read()     -12   date  2457171   name GITHUB.COM   cat:[       ] account                
+Transaction::read()   -1.75   date  2457172   name RED DOOR COFFEE San FranciscoCA   cat:[       ] account                
+Transaction::read()-24.1396   date  2457172   name  Safeway   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()-10.0898   date  2457173   name Spotify USA   cat:[       ] account                
+Transaction::read()-60.5996   date  2457173   name ANCHOR & HOPE SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read()-2.14941   date  2457175   name Zing! Cafe   cat:[        Food and Drink        Restaurants            Cafe       ] account                
+Transaction::read()-18.7598   date  2457175   name ALPHA MARKET SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read() -4.2998   date  2457175   name SOMA EATS SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read()-10.8594   date  2457175   name VAL DE COLE SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read()     -20   date  2457175   name BART-CLIPPER ASHBY   cat:[       ] account                
+Transaction::read()     -19   date  2457175   name SOUTHERN PACIFIC BREWING SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read()     -20   date  2457175   name BART-CLIPPER M   cat:[          Travel        Public Transportation Services       ] account                
+Transaction::read()-4.86914   date  2457168   name Zing! Cafe   cat:[        Food and Drink        Restaurants            Cafe       ] account                
+Transaction::read()-2.14941   date  2457168   name Zing! Cafe   cat:[        Food and Drink        Restaurants            Cafe       ] account                
+Transaction::read()-8.64941   date  2457165   name GYRO KING SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read()-26.9297   date  2457166   name Whole Foods   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()0.00976562   date  2457165   name Interest Earned   cat:[        Interest        Interest Earned       ] account                
+Transaction::read()-10.8594   date  2457168   name VAL DE COLE SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read()     -20   date  2457163   name BART-CLIPPER ASHBY   cat:[       ] account                
+Transaction::read()     -80   date  2457161   name ATM Withdrawal   cat:[        Transfer        Withdrawal       ] account                
+Transaction::read()       0   date  2457158   name INTEREST CHARGED ON BANK CASH ADVANCES   cat:[        Interest       ] account                
+Transaction::read() 432.369   date  2457156   name Online payment from CHK 9   cat:[         Payment        Credit Card       ] account                
+Transaction::read()-7.59961   date  2457154   name Zing! Cafe   cat:[        Food and Drink        Restaurants            Cafe       ] account                
+Transaction::read()     -12   date  2457151   name Monthly Maintenance Fee   cat:[        Bank Fees       ] account                
+Transaction::read()-17.9297   date  2457148   name Trader Joe's   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()-2.14941   date  2457147   name Zing! Cafe   cat:[        Food and Drink        Restaurants            Cafe       ] account                
+Transaction::read()-13.0391   date  2457145   name VAL DE COLE SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read()-2.14941   date  2457164   name Zing! Cafe   cat:[        Food and Drink        Restaurants            Cafe       ] account                
+Transaction::read()   -1000   date  2457162   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()-2.14941   date  2457159   name Zing! Cafe   cat:[        Food and Drink        Restaurants            Cafe       ] account                
+Transaction::read()    1000   date  2457157   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()     -20   date  2457154   name BART-CLIPPER M #000231966 PURCHASE BART-CLIPPER MONT   cat:[          Travel        Public Transportation Services       ] account                
+Transaction::read()     -21   date  2457154   name THE SOCIAL STUDY RESTSan FranciscoCA   cat:[       ] account                
+Transaction::read()-11.0693   date  2457150   name Trader Joe's   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()-1.48926   date  2457147   name Berkeley Bowl   cat:[           Shops        Food and Beverage Store       ] account                
+Transaction::read()     -30   date  2457145   name NOPALITO INC SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read()     -20   date  2457144   name BART-CLIPPER M #000112083 PURCHASE BART-CLIPPER MONT   cat:[          Travel        Public Transportation Services       ] account                
+Transaction::read()-9.33984   date  2457164   name SUPER DUPER BURGER SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read()-2.14941   date  2457163   name Zing! Cafe   cat:[        Food and Drink        Restaurants            Cafe       ] account                
+Transaction::read()-2.14941   date  2457161   name Zing! Cafe   cat:[        Food and Drink        Restaurants            Cafe       ] account                
+Transaction::read()       0   date  2457158   name INTEREST CHARGED ON DIR DEP&CHK CASHADV   cat:[        Interest       ] account                
+Transaction::read()     -25   date  2457155   name LATE FEE FOR PAYMENT DUE   cat:[        Bank Fees        Late Payment       ] account                
+Transaction::read()    -6.5   date  2457154   name THE SOCIAL STUDY RESTSan FranciscoCA   cat:[       ] account                
+Transaction::read()     -20   date  2457150   name BART-CLIPPER M #000108104 PURCHASE BART-CLIPPER MONT   cat:[          Travel        Public Transportation Services       ] account                
+Transaction::read()     -20   date  2457147   name REDFORD SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read()      -1   date  2457147   name ITUNES.COM/BILL   cat:[       ] account                
+Transaction::read() -9.0791   date  2457164   name SUBWAY 03284296 SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read()-21.4893   date  2457145   name OVERTON ENT SPIBELT   cat:[       ] account                
+Transaction::read() 1750.01   date  2457143   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()     -12   date  2457141   name GITHUB.COM   cat:[       ] account                
+Transaction::read()-2.14941   date  2457165   name Zing! Cafe   cat:[        Food and Drink        Restaurants            Cafe       ] account                
+Transaction::read()    2100   date  2457142   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()-8.64941   date  2457163   name GYRO KING SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read()     -20   date  2457161   name BART-CLIPPER ASHBY   cat:[       ] account                
+Transaction::read()-6.84961   date  2457158   name INTEREST CHARGED ON PURCHASES   cat:[        Interest        Interest Charged       ] account                
+Transaction::read()     -14   date  2457156   name Perdition Smokehouse   cat:[        Food and Drink        Restaurants        Barbecue       ] account                
+Transaction::read()-2.14941   date  2457154   name Zing! Cafe   cat:[        Food and Drink        Restaurants            Cafe       ] account                
+Transaction::read()-25.8896   date  2457151   name Whole Foods   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()-10.0898   date  2457143   name Spotify USA   cat:[       ] account                
+Transaction::read()   -3.25   date  2457140   name Zing! Cafe   cat:[        Food and Drink        Restaurants            Cafe       ] account                
+Transaction::read()-20.1895   date  2457163   name ADOBE *CREATIVE CLOUD   cat:[       ] account                
+Transaction::read() -5.2793   date  2457162   name      CVS   cat:[           Shops        Pharmacies       ] account                
+Transaction::read()     -20   date  2457148   name BART-CLIPPER ASHBY   cat:[       ] account                
+Transaction::read()     -45   date  2457147   name TRADING POST MODERN SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read()     -53   date  2457140   name BLACKBIRD BAR SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read()   -1.75   date  2457145   name RED DOOR COFFEE San FranciscoCA   cat:[       ] account                
+Transaction::read()     -20   date  2457140   name BART-CLIPPER 24TH ST   cat:[       ] account                
+Transaction::read()       0   date  2457158   name INTEREST CHARGED ON BALANCE TRANSFERS   cat:[        Interest       ] account                
+Transaction::read()-432.369   date  2457156   name Online Banking payment to CRD 2187 Confirmation# 3949710093   cat:[        Transfer       ] account                
+Transaction::read()-9.92969   date  2457154   name Zing! Cafe   cat:[        Food and Drink        Restaurants            Cafe       ] account                
+Transaction::read()-8.47949   date  2457152   name TAVA INDIAN KITCHEN SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read()-1.94922   date  2457137   name Zing! Cafe   cat:[        Food and Drink        Restaurants            Cafe       ] account                
+Transaction::read()     -20   date  2457136   name BART-CLIPPER ASHBY   cat:[       ] account                
+Transaction::read()-2.33984   date  2457133   name  PEETS A   cat:[       ] account                
+Transaction::read()-1750.01   date  2457143   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()-21.0098   date  2457140   name Berkeley Bowl   cat:[           Shops        Food and Beverage Store       ] account                
+Transaction::read()-7.50977   date  2457140   name     Uber   cat:[          Travel        Car Service        Ride Share       ] account                
+Transaction::read()-42.9795   date  2457137   name PADRECITO SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read()-44.3594   date  2457136   name UQ POWELL ST US0033 SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read() -6.2998   date  2457133   name McDonald's   cat:[        Food and Drink        Restaurants        Fast Food       ] account                
+Transaction::read()-3.46973   date  2457131   name McDonald's   cat:[        Food and Drink        Restaurants        Fast Food       ] account                
+Transaction::read()-1.94922   date  2457140   name Zing! Cafe   cat:[        Food and Drink        Restaurants            Cafe       ] account                
+Transaction::read()      -7   date  2457140   name     Uber   cat:[          Travel        Car Service        Ride Share       ] account                
+Transaction::read()-8.15918   date  2457137   name CARAMBA MEXICAN FOOD SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read()-7.44922   date  2457135   name HUDSON NEWS ORLANDO   cat:[       ] account                
+Transaction::read()     -20   date  2457138   name BART-CLIPPER ASHBY   cat:[       ] account                
+Transaction::read() -7.3291   date  2457136   name  Wendy's   cat:[        Food and Drink        Restaurants        Fast Food       ] account                
+Transaction::read()  -878.5   date  2457148   name    Check   cat:[        Transfer        Withdrawal           Check       ] account                
+Transaction::read()-3.76953   date  2457133   name   Publix   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()-7.39941   date  2457131   name McDonald's   cat:[        Food and Drink        Restaurants        Fast Food       ] account                
+Transaction::read() 3.76953   date  2457133   name   Publix   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()-92.2393   date  2457131   name PREMIER TRAVEL INN #25   cat:[       ] account                
+Transaction::read()     -55   date  2457129   name NOVELA SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read()       0   date  2457128   name INTEREST CHARGED ON DIR DEP&CHK CASHADV   cat:[        Interest       ] account                
+Transaction::read()     150   date  2457126   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()-6.44922   date  2457126   name SUBWAY 03284296 SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read()    -2.5   date  2457126   name THE CREAMERY SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read()-22.7197   date  2457124   name Trader Joe's   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()     -12   date  2457123   name Monthly Maintenance Fee   cat:[        Bank Fees       ] account                
+Transaction::read()-0.109375   date  2457130   name OVO CAFE INC SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read()-2.14941   date  2457147   name Zing! Cafe   cat:[        Food and Drink        Restaurants            Cafe       ] account                
+Transaction::read()     -20   date  2457145   name CALIFORNIA ACADEMY OF SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read()    -5.5   date  2457144   name SUBWAY 03284296 SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read()-9.08984   date  2457128   name INTEREST CHARGED ON PURCHASES   cat:[        Interest        Interest Charged       ] account                
+Transaction::read()       0   date  2457128   name INTEREST CHARGED ON BALANCE TRANSFERS   cat:[        Interest       ] account                
+Transaction::read()-1.94922   date  2457129   name Zing! Cafe   cat:[        Food and Drink        Restaurants            Cafe       ] account                
+Transaction::read()     763   date  2457127   name Counter Credit   cat:[        Transfer         Deposit           Check       ] account                
+Transaction::read()-1831.41   date  2457126   name Online Banking payment to CRD 2187 Confirmation# 0290782796   cat:[        Transfer       ] account                
+Transaction::read()    -7.5   date  2457126   name BART-CLIPPER ASHBY   cat:[       ] account                
+Transaction::read()      -3   date  2457127   name RED DOOR COFFEE San FranciscoCA   cat:[       ] account                
+Transaction::read()    -150   date  2457126   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()-11.1895   date  2457126   name VAL DE COLE SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read()-2.14941   date  2457126   name Zing! Cafe   cat:[        Food and Drink        Restaurants            Cafe       ] account                
+Transaction::read()     -20   date  2457120   name BART-CLIPPER M #000076669 PURCHASE BART-CLIPPER MONT   cat:[          Travel        Public Transportation Services       ] account                
+Transaction::read()      50   date  2457123   name <SQC ROB O #000190395 REFUND SQC*<SQC ROB OSBO   cat:[        Transfer         Deposit           Check       ] account                
+Transaction::read()     -20   date  2457141   name BART-CLIPPER M #000229701 PURCHASE BART-CLIPPER MONT   cat:[          Travel        Public Transportation Services       ] account                
+Transaction::read()-3.26953   date  2457140   name Walgreens   cat:[           Shops        Pharmacies       ] account                
+Transaction::read()-382.159   date  2457138   name APPLE ONLINE STORE   cat:[       ] account                
+Transaction::read()-4.55957   date  2457137   name      CVS   cat:[           Shops        Pharmacies       ] account                
+Transaction::read()-3.98926   date  2457134   name Walgreens   cat:[           Shops        Pharmacies       ] account                
+Transaction::read()-20.1895   date  2457133   name ADOBE *CREATIVE CLOUD   cat:[       ] account                
+Transaction::read()     -20   date  2457130   name BART-CLIPPER ASHBY   cat:[       ] account                
+Transaction::read()       0   date  2457128   name INTEREST CHARGED ON BANK CASH ADVANCES   cat:[        Interest       ] account                
+Transaction::read()     200   date  2457126   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()     -20   date  2457127   name BART-CLIPPER M #000126982 PURCHASE BART-CLIPPER MONT   cat:[          Travel        Public Transportation Services       ] account                
+Transaction::read()    -200   date  2457126   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()-3.37988   date  2457126   name Berkeley Bowl   cat:[           Shops        Food and Beverage Store       ] account                
+Transaction::read()-19.0391   date  2457126   name Berkeley Bowl   cat:[           Shops        Food and Beverage Store       ] account                
+Transaction::read()-17.5195   date  2457124   name Pegasus Books   cat:[           Shops        Bookstores       ] account                
+Transaction::read()-11.8799   date  2457122   name Whole Foods   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()   -1.75   date  2457120   name RED DOOR COFFEE San FranciscoCA   cat:[       ] account                
+Transaction::read()-40.9199   date  2457119   name     Uber   cat:[          Travel        Car Service        Ride Share       ] account                
+Transaction::read()-1.94922   date  2457119   name Zing! Cafe   cat:[        Food and Drink        Restaurants            Cafe       ] account                
+Transaction::read()    1000   date  2457115   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()      -3   date  2457113   name BART-CLIPPER M #000036676 PURCHASE BART-CLIPPER MONT   cat:[          Travel        Public Transportation Services       ] account                
+Transaction::read()-54.7295   date  2457126   name SOMA WINE AND SPIRITS SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read()-70.3398   date  2457124   name BILL PAYMENT   cat:[       ] account                
+Transaction::read()     -18   date  2457123   name   HEROKU   cat:[       ] account                
+Transaction::read()-205.699   date  2457120   name AMERICAN AI 0012300911638DALLAS   cat:[       ] account                
+Transaction::read()      -7   date  2457119   name 111 MINNA ST GALLERY LLC SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read()      -3   date  2457119   name Philz Coffee   cat:[        Food and Drink        Restaurants        Coffee Shop       ] account                
+Transaction::read()     -20   date  2457115   name BART-CLIPPER M #000130720 PURCHASE BART-CLIPPER MONT   cat:[          Travel        Public Transportation Services       ] account                
+Transaction::read()-11.0791   date  2457114   name Berkeley Bowl   cat:[           Shops        Food and Beverage Store       ] account                
+Transaction::read()      -7   date  2457112   name 111 MINNA ST GALLERY LLC SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read() 1831.41   date  2457126   name Online payment from CHK 9   cat:[         Payment        Credit Card       ] account                
+Transaction::read()      -3   date  2457126   name Philz Coffee   cat:[        Food and Drink        Restaurants        Coffee Shop       ] account                
+Transaction::read()     -17   date  2457126   name Toast Inc   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()    -100   date  2457121   name ATM Withdrawal   cat:[        Transfer        Withdrawal       ] account                
+Transaction::read()    1000   date  2457119   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()-22.9893   date  2457119   name Berkeley Bowl   cat:[           Shops        Food and Beverage Store       ] account                
+Transaction::read()-11.9795   date  2457117   name Walgreens   cat:[           Shops        Pharmacies       ] account                
+Transaction::read()     -20   date  2457115   name CLIPPER #3014 SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read()-28.5996   date  2457113   name Walgreens   cat:[           Shops        Pharmacies       ] account                
+Transaction::read()   -1000   date  2457119   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()-1.94922   date  2457112   name Zing! Cafe   cat:[        Food and Drink        Restaurants            Cafe       ] account                
+Transaction::read()     -12   date  2457110   name GH GITHUB.COM   cat:[       ] account                
+Transaction::read()-1.94922   date  2457112   name Zing! Cafe   cat:[        Food and Drink        Restaurants            Cafe       ] account                
+Transaction::read()  -11.25   date  2457123   name BART-CLIPPER M #000218570 PURCHASE BART-CLIPPER MONT   cat:[          Travel        Public Transportation Services       ] account                
+Transaction::read()   -3.25   date  2457119   name Philz Coffee   cat:[        Food and Drink        Restaurants        Coffee Shop       ] account                
+Transaction::read()-9.47949   date  2457109   name Walgreens   cat:[           Shops        Pharmacies       ] account                
+Transaction::read()-1.95996   date  2457108   name THE BEANERY 1   cat:[       ] account                
+Transaction::read()   -1.75   date  2457110   name RED DOOR COFFEE San FranciscoCA   cat:[       ] account                
+Transaction::read()-15.2393   date  2457121   name Whole Foods   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()-15.6895   date  2457116   name Berkeley Bowl   cat:[           Shops        Food and Beverage Store       ] account                
+Transaction::read()     -12   date  2457114   name BART-CLIPPER EMBARCADERO   cat:[       ] account                
+Transaction::read()     -20   date  2457108   name BART-CLIPPER CIVIC CTR   cat:[       ] account                
+Transaction::read() -1.2998   date  2457107   name  Chevron   cat:[          Travel        Gas Stations       ] account                
+Transaction::read()-9.56934   date  2457112   name Walgreens   cat:[           Shops        Pharmacies       ] account                
+Transaction::read()-0.889648   date  2457110   name Foreign Transaction Fee   cat:[        Bank Fees        Foreign Transaction       ] account                
+Transaction::read()-11.1494   date  2457109   name SUPER DUPER BURGER SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read()-26.0293   date  2457107   name Walgreens   cat:[           Shops        Pharmacies       ] account                
+Transaction::read()    -2.5   date  2457106   name RED DOOR COFFEE San FranciscoCA   cat:[       ] account                
+Transaction::read()-1.94922   date  2457106   name PEET'S #21502 SAN FRANSISCOCA   cat:[       ] account                
+Transaction::read()-6.58984   date  2457108   name Berkeley Bowl   cat:[           Shops        Food and Beverage Store       ] account                
+Transaction::read() -5.5293   date  2457107   name ALPHA MARKET SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read()    -490   date  2457119   name 0404 SQC*ANDREY FEDOROV 877-417-4551 CA   cat:[         Service        Personal Care       ] account                
+Transaction::read()    2000   date  2457105   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read() -6.5293   date  2457105   name Cafe Venetia   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read() -5.5498   date  2457106   name BART ASHBY STATION QPS   cat:[       ] account                
+Transaction::read()   -3.75   date  2457107   name RESTRANT REVEILLE COFSan FranciscoCA   cat:[       ] account                
+Transaction::read()-43.0596   date  2457106   name Whole Foods   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()   -2232   date  2457106   name    Check   cat:[        Transfer        Withdrawal           Check       ] account                
+Transaction::read()-13.3291   date  2457106   name ALPHA MARKET SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read()     -12   date  2457105   name 0320 SQC*ANDREY FEDOROV . / CA   cat:[        Transfer         Deposit       ] account                
+Transaction::read()-1.94922   date  2457105   name PEET'S #21502 SAN FRANSISCOCA   cat:[       ] account                
+Transaction::read()  -26.21   date  2457119   name AMAZON MKTPLACE PMTS AMZN.COM/BILLWA   cat:[       ] account                
+Transaction::read()-4.68945   date  2457103   name Walgreens   cat:[           Shops        Pharmacies       ] account                
+Transaction::read()-8.94922   date  2457102   name BUDGET RENTACARTOLLS   cat:[       ] account                
+Transaction::read()    2500   date  2457105   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()   -2500   date  2457105   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()-30.6191   date  2457116   name AMAZON MKTPLACE PMTS AMZN.COM/BILLWA   cat:[       ] account                
+Transaction::read()   -4.25   date  2457100   name 0316 LA BOULANGE DE COLE SAN FRANCISCOCA   cat:[        Transfer         Deposit       ] account                
+Transaction::read()-33.9795   date  2457098   name Whole Foods   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()      -3   date  2457105   name FOODMKT FLYWHEEL COFFSan FranciscoCA   cat:[       ] account                
+Transaction::read()-3.23926   date  2457103   name STANFORD UNIV BKST #670   cat:[       ] account                
+Transaction::read()      -1   date  2457114   name BART-CLIPPER ASHBY   cat:[       ] account                
+Transaction::read()     -40   date  2457105   name 0322 SQC*MICHAEL WASSER . / CA   cat:[        Transfer         Deposit       ] account                
+Transaction::read()-10.8594   date  2457098   name VAL DE COLE SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read()-22.7998   date  2457105   name Whole Foods   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()-1.94922   date  2457101   name PEET'S #21502 SAN FRANSISCOCA   cat:[       ] account                
+Transaction::read()-18.2393   date  2457105   name VAL DE COLE SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read()-2.21973   date  2457105   name Walgreens   cat:[           Shops        Pharmacies       ] account                
+Transaction::read()-7.36914   date  2457098   name Walgreens   cat:[           Shops        Pharmacies       ] account                
+Transaction::read() -6.0791   date  2457103   name Walgreens   cat:[           Shops        Pharmacies       ] account                
+Transaction::read()-2.15918   date  2457102   name      CVS   cat:[           Shops        Pharmacies       ] account                
+Transaction::read()-10.0898   date  2457112   name Spotify USA   cat:[       ] account                
+Transaction::read()-29.9893   date  2457110   name Paradox Stockholm   cat:[       ] account                
+Transaction::read()      -2   date  2457109   name Zing! Cafe   cat:[        Food and Drink        Restaurants            Cafe       ] account                
+Transaction::read()-17.5195   date  2457100   name  Safeway   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()-20.1895   date  2457102   name ADOBE SYSTEMS INC.   cat:[       ] account                
+Transaction::read()-1.94922   date  2457100   name PEET'S #21502 SAN FRANSISCOCA   cat:[       ] account                
+Transaction::read()       0   date  2457096   name INTEREST CHARGED ON DIR DEP&CHK CASHADV   cat:[        Interest       ] account                
+Transaction::read()0.00976562   date  2457107   name Interest Earned   cat:[        Interest        Interest Earned       ] account                
+Transaction::read()     -20   date  2457107   name BART-CLIPPER ROCKRIDGE   cat:[       ] account                
+Transaction::read()     -10   date  2457101   name BART-CLIPPER POWELL   cat:[       ] account                
+Transaction::read()-1.94922   date  2457098   name PEET'S #21502 SAN FRANSISCOCA   cat:[       ] account                
+Transaction::read()-1.19922   date  2457098   name BART-CLIPPER W   cat:[       ] account                
+Transaction::read()  758.56   date  2457098   name Online payment from CHK 9   cat:[         Payment        Credit Card       ] account                
+Transaction::read() -758.56   date  2457098   name Online Banking payment to CRD 2187 Confirmation# 3844060463   cat:[        Transfer       ] account                
+Transaction::read()     -25   date  2457094   name LATE FEE FOR PAYMENT DUE   cat:[        Bank Fees        Late Payment       ] account                
+Transaction::read()-1.94922   date  2457096   name PEET'S #21502 SAN FRANSISCOCA   cat:[       ] account                
+Transaction::read()-19.1396   date  2457096   name Bristol Farms   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()0.0595703   date  2457098   name INTEREST REF CASH ADVANCES MAR   cat:[        Interest        Interest Earned       ] account                
+Transaction::read()-0.719727   date  2457096   name INTEREST CHARGED ON BANK CASH ADVANCES   cat:[        Interest        Interest Charged       ] account                
+Transaction::read()-6.96973   date  2457096   name Whole Foods   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()-9.16992   date  2457106   name ALPHA MARKET SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read()-8.19922   date  2457105   name Alpha Market   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()-8.47949   date  2457092   name ALPHA MARKET SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read()-2.31934   date  2457091   name DUNKIN #349419 Q35   cat:[       ] account                
+Transaction::read()-9.69922   date  2457091   name ExxonMobil   cat:[          Travel        Gas Stations       ] account                
+Transaction::read()-2.98926   date  2457093   name Walgreens   cat:[           Shops        Pharmacies       ] account                
+Transaction::read()     -20   date  2457105   name CLIPPER #3014 SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read()-1.64941   date  2457105   name Le Boulanger   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()     -18   date  2457092   name   HEROKU   cat:[       ] account                
+Transaction::read()-67.8799   date  2457092   name BILL PAYMENT   cat:[       ] account                
+Transaction::read()-58.3691   date  2457091   name BUDGET RENT-A-CAR EAST ELMHURSTNY   cat:[       ] account                
+Transaction::read() -3.2793   date  2457098   name Walgreens   cat:[           Shops        Pharmacies       ] account                
+Transaction::read()   -3.25   date  2457098   name Walgreens   cat:[           Shops        Pharmacies       ] account                
+Transaction::read()       0   date  2457096   name INTEREST CHARGED ON BALANCE TRANSFERS   cat:[        Interest       ] account                
+Transaction::read()      -8   date  2457095   name GP*TRADING POST MODERN SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read()   -2.75   date  2457092   name BLUE BOTTLE COFFEE MSan FranciscoCA   cat:[       ] account                
+Transaction::read() 2000.01   date  2457091   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()-8.09961   date  2457091   name BART-CLIPPER SFO CONCRS   cat:[       ] account                
+Transaction::read()-5.89941   date  2457091   name Colectivo Coffee   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()-21.2793   date  2457089   name U.S. Post Office   cat:[        Community        Government Departments and Agencies       ] account                
+Transaction::read()     -10   date  2457088   name OVERDRAFT PROTECTION TRANSACTION FEE   cat:[        Bank Fees        Overdraft       ] account                
+Transaction::read()    -100   date  2457084   name ATM Withdrawal   cat:[        Transfer        Withdrawal       ] account                
+Transaction::read()-7.71973   date  2457091   name Antonio's Pizza   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()     100   date  2457088   name OVERDRAFT PROTECTION FROM   cat:[        Transfer          Credit       ] account                
+Transaction::read()-4.44922   date  2457103   name PEET'S #21502 SAN FRANSISCOCA   cat:[       ] account                
+Transaction::read()     -68   date  2457091   name CLIPPER SERVICE #3106 SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read()      -3   date  2457091   name SAINT FRANK COFFEE San FranciscoCA   cat:[       ] account                
+Transaction::read()    -100   date  2457088   name OVERDRAFT PROTECTION TO   cat:[        Bank Fees        Overdraft       ] account                
+Transaction::read()    -2.5   date  2457085   name La Colombe   cat:[        Food and Drink        Restaurants        Coffee Shop       ] account                
+Transaction::read()      -3   date  2457084   name Lost Weekend NYC   cat:[        Food and Drink        Restaurants        Coffee Shop       ] account                
+Transaction::read()     -21   date  2457084   name Upper West Side   cat:[        Recreation       ] account                
+Transaction::read()-19.6299   date  2457085   name Trader Joe's   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()-7.56934   date  2457084   name P.s Burgers   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()    -2.5   date  2457084   name La Colombe   cat:[        Food and Drink        Restaurants        Coffee Shop       ] account                
+Transaction::read()-5.42969   date  2457080   name Duane Reade   cat:[           Shops        Pharmacies       ] account                
+Transaction::read()-6.75977   date  2457101   name ALPHA MARKET SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read()-11.5791   date  2457099   name 0315 ALPHA MARKET SAN FRANCISCOCA   cat:[           Shops        Food and Beverage Store       ] account                
+Transaction::read()-2000.01   date  2457091   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read() -1.5791   date  2457091   name PARADIES # 059 Q02   cat:[       ] account                
+Transaction::read()-20.4893   date  2457091   name    Shell   cat:[          Travel        Gas Stations       ] account                
+Transaction::read() -1.7998   date  2457089   name McDonald's   cat:[        Food and Drink        Restaurants        Fast Food       ] account                
+Transaction::read() 3.25977   date  2457098   name INTEREST REF PURCHASES MAR   cat:[        Interest        Interest Earned       ] account                
+Transaction::read()      -5   date  2457098   name CLIPPER SERVICE #3106 SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read()     -15   date  2457077   name 0222 SQC*JESS.CORDING@GM 877-417-4551 CA   cat:[         Service        Personal Care       ] account                
+Transaction::read()     -18   date  2457080   name TRAVEL INSURANCE POLICY   cat:[       ] account                
+Transaction::read()      -3   date  2457084   name Lost Weekend NYC   cat:[        Food and Drink        Restaurants        Coffee Shop       ] account                
+Transaction::read()-7.43945   date  2457096   name INTEREST CHARGED ON PURCHASES   cat:[        Interest        Interest Charged       ] account                
+Transaction::read()-12.9697   date  2457095   name ALPHA MARKET SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read()-19.9199   date  2457092   name  Safeway   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()0.00976562   date  2457077   name Interest Earned   cat:[        Interest        Interest Earned       ] account                
+Transaction::read()     -12   date  2457082   name GH GITHUB.COM   cat:[       ] account                
+Transaction::read()-2.48926   date  2457079   name Hudson Square Pharmacy   cat:[           Shops        Pharmacies       ] account                
+Transaction::read()     -40   date  2457077   name MTA MVM*HOUSTON STREET   cat:[       ] account                
+Transaction::read()    -100   date  2457091   name ATM Withdrawal   cat:[        Transfer        Withdrawal       ] account                
+Transaction::read() -3.7998   date  2457091   name DUNKIN #342262 Q35   cat:[       ] account                
+Transaction::read()      -3   date  2457077   name La Colombe   cat:[        Food and Drink        Restaurants        Coffee Shop       ] account                
+Transaction::read()-20.1895   date  2457074   name ADOBE SYSTEMS INC.   cat:[       ] account                
+Transaction::read()    -2.5   date  2457072   name La Colombe   cat:[        Food and Drink        Restaurants        Coffee Shop       ] account                
+Transaction::read()   -18.5   date  2457075   name Ehrlich Wines & Spirits   cat:[           Shops        Food and Beverage Store        Beer/Wine and Spirits       ] account                
+Transaction::read()     -99   date  2457073   name AmazonPrime Membership amzn.com/prmeNV   cat:[       ] account                
+Transaction::read()-11.9492   date  2457074   name Murray's Cheese   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()   -2.75   date  2457087   name RESTRANT JOE COFFEE CNew   cat:[       ] account                
+Transaction::read()   -11.5   date  2457084   name Chipotle Mexican Grill   cat:[        Food and Drink        Restaurants        Fast Food       ] account                
+Transaction::read()     -26   date  2457084   name Mughlai Indian Cuisine   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()-1.05957   date  2457091   name    Shell   cat:[          Travel        Gas Stations       ] account                
+Transaction::read()    -2.5   date  2457073   name La Colombe   cat:[        Food and Drink        Restaurants        Coffee Shop       ] account                
+Transaction::read()      -3   date  2457071   name La Colombe   cat:[        Food and Drink        Restaurants        Coffee Shop       ] account                
+Transaction::read()-5.59961   date  2457081   name SOUTHWES 5262486490740800-435-9792   cat:[       ] account                
+Transaction::read()-5.42969   date  2457072   name Duane Reade   cat:[           Shops        Pharmacies       ] account                
+Transaction::read()    -2.5   date  2457089   name La Colombe   cat:[        Food and Drink        Restaurants        Coffee Shop       ] account                
+Transaction::read()      -5   date  2457071   name DUNKIN #340355 Q35   cat:[       ] account                
+Transaction::read()-5.69922   date  2457068   name INTEREST CHARGED ON BANK CASH ADVANCES   cat:[        Interest        Interest Charged       ] account                
+Transaction::read()-5.72949   date  2457078   name Whole Foods   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()     -34   date  2457077   name   Anfora   cat:[        Food and Drink             Bar        Wine Bar       ] account                
+Transaction::read()   -2000   date  2457087   name    Check   cat:[        Transfer        Withdrawal           Check       ] account                
+Transaction::read()    2500   date  2457084   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()     -18   date  2457065   name   HEROKU   cat:[       ] account                
+Transaction::read()     -20   date  2457064   name El Centro   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read() 2560.11   date  2457058   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()     -46   date  2457070   name  Bettola   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()       0   date  2457068   name INTEREST CHARGED ON BALANCE TRANSFERS   cat:[        Interest       ] account                
+Transaction::read()-1.98926   date  2457064   name Iconic Café   cat:[        Food and Drink        Restaurants        Coffee Shop       ] account                
+Transaction::read()     -40   date  2457063   name MTA MVM*116TH ST/COLUMB   cat:[       ] account                
+Transaction::read()      -3   date  2457074   name La Colombe   cat:[        Food and Drink        Restaurants        Coffee Shop       ] account                
+Transaction::read()-9.16992   date  2457072   name Whole Foods   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()-20.3896   date  2457071   name Whole Foods   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()-5.41992   date  2457070   name Hudson Square Pharmacy   cat:[           Shops        Pharmacies       ] account                
+Transaction::read()-21.7598   date  2457070   name Ehrlich Wines & Spirits   cat:[           Shops        Food and Beverage Store        Beer/Wine and Spirits       ] account                
+Transaction::read()      -3   date  2457084   name Lost Weekend NYC   cat:[        Food and Drink        Restaurants        Coffee Shop       ] account                
+Transaction::read()-11.9697   date  2457082   name Ehrlich Wines & Spirits   cat:[           Shops        Food and Beverage Store        Beer/Wine and Spirits       ] account                
+Transaction::read()-14.0996   date  2457067   name Masala Times NY   cat:[       ] account                
+Transaction::read()      -9   date  2457064   name METRO-NORTH TVM & TOM   cat:[       ] account                
+Transaction::read()       0   date  2457068   name INTEREST CHARGED ON PURCHASES   cat:[        Interest       ] account                
+Transaction::read()-2.05957   date  2457065   name Pret A Manger   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()      -5   date  2457064   name La Colombe   cat:[        Food and Drink        Restaurants        Coffee Shop       ] account                
+Transaction::read()-2560.11   date  2457058   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()   -2.25   date  2457056   name Ground Support   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()-1198.51   date  2457052   name Online Banking payment to CRD 2187 Confirmation# 0454730955   cat:[        Transfer       ] account                
+Transaction::read()    -100   date  2457051   name ATM Withdrawal   cat:[        Transfer        Withdrawal       ] account                
+Transaction::read()     -65   date  2457056   name Arte Cafe   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()-82.4795   date  2457053   name BILL PAYMENT   cat:[       ] account                
+Transaction::read()-2.68945   date  2457052   name Gristedes   cat:[         Service        Financial        Banking and Finance       ] account                
+Transaction::read()-1090.16   date  2457058   name    Check   cat:[        Transfer        Withdrawal           Check       ] account                
+Transaction::read()0.00976562   date  2457049   name Interest Earned   cat:[        Interest        Interest Earned       ] account                
+Transaction::read()     -12   date  2457060   name Monthly Maintenance Fee   cat:[        Bank Fees       ] account                
+Transaction::read()-23.8896   date  2457078   name Gourmet Garage East   cat:[         Service        Automotive        Maintenance and Repair       ] account                
+Transaction::read()      99   date  2457077   name AmazonPrime Membership amzn.com/prmeNV   cat:[       ] account                
+Transaction::read()-32.2998   date  2457056   name Whole Foods   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read() 439.899   date  2457052   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()-3.90918   date  2457056   name DUNKIN #340355 Q35   cat:[       ] account                
+Transaction::read()-8.65918   date  2457053   name POTJANEE THAI RESTAURNew   cat:[       ] account                
+Transaction::read()   -3.75   date  2457074   name AMY'S BREAD THE VILL   cat:[       ] account                
+Transaction::read()-83.9893   date  2457072   name Banana Republic   cat:[           Shops        Clothing and Accessories       ] account                
+Transaction::read()     -12   date  2457051   name GH GITHUB.COM   cat:[       ] account                
+Transaction::read() 1198.51   date  2457052   name ONLINE PAYMENT FROM CHK 9   cat:[         Payment        Credit Card       ] account                
+Transaction::read()   -5.75   date  2457050   name DUNKIN #341139 Q35   cat:[       ] account                
+Transaction::read()-10.5498   date  2457044   name Murray's Cheese   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()-3.26953   date  2457043   name DUNKIN #340355 Q35   cat:[       ] account                
+Transaction::read()-6.98926   date  2457043   name AMAZON MKTPLACE PMTS AMZN.COM/BILLWA   cat:[       ] account                
+Transaction::read()-439.899   date  2457052   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()-33.7393   date  2457051   name Duane Reade   cat:[           Shops        Pharmacies       ] account                
+Transaction::read()     -40   date  2457049   name MTA MVM*HOUSTON STREET   cat:[       ] account                
+Transaction::read()-14.0996   date  2457071   name    Essen   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()-3.80957   date  2457070   name Hudson Square Pharmacy   cat:[           Shops        Pharmacies       ] account                
+Transaction::read()       0   date  2457068   name INTEREST CHARGED ON DIR DEP&CHK CASHADV   cat:[        Interest       ] account                
+Transaction::read()    -9.5   date  2457043   name Ocean Wine Spirits   cat:[           Shops        Food and Beverage Store        Beer/Wine and Spirits       ] account                
+Transaction::read()-20.3398   date  2457043   name Whole Foods   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()-20.1895   date  2457047   name ADOBE SYSTEMS INC.   cat:[       ] account                
+Transaction::read()-3.26953   date  2457043   name DUNKIN #340355 Q35   cat:[       ] account                
+Transaction::read()-7.87988   date  2457038   name Murray's Cheese   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()-1.86914   date  2457036   name Interest Charged on Bank Cash Advances   cat:[        Interest        Interest Charged       ] account                
+Transaction::read()      -4   date  2457040   name La Colombe   cat:[        Food and Drink        Restaurants        Coffee Shop       ] account                
+Transaction::read()-39.7393   date  2457037   name MOO.COM www moo com   cat:[       ] account                
+Transaction::read()-2.16992   date  2457049   name Hudson Square Pharmacy   cat:[           Shops        Pharmacies       ] account                
+Transaction::read()    -100   date  2457043   name ATM Withdrawal   cat:[        Transfer        Withdrawal       ] account                
+Transaction::read()      -9   date  2457064   name METRO-NORTH TVM & TOM   cat:[       ] account                
+Transaction::read()      -5   date  2457043   name WPY*Extra Credit General   cat:[       ] account                
+Transaction::read()       5   date  2457063   name WPY*Extra Credit General   cat:[       ] account                
+Transaction::read()-2.17969   date  2457035   name DUNKIN #340355 Q35   cat:[       ] account                
+Transaction::read()     -10   date  2457033   name OVERDRAFT PROTECTION TRANSACTION FEE   cat:[        Bank Fees        Overdraft       ] account                
+Transaction::read()   -7.75   date  2457031   name TAIM NOLITA   cat:[       ] account                
+Transaction::read()-1068.61   date  2457029   name    Check   cat:[        Transfer        Withdrawal           Check       ] account                
+Transaction::read()-3.68945   date  2457025   name DUNKIN #307834 Q35   cat:[       ] account                
+Transaction::read()-1.78906   date  2457043   name Murray's Cheese   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()     -71   date  2457040   name Chez Moi   cat:[        Food and Drink        Restaurants          French       ] account                
+Transaction::read()     -18   date  2457037   name   HEROKU   cat:[       ] account                
+Transaction::read()      -3   date  2457039   name Ground Support   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()-52.1299   date  2457037   name DNH*GODADDY.COM   cat:[       ] account                
+Transaction::read()     -80   date  2457035   name ATM Withdrawal   cat:[        Transfer        Withdrawal       ] account                
+Transaction::read()-33.0098   date  2457035   name Apotheke   cat:[        Food and Drink             Bar       ] account                
+Transaction::read() 500.699   date  2457031   name ONLINE PAYMENT FROM SAV 1   cat:[         Payment        Credit Card       ] account                
+Transaction::read()-8.66992   date  2457058   name Trader Joe's   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()-8.36914   date  2457054   name Five Guys   cat:[        Food and Drink        Restaurants        Fast Food       ] account                
+Transaction::read()    2500   date  2457052   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()-15.4795   date  2457051   name Duane Reade   cat:[           Shops        Pharmacies       ] account                
+Transaction::read() 1499.31   date  2457035   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()-82.3291   date  2457035   name BILL PAYMENT   cat:[       ] account                
+Transaction::read()-500.699   date  2457031   name Online Banking payment to CRD 2187 Confirmation# 0472857494   cat:[        Transfer       ] account                
+Transaction::read()-6.37988   date  2457031   name      CVS   cat:[           Shops        Pharmacies       ] account                
+Transaction::read()     -40   date  2457028   name MTA MVM*34TH STREET/SIX   cat:[       ] account                
+Transaction::read()-10.0898   date  2457022   name Spotify USA   cat:[       ] account                
+Transaction::read()-1499.31   date  2457035   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()     -18   date  2457030   name Papillon   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()      -3   date  2457028   name Ground Support   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()   -21.5   date  2457011   name METRO-NORTH TVM & TOM   cat:[       ] account                
+Transaction::read()   -6.75   date  2457008   name     Taim   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()-4.87988   date  2457049   name Hudson Square Pharmacy   cat:[           Shops        Pharmacies       ] account                
+Transaction::read()     -23   date  2457044   name      Von   cat:[        Food and Drink             Bar       ] account                
+Transaction::read()-1.78906   date  2457043   name Murray's Cheese   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()   -6.75   date  2457043   name     Taim   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()-2.16992   date  2457037   name Hudson Square Pharmacy   cat:[           Shops        Pharmacies       ] account                
+Transaction::read()    -700   date  2457033   name OVERDRAFT PROT ACCT   cat:[        Bank Fees        Overdraft       ] account                
+Transaction::read()     -75   date  2457031   name       BT   cat:[       ] account                
+Transaction::read()-18.5195   date  2457025   name   Savona   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()0.00976562   date  2457016   name Interest Earned   cat:[        Interest        Interest Earned       ] account                
+Transaction::read()-1.08984   date  2457008   name DUNKIN #340355 Q35   cat:[       ] account                
+Transaction::read()-10.3496   date  2457030   name Little Rascal   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()    2500   date  2457023   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read() 13.5098   date  2457014   name <BRENDA OS #000320004 REFUND SQC*<BRENDA OSBOR   cat:[        Transfer         Deposit           Check       ] account                
+Transaction::read()-6.51953   date  2457008   name Murray's Cheese   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read() -4.7793   date  2457004   name Duane Reade   cat:[           Shops        Pharmacies       ] account                
+Transaction::read()     -17   date  2457001   name  Silvana   cat:[        Food and Drink        Restaurants        Middle Eastern       ] account                
+Transaction::read()     -80   date  2456996   name ATM Withdrawal   cat:[        Transfer        Withdrawal       ] account                
+Transaction::read()-7.59961   date  2457007   name Fresh Tortillas Express   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()      -4   date  2457007   name Ground Support   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()     -10   date  2457026   name WIKIMEDIA 8776009454   cat:[       ] account                
+Transaction::read()     -12   date  2457022   name GH GITHUB.COM   cat:[       ] account                
+Transaction::read()-20.1895   date  2457012   name ADOBE SYSTEMS INC.   cat:[       ] account                
+Transaction::read()-7.59961   date  2457008   name Fresh Tortillas Express   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()     700   date  2457035   name OVERDRAFT PROTECTION FROM   cat:[        Transfer          Credit       ] account                
+Transaction::read()-11.4199   date  2457035   name Murray's Cheese   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()     -23   date  2457003   name Tartinery   cat:[        Food and Drink        Restaurants          French       ] account                
+Transaction::read()-5.42969   date  2457000   name Duane Reade   cat:[           Shops        Pharmacies       ] account                
+Transaction::read()-2567.98   date  2456996   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()     -12   date  2457002   name Monthly Maintenance Fee   cat:[        Bank Fees       ] account                
+Transaction::read()   -6.75   date  2456996   name     Taim   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()   -1200   date  2457032   name    Check   cat:[        Transfer        Withdrawal           Check       ] account                
+Transaction::read()-14.9893   date  2457005   name WWW.1AND1.COM   cat:[       ] account                
+Transaction::read()   -6.75   date  2456997   name     Taim   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read() 960.189   date  2456996   name ONLINE PAYMENT FROM CHK 9   cat:[         Payment        Credit Card       ] account                
+Transaction::read()-9.98926   date  2456993   name Spotify USA   cat:[       ] account                
+Transaction::read()    -2.5   date  2456986   name EFX #000516588 WITHDRWL 119D HESTER ST   cat:[        Bank Fees       ] account                
+Transaction::read()     -35   date  2456983   name Port Authority Of Ny&nj   cat:[         Service        Transportation       ] account                
+Transaction::read()      -8   date  2457031   name Fresh Tortillas Express   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()    2500   date  2456995   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()     -35   date  2457002   name  Buvette   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read() 2567.98   date  2456996   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()-3.62988   date  2456996   name Amazon Web Services aws.amazon.coWA   cat:[       ] account                
+Transaction::read()-2.17969   date  2457029   name DUNKIN #340355 Q35   cat:[       ] account                
+Transaction::read()   -24.5   date  2457025   name COACHUSA/MEGABUS WWW.MEGABUS.CNJ   cat:[       ] account                
+Transaction::read()   -2.75   date  2456995   name MTA MVM*BOROUGH HALL   cat:[       ] account                
+Transaction::read()-2.17969   date  2456990   name DUNKIN #340112 Q35   cat:[       ] account                
+Transaction::read()-9.50977   date  2456995   name Morton Williams   cat:[       ] account                
+Transaction::read()     -12   date  2456990   name GITHUB.COM   cat:[       ] account                
+Transaction::read()-19.9893   date  2457018   name 1225 SQC*BRENDA OSBORN 877-417-4551 CA   cat:[         Service        Personal Care       ] account                
+Transaction::read()   -6.75   date  2456979   name TAIM NOLITA   cat:[       ] account                
+Transaction::read()-82.3291   date  2456986   name BILL PAYMENT   cat:[       ] account                
+Transaction::read()-7.59961   date  2456986   name Fresh Tortillas Express   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()     -18   date  2457009   name   HEROKU   cat:[       ] account                
+Transaction::read()-2.37988   date  2456987   name DUNKIN #341139 Q35   cat:[       ] account                
+Transaction::read()   -6.75   date  2456975   name     Taim   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()-2.37988   date  2456982   name DUNKIN #341139 Q35   cat:[       ] account                
+Transaction::read()   -21.5   date  2456979   name METRO-NORTH TVM & TOM   cat:[       ] account                
+Transaction::read()     -80   date  2457007   name ATM Withdrawal   cat:[        Transfer        Withdrawal       ] account                
+Transaction::read()0.00976562   date  2456983   name Interest Earned   cat:[        Interest        Interest Earned       ] account                
+Transaction::read()-82.3291   date  2456973   name BILL PAYMENT   cat:[       ] account                
+Transaction::read()-6.31934   date  2456974   name Interest Charged on Purchases   cat:[        Interest        Interest Charged       ] account                
+Transaction::read()-20.1895   date  2456982   name ADOBE SYSTEMS INC.   cat:[       ] account                
+Transaction::read()     -40   date  2457003   name MTA MVM*GRAND STREET   cat:[       ] account                
+Transaction::read()-7.59961   date  2456970   name Fresh Tortillas Express   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()   -6.75   date  2456965   name     Taim   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read() -4.0293   date  2456965   name ITUNES.COM/BILL   cat:[       ] account                
+Transaction::read()     -12   date  2456963   name METRO-NORTH TVM & TOM   cat:[       ] account                
+Transaction::read() 6.48926   date  2456961   name Home Depot   cat:[           Shops        Hardware Store       ] account                
+Transaction::read()     -25   date  2456972   name LATE FEE FOR PAYMENT DUE 11/10   cat:[        Bank Fees        Late Payment       ] account                
+Transaction::read()     -40   date  2456980   name MTA MVM*42ND ST-GRAND C   cat:[       ] account                
+Transaction::read()-4.98926   date  2456976   name Spotify USA   cat:[       ] account                
+Transaction::read()-9.98926   date  2457000   name Ocean Wine Spirits   cat:[           Shops        Food and Beverage Store        Beer/Wine and Spirits       ] account                
+Transaction::read()-960.189   date  2456996   name Online Banking payment to CRD 7946 Confirmation# 0270658838   cat:[        Transfer       ] account                
+Transaction::read()     -12   date  2456968   name Potjanee Thai Restaurant   cat:[        Food and Drink        Restaurants            Thai       ] account                
+Transaction::read()-7.59961   date  2456977   name Fresh Tortillas Express   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read() 529.039   date  2456974   name ONLINE PAYMENT FROM SAV 1   cat:[         Payment        Credit Card       ] account                
+Transaction::read() 7.97949   date  2456960   name Grainger Industrial Supply   cat:[           Shops        Industrial Supplies       ] account                
+Transaction::read()   -1038   date  2456995   name    Check   cat:[        Transfer        Withdrawal           Check       ] account                
+Transaction::read()-29.9893   date  2456965   name Murray's Cheese   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()-7.89941   date  2456965   name China Wok Restaurant   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()-25.9795   date  2456962   name DNH*GODADDY.COM   cat:[       ] account                
+Transaction::read()     -12   date  2456961   name METRO-NORTH TVM & TOM   cat:[       ] account                
+Transaction::read() -7.7793   date  2456959   name      CVS   cat:[           Shops        Pharmacies       ] account                
+Transaction::read()     -18   date  2456974   name   HEROKU   cat:[       ] account                
+Transaction::read()      -9   date  2456972   name NODEJITSU   cat:[       ] account                
+Transaction::read()   -2000   date  2456958   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()-8.63965   date  2456958   name Home Depot   cat:[           Shops        Hardware Store       ] account                
+Transaction::read()    2000   date  2456952   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()-7.88965   date  2456970   name China Wok Restaurant   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()-7.89941   date  2456966   name China Wok Restaurant   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()     -12   date  2456965   name METRO-NORTH TVM & TOM   cat:[       ] account                
+Transaction::read()   -6.75   date  2456965   name     Taim   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()-3.75977   date  2456966   name Amazon Web Services aws.amazon.coWA   cat:[       ] account                
+Transaction::read()-41.3096   date  2456993   name Marshalls   cat:[           Shops        Department Stores       ] account                
+Transaction::read()0.00976562   date  2456958   name Interest Earned   cat:[        Interest        Interest Earned       ] account                
+Transaction::read()-29.1699   date  2456951   name Friedland Wine & Liquor Store   cat:[           Shops        Food and Beverage Store        Beer/Wine and Spirits       ] account                
+Transaction::read()     -12   date  2456965   name METRO-NORTH TVM & TOM   cat:[       ] account                
+Transaction::read()-7.88965   date  2456965   name China Wok Restaurant   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()     -12   date  2456962   name METRO-NORTH TVM & TOM   cat:[       ] account                
+Transaction::read()-6.48926   date  2456956   name HOMEDEPOT.COM   cat:[       ] account                
+Transaction::read()-9.23926   date  2456986   name Duane Reade   cat:[           Shops        Pharmacies       ] account                
+Transaction::read()   -9.75   date  2456982   name Chipotle Mexican Grill   cat:[        Food and Drink        Restaurants        Fast Food       ] account                
+Transaction::read()     -12   date  2456962   name METRO-NORTH TVM & TOM   cat:[       ] account                
+Transaction::read()      -9   date  2456960   name METRO-NORTH TVM & TOM   cat:[       ] account                
+Transaction::read()    -190   date  2456947   name NYS DMV TVB   cat:[       ] account                
+Transaction::read()  -20.21   date  2456945   name Key Food Stores Co-op, Inc.   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()     -18   date  2456941   name   HEROKU   cat:[       ] account                
+Transaction::read()-14.1699   date  2456979   name D'agostino   cat:[           Shops        Food and Beverage Store       ] account                
+Transaction::read()-529.039   date  2456974   name Online Banking payment to CRD 7946 Confirmation# 4171243342   cat:[        Transfer       ] account                
+Transaction::read()-4.97949   date  2456952   name Key Food Stores Co-op, Inc.   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()     -12   date  2456961   name METRO-NORTH TVM & TOM   cat:[       ] account                
+Transaction::read()-18.1699   date  2456937   name ITUNES.COM/BILL   cat:[       ] account                
+Transaction::read()    2000   date  2456958   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()   -6.75   date  2456973   name     Taim   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()    -112   date  2456951   name MTA MVM*135TH STREET &   cat:[       ] account                
+Transaction::read()-8.46973   date  2456947   name Key Food Stores Co-op, Inc.   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()-4.98926   date  2456945   name Spotify USA   cat:[       ] account                
+Transaction::read() -109.42   date  2456939   name BILL PAYMENT   cat:[       ] account                
+Transaction::read()-7.59961   date  2456969   name Fresh Tortillas Express   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()     -12   date  2456959   name GITHUB.COM   cat:[       ] account                
+Transaction::read()-2.00977   date  2456958   name ITUNES.COM/BILL   cat:[       ] account                
+Transaction::read()-8.16992   date  2456934   name La Sonrisa   cat:[        Food and Drink        Restaurants        Latin American       ] account                
+Transaction::read()   -5.25   date  2456937   name Duane Reade   cat:[           Shops        Pharmacies       ] account                
+Transaction::read()      -3   date  2456958   name Insufficient Funds Fee   cat:[        Bank Fees        Insufficient Funds       ] account                
+Transaction::read()-9.26953   date  2456955   name Key Food Stores Co-op, Inc.   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()-7.97949   date  2456954   name WW GRAINGER   cat:[       ] account                
+Transaction::read()-2.17969   date  2456952   name DUNKIN #340355 Q35   cat:[       ] account                
+Transaction::read()-20.1895   date  2456951   name ADOBE SYSTEMS INC.   cat:[       ] account                
+Transaction::read()-1.71973   date  2456945   name Interest Charged on Purchases   cat:[        Interest        Interest Charged       ] account                
+Transaction::read()     -10   date  2456952   name 00976/LAUNDRY CARD   cat:[       ] account                
+Transaction::read()-2.17969   date  2456931   name DUNKIN #340355 Q35   cat:[       ] account                
+Transaction::read()    1500   date  2456932   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()      -9   date  2456965   name METRO-NORTH TVM & TOM   cat:[       ] account                
+Transaction::read()-6.48926   date  2456965   name Duane Reade   cat:[           Shops        Pharmacies       ] account                
+Transaction::read()-22.7695   date  2456951   name Key Food Stores Co-op, Inc.   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()    -374   date  2456946   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()   -6.75   date  2456945   name     Taim   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read() -2.2793   date  2456938   name 400MADISONAUBONPAIN255   cat:[       ] account                
+Transaction::read()     -12   date  2456963   name METRO-NORTH TVM & TOM   cat:[       ] account                
+Transaction::read()      -6   date  2456930   name AMC LINCOLN SQ 13 #2116   cat:[       ] account                
+Transaction::read()     -10   date  2456930   name 00976/LAUNDRY CARD   cat:[       ] account                
+Transaction::read()-12.4697   date  2456928   name Key Food Stores Co-op, Inc.   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()-3.63965   date  2456935   name Amazon Web Services aws.amazon.coWA   cat:[       ] account                
+Transaction::read()   -1200   date  2456932   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()     -22   date  2456924   name The Place   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()-5.43945   date  2456942   name   Subway   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()-5.43945   date  2456923   name Astor Row Café   cat:[        Food and Drink        Restaurants            Cafe       ] account                
+Transaction::read()-5.35938   date  2456961   name      CVS   cat:[           Shops        Pharmacies       ] account                
+Transaction::read()-1403.34   date  2456920   name Online Banking payment to CRD 7946 Confirmation# 2913731905   cat:[        Transfer       ] account                
+Transaction::read()   -6.75   date  2456918   name     Taim   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()     -15   date  2456938   name FS *Bartender   cat:[       ] account                
+Transaction::read() 1403.34   date  2456920   name ONLINE PAYMENT FROM SAV 1   cat:[         Payment        Credit Card       ] account                
+Transaction::read()-7.88965   date  2456959   name  Cafe 71   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()    -112   date  2456913   name MTA MVM*135TH STREET &   cat:[       ] account                
+Transaction::read()   -33.5   date  2456911   name GLI*PP INTERNET #3743   cat:[       ] account                
+Transaction::read()  -16.25   date  2456909   name METRO-NORTH TVM & TOM   cat:[       ] account                
+Transaction::read()-5.67969   date  2456904   name DUNKIN #347623 Q35   cat:[       ] account                
+Transaction::read()   -1000   date  2456958   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()-5.87988   date  2456935   name Little Italy - 2   cat:[         Service        Financial        Banking and Finance       ] account                
+Transaction::read()     -12   date  2456930   name GITHUB.COM   cat:[       ] account                
+Transaction::read()-11.4297   date  2456927   name Vien Nyc   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()-12.9893   date  2456903   name   Target   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()   -2.75   date  2456900   name BKLYN Larder   cat:[           Shops        Food and Beverage Store        Specialty       ] account                
+Transaction::read()-1.78906   date  2456932   name Key Food Stores Co-op, Inc.   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()-4.98926   date  2456916   name Spotify USA   cat:[       ] account                
+Transaction::read()-3.18945   date  2456958   name Key Food Stores Co-op, Inc.   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()   -6.75   date  2456923   name     Taim   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()-1.66992   date  2456895   name Key Food Stores Co-op, Inc.   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()   -3.25   date  2456930   name Gimme Coffee   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()-60.5898   date  2456926   name ITUNES.COM/BILL   cat:[       ] account                
+Transaction::read()-20.1895   date  2456921   name ADOBE SYSTEMS INC.   cat:[       ] account                
+Transaction::read()    1000   date  2456919   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()-28.0098   date  2456893   name Key Food Stores Co-op, Inc.   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()-85.2891   date  2456912   name BILL PAYMENT   cat:[       ] account                
+Transaction::read()-22.5693   date  2456911   name Angkor Restaurant   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()-5.16992   date  2456907   name CIAO BELLA CAFE GRAND CENNEW   cat:[       ] account                
+Transaction::read()-3.85938   date  2456904   name Amazon Web Services aws.amazon.coWA   cat:[       ] account                
+Transaction::read()-10.0898   date  2456903   name ITUNES.COM/BILL   cat:[       ] account                
+Transaction::read()-6.98926   date  2456952   name FAIRWAY MKT DT   cat:[       ] account                
+Transaction::read()     -80   date  2456951   name Felidia Ristorante   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()-13.3691   date  2456947   name Key Food Stores Co-op, Inc.   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()    -3.5   date  2456919   name birdbath bakery   cat:[        Food and Drink        Restaurants          Bakery       ] account                
+Transaction::read()-10.4492   date  2456913   name Key Food Stores Co-op, Inc.   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()-24.3291   date  2456945   name Trader Joe's   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()      -9   date  2456941   name NODEJITSU   cat:[       ] account                
+Transaction::read()     -12   date  2456898   name GITHUB.COM   cat:[       ] account                
+Transaction::read()   -6.75   date  2456916   name     Taim   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()     -25   date  2456911   name LATE FEE FOR PAYMENT DUE 09/10   cat:[        Bank Fees        Late Payment       ] account                
+Transaction::read()      -9   date  2456911   name NODEJITSU   cat:[       ] account                
+Transaction::read()-14.0596   date  2456905   name Key Food Stores Co-op, Inc.   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()     -18   date  2456911   name   HEROKU   cat:[       ] account                
+Transaction::read()-21.0391   date  2456889   name Key Food Stores Co-op, Inc.   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()     -21   date  2456888   name   Rafael   cat:[        Community        Government Departments and Agencies       ] account                
+Transaction::read()-6.94922   date  2456895   name DUNKIN #347623 Q35   cat:[       ] account                
+Transaction::read()-34.1895   date  2456903   name   Target   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()-2.38965   date  2456909   name Ashlawn Farm Store   cat:[         Service        Agriculture and Forestry       ] account                
+Transaction::read()   -6.75   date  2456905   name     Taim   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()    -112   date  2456883   name MTA MVM*SPRING ST & LAF   cat:[       ] account                
+Transaction::read()   -21.5   date  2456891   name METRO-NORTH TVM & TOM   cat:[       ] account                
+Transaction::read()     -21   date  2456937   name Hundred Acres   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()-5.21973   date  2456933   name Key Food Stores Co-op, Inc.   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()-15.7197   date  2456931   name Key Food Stores Co-op, Inc.   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()-11.1797   date  2456903   name Key Food Stores Co-op, Inc.   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()   -3.25   date  2456903   name Gimme Coffee   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()     -31   date  2456881   name Harlem Tavern   cat:[        Food and Drink             Bar       ] account                
+Transaction::read()   -3.25   date  2456881   name Gimme Coffee   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()-3.26953   date  2456930   name Astor Row Café   cat:[        Food and Drink        Restaurants            Cafe       ] account                
+Transaction::read()-11.4092   date  2456924   name RadioShack   cat:[           Shops        Computers and Electronics       ] account                
+Transaction::read()   -2.75   date  2456896   name GROUNDED ORGANIC COFFNew   cat:[       ] account                
+Transaction::read()-2.17969   date  2456903   name DUNKIN #340355 Q35   cat:[       ] account                
+Transaction::read()-35.7695   date  2456897   name Trader Joe's   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()-25.7295   date  2456888   name Bangkok Center Grocery   cat:[           Shops        Food and Beverage Store       ] account                
+Transaction::read() -1.7998   date  2456886   name DUNKIN #340355 Q35   cat:[       ] account                
+Transaction::read()   -3.25   date  2456895   name Gimme Coffee   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()   -7.75   date  2456920   name Dos Toros Taqueria   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()-10.3398   date  2456916   name Astor Row Café   cat:[        Food and Drink        Restaurants            Cafe       ] account                
+Transaction::read()-2.17969   date  2456895   name DUNKIN #340355 Q35   cat:[       ] account                
+Transaction::read()-82.2793   date  2456882   name BILL PAYMENT   cat:[       ] account                
+Transaction::read()     -10   date  2456881   name 00976/LAUNDRY CARD   cat:[       ] account                
+Transaction::read()-2.17969   date  2456875   name DUNKIN #340355 Q35   cat:[       ] account                
+Transaction::read()-5.45996   date  2456913   name Interest Charged on Purchases   cat:[        Interest        Interest Charged       ] account                
+Transaction::read()-5.98926   date  2456911   name East Side Mini-mart   cat:[           Shops        Convenience Stores       ] account                
+Transaction::read()-1.97949   date  2456889   name DUNKIN #347623 Q35   cat:[       ] account                
+Transaction::read()     -21   date  2456888   name RADEGAST HALL & BEER GARDBROOKLYN   cat:[       ] account                
+Transaction::read()   -3.25   date  2456874   name Gimme Coffee   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()-8.36914   date  2456869   name East Side Mini-mart   cat:[           Shops        Convenience Stores       ] account                
+Transaction::read()     -33   date  2456865   name   Rafael   cat:[        Community        Government Departments and Agencies       ] account                
+Transaction::read()     -18   date  2456879   name   HEROKU   cat:[       ] account                
+Transaction::read()-20.1895   date  2456890   name ADOBE SYSTEMS INC.   cat:[       ] account                
+Transaction::read()-4.98926   date  2456884   name Spotify USA   cat:[       ] account                
+Transaction::read()-4.89941   date  2456907   name Feng Shui   cat:[        Food and Drink        Restaurants         Chinese       ] account                
+Transaction::read()-8.96973   date  2456874   name Gristedes   cat:[         Service        Financial        Banking and Finance       ] account                
+Transaction::read()-7.01953   date  2456870   name Blue State Coffee   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()-7.60938   date  2456888   name    Essen   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()-837.819   date  2456881   name Online Banking payment to CRD 7946 Confirmation# 2559606678   cat:[        Transfer       ] account                
+Transaction::read()     -19   date  2456904   name Gimme Coffee   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()-12.2695   date  2456903   name Key Food Stores Co-op, Inc.   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()-11.1699   date  2456885   name Key Food Stores Co-op, Inc.   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()    1000   date  2456881   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()      -9   date  2456881   name NODEJITSU   cat:[       ] account                
+Transaction::read()-20.1895   date  2456860   name ADOBE SYSTEMS INC.   cat:[       ] account                
+Transaction::read()-1921.29   date  2456825   name Online Banking payment to CRD 7946 Confirmation# 0575149625   cat:[        Transfer       ] account                
+Transaction::read()-2.23926   date  2456820   name Golden Pride   cat:[        Food and Drink        Restaurants         Burrito       ] account                
+Transaction::read()-2.17969   date  2456881   name DUNKIN #340355 Q35   cat:[       ] account                
+Transaction::read()     -12   date  2456868   name GITHUB.COM   cat:[       ] account                
+Transaction::read()     -10   date  2456861   name 00976/LAUNDRY CARD   cat:[       ] account                
+Transaction::read()0.00976562   date  2456833   name Interest Earned   cat:[        Interest        Interest Earned       ] account                
+Transaction::read()-2.98926   date  2456899   name Key Food Stores Co-op, Inc.   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()-1.60938   date  2456895   name Whole Foods   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()  -12.25   date  2456892   name METRO-NORTH TVM & TOM   cat:[       ] account                
+Transaction::read()     -25   date  2456819   name LATE FEE FOR PAYMENT DUE 06/10   cat:[        Bank Fees        Late Payment       ] account                
+Transaction::read()-4.55957   date  2456814   name C-Town Supermarkets   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()  -40.46   date  2456878   name Trader Joe's   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()-39.1699   date  2456874   name RadioShack   cat:[           Shops        Computers and Electronics       ] account                
+Transaction::read()     -35   date  2456870   name New Rivers Restaurant   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()-24.1094   date  2456867   name Eastside Marketplace   cat:[         Service        Food and Beverage        Catering       ] account                
+Transaction::read()   -11.5   date  2456860   name NEW HARLEM DELI MKT   cat:[       ] account                
+Transaction::read()     -11   date  2456875   name NEW HARLEM DELI MKT   cat:[       ] account                
+Transaction::read()-3.62988   date  2456874   name Amazon Web Services aws.amazon.coWA   cat:[       ] account                
+Transaction::read()-14.9893   date  2456869   name East Side Mini-mart   cat:[           Shops        Convenience Stores       ] account                
+Transaction::read() 21.7598   date  2456811   name C-Town Supermarkets   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()    -7.5   date  2456811   name Le Pain Quotidien   cat:[        Food and Drink        Restaurants            Cafe       ] account                
+Transaction::read()-6.44922   date  2456808   name C-Town Supermarkets   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()     -43   date  2456867   name METRO-NORTH TVM & TOM   cat:[       ] account                
+Transaction::read()-1.08984   date  2456860   name DUNKIN #340355 Q35   cat:[       ] account                
+Transaction::read()-5.10938   date  2456821   name Pizza Hut   cat:[        Food and Drink        Restaurants           Pizza       ] account                
+Transaction::read()-1.60938   date  2456820   name DUNKIN #301341 Q35   cat:[       ] account                
+Transaction::read()      -6   date  2456816   name JFK TVM*JFK01 HOWARD BE   cat:[       ] account                
+Transaction::read()   -1000   date  2456828   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()   -6.75   date  2456889   name     Taim   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()-99.9893   date  2456813   name APPLE ONLINE STORE   cat:[       ] account                
+Transaction::read()     -99   date  2456806   name ONLY DOMAINS LIMIT STREET   cat:[       ] account                
+Transaction::read()    1000   date  2456827   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()-2.98926   date  2456821   name Comida Buena   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()     -10   date  2456888   name EB *AN EVENING WITH PE EVENTBRITE   cat:[       ] account                
+Transaction::read() 39.1699   date  2456882   name RadioShack   cat:[           Shops        Computers and Electronics       ] account                
+Transaction::read()-12.7695   date  2456881   name Key Food Stores Co-op, Inc.   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read() 837.819   date  2456879   name ONLINE PAYMENT FROM SAV 1   cat:[         Payment        Credit Card       ] account                
+Transaction::read()-4.58984   date  2456820   name Baskin-Robbins   cat:[        Food and Drink        Restaurants        Ice Cream       ] account                
+Transaction::read()-37.8291   date  2456811   name C-Town Supermarkets   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()     -18   date  2456809   name METRO-NORTH TVM & TOM   cat:[       ] account                
+Transaction::read()   -2.75   date  2456802   name Famous Famiglia Pizza   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()-2.76953   date  2456799   name      CVS   cat:[           Shops        Pharmacies       ] account                
+Transaction::read()-6.44922   date  2456797   name Irving Farm Coffee RoasteNew   cat:[       ] account                
+Transaction::read()-8.64941   date  2456821   name Interest Charged on Purchases   cat:[        Interest        Interest Charged       ] account                
+Transaction::read()   -9.25   date  2456874   name Kinokuniya Bookstores   cat:[           Shops        Bookstores       ] account                
+Transaction::read() -7.3291   date  2456871   name ADAMS SUPERMARKET   cat:[       ] account                
+Transaction::read()-7.45996   date  2456815   name McDonald's   cat:[        Food and Drink        Restaurants        Fast Food       ] account                
+Transaction::read()      -9   date  2456820   name New Mexico Rail Runner Express   cat:[        Community        Post Offices       ] account                
+Transaction::read()-0.169922   date  2456814   name Amazon Web Services aws.amazon.coWA   cat:[       ] account                
+Transaction::read()-10.9893   date  2456812   name C-Town Supermarkets   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()-2.94922   date  2456811   name Le Pain Quotidien   cat:[        Food and Drink        Restaurants            Cafe       ] account                
+Transaction::read()    2500   date  2456807   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()-2.70996   date  2456795   name C-Town Supermarkets   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()     -20   date  2456812   name   ANTIKA   cat:[       ] account                
+Transaction::read()    -979   date  2456808   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()-3.81934   date  2456805   name DUNKIN #337513 Q35   cat:[       ] account                
+Transaction::read()     -30   date  2456793   name MTA MVM*125TH ST & LEXI   cat:[       ] account                
+Transaction::read()-16.8994   date  2456811   name C-Town Supermarkets   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()0.00976562   date  2456801   name Interest Earned   cat:[        Interest        Interest Earned       ] account                
+Transaction::read()-2.96973   date  2456806   name Foreign Transaction Fee   cat:[        Bank Fees        Foreign Transaction       ] account                
+Transaction::read()-29.2793   date  2456792   name Whole Foods   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()-5.68945   date  2456798   name 16 Handles   cat:[           Shops        Food and Beverage Store       ] account                
+Transaction::read()-14.4395   date  2456809   name C-Town Supermarkets   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()  -87.46   date  2456802   name BILL PAYMENT   cat:[       ] account                
+Transaction::read()     -30   date  2456800   name MTA MVM*163RD ST AMST   cat:[       ] account                
+Transaction::read()  -16.25   date  2456797   name METRO-NORTH TVM & TOM   cat:[       ] account                
+Transaction::read()-2.06934   date  2456794   name C-Town Supermarkets   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()0.0390625   date  2456772   name Interest Earned   cat:[        Interest        Interest Earned       ] account                
+Transaction::read()   -31.5   date  2456797   name AMC LINCOLN SQ 13 #2116   cat:[       ] account                
+Transaction::read()-3.20996   date  2456795   name Think Coffee   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()-8.50977   date  2456793   name C-Town Supermarkets   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()-5.43945   date  2456794   name   Subway   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()     -12   date  2456807   name GITHUB.COM   cat:[       ] account                
+Transaction::read()   -1250   date  2456784   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()-4.98926   date  2456792   name SPOTIFY USA   cat:[       ] account                
+Transaction::read()  -944.8   date  2456772   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()-660.039   date  2456748   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()  -16.25   date  2456805   name METRO-NORTH TVM & TOM   cat:[       ] account                
+Transaction::read()-13.8799   date  2456801   name Shake Shack   cat:[        Food and Drink        Restaurants        Fast Food       ] account                
+Transaction::read()-4.42969   date  2456798   name C-Town Supermarkets   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()-4.38965   date  2456795   name C-Town Supermarkets   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()-7.06934   date  2456794   name Whole Foods   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()-2.25977   date  2456793   name C-Town Supermarkets   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()-992.739   date  2456778   name Online Banking payment to CRD 7946 Confirmation# 0683725779   cat:[        Transfer       ] account                
+Transaction::read()0.0498047   date  2456742   name Interest Earned   cat:[        Interest        Interest Earned       ] account                
+Transaction::read()-2.12988   date  2456868   name Mystic Seaport Museum   cat:[        Arts and Entertainment         Museums       ] account                
+Transaction::read()   -3.25   date  2456864   name Gimme Coffee   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()-6.48926   date  2456858   name Key Food Stores Co-op, Inc.   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()    -112   date  2456821   name MTA MVM*168TH STREET &   cat:[       ] account                
+Transaction::read()-4.46973   date  2456820   name Golden Pride   cat:[        Food and Drink        Restaurants         Burrito       ] account                
+Transaction::read()      -9   date  2456819   name NODEJITSU   cat:[       ] account                
+Transaction::read()-16.3193   date  2456814   name University Hardware   cat:[           Shops        Furniture and Home Decor       ] account                
+Transaction::read()-6.83984   date  2456811   name C-Town Supermarkets   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()     -30   date  2456809   name MTA MVM*125TH ST/ST NI   cat:[       ] account                
+Transaction::read()-14.0791   date  2456808   name Whole Foods   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()-8.98926   date  2456805   name WWW.1AND1.COM   cat:[       ] account                
+Transaction::read()   -14.5   date  2456802   name Dallas Bbq   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()-4.18945   date  2456799   name C-Town Supermarkets   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()-8.75977   date  2456797   name Trader Joe's   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()   -1.25   date  2456794   name   Subway   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()      -3   date  2456793   name    Kaffe   cat:[        Food and Drink        Restaurants       ] account                
+Transaction::read()-802.359   date  2456784   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()     200   date  2456748   name Transfer   cat:[        Transfer        Account Transfer       ] account                
+Transaction::read()-2.98926   date  2457176   name Foreign Transaction Fee   cat:[        Bank Fees        Foreign Transaction       ] account                
+Transaction::read()-99.9893   date  2457176   name ONLY DOMAINS LIMIT STREET   cat:[       ] account                
+Transaction::read()-2.14941   date  2457176   name Zing! Cafe   cat:[        Food and Drink        Restaurants            Cafe       ] account                
+Transaction::read()-14.8496   date  2457176   name Berkeley Bowl   cat:[           Shops        Food and Beverage Store       ] account                
+Transaction::read()-93.0791   date  2457176   name ZAP*ZAPPOS.COM   cat:[       ] account                
+Transaction::read()    -150   date  2457177   name 0602 SQC*ROB OSBORN 877-417-4551 CA   cat:[         Service        Personal Care       ] account                
+Transaction::read()     -20   date  2457177   name BART-CLIPPER M   cat:[          Travel        Public Transportation Services       ] account                
+Transaction::read()-18.1699   date  2457177   name Walgreens   cat:[           Shops        Pharmacies       ] account                
+Transaction::read()-10.8193   date  2457177   name SOMA EATS SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read()-2.14941   date  2457179   name Zing! Cafe   cat:[        Food and Drink        Restaurants            Cafe       ] account                
+Transaction::read()-28.5791   date  2457179   name      CVS   cat:[           Shops        Pharmacies       ] account                
+Transaction::read()-8.19922   date  2457179   name Walgreens   cat:[           Shops        Pharmacies       ] account                
+Transaction::read()-8.64941   date  2457180   name GYRO KING SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read()-99.9893   date  2457180   name APPLE ONLINE STORE   cat:[       ] account                
+Transaction::read()    2000   date  2457182   name Transfer   cat:[       ] account                
+Transaction::read()-2.14941   date  2457182   name Zing! Cafe   cat:[        Food and Drink        Restaurants            Cafe       ] account                
+Transaction::read()-2.14941   date  2457182   name Zing! Cafe   cat:[        Food and Drink        Restaurants            Cafe       ] account                
+Transaction::read()-2.14941   date  2457182   name Zing! Cafe   cat:[        Food and Drink        Restaurants            Cafe       ] account                
+Transaction::read()   -2000   date  2457182   name Transfer   cat:[       ] account                
+Transaction::read() -3.8291   date  2457182   name Berkeley Bowl   cat:[           Shops        Food and Beverage Store       ] account                
+Transaction::read()     -20   date  2457182   name BART-CLIPPER ASHBY   cat:[       ] account                
+Transaction::read()     -20   date  2457182   name CLIPPER #3014 SAN FRANCISCOCA   cat:[       ] account                
+Transaction::read()-18.3096   date  2457182   name Whole Foods   cat:[           Shops        Supermarkets and Groceries       ] account                
+Transaction::read()-29.4795   date  2457182   name Berkeley Bowl   cat:[           Shops        Food and Beverage Store       ] account                
+Transaction::read()-3.25977   date  2457182   name BLUE BOTTLE COFFEE MSan FranciscoCA   cat:[       ] account                
+Transaction::read()    -779   date  2457183   name    Check   cat:[        Transfer        Withdrawal           Check       ] account                
+Transaction::read()-2.14941   date  2457183   name Zing! Cafe   cat:[        Food and Drink        Restaurants            Cafe       ] account                
+Transaction::read()   -1938   date  2457184   name    Check   cat:[        Transfer        Withdrawal           Check       ] account                
+Transaction::read()     -20   date  2457184   name BART-CLIPPER M   cat:[          Travel        Public Transportation Services       ] account                
+Transaction::read()-5.97949   date  2457184   name SUBWAY 03284296 SAN FRANCISCOCA   cat:[       ] account                
+Creating evolution context       
+  tree ( 53.6421     ): (ROOT (MonthlyAmount 1135 -1357 1423 -1357 2631 797) (BiWeeklyIncome 18347 -480 648 -578 0.4 -4439) (MonthlyAmount -1099 -1353 1276 1630 -1196 1.19256e+06) (BiWeeklyIncome -813 -480 648 -578 -8.39631e-06 1276) (MonthlyAmount -719 -1353 1276 -1288 18347 -959) (BiWeeklyIncome 1135 -1353 1276 -1357 -467.729 978) (BiWeeklyIncome 1079 -1353 978 2621 1805 1071) (MonthlyAmount 1135 -1357 1243 -1357 1195 -1320) (MonthlyAmount 895 -1140 720 2931 637 1068) (MonthlyAmount 1559 -1140 1630 -1140 1591 823) (MonthlyAmount -622 -480 648 -578 -1288 -1.00232e+06) 0 0 0 0 0 0 0 0 0)       
+        {
+    "features": [
+        {
+            "args": [
+                1135,
+                -1357,
+                1423,
+                -1357,
+                2631,
+                797
+            ],
+            "billProba": 2.0054188753643043,
+            "cons-missed": 0,
+            "consecutive": 2,
+            "dayOfMonth": 20,
+            "fitness": 4.0108377507286086,
+            "hash": 1423,
+            "indH": 146,
+            "info": "MonthlyAmount (2)  kl$ -1.3252 / -1.32612 = -20.1444 / -20.1895",
+            "labels": [
+                "ADOBE *CREATIVE CLOUD"
+            ],
+            "name": "MonthlyAmount",
+            "numArgs": 6,
+            "tot$": -40.37890625
+        },
+        {
+            "args": [
+                18347,
+                -480,
+                648,
+                -578,
+                0.40000000000000002,
+                -4439
+            ],
+            "billProba": 5.4369233360225202,
+            "cons-missed": 0,
+            "consecutive": 5,
+            "dayOfMonth": 27,
+            "dayOfMonth2": 16,
+            "fitness": 4.349538668818016,
+            "hash": 648,
+            "indH": 37,
+            "info": "BiWeeklyIncome (5)  kl$ -0.46875 / -0.482795 = -1.94273 / -2.03945",
+            "labels": [
+                "Zing! Cafe"
+            ],
+            "name": "BiWeeklyIncome",
+            "numArgs": 6,
+            "tot$": -10.197265625
+        },
+        {
+            "args": [
+                -1099,
+                -1353,
+                1276,
+                1630,
+                -1196,
+                1192560
+            ],
+            "billProba": 2.0052689722814567,
+            "cons-missed": 0,
+            "consecutive": 2,
+            "dayOfMonth": -13,
+            "fitness": 4.0105379445629135,
+            "hash": 1276,
+            "indH": 122,
+            "info": "MonthlyAmount (2)  kl$ -1.32129 / -1.32222 = -19.9551 / -20",
+            "labels": [
+                "BART-CLIPPER ASHBY"
+            ],
+            "name": "MonthlyAmount",
+            "numArgs": 6,
+            "tot$": -40
+        },
+        {
+            "args": [
+                -813,
+                -480,
+                648,
+                -578,
+                -8.3963100000000003e-06,
+                1276
+            ],
+            "billProba": 5.3834521955992898,
+            "cons-missed": 0,
+            "consecutive": 6,
+            "dayOfMonth": -6,
+            "dayOfMonth2": -24,
+            "fitness": 3.5889681303995267,
+            "hash": 648,
+            "indH": 37,
+            "info": "BiWeeklyIncome (6)  kl$ -0.46875 / -0.484202 = -1.94273 / -2.04932",
+            "labels": [
+                "Zing! Cafe"
+            ],
+            "name": "BiWeeklyIncome",
+            "numArgs": 6,
+            "tot$": -12.2958984375
+        },
+        {
+            "args": [
+                -719,
+                -1353,
+                1276,
+                -1288,
+                18347,
+                -959
+            ],
+            "billProba": 2.0063557288955889,
+            "cons-missed": 0,
+            "consecutive": 2,
+            "dayOfMonth": -5,
+            "fitness": 4.0127114577911778,
+            "hash": 1276,
+            "indH": 122,
+            "info": "MonthlyAmount (2)  kl$ -1.32129 / -1.32222 = -19.9551 / -20",
+            "labels": [
+                "BART-CLIPPER ASHBY"
+            ],
+            "name": "MonthlyAmount",
+            "numArgs": 6,
+            "tot$": -40
+        },
+        {
+            "args": [
+                1135,
+                -1353,
+                1276,
+                -1357,
+                -467.72899999999998,
+                978
+            ],
+            "billProba": 4.0956065718833852,
+            "cons-missed": 0,
+            "consecutive": 4,
+            "dayOfMonth": 20,
+            "dayOfMonth2": 5,
+            "fitness": 4.0956065718833852,
+            "hash": 1276,
+            "indH": 122,
+            "info": "BiWeeklyIncome (4)  kl$ -1.32129 / -1.32222 = -19.9551 / -20",
+            "labels": [
+                "BART-CLIPPER ASHBY"
+            ],
+            "name": "BiWeeklyIncome",
+            "numArgs": 6,
+            "tot$": -80
+        },
+        {
+            "args": [
+                1079,
+                -1353,
+                978,
+                2621,
+                1805,
+                1071
+            ],
+            "billProba": 2.0030021559412292,
+            "cons-missed": 0,
+            "consecutive": 2,
+            "dayOfMonth": 26,
+            "dayOfMonth2": 3,
+            "fitness": 4.0060043118824584,
+            "hash": 978,
+            "indH": 88,
+            "info": "BiWeeklyIncome (2)  kl$ -1.32129 / -1.32222 = -19.9551 / -20",
+            "labels": [
+                "BART-CLIPPER M"
+            ],
+            "name": "BiWeeklyIncome",
+            "numArgs": 6,
+            "tot$": -40
+        },
+        {
+            "args": [
+                1135,
+                -1357,
+                1243,
+                -1357,
+                1195,
+                -1320
+            ],
+            "billProba": 10.612650885960877,
+            "cons-missed": 2,
+            "consecutive": 9,
+            "dayOfMonth": 20,
+            "fitness": 9.4334674541874453,
+            "hash": 1243,
+            "indH": 117,
+            "info": "MonthlyAmount (9)  kl$ -1.3252 / -1.32612 = -20.1444 / -20.1895",
+            "labels": [
+                "ADOBE SYSTEMS INC."
+            ],
+            "name": "MonthlyAmount",
+            "numArgs": 6,
+            "tot$": -181.705078125
+        },
+        {
+            "args": [
+                895,
+                -1140,
+                720,
+                2931,
+                637,
+                1068
+            ],
+            "billProba": 5.1771433386896977,
+            "cons-missed": 0,
+            "consecutive": 2,
+            "dayOfMonth": 28,
+            "fitness": 10.354286677379395,
+            "hash": 720,
+            "indH": 52,
+            "info": "MonthlyAmount (8)  kl$ -1.11328 / -1.11394 = -11.9802 / -12",
+            "labels": [
+                "GITHUB.COM"
+            ],
+            "name": "MonthlyAmount",
+            "numArgs": 6,
+            "tot$": -96
+        },
+        {
+            "args": [
+                1559,
+                -1140,
+                1630,
+                -1140,
+                1591,
+                823
+            ],
+            "billProba": 2.048370355417017,
+            "cons-missed": 0,
+            "consecutive": 2,
+            "dayOfMonth": 10,
+            "fitness": 4.0967407108340339,
+            "hash": 1630,
+            "indH": 175,
+            "info": "MonthlyAmount (4)  kl$ -1.11328 / -1.11394 = -11.9802 / -12",
+            "labels": [
+                "Monthly Maintenance Fee"
+            ],
+            "name": "MonthlyAmount",
+            "numArgs": 6,
+            "tot$": -48
+        },
+        {
+            "args": [
+                -622,
+                -480,
+                648,
+                -578,
+                -1288,
+                -1002320
+            ],
+            "billProba": 1.2625214595055514,
+            "cons-missed": 0,
+            "consecutive": 3,
+            "dayOfMonth": -1,
+            "fitness": 1.6833619460074019,
+            "hash": 648,
+            "indH": 37,
+            "info": "MonthlyAmount (3)  kl$ -0.46875 / -0.537762 = -1.94273 / -2.44954",
+            "labels": [
+                "Zing! Cafe"
+            ],
+            "name": "MonthlyAmount",
+            "numArgs": 6,
+            "tot$": -7.3486328125
+        }
+    ]
+}
+       
+costLiving(50/75/90/95/99)  3.84038 9.97115 19.0724 33.3397 105.018       
+  tree ( 53.6421     ): (ROOT (MonthlyAmount 1135 -1357 1423 -1357 2631 797) (BiWeeklyIncome 18347 -480 648 -578 0.4 -4439) (MonthlyAmount -1099 -1353 1276 1630 -1196 1.19256e+06) (BiWeeklyIncome -813 -480 648 -578 -8.39631e-06 1276) (MonthlyAmount -719 -1353 1276 -1288 18347 -959) (BiWeeklyIncome 1135 -1353 1276 -1357 -467.729 978) (BiWeeklyIncome 1079 -1353 978 2621 1805 1071) (MonthlyAmount 1135 -1357 1243 -1357 1195 -1320) (MonthlyAmount 895 -1140 720 2931 637 1068) (MonthlyAmount 1559 -1140 1630 -1140 1591 823) (MonthlyAmount -622 -480 648 -578 -1288 -1.00232e+06) 0 0 0 0 0 0 0 0 0)       
+        {
+    "features": [
+        {
+            "args": [
+                1135,
+                -1357,
+                1423,
+                -1357,
+                2631,
+                797
+            ],
+            "billProba": 2.0054188753643043,
+            "cons-missed": 0,
+            "consecutive": 2,
+            "dayOfMonth": 20,
+            "fitness": 4.0108377507286086,
+            "hash": 1423,
+            "indH": 146,
+            "info": "MonthlyAmount (2)  kl$ -1.3252 / -1.32612 = -20.1444 / -20.1895",
+            "labels": [
+                "ADOBE *CREATIVE CLOUD"
+            ],
+            "name": "MonthlyAmount",
+            "numArgs": 6,
+            "tot$": -40.37890625
+        },
+        {
+            "args": [
+                18347,
+                -480,
+                648,
+                -578,
+                0.40000000000000002,
+                -4439
+            ],
+            "billProba": 5.4369233360225202,
+            "cons-missed": 0,
+            "consecutive": 5,
+            "dayOfMonth": 27,
+            "dayOfMonth2": 16,
+            "fitness": 4.349538668818016,
+            "hash": 648,
+            "indH": 37,
+            "info": "BiWeeklyIncome (5)  kl$ -0.46875 / -0.482795 = -1.94273 / -2.03945",
+            "labels": [
+                "Zing! Cafe"
+            ],
+            "name": "BiWeeklyIncome",
+            "numArgs": 6,
+            "tot$": -10.197265625
+        },
+        {
+            "args": [
+                -1099,
+                -1353,
+                1276,
+                1630,
+                -1196,
+                1192560
+            ],
+            "billProba": 2.0052689722814567,
+            "cons-missed": 0,
+            "consecutive": 2,
+            "dayOfMonth": -13,
+            "fitness": 4.0105379445629135,
+            "hash": 1276,
+            "indH": 122,
+            "info": "MonthlyAmount (2)  kl$ -1.32129 / -1.32222 = -19.9551 / -20",
+            "labels": [
+                "BART-CLIPPER ASHBY"
+            ],
+            "name": "MonthlyAmount",
+            "numArgs": 6,
+            "tot$": -40
+        },
+        {
+            "args": [
+                -813,
+                -480,
+                648,
+                -578,
+                -8.3963100000000003e-06,
+                1276
+            ],
+            "billProba": 5.3834521955992898,
+            "cons-missed": 0,
+            "consecutive": 6,
+            "dayOfMonth": -6,
+            "dayOfMonth2": -24,
+            "fitness": 3.5889681303995267,
+            "hash": 648,
+            "indH": 37,
+            "info": "BiWeeklyIncome (6)  kl$ -0.46875 / -0.484202 = -1.94273 / -2.04932",
+            "labels": [
+                "Zing! Cafe"
+            ],
+            "name": "BiWeeklyIncome",
+            "numArgs": 6,
+            "tot$": -12.2958984375
+        },
+        {
+            "args": [
+                -719,
+                -1353,
+                1276,
+                -1288,
+                18347,
+                -959
+            ],
+            "billProba": 2.0063557288955889,
+            "cons-missed": 0,
+            "consecutive": 2,
+            "dayOfMonth": -5,
+            "fitness": 4.0127114577911778,
+            "hash": 1276,
+            "indH": 122,
+            "info": "MonthlyAmount (2)  kl$ -1.32129 / -1.32222 = -19.9551 / -20",
+            "labels": [
+                "BART-CLIPPER ASHBY"
+            ],
+            "name": "MonthlyAmount",
+            "numArgs": 6,
+            "tot$": -40
+        },
+        {
+            "args": [
+                1135,
+                -1353,
+                1276,
+                -1357,
+                -467.72899999999998,
+                978
+            ],
+            "billProba": 4.0956065718833852,
+            "cons-missed": 0,
+            "consecutive": 4,
+            "dayOfMonth": 20,
+            "dayOfMonth2": 5,
+            "fitness": 4.0956065718833852,
+            "hash": 1276,
+            "indH": 122,
+            "info": "BiWeeklyIncome (4)  kl$ -1.32129 / -1.32222 = -19.9551 / -20",
+            "labels": [
+                "BART-CLIPPER ASHBY"
+            ],
+            "name": "BiWeeklyIncome",
+            "numArgs": 6,
+            "tot$": -80
+        },
+        {
+            "args": [
+                1079,
+                -1353,
+                978,
+                2621,
+                1805,
+                1071
+            ],
+            "billProba": 2.0030021559412292,
+            "cons-missed": 0,
+            "consecutive": 2,
+            "dayOfMonth": 26,
+            "dayOfMonth2": 3,
+            "fitness": 4.0060043118824584,
+            "hash": 978,
+            "indH": 88,
+            "info": "BiWeeklyIncome (2)  kl$ -1.32129 / -1.32222 = -19.9551 / -20",
+            "labels": [
+                "BART-CLIPPER M"
+            ],
+            "name": "BiWeeklyIncome",
+            "numArgs": 6,
+            "tot$": -40
+        },
+        {
+            "args": [
+                1135,
+                -1357,
+                1243,
+                -1357,
+                1195,
+                -1320
+            ],
+            "billProba": 10.612650885960877,
+            "cons-missed": 2,
+            "consecutive": 9,
+            "dayOfMonth": 20,
+            "fitness": 9.4334674541874453,
+            "hash": 1243,
+            "indH": 117,
+            "info": "MonthlyAmount (9)  kl$ -1.3252 / -1.32612 = -20.1444 / -20.1895",
+            "labels": [
+                "ADOBE SYSTEMS INC."
+            ],
+            "name": "MonthlyAmount",
+            "numArgs": 6,
+            "tot$": -181.705078125
+        },
+        {
+            "args": [
+                895,
+                -1140,
+                720,
+                2931,
+                637,
+                1068
+            ],
+            "billProba": 5.1771433386896977,
+            "cons-missed": 0,
+            "consecutive": 2,
+            "dayOfMonth": 28,
+            "fitness": 10.354286677379395,
+            "hash": 720,
+            "indH": 52,
+            "info": "MonthlyAmount (8)  kl$ -1.11328 / -1.11394 = -11.9802 / -12",
+            "labels": [
+                "GITHUB.COM"
+            ],
+            "name": "MonthlyAmount",
+            "numArgs": 6,
+            "tot$": -96
+        },
+        {
+            "args": [
+                1559,
+                -1140,
+                1630,
+                -1140,
+                1591,
+                823
+            ],
+            "billProba": 2.048370355417017,
+            "cons-missed": 0,
+            "consecutive": 2,
+            "dayOfMonth": 10,
+            "fitness": 4.0967407108340339,
+            "hash": 1630,
+            "indH": 175,
+            "info": "MonthlyAmount (4)  kl$ -1.11328 / -1.11394 = -11.9802 / -12",
+            "labels": [
+                "Monthly Maintenance Fee"
+            ],
+            "name": "MonthlyAmount",
+            "numArgs": 6,
+            "tot$": -48
+        },
+        {
+            "args": [
+                -622,
+                -480,
+                648,
+                -578,
+                -1288,
+                -1002320
+            ],
+            "billProba": 1.2625214595055514,
+            "cons-missed": 0,
+            "consecutive": 3,
+            "dayOfMonth": -1,
+            "fitness": 1.6833619460074019,
+            "hash": 648,
+            "indH": 37,
+            "info": "MonthlyAmount (3)  kl$ -0.46875 / -0.537762 = -1.94273 / -2.44954",
+            "labels": [
+                "Zing! Cafe"
+            ],
+            "name": "MonthlyAmount",
+            "numArgs": 6,
+            "tot$": -7.3486328125
+        }
+    ]
+}
+       
+predictedFutureTransactions(       1), size =       47       
+  tree ( 53.6421     ): (ROOT (MonthlyAmount 1135 -1357 1423 -1357 2631 797) (BiWeeklyIncome 18347 -480 648 -578 0.4 -4439) (MonthlyAmount -1099 -1353 1276 1630 -1196 1.19256e+06) (BiWeeklyIncome -813 -480 648 -578 -8.39631e-06 1276) (MonthlyAmount -719 -1353 1276 -1288 18347 -959) (BiWeeklyIncome 1135 -1353 1276 -1357 -467.729 978) (BiWeeklyIncome 1079 -1353 978 2621 1805 1071) (MonthlyAmount 1135 -1357 1243 -1357 1195 -1320) (MonthlyAmount 895 -1140 720 2931 637 1068) (MonthlyAmount 1559 -1140 1630 -1140 1591 823) (MonthlyAmount -622 -480 648 -578 -1288 -1.00232e+06) 0 0 0 0 0 0 0 0 0)       
+        {
+    "features": [
+        {
+            "args": [
+                1135,
+                -1357,
+                1423,
+                -1357,
+                2631,
+                797
+            ],
+            "billProba": 2.0054188753643043,
+            "cons-missed": 0,
+            "consecutive": 2,
+            "dayOfMonth": 20,
+            "fitness": 4.0108377507286086,
+            "hash": 1423,
+            "indH": 146,
+            "info": "MonthlyAmount (2)  kl$ -1.3252 / -1.32612 = -20.1444 / -20.1895",
+            "labels": [
+                "ADOBE *CREATIVE CLOUD"
+            ],
+            "name": "MonthlyAmount",
+            "numArgs": 6,
+            "tot$": -40.37890625
+        },
+        {
+            "args": [
+                18347,
+                -480,
+                648,
+                -578,
+                0.40000000000000002,
+                -4439
+            ],
+            "billProba": 5.4369233360225202,
+            "cons-missed": 0,
+            "consecutive": 5,
+            "dayOfMonth": 27,
+            "dayOfMonth2": 16,
+            "fitness": 4.349538668818016,
+            "hash": 648,
+            "indH": 37,
+            "info": "BiWeeklyIncome (5)  kl$ -0.46875 / -0.482795 = -1.94273 / -2.03945",
+            "labels": [
+                "Zing! Cafe"
+            ],
+            "name": "BiWeeklyIncome",
+            "numArgs": 6,
+            "tot$": -10.197265625
+        },
+        {
+            "args": [
+                -1099,
+                -1353,
+                1276,
+                1630,
+                -1196,
+                1192560
+            ],
+            "billProba": 2.0052689722814567,
+            "cons-missed": 0,
+            "consecutive": 2,
+            "dayOfMonth": -13,
+            "fitness": 4.0105379445629135,
+            "hash": 1276,
+            "indH": 122,
+            "info": "MonthlyAmount (2)  kl$ -1.32129 / -1.32222 = -19.9551 / -20",
+            "labels": [
+                "BART-CLIPPER ASHBY"
+            ],
+            "name": "MonthlyAmount",
+            "numArgs": 6,
+            "tot$": -40
+        },
+        {
+            "args": [
+                -813,
+                -480,
+                648,
+                -578,
+                -8.3963100000000003e-06,
+                1276
+            ],
+            "billProba": 5.3834521955992898,
+            "cons-missed": 0,
+            "consecutive": 6,
+            "dayOfMonth": -6,
+            "dayOfMonth2": -24,
+            "fitness": 3.5889681303995267,
+            "hash": 648,
+            "indH": 37,
+            "info": "BiWeeklyIncome (6)  kl$ -0.46875 / -0.484202 = -1.94273 / -2.04932",
+            "labels": [
+                "Zing! Cafe"
+            ],
+            "name": "BiWeeklyIncome",
+            "numArgs": 6,
+            "tot$": -12.2958984375
+        },
+        {
+            "args": [
+                -719,
+                -1353,
+                1276,
+                -1288,
+                18347,
+                -959
+            ],
+            "billProba": 2.0063557288955889,
+            "cons-missed": 0,
+            "consecutive": 2,
+            "dayOfMonth": -5,
+            "fitness": 4.0127114577911778,
+            "hash": 1276,
+            "indH": 122,
+            "info": "MonthlyAmount (2)  kl$ -1.32129 / -1.32222 = -19.9551 / -20",
+            "labels": [
+                "BART-CLIPPER ASHBY"
+            ],
+            "name": "MonthlyAmount",
+            "numArgs": 6,
+            "tot$": -40
+        },
+        {
+            "args": [
+                1135,
+                -1353,
+                1276,
+                -1357,
+                -467.72899999999998,
+                978
+            ],
+            "billProba": 4.0956065718833852,
+            "cons-missed": 0,
+            "consecutive": 4,
+            "dayOfMonth": 20,
+            "dayOfMonth2": 5,
+            "fitness": 4.0956065718833852,
+            "hash": 1276,
+            "indH": 122,
+            "info": "BiWeeklyIncome (4)  kl$ -1.32129 / -1.32222 = -19.9551 / -20",
+            "labels": [
+                "BART-CLIPPER ASHBY"
+            ],
+            "name": "BiWeeklyIncome",
+            "numArgs": 6,
+            "tot$": -80
+        },
+        {
+            "args": [
+                1079,
+                -1353,
+                978,
+                2621,
+                1805,
+                1071
+            ],
+            "billProba": 2.0030021559412292,
+            "cons-missed": 0,
+            "consecutive": 2,
+            "dayOfMonth": 26,
+            "dayOfMonth2": 3,
+            "fitness": 4.0060043118824584,
+            "hash": 978,
+            "indH": 88,
+            "info": "BiWeeklyIncome (2)  kl$ -1.32129 / -1.32222 = -19.9551 / -20",
+            "labels": [
+                "BART-CLIPPER M"
+            ],
+            "name": "BiWeeklyIncome",
+            "numArgs": 6,
+            "tot$": -40
+        },
+        {
+            "args": [
+                1135,
+                -1357,
+                1243,
+                -1357,
+                1195,
+                -1320
+            ],
+            "billProba": 10.612650885960877,
+            "cons-missed": 2,
+            "consecutive": 9,
+            "dayOfMonth": 20,
+            "fitness": 9.4334674541874453,
+            "hash": 1243,
+            "indH": 117,
+            "info": "MonthlyAmount (9)  kl$ -1.3252 / -1.32612 = -20.1444 / -20.1895",
+            "labels": [
+                "ADOBE SYSTEMS INC."
+            ],
+            "name": "MonthlyAmount",
+            "numArgs": 6,
+            "tot$": -181.705078125
+        },
+        {
+            "args": [
+                895,
+                -1140,
+                720,
+                2931,
+                637,
+                1068
+            ],
+            "billProba": 5.1771433386896977,
+            "cons-missed": 0,
+            "consecutive": 2,
+            "dayOfMonth": 28,
+            "fitness": 10.354286677379395,
+            "hash": 720,
+            "indH": 52,
+            "info": "MonthlyAmount (8)  kl$ -1.11328 / -1.11394 = -11.9802 / -12",
+            "labels": [
+                "GITHUB.COM"
+            ],
+            "name": "MonthlyAmount",
+            "numArgs": 6,
+            "tot$": -96
+        },
+        {
+            "args": [
+                1559,
+                -1140,
+                1630,
+                -1140,
+                1591,
+                823
+            ],
+            "billProba": 2.048370355417017,
+            "cons-missed": 0,
+            "consecutive": 2,
+            "dayOfMonth": 10,
+            "fitness": 4.0967407108340339,
+            "hash": 1630,
+            "indH": 175,
+            "info": "MonthlyAmount (4)  kl$ -1.11328 / -1.11394 = -11.9802 / -12",
+            "labels": [
+                "Monthly Maintenance Fee"
+            ],
+            "name": "MonthlyAmount",
+            "numArgs": 6,
+            "tot$": -48
+        },
+        {
+            "args": [
+                -622,
+                -480,
+                648,
+                -578,
+                -1288,
+                -1002320
+            ],
+            "billProba": 1.2625214595055514,
+            "cons-missed": 0,
+            "consecutive": 3,
+            "dayOfMonth": -1,
+            "fitness": 1.6833619460074019,
+            "hash": 648,
+            "indH": 37,
+            "info": "MonthlyAmount (3)  kl$ -0.46875 / -0.537762 = -1.94273 / -2.44954",
+            "labels": [
+                "Zing! Cafe"
+            ],
+            "name": "MonthlyAmount",
+            "numArgs": 6,
+            "tot$": -7.3486328125
+        }
+    ]
+}
+       
+predictedFutureTransactions(       1), size =       47       
+predictedSparkLine(       1), temp.size =       47, temp.uniqueKeys =       39. balanceNow =  1497.96       
+ on day       -1      : -11.9795     ->  1485.98       
+ on day        5      : -1.94238     ->  1484.04       
+ on day        6      : -19.9541     ->  1464.08       
+ on day        9      : -19.9541     ->  1444.13       
+ on day        9      : -20.1436     ->  1423.99       
+ on day        9      : -20.1436     ->  1403.84       
+ on day       13      : -1.94238     ->   1401.9       
+ on day       14      : -19.9541     ->  1381.95       
+ on day       15      : -19.9541     ->  1361.99       
+ on day       16      : -1.94238     ->  1360.05       
+ on day       17      : -11.9795     ->  1348.07       
+ on day       18      : -1.94238     ->  1346.13       
+ on day       22      : -19.9541     ->  1326.17       
+ on day       24      : -19.9541     ->  1306.22       
+ on day       26      : -1.94238     ->  1304.28       
+ on day       29      : -11.9795     ->   1292.3       
+ on day       35      : -1.94238     ->  1290.36       
+ on day       37      : -19.9541     ->   1270.4       
+ on day       39      : -19.9541     ->  1250.45       
+ on day       39      : -20.1436     ->   1230.3       
+ on day       39      : -20.1436     ->  1210.16       
+ on day       44      : -1.94238     ->  1208.22       
+ on day       45      : -19.9541     ->  1188.26       
+ on day       45      : -19.9541     ->  1168.31       
+ on day       46      : -1.94238     ->  1166.37       
+ on day       47      : -11.9795     ->  1154.39       
+ on day       49      : -1.94238     ->  1152.45       
+ on day       53      : -19.9541     ->  1132.49       
+ on day       55      : -19.9541     ->  1112.54       
+ on day       57      : -1.94238     ->  1110.59       
+ on day       60      : -11.9795     ->  1098.62       
+ on day       66      : -1.94238     ->  1096.67       
+ on day       68      : -19.9541     ->  1076.72       
+ on day       70      : -19.9541     ->  1056.76       
+ on day       70      : -20.1436     ->  1036.62       
+ on day       70      : -20.1436     ->  1016.48       
+ on day       75      : -1.94238     ->  1014.54       
+ on day       76      : -19.9541     ->  994.581       
+ on day       76      : -19.9541     ->  974.627       
+ on day       77      : -1.94238     ->  972.685       
+ on day       78      : -11.9795     ->  960.705       
+ on day       80      : -1.94238     ->  958.763       
+ on day       84      : -19.9541     ->  938.809       
+ on day       86      : -19.9541     ->  918.855       
+ on day       87      : -1.94238     ->  916.912       
+ on day       91      : -11.9795     ->  904.933       
+ on day       97      : -1.94238     ->   902.99       

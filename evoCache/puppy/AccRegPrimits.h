@@ -6,6 +6,7 @@
 
 static const int MAX_NUM_FEATURES = 20;
 static unsigned int LIMIT_NUM_FEATURES = 1;
+static unsigned int TARGET_TRANS_FUTUR_DAYS = 100;
 
 class Add : public Puppy::Primitive
 {

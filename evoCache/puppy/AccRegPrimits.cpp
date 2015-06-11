@@ -66,6 +66,8 @@ QVector<Transaction> FeatureMonthlyAmount::targetTransactions(QDate iniDate, QDa
 		targetTrans.last().setKLA(m_kla);
 		targetTrans.last().indexHash = 0;
 		targetTrans.last().nameHash.hash = m_b[0];
+		targetTrans.last().flags |= Transaction::Predicted;
+
 		currentDate = currentDate.addMonths(1);
 	}
 
@@ -87,7 +89,7 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 	QDate lastDate = ioContext.m_pUser->allTrans().lastTransactionDate();//.addDays(-4);
 	QDate iniDate = ioContext.m_pUser->allTrans().firstTransactionDate();
 
-	QVector<Transaction> targetTrans = targetTransactions(iniDate, lastDate);
+	QVector<Transaction> targetTrans = targetTransactions(iniDate, lastDate.addDays(TARGET_TRANS_FUTUR_DAYS));
 	if (targetTrans.count() == 0) {
 		LOG() << "MonthlyAmount(0 TARGET): day "<<m_dayOfMonth<<" kla "<< m_kla << endl;
 	}
@@ -104,11 +106,7 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 	// the current target to compare to
 	Transaction* iTarg = &targetTrans[0];
 	m_bundle.clear();
-	QVector<Transaction> predictTrans;
-	if (ioContext.m_summaryJsonObj) {
-		m_bundle.clear();
-		predictTrans = targetTransactions(iniDate, lastDate.addDays(365));
-	}
+
 	m_consecMonth = 0;
 	m_consecMonthBeforeMissed = 0;
 	m_consecMissed = 0;
@@ -128,6 +126,7 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 				// isolate the transaction that were fitted to the target
 				Q_ASSERT(localTrans->dimensionOfVoid == 0);
 				localTrans->dimensionOfVoid++;
+				iTarg->flags |= Transaction::CameTrue;
 				if(m_consecMonth == 0) {
 					m_consecMonthBeforeMissed = 0;
 				}
@@ -141,7 +140,7 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 			}
 //				totalOneOverExpDist += expoInt<64>(-localDist);
 				totalOneOverExpDist += 4.0 / (4 + localDist);
-			if (iTarg == &targetTrans.last())
+			if (iTarg == &targetTrans.last() || (iTarg + 1)->date >= lastDate)
 				break;
 			++iTarg;
 			localTrans = 0;
@@ -171,7 +170,10 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 	if (ioContext.m_summaryJsonObj) {
 		m_billProba = billProbability();
 		if(ioContext.m_mapPredicted) {
-			(*(ioContext.m_mapPredicted))[m_billProba] += predictTrans;
+			(*(ioContext.m_mapPredicted))[m_billProba] += targetTrans;
+			for (auto& t : targetTrans) {
+				Q_ASSERT(t.flags & Transaction::Predicted);
+			}
 		}
 
 		if(m_billProba > 1.0) {
@@ -213,6 +215,8 @@ QVector<Transaction> FeatureBiWeeklyAmount::targetTransactions(QDate iniDate, QD
 		targetTrans.last().setKLA(m_kla);
 		targetTrans.last().indexHash = 0;
 		targetTrans.last().nameHash.hash = m_b[0];
+		targetTrans.last().flags |= Transaction::Predicted;
+
 		currentDate = currentDate.addMonths(1);
 	}
 

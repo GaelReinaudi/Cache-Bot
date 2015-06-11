@@ -96,7 +96,7 @@ void User::injectJsonBot(QString jsonStr)
 	m_botContext = new BotContext(this);
 	m_bestBot = new Bot(jsonObj, this);
 	m_bestBot->init(m_botContext);
-	m_bestBot->summarize(m_botContext);
+	m_bestBot->summarize();
 
 	emit botInjected();
 }
@@ -122,6 +122,55 @@ double User::costLiving(double withinPercentileCost)
 		qDebug() << "cost of living (L="<<lastCostsInd<<")" << avg;
 	}
 	return avg;
+}
+
+QVector<Transaction> User::predictedFutureTransactions(double threshProba) {
+	QVector<Transaction> ret;
+	if (m_bestBot) {
+		for (Transaction& t : m_bestBot->predictTrans(threshProba)) {
+			Q_ASSERT(t.flags & Transaction::Predicted);
+			if (t.date >= m_today.addDays(-1)) {
+				// if it didn't CameTrue
+				if (!(t.flags & Transaction::CameTrue)) {
+					ret.append(t);
+				}
+			}
+		}
+	}
+	LOG() << "predictedFutureTransactions(" << threshProba << "), size = " << ret.size() << endl;
+	return ret;
+}
+
+SparkLine User::predictedSparkLine(double threshProba)
+{
+	// will hold temporary relative changes so that they can be organized
+	// with the losses first (to be safe and not predict a salary before a bill if on the same day)
+	SparkLine temp;
+	for (Transaction& t : predictedFutureTransactions(threshProba)) {
+		int futDays = m_today.daysTo(t.date);
+		temp.insertMulti(futDays, t.amountDbl());
+	}
+	// now we sort them and make absolute values in the Sparkline
+	double balanceNow = balance(Account::Type::Checking | Account::Type::Saving);
+	LOG() << "predictedSparkLine(" << threshProba << "), temp.size = " << temp.size() << ", temp.uniqueKeys = " << temp.uniqueKeys().size() << ". balanceNow = " << balanceNow << endl;
+	qDebug() << "temp.uniqueKeys()" << temp.uniqueKeys();
+	SparkLine ret;
+	// insert the balanceNow for the last transaction day
+	ret.insertMulti(-9999, balanceNow);
+	for (auto futDay : temp.uniqueKeys()) {
+		QList<double> transThatDay = temp.values(futDay);
+		std::sort(transThatDay.begin(), transThatDay.end());
+		qDebug() << futDay << transThatDay;
+		// insert from the end (see QMap::values(key) documentation)
+		for (int i = transThatDay.size() - 1; i >= 0; --i) {
+			balanceNow += transThatDay[i];
+			ret.insertMulti(futDay, balanceNow);
+			qDebug() << futDay << transThatDay[i];
+			LOG() << "on day " << futDay << ": " << transThatDay[i] << " -> " << balanceNow << endl;
+		}
+	}
+	qDebug() << ret;
+	return ret;
 }
 
 

@@ -221,10 +221,11 @@ void MainWindow::makePredictiPlot()
 {
 	ui->plot->graph(2)->clearData();
 	double minPredict = m_lastBal;
-	for(int i = 0; i < m_pUser->predictedTransactions().count(); ++i) {
-		Transaction* trans = m_pUser->predictedTransactions()[i];
+	auto temp = m_pUser->predictedFutureTransactions(1.0);
+	for(int i = 0; i < temp.count(); ++i) {
+		Transaction* trans = &temp[i];
 		// not do anything if it already came true
-		if (trans->flags == Transaction::CameTrue) {
+		if (trans->flags & Transaction::CameTrue) {
 			qDebug() << "not charting prediction that came true";
 			continue;
 		}
@@ -272,10 +273,11 @@ void MainWindow::makePastiPlot()
 	QCPGraph* graph = ui->plot->graph(3);
 	graph->clearData();
 	double minPredict = m_lastBal;
-	for(int i = m_pUser->predictedTransactions().count() - 1; i >= 0; --i) {
-		Transaction* trans = m_pUser->predictedTransactions()[i];
+	auto temp = m_pUser->predictedFutureTransactions(1.0);
+	for(int i = 0; i < temp.count(); ++i) {
+		Transaction* trans = &temp[i];
 //		// not do anything if it already came true
-//		if (trans->flags == Transaction::CameTrue) {
+//		if (trans->flags & Transaction::CameTrue) {
 //			qDebug() << "not charting prediction that came true";
 //			continue;
 //		}

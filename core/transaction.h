@@ -7,9 +7,6 @@ class Account;
 
 class CORESHARED_EXPORT Transaction// : public DBobj
 {
-public:
-	Transaction()
-	{}
 private:
 	//	double amount = 0.0;
 		qint64 kamount = 0; // integer = round(amount * Mult)
@@ -28,7 +25,7 @@ public:
 	int dimensionOfVoid = 0;
 
 	enum Flag { None = 0x0, Predicted = 0x1, CameTrue = 0x2 };
-	int flags = 0;
+	int flags = Flag::None;
 
 	//! json in
 	void read(const QJsonObject &json);
@@ -58,6 +55,9 @@ public:
 	}
 	static bool earlierThan(const Transaction first, const Transaction second) {
 		return first.date < second.date;
+	}
+	static bool smallerAmountThan(const Transaction first, const Transaction second) {
+		return first.amountInt() < second.amountInt();
 	}
 	//! julian day
 	qint64 jDay() const {

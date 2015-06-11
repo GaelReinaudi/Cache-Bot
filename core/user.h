@@ -9,6 +9,8 @@ class Bot;
 class BotContext;
 class Fund;
 
+typedef QMap<int, double> SparkLine;
+
 class CORESHARED_EXPORT Bank : public DBobj
 {
 public:
@@ -31,7 +33,9 @@ class CORESHARED_EXPORT User : public DBobj
 public:
 	User(QString userId, QObject* parent = 0)
 		:DBobj(userId, parent)
-	{}
+	{
+		m_today = QDate::currentDate();
+	}
 
 	// gives the daily average of outcome for the withinPercentileCost outgoing transactions
 	double costLiving(double withinPercentileCost);
@@ -47,12 +51,12 @@ public:
 	StaticTransactionArray& allTrans() {
 		return m_allTransactions;
 	}
-	// TEMP
-	QVector<Transaction*> predictedTransactions() {
-		return QVector<Transaction*>();
-	}
+	//! gives the transactions predicted by the best bot
+	QVector<Transaction> predictedFutureTransactions(double threshProba);
+	//! returns a map of dayInTheFuture (0 is today), with multiple values (if on same day) organized by amount
+	SparkLine predictedSparkLine(double threshProba);
 
-	double balance(Account::Type flagType) const {
+	double balance(int flagType) const {
 		double bal = 0.0;
 		for (Account* pAcc : m_accounts) {
 			if (pAcc->type() & flagType) {
@@ -117,6 +121,7 @@ private:
 	Bot* m_bestBot = 0;
 	BotContext* m_botContext = 0;
 	Fund* m_extraCacheFund = 0;
+	QDate m_today;
 };
 
 #endif // USER_H

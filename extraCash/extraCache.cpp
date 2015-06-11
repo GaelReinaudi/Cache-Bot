@@ -45,5 +45,9 @@ void extraCache::onBotInjected()
 			 << user()->balance(Account::Type::Credit)
 			 << " )";
 
+	double threshProba = 1.0;
+	QVector<Transaction> predTrans = user()->predictedFutureTransactions(threshProba);
+	m_spark = user()->predictedSparkLine(threshProba);
+
 	qApp->exit();
 }

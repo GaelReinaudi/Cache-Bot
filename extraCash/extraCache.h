@@ -47,6 +47,8 @@ private:
 private:
 	QDate m_date;
 	int m_d0 = 0;
+	double m_minSlope = 0.0;
+	SparkLine m_spark;
 };
 
 #endif // EXTRACACHE_H
