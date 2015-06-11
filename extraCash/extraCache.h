@@ -4,16 +4,17 @@
 #include "cacheAccountConnector.h"
 #include <QThread>
 
-class extraCache : public CacheAccountConnector
+class ExtraCache : public CacheAccountConnector
 {
 	Q_OBJECT
 
 public:
-	extraCache(QString userID);
+	ExtraCache(QString userID);
 
 protected:
 	void onUserInjected() override;
 	void onBotInjected() override;
+	void onRepliedExtraCache(QString strData) override;
 
 private:
 	int computeMinSlopeOver(int numDays);

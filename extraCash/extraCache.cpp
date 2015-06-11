@@ -2,18 +2,18 @@
 #include "account.h"
 #include "cacherest.h"
 
-extraCache::extraCache(QString userID)
+ExtraCache::ExtraCache(QString userID)
 	: CacheAccountConnector(userID)
 {
 }
 
-void extraCache::onUserInjected()
+void ExtraCache::onUserInjected()
 {
 	CacheAccountConnector::onUserInjected();
 	CacheRest::Instance()->getBestBot(userID(), user());
 }
 
-void extraCache::onBotInjected()
+void ExtraCache::onBotInjected()
 {
 	LOG() << "costLiving(50/75/90/95/99) "
 		  << user()->costLiving(0.50)
@@ -53,10 +53,32 @@ void extraCache::onBotInjected()
 	m_spark = user()->predictedSparkLine(threshProba);
 	computeMinSlopeOver(60);
 
+	int addDay = 1;
+	double m_extraToday = -1.0;
+	double posSlope = qMax(0.0, m_minSlope);
+	double extraToday = posSlope * addDay / 2.0;
+	if(m_extraToday < 0.0)
+		m_extraToday = extraToday;
+	if(extraToday > m_extraToday) {
+		m_extraToday *= 0.95;
+		m_extraToday += 0.05 * extraToday;
+	}
+	else {
+		m_extraToday *= 0.9;
+		m_extraToday += 0.1 * extraToday;
+	}
+	m_slushFundStartsAt += m_extraToday;
+
+	CacheRest::Instance(0)->sendExtraCash(user()->id(), m_extraToday);
+}
+
+void ExtraCache::onRepliedExtraCache(QString strData)
+{
+	CacheAccountConnector::onRepliedExtraCache(strData);
 	qApp->exit();
 }
 
-int extraCache::computeMinSlopeOver(int numDays)
+int ExtraCache::computeMinSlopeOver(int numDays)
 {
 	m_minSlope = 9999.9;
 	int dayMin = -1;
@@ -86,6 +108,6 @@ int extraCache::computeMinSlopeOver(int numDays)
 		m_minSlope = (balanceNow - effectiveSlushforDay - m_slushFundStartsAt) / numDays;// / 2.0;
 		dayMin = tToday + numDays;
 	}
-	LOG() << "computeMinSlopeOver(" << numDays << ") = " << m_minSlope << "dayMin" << dayMin << endl;
+	LOG() << "computeMinSlopeOver(" << numDays << ") = [$/d]" << m_minSlope << "dayMin" << dayMin << endl;
 	return dayMin;
 }

@@ -23,6 +23,7 @@ protected slots:
 	virtual void onBotInjected();
 	virtual void onRepliedSendNewBot(QString strData);
 	virtual void onRepliedBestBot(QString strData);
+	virtual void onRepliedExtraCache(QString strData);
 
 private:
 	QString m_userId;

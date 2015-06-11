@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "cacherest.h"
+#include "../extraCash/extraCache.h"
 
 const int dayPast = 60;
 const int dayFuture = 60;
@@ -16,19 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow)
 {
-
-	// curl -ipv4 --insecure --cookie-jar jarfile -d "email=gael.reinaudi@gmail.com&password=wwwwwwww" -X POST https://cache-heroku.herokuapp.com/login
-	// curl -ipv4 --insecure --cookie jarfile -H "Accept: application/json" -X GET https://cache-heroku.herokuapp.com:443/bank/f202f5004003ff51b7cc7e60523b7a43d541b38246c4abc0b765306e977126540f731d94478de121c44d5c214382d36cb3c1f3c4e117a532fc78a8b078c320bb24f671bbd0199ea599c15349d2b3d820
-	manager = new QNetworkAccessManager(this);
-	QNetworkCookieJar* cookieJar = new QNetworkCookieJar(0);
-	manager->setCookieJar(cookieJar);
-	QNetworkRequest request;
-	request.setUrl(QUrl("https://cache-heroku.herokuapp.com/login"));
-	request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
-
-	QNetworkReply *reply = manager->post(request, "email=cache-bot&password=)E[ls$=1IC1A$}Boji'W@zOX_<H<*n");
-	connect(reply, SIGNAL(readyRead()), this, SLOT(slotReadyRead()));
-
+//	m_pExtraCache = new ExtraCache("556502390fbee50300e6d07c");
 
 	ui->setupUi(this);
 //	ui->plot->xAxis->setVisible(false);
@@ -60,7 +49,6 @@ MainWindow::MainWindow(QWidget *parent) :
 	pBars->setPen(QColor(255, 131, 0));
 	pBars->setBrush(QColor(255, 131, 0, 50));
 
-//	connect(ui->spinBox, SIGNAL(editingFinished()), this, SLOT(updateChart()));
 	connect(ui->plot, SIGNAL(mouseWheel(QWheelEvent*)), this, SLOT(onWheelEvent(QWheelEvent*)));
 
 	init();
@@ -73,13 +61,11 @@ MainWindow::~MainWindow()
 
 void MainWindow::init()
 {
-	m_pUser = new User("QJsonObject()", this);
-//	m_account->loadPlaidJson(jsonFile, 0, 0);
-	ui->costLive50SpinBox->setValue(m_pUser->costLiving(0.50));
-	ui->costLive75SpinBox->setValue(m_pUser->costLiving(0.75));
-	ui->costLive90SpinBox->setValue(m_pUser->costLiving(0.90));
-	ui->costLive95SpinBox->setValue(m_pUser->costLiving(0.95));
-	ui->costLive99SpinBox->setValue(m_pUser->costLiving(0.99));
+	ui->costLive50SpinBox->setValue(m_pExtraCache->user()->costLiving(0.50));
+	ui->costLive75SpinBox->setValue(m_pExtraCache->user()->costLiving(0.75));
+	ui->costLive90SpinBox->setValue(m_pExtraCache->user()->costLiving(0.90));
+	ui->costLive95SpinBox->setValue(m_pExtraCache->user()->costLiving(0.95));
+	ui->costLive99SpinBox->setValue(m_pExtraCache->user()->costLiving(0.99));
 
 	// transaction at the starting date of the playback
 	auto& real = m_pUser->allTrans();

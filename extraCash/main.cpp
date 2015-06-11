@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 	QString userID = argv[1];
-	extraCache w(userID);
+	ExtraCache w(userID);
 
 	return a.exec();
 }

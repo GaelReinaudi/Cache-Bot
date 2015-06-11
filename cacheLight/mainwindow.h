@@ -8,6 +8,8 @@
 #include "cacherest.h"
 #include <QNetworkCookieJar>
 
+class ExtraCache;
+
 namespace Ui {
 class MainWindow;
 }
@@ -61,6 +63,7 @@ private:
 	QNetworkAccessManager *manager = 0;
 
 private:
+	ExtraCache* m_pExtraCache = 0;
 	Ui::MainWindow *ui;
 	QDate m_date;
 	int m_d0 = 0;
