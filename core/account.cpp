@@ -18,15 +18,17 @@ void Account::loadJsonData(QJsonObject json, int afterJday, int beforeJday)
 
 	// quick and dirty account type
 	QString metaName = json["meta"].toObject()["name"].toString();
+	QString type = json["type"].toString();
 	if (metaName.contains("saving", Qt::CaseInsensitive)) {
 		m_type = Type::Saving;
 	}
 	if (metaName.contains("checking", Qt::CaseInsensitive)) {
 		m_type = Type::Checking;
 	}
-	if (metaName.contains("credit", Qt::CaseInsensitive)) {
+	if (type.contains("credit", Qt::CaseInsensitive)) {
 		m_type = Type::Credit;
 	}
+	m_balance = json["balance"].toObject()["available"].toDouble();
 
 //	predictedTransactions().read(json["predicted"].toArray());
 //
