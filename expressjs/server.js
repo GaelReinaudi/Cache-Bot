@@ -16,7 +16,7 @@ app.get('/sample', function(req, res) {
 });
 
 app.get('/cache-bot/fullAnalysis/:user_id', function(req, res) {
-    console.log('POST to /cache-bot/extracash/:user_id')
+    console.log('POST to /cache-bot/fullAnalysis/:user_id')
 
     var deploySh = child_process.spawn('sh',
         ['fullAnalysis.sh', req.params.user_id], {
@@ -25,11 +25,8 @@ app.get('/cache-bot/fullAnalysis/:user_id', function(req, res) {
     });
     console.log(deploySh)
 
-    var response = {
-        "success" : "Successfully parsed extra cash for user: " + req.params.user_id,
-        "return" : deploySh
-    }
-    res.send(200, response)
+    var response = "Successfully ran fullAnalysis for user: " + req.params.user_id;
+    res.status(200).send(response)
 });
 
 // Start the server
