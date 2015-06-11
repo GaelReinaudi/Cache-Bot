@@ -45,9 +45,47 @@ void extraCache::onBotInjected()
 			 << user()->balance(Account::Type::Credit)
 			 << " )";
 
+	// some arbitrary slush need to (try to) never go under of
+	m_slushFundTypicalNeed = 0.5 * user()->balance(Account::Type::Checking);
+	m_slushFundTypicalNeed = 0.5 * user()->costLiving(0.75);
+
 	double threshProba = 1.0;
-	QVector<Transaction> predTrans = user()->predictedFutureTransactions(threshProba);
 	m_spark = user()->predictedSparkLine(threshProba);
+	computeMinSlopeOver(60);
 
 	qApp->exit();
+}
+
+int extraCache::computeMinSlopeOver(int numDays)
+{
+	m_minSlope = 9999.9;
+	int dayMin = -1;
+	double tToday = m_date.toJulianDay() - m_d0;
+	double yToday = m_slushFundStartsAt;
+	SparkLine* pDat = &m_spark;
+	SparkLine::iterator it = pDat->begin();
+	// first value is the last known balance;
+	double balanceNow = it.value();
+
+	while(it != pDat->end() && it.key() < tToday + numDays + 1) {
+		double futDay = it.key();
+		double balanceThen = it.value();
+		if (futDay > 0) {
+			double effectiveSlushforDay = m_slushFundTypicalNeed * (0.5 + 1.0 * (futDay) / 30.0);
+			double y = balanceThen - effectiveSlushforDay;
+			double slope = (y - yToday) / qMax(1.0, futDay);
+			if(slope < m_minSlope) {
+				m_minSlope = slope;
+				dayMin = futDay;
+			}
+		}
+		++it;
+	}
+	if (m_minSlope == 9999.9) {
+		double effectiveSlushforDay = m_slushFundTypicalNeed * (0.5 + 1.0 * (numDays) / 30.0);
+		m_minSlope = (balanceNow - effectiveSlushforDay - m_slushFundStartsAt) / numDays;// / 2.0;
+		dayMin = tToday + numDays;
+	}
+	LOG() << "computeMinSlopeOver(" << numDays << ") = " << m_minSlope << "dayMin" << dayMin << endl;
+	return dayMin;
 }
