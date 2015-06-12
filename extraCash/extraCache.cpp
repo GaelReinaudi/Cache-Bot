@@ -1,6 +1,7 @@
 #include "extraCache.h"
 #include "account.h"
 #include "cacherest.h"
+#include "fund.h"
 
 ExtraCache::ExtraCache(QString userID)
 	: CacheAccountConnector(userID)
@@ -47,7 +48,16 @@ void ExtraCache::onBotInjected()
 
 	// some arbitrary slush need to (try to) never go under of
 	m_slushFundTypicalNeed = 0.5 * user()->balance(Account::Type::Checking);
+//	m_slushFundTypicalNeed = 0.5 * user()->balance(Account::Type::Checking);
 	m_slushFundTypicalNeed = 0.5 * user()->costLiving(0.75);
+
+	// the amount of money on the extraCash fund already
+	Fund* extraFund = user()->extraCacheFund();
+	double extraTotal = 0.0;
+	for (Cash& c : extraFund->cashes()) {
+		extraTotal += c.amount;
+	}
+	m_slushFundStartsAt = extraTotal;
 
 	double threshProba = 1.0;
 	m_spark = user()->predictedSparkLine(threshProba);

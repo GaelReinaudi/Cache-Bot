@@ -66,6 +66,11 @@ public:
 		return bal;
 	}
 
+	Fund *extraCacheFund() const {
+		return m_extraCacheFund;
+	}
+
+
 public slots:
 	void injectJsonData(QString jsonStr);
 	void injectJsonBot(QString jsonStr);
