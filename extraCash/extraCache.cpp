@@ -58,6 +58,7 @@ void ExtraCache::onBotInjected()
 		extraTotal += c.amount;
 	}
 	m_slushFundStartsAt = extraTotal;
+	qDebug() << "extraTotal" << ;
 
 	double threshProba = 1.0;
 	m_spark = user()->predictedSparkLine(threshProba);
