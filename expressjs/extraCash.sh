@@ -1,3 +1,4 @@
 #!/bin/sh
-
-../bin/release/extraCash $1
+pwd
+export LD_LIBRARY_PATH=$(pwd):$LD_LIBRARY_PATH
+./extraCash $1

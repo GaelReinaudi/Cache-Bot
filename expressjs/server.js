@@ -29,18 +29,22 @@ app.get('/cache-bot/fullAnalysis/:user_id', function(req, res) {
     res.status(200).send(response)
 });
 
-app.get('/cache-bot/extraCache/:user_id', function(req, res) {
-    console.log('POST to /cache-bot/extraCache/:user_id')
+app.get('/cache-bot/extraCash/:user_id', function(req, res) {
+    console.log('POST to /cache-bot/extraCash/:user_id('+req.params.user_id+')')
 
-    var deploySh = child_process.spawn('sh',
-        ['extraCache.sh', req.params.user_id], {
-        cwd: '/home/ubuntu/Cache-Bot/bin/release',
-        env:_.extend(process.env, { PATH: process.env.PATH + ':./' })
-    });
-    console.log(deploySh)
-
-    var response = "Successfully ran extraCache for user: " + req.params.user_id;
-    res.status(200).send(response)
+    var runExtra = child_process.execFile(
+        '../../expressjs/extraCash.sh', [req.params.user_id], {
+            cwd: '/home/ubuntu/Cache-Bot/bin/release',
+            timeout: 10000 },
+        function(err, stdout, stderr) {
+            console.log(err);
+            console.log(stdout);
+            console.log(stderr);
+            var response = "ran extraCache for user: " + req.params.user_id+'\n'
+            + stdout + '\n' + stderr;
+            res.status(200).send(response)
+        }
+    );
 });
 
 // Start the server
