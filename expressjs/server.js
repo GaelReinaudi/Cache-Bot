@@ -11,7 +11,7 @@ app.get('/cache-bot/fullAnalysis/:user_id', function(req, res) {
     var runFull = child_process.execFile(
         '../../expressjs/fullAnalysis.sh', [req.params.user_id], {
             cwd: '/home/ubuntu/Cache-Bot/bin/release',
-            timeout: 10000 },
+            timeout: 600000 },
         function(err, stdout, stderr) {
             console.log(err);
             console.log(stdout);
@@ -29,7 +29,7 @@ app.get('/cache-bot/extraCash/:user_id', function(req, res) {
     var runExtra = child_process.execFile(
         '../../expressjs/extraCash.sh', [req.params.user_id], {
             cwd: '/home/ubuntu/Cache-Bot/bin/release',
-            timeout: 10000 },
+            timeout: 30000 },
         function(err, stdout, stderr) {
             console.log(err);
             console.log(stdout);
