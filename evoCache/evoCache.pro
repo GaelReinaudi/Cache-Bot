@@ -17,6 +17,7 @@ SOURCES += \
 	evolver.cpp \
 	EvolutionSpinner.cpp \
 	mainwindow.cpp \
+#	$$PWD/../core/bot.cpp \
 	$$PWD/../AccountChart/qcustomplot/qcustomplot.cpp \
 	$$PWD/../AccountChart/ACChart/acustomplot.cpp \
 	$$PWD/../AccountChart/AmortiChart/AMPlot.cpp
@@ -26,6 +27,7 @@ HEADERS  += \
 	$$PWD/log.h \
 	EvolutionSpinner.h \
 	mainwindow.h \
+#	$$PWD/../core/bot.h \
 	$$PWD/../AccountChart/qcustomplot/qcustomplot.h \
 	$$PWD/../AccountChart/ACChart/acustomplot.h \
 	$$PWD/../AccountChart/AmortiChart/AMPlot.h

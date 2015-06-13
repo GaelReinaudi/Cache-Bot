@@ -14,11 +14,6 @@ MainWindow::MainWindow(QString userID, int afterJday, int beforeJday)
 	connect(pEvolver, SIGNAL(injected(User*)), this, SLOT(onUserInjected(User*)));
 
 //	connect(ui->startButton, SIGNAL(clicked(bool)), m_evoSpinner, SLOT(startStopEvolution(bool)), Qt::DirectConnection);
-	connect(pEvolver, &Evolver::sendMask, this, &MainWindow::plotMask);
-	connect(pEvolver, &Evolver::summarizingTree, this, &MainWindow::clearMasks);
-	connect(pEvolver, &Evolver::needsReplot, this, &MainWindow::replotCharts);
-	connect(pEvolver, &Evolver::sendClearList, this, &MainWindow::clearList);
-	connect(pEvolver, &Evolver::newSummarizedTree, this, &MainWindow::onNewSummarizedTree, Qt::BlockingQueuedConnection);
 }
 
 MainWindow::~MainWindow()
@@ -36,6 +31,13 @@ void MainWindow::onUserInjected(User* pUser)
 	connect(ui->acPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), ui->amPlot, SLOT(replot()));
 
 //	ui->acPlot->setPlottingHints(QCP::phFastPolylines | QCP::phCacheLabels);
+
+	connect(pUser->botContext(), &BotContext::targetedTransaction, this, &MainWindow::plotTargetedTransaction);
+	connect(pUser->botContext(), &BotContext::matchedTransaction, this, &MainWindow::plotMatchedTransaction);
+	connect(pUser->botContext(), &BotContext::summarizingTree, this, &MainWindow::clearMasks, Qt::BlockingQueuedConnection);
+	connect(pUser->botContext(), &BotContext::needsReplot, this, &MainWindow::replotCharts, Qt::BlockingQueuedConnection);
+	connect(pUser->botContext(), &BotContext::needsReplot, this, &MainWindow::clearList);
+	connect(pUser->botContext(), &BotContext::newSummarizedTree, this, &MainWindow::onNewSummarizedTree, Qt::BlockingQueuedConnection);
 }
 
 void MainWindow::clearMasks()

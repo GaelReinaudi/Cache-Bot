@@ -10,8 +10,17 @@
 
 class CORESHARED_EXPORT BotContext : public QObject, public Puppy::Context
 {
+	Q_OBJECT
+
 public:
 	BotContext (User* pUser);
+
+signals:
+	void targetedTransaction(double t, double amount);
+	void matchedTransaction(double t, double amount);
+	void summarizingTree();
+	void needsReplot();
+	void newSummarizedTree(QJsonObject);
 
 private:
 //	Puppy::Context m_context;

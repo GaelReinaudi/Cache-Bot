@@ -30,7 +30,7 @@ EvolutionSpinner::EvolutionSpinner(QObject* parent)
 void EvolutionSpinner::init(User* pUser)
 {
 	// Create evolution context add primitives used into it.
-	m_context = new BotContext(pUser);
+	m_context = pUser->makeBotContext();
 	emit initialized(true);
 }
 
@@ -208,7 +208,7 @@ QJsonObject EvolutionSpinner::summarize(Tree& tree)
 {
 	QJsonObject jsonObj;
 	jsonObj.insert("features", QJsonArray());
-	emit summarizingTree();
+	emit m_context->summarizingTree();
 	tree.mValid = false;
 	m_context->m_summaryJsonObj = &jsonObj;
 	double fit;
@@ -218,8 +218,8 @@ QJsonObject EvolutionSpinner::summarize(Tree& tree)
 	QString jsonStr = QJsonDocument(jsonObj).toJson(/*QJsonDocument::Compact*/);
 	LOG() << "tree (" << fit << "): " << tree.toStr() << endl;
 	LOG() << "    " << jsonStr << endl;
-	emit needsReplot();
-	emit newSummarizedTree(jsonObj);
+	emit m_context->needsReplot();
+	emit m_context->newSummarizedTree(jsonObj);
 	return jsonObj;
 }
 

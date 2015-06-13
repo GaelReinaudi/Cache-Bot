@@ -31,6 +31,9 @@ public slots:
 	void clearList();
 	void onNewSummarizedTree(QJsonObject jsonObj);
 	void onUserInjected(User* pUser);
+	void plotTargetedTransaction(double x, double y) { plotMask(x, y, true); }
+	void plotMatchedTransaction(double x, double y) { plotMask(x, y, false); }
+
 
 signals:
 	void operate(const QString &);

@@ -25,9 +25,6 @@ void Evolver::init()
 	connect(m_evoThread, &QThread::finished, m_evoSpinner, &QObject::deleteLater);
 	connect(m_evoSpinner, &EvolutionSpinner::initialized, m_evoSpinner, &EvolutionSpinner::startStopEvolution);
 	connect(m_evoSpinner, &EvolutionSpinner::finishedEvolution, this, &Evolver::onFinishedEvolution);
-	connect(m_evoSpinner, &EvolutionSpinner::needsReplot, this, &Evolver::needsReplot, Qt::BlockingQueuedConnection);
-	connect(m_evoSpinner, &EvolutionSpinner::summarizingTree, this, &Evolver::summarizingTree, Qt::BlockingQueuedConnection);
-	connect(m_evoSpinner, &EvolutionSpinner::newSummarizedTree, this, &Evolver::newSummarizedTree, Qt::DirectConnection);
 	m_evoThread->start();
 }
 

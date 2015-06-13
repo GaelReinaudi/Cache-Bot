@@ -74,6 +74,12 @@ public:
 		return m_email;
 	}
 
+	BotContext *botContext() const{
+		return m_botContext;
+	}
+
+	BotContext* makeBotContext();
+
 public slots:
 	void injectJsonData(QString jsonStr);
 	void injectJsonBot(QString jsonStr);
