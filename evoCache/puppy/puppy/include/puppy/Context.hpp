@@ -43,7 +43,8 @@
 #include "puppy/PrimitiveHandle.hpp"
 #include "puppy/Primitive.hpp"
 #include "puppy/Randomizer.hpp"
-#include "core/account.h"
+#include "puppy/TokenT.hpp"
+#include "user.h"
 
 namespace Puppy {
 
@@ -65,9 +66,9 @@ public:
 	/*!
    *  \brief Build an evolutionary context.
    */
-	inline Context(Account* pAc) :
+	inline Context(User* pUser) :
 		mTree(NULL)
-	  , m_pAccount(pAc)
+	  , m_pUser(pUser)
 	{
 	}
 
@@ -93,6 +94,28 @@ public:
 		if(mPrimitiveMap.find(inPrimitive->getName()) == mPrimitiveMap.end())
 			insert(inPrimitive);
 	}
+	inline bool hasPrimitive(QString name)
+	{
+		if(mPrimitiveMap.find(name.toStdString()) == mPrimitiveMap.end())
+			return false;
+		return true;
+	}
+	inline PrimitiveHandle getPrimitiveByName(QString name)
+	{
+		std::string stdname = name.toStdString();
+		if (hasPrimitive(name)) {
+			return mPrimitiveMap[stdname];
+		}
+		// else, is this a number ?
+		bool yes = false;
+		double val = name.toDouble(&yes);
+		if (yes) {
+			PrimitiveHandle newTerminal = new TokenT<double>(stdname, val);
+			insert(newTerminal);
+			return newTerminal;
+		}
+		return new TokenT<double>(std::string("ERROR_NAME_NOT_FOUND_AND_COULDNT_BE_CONVERTED"), 3.141592);
+	}
 
 	Randomizer                            mRandom;        //!< Random number generator.
 	std::vector<PrimitiveHandle>          mFunctionSet;   //!< Set of functions usable to build trees.
@@ -104,9 +127,9 @@ public:
 	Tree*                                 mTree;          //!< Actual tree evaluated.
 	bool m_isInFeature = false;
 	bool m_hasRecursiveFeature = false;
-	QStringList* m_summaryStrList = 0;
+	QJsonObject* m_summaryJsonObj = 0;
 	QMap<double, QVector<Transaction> >* m_mapPredicted = 0;
-	Account* m_pAccount;
+	User* m_pUser;
 	int filterHashIndex = -1;
 };
 

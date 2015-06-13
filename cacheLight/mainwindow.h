@@ -8,6 +8,8 @@
 #include "cacherest.h"
 #include <QNetworkCookieJar>
 
+class ExtraCache;
+
 namespace Ui {
 class MainWindow;
 }
@@ -19,7 +21,6 @@ class MainWindow : public QMainWindow
 public:
 	explicit MainWindow(QWidget *parent = 0);
 	~MainWindow();
-	bool wasPredicted(Transaction& trans);
 	void keyPressEvent(QKeyEvent *event);
 	int computeMinSlopeOver(int numDays);
 
@@ -57,12 +58,12 @@ private slots:
 		QByteArray jsonData = reply->readAll();
 		qDebug(jsonData);
 		return;
-		m_account.loadJsonData(jsonData);
 	}
 private:
 	QNetworkAccessManager *manager = 0;
 
 private:
+	ExtraCache* m_pExtraCache = 0;
 	Ui::MainWindow *ui;
 	QDate m_date;
 	int m_d0 = 0;
@@ -72,7 +73,7 @@ private:
 	double m_extraToday = -1.0;
 	int m_ipb = 0;
 	// account to read predicted transactions from
-	Account m_account;
+	User* m_pUser;
 	QCPBars *pBars = 0;
 };
 

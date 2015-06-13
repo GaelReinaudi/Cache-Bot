@@ -14,12 +14,14 @@ INCLUDEPATH  += ./ \
 SOURCES += \
 	main.cpp \
 	mainwindow.cpp \
-	$$PWD/../AccountChart/qcustomplot/qcustomplot.cpp
+	$$PWD/../AccountChart/qcustomplot/qcustomplot.cpp \
+#	$$PWD/../extraCache/extraCache.cpp
 
 HEADERS  += \
 	mainwindow.h \
 	$$PWD/log.h \
-	$$PWD/../AccountChart/qcustomplot/qcustomplot.h
+	$$PWD/../AccountChart/qcustomplot/qcustomplot.h \
+#	$$PWD/../extraCache/extraCache.h
 
 FORMS    += mainwindow.ui
 

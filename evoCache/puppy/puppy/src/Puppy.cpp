@@ -340,6 +340,36 @@ unsigned int Puppy::initializeTreeFull(Puppy::Tree& ioTree,
 	return lTreeSize;
 }
 
+unsigned int Puppy::initializeTree(Puppy::Tree& ioTree,
+									   Puppy::Context& ioContext,
+									   QStringList& nodeNames,
+									   int depthAtCall /*= 0*/)
+{
+	QString name = "0";
+	// if we exausted the nodeNames, it should be because we have only that meany feature
+	if (nodeNames.isEmpty()) {
+		Q_ASSERT(depthAtCall == DEPTH_OF_FEATURES);
+	}
+	else {
+		name = nodeNames.takeFirst();
+	}
+	PrimitiveHandle prim = ioContext.getPrimitiveByName(name);
+	if(depthAtCall == 0) {
+		PrimitiveHandle lRoot = ioContext.mAccountRoot[0];
+		Q_ASSERT(prim == lRoot);
+	}
+	unsigned int lNodeIndex = ioTree.size();
+	ioTree.push_back(Node(prim->giveReference(ioContext), 0));
+	unsigned int lNbArgs = ioTree[lNodeIndex].mPrimitive->getNumberArguments();
+	unsigned int lTreeSize = 1;
+	++depthAtCall;
+	for(unsigned int i=0; i<lNbArgs; ++i) {
+		lTreeSize += initializeTree(ioTree, ioContext, nodeNames, depthAtCall);
+	}
+	ioTree[lNodeIndex].mSubTreeSize = lTreeSize;
+	return lTreeSize;
+}
+
 
 /*!
  *  \brief Initialize a GP tree with grow approach.

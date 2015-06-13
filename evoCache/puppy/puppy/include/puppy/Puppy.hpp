@@ -105,6 +105,11 @@ unsigned int initializeTreeFull(Tree& ioTree,
 								unsigned int inDepth
 								, int depthAtCall = 0);
 
+unsigned int initializeTree(Tree& ioTree,
+							Puppy::Context& ioContext,
+							QStringList &NodeNames,
+							int depthAtCall = 0);
+
 unsigned int initializeTreeGrow(Tree& ioTree,
                                 Context& ioContext,
                                 unsigned int inMinDepth,

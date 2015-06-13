@@ -9,85 +9,41 @@ typedef QMap<uint, TransactionBundle*> HashedBundles;
 class CORESHARED_EXPORT Account : public DBobj
 {
 public:
-	Account() {}
+	enum Type{Unknown = 0x1, Checking = 0x2, Saving = 0x4, Credit = 0x8};
+	Account(QJsonObject jsonAcc, QObject* parent = 0);
 
 	// loading the json file
 	// see this: https://qt-project.org/doc/qt-5-snapshot/qtcore-savegame-example.html
 	bool loadPlaidJson(QString jsonFile, int afterJday = 0, int beforeJday = 0);
-	void loadJsonData(QByteArray jsonData, int afterJday = 0, int beforeJday = 0);
+	void loadJsonData(QJsonObject json, int afterJday = 0, int beforeJday = 0);
 	bool toJson(QVector<Transaction> transactions, QString category);
 
-	QMap<uint, TransactionBundle*>& hashBundles() {
-		return m_hashBundles;
+	QString plaidId() const { return m_plaidId; }
+
+	void append(Transaction* pT) {
+		m_allTrans.append(pT);
 	}
 
-	TransactionBundle& allTrans(int filterHash = -1) {
-		if (filterHash >= 0)
-			return *m_hashBundles[filterHash];
-		return m_allTrans;
+//	// gives the daily average of outcome for the withinPercentileCost outgoing transactions
+//	double costLiving(double withinPercentileCost);
+
+	double balance() const{
+		return m_balance;
 	}
-	QDate lastTransactionDate() {
-		return m_allTransactions.transArray()[m_allTransactions.count() - 1].date;
-	}
-	QDate firstTransactionDate() {
-		return m_allTransactions.transArray()[0].date;
-	}
-	// gives the daily average of outcome for the withinPercentileCost outgoing transactions
-	double costLiving(double withinPercentileCost);
+
+	Type type() const{ return m_type; }
 
 private:
-	QVector<QString> m_accountIds;
-	struct Transactions
-	{
-		Transactions() {}
-		//! json in
-		void read(const QJsonArray& npcArray, int afterJday = 0, int beforeJday = 0, const QVector<QString>& onlyAcIds = QVector<QString>());
-		//! json out
-		void write(QJsonArray &npcArray) const;
-		Transaction* transArray() { return &m_transArray[0]; }
-		void clear() { m_numTrans = 0; }
-		int count() const { return m_numTrans; }
-		Transaction* appendNew() { return &m_transArray[m_numTrans++]; }
-		Transaction* last() { return &m_transArray[m_numTrans - 1]; }
-		void removeLast() { m_numTrans--; }
-	private:
-		std::array<Transaction, MAX_TRANSACTION_PER_ACCOUNT> m_transArray;
-		int m_numTrans = 0;
-	};
-	//! makes a bundle for each hash value
-	void makeHashBundles() {
-		for (int i = 0; i < allTrans().count(); ++i) {
-			Transaction& t = allTrans().trans(i);
-			uint h = t.nameHash.hash;
-			if (!m_hashBundles.contains(h))
-				m_hashBundles[h] = new TransactionBundle();
-			m_hashBundles[h]->append(&t);
-		}
-		// assigns the index of the hash to the transactions
-		for (int i = 0; i < hashBundles().count(); ++i) {
-			int h = hashBundles().keys()[i];
-			for (int j = 0; j < hashBundles()[h]->count(); ++j) {
-				hashBundles()[h]->trans(j).indexHash = i;
-			}
-		}
-
-		qDebug() << m_hashBundles.count() << m_hashBundles.keys().first() << m_hashBundles.keys().last();
-	}
-
-private:
-	QString m_jsonFilePath;
-	Transactions m_allTransactions;
+	QString m_plaidId;
+	QString m_jsonFilePath = "predicted";
 	TransactionBundle m_allTrans;
-	HashedBundles m_hashBundles;
-
-public:
-	// for predicted transcations
-	Transactions m_predicted;
+	double m_balance = 0.0;
+	Type m_type = Type::Unknown;
 };
 
-class Household : public QObject
-{
-	QVector<Account*> m_accounts;
-};
+//class Household : public QObject
+//{
+//	QVector<User*> m_users;
+//};
 
 #endif // ACDATA_H

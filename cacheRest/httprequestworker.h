@@ -9,10 +9,17 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 
-static const QString LoginRoute = "https://cache-heroku.herokuapp.com/login";
-static const QString IdsRoute = "https://cache-heroku.herokuapp.com/cache-bot/user_ids";
-static const QString UserDataRoute = "https://cache-heroku.herokuapp.com/cache-bot/data";
-static const QString SendExtraCashRoute = "https://cache-heroku.herokuapp.com/cache-bot/extraCash";
+//static const QString server = "http://127.0.0.1:8080";
+static const QString server = "https://cache-heroku.herokuapp.com";
+static const QString LoginRoute = server + "/login";
+static const QString IdsRoute = server + "/cache-bot/user_ids";
+static const QString UserDataRoute = server + "/cache-bot/data";
+static const QString SendExtraCashRoute = server + "/cache-bot/extraCash";
+static const QString SendNewBotRoute = server + "/cache-bot/newBot";
+static const QString BestBotRoute = server + "/cache-bot/bestBot";
+
+static const QString StringLoggedInReplySuccess = "Moved Temporarily. Redirecting to /loginSuccess";
+static const QString StringLoggedInReplyFailure = "Moved Temporarily. Redirecting to /loginFailure";
 
 enum HttpRequestVarLayout {NOT_SET, ADDRESS, URL_ENCODED, MULTIPART, JSON};
 
@@ -66,9 +73,12 @@ public:
 signals:
 	void on_execution_finished(HttpRequestWorker *worker);
 	void repliedLogin(QString);
+	void loggedIn(bool);
 	void repliedIds(QString);
 	void repliedUserData(QString);
 	void repliedExtraCache(QString);
+	void repliedSendNewBot(QString);
+	void repliedBestBot(QString);
 
 private:
 	QNetworkAccessManager *manager;

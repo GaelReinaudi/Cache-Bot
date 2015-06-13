@@ -303,9 +303,15 @@ void HttpRequestWorker::on_manager_finished(QNetworkReply *reply) {
 
 	emit on_execution_finished(this);
 
-	qDebug() << "response is" << response;
+	qDebug() << "response is" << response.left(256);
 	if(reply->request().url() == QUrl(LoginRoute)) {
 		emit repliedLogin(response);
+		if(response == StringLoggedInReplySuccess) {
+			emit loggedIn(true);
+		}
+		if(response == StringLoggedInReplyFailure) {
+			emit loggedIn(false);
+		}
 	}
 	else if(reply->request().url() == QUrl(IdsRoute)) {
 		emit repliedIds(response);
@@ -315,6 +321,12 @@ void HttpRequestWorker::on_manager_finished(QNetworkReply *reply) {
 	}
 	else if(reply->request().url().toString().startsWith(SendExtraCashRoute)) {
 		emit repliedExtraCache(response);
+	}
+	else if(reply->request().url().toString().startsWith(SendNewBotRoute)) {
+		emit repliedSendNewBot(response);
+	}
+	else if(reply->request().url().toString().startsWith(BestBotRoute)) {
+		emit repliedBestBot(response);
 	}
 }
 

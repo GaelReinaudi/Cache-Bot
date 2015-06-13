@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "cacherest.h"
+#include "../extraCash/extraCache.h"
 
 const int dayPast = 60;
 const int dayFuture = 60;
@@ -8,26 +10,14 @@ const int playBackStartAgo = 210;
 double smallInc = 1e-3;
 double iniBalance = 3000.0;
 double slushAmmount = 5000.0;
-//QString jsonFile = "../../cacheLight/chrisPurchases.json";
-QString jsonFile = "../../cacheLight/input.json";
+QString jsonFile = "../../cacheLight/jsonDataChris_2015-06-10.json";
+//QString jsonFile = "../../cacheLight/input.json";
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow)
 {
-
-	// curl -ipv4 --insecure --cookie-jar jarfile -d "email=gael.reinaudi@gmail.com&password=wwwwwwww" -X POST https://cache-heroku.herokuapp.com/login
-	// curl -ipv4 --insecure --cookie jarfile -H "Accept: application/json" -X GET https://cache-heroku.herokuapp.com:443/bank/f202f5004003ff51b7cc7e60523b7a43d541b38246c4abc0b765306e977126540f731d94478de121c44d5c214382d36cb3c1f3c4e117a532fc78a8b078c320bb24f671bbd0199ea599c15349d2b3d820
-	manager = new QNetworkAccessManager(this);
-	QNetworkCookieJar* cookieJar = new QNetworkCookieJar(0);
-	manager->setCookieJar(cookieJar);
-	QNetworkRequest request;
-	request.setUrl(QUrl("https://cache-heroku.herokuapp.com/login"));
-	request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
-
-	QNetworkReply *reply = manager->post(request, "email=cache-bot&password=)E[ls$=1IC1A$}Boji'W@zOX_<H<*n");
-	connect(reply, SIGNAL(readyRead()), this, SLOT(slotReadyRead()));
-
+//	m_pExtraCache = new ExtraCache("556502390fbee50300e6d07c");
 
 	ui->setupUi(this);
 //	ui->plot->xAxis->setVisible(false);
@@ -59,7 +49,6 @@ MainWindow::MainWindow(QWidget *parent) :
 	pBars->setPen(QColor(255, 131, 0));
 	pBars->setBrush(QColor(255, 131, 0, 50));
 
-//	connect(ui->spinBox, SIGNAL(editingFinished()), this, SLOT(updateChart()));
 	connect(ui->plot, SIGNAL(mouseWheel(QWheelEvent*)), this, SLOT(onWheelEvent(QWheelEvent*)));
 
 	init();
@@ -72,16 +61,15 @@ MainWindow::~MainWindow()
 
 void MainWindow::init()
 {
-	m_account.loadPlaidJson(jsonFile, 0, 0);
-	ui->costLive50SpinBox->setValue(m_account.costLiving(0.50));
-	ui->costLive75SpinBox->setValue(m_account.costLiving(0.75));
-	ui->costLive90SpinBox->setValue(m_account.costLiving(0.90));
-	ui->costLive95SpinBox->setValue(m_account.costLiving(0.95));
-	ui->costLive99SpinBox->setValue(m_account.costLiving(0.99));
+	ui->costLive50SpinBox->setValue(m_pExtraCache->user()->costLiving(0.50));
+	ui->costLive75SpinBox->setValue(m_pExtraCache->user()->costLiving(0.75));
+	ui->costLive90SpinBox->setValue(m_pExtraCache->user()->costLiving(0.90));
+	ui->costLive95SpinBox->setValue(m_pExtraCache->user()->costLiving(0.95));
+	ui->costLive99SpinBox->setValue(m_pExtraCache->user()->costLiving(0.99));
 
 	// transaction at the starting date of the playback
-	TransactionBundle& real = m_account.allTrans();
-	m_date = real.trans(-1).date.addDays(-playBackStartAgo);//QDate::currentDate();
+	auto& real = m_pUser->allTrans();
+	m_date = real.lastTransactionDate().addDays(-playBackStartAgo);
 	m_d0 = m_date.toJulianDay();
 	qDebug() << "m_date" << m_date;
 
@@ -92,10 +80,6 @@ void MainWindow::init()
 			break;
 		}
 	}
-//	// trick predictions at time of playback
-//	for (int i = 0; i < m_account.m_predicted.count(); ++i) {
-//		(m_account.m_predicted.transArray()+i)->date = (m_account.m_predicted.transArray()+i)->date.addDays(-playBackStartAgo);
-//	}
 
 	m_lastBal = iniBalance;
 	ui->spinBox->setValue(m_lastBal);
@@ -104,26 +88,13 @@ void MainWindow::init()
 	updateChart();
 }
 
-bool MainWindow::wasPredicted(Transaction &trans)
-{
-	for(int i = 0; i < m_account.m_predicted.count(); ++i) {
-		Transaction* pred = m_account.m_predicted.transArray() + i;
-		//qDebug() << pred->jDay() << trans.jDay();
-		if(pred->dist(trans) < 128) {
-			qDebug() << "observing predicted transaction" << pred->dist(trans) << trans.name;
-			return true;
-		}
-	}
-	return false;
-}
-
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
 	int maxDayMove = 1;
 	int minDayMove = 0;
 	if(event->key() == Qt::Key_Up)
 		minDayMove = 1;
-	TransactionBundle& real = m_account.allTrans();
+	auto& real = m_pUser->allTrans();
 	int addDay = 1;
 	if(m_ipb < real.count()) {
 		Transaction& newTrans = real.trans(m_ipb);
@@ -134,11 +105,6 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 			// revert the soon to come increment so that we add a day and come back to this trans
 			--m_ipb;
 			addDay = maxDayMove;
-		}
-		// is this transaction predicted in a way?
-		else if (wasPredicted(newTrans)) {
-			qDebug() << "prediction that came true";
-			newTrans.flags = Transaction::CameTrue;
 		}
 		else {
 			double delta = newTrans.amountDbl();
@@ -241,10 +207,11 @@ void MainWindow::makePredictiPlot()
 {
 	ui->plot->graph(2)->clearData();
 	double minPredict = m_lastBal;
-	for(int i = 0; i < m_account.m_predicted.count(); ++i) {
-		Transaction* trans = m_account.m_predicted.transArray() + i;
+	auto temp = m_pUser->predictedFutureTransactions(1.0);
+	for(int i = 0; i < temp.count(); ++i) {
+		Transaction* trans = &temp[i];
 		// not do anything if it already came true
-		if (trans->flags == Transaction::CameTrue) {
+		if (trans->flags & Transaction::CameTrue) {
 			qDebug() << "not charting prediction that came true";
 			continue;
 		}
@@ -292,10 +259,11 @@ void MainWindow::makePastiPlot()
 	QCPGraph* graph = ui->plot->graph(3);
 	graph->clearData();
 	double minPredict = m_lastBal;
-	for(int i = m_account.m_predicted.count() - 1; i >= 0; --i) {
-		Transaction* trans = m_account.m_predicted.transArray() + i;
+	auto temp = m_pUser->predictedFutureTransactions(1.0);
+	for(int i = 0; i < temp.count(); ++i) {
+		Transaction* trans = &temp[i];
 //		// not do anything if it already came true
-//		if (trans->flags == Transaction::CameTrue) {
+//		if (trans->flags & Transaction::CameTrue) {
 //			qDebug() << "not charting prediction that came true";
 //			continue;
 //		}

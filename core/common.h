@@ -6,12 +6,16 @@
 #include "log.h"
 
 static const int MAX_TRANSACTION_PER_ACCOUNT = 1024 * 8;
-static const int KLA_MULTIPLICATOR = 128;
+static const int KLA_MULTIPLICATOR = 1024;
 static const int KA_MULTIPLICATOR = 1024;
 
-double kindaLog(double amount);
-double unKindaLog(double kindaLogAmount);
-unsigned int proximityHashString(const QString& str);
+#define QSTARTSWITH(actual, expected) QCOMPARE(actual.left(QString(expected).length()), QString(expected))
+
+double CORESHARED_EXPORT kindaLog(double amount);
+double CORESHARED_EXPORT unKindaLog(double kindaLogAmount);
+qint64 CORESHARED_EXPORT proximityHashString(const QString& str);
+qint64 CORESHARED_EXPORT proximityHashString2(const QString& str);
+qint64 CORESHARED_EXPORT stringHashDistance(qint64 h1, qint64 h2);
 
 static inline qint64 absInt(const qint64& x) {
 	return qAbs(x);
@@ -39,10 +43,15 @@ class CORESHARED_EXPORT DBobj : public QObject
 	Q_OBJECT
 
 public:
-	DBobj() {}
-	DBobj(QString id) {
+	DBobj(QObject* parent = 0)
+		:QObject(parent)
+	{}
+	DBobj(QString id, QObject* parent = 0)
+		:QObject(parent)
+	{
 		m_id = id;
 	}
+	~DBobj() {}
 
 	QString id() const {
 		return m_id;

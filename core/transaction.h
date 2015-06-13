@@ -3,31 +3,29 @@
 
 #include "core_global.h"
 #include "common.h"
+class Account;
 
 class CORESHARED_EXPORT Transaction// : public DBobj
 {
-public:
-	Transaction()
-	{}
 private:
 	//	double amount = 0.0;
 		qint64 kamount = 0; // integer = round(amount * Mult)
 		double kla = 0; // Mult * kindaLog(amount)
 public:
-	QString id; // "pKowox9EaKF14mBJ71m3hnmoPgA3Q0T4rjDox"
+	Account* account = 0;
 	QString name; // "YARROW HOTEL GRILL" or "STRIKE TECHNOLOG"
 	QDate date; // "2015-01-28"
 	QStringList categories; // ["Food and Drink", "Restaurants"] or ["Transfer", "Payroll"]
 	union {
-		int hash = 0;
-		uchar b[4];
+		qint64 hash = 0;
+		uchar b[8];
 	} nameHash;
 	int indexHash = -1;
 	// used to make the distance arbitrary far from anything
 	int dimensionOfVoid = 0;
 
 	enum Flag { None = 0x0, Predicted = 0x1, CameTrue = 0x2 };
-	int flags = 0;
+	int flags = Flag::None;
 
 	//! json in
 	void read(const QJsonObject &json);
@@ -58,6 +56,9 @@ public:
 	static bool earlierThan(const Transaction first, const Transaction second) {
 		return first.date < second.date;
 	}
+	static bool smallerAmountThan(const Transaction first, const Transaction second) {
+		return first.amountInt() < second.amountInt();
+	}
 	//! julian day
 	qint64 jDay() const {
 		return date.toJulianDay();
@@ -68,7 +69,7 @@ public:
 		qint64 d = 0;
 		d += qint64(wD) * (absInt(jDay() - other.jDay()));
 		d += qint64(wA) * (absInt(amountInt() - other.amountInt()));
-		d += qint64(wH) * qint64(absInt(nameHash.hash - other.nameHash.hash));
+		d += qint64(wH) * stringHashDistance(nameHash.hash, other.nameHash.hash);
 		d += qint64(wIH) * qint64(absInt(indexHash - other.indexHash));
 		//LOG() << "dist " << d << " = day " << jDay() << "-" << other.jDay() << " kamount " << kamount << "-" << other.kamount << " hash " << nameHash.hash << "-" << other.nameHash.hash << endl;
 		d += qint64(1<<20) * qint64(absInt(dimensionOfVoid - other.dimensionOfVoid));
@@ -77,9 +78,44 @@ public:
 
 	//! distance between this transaction and anther.
 	inline quint64 dist(const Transaction& other) const {
-		return distanceWeighted<8, 1, 128, 0>(other);
+		return distanceWeighted<8*8, 1, 128*8, 0>(other);
 	}
 };
+
+struct StaticTransactionArray
+{
+	//! json in
+	void read(const QJsonArray& npcArray, int afterJday = 0, int beforeJday = 0, const QVector<QString>& onlyAcIds = QVector<QString>());
+	//! json out
+	void write(QJsonArray &npcArray) const;
+	Transaction* transArray() { return &m_transArray[0]; }
+	Transaction& trans(int i) { return m_transArray[i]; }
+	void clear() { m_numTrans = 0; }
+	int count() const { return m_numTrans; }
+	Transaction* appendNew(Account* pInAcc) {
+		Transaction* pNewTrans = &m_transArray[m_numTrans++];
+		pNewTrans->account = pInAcc;
+		return pNewTrans;
+	}
+	Transaction* last() { return &m_transArray[m_numTrans - 1]; }
+	void removeLast() { m_numTrans--; }
+	void sort() {
+		qSort(m_transArray.begin(), m_transArray.begin() + m_numTrans, Transaction::earlierThan);
+	}
+
+	QDate lastTransactionDate() {
+		return transArray()[count() - 1].date;
+	}
+	QDate firstTransactionDate() {
+		return transArray()[0].date;
+	}
+
+private:
+	// static array to allow pointing at the transactions
+	std::array<Transaction, MAX_TRANSACTION_PER_ACCOUNT> m_transArray;
+	int m_numTrans = 0;
+};
+
 
 
 class CORESHARED_EXPORT TransactionBundle : public QObject

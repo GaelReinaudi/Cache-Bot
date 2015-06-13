@@ -3,7 +3,7 @@
 #include <QObject>
 #include <QRectF>
 
-#include "puppy/Puppy.hpp"
+#include "bot.h"
 
 class Zone : public QRectF
 {
@@ -19,27 +19,30 @@ class EvolutionSpinner : public QObject
 	Q_OBJECT
 
 public:
-	EvolutionSpinner(Account* pAc, QObject* parent = 0);
+	EvolutionSpinner(QObject* parent = 0);
 
+	void init(User *pUser);
 public slots:
 	void startStopEvolution(bool doStart);
 	void runEvolution();
 
 protected:
 	unsigned int evaluateSymbReg(std::vector<Puppy::Tree> &ioPopulation, Puppy::Context &ioContext);
-	QString summarize(Puppy::Tree &tree);
+	QJsonObject summarize(Puppy::Tree &tree);
 	QVector<Transaction> predictTrans(Puppy::Tree &tree, double threshProba);
 
 signals:
+	void initialized(bool);
 	void resultReady(const QString &result);
 	void sendMask(double, double, bool);
 	void sendClearMask();
 	void needsReplot();
 	void sendClearList();
 	void newList(QStringList strList);
+	void finishedEvolution(QJsonObject);
 
 private:
-	Puppy::Context* m_context = 0;
+	BotContext* m_context = 0;
 	int m_gen = 0;
 	volatile bool m_doSpin = false;
 };
