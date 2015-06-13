@@ -95,7 +95,7 @@ protected:
 	}
 
 signals:
-	void injected();
+	void injected(User* pUser);
 	void botInjected();
 
 private:

@@ -22,6 +22,7 @@ void CacheAccountConnector::onLoggedIn(bool didLogin)
 		m_user = new User(userID());
 		CacheRest::Instance()->getUserData(userID(), m_user);
 		connect(m_user, SIGNAL(injected(User*)), this, SLOT(onUserInjected(User*)));
+		connect(m_user, SIGNAL(injected(User*)), this, SIGNAL(injected(User*)));
 		connect(m_user, SIGNAL(botInjected()), this, SLOT(onBotInjected()));
 		connect(CacheRest::Instance()->worker, SIGNAL(repliedBestBot(QString)), this, SLOT(onRepliedBestBot(QString)));
 		connect(CacheRest::Instance()->worker, SIGNAL(repliedExtraCache(QString)), this, SLOT(onRepliedExtraCache(QString)));

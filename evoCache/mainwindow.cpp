@@ -11,12 +11,12 @@ MainWindow::MainWindow(QString userID, int afterJday, int beforeJday)
 
 	Evolver* pEvolver = new Evolver(userID);
 
-	connect(pEvolver->user(), SIGNAL(injected(User*)), this, SLOT(onUserInjected(User*)));
+	connect(pEvolver, SIGNAL(injected(User*)), this, SLOT(onUserInjected(User*)));
 
-	connect(ui->startButton, SIGNAL(clicked(bool)), m_evoSpinner, SLOT(startStopEvolution(bool)), Qt::DirectConnection);
+//	connect(ui->startButton, SIGNAL(clicked(bool)), m_evoSpinner, SLOT(startStopEvolution(bool)), Qt::DirectConnection);
 	connect(pEvolver, &Evolver::sendMask, this, &MainWindow::plotMask);
-	connect(pEvolver, &Evolver::summarizingTree, this, &MainWindow::clearMasks, Qt::BlockingQueuedConnection);
-	connect(pEvolver, &Evolver::needsReplot, this, &MainWindow::replotCharts, Qt::BlockingQueuedConnection);
+	connect(pEvolver, &Evolver::summarizingTree, this, &MainWindow::clearMasks);
+	connect(pEvolver, &Evolver::needsReplot, this, &MainWindow::replotCharts);
 	connect(pEvolver, &Evolver::sendClearList, this, &MainWindow::clearList);
 	connect(pEvolver, &Evolver::newSummarizedTree, this, &MainWindow::onNewSummarizedTree, Qt::BlockingQueuedConnection);
 }

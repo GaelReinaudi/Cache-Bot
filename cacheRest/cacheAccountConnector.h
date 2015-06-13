@@ -25,6 +25,9 @@ protected slots:
 	virtual void onRepliedBestBot(QString strData);
 	virtual void onRepliedExtraCache(QString strData);
 
+signals:
+	void injected(User* pUser);
+
 private:
 	QString m_userId;
 	User* m_user;

@@ -89,7 +89,7 @@ struct StaticTransactionArray
 	//! json out
 	void write(QJsonArray &npcArray) const;
 	Transaction* transArray() { return &m_transArray[0]; }
-	Transaction& trans(int i) { return m_transArray[i]; }
+	Transaction& trans(int i) { return i >= 0 ? m_transArray[i] : m_transArray[i + count()]; }
 	void clear() { m_numTrans = 0; }
 	int count() const { return m_numTrans; }
 	Transaction* appendNew(Account* pInAcc) {

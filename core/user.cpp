@@ -75,7 +75,7 @@ void User::injectJsonData(QString jsonStr)
 
 	makeHashBundles();
 
-	emit injected();
+	emit injected(this);
 }
 
 void User::injectJsonBot(QString jsonStr)

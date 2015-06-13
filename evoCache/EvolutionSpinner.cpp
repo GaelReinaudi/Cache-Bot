@@ -218,6 +218,7 @@ QJsonObject EvolutionSpinner::summarize(Tree& tree)
 	QString jsonStr = QJsonDocument(jsonObj).toJson(/*QJsonDocument::Compact*/);
 	LOG() << "tree (" << fit << "): " << tree.toStr() << endl;
 	LOG() << "    " << jsonStr << endl;
+	emit needsReplot();
 	emit newSummarizedTree(jsonObj);
 	return jsonObj;
 }

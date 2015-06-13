@@ -34,6 +34,7 @@ protected:
 signals:
 	void initialized(bool);
 	void finishedEvolution(QJsonObject);
+	void needsReplot();
 	void summarizingTree();
 	void newSummarizedTree(QJsonObject);
 

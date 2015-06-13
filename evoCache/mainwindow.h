@@ -37,9 +37,6 @@ signals:
 
 private:
 	Ui::MainWindow *ui;
-	QThread* m_evoThread;
-	EvolutionSpinner* m_evoSpinner;
-	Account* account;
 };
 
 #endif // MAINWINDOW_H

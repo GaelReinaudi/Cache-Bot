@@ -10,8 +10,7 @@ TEMPLATE = app
 
 INCLUDEPATH  += ./ \
 	$$PWD/../AccountChart \
-	$$PWD/../ \
-	mainwindow.h
+	$$PWD/../
 
 SOURCES += \
 	main.cpp \

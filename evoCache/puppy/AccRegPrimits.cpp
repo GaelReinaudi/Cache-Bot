@@ -184,13 +184,13 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 
 		for (int i = 0; i < targetTrans.count(); ++i) {
 			Transaction* iTarg = &targetTrans[i];
-//			emit evoSpinner()->sendMask(iTarg->time_t(), iTarg->amountDbl(), true);
+			emit evoSpinner()->sendMask(iTarg->time_t(), iTarg->amountDbl(), true);
 		}
 		for (int i = 0; i < m_bundle.count(); ++i) {
 			Transaction& t = m_bundle.trans(i);
 //			emit evoSpinner()->sendMask(t.time_t(), t.amountDbl(), false);
 		}
-		//qDebug() << targetTrans.count() << m_bundle.count();
+		qDebug() << targetTrans.count() << m_bundle.count();
 	}
 }
 
