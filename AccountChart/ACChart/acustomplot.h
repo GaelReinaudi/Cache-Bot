@@ -2,7 +2,7 @@
 #define ACUSTOMPLOT_H
 
 #include "../qcustomplot/qcustomplot.h"
-#include "core/account.h"
+#include "user.h"
 
 class ACustomPlot : public QCustomPlot
 {
@@ -10,8 +10,8 @@ class ACustomPlot : public QCustomPlot
 public:
 	explicit ACustomPlot(QWidget *parent = 0);
 
-	void loadCompressedAmount(Account *account);
-	void loadAmount(Account *account);
+	void loadCompressedAmount(User *pUser);
+	void loadAmount(User* pUser);
 	QList<uint> hashKeys() {
 		return m_hashGraphs.keys();
 	}

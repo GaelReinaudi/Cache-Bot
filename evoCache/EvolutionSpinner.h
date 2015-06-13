@@ -33,13 +33,10 @@ protected:
 
 signals:
 	void initialized(bool);
-	void resultReady(const QString &result);
-	void sendMask(double, double, bool);
-	void sendClearMask();
-	void needsReplot();
-	void sendClearList();
-	void newList(QStringList strList);
 	void finishedEvolution(QJsonObject);
+	void needsReplot();
+	void summarizingTree();
+	void newSummarizedTree(QJsonObject);
 
 private:
 	BotContext* m_context = 0;

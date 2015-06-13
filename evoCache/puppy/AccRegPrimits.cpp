@@ -190,7 +190,7 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 			Transaction& t = m_bundle.trans(i);
 //			emit evoSpinner()->sendMask(t.time_t(), t.amountDbl(), false);
 		}
-		//qDebug() << targetTrans.count() << m_bundle.count();
+		qDebug() << targetTrans.count() << m_bundle.count();
 	}
 }
 

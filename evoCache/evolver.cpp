@@ -28,10 +28,11 @@ void Evolver::init()
 	m_evoThread->start();
 }
 
-void Evolver::onUserInjected()
+void Evolver::onUserInjected(User* pUser)
 {
-	CacheAccountConnector::onUserInjected();
+	CacheAccountConnector::onUserInjected(pUser);
 
+	Q_ASSERT(pUser == user());
 	m_evoSpinner->init(user());
 }
 

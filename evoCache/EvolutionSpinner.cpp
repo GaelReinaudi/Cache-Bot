@@ -208,7 +208,7 @@ QJsonObject EvolutionSpinner::summarize(Tree& tree)
 {
 	QJsonObject jsonObj;
 	jsonObj.insert("features", QJsonArray());
-	emit sendClearMask();
+	emit summarizingTree();
 	tree.mValid = false;
 	m_context->m_summaryJsonObj = &jsonObj;
 	double fit;
@@ -219,7 +219,7 @@ QJsonObject EvolutionSpinner::summarize(Tree& tree)
 	LOG() << "tree (" << fit << "): " << tree.toStr() << endl;
 	LOG() << "    " << jsonStr << endl;
 	emit needsReplot();
-	//emit newList(jsonStr);
+	emit newSummarizedTree(jsonObj);
 	return jsonObj;
 }
 

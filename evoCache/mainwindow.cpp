@@ -1,46 +1,41 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "core/account.h"
+#include "user.h"
+#include "evolver.h"
 
-MainWindow::MainWindow(QString jsonFile, int afterJday, int beforeJday)
+MainWindow::MainWindow(QString userID, int afterJday, int beforeJday)
 	: QMainWindow()
 	, ui(new Ui::MainWindow)
 {
 	ui->setupUi(this);
 
+	Evolver* pEvolver = new Evolver(userID);
 
-	// an account object that is going to be populated by the json file
-	account = new Account();
-	account->loadPlaidJson(jsonFile, afterJday, beforeJday);
+	connect(pEvolver, SIGNAL(injected(User*)), this, SLOT(onUserInjected(User*)));
 
-	ui->acPlot->loadCompressedAmount(account);
-	ui->amPlot->loadAmount(account);
+//	connect(ui->startButton, SIGNAL(clicked(bool)), m_evoSpinner, SLOT(startStopEvolution(bool)), Qt::DirectConnection);
+	connect(pEvolver, &Evolver::sendMask, this, &MainWindow::plotMask);
+	connect(pEvolver, &Evolver::summarizingTree, this, &MainWindow::clearMasks);
+	connect(pEvolver, &Evolver::needsReplot, this, &MainWindow::replotCharts);
+	connect(pEvolver, &Evolver::sendClearList, this, &MainWindow::clearList);
+	connect(pEvolver, &Evolver::newSummarizedTree, this, &MainWindow::onNewSummarizedTree, Qt::BlockingQueuedConnection);
+}
+
+MainWindow::~MainWindow()
+{
+	delete ui;
+}
+
+void MainWindow::onUserInjected(User* pUser)
+{
+	ui->acPlot->loadCompressedAmount(pUser);
+	ui->amPlot->loadAmount(pUser);
 	ui->amPlot->hide();
 
 	connect(ui->acPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), ui->amPlot->xAxis, SLOT(setRange(QCPRange)));
 	connect(ui->acPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), ui->amPlot, SLOT(replot()));
 
 //	ui->acPlot->setPlottingHints(QCP::phFastPolylines | QCP::phCacheLabels);
-
-	// needed to spin a new thread and run the evolution in it
-	m_evoThread = new QThread();
-	m_evoSpinner = new EvolutionSpinner(account);
-	m_evoSpinner->moveToThread(m_evoThread);
-	connect(m_evoThread, &QThread::finished, m_evoSpinner, &QObject::deleteLater);
-	connect(m_evoSpinner, &EvolutionSpinner::resultReady, this, &MainWindow::handleResults);
-	connect(ui->startButton, SIGNAL(clicked(bool)), m_evoSpinner, SLOT(startStopEvolution(bool)), Qt::DirectConnection);
-	connect(m_evoSpinner, &EvolutionSpinner::sendMask, this, &MainWindow::plotMask);
-	connect(m_evoSpinner, &EvolutionSpinner::sendClearMask, this, &MainWindow::clearMasks, Qt::BlockingQueuedConnection);
-	connect(m_evoSpinner, &EvolutionSpinner::needsReplot, this, &MainWindow::replotCharts, Qt::BlockingQueuedConnection);
-	connect(m_evoSpinner, &EvolutionSpinner::sendClearList, this, &MainWindow::clearList);
-	connect(m_evoSpinner, &EvolutionSpinner::newList, this, &MainWindow::newList, Qt::BlockingQueuedConnection);
-	m_evoThread->start();
-	ui->startButton->click();
-}
-
-MainWindow::~MainWindow()
-{
-	delete ui;
 }
 
 void MainWindow::clearMasks()
@@ -73,11 +68,11 @@ void MainWindow::clearList()
 	ui->listBills->clear();
 }
 
-void MainWindow::newList(QStringList strList)
+void MainWindow::onNewSummarizedTree(QJsonObject jsonObj)
 {
 	ui->listBills->clear();
-	for (const QString& str : strList) {
-		ui->listBills->addItem(str);
+	for (const auto f : jsonObj["features"].toArray()) {
+		ui->listBills->addItem(QString(QJsonDocument(f.toObject()).toJson()));
 	}
 }
 

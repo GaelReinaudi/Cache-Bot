@@ -18,7 +18,7 @@ public:
 	void init();
 
 protected:
-	void onUserInjected() override;
+	void onUserInjected(User* pUser) override;
 	void onRepliedSendNewBot(QString strData) override;
 
 protected slots:
@@ -26,6 +26,11 @@ protected slots:
 
 signals:
 	void initialized(bool);
+	void sendMask(double, double, bool);
+	void summarizingTree();
+	void needsReplot();
+	void sendClearList();
+	void newSummarizedTree(QJsonObject);
 
 private:
 	QThread* m_evoThread;

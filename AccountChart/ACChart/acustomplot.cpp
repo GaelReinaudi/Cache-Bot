@@ -56,13 +56,13 @@ void ACustomPlot::showHash(int ithLayer)
 	replot();
 }
 
-void ACustomPlot::loadCompressedAmount(Account* account)
+void ACustomPlot::loadCompressedAmount(User* pUser)
 {
-	makeGraphs(account->hashBundles());
+	makeGraphs(pUser->hashBundles());
 
 	yAxis->setLabel("log($)");
 	// add the purchase points
-	TransactionBundle& allTrans = account->allTrans();
+	auto& allTrans = pUser->allTrans();
 	for (int i = 0; i < allTrans.count(); ++i) {
 		double t = allTrans.trans(i).time_t();
 		uint h = allTrans.trans(i).nameHash.hash;
@@ -76,11 +76,11 @@ void ACustomPlot::loadCompressedAmount(Account* account)
 }
 
 
-void ACustomPlot::loadAmount(Account* account)
+void ACustomPlot::loadAmount(User* pUser)
 {
 	yAxis->setLabel("$");
 	// add the purchase points
-	TransactionBundle& allTrans = account->allTrans();
+	auto& allTrans = pUser->allTrans();
 	for (int i = 0; i < allTrans.count(); ++i) {
 		double t = allTrans.trans(i).time_t();
 		graph(0)->addData(t, allTrans.trans(i).compressedAmount());
