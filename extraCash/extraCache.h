@@ -12,7 +12,7 @@ public:
 	ExtraCache(QString userID);
 
 protected:
-	void onUserInjected() override;
+	void onUserInjected(User* pUser) override;
 	void onBotInjected() override;
 	void onRepliedExtraCache(QString strData) override;
 

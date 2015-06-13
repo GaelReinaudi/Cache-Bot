@@ -25,13 +25,16 @@ void Evolver::init()
 	connect(m_evoThread, &QThread::finished, m_evoSpinner, &QObject::deleteLater);
 	connect(m_evoSpinner, &EvolutionSpinner::initialized, m_evoSpinner, &EvolutionSpinner::startStopEvolution);
 	connect(m_evoSpinner, &EvolutionSpinner::finishedEvolution, this, &Evolver::onFinishedEvolution);
+	connect(m_evoSpinner, &EvolutionSpinner::summarizingTree, this, &Evolver::summarizingTree);
+	connect(m_evoSpinner, &EvolutionSpinner::newSummarizedTree, this, &Evolver::newSummarizedTree);
 	m_evoThread->start();
 }
 
-void Evolver::onUserInjected()
+void Evolver::onUserInjected(User* pUser)
 {
-	CacheAccountConnector::onUserInjected();
+	CacheAccountConnector::onUserInjected(pUser);
 
+	Q_ASSERT(pUser == user());
 	m_evoSpinner->init(user());
 }
 

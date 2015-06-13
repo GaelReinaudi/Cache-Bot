@@ -2,7 +2,7 @@
 #define AMPLOT_H
 
 #include "../qcustomplot/qcustomplot.h"
-class Account;
+class User;
 
 class AMPlot : public QCustomPlot
 {
@@ -10,7 +10,7 @@ class AMPlot : public QCustomPlot
 public:
 	explicit AMPlot(QWidget *parent = 0);
 
-	void loadAmount(Account *account);
+	void loadAmount(User* pUser);
 
 signals:
 

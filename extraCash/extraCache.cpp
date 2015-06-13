@@ -8,9 +8,9 @@ ExtraCache::ExtraCache(QString userID)
 {
 }
 
-void ExtraCache::onUserInjected()
+void ExtraCache::onUserInjected(User* pUser)
 {
-	CacheAccountConnector::onUserInjected();
+	CacheAccountConnector::onUserInjected(pUser);
 	CacheRest::Instance()->getBestBot(userID(), user());
 }
 
@@ -58,7 +58,7 @@ void ExtraCache::onBotInjected()
 		extraTotal += c.amount;
 	}
 	m_slushFundStartsAt = extraTotal;
-	qDebug() << "extraTotal" << ;
+	qDebug() << "extraTotal" << m_slushFundStartsAt;
 
 	double threshProba = 1.0;
 	m_spark = user()->predictedSparkLine(threshProba);

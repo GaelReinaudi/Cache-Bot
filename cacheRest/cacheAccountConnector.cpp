@@ -21,7 +21,7 @@ void CacheAccountConnector::onLoggedIn(bool didLogin)
 	if(didLogin) {
 		m_user = new User(userID());
 		CacheRest::Instance()->getUserData(userID(), m_user);
-		connect(m_user, SIGNAL(injected()), this, SLOT(onUserInjected()));
+		connect(m_user, SIGNAL(injected(User*)), this, SLOT(onUserInjected(User*)));
 		connect(m_user, SIGNAL(botInjected()), this, SLOT(onBotInjected()));
 		connect(CacheRest::Instance()->worker, SIGNAL(repliedBestBot(QString)), this, SLOT(onRepliedBestBot(QString)));
 		connect(CacheRest::Instance()->worker, SIGNAL(repliedExtraCache(QString)), this, SLOT(onRepliedExtraCache(QString)));
@@ -31,9 +31,9 @@ void CacheAccountConnector::onLoggedIn(bool didLogin)
 	}
 }
 
-void CacheAccountConnector::onUserInjected()
+void CacheAccountConnector::onUserInjected(User* pUser)
 {
-	qDebug() << "CacheAccountConnector has a user injected object";
+	qDebug() << "CacheAccountConnector has injected user" << pUser->email();
 }
 
 void CacheAccountConnector::onBotInjected()

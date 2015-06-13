@@ -18,7 +18,7 @@ class MainWindow : public QMainWindow
 	Q_OBJECT
 
 public:
-	explicit MainWindow(QString jsonFile, int afterJday = 0, int beforeJday = 0);
+	explicit MainWindow(QString userID, int afterJday = 0, int beforeJday = 0);
 	~MainWindow();
 
 public slots:
@@ -29,7 +29,8 @@ public slots:
 	void clearMasks();
 	void replotCharts();
 	void clearList();
-	void newList(QStringList strList);
+	void onNewSummarizedTree(QJsonObject jsonObj);
+	void onUserInjected(User* pUser);
 
 signals:
 	void operate(const QString &);

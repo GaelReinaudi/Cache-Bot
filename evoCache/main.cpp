@@ -4,7 +4,7 @@
 int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
-	QString jsonFile = "../../data/adelineGaelTransactions.json";
+	QString jsonFileOrUser = "../../data/adelineGaelTransactions.json";
 	int afterJday = 0;
 	int beforeJday = 0;
 	if(argc > 1) {
@@ -14,7 +14,9 @@ int main(int argc, char *argv[])
 			if(argc > 3) {
 				beforeJday = QString(argv[3]).toInt();
 			}
-	MainWindow w(jsonFile, afterJday, beforeJday);
+		}
+	}
+	MainWindow w(jsonFileOrUser, afterJday, beforeJday);
 	w.show();
 
 	return a.exec();

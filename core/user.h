@@ -70,6 +70,9 @@ public:
 		return m_extraCacheFund;
 	}
 
+	QString email() const{
+		return m_email;
+	}
 
 public slots:
 	void injectJsonData(QString jsonStr);
@@ -127,6 +130,7 @@ private:
 	BotContext* m_botContext = 0;
 	Fund* m_extraCacheFund = 0;
 	QDate m_today;
+	QString m_email;
 };
 
 #endif // USER_H
