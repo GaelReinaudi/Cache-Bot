@@ -48,6 +48,6 @@ void Evolver::onRepliedSendNewBot(QString strData)
 
 	qDebug() << strData;
 	std::cout << "Exiting program";
-	qApp->exit();
+	//qApp->exit();
 }
 

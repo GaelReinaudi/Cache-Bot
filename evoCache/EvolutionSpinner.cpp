@@ -5,8 +5,8 @@
 
 const double THRESHOLD_PROBA_BILL = 1.0;
 
-#define POP_SIZE_DEFAULT 50
-#define NBR_GEN_DEFAULT 50
+#define POP_SIZE_DEFAULT 500
+#define NBR_GEN_DEFAULT 20
 #define NBR_PART_TOURNAMENT_DEFAULT 2
 #define MAX_DEPTH_DEFAULT 5
 #define MIN_INIT_DEPTH_DEFAULT 3
@@ -133,7 +133,7 @@ void EvolutionSpinner::runEvolution() {
 	}
 
 	// run again with full features
-	LIMIT_NUM_FEATURES = MAX_NUM_FEATURES;
+	BotContext::LIMIT_NUM_FEATURES = BotContext::MAX_NUM_FEATURES;
 	m_context->filterHashIndex = -1;
 	Tree veryBestTree;
 	// Initialize population.
@@ -151,7 +151,7 @@ void EvolutionSpinner::runEvolution() {
 
 		// Evolve population for the given number of generations
 		LOG() << "Starting evolution" << endl;
-		for(unsigned int i=1; i<=10*lNbrGen; ++i) {
+		for(unsigned int i=1; i<=100*lNbrGen; ++i) {
 			if(!m_doSpin)  {
 				break;
 			}
@@ -176,7 +176,7 @@ void EvolutionSpinner::runEvolution() {
 		}
 		LOG() << "End of evolution" << endl;
 
-		QVector<Transaction> futureTransactions = predictTrans(veryBestTree, THRESHOLD_PROBA_BILL);
+//		QVector<Transaction> futureTransactions = predictTrans(veryBestTree, THRESHOLD_PROBA_BILL);
 //		m_context->m_pAccount->toJson(futureTransactions, "predicted");
 
 	}

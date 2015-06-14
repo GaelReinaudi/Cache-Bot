@@ -31,7 +31,7 @@ Puppy::Primitive::tryReplaceArgumentNode(unsigned int inN, std::string primName,
 	newStack.push_back(1);
 	unsigned int tempStack = ioContext.mCallStack.back();
 	ioContext.mCallStack.pop_back();
-	for (unsigned int iFeat = MAX_NUM_FEATURES - 1; iFeat >= LIMIT_NUM_FEATURES; --iFeat) {
+	for (unsigned int iFeat = BotContext::MAX_NUM_FEATURES - 1; iFeat >= BotContext::LIMIT_NUM_FEATURES; --iFeat) {
 		Tree dupTree = Tree(*ioContext.mTree);
 		unsigned int indexFeat = ioContext.mCallStack.back() + 1;
 		for(unsigned int j=0; j<iFeat; ++j)
@@ -90,7 +90,7 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 	QDate lastDate = ioContext.m_pUser->allTrans().lastTransactionDate();//.addDays(-4);
 	QDate iniDate = ioContext.m_pUser->allTrans().firstTransactionDate();
 
-	QVector<Transaction> targetTrans = targetTransactions(iniDate, lastDate.addDays(TARGET_TRANS_FUTUR_DAYS));
+	QVector<Transaction> targetTrans = targetTransactions(iniDate, lastDate.addDays(BotContext::TARGET_TRANS_FUTUR_DAYS));
 	if (targetTrans.count() == 0) {
 		LOG() << "MonthlyAmount(0 TARGET): day "<<m_dayOfMonth<<" kla "<< m_kla << endl;
 	}
@@ -177,7 +177,8 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 			}
 		}
 
-		if(m_billProba > 1.0) {
+//		if(m_billProba > 0.0)
+		{
 			QJsonArray features = (*ioContext.m_summaryJsonObj)["features"].toArray();
 			features.append(toJson(ioContext));
 			ioContext.m_summaryJsonObj->insert("features", features);
