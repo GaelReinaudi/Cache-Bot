@@ -3,7 +3,7 @@
 
 #include <QtCore>
 #include "puppy/Puppy.hpp"
-#include "bot.h"
+#include "botContext.h"
 
 class Add : public Puppy::Primitive
 {

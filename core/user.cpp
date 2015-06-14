@@ -1,5 +1,6 @@
 #include "user.h"
 #include "bot.h"
+#include "botContext.h"
 #include "fund.h"
 
 void User::injectJsonData(QString jsonStr)
