@@ -7,10 +7,8 @@
 //using namespace Puppy;
 #define CONTEXT_SEED_DEFAULT 0
 
-class CORESHARED_EXPORT BotContext : public QObject, public Puppy::Context
+class CORESHARED_EXPORT BotContext : public DBobj, public Puppy::Context
 {
-	Q_OBJECT
-
 public:
 	BotContext (User* pUser);
 

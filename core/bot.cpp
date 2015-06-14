@@ -5,7 +5,7 @@ unsigned int BotContext::LIMIT_NUM_FEATURES = 1;
 unsigned int BotContext::TARGET_TRANS_FUTUR_DAYS = 0;
 
 BotContext::BotContext(User *pUser)
-	: QObject(pUser)
+	: DBobj(pUser)
 	, Puppy::Context(pUser)
 {
 	LOG() << "Creating evolution context" << endl;
