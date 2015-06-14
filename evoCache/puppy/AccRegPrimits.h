@@ -3,10 +3,7 @@
 
 #include <QtCore>
 #include "puppy/Puppy.hpp"
-
-static const int MAX_NUM_FEATURES = 20;
-static unsigned int LIMIT_NUM_FEATURES = 1;
-static unsigned int TARGET_TRANS_FUTUR_DAYS = 100;
+#include "bot.h"
 
 class Add : public Puppy::Primitive
 {
@@ -120,13 +117,14 @@ protected:
 	TransactionBundle m_bundle;
 	// if any, the hash to filter the transaction on
 	int m_filterHash = -1;
+
 };
 
 class CacheBotRootPrimitive : public AccountFeature
 {
 public:
 	CacheBotRootPrimitive()
-		: AccountFeature(MAX_NUM_FEATURES, rootName().toStdString())
+		: AccountFeature(BotContext::MAX_NUM_FEATURES, rootName().toStdString())
 	{ }
 	virtual ~CacheBotRootPrimitive() { }
 	static QString rootName() {
@@ -139,7 +137,7 @@ public:
 		double& lResult = *(double*)outDatum;
 		lResult = 0.0;
 		double lArgi;
-		for(unsigned int i = 0; i < LIMIT_NUM_FEATURES; ++i) {
+		for(unsigned int i = 0; i < BotContext::LIMIT_NUM_FEATURES; ++i) {
 			getArgument(i, &lArgi, ioContext);
 			lResult += lArgi;
 		}

@@ -22,6 +22,10 @@ public:
 	EvolutionSpinner(QObject* parent = 0);
 
 	void init(User *pUser);
+	BotContext *context() const {
+		return m_context;
+	}
+
 public slots:
 	void startStopEvolution(bool doStart);
 	void runEvolution();
@@ -34,9 +38,6 @@ protected:
 signals:
 	void initialized(bool);
 	void finishedEvolution(QJsonObject);
-	void needsReplot();
-	void summarizingTree();
-	void newSummarizedTree(QJsonObject);
 
 private:
 	BotContext* m_context = 0;

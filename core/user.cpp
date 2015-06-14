@@ -72,10 +72,17 @@ void User::injectJsonData(QString jsonStr)
 		}
 	}
 
-
 	makeHashBundles();
 
 	emit injected(this);
+}
+
+BotContext* User::makeBotContext()
+{
+	if(m_botContext)
+		delete m_botContext;
+	m_botContext = new BotContext(this);
+	return m_botContext;
 }
 
 void User::injectJsonBot(QString jsonStr)
@@ -92,9 +99,7 @@ void User::injectJsonBot(QString jsonStr)
 	}
 
 	// remake the context just in case
-	if(m_botContext)
-		delete m_botContext;
-	m_botContext = new BotContext(this);
+	makeBotContext();
 	m_bestBot = new Bot(jsonObj, this);
 	m_bestBot->init(m_botContext);
 	m_bestBot->summarize();

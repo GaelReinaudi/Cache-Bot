@@ -1,6 +1,8 @@
 #include "bot.h"
+#include "AccRegPrimits.h"
 
-
+unsigned int BotContext::LIMIT_NUM_FEATURES = 1;
+unsigned int BotContext::TARGET_TRANS_FUTUR_DAYS = 0;
 
 BotContext::BotContext(User *pUser)
 	: QObject(pUser)
@@ -72,7 +74,7 @@ Bot::Bot(QJsonObject jsonBot, QObject *parent)
 
 void Bot::init(BotContext *context) {
 	m_context = context;
-	LIMIT_NUM_FEATURES = MAX_NUM_FEATURES;
+	BotContext::LIMIT_NUM_FEATURES = BotContext::MAX_NUM_FEATURES;
 	Puppy::initializeTree(m_puppyTree, *m_context, m_botStrings);
 	qDebug() << m_puppyTree.toStr();
 }

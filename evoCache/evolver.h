@@ -28,7 +28,6 @@ signals:
 	void initialized(bool);
 	void sendMask(double, double, bool);
 	void summarizingTree();
-	void needsReplot();
 	void sendClearList();
 	void newSummarizedTree(QJsonObject);
 
