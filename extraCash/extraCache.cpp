@@ -68,7 +68,7 @@ void ExtraCache::onBotInjected()
 
 	int addDay = 1;
 	double m_extraToday = -1.0;
-	double posSlope = qMax(0.0, m_minSlope);
+	double posSlope = m_minSlope;//qMax(0.0, m_minSlope);
 	double extraToday = posSlope * addDay / 2.0;
 	if(m_extraToday < 0.0)
 		m_extraToday = extraToday;
