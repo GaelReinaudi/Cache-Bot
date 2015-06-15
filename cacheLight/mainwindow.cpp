@@ -13,13 +13,14 @@ double slushAmmount = 5000.0;
 QString jsonFile = "../../cacheLight/jsonDataChris_2015-06-10.json";
 //QString jsonFile = "../../cacheLight/input.json";
 
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow::MainWindow(QString userID, QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow)
 {
-//	m_pExtraCache = new ExtraCache("556502390fbee50300e6d07c");
-
 	ui->setupUi(this);
+
+	m_pExtraCache = new ExtraCache(userID);
+
 //	ui->plot->xAxis->setVisible(false);
 //	ui->plot->yAxis->setVisible(false);
 	ui->plot->yAxis2->setVisible(true);

@@ -6,10 +6,11 @@
 
 class ExtraCache : public CacheAccountConnector
 {
-	Q_OBJECT
+	//Q_OBJECT
 
 public:
 	ExtraCache(QString userID);
+	virtual ~ExtraCache() {};
 
 protected:
 	void onUserInjected(User* pUser) override;

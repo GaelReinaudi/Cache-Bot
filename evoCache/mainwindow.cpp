@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "user.h"
 #include "evolver.h"
+#include "botContext.h"
 
 MainWindow::MainWindow(QString userID, int afterJday, int beforeJday)
 	: QMainWindow()

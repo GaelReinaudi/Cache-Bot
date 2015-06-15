@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include <QDate>
-#include "core/account.h"
+#include "user.h"
 #include "qcustomplot.h"
 #include "cacherest.h"
 #include <QNetworkCookieJar>
@@ -19,7 +19,7 @@ class MainWindow : public QMainWindow
 	Q_OBJECT
 
 public:
-	explicit MainWindow(QWidget *parent = 0);
+	explicit MainWindow(QString userID, QWidget *parent = 0);
 	~MainWindow();
 	void keyPressEvent(QKeyEvent *event);
 	int computeMinSlopeOver(int numDays);
