@@ -16,7 +16,7 @@ void ExtraCache::onUserInjected(User* pUser)
 
 void ExtraCache::onBotInjected()
 {
-	LOG() << "costLiving(50/75/90/95/99) "
+	qDebug() << "costLiving(50/75/90/95/99) "
 		  << user()->costLiving(0.50)
 		  << user()->costLiving(0.75)
 		  << user()->costLiving(0.90)
@@ -50,6 +50,8 @@ void ExtraCache::onBotInjected()
 	m_slushFundTypicalNeed = 0.5 * user()->balance(Account::Type::Checking);
 //	m_slushFundTypicalNeed = 0.5 * user()->balance(Account::Type::Checking);
 	m_slushFundTypicalNeed = 0.5 * user()->costLiving(0.75);
+
+	qDebug() << "m_slushFundTypicalNeed" << m_slushFundTypicalNeed;
 
 	// the amount of money on the extraCash fund already
 	Fund* extraFund = user()->extraCacheFund();

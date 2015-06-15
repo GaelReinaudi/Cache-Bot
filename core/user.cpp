@@ -18,7 +18,7 @@ void User::injectJsonData(QString jsonStr)
 
 	//////// "user"
 	QJsonObject jsonUser = jsonObj["user"].toObject();
-	m_email = jsonUser["email"].toString();
+	m_email = jsonUser["local"].toObject()["email"].toString();
 	qDebug() << "user" << jsonUser["_id"].toString() << ":" << jsonUser["local"].toObject()["email"].toString();
 	Q_ASSERT_X(jsonUser["_id"].toString() == id(), "injectJsonData", jsonUser["_id"].toString().toUtf8() + " != " + id().toUtf8());
 
