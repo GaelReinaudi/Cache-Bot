@@ -49,7 +49,7 @@ void ExtraCache::onBotInjected()
 	// some arbitrary slush need to (try to) never go under of
 	m_slushFundTypicalNeed = 0.5 * user()->balance(Account::Type::Checking);
 //	m_slushFundTypicalNeed += 0.5 * user()->balance(Account::Type::Checking);
-	m_slushFundTypicalNeed += 0.5 * user()->costLiving(0.75);
+	m_slushFundTypicalNeed += 0.5 * user()->costLiving(0.75) * 30;
 
 	qDebug() << "m_slushFundTypicalNeed" << m_slushFundTypicalNeed;
 
