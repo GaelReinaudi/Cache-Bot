@@ -48,8 +48,8 @@ void ExtraCache::onBotInjected()
 
 	// some arbitrary slush need to (try to) never go under of
 	m_slushFundTypicalNeed = 0.5 * user()->balance(Account::Type::Checking);
-//	m_slushFundTypicalNeed = 0.5 * user()->balance(Account::Type::Checking);
-	m_slushFundTypicalNeed = 0.5 * user()->costLiving(0.75);
+//	m_slushFundTypicalNeed += 0.5 * user()->balance(Account::Type::Checking);
+	m_slushFundTypicalNeed += 0.5 * user()->costLiving(0.75);
 
 	qDebug() << "m_slushFundTypicalNeed" << m_slushFundTypicalNeed;
 
@@ -121,6 +121,7 @@ int ExtraCache::computeMinSlopeOver(int numDays)
 		m_minSlope = (balanceNow - effectiveSlushforDay - m_slushFundStartsAt) / numDays;// / 2.0;
 		dayMin = tToday + numDays;
 	}
+	qDebug() << "balanceNow" << balanceNow << "m_slushFundTypicalNeed" << m_slushFundTypicalNeed << "m_slushFundStartsAt" << m_slushFundStartsAt;
 	LOG() << "computeMinSlopeOver(" << numDays << ") = [$/d]" << m_minSlope << "dayMin" << dayMin << endl;
 	return dayMin;
 }
