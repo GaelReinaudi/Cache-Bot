@@ -16,7 +16,7 @@ void ExtraCache::onUserInjected(User* pUser)
 
 void ExtraCache::onBotInjected()
 {
-	LOG() << "costLiving(50/75/90/95/99) "
+	qDebug() << "costLiving(50/75/90/95/99) "
 		  << user()->costLiving(0.50)
 		  << user()->costLiving(0.75)
 		  << user()->costLiving(0.90)
@@ -48,8 +48,10 @@ void ExtraCache::onBotInjected()
 
 	// some arbitrary slush need to (try to) never go under of
 	m_slushFundTypicalNeed = 0.5 * user()->balance(Account::Type::Checking);
-//	m_slushFundTypicalNeed = 0.5 * user()->balance(Account::Type::Checking);
-	m_slushFundTypicalNeed = 0.5 * user()->costLiving(0.75);
+//	m_slushFundTypicalNeed += 0.5 * user()->balance(Account::Type::Checking);
+	m_slushFundTypicalNeed += 0.5 * user()->costLiving(0.75) * 30;
+
+	qDebug() << "m_slushFundTypicalNeed" << m_slushFundTypicalNeed;
 
 	// the amount of money on the extraCash fund already
 	Fund* extraFund = user()->extraCacheFund();
@@ -66,7 +68,7 @@ void ExtraCache::onBotInjected()
 
 	int addDay = 1;
 	double m_extraToday = -1.0;
-	double posSlope = qMax(0.0, m_minSlope);
+	double posSlope = m_minSlope;//qMax(0.0, m_minSlope);
 	double extraToday = posSlope * addDay / 2.0;
 	if(m_extraToday < 0.0)
 		m_extraToday = extraToday;
@@ -119,6 +121,7 @@ int ExtraCache::computeMinSlopeOver(int numDays)
 		m_minSlope = (balanceNow - effectiveSlushforDay - m_slushFundStartsAt) / numDays;// / 2.0;
 		dayMin = tToday + numDays;
 	}
+	qDebug() << "balanceNow" << balanceNow << "m_slushFundTypicalNeed" << m_slushFundTypicalNeed << "m_slushFundStartsAt" << m_slushFundStartsAt;
 	LOG() << "computeMinSlopeOver(" << numDays << ") = [$/d]" << m_minSlope << "dayMin" << dayMin << endl;
 	return dayMin;
 }

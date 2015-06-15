@@ -1,5 +1,6 @@
 #include "user.h"
 #include "bot.h"
+#include "botContext.h"
 #include "fund.h"
 
 void User::injectJsonData(QString jsonStr)
@@ -17,7 +18,7 @@ void User::injectJsonData(QString jsonStr)
 
 	//////// "user"
 	QJsonObject jsonUser = jsonObj["user"].toObject();
-	m_email = jsonUser["email"].toString();
+	m_email = jsonUser["local"].toObject()["email"].toString();
 	qDebug() << "user" << jsonUser["_id"].toString() << ":" << jsonUser["local"].toObject()["email"].toString();
 	Q_ASSERT_X(jsonUser["_id"].toString() == id(), "injectJsonData", jsonUser["_id"].toString().toUtf8() + " != " + id().toUtf8());
 
@@ -157,7 +158,7 @@ SparkLine User::predictedSparkLine(double threshProba)
 		temp.insertMulti(futDays, t.amountDbl());
 	}
 	// now we sort them and make absolute values in the Sparkline
-	double balanceNow = balance(Account::Type::Checking | Account::Type::Saving);
+	double balanceNow = balance(Account::Type::Checking);
 	LOG() << "predictedSparkLine(" << threshProba << "), temp.size = " << temp.size() << ", temp.uniqueKeys = " << temp.uniqueKeys().size() << ". balanceNow = " << balanceNow << endl;
 	qDebug() << "temp.uniqueKeys()" << temp.uniqueKeys();
 	SparkLine ret;

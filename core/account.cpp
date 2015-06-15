@@ -25,6 +25,9 @@ void Account::loadJsonData(QJsonObject json, int afterJday, int beforeJday)
 	if (metaName.contains("checking", Qt::CaseInsensitive)) {
 		m_type = Type::Checking;
 	}
+	if (metaName.contains("Ckg", Qt::CaseInsensitive)) {
+		m_type = Type::Checking;
+	}
 	if (type.contains("credit", Qt::CaseInsensitive)) {
 		m_type = Type::Credit;
 	}

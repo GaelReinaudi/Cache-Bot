@@ -15,7 +15,8 @@ SOURCES += \
     user.cpp \
 	transaction.cpp \
     bot.cpp \
-    fund.cpp
+    fund.cpp \
+    botContext.cpp
 
 
 HEADERS += \
@@ -26,7 +27,8 @@ HEADERS += \
 	user.h \
     transaction.h \
     bot.h \
-    fund.h
+    fund.h \
+    botContext.h
 
 unix {
 	target.path = /usr/lib
