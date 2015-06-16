@@ -5,14 +5,17 @@ QT       += network
 QT       -= gui
 
 TARGET = extraCash
+TEMPLATE = app
+
 CONFIG   += console
 CONFIG   -= app_bundle
 
-TEMPLATE = app
-
 
 SOURCES += main.cpp \
-    extraCache.cpp
+	extraCache.cpp
+
+HEADERS += \
+	extraCache.h
 
 unix {
 LIBS += -L$${SRC_DIR}/bin/$${DEBUGRELEASE} -lcacheRest
@@ -23,5 +26,3 @@ LIBS += -L$${SRC_DIR}/bin/$${DEBUGRELEASE} -lcacheRest
 LIBS += -L$${SRC_DIR}/bin/$${DEBUGRELEASE} -lcore
 }
 
-HEADERS += \
-    extraCache.h

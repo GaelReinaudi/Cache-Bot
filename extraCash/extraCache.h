@@ -6,10 +6,11 @@
 
 class ExtraCache : public CacheAccountConnector
 {
-	Q_OBJECT
+	//Q_OBJECT
 
 public:
 	ExtraCache(QString userID);
+	virtual ~ExtraCache() {};
 
 	double checkingBalance() const { return user()->balance(Account::Type::Checking); }
 	double slushNeed() const { return m_slushFundTypicalNeed; }
