@@ -96,7 +96,6 @@ int ExtraCache::computeMinSlopeOver(int numDays)
 	m_minSlope = 9999.9;
 	int dayMin = -1;
 	double tToday = m_date.toJulianDay() - m_d0;
-	double yToday = m_slushFundStartsAt;
 	SparkLine* pDat = &m_spark;
 	SparkLine::iterator it = pDat->begin();
 	// first value is the last known balance;
@@ -109,23 +108,23 @@ int ExtraCache::computeMinSlopeOver(int numDays)
 		if (futDay > 0 && futDay < 30.0) {
 			double effectiveSlushforDay = m_slushFundTypicalNeed * (0.5 + 1.0 * (futDay) / 30.0);
 			double effectY = balanceThen - effectiveSlushforDay;
-			double slope = (effectY - yToday) / qMax(1.0, futDay);
-			qDebug() << "futDay" << futDay << "effectY" << effectY << "yToday" << yToday << "balanceThen" << balanceThen;
-			qDebug() << "    effectiveSlushforDay" << effectiveSlushforDay << "(Dy - yToday)" << (effectY - yToday);
+			double slope = (effectY - m_slushFundStartsAt) / qMax(1.0, futDay);
+			qDebug() << "futDay" << futDay << "balanceThen" << balanceThen << "    effectiveSlushforDay" << effectiveSlushforDay << "effectY" << effectY << "(effectY - yToday)" << (effectY - m_slushFundStartsAt);
 			if(slope < m_minSlope) {
 				m_minSlope = slope;
 				dayMin = futDay;
 			}
-			qDebug() << "slope" << slope << "m_minSlope" << m_minSlope;
+			qDebug() << "    slope" << slope << "m_minSlope" << m_minSlope;
 		}
 		++it;
 	}
 	if (m_minSlope == 9999.9) {
 		double effectiveSlushforDay = m_slushFundTypicalNeed * (0.5 + 1.0 * (numDays) / 30.0);
-		m_minSlope = (balanceNow - effectiveSlushforDay - m_slushFundStartsAt) / numDays;// / 2.0;
+		double effectY = balanceNow - effectiveSlushforDay;
+		m_minSlope = (effectY - m_slushFundStartsAt) / numDays;// / 2.0;
 		dayMin = tToday + numDays;
-		qDebug() << "balanceNow" << balanceNow << "m_slushFundTypicalNeed" << m_slushFundTypicalNeed << "m_slushFundStartsAt" << m_slushFundStartsAt;
-		qDebug() << "m_minSlope" << m_minSlope;
+		qDebug() << "futDay:=" << 30 << "balanceThen" << balanceNow << "    effectiveSlushforDay" << effectiveSlushforDay << "effectY" << effectY << "(effectY - yToday)" << (effectY - m_slushFundStartsAt);
+		qDebug() << "    m_minSlope" << m_minSlope;
 	}
 	LOG() << "computeMinSlopeOver(" << numDays << ") = [$/d]" << m_minSlope << "dayMin" << dayMin << endl;
 	return dayMin;
