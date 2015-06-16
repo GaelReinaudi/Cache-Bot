@@ -3,6 +3,8 @@
 #include "cacherest.h"
 #include "fund.h"
 
+static const double SLOPE_MULTIPLICATION_EXTRA_TODAY = 0.5;
+
 ExtraCache::ExtraCache(QString userID)
 	: CacheAccountConnector(userID)
 {
@@ -11,11 +13,6 @@ ExtraCache::ExtraCache(QString userID)
 void ExtraCache::onUserInjected(User* pUser)
 {
 	CacheAccountConnector::onUserInjected(pUser);
-	CacheRest::Instance()->getBestBot(userID(), user());
-}
-
-void ExtraCache::onBotInjected()
-{
 	qDebug() << "costLiving(50/75/90/95/99) "
 		  << user()->costLiving(0.50)
 		  << user()->costLiving(0.75)
@@ -31,6 +28,14 @@ void ExtraCache::onBotInjected()
 		  << user()->makeLiving(0.99)
 		  << endl;
 
+	double checkingBal = checkingBalance();
+	qDebug() << "checkingBal" << checkingBal << " (Un/Ch/Sa/Cr"
+			 << user()->balance(Account::Type::Unknown)
+			 << user()->balance(Account::Type::Checking)
+			 << user()->balance(Account::Type::Saving)
+			 << user()->balance(Account::Type::Credit)
+			 << " )";
+
 	// transaction at the starting date of the playback
 	auto& real = user()->allTrans();
 	m_date = real.lastTransactionDate();//.addDays(-playBackStartAgo);
@@ -45,17 +50,9 @@ void ExtraCache::onBotInjected()
 		}
 	}
 
-	double m_lastBal = user()->balance(Account::Type::Checking);
-	qDebug() << "m_lastBal" << m_lastBal << " (Un/Ch/Sa/Cr"
-			 << user()->balance(Account::Type::Unknown)
-			 << user()->balance(Account::Type::Checking)
-			 << user()->balance(Account::Type::Saving)
-			 << user()->balance(Account::Type::Credit)
-			 << " )";
-
 	// some arbitrary slush need to (try to) never go under of
-	m_slushFundTypicalNeed = 0.5 * user()->balance(Account::Type::Checking);
-//	m_slushFundTypicalNeed += 0.5 * user()->balance(Account::Type::Checking);
+	m_slushFundTypicalNeed = 0.0;
+	m_slushFundTypicalNeed += 0.5 * user()->balance(Account::Type::Checking);
 	m_slushFundTypicalNeed += 0.5 * user()->costLiving(0.75) * 30;
 
 	qDebug() << "m_slushFundTypicalNeed" << m_slushFundTypicalNeed;
@@ -63,20 +60,26 @@ void ExtraCache::onBotInjected()
 	// the amount of money on the extraCash fund already
 	Fund* extraFund = user()->extraCacheFund();
 	double extraTotal = 0.0;
-	for (Cash& c : extraFund->cashes()) {
+	for (const Cash& c : extraFund->cashes()) {
 		extraTotal += c.amount;
 	}
 	m_slushFundStartsAt = extraTotal;
 	qDebug() << "extraTotal" << m_slushFundStartsAt;
 
+	CacheRest::Instance()->getBestBot(userID(), user());
+}
+
+void ExtraCache::onBotInjected()
+{
 	double threshProba = 1.0;
+	// with the Bot, computes where the balance is going to go in the future
 	m_spark = user()->predictedSparkLine(threshProba);
+	// then, based on that, gets the smallest growth slope
 	computeMinSlopeOver(30);
 
-	int addDay = 1;
 	double m_extraToday = -1.0;
 	double posSlope = m_minSlope;//qMax(0.0, m_minSlope);
-	double extraToday = posSlope * addDay / 2.0;
+	double extraToday = SLOPE_MULTIPLICATION_EXTRA_TODAY * posSlope;
 	if(m_extraToday < 0.0)
 		m_extraToday = extraToday;
 	if(extraToday > m_extraToday) {
@@ -89,7 +92,9 @@ void ExtraCache::onBotInjected()
 	}
 	m_slushFundStartsAt += m_extraToday;
 
-	CacheRest::Instance(0)->sendExtraCash(user()->id(), m_extraToday);
+	if (sendExtraCash) {
+		CacheRest::Instance(0)->sendExtraCash(user()->id(), m_extraToday);
+	}
 }
 
 void ExtraCache::onRepliedExtraCache(QString strData)
@@ -98,7 +103,7 @@ void ExtraCache::onRepliedExtraCache(QString strData)
 	qApp->exit();
 }
 
-int ExtraCache::computeMinSlopeOver(int numDays)
+void ExtraCache::computeMinSlopeOver(int numDays)
 {
 	m_minSlope = 9999.9;
 	int dayMin = -1;
@@ -138,5 +143,7 @@ int ExtraCache::computeMinSlopeOver(int numDays)
 		qDebug() << "    m_minSlope" << m_minSlope;
 	}
 	LOG() << "computeMinSlopeOver(" << numDays << ") = [$/d]" << m_minSlope << "dayMin" << dayMin << endl;
-	return dayMin;
+	m_futDayMinSlopeCollision = dayMin;
 }
+
+

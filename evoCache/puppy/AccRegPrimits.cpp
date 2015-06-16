@@ -191,7 +191,7 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 			Transaction& t = m_bundle.trans(i);
 			emit ioContext.m_pUser->botContext()->matchedTransaction(t.time_t(), t.amountDbl());
 		}
-		qDebug() << targetTrans.count() << m_bundle.count();
+		//qDebug() << targetTrans.count() << m_bundle.count();
 	}
 }
 
