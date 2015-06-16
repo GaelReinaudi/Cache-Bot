@@ -52,7 +52,7 @@ MainWindow::MainWindow(QString userID, QWidget *parent) :
 
 	connect(ui->plot, SIGNAL(mouseWheel(QWheelEvent*)), this, SLOT(onWheelEvent(QWheelEvent*)));
 
-	init();
+//	init();
 }
 
 MainWindow::~MainWindow()
