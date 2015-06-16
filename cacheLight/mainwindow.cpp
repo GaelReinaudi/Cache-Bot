@@ -8,18 +8,16 @@ const int dayFuture = 60;
 const int playBackStartAgo = 210;
 
 double smallInc = 1e-3;
-double iniBalance = 3000.0;
-double slushAmmount = 5000.0;
-QString jsonFile = "../../cacheLight/jsonDataChris_2015-06-10.json";
-//QString jsonFile = "../../cacheLight/input.json";
 
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow::MainWindow(QString userID, QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow)
 {
-//	m_pExtraCache = new ExtraCache("556502390fbee50300e6d07c");
-
 	ui->setupUi(this);
+
+	m_pExtraCache = new ExtraCache(userID);
+	m_pExtraCache->sendExtraCash = false;
+
 //	ui->plot->xAxis->setVisible(false);
 //	ui->plot->yAxis->setVisible(false);
 	ui->plot->yAxis2->setVisible(true);
@@ -51,7 +49,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	connect(ui->plot, SIGNAL(mouseWheel(QWheelEvent*)), this, SLOT(onWheelEvent(QWheelEvent*)));
 
-	init();
+//	init();
+	connect(m_pExtraCache, SIGNAL(botInjected()), this, SLOT(init()));
 }
 
 MainWindow::~MainWindow()
@@ -68,8 +67,8 @@ void MainWindow::init()
 	ui->costLive99SpinBox->setValue(m_pExtraCache->user()->costLiving(0.99));
 
 	// transaction at the starting date of the playback
-	auto& real = m_pUser->allTrans();
-	m_date = real.lastTransactionDate().addDays(-playBackStartAgo);
+	auto& real = m_pExtraCache->user()->allTrans();
+	m_date = real.lastTransactionDate();//.addDays(-playBackStartAgo);
 	m_d0 = m_date.toJulianDay();
 	qDebug() << "m_date" << m_date;
 
@@ -81,7 +80,7 @@ void MainWindow::init()
 		}
 	}
 
-	m_lastBal = iniBalance;
+	m_lastBal = m_pExtraCache->checkingBalance();
 	ui->spinBox->setValue(m_lastBal);
 	ui->spinBox->editingFinished();
 	ui->plot->setFocus();
@@ -92,9 +91,9 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 {
 	int maxDayMove = 1;
 	int minDayMove = 0;
-	if(event->key() == Qt::Key_Up)
+	if(event && event->key() == Qt::Key_Up)
 		minDayMove = 1;
-	auto& real = m_pUser->allTrans();
+	auto& real = m_pExtraCache->user()->allTrans();
 	int addDay = 1;
 	if(m_ipb < real.count()) {
 		Transaction& newTrans = real.trans(m_ipb);
@@ -117,7 +116,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 		return keyPressEvent(event);
 	}
 	m_date = m_date.addDays(addDay);
-	double posSlope = qMax(0.0, m_minSlope);
+	double posSlope = qMax(0.0, m_pExtraCache->minSlope());
 	double extraToday = posSlope * addDay / 2.0;
 	if(m_extraToday < 0.0)
 		m_extraToday = extraToday;
@@ -129,41 +128,13 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 		m_extraToday *= 0.9;
 		m_extraToday += 0.1 * extraToday;
 	}
-	m_slushThreshold += m_extraToday;
+//	m_slushThreshold += m_extraToday;
 	ui->extraTodaySpinBox->setValue(m_extraToday);
-	ui->spinSlushThresh->setValue(m_slushThreshold);
+	ui->spinSlushThresh->setValue(m_pExtraCache->slushBaseStart());
 	pBars->addData(m_date.toJulianDay() - m_d0, m_extraToday);
 	ui->plot->yAxis2->rescale();
 
 	updateChart();
-}
-
-int MainWindow::computeMinSlopeOver(int numDays)
-{
-	m_minSlope = 9999.9;
-	int dayMin = -1;
-	double tToday = m_date.toJulianDay() - m_d0;
-	double yToday = m_slushThreshold;
-	QCPDataMap *pDat = ui->plot->graph(2)->data();
-	QMap<double, QCPData>::iterator it = pDat->begin();
-	while(it != pDat->end() && it->key < tToday + numDays + 1) {
-		if (it->key > tToday) {
-			double effectiveSlushforDay = slushAmmount * (0.5 + 1.0 * (it->key - tToday) / 30.0);
-			double y = it->value - effectiveSlushforDay;
-			double slope = (y - yToday) / qMax(1.0, it->key - tToday);
-			if(slope < m_minSlope) {
-				m_minSlope = slope;
-				dayMin = it->key;
-			}
-		}
-		++it;
-	}
-	if (m_minSlope == 9999.9) {
-		double effectiveSlushforDay = slushAmmount * (0.5 + 1.0 * (numDays) / 30.0);
-		m_minSlope = (m_lastBal - effectiveSlushforDay - m_slushThreshold) / numDays;// / 2.0;
-		dayMin = tToday + numDays;
-	}
-	return dayMin;
 }
 
 void MainWindow::onWheelEvent(QWheelEvent * wEv)
@@ -207,7 +178,7 @@ void MainWindow::makePredictiPlot()
 {
 	ui->plot->graph(2)->clearData();
 	double minPredict = m_lastBal;
-	auto temp = m_pUser->predictedFutureTransactions(1.0);
+	auto temp = m_pExtraCache->user()->predictedFutureTransactions(1.0);
 	for(int i = 0; i < temp.count(); ++i) {
 		Transaction* trans = &temp[i];
 		// not do anything if it already came true
@@ -223,7 +194,7 @@ void MainWindow::makePredictiPlot()
 			m_lastBal = ui->plot->graph(1)->data()->last().value;
 			ui->spinBox->setValue(m_lastBal);
 			minPredict = m_lastBal;
-			//qDebug() << "predicted today" << trans->amountDbl();
+			qDebug() << "predicted today" << trans->amountDbl();
 		}
 		if(dayTo > 0 && dayTo < dayFuture) {
 			// first point predicted
@@ -245,11 +216,11 @@ void MainWindow::makePredictiPlot()
 		}
 	}
 
-	if(minPredict <= m_slushThreshold) {
+	if(minPredict <= m_pExtraCache->slushBaseStart()) {
 		ui->plot->setBackground(QBrush(Qt::red));
 	}
 	else {
-		int greenVal = qMin(4*255.0, minPredict - m_slushThreshold) / 4;
+		int greenVal = qMin(4*255.0, minPredict - m_pExtraCache->slushBaseStart()) / 4;
 		ui->plot->setBackground(QBrush(QColor(255 - greenVal, greenVal, 0)));
 	}
 }
@@ -259,7 +230,7 @@ void MainWindow::makePastiPlot()
 	QCPGraph* graph = ui->plot->graph(3);
 	graph->clearData();
 	double minPredict = m_lastBal;
-	auto temp = m_pUser->predictedFutureTransactions(1.0);
+	auto temp = m_pExtraCache->user()->predictedFutureTransactions(1.0);
 	for(int i = 0; i < temp.count(); ++i) {
 		Transaction* trans = &temp[i];
 //		// not do anything if it already came true
@@ -302,17 +273,18 @@ void MainWindow::makeMinSlope()
 	QCPGraph* graph = ui->plot->graph(4);
 	graph->clearData();
 	double tToday = m_date.toJulianDay() - m_d0;
+	double slushBase = m_pExtraCache->slushBaseStart();
 	if(graph->data()->isEmpty()) {
-		graph->addData(tToday, m_slushThreshold);
+		graph->addData(tToday, slushBase);
 	}
-	double dayMin = computeMinSlopeOver(dayFuture) - tToday;
-	double minSlope = qMax(0.0, m_minSlope);
-	double effectiveSlushforDay = slushAmmount * (0.5 + 1.0 * (dayMin) / 30.0);
-	graph->addData(tToday + dayFuture, m_slushThreshold + minSlope * dayFuture);
-	graph->addData(tToday + dayMin, m_slushThreshold + minSlope * dayMin);
-	graph->addData(tToday + dayMin + 0.001, m_slushThreshold + minSlope * dayMin + effectiveSlushforDay);
-	graph->addData(tToday + dayMin + 0.002, m_slushThreshold + minSlope * dayMin);
-	graph->addData(tToday + dayFuture + 0.003, m_slushThreshold + minSlope * dayFuture);
+	double dayMin = m_pExtraCache->futDayMinSlope() - tToday;
+	double minSlope = qMax(0.0, m_pExtraCache->minSlope());
+	double effectiveSlushforDay = m_pExtraCache->slushNeed() * (0.5 + 1.0 * (dayMin) / 30.0);
+	graph->addData(tToday + dayFuture, slushBase + minSlope * dayFuture);
+	graph->addData(tToday + dayMin, slushBase + minSlope * dayMin);
+	graph->addData(tToday + dayMin + 0.001, slushBase + minSlope * dayMin + effectiveSlushforDay);
+	graph->addData(tToday + dayMin + 0.002, slushBase + minSlope * dayMin);
+	graph->addData(tToday + dayFuture + 0.003, slushBase + minSlope * dayFuture);
 	qDebug() << tToday << dayFuture << dayMin << minSlope;
 }
 

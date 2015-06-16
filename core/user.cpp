@@ -125,9 +125,12 @@ double User::costLiving(double withinPercentileCost, double multiplicator /*= 1.
 		avg += costs[i];
 	}
 	double numDays = m_allTransactions.firstTransactionDate().daysTo(m_allTransactions.lastTransactionDate());
-	if(numDays) {
+	if (numDays) {
 		avg /= numDays;
 		qDebug() << (multiplicator > 0.0 ? "cost" : "make") << "living ("<< qRound(withinPercentileCost * 100.0) << "\%:" <<lastCostsInd<<"T)" << avg;
+	}
+	else {
+		qWarning() << "numDays" << numDays << "returning cost/make Living 0";
 	}
 	return avg;
 }
@@ -173,12 +176,11 @@ SparkLine User::predictedSparkLine(double threshProba)
 	for (auto futDay : temp.uniqueKeys()) {
 		QList<double> transThatDay = temp.values(futDay);
 		std::sort(transThatDay.begin(), transThatDay.end());
-		qDebug() << futDay << transThatDay;
 		// insert from the end (see QMap::values(key) documentation)
 		for (int i = transThatDay.size() - 1; i >= 0; --i) {
 			balanceNow += transThatDay[i];
 			ret.insertMulti(futDay, balanceNow);
-			qDebug() << futDay << transThatDay[i];
+//			qDebug() << futDay << transThatDay[i];
 			LOG() << "on day " << futDay << ": " << transThatDay[i] << " -> " << balanceNow << endl;
 		}
 	}

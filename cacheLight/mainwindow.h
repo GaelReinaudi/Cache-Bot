@@ -22,10 +22,9 @@ public:
 	explicit MainWindow(QWidget *parent = 0);
 	~MainWindow();
 	void keyPressEvent(QKeyEvent *event);
-	int computeMinSlopeOver(int numDays);
 
-	void init();
 protected slots:
+	void init();
 	void updateChart();
 	void makePredictiPlot();
 	void makePastiPlot();
@@ -63,17 +62,15 @@ private:
 	QNetworkAccessManager *manager = 0;
 
 private:
-	ExtraCache* m_pExtraCache = 0;
 	Ui::MainWindow *ui;
+	ExtraCache* m_pExtraCache = 0;
 	QDate m_date;
 	int m_d0 = 0;
 	double m_lastBal = 0.0;
-	double m_slushThreshold = 0.0;
-	double m_minSlope = 0.0;
 	double m_extraToday = -1.0;
 	int m_ipb = 0;
 	// account to read predicted transactions from
-	User* m_pUser;
+//	User* m_pUser;
 	QCPBars *pBars = 0;
 };
 
