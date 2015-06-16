@@ -27,6 +27,7 @@ protected slots:
 
 signals:
 	void injected(User* pUser);
+	void botInjected();
 
 private:
 	QString m_userId;

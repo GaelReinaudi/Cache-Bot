@@ -23,6 +23,13 @@ void ExtraCache::onBotInjected()
 		  << user()->costLiving(0.95)
 		  << user()->costLiving(0.99)
 		  << endl;
+	qDebug() << "makeLiving(50/75/90/95/99) "
+		  << user()->makeLiving(0.50)
+		  << user()->makeLiving(0.75)
+		  << user()->makeLiving(0.90)
+		  << user()->makeLiving(0.95)
+		  << user()->makeLiving(0.99)
+		  << endl;
 
 	// transaction at the starting date of the playback
 	auto& real = user()->allTrans();
@@ -64,7 +71,7 @@ void ExtraCache::onBotInjected()
 
 	double threshProba = 1.0;
 	m_spark = user()->predictedSparkLine(threshProba);
-	computeMinSlopeOver(60);
+	computeMinSlopeOver(30);
 
 	int addDay = 1;
 	double m_extraToday = -1.0;
@@ -100,12 +107,16 @@ int ExtraCache::computeMinSlopeOver(int numDays)
 	SparkLine::iterator it = pDat->begin();
 	// first value is the last known balance;
 	double balanceNow = it.value();
-	qDebug() << "balanceNow" << balanceNow << "m_slushFundTypicalNeed" << m_slushFundTypicalNeed << "m_slushFundStartsAt" << m_slushFundStartsAt;
 
+	double addIncomePerDay = user()->makeLiving(0.75);
+	double futDay = numDays;
+	double balanceThen = balanceNow + futDay * addIncomePerDay;
+
+	qDebug() << "balanceNow" << balanceNow << "addIncomePerDay" << addIncomePerDay << "m_slushFundTypicalNeed" << m_slushFundTypicalNeed << "m_slushFundStartsAt" << m_slushFundStartsAt;
 	while(it != pDat->end() && it.key() < tToday + numDays + 1) {
 		double futDay = it.key();
-		double balanceThen = it.value();
-		if (futDay > 0 && futDay < 30.0) {
+		double balanceThen = it.value() + futDay * addIncomePerDay;
+		if (futDay > 0) {
 			double effectiveSlushforDay = m_slushFundTypicalNeed * (0.5 + 1.0 * (futDay) / 30.0);
 			double effectY = balanceThen - effectiveSlushforDay;
 			double slope = (effectY - m_slushFundStartsAt) / qMax(1.0, futDay);
@@ -119,11 +130,11 @@ int ExtraCache::computeMinSlopeOver(int numDays)
 		++it;
 	}
 	if (m_minSlope == 9999.9) {
-		double effectiveSlushforDay = m_slushFundTypicalNeed * (0.5 + 1.0 * (numDays) / 30.0);
-		double effectY = balanceNow - effectiveSlushforDay;
-		m_minSlope = (effectY - m_slushFundStartsAt) / numDays;// / 2.0;
-		dayMin = tToday + numDays;
-		qDebug() << "futDay:=" << 30 << "balanceThen" << balanceNow << "    effectiveSlushforDay" << effectiveSlushforDay << "effectY" << effectY << "(effectY - yToday)" << (effectY - m_slushFundStartsAt);
+		double effectiveSlushforDay = m_slushFundTypicalNeed * (0.5 + 1.0 * (futDay) / 30.0);
+		double effectY = balanceThen - effectiveSlushforDay;
+		m_minSlope = (effectY - m_slushFundStartsAt) / futDay;// / 2.0;
+		dayMin = tToday + futDay;
+		qDebug() << "futDay:=" << 30 << "balanceThen" << balanceThen << "    effectiveSlushforDay" << effectiveSlushforDay << "effectY" << effectY << "(effectY - yToday)" << (effectY - m_slushFundStartsAt);
 		qDebug() << "    m_minSlope" << m_minSlope;
 	}
 	LOG() << "computeMinSlopeOver(" << numDays << ") = [$/d]" << m_minSlope << "dayMin" << dayMin << endl;
