@@ -38,7 +38,9 @@ public:
 	}
 
 	// gives the daily average of outcome for the withinPercentileCost outgoing transactions
-	double costLiving(double withinPercentileCost);
+	double costLiving(double withinPercentileCost, double multiplicator = 1.0);
+	// gives the daily average of income for the withinPercentileCost outgoing transactions
+	double makeLiving(double withinPercentileCost, double multiplicator = 1.0);
 
 	TransactionBundle& transBundle(int filterHash) {
 		if (filterHash >= 0)
