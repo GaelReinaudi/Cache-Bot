@@ -151,7 +151,7 @@ void EvolutionSpinner::runEvolution() {
 
 		// Evolve population for the given number of generations
 		LOG() << "Starting evolution" << endl;
-		for(unsigned int i=1; i<=100*lNbrGen; ++i) {
+		for(unsigned int i=1; i<=10*lNbrGen; ++i) {
 			if(!m_doSpin)  {
 				break;
 			}

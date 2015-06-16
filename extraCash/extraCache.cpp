@@ -101,18 +101,22 @@ int ExtraCache::computeMinSlopeOver(int numDays)
 	SparkLine::iterator it = pDat->begin();
 	// first value is the last known balance;
 	double balanceNow = it.value();
+	qDebug() << "balanceNow" << balanceNow << "m_slushFundTypicalNeed" << m_slushFundTypicalNeed << "m_slushFundStartsAt" << m_slushFundStartsAt;
 
 	while(it != pDat->end() && it.key() < tToday + numDays + 1) {
 		double futDay = it.key();
 		double balanceThen = it.value();
-		if (futDay > 0) {
+		if (futDay > 0 && futDay < 30.0) {
 			double effectiveSlushforDay = m_slushFundTypicalNeed * (0.5 + 1.0 * (futDay) / 30.0);
-			double y = balanceThen - effectiveSlushforDay;
-			double slope = (y - yToday) / qMax(1.0, futDay);
+			double effectY = balanceThen - effectiveSlushforDay;
+			double slope = (effectY - yToday) / qMax(1.0, futDay);
+			qDebug() << "futDay" << futDay << "effectY" << effectY << "yToday" << yToday << "balanceThen" << balanceThen;
+			qDebug() << "    effectiveSlushforDay" << effectiveSlushforDay << "(Dy - yToday)" << (effectY - yToday);
 			if(slope < m_minSlope) {
 				m_minSlope = slope;
 				dayMin = futDay;
 			}
+			qDebug() << "slope" << slope << "m_minSlope" << m_minSlope;
 		}
 		++it;
 	}
@@ -120,8 +124,9 @@ int ExtraCache::computeMinSlopeOver(int numDays)
 		double effectiveSlushforDay = m_slushFundTypicalNeed * (0.5 + 1.0 * (numDays) / 30.0);
 		m_minSlope = (balanceNow - effectiveSlushforDay - m_slushFundStartsAt) / numDays;// / 2.0;
 		dayMin = tToday + numDays;
+		qDebug() << "balanceNow" << balanceNow << "m_slushFundTypicalNeed" << m_slushFundTypicalNeed << "m_slushFundStartsAt" << m_slushFundStartsAt;
+		qDebug() << "m_minSlope" << m_minSlope;
 	}
-	qDebug() << "balanceNow" << balanceNow << "m_slushFundTypicalNeed" << m_slushFundTypicalNeed << "m_slushFundStartsAt" << m_slushFundStartsAt;
 	LOG() << "computeMinSlopeOver(" << numDays << ") = [$/d]" << m_minSlope << "dayMin" << dayMin << endl;
 	return dayMin;
 }
