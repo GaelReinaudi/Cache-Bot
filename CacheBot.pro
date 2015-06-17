@@ -8,12 +8,14 @@ SUBDIRS = \
 	cacheRest \
 	tests \
 	evoCache \
+	evoCacheView \
 	cacheLight \
 	extraCash \
 	userViewer
 	
 cacheRest.depends = core
 evoCache.depends = cacheRest,core
+evoCacheView.depends = cacheRest,core
 cacheLight.depends = cacheRest,core
 tests.depends = cacheRest,core
 extraCash.depends = cacheRest,core

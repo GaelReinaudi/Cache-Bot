@@ -11,7 +11,10 @@ MainWindow::MainWindow(QString userID, int afterJday, int beforeJday)
 	ui->setupUi(this);
 
 	Evolver* pEvolver = new Evolver(userID);
+
 	connect(pEvolver, SIGNAL(injected(User*)), this, SLOT(onUserInjected(User*)));
+
+//	connect(ui->startButton, SIGNAL(clicked(bool)), m_evoSpinner, SLOT(startStopEvolution(bool)), Qt::DirectConnection);
 }
 
 MainWindow::~MainWindow()

@@ -1,31 +1,30 @@
 include(../defaults.pri)
-include(puppy/puppy.pri)
+include(../evoCache/puppy/puppy.pri)
 
 QT += core
 QT += network
 QT += widgets printsupport
 
-TARGET = evoCache
+TARGET = evoCacheView
 TEMPLATE = app
 
 INCLUDEPATH  += ./ \
 	$$PWD/../AccountChart \
-	$$PWD/../
+	$$PWD/../evoCache
 
 SOURCES += \
-	main.cpp \
-	evolver.cpp \
-	EvolutionSpinner.cpp \
-	mainwindow.cpp \
+	$$PWD/main.cpp \
+	$$PWD/mainwindow.cpp \
+	$$PWD/../evoCache/evolver.cpp \
+	$$PWD/../evoCache/EvolutionSpinner.cpp \
 	$$PWD/../AccountChart/qcustomplot/qcustomplot.cpp \
 	$$PWD/../AccountChart/ACChart/acustomplot.cpp \
 	$$PWD/../AccountChart/AmortiChart/AMPlot.cpp
 
 HEADERS  += \
-	$$PWD/log.h \
-	evolver.h \
-	EvolutionSpinner.h \
-	mainwindow.h \
+	$$PWD/mainwindow.h \
+	$$PWD/../evoCache/evolver.h \
+	$$PWD/../evoCache/EvolutionSpinner.h \
 	$$PWD/../AccountChart/qcustomplot/qcustomplot.h \
 	$$PWD/../AccountChart/ACChart/acustomplot.h \
 	$$PWD/../AccountChart/AmortiChart/AMPlot.h
