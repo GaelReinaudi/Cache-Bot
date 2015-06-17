@@ -22,9 +22,6 @@ HEADERS  += \
 	$$PWD/log.h \
 	EvolutionSpinner.h
 
-
-FORMS    += mainwindow.ui
-
 unix {
 LIBS += -L$${SRC_DIR}/bin/$${DEBUGRELEASE} -lcacheRest
 LIBS += -L$${SRC_DIR}/bin/$${DEBUGRELEASE} -lcore
