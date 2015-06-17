@@ -12,7 +12,6 @@ public:
 	ExtraCache(QString userID);
 	virtual ~ExtraCache() {};
 
-	double checkingBalance() const { return user()->balance(Account::Type::Checking); }
 	double slushNeed() const { return m_slushFundTypicalNeed; }
 	double slushBaseStart() const { return m_slushFundStartsAt; }
 	double minSlope() const { return m_minSlope; }

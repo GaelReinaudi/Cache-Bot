@@ -13,28 +13,6 @@ ExtraCache::ExtraCache(QString userID)
 void ExtraCache::onUserInjected(User* pUser)
 {
 	CacheAccountConnector::onUserInjected(pUser);
-	qDebug() << "costLiving(50/75/90/95/99) "
-		  << user()->costLiving(0.50)
-		  << user()->costLiving(0.75)
-		  << user()->costLiving(0.90)
-		  << user()->costLiving(0.95)
-		  << user()->costLiving(0.99)
-		  << endl;
-	qDebug() << "makeLiving(50/75/90/95/99) "
-		  << user()->makeLiving(0.50)
-		  << user()->makeLiving(0.75)
-		  << user()->makeLiving(0.90)
-		  << user()->makeLiving(0.95)
-		  << user()->makeLiving(0.99)
-		  << endl;
-
-	double checkingBal = checkingBalance();
-	qDebug() << "checkingBal" << checkingBal << " (Un/Ch/Sa/Cr"
-			 << user()->balance(Account::Type::Unknown)
-			 << user()->balance(Account::Type::Checking)
-			 << user()->balance(Account::Type::Saving)
-			 << user()->balance(Account::Type::Credit)
-			 << " )";
 
 	// transaction at the starting date of the playback
 	auto& real = user()->allTrans();
