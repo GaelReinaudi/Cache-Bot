@@ -70,6 +70,14 @@ void ACustomPlot::loadCompressedAmount(User* pUser)
 		graph(0)->addData(t, kindaLog(m_integral));
 		m_hashGraphs[h]->addData(t, allTrans.trans(i).compressedAmount());
 	}
+	graph(0)->clearData();
+	// redo the integral to match the last point known.
+	m_integral = pUser->balance(Account::Type::Checking | Account::Type::Saving) - m_integral;
+	for (int i = 0; i < allTrans.count(); ++i) {
+		double t = allTrans.trans(i).time_t();
+		m_integral += allTrans.trans(i).amountDbl();
+		graph(0)->addData(t, kindaLog(m_integral));
+	}
 	rescaleAxes();
 	//xAxis->setRange(xAxis->range().lower - 7*24*3600, xAxis->range().upper + 7*24*3600);
 	yAxis->setRange(yAxis->range().lower - 0.5, yAxis->range().upper + 0.5);

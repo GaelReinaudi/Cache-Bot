@@ -43,6 +43,9 @@ QJsonObject Bot::summarize()
 	m_puppyTree.interpret(&fit, *m_context);
 	m_context->m_summaryJsonObj = 0;
 
+	emit m_context->needsReplot();
+	emit m_context->newSummarizedTree(jsonObj);
+
 	QString jsonStr = QJsonDocument(jsonObj).toJson(/*QJsonDocument::Compact*/);
 	LOG() << "tree (" << fit << "): " << m_puppyTree.toStr() << endl;
 	LOG() << "    " << jsonStr << endl;

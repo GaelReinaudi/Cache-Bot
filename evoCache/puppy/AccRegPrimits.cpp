@@ -173,6 +173,7 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 		if(ioContext.m_mapPredicted) {
 			(*(ioContext.m_mapPredicted))[m_billProba] += targetTrans;
 			for (auto& t : targetTrans) {
+				Q_UNUSED(t);
 				Q_ASSERT(t.flags & Transaction::Predicted);
 			}
 		}

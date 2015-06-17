@@ -12,7 +12,10 @@ CONFIG   -= app_bundle
 
 
 SOURCES += main.cpp \
-    extraCache.cpp
+	extraCache.cpp
+
+HEADERS += \
+	extraCache.h
 
 HEADERS += \
 	extraCache.h

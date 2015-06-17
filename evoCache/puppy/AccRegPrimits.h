@@ -103,7 +103,7 @@ public:
 		retObj.insert("name", QString::fromStdString(getName()));
 		retObj.insert("numArgs", int(getNumberArguments()));
 		QJsonArray argList;
-		for (int i = 0; i < getNumberArguments(); ++i) {
+		for (unsigned int i = 0; i < getNumberArguments(); ++i) {
 			double lArgi = 0.0;
 			getArgument(i, &lArgi, ioContext);
 			argList.append(lArgi);

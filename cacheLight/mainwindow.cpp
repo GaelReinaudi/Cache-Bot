@@ -80,7 +80,7 @@ void MainWindow::init()
 		}
 	}
 
-	m_lastBal = m_pExtraCache->checkingBalance();
+	m_lastBal = m_pExtraCache->user()->balance(Account::Type::Checking);
 	ui->spinBox->setValue(m_lastBal);
 	ui->spinBox->editingFinished();
 	ui->plot->setFocus();

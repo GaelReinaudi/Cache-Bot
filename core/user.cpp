@@ -103,9 +103,10 @@ void User::injectJsonBot(QString jsonStr)
 	makeBotContext();
 	m_bestBot = new Bot(jsonObj, this);
 	m_bestBot->init(m_botContext);
-	m_bestBot->summarize();
 
 	emit botInjected();
+
+	m_bestBot->summarize();
 }
 
 double User::costLiving(double withinPercentileCost, double multiplicator /*= 1.0*/)
