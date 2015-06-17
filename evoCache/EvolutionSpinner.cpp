@@ -133,7 +133,8 @@ void EvolutionSpinner::runEvolution() {
 	}
 
 	// run again with full features
-	BotContext::LIMIT_NUM_FEATURES = BotContext::MAX_NUM_FEATURES;
+	if (Transaction::onlyLoadHashes.isEmpty())
+		BotContext::LIMIT_NUM_FEATURES = BotContext::MAX_NUM_FEATURES;
 	m_context->filterHashIndex = -1;
 	Tree veryBestTree;
 	// Initialize population.
