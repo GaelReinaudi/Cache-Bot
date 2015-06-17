@@ -18,7 +18,7 @@ class MainWindow : public QMainWindow
 	Q_OBJECT
 
 public:
-	explicit MainWindow(QString userID, int afterJday = 0, int beforeJday = 0);
+	explicit MainWindow(QString userID, QVector<int> onlyLoadHashes = QVector<int>());
 	~MainWindow();
 
 public slots:

@@ -32,7 +32,6 @@ signals:
 private:
 	QString m_userId;
 	User* m_user;
-
 };
 
 #endif // CACHEACCOUNTCONNECTOR_H

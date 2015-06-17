@@ -1,6 +1,8 @@
 #include "transaction.h"
 #include "account.h"
 
+QVector<int> Transaction::onlyLoadHashes = QVector<int>();
+
 void Transaction::read(const QJsonObject &json) {
 	bool ok = false;
 	QString accountStr = json["_account"].toString();
@@ -72,12 +74,18 @@ void StaticTransactionArray::write(QJsonArray& npcArray) const {
 	}
 }
 
-Transaction *StaticTransactionArray::appendNew(QJsonObject jsonTrans, Account *pInAcc) {
+Transaction* StaticTransactionArray::appendNew(QJsonObject jsonTrans, Account *pInAcc) {
 	QString name = jsonTrans["name"].toString();
+	qint64 hash = proximityHashString(name);
 	for (const QString& nono : pInAcc->excludeNameTransContain()) {
 		if (name.contains(nono)) {
 			LOG() << "not Adding transaction because it looks like an internal transfer based on name containing"
 				  << nono << endl;
+			return 0;
+		}
+		if (!Transaction::onlyLoadHashes.isEmpty() && !Transaction::onlyLoadHashes.contains(hash)) {
+			LOG() << "not Adding transaction because Transaction::onlyLoadHashes doesn't contain "
+				  << hash << endl;
 			return 0;
 		}
 	}

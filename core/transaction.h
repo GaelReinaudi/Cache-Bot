@@ -80,6 +80,8 @@ public:
 	inline quint64 dist(const Transaction& other) const {
 		return distanceWeighted<8*8, 1, 128*8, 0>(other);
 	}
+public:
+	static QVector<int> onlyLoadHashes;
 };
 
 struct StaticTransactionArray
