@@ -92,11 +92,7 @@ struct StaticTransactionArray
 	Transaction& trans(int i) { return i >= 0 ? m_transArray[i] : m_transArray[i + count()]; }
 	void clear() { m_numTrans = 0; }
 	int count() const { return m_numTrans; }
-	Transaction* appendNew(Account* pInAcc) {
-		Transaction* pNewTrans = &m_transArray[m_numTrans++];
-		pNewTrans->account = pInAcc;
-		return pNewTrans;
-	}
+	Transaction* appendNew(QJsonObject jsonTrans, Account* pInAcc);
 	Transaction* last() { return &m_transArray[m_numTrans - 1]; }
 	void removeLast() { m_numTrans--; }
 	void sort() {

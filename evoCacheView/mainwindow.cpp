@@ -4,16 +4,14 @@
 #include "evolver.h"
 #include "botContext.h"
 
-MainWindow::MainWindow(QString userID, int afterJday, int beforeJday)
+MainWindow::MainWindow(QString userID, int onlyLoadHash, int beforeJday)
 	: QMainWindow()
 	, ui(new Ui::MainWindow)
 {
 	ui->setupUi(this);
 
 	Evolver* pEvolver = new Evolver(userID);
-
 	connect(pEvolver, SIGNAL(injected(User*)), this, SLOT(onUserInjected(User*)));
-
 //	connect(ui->startButton, SIGNAL(clicked(bool)), m_evoSpinner, SLOT(startStopEvolution(bool)), Qt::DirectConnection);
 }
 

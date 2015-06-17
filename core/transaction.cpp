@@ -1,4 +1,5 @@
 #include "transaction.h"
+#include "account.h"
 
 void Transaction::read(const QJsonObject &json) {
 	bool ok = false;
@@ -39,7 +40,7 @@ void Transaction::write(QJsonObject &json) const {
 
 void StaticTransactionArray::read(const QJsonArray& npcArray, int afterJday, int beforeJday, const QVector<QString> &onlyAcIds /*= anyID*/) {
 	QStringList s_excludeNameTransContain;
-	s_excludeNameTransContain.append("Online Transfer");
+	s_excludeNameTransContain.append("Transfer");
 	s_excludeNameTransContain.append("Credit Card Payment");
 	s_excludeNameTransContain.append("ment to Chase c");
 
@@ -47,18 +48,11 @@ void StaticTransactionArray::read(const QJsonArray& npcArray, int afterJday, int
 		QJsonObject jsonTrans = npcArray[npcIndex].toObject();
 		QString accountTrans = jsonTrans["_account"].toString();
 		if (onlyAcIds.isEmpty() || onlyAcIds.contains(accountTrans)) {
-			appendNew(0)->read(jsonTrans);
+			auto ok = appendNew(jsonTrans, 0);
 			if ((afterJday && last()->jDay() < afterJday) || (beforeJday && last()->jDay() > beforeJday)) {
-				removeLast();
-				continue;
-			}
-			for (QString& nono : s_excludeNameTransContain) {
-				if (last()->name.contains(nono)) {
+				if( ok)
 					removeLast();
-					LOG() << "removed transaction because it looks like an internal transfer based on name containing"
-						  << nono << endl;
-					break;
-				}
+				continue;
 			}
 		}
 		else {
@@ -76,6 +70,21 @@ void StaticTransactionArray::write(QJsonArray& npcArray) const {
 		m_transArray[i].write(npcObject);
 		npcArray.append(npcObject);
 	}
+}
+
+Transaction *StaticTransactionArray::appendNew(QJsonObject jsonTrans, Account *pInAcc) {
+	QString name = jsonTrans["name"].toString();
+	for (const QString& nono : pInAcc->excludeNameTransContain()) {
+		if (name.contains(nono)) {
+			LOG() << "not Adding transaction because it looks like an internal transfer based on name containing"
+				  << nono << endl;
+			return 0;
+		}
+	}
+	Transaction* pNewTrans = &m_transArray[m_numTrans++];
+	pNewTrans->read(jsonTrans);
+	pNewTrans->account = pInAcc;
+	return pNewTrans;
 }
 
 

@@ -49,7 +49,7 @@ void User::injectJsonData(QString jsonStr)
 		QJsonObject jsonTrans = jsonTransArray[iT].toObject();
 		QString acPlaidId = jsonTrans["plaid_account"].toString();
 		Account* pInAcc = getAccountByPlaidId(acPlaidId);
-		m_allTransactions.appendNew(pInAcc)->read(jsonTrans);
+		m_allTransactions.appendNew(jsonTrans, pInAcc);
 	}
 	m_allTransactions.sort();
 

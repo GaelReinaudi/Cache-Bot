@@ -4,6 +4,11 @@ Account::Account(QJsonObject jsonAcc, QObject *parent)
 	:DBobj(jsonAcc["_id"].toString(), parent)
 {
 	loadJsonData(jsonAcc);
+
+	m_excludeNameTransContain.append("Transfer");
+	m_excludeNameTransContain.append("Credit Card Payment");
+	m_excludeNameTransContain.append("ment to Chase c");
+	m_excludeNameTransContain.append("OVERDRAFT PROT");
 }
 
 void Account::loadJsonData(QJsonObject json, int afterJday, int beforeJday)

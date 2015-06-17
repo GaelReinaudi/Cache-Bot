@@ -15,6 +15,11 @@ public:
 			  , Credit = 0x8
 			 , All = 0xffff};
 	Account(QJsonObject jsonAcc, QObject* parent = 0);
+	~Account() {}
+
+	const QStringList& excludeNameTransContain() const {
+		return m_excludeNameTransContain;
+	}
 
 	// loading the json file
 	// see this: https://qt-project.org/doc/qt-5-snapshot/qtcore-savegame-example.html
@@ -43,6 +48,7 @@ private:
 	TransactionBundle m_allTrans;
 	double m_balance = 0.0;
 	Type m_type = Type::Unknown;
+	QStringList m_excludeNameTransContain;
 };
 
 //class Household : public QObject
