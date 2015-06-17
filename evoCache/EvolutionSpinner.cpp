@@ -142,7 +142,7 @@ void EvolutionSpinner::runEvolution() {
 	initializePopulation(lPopulation, *m_context, lInitGrowProba, lMinInitDepth, lMaxInitDepth);
 	qDebug() << bestPreEvoTrees.count();
 	if(bestPreEvoTrees.count()) {
-		for(int i = 0; i < 5*lPopSize; ++i) {
+		for(unsigned int i = 0; i < 5*lPopSize; ++i) {
 			lPopulation.push_back(bestPreEvoTrees.at(i % bestPreEvoTrees.size()));
 //			lPopulation[i] = bestPreEvoTrees.at(i % bestPreEvoTrees.size());
 		}
