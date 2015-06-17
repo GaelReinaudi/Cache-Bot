@@ -158,6 +158,7 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 		//m_fitness *= m_consecMonthBeforeMissed;
 		m_fitness *= 1.0 + (1.0 / (1.0 + m_consecMissed));
 	}
+	m_billProba = billProbability();
 	output = m_fitness;
 
 //	// isolate the transaction that were fitted to the target
@@ -169,7 +170,6 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 
 	// summary if the json object exists
 	if (ioContext.m_summaryJsonObj) {
-		m_billProba = billProbability();
 		if(ioContext.m_mapPredicted) {
 			(*(ioContext.m_mapPredicted))[m_billProba] += targetTrans;
 			for (auto& t : targetTrans) {
@@ -178,7 +178,7 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 			}
 		}
 
-		if(m_billProba > 1.0) {
+		if(m_billProba > 0.0) {
 			QJsonArray features = (*ioContext.m_summaryJsonObj)["features"].toArray();
 			features.append(toJson(ioContext));
 			ioContext.m_summaryJsonObj->insert("features", features);

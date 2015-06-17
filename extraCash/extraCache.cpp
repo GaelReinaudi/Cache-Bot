@@ -70,7 +70,7 @@ void ExtraCache::onBotInjected()
 	}
 	m_slushFundStartsAt += m_extraToday;
 
-	if (sendExtraCash) {
+	if (flags & SendExtraCash) {
 		CacheRest::Instance(0)->sendExtraCash(user()->id(), m_extraToday);
 	}
 }

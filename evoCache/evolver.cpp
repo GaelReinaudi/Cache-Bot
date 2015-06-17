@@ -38,8 +38,10 @@ void Evolver::onUserInjected(User* pUser)
 
 void Evolver::onFinishedEvolution(QJsonObject finalBotObject)
 {
-	CacheRest::Instance()->sendNewBot(userID(), finalBotObject);
-	connect(CacheRest::Instance()->worker, SIGNAL(repliedSendNewBot(QString)), this, SLOT(onRepliedSendNewBot(QString)));
+	if (flags & SendBot) {
+		CacheRest::Instance()->sendNewBot(userID(), finalBotObject);
+		connect(CacheRest::Instance()->worker, SIGNAL(repliedSendNewBot(QString)), this, SLOT(onRepliedSendNewBot(QString)));
+	}
 }
 
 void Evolver::onRepliedSendNewBot(QString strData)

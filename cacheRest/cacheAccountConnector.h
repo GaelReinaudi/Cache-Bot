@@ -32,6 +32,14 @@ signals:
 private:
 	QString m_userId;
 	User* m_user;
+
+public:
+	enum { None = 0x0
+		   , AutoExit = 0x1
+		   , SendExtraCash = 0x2
+		   , SendBot = 0x4
+	};
+	int flags = AutoExit | SendExtraCash | SendBot;
 };
 
 #endif // CACHEACCOUNTCONNECTOR_H
