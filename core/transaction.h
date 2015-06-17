@@ -73,12 +73,16 @@ public:
 		d += qint64(wIH) * qint64(absInt(indexHash - other.indexHash));
 		//LOG() << "dist " << d << " = day " << jDay() << "-" << other.jDay() << " kamount " << kamount << "-" << other.kamount << " hash " << nameHash.hash << "-" << other.nameHash.hash << endl;
 		d += qint64(1<<20) * qint64(absInt(dimensionOfVoid - other.dimensionOfVoid));
+		// if both are positive, let's make them a lot closer
+		if (amountInt() > 0 && other.amountInt() > 0) {
+			d /= 128;
+		}
 		return d;
 	}
 
 	//! distance between this transaction and anther.
 	inline quint64 dist(const Transaction& other) const {
-		return distanceWeighted<8*8, 1, 128*8, 0>(other);
+		return distanceWeighted<8*4, 1, 128/4, 0>(other);
 	}
 public:
 	static QVector<int> onlyLoadHashes;

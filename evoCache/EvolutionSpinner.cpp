@@ -3,10 +3,10 @@
 #include "puppy/Puppy.hpp"
 #include "AccRegPrimits.h"
 
-const double THRESHOLD_PROBA_BILL = 1.0;
+const double THRESHOLD_PROBA_BILL = 0.1;
 
-#define POP_SIZE_DEFAULT 500
-#define NBR_GEN_DEFAULT 20
+#define POP_SIZE_DEFAULT 750
+#define NBR_GEN_DEFAULT 30
 #define NBR_PART_TOURNAMENT_DEFAULT 2
 #define MAX_DEPTH_DEFAULT 5
 #define MIN_INIT_DEPTH_DEFAULT 3
@@ -116,9 +116,10 @@ void EvolutionSpinner::runEvolution() {
 
 		QJsonObject jsonBest = summarize(*lBestIndividual);
 		double billProba = jsonBest["features"].toArray().first().toObject()["billProba"].toDouble();
+		double fitness = jsonBest["features"].toArray().first().toObject()["fitness"].toDouble();
 		output[billProba].append(jsonBest);
 		qDebug() << "billProba" << billProba;
-		if(billProba > THRESHOLD_PROBA_BILL || bestPreEvoTrees.isEmpty()) {
+		if(fitness > THRESHOLD_PROBA_BILL || bestPreEvoTrees.isEmpty()) {
 			(*lBestIndividual).mValid = false;
 			bestPreEvoTrees.push_back(*lBestIndividual);
 		}
@@ -138,14 +139,13 @@ void EvolutionSpinner::runEvolution() {
 	m_context->filterHashIndex = -1;
 	Tree veryBestTree;
 	// Initialize population.
-	std::vector<Tree> lPopulation(0*lPopSize);
+	std::vector<Tree> lPopulation(0);
 	std::cout << "Initializing population" << std::endl;
 	initializePopulation(lPopulation, *m_context, lInitGrowProba, lMinInitDepth, lMaxInitDepth);
 	qDebug() << bestPreEvoTrees.count();
 	if(bestPreEvoTrees.count()) {
 		for(unsigned int i = 0; i < 5*lPopSize; ++i) {
 			lPopulation.push_back(bestPreEvoTrees.at(i % bestPreEvoTrees.size()));
-//			lPopulation[i] = bestPreEvoTrees.at(i % bestPreEvoTrees.size());
 		}
 		evaluateSymbReg(lPopulation, *m_context);
 		calculateStats(lPopulation, 0);
