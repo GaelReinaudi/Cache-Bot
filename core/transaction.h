@@ -75,14 +75,14 @@ public:
 		d += qint64(1<<20) * qint64(absInt(dimensionOfVoid - other.dimensionOfVoid));
 		// if both are positive, let's make them a lot closer
 		if (amountInt() > 0 && other.amountInt() > 0) {
-			d /= 128;
+			d /= 16;
 		}
 		return d;
 	}
 
 	//! distance between this transaction and anther.
 	inline quint64 dist(const Transaction& other) const {
-		return distanceWeighted<8*4, 1, 128/4, 0>(other);
+		return distanceWeighted<8*4, 1, 128*1, 0>(other);
 	}
 public:
 	static QVector<int> onlyLoadHashes;

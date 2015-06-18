@@ -11,7 +11,7 @@ MainWindow::MainWindow(QString userID, QVector<int> onlyLoadHashes)
 	ui->setupUi(this);
 
 	Evolver* pEvolver = new Evolver(userID);
-//	pEvolver->flags |= CacheAccountConnector::SendBot;
+	pEvolver->flags &= ~CacheAccountConnector::SendBot;
 	Transaction::onlyLoadHashes = onlyLoadHashes;
 
 	connect(pEvolver, SIGNAL(injected(User*)), this, SLOT(onUserInjected(User*)));
