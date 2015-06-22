@@ -16,10 +16,7 @@ public:
 	QString name; // "YARROW HOTEL GRILL" or "STRIKE TECHNOLOG"
 	QDate date; // "2015-01-28"
 	QStringList categories; // ["Food and Drink", "Restaurants"] or ["Transfer", "Payroll"]
-	union {
-		qint64 hash = 0;
-		uchar b[8];
-	} nameHash;
+	NameHashVector1 nameHash;
 	int indexHash = -1;
 	// used to make the distance arbitrary far from anything
 	int dimensionOfVoid = 0;
@@ -69,7 +66,7 @@ public:
 		qint64 d = 0;
 		d += qint64(wD) * (absInt(jDay() - other.jDay()));
 		d += qint64(wA) * (absInt(amountInt() - other.amountInt()));
-		d += qint64(wH) * stringHashDistance(nameHash.hash, other.nameHash.hash);
+		d += qint64(wH) * nameHash.dist(other.nameHash);
 		d += qint64(wIH) * qint64(absInt(indexHash - other.indexHash));
 		//LOG() << "dist " << d << " = day " << jDay() << "-" << other.jDay() << " kamount " << kamount << "-" << other.kamount << " hash " << nameHash.hash << "-" << other.nameHash.hash << endl;
 		d += qint64(1<<20) * qint64(absInt(dimensionOfVoid - other.dimensionOfVoid));

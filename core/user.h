@@ -111,7 +111,7 @@ private:
 	void makeHashBundles() {
 		for (int i = 0; i < m_allTransactions.count(); ++i) {
 			Transaction& t = m_allTransactions.trans(i);
-			qint64 h = t.nameHash.hash;
+			qint64 h = t.nameHash.hash();
 			if (!m_hashBundles.contains(h))
 				m_hashBundles[h] = new TransactionBundle();
 			m_hashBundles[h]->append(&t);

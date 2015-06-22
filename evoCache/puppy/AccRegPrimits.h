@@ -237,9 +237,9 @@ public:
 				  + " / " + QString::number(m_bundle.sumDollar() / m_bundle.count());
 			retObj.insert("info", str);
 			str = QString("On the ") + QString::number(m_dayOfMonth) + "th, ";
-			str += QString("hash: ") + QString::number(m_bundle.trans(0).nameHash.hash);
+			str += QString("hash: ") + QString::number(m_bundle.trans(0).nameHash.hash());
 			str += QString("  ind: ") + QString::number(m_bundle.trans(0).indexHash);
-			retObj.insert("hash", m_bundle.trans(0).nameHash.hash);
+			retObj.insert("hash", m_bundle.trans(0).nameHash.hash());
 			retObj.insert("indH", m_bundle.trans(0).indexHash);
 		}
 
