@@ -37,8 +37,3 @@ qint64 proximityHashString2(const QString &str) {
 	return ret;
 }
 
-
-qint64 stringHashDistance(qint64 h1, qint64 h2)
-{
-	return absInt(h1 - h2);
-}

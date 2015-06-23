@@ -15,7 +15,6 @@ double CORESHARED_EXPORT kindaLog(double amount);
 double CORESHARED_EXPORT unKindaLog(double kindaLogAmount);
 qint64 CORESHARED_EXPORT proximityHashString(const QString& str);
 qint64 CORESHARED_EXPORT proximityHashString2(const QString& str);
-qint64 CORESHARED_EXPORT stringHashDistance(qint64 h1, qint64 h2);
 
 static inline qint64 absInt(const qint64& x) {
 	return qAbs(x);
@@ -59,6 +58,65 @@ public:
 
 protected:
 	QString m_id;
+};
+
+template<int Dim, typename U>
+class FiniteVector
+{
+public:
+	FiniteVector() {
+		for (int i = 0; i < Dim; ++i) {
+			coord[i] = 0;
+		}
+	}
+
+	qint64 manDist(const FiniteVector<Dim, U>& other) const {
+		qint64 ret = 0;
+		for (int i = 0; i < Dim; ++i) {
+			ret += qAbs(coord[i] - other.coord[i]);
+		}
+		return ret;
+	}
+
+	qint64 manLength() const {
+		qint64 ret = 0;
+		for (int i = 0; i < Dim; ++i) {
+			ret += qAbs(coord[i]);
+		}
+		return ret;
+	}
+
+public:
+	U coord[Dim];
+};
+
+class NameHashVector1 : public FiniteVector<1, int>
+{
+public:
+	void setFromString(const QString& str) {
+		qint64 ret = 0;
+		for (const QChar& c : str) {
+			int n = c.toUpper().toLatin1() * 1;
+			// for numbers
+			if (c.isDigit())
+				n = 0;//QChar('#').toLatin1();
+			ret += n;
+		}
+		coord[0] = ret;
+	}
+
+	void setFromHash(int h) {
+		coord[0] = h;
+	}
+
+	qint64 dist(const NameHashVector1& other) const {
+		return manDist(other);
+	}
+
+	qint64 hash() const {
+		return manLength();
+	}
+
 };
 
 #endif // COMMON_H

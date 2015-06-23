@@ -7,7 +7,7 @@ void Transaction::read(const QJsonObject &json) {
 	bool ok = false;
 	QString accountStr = json["_account"].toString();
 	name = json["name"].toString();
-	nameHash.hash = proximityHashString(name);
+	nameHash.setFromString(name);
 	setAmount(-json["amount"].toDouble(ok));
 	date = QDate::fromString(json["date"].toString().left(10), "yyyy-MM-dd");
 	QJsonArray npcArrayOld = json["category"].toArray();
@@ -33,7 +33,7 @@ void Transaction::read(const QJsonObject &json) {
 
 void Transaction::write(QJsonObject &json) const {
 	json["name"] = name;
-	json["hash"] = nameHash.hash;
+	json["hash"] = nameHash.hash();
 	json["amount"] = -amountDbl();
 	json["date"] = date.toString("yyyy-MM-dd");
 }

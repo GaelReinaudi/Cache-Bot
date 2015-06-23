@@ -18,6 +18,7 @@ void ACustomPlot::makeGraphs(HashedBundles& hashBundles) {
 	addGraph();
 	graph(0)->setLineStyle(QCPGraph::lsStepLeft);
 	graph(0)->setPen(QPen(Qt::gray));
+	graph(0)->setAdaptiveSampling(false);
 	yAxis2->setAutoTickCount(10);
 	for (const auto& h : hashBundles.keys()) {
 		TransactionBundle* bundle = hashBundles[h];
@@ -25,9 +26,10 @@ void ACustomPlot::makeGraphs(HashedBundles& hashBundles) {
 		m_hashGraphs[h] = addGraph();
 		m_hashGraphs[h]->setLineStyle(QCPGraph::lsNone);
 		m_hashGraphs[h]->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 5.0));
-		int r = h % 255;
-		int g = (h >> 1) % 255;
-		int b = (h >> 2) % 255;
+		m_hashGraphs[h]->setAdaptiveSampling(false);
+		int r = h % 225;
+		int g = (h >> 1) % 225;
+		int b = (h >> 2) % 225;
 		m_hashGraphs[h]->setPen(QPen(QColor(r,g,b,255)));
 		m_labels.append(bundle->averageName() + "    last : " + bundle->trans(-1).name + "   uniques: " + bundle->uniqueNames().join(" | "));
 	}
@@ -65,7 +67,7 @@ void ACustomPlot::loadCompressedAmount(User* pUser)
 	auto& allTrans = pUser->allTrans();
 	for (int i = 0; i < allTrans.count(); ++i) {
 		double t = allTrans.trans(i).time_t();
-		uint h = allTrans.trans(i).nameHash.hash;
+		uint h = allTrans.trans(i).nameHash.hash();
 		m_integral += allTrans.trans(i).amountDbl();
 		graph(0)->addData(t, kindaLog(m_integral));
 		m_hashGraphs[h]->addData(t, allTrans.trans(i).compressedAmount());
@@ -98,3 +100,30 @@ void ACustomPlot::loadAmount(User* pUser)
 	yAxis->setRange(yAxis->range().lower - 500, yAxis->range().upper + 500);
 }
 
+
+
+void AHashPlot::loadCompressedAmount(User *pUser)
+{
+	makeGraphs(pUser->hashBundles());
+
+	xAxis->setLabel("log($)");
+	yAxis->setLabel("hash");
+	// add the purchase points
+	auto& allTrans = pUser->allTrans();
+	for (int i = 0; i < allTrans.count(); ++i) {
+		uint h = allTrans.trans(i).nameHash.hash();
+		m_integral += 1.0;
+		graph(0)->addData(allTrans.trans(i).compressedAmount(), m_integral);
+		m_hashGraphs[h]->addData(allTrans.trans(i).compressedAmount(), h);
+	}
+	QList<double> orderedKeys = graph(0)->data()->keys();
+	qDebug() << orderedKeys;
+	graph(0)->clearData();
+	m_integral = 0.0;//pUser->balance(Account::Type::Checking | Account::Type::Saving) - m_integral;
+	for (double dat : orderedKeys) {
+		m_integral += 1.0;
+		graph(0)->addData(dat, m_integral);
+	}
+	rescaleAxes();
+	xAxis->setRange(xAxis->range().lower - 0.5, xAxis->range().upper + 0.5);
+}

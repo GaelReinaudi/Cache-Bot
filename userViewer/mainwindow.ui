@@ -64,12 +64,15 @@
        </widget>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout_2" stretch="1">
+       <layout class="QVBoxLayout" name="verticalLayout_2" stretch="2,1">
         <property name="leftMargin">
          <number>0</number>
         </property>
         <item>
          <widget class="ACustomPlot" name="acPlot" native="true"/>
+        </item>
+        <item>
+         <widget class="AHashPlot" name="ahPlot" native="true"/>
         </item>
        </layout>
       </item>
@@ -148,11 +151,8 @@
      </layout>
     </item>
    </layout>
-   <zorder>horizontalLayoutWidget</zorder>
    <zorder></zorder>
-   <zorder>spinSum</zorder>
    <zorder></zorder>
-   <zorder>spinHashVal</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -181,6 +181,12 @@
  <customwidgets>
   <customwidget>
    <class>ACustomPlot</class>
+   <extends>QWidget</extends>
+   <header>ACChart/acustomplot.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>AHashPlot</class>
    <extends>QWidget</extends>
    <header>ACChart/acustomplot.h</header>
    <container>1</container>
