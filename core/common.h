@@ -94,7 +94,19 @@ class NameHashVector1 : public FiniteVector<1, int>
 {
 public:
 	void setFromString(const QString& str) {
+		qint64 ret = 0;
+		for (const QChar& c : str) {
+			int n = c.toUpper().toLatin1() * 1;
+			// for numbers
+			if (c.isDigit())
+				n = 0;//QChar('#').toLatin1();
+			ret += n;
+		}
+		coord[0] = ret;
+	}
 
+	void setFromHash(int h) {
+		coord[0] = h;
 	}
 
 	qint64 dist(const NameHashVector1& other) const {

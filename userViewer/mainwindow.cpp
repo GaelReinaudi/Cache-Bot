@@ -32,10 +32,12 @@ User *MainWindow::user() const
 void MainWindow::onUserInjected(User* pUser)
 {
 	ui->acPlot->loadCompressedAmount(pUser);
+	ui->ahPlot->loadCompressedAmount(pUser);
 	ui->sliderHash->setRange(-1, ui->acPlot->hashKeys().count() - 1);
 	ui->sliderHash->setValue(-1);
 
 	connect(ui->sliderHash, SIGNAL(valueChanged(int)), ui->acPlot, SLOT(showHash(int)));
+	connect(ui->sliderHash, SIGNAL(valueChanged(int)), ui->ahPlot, SLOT(showHash(int)));
 	connect(ui->sliderHash, SIGNAL(valueChanged(int)), ui->spinHash, SLOT(setValue(int)));
 	connect(ui->spinHash, SIGNAL(valueChanged(int)), ui->sliderHash, SLOT(setValue(int)));
 	connect(ui->acPlot, SIGNAL(newLabel(QString)), ui->labelBundle, SLOT(setText(QString)));
@@ -75,6 +77,7 @@ void MainWindow::plotMask(double x, double y, bool isTarget)
 void MainWindow::replotCharts()
 {
 	ui->acPlot->replot(QCustomPlot::rpQueued);
+	ui->ahPlot->replot(QCustomPlot::rpQueued);
 }
 
 void MainWindow::onNewSummarizedTree(QJsonObject jsonObj)

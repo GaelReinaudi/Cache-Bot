@@ -66,7 +66,7 @@ QVector<Transaction> FeatureMonthlyAmount::targetTransactions(QDate iniDate, QDa
 		targetTrans.last().date = currentDate;
 		targetTrans.last().setKLA(m_kla);
 		targetTrans.last().indexHash = 0;
-		targetTrans.last().nameHash.hash = m_b[0];
+		targetTrans.last().nameHash.setFromHash(m_b[0]);
 		targetTrans.last().flags |= Transaction::Predicted;
 
 		currentDate = currentDate.addMonths(1);
@@ -218,7 +218,7 @@ QVector<Transaction> FeatureBiWeeklyAmount::targetTransactions(QDate iniDate, QD
 		targetTrans.last().date = currentDate;
 		targetTrans.last().setKLA(m_kla);
 		targetTrans.last().indexHash = 0;
-		targetTrans.last().nameHash.hash = m_b[0];
+		targetTrans.last().nameHash.setFromHash(m_b[0]);
 		targetTrans.last().flags |= Transaction::Predicted;
 
 		currentDate = currentDate.addMonths(1);
