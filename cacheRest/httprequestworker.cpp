@@ -328,5 +328,8 @@ void HttpRequestWorker::on_manager_finished(QNetworkReply *reply) {
 	else if(reply->request().url().toString().startsWith(BestBotRoute)) {
 		emit repliedBestBot(response);
 	}
+	else if(reply->request().url().toString().startsWith(ExtraCashEC2Compute)) {
+		emit repliedExtraCashEC2Computation(response);
+	}
 }
 

@@ -49,9 +49,11 @@ private slots:
 		QVERIFY(spyIds.wait());
 		QCOMPARE(spyIds.count(), 1);
 		QList<QVariant> arguments = spyIds.takeFirst();
-		m_userIds = arguments.at(0).toString();
-		QSTARTSWITH(arguments.at(0).toString()
+		QString jsonString = arguments.at(0).toString();
+		QSTARTSWITH(jsonString
 					, "{\"user_ids\":[");
+		m_userIds = jsonString.mid(jsonString.indexOf(":")).split(QRegExp("\\W+"), QString::SkipEmptyParts);
+		qDebug() << "m_userIds" << m_userIds;
 	}
 
 	void verifyChrisId() {
@@ -100,12 +102,12 @@ private slots:
 		QVERIFY(spyInjectData.wait(10000));
 	}
 
-	void sendExtraCash() {
-		double extra = 20.0;
-		CacheRest::Instance()->sendExtraCash(m_testUser->id(), extra);
-		QSignalSpy spyExtraCash(CacheRest::Instance()->worker, SIGNAL(repliedExtraCache(QString)));
-		QVERIFY(spyExtraCash.wait(10000));
-	}
+//	void sendExtraCash() {
+//		double extra = 20.0;
+//		CacheRest::Instance()->sendExtraCash(m_testUser->id(), extra);
+//		QSignalSpy spyExtraCash(CacheRest::Instance()->worker, SIGNAL(repliedExtraCache(QString)));
+//		QVERIFY(spyExtraCash.wait(10000));
+//	}
 
 //	void sendNewBot() {
 //		QJsonObject json;
@@ -125,8 +127,16 @@ private slots:
 		QVERIFY(bestBotJson.contains("features\":"));
 	}
 
+	void allUsersExtraCashComputations() {
+		for (const QString& userId : m_userIds) {
+			CacheRest::Instance()->extraCashEC2Computation(userId);
+			QSignalSpy spyExtraCashComputation(CacheRest::Instance()->worker, SIGNAL(repliedExtraCashEC2Computation(QString)));
+			QVERIFY(spyExtraCashComputation.wait(10000));
+		}
+	}
+
 private:
-	QString m_userIds;
+	QStringList m_userIds;
 	QString m_userData;
 	User* m_testUser = 0;
 };
