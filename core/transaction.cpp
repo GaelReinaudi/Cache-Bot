@@ -89,16 +89,16 @@ Transaction* StaticTransactionArray::appendNew(QJsonObject jsonTrans, Account *p
 				  << nono << endl;
 			return 0;
 		}
-		if (!Transaction::onlyLoadHashes.isEmpty() && !Transaction::onlyLoadHashes.contains(hash)) {
-			LOG() << "not Adding transaction because Transaction::onlyLoadHashes doesn't contain "
-				  << hash << endl;
-			return 0;
-		}
-		if (date < Transaction::onlyAfterDate) {
-			LOG() << "not Adding transaction because Transaction::onlyAfterDate "
-				  << endl;
-			return 0;
-		}
+	}
+	if (!Transaction::onlyLoadHashes.isEmpty() && !Transaction::onlyLoadHashes.contains(hash)) {
+		LOG() << "not Adding transaction because Transaction::onlyLoadHashes doesn't contain "
+			  << hash << endl;
+		return 0;
+	}
+	if (date < Transaction::onlyAfterDate) {
+		LOG() << "not Adding transaction because Transaction::onlyAfterDate "
+			  << endl;
+		return 0;
 	}
 	Transaction* pNewTrans = &m_transArray[m_numTrans++];
 	pNewTrans->read(jsonTrans);
