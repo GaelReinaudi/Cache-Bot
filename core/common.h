@@ -168,8 +168,8 @@ public:
 	}
 
 private:
-	int pop(quint64 x) const {
-		quint64 ox = x;
+	int pop(quint64 n) const {
+		quint64 x = n;
 		const uint64_t m1  = 0x5555555555555555; //binary: 0101...
 		const uint64_t m2  = 0x3333333333333333; //binary: 00110011..
 		const uint64_t m4  = 0x0f0f0f0f0f0f0f0f; //binary:  4 zeros,  4 ones ...
@@ -180,7 +180,7 @@ private:
 		x += x >> 16;  //put count of each 32 bits into their lowest 8 bits
 		x += x >> 32;  //put count of each 64 bits into their lowest 8 bits
 		x &= 0x7f;
-		Q_ASSERT(x == QString::number(ox, 2).count("1"));
+		Q_ASSERT(x == QString::number(n, 2).count("1"));
 		return x;
 	}
 };

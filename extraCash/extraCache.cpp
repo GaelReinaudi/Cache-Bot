@@ -78,7 +78,8 @@ void ExtraCache::onBotInjected()
 void ExtraCache::onRepliedExtraCache(QString strData)
 {
 	CacheAccountConnector::onRepliedExtraCache(strData);
-	qApp->exit();
+	if(CacheAccountConnector::flags & CacheAccountConnector::AutoExit)
+		qApp->exit();
 }
 
 void ExtraCache::computeMinSlopeOver(int numDays)
