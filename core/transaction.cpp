@@ -2,6 +2,7 @@
 #include "account.h"
 
 QVector<int> Transaction::onlyLoadHashes = QVector<int>();
+QDate Transaction::onlyAfterDate = QDate::currentDate().addMonths(-6);
 
 void Transaction::read(const QJsonObject &json) {
 	bool ok = false;
@@ -42,9 +43,9 @@ qint64 Transaction::dist(const Transaction &other, bool log) const {
 	// if both are positive, let's make them a lot closer
 	if (amountInt() > 0 && other.amountInt() > 0
 	 || amountInt() < -2*KLA_MULTIPLICATOR && other.amountInt() < -2*KLA_MULTIPLICATOR) {
-		return distanceWeighted<32, 512, 8>(other, log);
+		return distanceWeighted<16*16, 512*16, 4*16>(other, log);
 	}
-	return distanceWeighted<4, 128, 2>(other, log);
+	return distanceWeighted<16, 512, 4>(other, log);
 }
 
 
@@ -80,6 +81,7 @@ void StaticTransactionArray::write(QJsonArray& npcArray) const {
 
 Transaction* StaticTransactionArray::appendNew(QJsonObject jsonTrans, Account *pInAcc) {
 	QString name = jsonTrans["name"].toString();
+	QDate date = QDate::fromString(jsonTrans["date"].toString().left(10), "yyyy-MM-dd");
 	qint64 hash = NameHashVector::fromString(name);
 	for (const QString& nono : pInAcc->excludeNameTransContain()) {
 		if (name.contains(nono, Qt::CaseInsensitive)) {
@@ -90,6 +92,11 @@ Transaction* StaticTransactionArray::appendNew(QJsonObject jsonTrans, Account *p
 		if (!Transaction::onlyLoadHashes.isEmpty() && !Transaction::onlyLoadHashes.contains(hash)) {
 			LOG() << "not Adding transaction because Transaction::onlyLoadHashes doesn't contain "
 				  << hash << endl;
+			return 0;
+		}
+		if (date < Transaction::onlyAfterDate) {
+			LOG() << "not Adding transaction because Transaction::onlyAfterDate "
+				  << endl;
 			return 0;
 		}
 	}

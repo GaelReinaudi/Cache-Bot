@@ -97,16 +97,20 @@ template<int Dim, typename U> qint64 FiniteVector<Dim, U>::MaxManLengthEver = 0;
 class NameHashVector1 : public FiniteVector<1, int>
 {
 public:
-	void setFromString(const QString& str) {
-		qint64 ret = 0;
+	static quint64 fromString(const QString& str) {
+		qint64 h = 0;
 		for (const QChar& c : str) {
 			int n = c.toUpper().toLatin1() * 1;
 			// for numbers
 			if (c.isDigit())
 				n = 0;//QChar('#').toLatin1();
-			ret += n;
+			h += n;
 		}
-		coord[0] = ret;
+		return h;
+	}
+
+	void setFromString(const QString& str) {
+		coord[0] = fromString(str);
 	}
 
 	void setFromHash(int h) {

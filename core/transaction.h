@@ -5,7 +5,7 @@
 #include "common.h"
 class Account;
 
-typedef NameHashVector2 NameHashVector;
+typedef NameHashVector1 NameHashVector;
 
 class CORESHARED_EXPORT Transaction// : public DBobj
 {
@@ -88,6 +88,7 @@ public:
 
 public:
 	static QVector<int> onlyLoadHashes;
+	static QDate onlyAfterDate;
 };
 
 struct StaticTransactionArray
