@@ -63,35 +63,28 @@ public:
 		return date.toJulianDay();
 	}
 
-	template <qint64 wD, qint64 wA, qint64 wH, qint64 wIH>
+	template <qint64 mD, qint64 mA, qint64 mH>
 	qint64 distanceWeighted(const Transaction& other, bool log = false) const {
 		qint64 d = 0;
-		d += qint64(wD) * (absInt(jDay() - other.jDay()));
-		d += qint64(wA) * (absInt(amountInt() - other.amountInt()));
-		d += qint64(wH) * nameHash.dist(other.nameHash);
-		d += qint64(wIH) * qint64(absInt(indexHash - other.indexHash));
-		d += qint64(1<<20) * qint64(absInt(dimensionOfVoid - other.dimensionOfVoid));
+		d += LIMIT_DIST_TRANS * (absInt(jDay() - other.jDay())) / mD;
+		d += LIMIT_DIST_TRANS * (absInt(amountInt() - other.amountInt())) / mA;
+		d += LIMIT_DIST_TRANS * nameHash.dist(other.nameHash) / mH;
+//		d += LIMIT_DIST_TRANS * qint64(absInt(indexHash - other.indexHash)) / mIH;
+		d |= (1<<20) * qint64(absInt(dimensionOfVoid - other.dimensionOfVoid));
 		if(log) {
 			LOG() << "dist " << d
-				<< QString(" = %1 x day(%2)").arg(wD).arg(absInt(jDay() - other.jDay()))
-				<< QString(" = %1 x kamount(%2)").arg(wA).arg(absInt(amountInt() - other.amountInt()))
-				<< QString(" = %1 x hash(%2)").arg(wD).arg(nameHash.dist(other.nameHash))
+				<< QString(" = %1 x day(%2)").arg(double(LIMIT_DIST_TRANS)/mD).arg(absInt(jDay() - other.jDay()))
+				<< QString(" = %1 x kamount(%2)").arg(double(LIMIT_DIST_TRANS)/mA).arg(absInt(amountInt() - other.amountInt()))
+				<< QString(" = %1 x hash(%2)").arg(double(LIMIT_DIST_TRANS)/mH).arg(nameHash.dist(other.nameHash))
 				<< endl;
 		}
 		return d;
 	}
 
 	//! distance between this transaction and anther.
-	inline qint64 dist(const Transaction& other, bool log = false) const {
-		// if both are positive, let's make them a lot closer
-		if (amountInt() > 0 && other.amountInt() > 0
-				|| amountInt() < -2 && other.amountInt() > -2) {
-			return distanceWeighted<8*4, 4, 128*1, 0>(other, log);
-		}
-		return distanceWeighted<8*4, 4, 128*1, 0>(other, log);
-	}
+	qint64 dist(const Transaction& other, bool log = false) const;
 
-	static const quint64 LIMIT_DIST_TRANS = 512;
+	static const qint64 LIMIT_DIST_TRANS = 512;
 
 public:
 	static QVector<int> onlyLoadHashes;

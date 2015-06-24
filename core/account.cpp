@@ -9,6 +9,8 @@ Account::Account(QJsonObject jsonAcc, QObject *parent)
 	m_excludeNameTransContain.append("Credit Card Payment");
 	m_excludeNameTransContain.append("ment to Chase c");
 	m_excludeNameTransContain.append("OVERDRAFT PROT");
+	m_excludeNameTransContain.append("payment to CRD");
+	m_excludeNameTransContain.append("online payment from CHK");
 }
 
 void Account::loadJsonData(QJsonObject json, int afterJday, int beforeJday)

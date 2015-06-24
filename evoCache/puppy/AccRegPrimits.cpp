@@ -95,7 +95,7 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 	if (targetTrans.count() == 0) {
 		LOG() << "MonthlyAmount(0 TARGET): day "<<m_dayOfMonth<<" kla "<< m_kla << endl;
 	}
-	else {
+	else if (ioContext.m_summaryJsonObj) {
 		LOG() << "MonthlyAmount("<<targetTrans.count()
 			<<" TARGET): day "<<m_dayOfMonth
 			<<" kla"<< m_kla <<"="<<targetTrans.first().amountDbl()
@@ -128,7 +128,9 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 		if (trans.jDay() > approxSpacingPayment() / 2 + iTarg->jDay() || i == allTrans.count() - 1) {
 			if (localDist < Transaction::LIMIT_DIST_TRANS) {
 				m_bundle.append(localTrans);
-				iTarg->dist(*localTrans, true);
+				if (ioContext.m_summaryJsonObj) {
+					iTarg->dist(*localTrans, true);
+				}
 				// isolate the transaction that were fitted to the target
 				Q_ASSERT(localTrans->dimensionOfVoid == 0);
 				localTrans->dimensionOfVoid++;
@@ -141,11 +143,15 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 				m_consecMissed = 0;
 			}
 			else {
+				if (ioContext.m_summaryJsonObj) {
+					LOG() << "missed: ";
+					iTarg->dist(*localTrans, true);
+				}
 				m_consecMonth = 0;
 				++m_consecMissed;
 			}
-//				totalOneOverExpDist += expoInt<64>(-localDist);
-				totalOneOverExpDist += 4.0 / (4 + localDist);
+
+			totalOneOverExpDist += 4.0 / (4 + localDist);
 			if (iTarg == &targetTrans.last() || (iTarg + 1)->date >= lastDate)
 				break;
 			++iTarg;
