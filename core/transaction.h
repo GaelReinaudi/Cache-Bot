@@ -5,6 +5,8 @@
 #include "common.h"
 class Account;
 
+typedef NameHashVector2 NameHashVector;
+
 class CORESHARED_EXPORT Transaction// : public DBobj
 {
 private:
@@ -16,7 +18,7 @@ public:
 	QString name; // "YARROW HOTEL GRILL" or "STRIKE TECHNOLOG"
 	QDate date; // "2015-01-28"
 	QStringList categories; // ["Food and Drink", "Restaurants"] or ["Transfer", "Payroll"]
-	NameHashVector1 nameHash;
+	NameHashVector nameHash;
 	int indexHash = -1;
 	// used to make the distance arbitrary far from anything
 	int dimensionOfVoid = 0;
@@ -61,26 +63,29 @@ public:
 		return date.toJulianDay();
 	}
 
-	template <quint64 wD, quint64 wA, quint64 wH, quint64 wIH>
-	qint64 distanceWeighted(const Transaction& other) const {
+	template <qint64 mD, qint64 mA, qint64 mH>
+	qint64 distanceWeighted(const Transaction& other, bool log = false) const {
 		qint64 d = 0;
-		d += qint64(wD) * (absInt(jDay() - other.jDay()));
-		d += qint64(wA) * (absInt(amountInt() - other.amountInt()));
-		d += qint64(wH) * nameHash.dist(other.nameHash);
-		d += qint64(wIH) * qint64(absInt(indexHash - other.indexHash));
-		//LOG() << "dist " << d << " = day " << jDay() << "-" << other.jDay() << " kamount " << kamount << "-" << other.kamount << " hash " << nameHash.hash << "-" << other.nameHash.hash << endl;
-		d += qint64(1<<20) * qint64(absInt(dimensionOfVoid - other.dimensionOfVoid));
-		// if both are positive, let's make them a lot closer
-		if (amountInt() > 0 && other.amountInt() > 0) {
-			d /= 16;
+		d += LIMIT_DIST_TRANS * (absInt(jDay() - other.jDay())) / mD;
+		d += LIMIT_DIST_TRANS * (absInt(amountInt() - other.amountInt())) / mA;
+		d += LIMIT_DIST_TRANS * nameHash.dist(other.nameHash) / mH;
+//		d += LIMIT_DIST_TRANS * qint64(absInt(indexHash - other.indexHash)) / mIH;
+		d |= (1<<20) * qint64(absInt(dimensionOfVoid - other.dimensionOfVoid));
+		if(log) {
+			LOG() << "dist " << d
+				<< QString(" = %1 x day(%2)").arg(double(LIMIT_DIST_TRANS)/mD).arg(absInt(jDay() - other.jDay()))
+				<< QString(" = %1 x kamount(%2)").arg(double(LIMIT_DIST_TRANS)/mA).arg(absInt(amountInt() - other.amountInt()))
+				<< QString(" = %1 x hash(%2)").arg(double(LIMIT_DIST_TRANS)/mH).arg(nameHash.dist(other.nameHash))
+				<< endl;
 		}
 		return d;
 	}
 
 	//! distance between this transaction and anther.
-	inline quint64 dist(const Transaction& other) const {
-		return distanceWeighted<8*4, 1, 128*1, 0>(other);
-	}
+	qint64 dist(const Transaction& other, bool log = false) const;
+
+	static const qint64 LIMIT_DIST_TRANS = 512;
+
 public:
 	static QVector<int> onlyLoadHashes;
 };

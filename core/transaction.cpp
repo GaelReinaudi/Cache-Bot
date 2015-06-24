@@ -38,14 +38,18 @@ void Transaction::write(QJsonObject &json) const {
 	json["date"] = date.toString("yyyy-MM-dd");
 }
 
+qint64 Transaction::dist(const Transaction &other, bool log) const {
+	// if both are positive, let's make them a lot closer
+	if (amountInt() > 0 && other.amountInt() > 0
+	 || amountInt() < -2*KLA_MULTIPLICATOR && other.amountInt() < -2*KLA_MULTIPLICATOR) {
+		return distanceWeighted<32, 512, 8>(other, log);
+	}
+	return distanceWeighted<4, 128, 2>(other, log);
+}
+
 
 
 void StaticTransactionArray::read(const QJsonArray& npcArray, int afterJday, int beforeJday, const QVector<QString> &onlyAcIds /*= anyID*/) {
-	QStringList s_excludeNameTransContain;
-	s_excludeNameTransContain.append("Transfer");
-	s_excludeNameTransContain.append("Credit Card Payment");
-	s_excludeNameTransContain.append("ment to Chase c");
-
 	for (int npcIndex = 0; npcIndex < npcArray.size(); ++npcIndex) {
 		QJsonObject jsonTrans = npcArray[npcIndex].toObject();
 		QString accountTrans = jsonTrans["_account"].toString();
@@ -76,9 +80,9 @@ void StaticTransactionArray::write(QJsonArray& npcArray) const {
 
 Transaction* StaticTransactionArray::appendNew(QJsonObject jsonTrans, Account *pInAcc) {
 	QString name = jsonTrans["name"].toString();
-	qint64 hash = proximityHashString(name);
+	qint64 hash = NameHashVector::fromString(name);
 	for (const QString& nono : pInAcc->excludeNameTransContain()) {
-		if (name.contains(nono)) {
+		if (name.contains(nono, Qt::CaseInsensitive)) {
 			LOG() << "not Adding transaction because it looks like an internal transfer based on name containing"
 				  << nono << endl;
 			return 0;

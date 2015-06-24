@@ -37,10 +37,7 @@ protected:
 class AHashPlot : public ACustomPlot
 {
 public:
-	AHashPlot(QWidget *parent = 0)  :
-		ACustomPlot(parent) {
-		xAxis->setTickLabelType(QCPAxis::ltNumber);
-	}
+	AHashPlot(QWidget *parent = 0);
 
 	void loadCompressedAmount(User *pUser) override;
 };

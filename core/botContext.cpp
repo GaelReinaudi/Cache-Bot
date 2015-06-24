@@ -43,7 +43,7 @@ BotContext::BotContext(User *pUser)
 		}
 	}
 	insert(new CacheBotRootPrimitive());
-	insert(new FeatureBiWeeklyAmount());
+//	insert(new FeatureBiWeeklyAmount());
 	insert(new FeatureMonthlyAmount());
 	//		insert(new DummyFeature());
 }
