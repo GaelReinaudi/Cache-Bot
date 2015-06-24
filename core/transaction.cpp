@@ -76,7 +76,7 @@ void StaticTransactionArray::write(QJsonArray& npcArray) const {
 
 Transaction* StaticTransactionArray::appendNew(QJsonObject jsonTrans, Account *pInAcc) {
 	QString name = jsonTrans["name"].toString();
-	qint64 hash = proximityHashString(name);
+	qint64 hash = NameHashVector::fromString(name);
 	for (const QString& nono : pInAcc->excludeNameTransContain()) {
 		if (name.contains(nono)) {
 			LOG() << "not Adding transaction because it looks like an internal transfer based on name containing"

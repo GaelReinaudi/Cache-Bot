@@ -5,6 +5,8 @@
 #include "common.h"
 class Account;
 
+typedef NameHashVector2 NameHashVector;
+
 class CORESHARED_EXPORT Transaction// : public DBobj
 {
 private:
@@ -16,7 +18,7 @@ public:
 	QString name; // "YARROW HOTEL GRILL" or "STRIKE TECHNOLOG"
 	QDate date; // "2015-01-28"
 	QStringList categories; // ["Food and Drink", "Restaurants"] or ["Transfer", "Payroll"]
-	NameHashVector1 nameHash;
+	NameHashVector nameHash;
 	int indexHash = -1;
 	// used to make the distance arbitrary far from anything
 	int dimensionOfVoid = 0;
@@ -61,26 +63,36 @@ public:
 		return date.toJulianDay();
 	}
 
-	template <quint64 wD, quint64 wA, quint64 wH, quint64 wIH>
-	qint64 distanceWeighted(const Transaction& other) const {
+	template <qint64 wD, qint64 wA, qint64 wH, qint64 wIH>
+	qint64 distanceWeighted(const Transaction& other, bool log = false) const {
 		qint64 d = 0;
 		d += qint64(wD) * (absInt(jDay() - other.jDay()));
 		d += qint64(wA) * (absInt(amountInt() - other.amountInt()));
 		d += qint64(wH) * nameHash.dist(other.nameHash);
 		d += qint64(wIH) * qint64(absInt(indexHash - other.indexHash));
-		//LOG() << "dist " << d << " = day " << jDay() << "-" << other.jDay() << " kamount " << kamount << "-" << other.kamount << " hash " << nameHash.hash << "-" << other.nameHash.hash << endl;
 		d += qint64(1<<20) * qint64(absInt(dimensionOfVoid - other.dimensionOfVoid));
-		// if both are positive, let's make them a lot closer
-		if (amountInt() > 0 && other.amountInt() > 0) {
-			d /= 16;
+		if(log) {
+			LOG() << "dist " << d
+				<< QString(" = %1 x day(%2)").arg(wD).arg(absInt(jDay() - other.jDay()))
+				<< QString(" = %1 x kamount(%2)").arg(wA).arg(absInt(amountInt() - other.amountInt()))
+				<< QString(" = %1 x hash(%2)").arg(wD).arg(nameHash.dist(other.nameHash))
+				<< endl;
 		}
 		return d;
 	}
 
 	//! distance between this transaction and anther.
-	inline quint64 dist(const Transaction& other) const {
-		return distanceWeighted<8*4, 1, 128*1, 0>(other);
+	inline qint64 dist(const Transaction& other, bool log = false) const {
+		// if both are positive, let's make them a lot closer
+		if (amountInt() > 0 && other.amountInt() > 0
+				|| amountInt() < -2 && other.amountInt() > -2) {
+			return distanceWeighted<8*4, 4, 128*1, 0>(other, log);
+		}
+		return distanceWeighted<8*4, 4, 128*1, 0>(other, log);
 	}
+
+	static const quint64 LIMIT_DIST_TRANS = 512;
+
 public:
 	static QVector<int> onlyLoadHashes;
 };

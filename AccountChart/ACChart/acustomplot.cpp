@@ -15,9 +15,9 @@ void ACustomPlot::makeGraphs(HashedBundles& hashBundles) {
 	m_hashGraphs.clear();
 	m_hashBund.clear();
 	m_labels.clear();
-	addGraph();
+	addGraph(xAxis, yAxis2);
 	graph(0)->setLineStyle(QCPGraph::lsStepLeft);
-	graph(0)->setPen(QPen(Qt::gray));
+	graph(0)->setPen(QPen(Qt::gray, 3));
 	graph(0)->setAdaptiveSampling(false);
 	yAxis2->setAutoTickCount(10);
 	for (const auto& h : hashBundles.keys()) {
@@ -62,7 +62,7 @@ void ACustomPlot::loadCompressedAmount(User* pUser)
 {
 	makeGraphs(pUser->hashBundles());
 
-	yAxis->setLabel("log($)");
+	yAxis->setLabel("skblnrl($)");
 	// add the purchase points
 	auto& allTrans = pUser->allTrans();
 	for (int i = 0; i < allTrans.count(); ++i) {
@@ -102,26 +102,36 @@ void ACustomPlot::loadAmount(User* pUser)
 
 
 
+AHashPlot::AHashPlot(QWidget *parent)  :
+	ACustomPlot(parent) {
+	xAxis->setTickLabelType(QCPAxis::ltNumber);
+	yAxis2->setVisible(true);
+
+	xAxis->setLabel("skblnrl($)");
+	yAxis->setLabel("hash");
+	yAxis2->setLabel("points");
+}
+
 void AHashPlot::loadCompressedAmount(User *pUser)
 {
 	makeGraphs(pUser->hashBundles());
 
-	xAxis->setLabel("log($)");
-	yAxis->setLabel("hash");
 	// add the purchase points
 	auto& allTrans = pUser->allTrans();
 	for (int i = 0; i < allTrans.count(); ++i) {
 		uint h = allTrans.trans(i).nameHash.hash();
+		uint d = allTrans.trans(i).nameHash.manLength();
 		m_integral += 1.0;
 		graph(0)->addData(allTrans.trans(i).compressedAmount(), m_integral);
-		m_hashGraphs[h]->addData(allTrans.trans(i).compressedAmount(), h);
+		m_hashGraphs[h]->addData(allTrans.trans(i).compressedAmount(), d);
 	}
 	QList<double> orderedKeys = graph(0)->data()->keys();
 	qDebug() << orderedKeys;
 	graph(0)->clearData();
+	double tot = 1.0;//m_integral;
 	m_integral = 0.0;//pUser->balance(Account::Type::Checking | Account::Type::Saving) - m_integral;
 	for (double dat : orderedKeys) {
-		m_integral += 1.0;
+		m_integral += 1.0 / tot;
 		graph(0)->addData(dat, m_integral);
 	}
 	rescaleAxes();

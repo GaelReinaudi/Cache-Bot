@@ -9,6 +9,7 @@ MainWindow::MainWindow(QString userID, QVector<int> onlyLoadHashes)
 	, ui(new Ui::MainWindow)
 {
 	ui->setupUi(this);
+	ui->amPlot->hide();
 
 	Evolver* pEvolver = new Evolver(userID);
 	pEvolver->flags &= ~CacheAccountConnector::SendBot;
@@ -27,7 +28,6 @@ void MainWindow::onUserInjected(User* pUser)
 {
 	ui->acPlot->loadCompressedAmount(pUser);
 	ui->amPlot->loadAmount(pUser);
-	ui->amPlot->hide();
 
 	connect(ui->acPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), ui->amPlot->xAxis, SLOT(setRange(QCPRange)));
 	connect(ui->acPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), ui->amPlot, SLOT(replot()));

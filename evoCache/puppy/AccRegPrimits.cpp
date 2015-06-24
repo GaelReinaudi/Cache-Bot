@@ -96,7 +96,11 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 		LOG() << "MonthlyAmount(0 TARGET): day "<<m_dayOfMonth<<" kla "<< m_kla << endl;
 	}
 	else {
-//		LOG() << "MonthlyAmount("<<targetTrans.count()<<" TARGET): day "<<m_dayOfMonth<<" kla"<< m_kla <<"="<<targetTrans.first().amountDbl() << " h=" <<targetTrans.first().nameHash.hash << endl;
+		LOG() << "MonthlyAmount("<<targetTrans.count()
+			<<" TARGET): day "<<m_dayOfMonth
+			<<" kla"<< m_kla <<"="<<targetTrans.first().amountDbl()
+			<< " h=" <<targetTrans.first().nameHash.hash()
+			<< endl;
 	}
 	if (double(m_kla) < -6 * KLA_MULTIPLICATOR || double(m_kla) > 6 * KLA_MULTIPLICATOR) {
 //		double fitness = -1;
@@ -120,11 +124,11 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 			localTrans = &trans;
 		}
 		Q_ASSERT(localDist < 18446744073709551615ULL);
-		static const int LIMIT_DIST_TRANS = 64 * 8;
 		// if we get further away by approxSpacingPayment() / 2 days, we take the next target, or if last trans
 		if (trans.jDay() > approxSpacingPayment() / 2 + iTarg->jDay() || i == allTrans.count() - 1) {
-			if (localDist < LIMIT_DIST_TRANS) {
+			if (localDist < Transaction::LIMIT_DIST_TRANS) {
 				m_bundle.append(localTrans);
+				iTarg->dist(*localTrans, true);
 				// isolate the transaction that were fitted to the target
 				Q_ASSERT(localTrans->dimensionOfVoid == 0);
 				localTrans->dimensionOfVoid++;
