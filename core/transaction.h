@@ -5,7 +5,7 @@
 #include "common.h"
 class Account;
 
-typedef NameHashVector1 NameHashVector;
+typedef NameHashVector2 NameHashVector;
 
 class CORESHARED_EXPORT Transaction// : public DBobj
 {
