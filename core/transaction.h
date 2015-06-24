@@ -89,6 +89,7 @@ public:
 public:
 	static QVector<int> onlyLoadHashes;
 	static QDate onlyAfterDate;
+	static int onlyAccountType;
 };
 
 struct StaticTransactionArray

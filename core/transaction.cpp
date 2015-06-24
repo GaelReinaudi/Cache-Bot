@@ -3,6 +3,7 @@
 
 QVector<int> Transaction::onlyLoadHashes = QVector<int>();
 QDate Transaction::onlyAfterDate = QDate::currentDate().addMonths(-6);
+int Transaction::onlyAccountType = Account::Type::Checking | Account::Type::Credit;
 
 void Transaction::read(const QJsonObject &json) {
 	bool ok = false;
@@ -98,6 +99,11 @@ Transaction* StaticTransactionArray::appendNew(QJsonObject jsonTrans, Account *p
 	if (date < Transaction::onlyAfterDate) {
 		LOG() << "not Adding transaction because Transaction::onlyAfterDate "
 			  << endl;
+		return 0;
+	}
+	if (!(pInAcc->type() & Transaction::onlyAccountType)) {
+		LOG() << "not Adding transaction because Transaction::onlyAccountType "
+			  << QString("b%1").arg(QString::number(Transaction::onlyAccountType, 2)) << endl;
 		return 0;
 	}
 	Transaction* pNewTrans = &m_transArray[m_numTrans++];
