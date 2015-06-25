@@ -53,7 +53,7 @@ void MainWindow::plotMask(double x, double y, bool isTarget)
 	y = kindaLog(y);
 	itRect->topLeft->setCoords(QPointF(x - 4*3600*24, y + (10+6*isTarget)*0.01));
 	itRect->bottomRight->setCoords(QPointF(x + 4*3600*24, y - (10+6*isTarget)*0.01));
-	QColor colZone = isTarget ? QColor(239, 64, 53, 32) : QColor(0, 64, 253, 128);
+	QColor colZone = isTarget ? QColor(239, 64, 53, 32) : QColor(0, 64, 253, 64);
 	itRect->setPen(QPen(QBrush(colZone), 3.0));
 	itRect->setBrush(QBrush(colZone));
 	itRect->setClipToAxisRect(false);

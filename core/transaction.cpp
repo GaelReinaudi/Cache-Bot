@@ -44,7 +44,7 @@ qint64 Transaction::dist(const Transaction &other, bool log) const {
 	// if both are positive, let's make them a lot closer
 	if (amountInt() > 0 && other.amountInt() > 0
 	 || amountInt() < -2*KLA_MULTIPLICATOR && other.amountInt() < -2*KLA_MULTIPLICATOR) {
-		return distanceWeighted<16*16, 512*16, 4*16>(other, log);
+		return distanceWeighted<16*2, 512*2, 4*4>(other, log);
 	}
 	return distanceWeighted<16, 512, 4>(other, log);
 }
