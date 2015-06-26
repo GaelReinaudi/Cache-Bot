@@ -25,7 +25,20 @@ void ACustomPlot::makeGraphs(HashedBundles& hashBundles) {
 		m_hashBund[h] = bundle;
 		m_hashGraphs[h] = addGraph();
 		m_hashGraphs[h]->setLineStyle(QCPGraph::lsNone);
-		m_hashGraphs[h]->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 5.0));
+		qDebug() << bundle->trans(0).account->type();
+		switch (bundle->trans(0).account->type()) {
+		case Account::Type::Credit:
+			m_hashGraphs[h]->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssPlus, 6.0));
+			break;
+		case Account::Type::Saving:
+			m_hashGraphs[h]->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssSquare, 5.0));
+			break;
+		case Account::Type::Checking:
+			m_hashGraphs[h]->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 5.0));
+			break;
+		default:
+			m_hashGraphs[h]->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssTriangle, 15.0));
+		}
 		m_hashGraphs[h]->setAdaptiveSampling(false);
 		int r = h % 225;
 		int g = (h >> 1) % 225;

@@ -112,6 +112,8 @@ public:
 		return retObj;
 	}
 	bool isFeature() const override { return true; }
+	virtual void getArgs(Puppy::Context &ioContext) { Q_UNUSED(ioContext); }
+	virtual void cleanArgs() {}
 
 protected:
 	TransactionBundle m_bundle;
@@ -150,7 +152,6 @@ public:
 	DummyFeature(QString featureName = "Dummy")
 			: AccountFeature(6, featureName.toStdString())
 	{}
-//	QJsonObject toJson() override { return QJsonObject(); }
 };
 
 class FeaturePeriodicAmount : public AccountFeature
@@ -162,9 +163,6 @@ public:
 	~FeaturePeriodicAmount() { }
 
 	virtual int approxSpacingPayment() = 0;
-//	virtual void execute(void* outDatum, Puppy::Context& ioContext) { Q_UNUSED(outDatum); Q_UNUSED(ioContext); }
-	virtual void getArgs(Puppy::Context &ioContext) { Q_UNUSED(ioContext); }
-	virtual void cleanArgs() {}
 };
 
 class FeatureMonthlyAmount : public FeaturePeriodicAmount
@@ -173,9 +171,11 @@ public:
 	FeatureMonthlyAmount()
 		: FeaturePeriodicAmount("MonthlyAmount")
 	{ }
+protected:
 	FeatureMonthlyAmount(QString featureName)
 		: FeaturePeriodicAmount(featureName)
 	{ }
+public:
 	int approxSpacingPayment() override { return 31; }
 	void getArgs(Puppy::Context &ioContext) override {
 		// if we are forcing a given hashed bundle

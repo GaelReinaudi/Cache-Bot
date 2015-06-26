@@ -5,7 +5,8 @@ SOURCES += \
 	$$PWD/puppy/src/Primitive.cpp \
 	$$PWD/puppy/src/Puppy.cpp \
 	$$PWD/puppy/src/Tree.cpp \
-	$$PWD/AccRegPrimits.cpp
+	$$PWD/AccRegPrimits.cpp \
+    $$PWD/featureAllOthers.cpp
 
 HEADERS  += \
 	$$PWD/puppy/Primitive.hpp \
@@ -16,4 +17,5 @@ HEADERS  += \
 	$$PWD/puppy/Randomizer.hpp \
 	$$PWD/puppy/Token.hpp \
 	$$PWD/puppy/Tree.hpp \
-	$$PWD/AccRegPrimits.h
+	$$PWD/AccRegPrimits.h \
+    $$PWD/featureAllOthers.h

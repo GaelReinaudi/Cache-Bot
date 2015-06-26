@@ -96,8 +96,8 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 		LOG() << "MonthlyAmount(0 TARGET): day "<<m_dayOfMonth<<" kla "<< m_kla << endl;
 	}
 	else if (ioContext.m_summaryJsonObj) {
-		LOG() << "MonthlyAmount("<<targetTrans.count()
-			<<" TARGET): day "<<m_dayOfMonth
+		LOG() << getName().c_str() << targetTrans.count()
+			<<" TARGET: day "<<m_dayOfMonth
 			<<" kla"<< m_kla <<"="<<targetTrans.first().amountDbl()
 			<< " h=" <<targetTrans.first().nameHash.hash()
 			<< endl;
@@ -106,7 +106,8 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 //		double fitness = -1;
 	}
 
-	double totalOneOverExpDist = 0.0;
+	double totalOneOverDistClosest = 0.0;
+	double totalOneOverDistOthers = 0.0;
 	quint64 localDist = 18446744073709551615ULL;
 	Transaction* localTrans = 0;
 	// the current target to compare to
@@ -141,6 +142,7 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 				++m_consecMonthBeforeMissed;
 				++m_consecMonth;
 				m_consecMissed = 0;
+				totalOneOverDistClosest += 64.0 / (64 + localDist);
 			}
 			else {
 				if (ioContext.m_summaryJsonObj) {
@@ -149,9 +151,9 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 				}
 				m_consecMonth = 0;
 				++m_consecMissed;
+				totalOneOverDistClosest += 1.0 / (1 + localDist);
 			}
 
-			totalOneOverExpDist += 4.0 / (4 + localDist);
 			if (iTarg == &targetTrans.last() || (iTarg + 1)->date >= lastDate)
 				break;
 			++iTarg;
@@ -161,24 +163,17 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 			if (&trans != localTrans)
 				--i;
 		}
+		totalOneOverDistOthers += 1.0 / (1 + dist);
 	}
+	totalOneOverDistOthers -= totalOneOverDistClosest;
 	// only sum that add up to > $N
 	if (qAbs(m_bundle.sumDollar()) > 1) {
-		m_fitness += totalOneOverExpDist;
+		m_fitness += totalOneOverDistClosest;
 		m_fitness *= 1.0 * double(m_bundle.count() + m_bundle.count()) / double(targetTrans.count());
-		//m_fitness += qAbs(kindaLog(m_bundle.sumDollar())) * totalOneOverExpDist / m_bundle.count();
-		//m_fitness *= m_consecMonthBeforeMissed;
 		m_fitness *= 1.0 + (1.0 / (1.0 + m_consecMissed));
 	}
 	m_billProba = billProbability();
 	output = m_fitness;
-
-//	// isolate the transaction that were fitted to the target
-//	for (int i = 0; i < m_bundle.count(); ++i) {
-//		Transaction& t = m_bundle.trans(i);
-//		Q_ASSERT(t.dimensionOfVoid == 0);
-//		++t.dimensionOfVoid;
-//	}
 
 	// summary if the json object exists
 	if (ioContext.m_summaryJsonObj) {

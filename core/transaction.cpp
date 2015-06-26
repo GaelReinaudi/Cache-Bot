@@ -44,9 +44,9 @@ qint64 Transaction::dist(const Transaction &other, bool log) const {
 	// if both are positive, let's make them a lot closer
 	if (amountInt() > 0 && other.amountInt() > 0
 	 || amountInt() < -2*KLA_MULTIPLICATOR && other.amountInt() < -2*KLA_MULTIPLICATOR) {
-		return distanceWeighted<16*2, 512*2, 4*4>(other, log);
+		return distanceWeighted<16*2, 512*2, 2*2>(other, log);
 	}
-	return distanceWeighted<16, 512, 4>(other, log);
+	return distanceWeighted<16, 512, 2>(other, log);
 }
 
 
@@ -58,7 +58,7 @@ void StaticTransactionArray::read(const QJsonArray& npcArray, int afterJday, int
 		if (onlyAcIds.isEmpty() || onlyAcIds.contains(accountTrans)) {
 			auto ok = appendNew(jsonTrans, 0);
 			if ((afterJday && last()->jDay() < afterJday) || (beforeJday && last()->jDay() > beforeJday)) {
-				if( ok)
+				if (ok)
 					removeLast();
 				continue;
 			}
