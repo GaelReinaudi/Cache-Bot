@@ -29,7 +29,7 @@ public slots:
 
 protected:
 	double m_integral = 0.0;
-	QMap<uint, QCPGraph*> m_hashGraphs;
+	QMap<uint, QList<QCPGraph*> > m_hashGraphs;
 	QStringList m_labels;
 	HashedBundles m_hashBund;
 };

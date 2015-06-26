@@ -9,10 +9,10 @@ typedef QMap<uint, TransactionBundle*> HashedBundles;
 class CORESHARED_EXPORT Account : public DBobj
 {
 public:
-	enum Type{Unknown = 0x1
-			  , Checking = 0x2
-			  , Saving = 0x4
-			  , Credit = 0x8
+	enum Type{Unknown = 0x0
+			  , Checking = 0x1
+			  , Saving = 0x2
+			  , Credit = 0x4
 			 , All = 0xffff};
 	Account(QJsonObject jsonAcc, QObject* parent = 0);
 	~Account() {}

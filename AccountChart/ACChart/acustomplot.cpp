@@ -5,9 +5,11 @@ ACustomPlot::ACustomPlot(QWidget *parent) :
 {
 	xAxis->setTickLabelType(QCPAxis::ltDateTime);
 	xAxis->setDateTimeFormat("yyyy/MM/dd hh");
-	yAxis->setAutoTickCount(18);
+//	yAxis->setAutoTickCount(18);
+//	yAxis2->setAutoTickCount(10);
 	setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
 	axisRect(0)->setRangeZoomAxes(xAxis, 0);
+	connect(yAxis, SIGNAL(rangeChanged(QCPRange)), yAxis2, SLOT(setRange(QCPRange)));
 }
 
 void ACustomPlot::makeGraphs(HashedBundles& hashBundles) {
@@ -19,32 +21,33 @@ void ACustomPlot::makeGraphs(HashedBundles& hashBundles) {
 	graph(0)->setLineStyle(QCPGraph::lsStepLeft);
 	graph(0)->setPen(QPen(Qt::gray, 3));
 	graph(0)->setAdaptiveSampling(false);
-	yAxis2->setAutoTickCount(10);
 	for (const auto& h : hashBundles.keys()) {
 		TransactionBundle* bundle = hashBundles[h];
 		m_hashBund[h] = bundle;
-		m_hashGraphs[h] = addGraph();
-		m_hashGraphs[h]->setLineStyle(QCPGraph::lsNone);
-		qDebug() << bundle->trans(0).account->type();
-		switch (bundle->trans(0).account->type()) {
-		case Account::Type::Credit:
-			m_hashGraphs[h]->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssPlus, 6.0));
-			break;
-		case Account::Type::Saving:
-			m_hashGraphs[h]->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssSquare, 5.0));
-			break;
-		case Account::Type::Checking:
-			m_hashGraphs[h]->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 5.0));
-			break;
-		default:
-			m_hashGraphs[h]->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssTriangle, 15.0));
-		}
-		m_hashGraphs[h]->setAdaptiveSampling(false);
-		int r = h % 225;
-		int g = (h >> 1) % 225;
-		int b = (h >> 2) % 225;
-		m_hashGraphs[h]->setPen(QPen(QColor(r,g,b,255)));
 		m_labels.append(bundle->averageName() + "    last : " + bundle->trans(-1).name + "   uniques: " + bundle->uniqueNames().join(" | "));
+		for (int iAccType = 0; iAccType <= 3; ++iAccType) {
+			QCPGraph* pGraph = addGraph();
+			m_hashGraphs[h].append(pGraph);
+			pGraph->setLineStyle(QCPGraph::lsNone);
+			pGraph->setAdaptiveSampling(false);
+			int r = h % 225;
+			int g = (h >> 1) % 225;
+			int b = (h >> 2) % 225;
+			pGraph->setPen(QPen(QColor(r,g,b,255)));
+			switch (1 << iAccType) {
+			case Account::Type::Checking:
+				pGraph->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 5.0));
+				break;
+			case Account::Type::Saving:
+				pGraph->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssSquare, 5.0));
+				break;
+			case Account::Type::Credit:
+				pGraph->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssPlus, 6.0));
+				break;
+			default:
+				pGraph->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssTriangle, 15.0));
+			}
+		}
 	}
 }
 
@@ -52,17 +55,20 @@ void ACustomPlot::showHash(int ithLayer)
 {
 	if (ithLayer < 0) {
 		for (const auto& h : m_hashGraphs.keys()) {
-			m_hashGraphs[h]->setVisible(true);
+			for (auto gr : m_hashGraphs[h])
+				gr->setVisible(true);
 		}
 		emit newLabel("");
 		emit newSum(0.0);
 	}
 	else {
-		for (uint h : m_hashGraphs.keys()) {
-			m_hashGraphs[h]->setVisible(false);
+		for (const auto& h : m_hashGraphs.keys()) {
+			for (auto gr : m_hashGraphs[h])
+				gr->setVisible(false);
 		}
-		uint h = m_hashGraphs.keys()[ithLayer];
-		m_hashGraphs[h]->setVisible(true);
+		const auto h = m_hashGraphs.keys()[ithLayer];
+		for (auto gr : m_hashGraphs[h])
+			gr->setVisible(true);
 		emit newLabel(m_labels[ithLayer]);
 		TransactionBundle* bundle = m_hashBund[h];
 		emit newSum(bundle->sumDollar());
@@ -83,7 +89,21 @@ void ACustomPlot::loadCompressedAmount(User* pUser)
 		uint h = allTrans.trans(i).nameHash.hash();
 		m_integral += allTrans.trans(i).amountDbl();
 		graph(0)->addData(t, kindaLog(m_integral));
-		m_hashGraphs[h]->addData(t, allTrans.trans(i).compressedAmount());
+		QCPGraph* pGraph = 0;
+		switch (allTrans.trans(i).account->type()) {
+		case Account::Type::Checking:
+			pGraph = m_hashGraphs[h].at(0);
+			break;
+		case Account::Type::Saving:
+			pGraph = m_hashGraphs[h].at(1);
+			break;
+		case Account::Type::Credit:
+			pGraph = m_hashGraphs[h].at(2);
+			break;
+		default:
+			pGraph = m_hashGraphs[h].at(3);
+		}
+		pGraph->addData(t, allTrans.trans(i).compressedAmount());
 	}
 	graph(0)->clearData();
 	// redo the integral to match the last point known.
@@ -123,6 +143,8 @@ AHashPlot::AHashPlot(QWidget *parent)  :
 	xAxis->setLabel("skblnrl($)");
 	yAxis->setLabel("hash");
 	yAxis2->setLabel("points");
+
+	disconnect(yAxis, SIGNAL(rangeChanged(QCPRange)), yAxis2, SLOT(setRange(QCPRange)));
 }
 
 void AHashPlot::loadCompressedAmount(User *pUser)
@@ -136,7 +158,21 @@ void AHashPlot::loadCompressedAmount(User *pUser)
 		uint d = allTrans.trans(i).nameHash.manLength();
 		m_integral += 1.0;
 		graph(0)->addData(allTrans.trans(i).compressedAmount(), m_integral);
-		m_hashGraphs[h]->addData(allTrans.trans(i).compressedAmount(), d);
+		QCPGraph* pGraph = 0;
+		switch (allTrans.trans(i).account->type()) {
+		case Account::Type::Checking:
+			pGraph = m_hashGraphs[h].at(0);
+			break;
+		case Account::Type::Saving:
+			pGraph = m_hashGraphs[h].at(1);
+			break;
+		case Account::Type::Credit:
+			pGraph = m_hashGraphs[h].at(2);
+			break;
+		default:
+			pGraph = m_hashGraphs[h].at(3);
+		}
+		pGraph->addData(allTrans.trans(i).compressedAmount(), d);
 	}
 	QList<double> orderedKeys = graph(0)->data()->keys();
 	qDebug() << orderedKeys;
