@@ -107,7 +107,7 @@ void ACustomPlot::loadCompressedAmount(User* pUser)
 	}
 	graph(0)->clearData();
 	// redo the integral to match the last point known.
-	m_integral = pUser->balance(Account::Type::Checking | Account::Type::Saving) - m_integral;
+	m_integral = pUser->balance(Account::Type::Checking) - m_integral;
 	for (int i = 0; i < allTrans.count(); ++i) {
 		double t = allTrans.trans(i).time_t();
 		m_integral += allTrans.trans(i).amountDbl();
@@ -178,7 +178,7 @@ void AHashPlot::loadCompressedAmount(User *pUser)
 	qDebug() << orderedKeys;
 	graph(0)->clearData();
 	double tot = 1.0;//m_integral;
-	m_integral = 0.0;//pUser->balance(Account::Type::Checking | Account::Type::Saving) - m_integral;
+	m_integral = 0.0;
 	for (double dat : orderedKeys) {
 		m_integral += 1.0 / tot;
 		graph(0)->addData(dat, m_integral);
