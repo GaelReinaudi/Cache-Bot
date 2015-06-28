@@ -13,7 +13,7 @@ Account::Account(QJsonObject jsonAcc, QObject *parent)
 //	m_excludeNameTransContain.append("online payment from CHK");
 }
 
-void Account::loadJsonData(QJsonObject json, int afterJday, int beforeJday)
+void Account::loadJsonData(QJsonObject json)
 {
 	QString accountID = json["_id"].toString();
 	m_plaidId = json["plaid_id"].toString();
@@ -50,7 +50,7 @@ void Account::loadJsonData(QJsonObject json, int afterJday, int beforeJday)
 //	makeHashBundles();
 }
 
-bool Account::loadPlaidJson(QString jsonFile, int afterJday, int beforeJday) {
+bool Account::loadPlaidJson(QString jsonFile) {
 	m_jsonFilePath = jsonFile;
 	QFile loadFile(m_jsonFilePath);
 	if (!loadFile.open(QIODevice::ReadOnly)) {
@@ -62,7 +62,7 @@ bool Account::loadPlaidJson(QString jsonFile, int afterJday, int beforeJday) {
 	QJsonDocument loadDoc(QJsonDocument::fromJson(jsonData));
 	const QJsonObject& json = loadDoc.object();
 
-	loadJsonData(json, beforeJday, afterJday);
+	loadJsonData(json);
 
 	return true;
 }

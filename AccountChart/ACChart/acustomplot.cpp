@@ -85,12 +85,14 @@ void ACustomPlot::loadCompressedAmount(User* pUser)
 	// add the purchase points
 	auto& allTrans = pUser->allTrans();
 	for (int i = 0; i < allTrans.count(); ++i) {
-		double t = allTrans.trans(i).time_t();
-		uint h = allTrans.trans(i).nameHash.hash();
-		m_integral += allTrans.trans(i).amountDbl();
+		Transaction& tr = allTrans.trans(i);
+		double t = tr.time_t();
+		uint h = tr.nameHash.hash();
+		if (!tr.isInternal())
+			m_integral += tr.amountDbl();
 		graph(0)->addData(t, kindaLog(m_integral));
 		QCPGraph* pGraph = 0;
-		switch (allTrans.trans(i).account->type()) {
+		switch (tr.type()) {
 		case Account::Type::Checking:
 			pGraph = m_hashGraphs[h].at(0);
 			break;
@@ -102,38 +104,24 @@ void ACustomPlot::loadCompressedAmount(User* pUser)
 			break;
 		default:
 			pGraph = m_hashGraphs[h].at(3);
+			qDebug() << "tr.type() =" << tr.type();
 		}
-		pGraph->addData(t, allTrans.trans(i).compressedAmount());
+		pGraph->addData(t, tr.compressedAmount());
 	}
 	graph(0)->clearData();
 	// redo the integral to match the last point known.
 	m_integral = pUser->balance(Account::Type::Checking) - m_integral;
 	for (int i = 0; i < allTrans.count(); ++i) {
-		double t = allTrans.trans(i).time_t();
-		m_integral += allTrans.trans(i).amountDbl();
+		Transaction& tr = allTrans.trans(i);
+		double t = tr.time_t();
+		if (!tr.isInternal())
+			m_integral += tr.amountDbl();
 		graph(0)->addData(t, kindaLog(m_integral));
 	}
 	rescaleAxes();
 	//xAxis->setRange(xAxis->range().lower - 7*24*3600, xAxis->range().upper + 7*24*3600);
 	yAxis->setRange(yAxis->range().lower - 0.5, yAxis->range().upper + 0.5);
 }
-
-
-void ACustomPlot::loadAmount(User* pUser)
-{
-	yAxis->setLabel("$");
-	// add the purchase points
-	auto& allTrans = pUser->allTrans();
-	for (int i = 0; i < allTrans.count(); ++i) {
-		double t = allTrans.trans(i).time_t();
-		graph(0)->addData(t, allTrans.trans(i).compressedAmount());
-	}
-	rescaleAxes();
-	xAxis->setRange(xAxis->range().lower - 7*24*3600, xAxis->range().upper + 7*24*3600);
-	yAxis->setRange(yAxis->range().lower - 500, yAxis->range().upper + 500);
-}
-
-
 
 AHashPlot::AHashPlot(QWidget *parent)  :
 	ACustomPlot(parent) {
@@ -154,12 +142,14 @@ void AHashPlot::loadCompressedAmount(User *pUser)
 	// add the purchase points
 	auto& allTrans = pUser->allTrans();
 	for (int i = 0; i < allTrans.count(); ++i) {
-		uint h = allTrans.trans(i).nameHash.hash();
-		uint d = allTrans.trans(i).nameHash.manLength();
-		m_integral += 1.0;
-		graph(0)->addData(allTrans.trans(i).compressedAmount(), m_integral);
+		Transaction& tr = allTrans.trans(i);
+		uint h = tr.nameHash.hash();
+		uint d = tr.nameHash.manLength();
+		if (!tr.isInternal())
+			m_integral += 1.0;
+		graph(0)->addData(tr.compressedAmount(), m_integral);
 		QCPGraph* pGraph = 0;
-		switch (allTrans.trans(i).account->type()) {
+		switch (tr.type()) {
 		case Account::Type::Checking:
 			pGraph = m_hashGraphs[h].at(0);
 			break;
@@ -171,8 +161,9 @@ void AHashPlot::loadCompressedAmount(User *pUser)
 			break;
 		default:
 			pGraph = m_hashGraphs[h].at(3);
+			qDebug() << "tr.type() =" << tr.type();
 		}
-		pGraph->addData(allTrans.trans(i).compressedAmount(), d);
+		pGraph->addData(tr.compressedAmount(), d);
 	}
 	QList<double> orderedKeys = graph(0)->data()->keys();
 	qDebug() << orderedKeys;

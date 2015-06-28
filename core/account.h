@@ -23,8 +23,8 @@ public:
 
 	// loading the json file
 	// see this: https://qt-project.org/doc/qt-5-snapshot/qtcore-savegame-example.html
-	bool loadPlaidJson(QString jsonFile, int afterJday = 0, int beforeJday = 0);
-	void loadJsonData(QJsonObject json, int afterJday = 0, int beforeJday = 0);
+	bool loadPlaidJson(QString jsonFile);
+	void loadJsonData(QJsonObject json);
 	bool toJson(QVector<Transaction> transactions, QString category);
 
 	QString plaidId() const { return m_plaidId; }

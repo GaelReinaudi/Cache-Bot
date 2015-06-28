@@ -16,7 +16,7 @@ void ExtraCache::onUserInjected(User* pUser)
 
 	// transaction at the starting date of the playback
 	auto& real = user()->allTrans();
-	m_date = real.lastTransactionDate();//.addDays(-playBackStartAgo);
+	m_date = QDate::currentDate();
 	m_d0 = m_date.toJulianDay();
 	qDebug() << "m_date" << m_date << "jD0" << m_d0;
 

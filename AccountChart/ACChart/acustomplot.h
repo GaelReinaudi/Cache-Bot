@@ -11,7 +11,6 @@ public:
 	ACustomPlot(QWidget *parent = 0);
 
 	virtual void loadCompressedAmount(User *pUser);
-	virtual void loadAmount(User* pUser);
 	QList<uint> hashKeys() {
 		return m_hashGraphs.keys();
 	}

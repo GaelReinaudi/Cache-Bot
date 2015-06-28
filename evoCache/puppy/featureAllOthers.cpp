@@ -14,12 +14,11 @@ void FeatureAllOthers::execute(void *outDatum, Puppy::Context &ioContext)
 
 	// will be ALL the transactions if m_filterHash < 0
 	auto& allTrans = ioContext.m_pUser->transBundle(m_filterHash);
-	QDate lastDate = ioContext.m_pUser->allTrans().lastTransactionDate();//.addDays(-4);
-//	QDate iniDate = ioContext.m_pUser->allTrans().firstTransactionDate();
-	QDate iniDate = ioContext.m_pUser->allTrans().lastTransactionDate().addMonths(-6);
+	QDate lastDate = QDate::currentDate();
+	QDate iniDate = lastDate.addMonths(-6);
 
 	QVector<Transaction> targetTrans = targetTransactions(iniDate, lastDate.addDays(BotContext::TARGET_TRANS_FUTUR_DAYS));
-if (ioContext.m_summaryJsonObj) {
+	if (ioContext.m_summaryJsonObj) {
 		LOG() << getName().c_str() << targetTrans.count()
 			<< "PercentileAmount" << m_upToPercentileAmount
 			<< endl;

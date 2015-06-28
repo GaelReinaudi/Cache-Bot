@@ -23,8 +23,10 @@ public:
 	// used to make the distance arbitrary far from anything
 	int dimensionOfVoid = 0;
 
-	enum Flag { None = 0x0, Predicted = 0x1, CameTrue = 0x2 };
+	enum Flag { None = 0x0, Predicted = 0x1, CameTrue = 0x2 , Internal = 0x4 };
 	int flags = Flag::None;
+	bool isInternal() const { return flags & Transaction::Flag::Internal; }
+	int type() const;
 
 	//! json in
 	void read(const QJsonObject &json);
@@ -71,6 +73,7 @@ public:
 		d += LIMIT_DIST_TRANS * nameHash.dist(other.nameHash) / mH;
 //		d += LIMIT_DIST_TRANS * qint64(absInt(indexHash - other.indexHash)) / mIH;
 		d |= (1<<20) * qint64(absInt(dimensionOfVoid - other.dimensionOfVoid));
+		d |= (1<<20) * qint64(isInternal() || other.isInternal());
 		if(log) {
 			LOG() << "dist " << d
 				<< QString(" = %1 x day(%2)").arg(double(LIMIT_DIST_TRANS)/mD).arg(absInt(jDay() - other.jDay()))
