@@ -140,8 +140,8 @@ void Bot::postTreatment(QJsonObject& sumObj, const QVector<Transaction>& predict
 
 	sumObj.insert("stat", statObj);
 
-	QString jsonStr = QJsonDocument(statObj).toJson();
+	m_lastStats = statObj;
+	QString jsonStr = QJsonDocument(m_lastStats).toJson();
 	LOG() << "statObj  " << jsonStr << endl;
 
-	m_lastStats = sumObj;
 }

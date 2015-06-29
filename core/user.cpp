@@ -186,6 +186,18 @@ QVector<Transaction> User::predictedFutureTransactions(double threshProba) {
 	return ret;
 }
 
+double User::predictedRemainingRate() const {
+	double remainRate = 0.0;
+	if (m_bestBot) {
+		remainRate = m_bestBot->lastStats()["avgDayIn090"].toDouble();
+		remainRate -= m_bestBot->lastStats()["predictedRateIn"].toDouble();
+		remainRate -= m_bestBot->lastStats()["avgDayIn090"].toDouble();
+		remainRate += m_bestBot->lastStats()["predictedRateOut"].toDouble();
+	}
+	LOG() << "predictedRemainingRate " << remainRate << endl;
+	return remainRate;
+}
+
 SparkLine User::predictedSparkLine(double threshProba)
 {
 	// will hold temporary relative changes so that they can be organized
@@ -195,6 +207,12 @@ SparkLine User::predictedSparkLine(double threshProba)
 		int futDays = m_today.daysTo(t.date);
 		temp.insertMulti(futDays, t.amountDbl());
 	}
+
+	double remaingRate = predictedRemainingRate();
+	for (quint32 i = 0; i < BotContext::TARGET_TRANS_FUTUR_DAYS; ++i) {
+		temp.insertMulti(i, remaingRate);
+	}
+
 	// now we sort them and make absolute values in the Sparkline
 	double balanceNow = balance(Account::Type::Checking);
 	LOG() << "predictedSparkLine(" << threshProba << "), temp.size = " << temp.size() << ", temp.uniqueKeys = " << temp.uniqueKeys().size() << ". balanceNow = " << balanceNow << endl;
