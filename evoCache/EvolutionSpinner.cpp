@@ -227,22 +227,6 @@ QJsonObject EvolutionSpinner::summarize(Tree& tree)
 	return jsonObj;
 }
 
-QVector<Transaction> EvolutionSpinner::predictTrans(Tree& tree, double threshProba)
-{
-	QVector<Transaction> ret;
-	QMap<double, QVector<Transaction> > mapFitPredicted;
-	// makes the summary to compute predictions
-	m_context->m_mapPredicted = &mapFitPredicted;
-	summarize(tree);
-	m_context->m_mapPredicted = nullptr;
-
-	for (int i = 0; i < mapFitPredicted.count(); ++i) {
-		double proBill = mapFitPredicted.keys()[i];
-		if (proBill > threshProba)
-			ret += mapFitPredicted[proBill];
-	}
-	return ret;
-}
 
 
 

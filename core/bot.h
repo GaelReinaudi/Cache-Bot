@@ -7,6 +7,8 @@ class BotContext;
 
 class CORESHARED_EXPORT Bot : public DBobj
 {
+//private:
+//	Bot(BotContext* context, const Puppy::Tree& tree);
 public:
 	Bot(QJsonObject jsonBot, QObject* parent = 0);
 	//! builds the tree from the previously loaded json
@@ -15,6 +17,9 @@ public:
 	QJsonObject summarize();
 	//! predicted transactions
 	QVector<Transaction> predictTrans(double threshProba);
+
+//public:
+//	static Bot fromTree();
 
 private:
 	QDateTime m_created;
