@@ -18,8 +18,8 @@ void FeatureAllOthers::execute(void *outDatum, Puppy::Context &ioContext)
 	QDate iniDate = lastDate.addMonths(-6);
 
 	m_bundle.clear();
-	m_avgDayIncome = 0.0;
-	m_avgDayOutcome = 0.0;
+	m_avgDayIncome = ioContext.m_pUser->makeLiving(0.9);
+	m_avgDayOutcome = ioContext.m_pUser->costLiving(0.9);
 	int posTr = 0;
 	int negTr = 0;
 	int alreadyMatched = 0;
@@ -33,19 +33,14 @@ void FeatureAllOthers::execute(void *outDatum, Puppy::Context &ioContext)
 		}
 		if (trans.amountInt() > 0) {
 			++posTr;
-			m_avgDayIncome +=trans.amountDbl();
-			++trans.dimensionOfVoid;
 		}
 		if (trans.amountInt() < 0) {
 			++negTr;
-			m_avgDayOutcome +=trans.amountDbl();
-			++trans.dimensionOfVoid;
 		}
-		m_avgDayIncome /= double(qMax(1, inilastDate.daysTo(lastDate)));
-		m_avgDayOutcome /= double(qMax(1, inilastDate.daysTo(lastDate)));
+		++trans.dimensionOfVoid;
 	}
-	m_fitness = double(alreadyMatched) / allTrans.count();
-	m_billProba = 0.5;
+	m_fitness = double(alreadyMatched * (posTr + negTr)) / allTrans.count();
+	m_billProba = 1000000.0;
 
 	QVector<Transaction> targetTrans = targetTransactions(iniDate, lastDate.addDays(BotContext::TARGET_TRANS_FUTUR_DAYS));
 	if (ioContext.m_summaryJsonObj) {
@@ -74,5 +69,16 @@ void FeatureAllOthers::execute(void *outDatum, Puppy::Context &ioContext)
 QVector<Transaction> FeatureAllOthers::targetTransactions(QDate iniDate, QDate lastDate)
 {
 	QVector<Transaction> targetTrans;
+	QDate currentDate = iniDate;
+	while (currentDate < lastDate) {
+		targetTrans.append(Transaction());
+		targetTrans.last().date = currentDate;
+		targetTrans.last().setAmount(m_avgDayIncome - m_avgDayOutcome);
+		targetTrans.last().indexHash = 0;
+		targetTrans.last().nameHash.setFromHash(0);
+		targetTrans.last().flags |= Transaction::Predicted;
+
+		currentDate = currentDate.addDays(1);
+	}
 	return targetTrans;
 }

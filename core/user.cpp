@@ -138,7 +138,7 @@ double User::costLiving(double withinPercentileCost, double multiplicator /*= 1.
 	for (int i = 0; i < m_allTransactions.count(); ++i) {
 		double amnt = m_allTransactions.trans(i).amountDbl();
 		amnt *= multiplicator;
-		if (amnt < 0.0) {
+		if (amnt < 0.0 && !m_allTransactions.trans(i).isInternal()) {
 			costs.append(-amnt);
 		}
 	}
@@ -148,7 +148,7 @@ double User::costLiving(double withinPercentileCost, double multiplicator /*= 1.
 	for (int i = 0; i < lastCostsInd; ++i) {
 		avg += costs[i];
 	}
-	double numDays = m_allTransactions.firstTransactionDate().daysTo(m_allTransactions.lastTransactionDate());
+	double numDays = m_allTransactions.firstTransactionDate().daysTo(m_today);
 	if (numDays) {
 		avg /= numDays;
 		qDebug() << (multiplicator > 0.0 ? "cost" : "make") << "living ("<< qRound(withinPercentileCost * 100.0) << "\%:" <<lastCostsInd<<"T)" << avg;

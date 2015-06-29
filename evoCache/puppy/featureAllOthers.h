@@ -7,7 +7,7 @@ class FeatureAllOthers : public AccountFeature
 {
 public:
 	FeatureAllOthers()
-		: AccountFeature(2, "FeatureAllOthers")
+		: AccountFeature(6, "FeatureAllOthers")
 	{ }
 
 public:
