@@ -17,17 +17,42 @@ void FeatureAllOthers::execute(void *outDatum, Puppy::Context &ioContext)
 	QDate lastDate = QDate::currentDate();
 	QDate iniDate = lastDate.addMonths(-6);
 
+	m_bundle.clear();
+	m_avgDayIncome = 0.0;
+	m_avgDayOutcome = 0.0;
+	int posTr = 0;
+	int negTr = 0;
+	int alreadyMatched = 0;
+	for (int i = 0; i < allTrans.count(); ++i) {
+		Transaction& trans = allTrans.trans(i);
+		if (trans.isInternal())
+			continue;
+		if (trans.dimensionOfVoid) {
+			++alreadyMatched;
+			continue;
+		}
+		if (trans.amountInt() > 0) {
+			++posTr;
+			m_avgDayIncome +=trans.amountDbl();
+			++trans.dimensionOfVoid;
+		}
+		if (trans.amountInt() < 0) {
+			++negTr;
+			m_avgDayOutcome +=trans.amountDbl();
+			++trans.dimensionOfVoid;
+		}
+		m_avgDayIncome /= double(qMax(1, inilastDate.daysTo(lastDate)));
+		m_avgDayOutcome /= double(qMax(1, inilastDate.daysTo(lastDate)));
+	}
+	m_fitness = double(alreadyMatched) / allTrans.count();
+	m_billProba = 0.5;
+
 	QVector<Transaction> targetTrans = targetTransactions(iniDate, lastDate.addDays(BotContext::TARGET_TRANS_FUTUR_DAYS));
 	if (ioContext.m_summaryJsonObj) {
 		LOG() << getName().c_str() << targetTrans.count()
-			<< "PercentileAmount" << m_upToPercentileAmount
-			<< endl;
-	}
-
-	m_bundle.clear();
-
-	for (int i = 0; i < allTrans.count(); ++i) {
-		Transaction& trans = allTrans.trans(i);
+			  << "avgDayIncome" << m_avgDayIncome
+			  << "avgDayOutcome" << m_avgDayOutcome
+			  << endl;
 	}
 
 	output = m_fitness;
