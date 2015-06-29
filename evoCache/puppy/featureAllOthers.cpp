@@ -76,6 +76,8 @@ void FeatureAllOthers::execute(void *outDatum, Puppy::Context &ioContext)
 
 QVector<Transaction> FeatureAllOthers::targetTransactions(QDate iniDate, QDate lastDate)
 {
+	Q_UNUSED(iniDate);
+	Q_UNUSED(lastDate);
 	QVector<Transaction> targetTrans;
 //	QDate currentDate = iniDate;
 //	while (currentDate < lastDate) {

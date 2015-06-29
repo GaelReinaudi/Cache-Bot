@@ -18,7 +18,7 @@ class MainWindow : public QMainWindow
 	Q_OBJECT
 
 public:
-	explicit MainWindow(QString userID, int afterJday = 0, int beforeJday = 0);
+	explicit MainWindow(QString userID);
 	~MainWindow();
 
 	User* user() const;
@@ -32,7 +32,7 @@ public slots:
 	void replotCharts();
 	void onNewSummarizedTree(QJsonObject jsonObj);
 	void onUserInjected(User* pUser);
-	void onBotInjected();
+	void onBotInjected(Bot *bestBot);
 	void plotTargetedTransaction(double x, double y) { plotMask(x, y, true); }
 	void plotMatchedTransaction(double x, double y) { plotMask(x, y, false); }
 

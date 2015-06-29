@@ -1,5 +1,6 @@
 #include "extraCache.h"
 #include "account.h"
+#include "bot.h"
 #include "cacherest.h"
 #include "fund.h"
 
@@ -47,10 +48,11 @@ void ExtraCache::onUserInjected(User* pUser)
 	CacheRest::Instance()->getBestBot(userID(), user());
 }
 
-void ExtraCache::onBotInjected()
+void ExtraCache::onBotInjected(Bot* bestBot)
 {
 	double threshProba = 1.0;
 	// with the Bot, computes where the balance is going to go in the future
+	// this is goig to run summarize()
 	m_spark = user()->predictedSparkLine(threshProba);
 	// then, based on that, gets the smallest growth slope
 	computeMinSlopeOver(30);
@@ -71,7 +73,7 @@ void ExtraCache::onBotInjected()
 	m_slushFundStartsAt += m_extraToday;
 
 	if (flags & SendExtraCash) {
-		CacheRest::Instance(0)->sendExtraCash(user()->id(), m_extraToday);
+		CacheRest::Instance()->sendExtraCash(user()->id(), m_extraToday, bestBot->lastStats());
 	}
 }
 

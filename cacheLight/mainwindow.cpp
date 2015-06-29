@@ -50,7 +50,7 @@ MainWindow::MainWindow(QString userID, QWidget *parent) :
 	connect(ui->plot, SIGNAL(mouseWheel(QWheelEvent*)), this, SLOT(onWheelEvent(QWheelEvent*)));
 
 //	init();
-	connect(m_pExtraCache, SIGNAL(botInjected()), this, SLOT(init()));
+	connect(m_pExtraCache, SIGNAL(botInjected(Bot*)), this, SLOT(init()));
 }
 
 MainWindow::~MainWindow()

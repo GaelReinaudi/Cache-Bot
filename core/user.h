@@ -104,7 +104,7 @@ protected:
 
 signals:
 	void injected(User* pUser);
-	void botInjected();
+	void botInjected(Bot* bestBot);
 
 private:
 	//! makes a bundle for each hash value

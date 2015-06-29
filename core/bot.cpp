@@ -58,14 +58,90 @@ QVector<Transaction> Bot::predictTrans(double threshProba)
 	QMap<double, QVector<Transaction> > mapFitPredicted;
 	// makes the summary to compute predictions
 	m_context->m_mapPredicted = &mapFitPredicted;
-	summarize();
-	m_context->m_mapPredicted = 0;
+	QJsonObject sumObj = summarize();
 
 	for (int i = 0; i < mapFitPredicted.count(); ++i) {
 		double proBill = mapFitPredicted.keys()[i];
 		if (proBill > threshProba)
 			ret += mapFitPredicted[proBill];
 	}
+
 	qSort(ret.begin(), ret.end(), Transaction::earlierThan);
+
+	postTreatment(sumObj, ret);
+
+	m_context->m_mapPredicted = 0;
 	return ret;
+}
+
+void Bot::postTreatment(QJsonObject& sumObj, const QVector<Transaction>& predictedTrans)
+{
+	Q_ASSERT(m_context->m_mapPredicted);
+	auto& allTrans = m_context->m_pUser->allTrans();
+	QDate lastDate = QDate::currentDate();
+	QDate iniDate = lastDate.addMonths(-6);
+
+	double m_avgDayIn80 = m_context->m_pUser->makeLiving(0.80);
+	double m_avgDayOut80 = m_context->m_pUser->costLiving(0.80);
+	double m_avgDayIn90 = m_context->m_pUser->makeLiving(0.90);
+	double m_avgDayOut90 = m_context->m_pUser->costLiving(0.90);
+	double m_avgDayIn95 = m_context->m_pUser->makeLiving(0.95);
+	double m_avgDayOut95 = m_context->m_pUser->costLiving(0.95);
+	double m_avgDayIn100 = m_context->m_pUser->makeLiving(1.00);
+	double m_avgDayOut100 = m_context->m_pUser->costLiving(1.00);
+	int posTr = 0;
+	int negTr = 0;
+	int alreadyMatched = 0;
+	for (int i = 0; i < allTrans.count(); ++i) {
+		Transaction& tr = allTrans.trans(i);
+		if (tr.isInternal())
+			continue;
+		if (tr.dimensionOfVoid) {
+			++alreadyMatched;
+			continue;
+		}
+		if (tr.amountInt() > 0) {
+			++posTr;
+		}
+		if (tr.amountInt() < 0) {
+			++negTr;
+		}
+		++tr.dimensionOfVoid;
+	}
+	double predictedRateIn = 0.0;
+	double predictedRateOut = 0.0;
+	for (const Transaction& tr : predictedTrans) {
+		if (tr.date < lastDate)
+			continue;
+		if (tr.amountInt() > 0) {
+			predictedRateIn += tr.amountDbl();
+		}
+		if (tr.amountInt() < 0) {
+			predictedRateOut += -tr.amountDbl();
+		}
+	}
+	predictedRateIn /= BotContext::TARGET_TRANS_FUTUR_DAYS;
+	predictedRateOut /= BotContext::TARGET_TRANS_FUTUR_DAYS;
+
+	QJsonObject statObj;
+	statObj.insert("rangeDays", iniDate.daysTo(lastDate));
+	statObj.insert("matchedIn", posTr);
+	statObj.insert("matchedOut", negTr);
+	statObj.insert("predictedRateIn", predictedRateIn);
+	statObj.insert("predictedRateOut", predictedRateOut);
+	statObj.insert("avgDayIn080", m_avgDayIn80);
+	statObj.insert("avgDayOut080", m_avgDayOut80);
+	statObj.insert("avgDayIn090", m_avgDayIn90);
+	statObj.insert("avgDayOut090", m_avgDayOut90);
+	statObj.insert("avgDayIn095", m_avgDayIn95);
+	statObj.insert("avgDayOut095", m_avgDayOut95);
+	statObj.insert("avgDayIn100", m_avgDayIn100);
+	statObj.insert("avgDayOut100", m_avgDayOut100);
+
+	sumObj.insert("stat", statObj);
+
+	QString jsonStr = QJsonDocument(statObj).toJson();
+	LOG() << "statObj  " << jsonStr << endl;
+
+	m_lastStats = sumObj;
 }

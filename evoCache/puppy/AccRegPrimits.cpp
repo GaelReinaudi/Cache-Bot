@@ -101,9 +101,6 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 			<< " h=" <<targetTrans.first().nameHash.hash()
 			<< endl;
 	}
-	if (double(m_kla) < -6 * KLA_MULTIPLICATOR || double(m_kla) > 6 * KLA_MULTIPLICATOR) {
-//		double fitness = -1;
-	}
 
 	double totalOneOverDistClosest = 0.0;
 	double totalOneOverDistOthers = 0.0;

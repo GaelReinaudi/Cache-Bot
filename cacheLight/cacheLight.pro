@@ -1,4 +1,5 @@
 include(../defaults.pri)
+include(../evoCache/puppy/puppy.pri)
 
 QT += core gui widgets printsupport network
 

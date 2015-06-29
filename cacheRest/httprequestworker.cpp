@@ -1,4 +1,5 @@
 #include "httprequestworker.h"
+#include "log.h"
 #include <QDateTime>
 #include <QUrl>
 #include <QFileInfo>
@@ -265,6 +266,7 @@ QNetworkReply* HttpRequestWorker::execute(HttpRequestInput *input) {
 		request.setHeader(QNetworkRequest::ContentLengthHeader, QString::number(m_jsonByte.size()));
 	}
 
+	LOG() << "Sending to " << input->url_str << endl;
 	qDebug() << "Sending to" << input->url_str;
 	QNetworkReply* reply = 0;
 	if (input->http_method == "GET") {
@@ -272,6 +274,7 @@ QNetworkReply* HttpRequestWorker::execute(HttpRequestInput *input) {
 	}
 	else if (input->http_method == "POST") {
 		reply = manager->post(request, request_content);
+		LOG() << request_content << endl;
 		qDebug() << request_content;
 	}
 	else if (input->http_method == "PUT") {
@@ -304,6 +307,7 @@ void HttpRequestWorker::on_manager_finished(QNetworkReply *reply) {
 	emit on_execution_finished(this);
 
 	qDebug() << "response is" << response.left(256);
+	LOG() << "response is" << response << endl;
 	if(reply->request().url() == QUrl(LoginRoute)) {
 		emit repliedLogin(response);
 		if(response == StringLoggedInReplySuccess) {

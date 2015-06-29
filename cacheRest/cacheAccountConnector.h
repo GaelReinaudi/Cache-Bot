@@ -20,14 +20,14 @@ public:
 protected slots:
 	virtual void onLoggedIn(bool didLogin);
 	virtual void onUserInjected(User* pUser);
-	virtual void onBotInjected();
+	virtual void onBotInjected(Bot *bestBot);
 	virtual void onRepliedSendNewBot(QString strData);
 	virtual void onRepliedBestBot(QString strData);
 	virtual void onRepliedExtraCache(QString strData);
 
 signals:
 	void injected(User* pUser);
-	void botInjected();
+	void botInjected(Bot* bestBot);
 
 private:
 	QString m_userId;

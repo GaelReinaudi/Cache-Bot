@@ -2,10 +2,11 @@
 #include "ui_mainwindow.h"
 #include "user.h"
 #include "botContext.h"
+#include "bot.h"
 #include "cacherest.h"
 #include "cacheAccountConnector.h"
 
-MainWindow::MainWindow(QString userID, int afterJday, int beforeJday)
+MainWindow::MainWindow(QString userID)
 	: QMainWindow()
 	, ui(new Ui::MainWindow)
 {
@@ -13,7 +14,7 @@ MainWindow::MainWindow(QString userID, int afterJday, int beforeJday)
 
 	m_pConnector = new CacheAccountConnector(userID);
 	connect(m_pConnector, SIGNAL(injected(User*)), this, SLOT(onUserInjected(User*)));
-	connect(m_pConnector, SIGNAL(botInjected()), this, SLOT(onBotInjected()));
+	connect(m_pConnector, SIGNAL(botInjected(Bot*)), this, SLOT(onBotInjected(Bot*)));
 }
 
 MainWindow::~MainWindow()
@@ -47,13 +48,15 @@ void MainWindow::onUserInjected(User* pUser)
 	CacheRest::Instance()->getBestBot(pUser->id(), pUser);
 }
 
-void MainWindow::onBotInjected()
+void MainWindow::onBotInjected(Bot* bestBot)
 {
 	connect(user()->botContext(), &BotContext::targetedTransaction, this, &MainWindow::plotTargetedTransaction);
 	connect(user()->botContext(), &BotContext::matchedTransaction, this, &MainWindow::plotMatchedTransaction);
 	connect(user()->botContext(), &BotContext::summarizingTree, this, &MainWindow::clearMasks);
 	connect(user()->botContext(), &BotContext::needsReplot, this, &MainWindow::replotCharts);
 	connect(user()->botContext(), &BotContext::newSummarizedTree, this, &MainWindow::onNewSummarizedTree);
+
+	bestBot->summarize();
 }
 
 void MainWindow::clearMasks()

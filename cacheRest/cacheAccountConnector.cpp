@@ -23,8 +23,8 @@ void CacheAccountConnector::onLoggedIn(bool didLogin)
 		CacheRest::Instance()->getUserData(userID(), m_user);
 		connect(m_user, SIGNAL(injected(User*)), this, SLOT(onUserInjected(User*)));
 		connect(m_user, SIGNAL(injected(User*)), this, SIGNAL(injected(User*)));
-		connect(m_user, SIGNAL(botInjected()), this, SLOT(onBotInjected()));
-		connect(m_user, SIGNAL(botInjected()), this, SIGNAL(botInjected()));
+		connect(m_user, SIGNAL(botInjected(Bot*)), this, SLOT(onBotInjected(Bot*)));
+		connect(m_user, SIGNAL(botInjected(Bot*)), this, SIGNAL(botInjected(Bot*)));
 		connect(CacheRest::Instance()->worker, SIGNAL(repliedBestBot(QString)), this, SLOT(onRepliedBestBot(QString)));
 		connect(CacheRest::Instance()->worker, SIGNAL(repliedExtraCache(QString)), this, SLOT(onRepliedExtraCache(QString)));
 	}
@@ -61,8 +61,9 @@ void CacheAccountConnector::onUserInjected(User* pUser)
 			 << " )";
 }
 
-void CacheAccountConnector::onBotInjected()
+void CacheAccountConnector::onBotInjected(Bot* bestBot)
 {
+	Q_UNUSED(bestBot);
 	qDebug() << "CacheAccountConnector has a bot injected object";
 }
 

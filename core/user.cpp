@@ -124,12 +124,11 @@ void User::injectJsonBot(QString jsonStr)
 
 	// remake the context just in case
 	makeBotContext();
+	// makes the bot and build the tree inside
 	m_bestBot = new Bot(jsonObj, this);
 	m_bestBot->init(m_botContext);
 
-	emit botInjected();
-
-	m_bestBot->summarize();
+	emit botInjected(m_bestBot);
 }
 
 double User::costLiving(double withinPercentileCost, double multiplicator /*= 1.0*/)

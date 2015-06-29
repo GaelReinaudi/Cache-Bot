@@ -20,7 +20,7 @@ public:
 
 protected:
 	void onUserInjected(User* pUser) override;
-	void onBotInjected() override;
+	void onBotInjected(Bot *bestBot) override;
 	void onRepliedExtraCache(QString strData) override;
 
 private:
@@ -34,8 +34,6 @@ private:
 	double m_slushFundStartsAt = 0.0;
 	double m_slushFundTypicalNeed = 1000.0;
 	SparkLine m_spark;
-public:
-	bool sendExtraCash = true;
 };
 
 #endif // EXTRACACHE_H
