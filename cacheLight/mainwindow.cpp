@@ -16,7 +16,7 @@ MainWindow::MainWindow(QString userID, QWidget *parent) :
 	ui->setupUi(this);
 
 	m_pExtraCache = new ExtraCache(userID);
-	m_pExtraCache->flags = CacheAccountConnector::SendExtraCash;
+	m_pExtraCache->flags = CacheAccountConnector::None;
 
 //	ui->plot->xAxis->setVisible(false);
 //	ui->plot->yAxis->setVisible(false);

@@ -18,8 +18,12 @@ void FeatureAllOthers::execute(void *outDatum, Puppy::Context &ioContext)
 	QDate iniDate = lastDate.addMonths(-6);
 
 	m_bundle.clear();
-	m_avgDayIncome = ioContext.m_pUser->makeLiving(0.9);
-	m_avgDayOutcome = ioContext.m_pUser->costLiving(0.9);
+	m_avgDayIn90 = ioContext.m_pUser->makeLiving(0.90);
+	m_avgDayOut90 = ioContext.m_pUser->costLiving(0.90);
+	m_avgDayIn95 = ioContext.m_pUser->makeLiving(0.95);
+	m_avgDayOut95 = ioContext.m_pUser->costLiving(0.95);
+	m_avgDayIn80 = ioContext.m_pUser->makeLiving(0.80);
+	m_avgDayOut80 = ioContext.m_pUser->costLiving(0.80);
 	int posTr = 0;
 	int negTr = 0;
 	int alreadyMatched = 0;
@@ -45,8 +49,12 @@ void FeatureAllOthers::execute(void *outDatum, Puppy::Context &ioContext)
 	QVector<Transaction> targetTrans = targetTransactions(iniDate, lastDate.addDays(BotContext::TARGET_TRANS_FUTUR_DAYS));
 	if (ioContext.m_summaryJsonObj) {
 		LOG() << getName().c_str() << targetTrans.count()
-			  << "avgDayIncome" << m_avgDayIncome
-			  << "avgDayOutcome" << m_avgDayOutcome
+			  << "avgDayIn80" << m_avgDayIn80
+			  << "avgDayOut80" << m_avgDayOut80
+			  << "avgDayIn90" << m_avgDayIn90
+			  << "avgDayOut90" << m_avgDayOut90
+			  << "avgDayIn95" << m_avgDayIn95
+			  << "avgDayOut95" << m_avgDayOut95
 			  << endl;
 	}
 
@@ -69,16 +77,16 @@ void FeatureAllOthers::execute(void *outDatum, Puppy::Context &ioContext)
 QVector<Transaction> FeatureAllOthers::targetTransactions(QDate iniDate, QDate lastDate)
 {
 	QVector<Transaction> targetTrans;
-	QDate currentDate = iniDate;
-	while (currentDate < lastDate) {
-		targetTrans.append(Transaction());
-		targetTrans.last().date = currentDate;
-		targetTrans.last().setAmount(m_avgDayIncome - m_avgDayOutcome);
-		targetTrans.last().indexHash = 0;
-		targetTrans.last().nameHash.setFromHash(0);
-		targetTrans.last().flags |= Transaction::Predicted;
+//	QDate currentDate = iniDate;
+//	while (currentDate < lastDate) {
+//		targetTrans.append(Transaction());
+//		targetTrans.last().date = currentDate;
+//		targetTrans.last().setAmount(m_avgDayIn90 - m_avgDayOut90);
+//		targetTrans.last().indexHash = 0;
+//		targetTrans.last().nameHash.setFromHash(0);
+//		targetTrans.last().flags |= Transaction::Predicted;
 
-		currentDate = currentDate.addDays(1);
-	}
+//		currentDate = currentDate.addDays(1);
+//	}
 	return targetTrans;
 }

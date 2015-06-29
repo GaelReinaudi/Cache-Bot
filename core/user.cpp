@@ -134,6 +134,11 @@ void User::injectJsonBot(QString jsonStr)
 
 double User::costLiving(double withinPercentileCost, double multiplicator /*= 1.0*/)
 {
+	// caching result to not go through all transactions 10 billions times
+	static QMap<double, double> alreadyReturned;
+	if (alreadyReturned.contains(withinPercentileCost * multiplicator))
+		return alreadyReturned[withinPercentileCost * multiplicator];
+
 	QVector<double> costs;
 	for (int i = 0; i < m_allTransactions.count(); ++i) {
 		double amnt = m_allTransactions.trans(i).amountDbl();
@@ -156,6 +161,7 @@ double User::costLiving(double withinPercentileCost, double multiplicator /*= 1.
 	else {
 		qWarning() << "numDays" << numDays << "returning cost/make Living 0";
 	}
+	alreadyReturned[withinPercentileCost * multiplicator] = avg;
 	return avg;
 }
 
