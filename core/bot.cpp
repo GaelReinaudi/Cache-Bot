@@ -19,7 +19,7 @@ Bot::Bot(QJsonObject jsonBot, QObject *parent)
 		QJsonArray jsonValArray = jsonFeat["args"].toArray();
 		for (int iV = 0; iV < numArgs; ++iV) {
 			double val = jsonValArray.at(iV).toDouble();
-			QString strVal = QString::number(val);
+			QString strVal = QString::number(val, 'f', 30);
 			m_botStrings += strVal;
 		}
 	}
