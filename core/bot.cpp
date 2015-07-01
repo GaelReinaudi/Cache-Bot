@@ -43,6 +43,8 @@ QJsonObject Bot::summarize()
 	m_puppyTree.interpret(&fit, *m_context);
 	m_context->m_summaryJsonObj = 0;
 
+	jsonObj.insert("fit", fit);
+
 	emit m_context->needsReplot();
 	emit m_context->newSummarizedTree(jsonObj);
 
@@ -81,8 +83,8 @@ void Bot::postTreatment(QJsonObject& sumObj, const QVector<Transaction>& predict
 	QDate lastDate = QDate::currentDate();
 	QDate iniDate = lastDate.addMonths(-6);
 
-	double m_avgDayIn80 = m_context->m_pUser->makeLiving(0.80);
-	double m_avgDayOut80 = m_context->m_pUser->costLiving(0.80);
+	double m_avgDayIn099 = m_context->m_pUser->makeLiving(0.099);
+	double m_avgDayOut099 = m_context->m_pUser->costLiving(0.099);
 	double m_avgDayIn90 = m_context->m_pUser->makeLiving(0.90);
 	double m_avgDayOut90 = m_context->m_pUser->costLiving(0.90);
 	double m_avgDayIn95 = m_context->m_pUser->makeLiving(0.95);
@@ -129,8 +131,8 @@ void Bot::postTreatment(QJsonObject& sumObj, const QVector<Transaction>& predict
 	statObj.insert("matchedOut", negTr);
 	statObj.insert("predictedRateIn", predictedRateIn);
 	statObj.insert("predictedRateOut", predictedRateOut);
-	statObj.insert("avgDayIn080", m_avgDayIn80);
-	statObj.insert("avgDayOut080", m_avgDayOut80);
+	statObj.insert("avgDayIn099", m_avgDayIn099);
+	statObj.insert("avgDayOut099", m_avgDayOut099);
 	statObj.insert("avgDayIn090", m_avgDayIn90);
 	statObj.insert("avgDayOut090", m_avgDayOut90);
 	statObj.insert("avgDayIn095", m_avgDayIn95);

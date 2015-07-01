@@ -40,6 +40,7 @@ signals:
 
 private:
 	Ui::MainWindow *ui;
+	QCustomPlot* m_plotFitness;
 };
 
 #endif // MAINWINDOW_H
