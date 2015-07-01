@@ -180,7 +180,7 @@ private:
 		x += x >> 16;  //put count of each 32 bits into their lowest 8 bits
 		x += x >> 32;  //put count of each 64 bits into their lowest 8 bits
 		x &= 0x7f;
-		Q_ASSERT(x == QString::number(n, 2).count("1"));
+		Q_ASSERT(int(x) == QString::number(n, 2).count("1"));
 		return x;
 	}
 };

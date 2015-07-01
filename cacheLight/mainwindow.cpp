@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "cacherest.h"
 #include "../extraCash/extraCache.h"
+#include "userMetrics.h"
 
 const int dayPast = 60;
 const int dayFuture = 60;
@@ -60,15 +61,15 @@ MainWindow::~MainWindow()
 
 void MainWindow::init()
 {
-	ui->costLive50SpinBox->setValue(m_pExtraCache->user()->costLiving(0.50));
-	ui->costLive75SpinBox->setValue(m_pExtraCache->user()->costLiving(0.75));
-	ui->costLive90SpinBox->setValue(m_pExtraCache->user()->costLiving(0.90));
-	ui->costLive95SpinBox->setValue(m_pExtraCache->user()->costLiving(0.95));
-	ui->costLive99SpinBox->setValue(m_pExtraCache->user()->costLiving(0.99));
+	m_date = QDate::currentDate();
+	ui->costLive50SpinBox->setValue(CostMonthPercentileMetric<6, 50>::get(m_pExtraCache->user())->value(m_date));
+	ui->costLive75SpinBox->setValue(CostMonthPercentileMetric<6, 75>::get(m_pExtraCache->user())->value(m_date));
+	ui->costLive90SpinBox->setValue(CostMonthPercentileMetric<6, 90>::get(m_pExtraCache->user())->value(m_date));
+	ui->costLive95SpinBox->setValue(CostMonthPercentileMetric<6, 95>::get(m_pExtraCache->user())->value(m_date));
+	ui->costLive99SpinBox->setValue(CostMonthPercentileMetric<6, 99>::get(m_pExtraCache->user())->value(m_date));
 
 	// transaction at the starting date of the playback
 	auto& real = m_pExtraCache->user()->allTrans();
-	m_date = QDate::currentDate();
 	m_d0 = m_date.toJulianDay();
 	qDebug() << "m_date" << m_date;
 

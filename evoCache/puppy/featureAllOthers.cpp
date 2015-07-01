@@ -18,12 +18,12 @@ void FeatureAllOthers::execute(void *outDatum, Puppy::Context &ioContext)
 	QDate iniDate = lastDate.addMonths(-6);
 
 	m_bundle.clear();
-	m_avgDayIn90 = ioContext.m_pUser->makeLiving(0.90);
-	m_avgDayOut90 = ioContext.m_pUser->costLiving(0.90);
-	m_avgDayIn95 = ioContext.m_pUser->makeLiving(0.95);
-	m_avgDayOut95 = ioContext.m_pUser->costLiving(0.95);
-	m_avgDayIn099 = ioContext.m_pUser->makeLiving(0.099);
-	m_avgDayOut099 = ioContext.m_pUser->costLiving(0.099);
+	m_avgDayIn90 = 123456;//ioContext.m_pUser->makeLiving(0.90);
+	m_avgDayOut90 = 123456;//HistoMetric::get("cost2MonthP90")[lastDate];
+	m_avgDayIn95 = 123456;//ioContext.m_pUser->makeLiving(0.95);
+	m_avgDayOut95 = 123456;//HistoMetric::get("cost2MonthP95")[lastDate];
+	m_avgDayIn099 = 123456;//ioContext.m_pUser->makeLiving(0.99);
+	m_avgDayOut099 = 123456;//HistoMetric::get("cost2MonthP99")[lastDate];
 	int posTr = 0;
 	int negTr = 0;
 	int alreadyMatched = 0;

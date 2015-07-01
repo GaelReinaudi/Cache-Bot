@@ -2,6 +2,13 @@
 #include "bot.h"
 #include "botContext.h"
 #include "fund.h"
+#include "userMetrics.h"
+
+User::User(QString userId, QObject *parent)
+	:DBobj(userId, parent)
+{
+	m_today = QDate::currentDate();
+}
 
 void User::injectJsonData(QString jsonStr)
 {
@@ -99,6 +106,12 @@ void User::injectJsonData(QString jsonStr)
 	makeHashBundles();
 
 	emit injected(this);
+
+	CostMonthPercentileMetric<2, 50>::get(this)->value(m_today);
+	CostMonthPercentileMetric<2, 75>::get(this)->value(m_today);
+	CostMonthPercentileMetric<2, 90>::get(this)->value(m_today);
+	CostMonthPercentileMetric<2, 95>::get(this)->value(m_today);
+	CostMonthPercentileMetric<2, 99>::get(this)->value(m_today);
 }
 
 BotContext* User::makeBotContext()
@@ -131,42 +144,9 @@ void User::injectJsonBot(QString jsonStr)
 	emit botInjected(m_bestBot);
 }
 
-double User::costLiving(double withinPercentileCost, double multiplicator /*= 1.0*/)
-{
-	// caching result to not go through all transactions 10 billions times
-	static QMap<double, double> alreadyReturned;
-	if (alreadyReturned.contains(withinPercentileCost * multiplicator))
-		return alreadyReturned[withinPercentileCost * multiplicator];
-
-	QVector<double> costs;
-	for (int i = 0; i < m_allTransactions.count(); ++i) {
-		double amnt = m_allTransactions.trans(i).amountDbl();
-		amnt *= multiplicator;
-		if (amnt < 0.0 && !m_allTransactions.trans(i).isInternal()) {
-			costs.append(-amnt);
-		}
-	}
-	qSort(costs);
-	double avg = 0.0;
-	int lastCostsInd = costs.count() * withinPercentileCost;
-	for (int i = 0; i < lastCostsInd; ++i) {
-		avg += costs[i];
-	}
-	double numDays = m_allTransactions.firstTransactionDate().daysTo(m_today);
-	if (numDays) {
-		avg /= numDays;
-		qDebug() << (multiplicator > 0.0 ? "cost" : "make") << "living ("<< qRound(withinPercentileCost * 100.0) << "\%:" <<lastCostsInd<<"T)" << avg;
-	}
-	else {
-		qWarning() << "numDays" << numDays << "returning cost/make Living 0";
-	}
-	alreadyReturned[withinPercentileCost * multiplicator] = avg;
-	return avg;
-}
-
 double User::makeLiving(double withinPercentileCost, double multiplicator /*= 1.0*/)
 {
-	return costLiving(withinPercentileCost, -multiplicator);
+	return 0;//costLiving(withinPercentileCost, -multiplicator);
 }
 
 QVector<Transaction> User::predictedFutureTransactions(double threshProba) {

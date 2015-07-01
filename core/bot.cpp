@@ -1,6 +1,7 @@
 #include "bot.h"
 #include "AccRegPrimits.h"
 #include "botContext.h"
+#include "userMetrics.h"
 
 Bot::Bot(QJsonObject jsonBot, QObject *parent)
 	:DBobj(jsonBot["_id"].toString(), parent)
@@ -83,14 +84,14 @@ void Bot::postTreatment(QJsonObject& sumObj, const QVector<Transaction>& predict
 	QDate lastDate = QDate::currentDate();
 	QDate iniDate = lastDate.addMonths(-6);
 
-	double m_avgDayIn099 = m_context->m_pUser->makeLiving(0.099);
-	double m_avgDayOut099 = m_context->m_pUser->costLiving(0.099);
 	double m_avgDayIn90 = m_context->m_pUser->makeLiving(0.90);
-	double m_avgDayOut90 = m_context->m_pUser->costLiving(0.90);
+	double m_avgDayOut90 = CostMonthPercentileMetric<2, 90>::get(m_context->m_pUser)->value(lastDate);
 	double m_avgDayIn95 = m_context->m_pUser->makeLiving(0.95);
-	double m_avgDayOut95 = m_context->m_pUser->costLiving(0.95);
+	double m_avgDayOut95 = CostMonthPercentileMetric<2, 95>::get(m_context->m_pUser)->value(lastDate);
+	double m_avgDayIn099 = m_context->m_pUser->makeLiving(0.99);
+	double m_avgDayOut099 = CostMonthPercentileMetric<2, 99>::get(m_context->m_pUser)->value(lastDate);
 	double m_avgDayIn100 = m_context->m_pUser->makeLiving(1.00);
-	double m_avgDayOut100 = m_context->m_pUser->costLiving(1.00);
+	double m_avgDayOut100 = CostMonthPercentileMetric<2, 100>::get(m_context->m_pUser)->value(lastDate);
 	int posTr = 0;
 	int negTr = 0;
 	int alreadyMatched = 0;

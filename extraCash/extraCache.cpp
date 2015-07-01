@@ -3,6 +3,7 @@
 #include "bot.h"
 #include "cacherest.h"
 #include "fund.h"
+#include "userMetrics.h"
 
 static const double SLOPE_MULTIPLICATION_EXTRA_TODAY = 0.5;
 
@@ -32,7 +33,7 @@ void ExtraCache::onUserInjected(User* pUser)
 	// some arbitrary slush need to (try to) never go under of
 	m_slushFundTypicalNeed = 0.0;
 	m_slushFundTypicalNeed += 0.5 * user()->balance(Account::Type::Checking);
-	m_slushFundTypicalNeed += 0.5 * user()->costLiving(0.75) * 30;
+	m_slushFundTypicalNeed += 0.5 * CostMonthPercentileMetric<6, 75>::get(user())->value(m_date) * 30;
 
 	qDebug() << "m_slushFundTypicalNeed" << m_slushFundTypicalNeed;
 
