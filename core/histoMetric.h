@@ -19,6 +19,10 @@ protected:
 	virtual ~HistoMetric() {
 		s_AllMetrics.remove(m_name);
 	}
+public:
+	static QStringList allNames() {
+		return s_AllMetrics.keys();
+	}
 	//! static repo of all metrics made so far
 	static HistoMetric* get(const QString& withName) {
 		if (s_AllMetrics.contains(withName)) {
@@ -30,7 +34,6 @@ protected:
 	}
 
 public:
-
 	double value(const QDate& date) {
 		if (m_values.contains(date)) {
 			return m_values[date];
