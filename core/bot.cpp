@@ -19,7 +19,7 @@ Bot::Bot(QJsonObject jsonBot, QObject *parent)
 		QJsonArray jsonValArray = jsonFeat["args"].toArray();
 		for (int iV = 0; iV < numArgs; ++iV) {
 			double val = jsonValArray.at(iV).toDouble();
-			QString strVal = QString::number(val, 'f', 30);
+			QString strVal = QString::number(val, 'f', 20);
 			m_botStrings += strVal;
 		}
 	}
@@ -137,6 +137,10 @@ void Bot::postTreatment(QJsonObject& sumObj, const QVector<Transaction>& predict
 	statObj.insert("avgDayOut095", m_avgDayOut95);
 	statObj.insert("avgDayIn100", m_avgDayIn100);
 	statObj.insert("avgDayOut100", m_avgDayOut100);
+
+	double flow = m_avgDayIn95 - m_avgDayOut90;
+	flow /= m_avgDayIn95;
+	statObj.insert("flow", flow);
 
 	sumObj.insert("stat", statObj);
 

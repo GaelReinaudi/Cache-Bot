@@ -277,7 +277,7 @@ public:
 	{ }
 	int approxSpacingPayment() override { return 15; }
 	virtual void cleanArgs() override {
-		m_dayOfMonth2 = (m_dayOfMonth / 32) % 31;
+		m_dayOfMonth2 = m_dayOfMonth+14;//(m_dayOfMonth / 32) % 31;
 		++m_dayOfMonth2;
 		FeatureMonthlyAmount::cleanArgs();
 	}
