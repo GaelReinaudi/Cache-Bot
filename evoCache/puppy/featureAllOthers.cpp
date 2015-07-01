@@ -22,8 +22,8 @@ void FeatureAllOthers::execute(void *outDatum, Puppy::Context &ioContext)
 	m_avgDayOut90 = ioContext.m_pUser->costLiving(0.90);
 	m_avgDayIn95 = ioContext.m_pUser->makeLiving(0.95);
 	m_avgDayOut95 = ioContext.m_pUser->costLiving(0.95);
-	m_avgDayIn80 = ioContext.m_pUser->makeLiving(0.80);
-	m_avgDayOut80 = ioContext.m_pUser->costLiving(0.80);
+	m_avgDayIn099 = ioContext.m_pUser->makeLiving(0.099);
+	m_avgDayOut099 = ioContext.m_pUser->costLiving(0.099);
 	int posTr = 0;
 	int negTr = 0;
 	int alreadyMatched = 0;
@@ -49,8 +49,8 @@ void FeatureAllOthers::execute(void *outDatum, Puppy::Context &ioContext)
 	QVector<Transaction> targetTrans = targetTransactions(iniDate, lastDate.addDays(BotContext::TARGET_TRANS_FUTUR_DAYS));
 	if (ioContext.m_summaryJsonObj) {
 		LOG() << getName().c_str() << targetTrans.count()
-			  << "avgDayIn80" << m_avgDayIn80
-			  << "avgDayOut80" << m_avgDayOut80
+			  << "avgDayIn099" << m_avgDayIn099
+			  << "avgDayOut099" << m_avgDayOut099
 			  << "avgDayIn90" << m_avgDayIn90
 			  << "avgDayOut90" << m_avgDayOut90
 			  << "avgDayIn95" << m_avgDayIn95

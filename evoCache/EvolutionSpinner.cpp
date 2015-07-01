@@ -91,7 +91,7 @@ void EvolutionSpinner::runEvolution() {
 			auto result = std::minmax_element(lPopulation.begin(), lPopulation.end());
 			Tree bestTree = lPopulation[result.second - lPopulation.begin()];
 
-			summarize(bestTree);
+//			summarize(bestTree);
 
 			applySelectionTournament(lPopulation, *m_context, lNbrPartTournament);
 			applyCrossover(lPopulation, *m_context, lCrossoverProba, lCrossDistribProba, lMaxDepth);
@@ -218,6 +218,8 @@ QJsonObject EvolutionSpinner::summarize(Tree& tree)
 	double fit;
 	tree.interpret(&fit, *m_context);
 	m_context->m_summaryJsonObj = 0;
+
+	jsonObj.insert("fit", fit);
 
 	QString jsonStr = QJsonDocument(jsonObj).toJson(/*QJsonDocument::Compact*/);
 	LOG() << "tree (" << fit << "): " << tree.toStr() << endl;

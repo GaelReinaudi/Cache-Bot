@@ -15,9 +15,9 @@ public:
 		double a = 0;
 		int ind = -1;
 		getArgument(++ind, &a, ioContext);
-		m_avgDayIn80 = a;
+		m_avgDayIn099 = a;
 		getArgument(++ind, &a, ioContext);
-		m_avgDayOut80 = a;
+		m_avgDayOut099 = a;
 		getArgument(++ind, &a, ioContext);
 		m_avgDayIn90 = a;
 		getArgument(++ind, &a, ioContext);
@@ -35,8 +35,8 @@ public:
 		QJsonObject retObj = AccountFeature::toJson(ioContext);
 		retObj.insert("fitness", m_fitness);
 		retObj.insert("billProba", m_billProba);
-		retObj.insert("avgDayIn80", m_avgDayIn80);
-		retObj.insert("avgDayOut80", m_avgDayOut80);
+		retObj.insert("avgDayIn099", m_avgDayIn099);
+		retObj.insert("avgDayOut099", m_avgDayOut099);
 		retObj.insert("avgDayIn90", m_avgDayIn90);
 		retObj.insert("avgDayOut90", m_avgDayOut90);
 		retObj.insert("avgDayIn95", m_avgDayIn95);
@@ -54,8 +54,8 @@ private:
 	double m_avgDayOut90 = 0.0;
 	double m_avgDayIn95 = 0.0;
 	double m_avgDayOut95 = 0.0;
-	double m_avgDayIn80 = 0.0;
-	double m_avgDayOut80 = 0.0;
+	double m_avgDayIn099 = 0.0;
+	double m_avgDayOut099 = 0.0;
 	double m_fitness = 0.0;
 	double m_billProba = 0;
 };

@@ -16,7 +16,9 @@ SOURCES += \
 	transaction.cpp \
     bot.cpp \
     fund.cpp \
-    botContext.cpp
+    botContext.cpp \
+    histoMetric.cpp \
+    userMetrics.cpp
 
 
 HEADERS += \
@@ -28,7 +30,9 @@ HEADERS += \
     transaction.h \
     bot.h \
     fund.h \
-    botContext.h
+    botContext.h \
+    histoMetric.h \
+    userMetrics.h
 
 unix {
 	target.path = /usr/lib

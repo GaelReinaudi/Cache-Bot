@@ -17,6 +17,10 @@ MainWindow::MainWindow(QString userID, QVector<int> onlyLoadHashes)
 
 	connect(pEvolver, SIGNAL(injected(User*)), this, SLOT(onUserInjected(User*)));
 //	connect(ui->startButton, SIGNAL(clicked(bool)), m_evoSpinner, SLOT(startStopEvolution(bool)), Qt::DirectConnection);
+
+	m_plotFitness = new QCustomPlot(ui->leftWidget);
+	m_plotFitness->addGraph();
+	ui->leftWidget->layout()->addWidget(m_plotFitness);
 }
 
 MainWindow::~MainWindow()
@@ -80,5 +84,10 @@ void MainWindow::onNewSummarizedTree(QJsonObject jsonObj)
 		fobj.remove("args");
 		ui->listBills->addItem(QString(QJsonDocument(fobj).toJson()));
 	}
+	static double i = 0;
+	++i;
+	m_plotFitness->graph(0)->addData(i, jsonObj["fit"].toDouble());
+	m_plotFitness->rescaleAxes();
+	m_plotFitness->replot();
 }
 
