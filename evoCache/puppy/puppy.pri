@@ -15,7 +15,7 @@ HEADERS  += \
 	$$PWD/puppy/include/puppy/Puppy.hpp \
 	$$PWD/puppy/include/puppy/Context.hpp \
 	$$PWD/puppy/include/puppy/Randomizer.hpp \
-	$$PWD/puppy/include/puppy/Token.hpp \
+	$$PWD/puppy/include/puppy/TokenT.hpp \
 	$$PWD/puppy/include/puppy/Tree.hpp \
 	$$PWD/AccRegPrimits.h \
     $$PWD/featureAllOthers.h
