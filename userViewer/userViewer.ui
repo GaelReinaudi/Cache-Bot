@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>UserViewer</class>
+ <widget class="QMainWindow" name="UserViewer">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>UserViewer</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -64,17 +64,20 @@
        </widget>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout_2" stretch="2">
+       <layout class="QVBoxLayout" name="verticalLayout_2" stretch="2,1">
         <property name="leftMargin">
          <number>0</number>
         </property>
         <item>
          <widget class="ACustomPlot" name="acPlot" native="true"/>
         </item>
+        <item>
+         <widget class="AHashPlot" name="ahPlot" native="true"/>
+        </item>
        </layout>
       </item>
       <item>
-       <widget class="QListWidget" name="metricList"/>
+       <widget class="QListWidget" name="listBills"/>
       </item>
      </layout>
     </item>
@@ -148,8 +151,6 @@
      </layout>
     </item>
    </layout>
-   <zorder></zorder>
-   <zorder></zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -178,6 +179,12 @@
  <customwidgets>
   <customwidget>
    <class>ACustomPlot</class>
+   <extends>QWidget</extends>
+   <header>ACChart/acustomplot.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>AHashPlot</class>
    <extends>QWidget</extends>
    <header>ACChart/acustomplot.h</header>
    <container>1</container>

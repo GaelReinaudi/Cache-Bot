@@ -1,10 +1,10 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+#include "evoCacheView.h"
+#include "ui_evoCacheView.h"
 #include "user.h"
 #include "evolver.h"
 #include "botContext.h"
 
-MainWindow::MainWindow(QString userID, QVector<int> onlyLoadHashes)
+EvoCacheView::EvoCacheView(QString userID, QVector<int> onlyLoadHashes)
 	: QMainWindow()
 	, ui(new Ui::MainWindow)
 {
@@ -23,12 +23,12 @@ MainWindow::MainWindow(QString userID, QVector<int> onlyLoadHashes)
 	ui->leftWidget->layout()->addWidget(m_plotFitness);
 }
 
-MainWindow::~MainWindow()
+EvoCacheView::~EvoCacheView()
 {
 	delete ui;
 }
 
-void MainWindow::onUserInjected(User* pUser)
+void EvoCacheView::onUserInjected(User* pUser)
 {
 	ui->acPlot->loadCompressedAmount(pUser);
 	ui->amPlot->loadAmount(pUser);
@@ -38,20 +38,20 @@ void MainWindow::onUserInjected(User* pUser)
 
 //	ui->acPlot->setPlottingHints(QCP::phFastPolylines | QCP::phCacheLabels);
 
-	connect(pUser->botContext(), &BotContext::targetedTransaction, this, &MainWindow::plotTargetedTransaction);
-	connect(pUser->botContext(), &BotContext::matchedTransaction, this, &MainWindow::plotMatchedTransaction);
-	connect(pUser->botContext(), &BotContext::summarizingTree, this, &MainWindow::clearMasks, Qt::BlockingQueuedConnection);
-	connect(pUser->botContext(), &BotContext::needsReplot, this, &MainWindow::replotCharts, Qt::BlockingQueuedConnection);
-	connect(pUser->botContext(), &BotContext::needsReplot, this, &MainWindow::clearList);
-	connect(pUser->botContext(), &BotContext::newSummarizedTree, this, &MainWindow::onNewSummarizedTree, Qt::BlockingQueuedConnection);
+	connect(pUser->botContext(), &BotContext::targetedTransaction, this, &EvoCacheView::plotTargetedTransaction);
+	connect(pUser->botContext(), &BotContext::matchedTransaction, this, &EvoCacheView::plotMatchedTransaction);
+	connect(pUser->botContext(), &BotContext::summarizingTree, this, &EvoCacheView::clearMasks, Qt::BlockingQueuedConnection);
+	connect(pUser->botContext(), &BotContext::needsReplot, this, &EvoCacheView::replotCharts, Qt::BlockingQueuedConnection);
+	connect(pUser->botContext(), &BotContext::needsReplot, this, &EvoCacheView::clearList);
+	connect(pUser->botContext(), &BotContext::newSummarizedTree, this, &EvoCacheView::onNewSummarizedTree, Qt::BlockingQueuedConnection);
 }
 
-void MainWindow::clearMasks()
+void EvoCacheView::clearMasks()
 {
 	ui->acPlot->clearItems();
 }
 
-void MainWindow::plotMask(double x, double y, bool isTarget)
+void EvoCacheView::plotMask(double x, double y, bool isTarget)
 {
 	QCPItemRect* itRect = new QCPItemRect(ui->acPlot);
 	y = kindaLog(y);
@@ -64,19 +64,19 @@ void MainWindow::plotMask(double x, double y, bool isTarget)
 	ui->acPlot->addItem(itRect);
 }
 
-void MainWindow::replotCharts()
+void EvoCacheView::replotCharts()
 {
 	ui->acPlot->replot(QCustomPlot::rpQueued);
 	//ui->amPlot->loadAmount(account);
 	//	ui->amPlot->replot(QCustomPlot::rpQueued);
 }
 
-void MainWindow::clearList()
+void EvoCacheView::clearList()
 {
 	ui->listBills->clear();
 }
 
-void MainWindow::onNewSummarizedTree(QJsonObject jsonObj)
+void EvoCacheView::onNewSummarizedTree(QJsonObject jsonObj)
 {
 	ui->listBills->clear();
 	for (const auto f : jsonObj["features"].toArray()) {

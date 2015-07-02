@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+#include "evoCacheView.h"
 #include <QApplication>
 
 int main(int argc, char *argv[])
@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
 			onlyLoadHashes.append(QString(argv[i]).toInt());
 		}
 	}
-	MainWindow w(jsonFileOrUser, onlyLoadHashes);
+	EvoCacheView w(jsonFileOrUser, onlyLoadHashes);
 	w.show();
 
 	return a.exec();

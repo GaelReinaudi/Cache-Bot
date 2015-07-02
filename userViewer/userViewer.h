@@ -10,16 +10,16 @@ class User;
 class CacheAccountConnector;
 
 namespace Ui {
-class MainWindow;
+class UserViewer;
 }
 
-class MainWindow : public QMainWindow
+class UserViewer : public QMainWindow
 {
 	Q_OBJECT
 
 public:
-	explicit MainWindow(QString userID);
-	~MainWindow();
+	explicit UserViewer(QString userID);
+	~UserViewer();
 
 	User* user() const;
 
@@ -41,7 +41,7 @@ signals:
 	void operate(const QString &);
 
 private:
-	Ui::MainWindow *ui;
+	Ui::UserViewer *ui;
 	CacheAccountConnector* m_pConnector = 0;
 };
 

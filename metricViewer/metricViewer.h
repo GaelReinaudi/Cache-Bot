@@ -9,16 +9,16 @@ class User;
 class CacheAccountConnector;
 
 namespace Ui {
-class MainWindow;
+class MetricViewer;
 }
 
-class MainWindow : public QMainWindow
+class MetricViewer : public QMainWindow
 {
 	Q_OBJECT
 
 public:
-	explicit MainWindow(QString userID);
-	~MainWindow();
+	explicit MetricViewer(QString userID);
+	~MetricViewer();
 
 	User* user() const;
 
@@ -27,7 +27,7 @@ public slots:
 	void onBotInjected(Bot *bestBot);
 
 private:
-	Ui::MainWindow *ui;
+	Ui::MetricViewer *ui;
 	CacheAccountConnector* m_pConnector = 0;
 };
 

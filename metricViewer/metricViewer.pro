@@ -13,17 +13,17 @@ INCLUDEPATH  += ./ \
 
 SOURCES += \
 	main.cpp \
-	mainwindow.cpp \
 	$$PWD/../AccountChart/ACChart/acustomplot.cpp \
-	$$PWD/../AccountChart/qcustomplot/qcustomplot.cpp
+	$$PWD/../AccountChart/qcustomplot/qcustomplot.cpp \
+    metricViewer.cpp
 
 HEADERS  += \
 	$$PWD/log.h \
-	mainwindow.h \
 	$$PWD/../AccountChart/ACChart/acustomplot.h \
-	$$PWD/../AccountChart/qcustomplot/qcustomplot.h
+	$$PWD/../AccountChart/qcustomplot/qcustomplot.h \
+    metricViewer.h
 
-FORMS    += mainwindow.ui
+FORMS    += metricViewer.ui
 
 unix {
 LIBS += -L$${SRC_DIR}/bin/$${DEBUGRELEASE} -lcacheRest

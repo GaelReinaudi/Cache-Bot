@@ -14,7 +14,7 @@ INCLUDEPATH  += ./ \
 
 SOURCES += \
 	$$PWD/main.cpp \
-	$$PWD/mainwindow.cpp \
+	$$PWD/evoCacheView.cpp \
 	$$PWD/../evoCache/evolver.cpp \
 	$$PWD/../evoCache/EvolutionSpinner.cpp \
 	$$PWD/../AccountChart/qcustomplot/qcustomplot.cpp \
@@ -22,7 +22,7 @@ SOURCES += \
 	$$PWD/../AccountChart/AmortiChart/AMPlot.cpp
 
 HEADERS  += \
-	$$PWD/mainwindow.h \
+	$$PWD/evoCacheView.h \
 	$$PWD/../evoCache/evolver.h \
 	$$PWD/../evoCache/EvolutionSpinner.h \
 	$$PWD/../AccountChart/qcustomplot/qcustomplot.h \
@@ -30,7 +30,7 @@ HEADERS  += \
 	$$PWD/../AccountChart/AmortiChart/AMPlot.h
 
 
-FORMS    += mainwindow.ui
+FORMS    += evoCacheView.ui
 
 unix {
 LIBS += -L$${SRC_DIR}/bin/$${DEBUGRELEASE} -lcacheRest

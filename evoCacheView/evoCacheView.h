@@ -13,13 +13,13 @@ namespace Ui {
 class MainWindow;
 }
 
-class MainWindow : public QMainWindow
+class EvoCacheView : public QMainWindow
 {
 	Q_OBJECT
 
 public:
-	explicit MainWindow(QString userID, QVector<int> onlyLoadHashes = QVector<int>());
-	~MainWindow();
+	explicit EvoCacheView(QString userID, QVector<int> onlyLoadHashes = QVector<int>());
+	~EvoCacheView();
 
 public slots:
 	void handleResults(const QString &) {

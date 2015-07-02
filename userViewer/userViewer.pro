@@ -13,20 +13,20 @@ INCLUDEPATH  += ./ \
 
 SOURCES += \
 	main.cpp \
-	mainwindow.cpp \
 	$$PWD/../AccountChart/ACChart/acustomplot.cpp \
 	$$PWD/../AccountChart/AmortiChart/AMPlot.cpp \
-	$$PWD/../AccountChart/qcustomplot/qcustomplot.cpp
+	$$PWD/../AccountChart/qcustomplot/qcustomplot.cpp \
+    userViewer.cpp
 
 
 HEADERS  += \
 	$$PWD/log.h \
-	mainwindow.h \
 	$$PWD/../AccountChart/ACChart/acustomplot.h \
 	$$PWD/../AccountChart/AmortiChart/AMPlot.h \
-	$$PWD/../AccountChart/qcustomplot/qcustomplot.h
+	$$PWD/../AccountChart/qcustomplot/qcustomplot.h \
+    userViewer.h
 
-FORMS    += mainwindow.ui
+FORMS    += userViewer.ui
 
 unix {
 LIBS += -L$${SRC_DIR}/bin/$${DEBUGRELEASE} -lcacheRest

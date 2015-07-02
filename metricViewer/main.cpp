@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+#include "metricViewer.h"
 #include <QApplication>
 
 int main(int argc, char *argv[])
@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
 	if(argc > 1) {
 		jsonFileOrUser = argv[1];
 	}
-	MainWindow w(jsonFileOrUser);
+	MetricViewer w(jsonFileOrUser);
 	w.show();
 
 	return a.exec();

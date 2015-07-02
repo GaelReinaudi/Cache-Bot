@@ -1,14 +1,14 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+#include "userViewer.h"
+#include "ui_userViewer.h"
 #include "user.h"
 #include "botContext.h"
 #include "bot.h"
 #include "cacherest.h"
 #include "cacheAccountConnector.h"
 
-MainWindow::MainWindow(QString userID)
+UserViewer::UserViewer(QString userID)
 	: QMainWindow()
-	, ui(new Ui::MainWindow)
+	, ui(new Ui::UserViewer)
 {
 	ui->setupUi(this);
 
@@ -17,7 +17,7 @@ MainWindow::MainWindow(QString userID)
 	connect(m_pConnector, SIGNAL(botInjected(Bot*)), this, SLOT(onBotInjected(Bot*)));
 }
 
-MainWindow::~MainWindow()
+UserViewer::~UserViewer()
 {
 	if (m_pConnector) {
 		delete m_pConnector;
@@ -25,12 +25,12 @@ MainWindow::~MainWindow()
 	delete ui;
 }
 
-User *MainWindow::user() const
+User *UserViewer::user() const
 {
 	return m_pConnector->user();
 }
 
-void MainWindow::onUserInjected(User* pUser)
+void UserViewer::onUserInjected(User* pUser)
 {
 	ui->acPlot->loadCompressedAmount(pUser);
 	ui->ahPlot->loadCompressedAmount(pUser);
@@ -48,23 +48,23 @@ void MainWindow::onUserInjected(User* pUser)
 	CacheRest::Instance()->getBestBot(pUser->id(), pUser);
 }
 
-void MainWindow::onBotInjected(Bot* bestBot)
+void UserViewer::onBotInjected(Bot* bestBot)
 {
-	connect(user()->botContext(), &BotContext::targetedTransaction, this, &MainWindow::plotTargetedTransaction);
-	connect(user()->botContext(), &BotContext::matchedTransaction, this, &MainWindow::plotMatchedTransaction);
-	connect(user()->botContext(), &BotContext::summarizingTree, this, &MainWindow::clearMasks);
-	connect(user()->botContext(), &BotContext::needsReplot, this, &MainWindow::replotCharts);
-	connect(user()->botContext(), &BotContext::newSummarizedTree, this, &MainWindow::onNewSummarizedTree);
+	connect(user()->botContext(), &BotContext::targetedTransaction, this, &UserViewer::plotTargetedTransaction);
+	connect(user()->botContext(), &BotContext::matchedTransaction, this, &UserViewer::plotMatchedTransaction);
+	connect(user()->botContext(), &BotContext::summarizingTree, this, &UserViewer::clearMasks);
+	connect(user()->botContext(), &BotContext::needsReplot, this, &UserViewer::replotCharts);
+	connect(user()->botContext(), &BotContext::newSummarizedTree, this, &UserViewer::onNewSummarizedTree);
 
 	bestBot->summarize();
 }
 
-void MainWindow::clearMasks()
+void UserViewer::clearMasks()
 {
 	ui->acPlot->clearItems();
 }
 
-void MainWindow::plotMask(double x, double y, bool isTarget)
+void UserViewer::plotMask(double x, double y, bool isTarget)
 {
 	QCPItemRect* itRect = new QCPItemRect(ui->acPlot);
 	y = kindaLog(y);
@@ -77,13 +77,13 @@ void MainWindow::plotMask(double x, double y, bool isTarget)
 	ui->acPlot->addItem(itRect);
 }
 
-void MainWindow::replotCharts()
+void UserViewer::replotCharts()
 {
 	ui->acPlot->replot(QCustomPlot::rpQueued);
 	ui->ahPlot->replot(QCustomPlot::rpQueued);
 }
 
-void MainWindow::onNewSummarizedTree(QJsonObject jsonObj)
+void UserViewer::onNewSummarizedTree(QJsonObject jsonObj)
 {
 	ui->listBills->clear();
 	for (const auto f : jsonObj["features"].toArray()) {

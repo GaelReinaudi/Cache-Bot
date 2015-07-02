@@ -1,5 +1,5 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+#include "metricViewer.h"
+#include "ui_metricViewer.h"
 #include "user.h"
 #include "botContext.h"
 #include "bot.h"
@@ -7,9 +7,9 @@
 #include "cacheAccountConnector.h"
 #include "userMetrics.h"
 
-MainWindow::MainWindow(QString userID)
+MetricViewer::MetricViewer(QString userID)
 	: QMainWindow()
-	, ui(new Ui::MainWindow)
+	, ui(new Ui::MetricViewer)
 {
 	ui->setupUi(this);
 
@@ -18,7 +18,7 @@ MainWindow::MainWindow(QString userID)
 	connect(m_pConnector, SIGNAL(botInjected(Bot*)), this, SLOT(onBotInjected(Bot*)));
 }
 
-MainWindow::~MainWindow()
+MetricViewer::~MetricViewer()
 {
 	if (m_pConnector) {
 		delete m_pConnector;
@@ -26,12 +26,12 @@ MainWindow::~MainWindow()
 	delete ui;
 }
 
-User *MainWindow::user() const
+User *MetricViewer::user() const
 {
 	return m_pConnector->user();
 }
 
-void MainWindow::onUserInjected(User* pUser)
+void MetricViewer::onUserInjected(User* pUser)
 {
 	MetricSmoother<7>::get(CostRateMonthPercentileMetric<1, 90 >::get(pUser));
 	MetricSmoother<7>::get(CostRateMonthPercentileMetric<1, 99 >::get(pUser));
@@ -78,7 +78,7 @@ void MainWindow::onUserInjected(User* pUser)
 	CacheRest::Instance()->getBestBot(pUser->id(), pUser);
 }
 
-void MainWindow::onBotInjected(Bot* bestBot)
+void MetricViewer::onBotInjected(Bot* bestBot)
 {
 	bestBot->summarize();
 }
