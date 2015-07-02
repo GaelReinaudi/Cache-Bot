@@ -6,7 +6,7 @@
 
 EvoCacheView::EvoCacheView(QString userID, QVector<int> onlyLoadHashes)
 	: QMainWindow()
-	, ui(new Ui::MainWindow)
+	, ui(new Ui::EvoCacheView)
 {
 	ui->setupUi(this);
 	ui->amPlot->hide();

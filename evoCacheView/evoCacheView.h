@@ -10,7 +10,7 @@
 class EvolutionSpinner;
 
 namespace Ui {
-class MainWindow;
+class EvoCacheView;
 }
 
 class EvoCacheView : public QMainWindow
@@ -39,7 +39,7 @@ signals:
 	void operate(const QString &);
 
 private:
-	Ui::MainWindow *ui;
+	Ui::EvoCacheView *ui;
 	QCustomPlot* m_plotFitness;
 };
 
