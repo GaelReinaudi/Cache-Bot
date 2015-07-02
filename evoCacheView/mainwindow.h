@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef MAINWINDOW_EVOCACHEVIEW_H
+#define MAINWINDOW_EVOCACHEVIEW_H
 
 #include <QMainWindow>
 #include <QThread>
@@ -43,4 +43,4 @@ private:
 	QCustomPlot* m_plotFitness;
 };
 
-#endif // MAINWINDOW_H
+#endif // MAINWINDOW_EVOCACHEVIEW_H
