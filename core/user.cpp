@@ -107,11 +107,11 @@ void User::injectJsonData(QString jsonStr)
 
 	emit injected(this);
 
-	CostMonthPercentileMetric<2, 50>::get(this)->value(m_today);
-	CostMonthPercentileMetric<2, 75>::get(this)->value(m_today);
-	CostMonthPercentileMetric<2, 90>::get(this)->value(m_today);
-	CostMonthPercentileMetric<2, 95>::get(this)->value(m_today);
-	CostMonthPercentileMetric<2, 99>::get(this)->value(m_today);
+	CostRateMonthPercentileMetric<2, 50>::get(this)->value(m_today);
+	CostRateMonthPercentileMetric<2, 75>::get(this)->value(m_today);
+	CostRateMonthPercentileMetric<2, 90>::get(this)->value(m_today);
+	CostRateMonthPercentileMetric<2, 95>::get(this)->value(m_today);
+	CostRateMonthPercentileMetric<2, 99>::get(this)->value(m_today);
 }
 
 BotContext* User::makeBotContext()
@@ -144,11 +144,6 @@ void User::injectJsonBot(QString jsonStr)
 	emit botInjected(m_bestBot);
 }
 
-double User::makeLiving(double withinPercentileCost, double multiplicator /*= 1.0*/)
-{
-	return 0;//costLiving(withinPercentileCost, -multiplicator);
-}
-
 QVector<Transaction> User::predictedFutureTransactions(double threshProba) {
 	QVector<Transaction> ret;
 	if (m_bestBot) {
@@ -171,8 +166,8 @@ double User::predictedRemainingRate() const {
 	if (m_bestBot) {
 		remainRate = m_bestBot->lastStats()["avgDayIn090"].toDouble();
 		remainRate -= m_bestBot->lastStats()["predictedRateIn"].toDouble();
-		remainRate -= m_bestBot->lastStats()["avgDayIn090"].toDouble();
-		remainRate += m_bestBot->lastStats()["predictedRateOut"].toDouble();
+		remainRate += m_bestBot->lastStats()["avgDayOut090"].toDouble();
+		remainRate -= m_bestBot->lastStats()["predictedRateOut"].toDouble();
 	}
 	LOG() << "predictedRemainingRate " << remainRate << endl;
 	return remainRate;

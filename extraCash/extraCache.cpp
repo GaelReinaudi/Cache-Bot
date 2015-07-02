@@ -33,7 +33,7 @@ void ExtraCache::onUserInjected(User* pUser)
 	// some arbitrary slush need to (try to) never go under of
 	m_slushFundTypicalNeed = 0.0;
 	m_slushFundTypicalNeed += 0.5 * user()->balance(Account::Type::Checking);
-	m_slushFundTypicalNeed += 0.5 * CostMonthPercentileMetric<6, 75>::get(user())->value(m_date) * 30;
+	m_slushFundTypicalNeed += 0.5 * -CostRateMonthPercentileMetric<6, 75>::get(user())->value(m_date) * 30;
 
 	qDebug() << "m_slushFundTypicalNeed" << m_slushFundTypicalNeed;
 
@@ -95,7 +95,7 @@ void ExtraCache::computeMinSlopeOver(int numDays)
 	// first value is the last known balance;
 	double balanceNow = it.value();
 
-	double addIncomePerDay = user()->makeLiving(0.75);
+	double addIncomePerDay = MakeRateMonthPercentileMetric<6, 75>::get(user())->value(m_date);
 	double futDay = numDays;
 	double balanceThen = balanceNow + futDay * addIncomePerDay;
 

@@ -84,14 +84,14 @@ void Bot::postTreatment(QJsonObject& sumObj, const QVector<Transaction>& predict
 	QDate lastDate = QDate::currentDate();
 	QDate iniDate = lastDate.addMonths(-6);
 
-	double m_avgDayIn90 = m_context->m_pUser->makeLiving(0.90);
-	double m_avgDayOut90 = CostMonthPercentileMetric<2, 90>::get(m_context->m_pUser)->value(lastDate);
-	double m_avgDayIn95 = m_context->m_pUser->makeLiving(0.95);
-	double m_avgDayOut95 = CostMonthPercentileMetric<2, 95>::get(m_context->m_pUser)->value(lastDate);
-	double m_avgDayIn099 = m_context->m_pUser->makeLiving(0.99);
-	double m_avgDayOut099 = CostMonthPercentileMetric<2, 99>::get(m_context->m_pUser)->value(lastDate);
-	double m_avgDayIn100 = m_context->m_pUser->makeLiving(1.00);
-	double m_avgDayOut100 = CostMonthPercentileMetric<2, 100>::get(m_context->m_pUser)->value(lastDate);
+	double m_avgDayIn90   = MakeRateMonthPercentileMetric<2, 90>::get(m_context->m_pUser)->value(lastDate);
+	double m_avgDayOut90  = CostRateMonthPercentileMetric<2, 90>::get(m_context->m_pUser)->value(lastDate);
+	double m_avgDayIn95   = MakeRateMonthPercentileMetric<2, 95>::get(m_context->m_pUser)->value(lastDate);
+	double m_avgDayOut95  = CostRateMonthPercentileMetric<2, 95>::get(m_context->m_pUser)->value(lastDate);
+	double m_avgDayIn099  = MakeRateMonthPercentileMetric<2, 99>::get(m_context->m_pUser)->value(lastDate);
+	double m_avgDayOut099 = CostRateMonthPercentileMetric<2, 99>::get(m_context->m_pUser)->value(lastDate);
+	double m_avgDayIn100  = MakeRateMonthPercentileMetric<2, 100>::get(m_context->m_pUser)->value(lastDate);
+	double m_avgDayOut100 = CostRateMonthPercentileMetric<2, 100>::get(m_context->m_pUser)->value(lastDate);
 	int posTr = 0;
 	int negTr = 0;
 	int alreadyMatched = 0;
@@ -120,7 +120,7 @@ void Bot::postTreatment(QJsonObject& sumObj, const QVector<Transaction>& predict
 			predictedRateIn += tr.amountDbl();
 		}
 		if (tr.amountInt() < 0) {
-			predictedRateOut += -tr.amountDbl();
+			predictedRateOut += tr.amountDbl();
 		}
 	}
 	predictedRateIn /= BotContext::TARGET_TRANS_FUTUR_DAYS;
@@ -141,7 +141,7 @@ void Bot::postTreatment(QJsonObject& sumObj, const QVector<Transaction>& predict
 	statObj.insert("avgDayIn100", m_avgDayIn100);
 	statObj.insert("avgDayOut100", m_avgDayOut100);
 
-	double flow = m_avgDayIn95 - m_avgDayOut90;
+	double flow = m_avgDayIn95 + m_avgDayOut90;
 	flow /= m_avgDayIn95;
 	statObj.insert("flow", flow);
 
@@ -150,5 +150,4 @@ void Bot::postTreatment(QJsonObject& sumObj, const QVector<Transaction>& predict
 	m_lastStats = statObj;
 	QString jsonStr = QJsonDocument(m_lastStats).toJson();
 	LOG() << "statObj  " << jsonStr << endl;
-
 }

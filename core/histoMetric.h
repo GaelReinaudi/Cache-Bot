@@ -4,6 +4,7 @@
 #include "log.h"
 //#include "common.h"
 #include <QtCore>
+#include <QDebug>
 
 class CORESHARED_EXPORT HistoMetric : public QObject
 {
@@ -32,6 +33,7 @@ public:
 		LOG() << "HistoMetric::get() couldn't find" << withName << endl;
 		return 0;
 	}
+	QString name() const { return m_name; }
 
 public:
 	double value(const QDate& date) {
@@ -47,7 +49,7 @@ public:
 
 		return val;
 	}
-	bool valid(const QDate& date) {
+	bool isValid(const QDate& date) {
 		if (m_values.contains(date)) {
 			return m_valid[date];
 		}
@@ -66,6 +68,41 @@ private:
 	static QMap<QString, HistoMetric*> s_AllMetrics;
 };
 
+template <int DayPast>
+class MetricSmoother : public HistoMetric
+{
+public:
+	MetricSmoother(HistoMetric* pMetric)
+		: HistoMetric(Name(pMetric), pMetric)
+		, m_pMetric(pMetric)
+	{
+	}
+	static QString Name(HistoMetric* pMetric) {
+		return QString("Smooth%1_%2").arg(DayPast).arg(pMetric->name());
+	}
+	static MetricSmoother<DayPast>* get(HistoMetric* pMetric) {
+		auto pMet = HistoMetric::get(Name(pMetric));
+		if (pMet)
+			return reinterpret_cast<MetricSmoother<DayPast>*>(pMet);
+		return new MetricSmoother<DayPast>(pMetric);
+	}
+protected:
+	double computeFor(const QDate& date, bool& isValid) override {
+		double avg = 0.0;
+		isValid = true;
+		for (int i = 0; i < DayPast; ++i) {
+			QDate ad = date.addDays(-i);
+			avg += m_pMetric->value(ad);
+			isValid &= m_pMetric->isValid(ad);
+			//qDebug() << i << avg;
+		}
+		avg /= DayPast;
+		return avg;
+	}
 
+private:
+
+	HistoMetric* m_pMetric = 0;
+};
 
 #endif // HISTOMETRIC_H

@@ -18,11 +18,16 @@ private:
 };
 
 template <int PastMonth, int Percentile>
-class CostMonthPercentileMetric : public UserMetric
+class CostRateMonthPercentileMetric : public UserMetric
 {
 protected:
-	CostMonthPercentileMetric(User* pUser)
+	CostRateMonthPercentileMetric(User* pUser)
 		: UserMetric(Name(), pUser)
+	{
+		Q_ASSERT(Percentile >= 0 && Percentile <= 100);
+	}
+	CostRateMonthPercentileMetric(const QString& name, User* pUser)
+		: UserMetric(name, pUser)
 	{
 		Q_ASSERT(Percentile >= 0 && Percentile <= 100);
 	}
@@ -32,24 +37,29 @@ protected:
 	}
 
 public:
-	static CostMonthPercentileMetric<PastMonth, Percentile>* get(User* pUser) {
+	static CostRateMonthPercentileMetric<PastMonth, Percentile>* get(User* pUser) {
 		auto pMet = HistoMetric::get(Name());
 		if (pMet)
-			return reinterpret_cast<CostMonthPercentileMetric<PastMonth, Percentile>*>(pMet);
-		return new CostMonthPercentileMetric<PastMonth, Percentile>(pUser);
+			return reinterpret_cast<CostRateMonthPercentileMetric<PastMonth, Percentile>*>(pMet);
+		return new CostRateMonthPercentileMetric<PastMonth, Percentile>(pUser);
 	}
 
 protected:
 	double computeFor(const QDate& date, bool& isValid) override {
+		return templateComputeFor<-1>(date, isValid);
+	}
+	template <int Multiplicator>
+	double templateComputeFor(const QDate& date, bool& isValid) {
 		QVector<double> costs;
 		QDate startDate = date.addMonths(-PastMonth);
 		for (int i = 0; i < user()->allTrans().count(); ++i) {
 			Transaction& tr = user()->allTrans().trans(i);
 			double amnt = tr.amountDbl();
+			amnt *= Multiplicator;
 			// filter on date
 			if (tr.date <= date && tr.date > startDate) {
-				if (amnt < 0.0 && !tr.isInternal()) {
-					costs.append(-amnt);
+				if (amnt > 0.0 && !tr.isInternal()) {
+					costs.append(amnt);
 				}
 			}
 		}
@@ -67,9 +77,36 @@ protected:
 		}
 		else
 			return 0.0;
-		return avg;
+		return avg * Multiplicator;
+	}
+};
+
+template <int PastMonth, int Percentile>
+class MakeRateMonthPercentileMetric : public CostRateMonthPercentileMetric<PastMonth, Percentile>
+{
+protected:
+	MakeRateMonthPercentileMetric(User* pUser)
+		: CostRateMonthPercentileMetric<PastMonth, Percentile>(Name(), pUser)
+	{
 	}
 
+	static QString Name() {
+		return QString("rateMake%1MonthP%2").arg(PastMonth).arg(Percentile);
+	}
+
+public:
+	static MakeRateMonthPercentileMetric<PastMonth, Percentile>* get(User* pUser) {
+		auto pMet = HistoMetric::get(Name());
+		if (pMet)
+			return reinterpret_cast<MakeRateMonthPercentileMetric<PastMonth, Percentile>*>(pMet);
+		return new MakeRateMonthPercentileMetric<PastMonth, Percentile>(pUser);
+	}
+
+protected:
+	double computeFor(const QDate& date, bool& isValid) override {
+		return this->template templateComputeFor<1>(date, isValid);
+	}
 };
+
 
 #endif // USERMETRICS_H

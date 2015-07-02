@@ -62,11 +62,11 @@ MainWindow::~MainWindow()
 void MainWindow::init()
 {
 	m_date = QDate::currentDate();
-	ui->costLive50SpinBox->setValue(CostMonthPercentileMetric<6, 50>::get(m_pExtraCache->user())->value(m_date));
-	ui->costLive75SpinBox->setValue(CostMonthPercentileMetric<6, 75>::get(m_pExtraCache->user())->value(m_date));
-	ui->costLive90SpinBox->setValue(CostMonthPercentileMetric<6, 90>::get(m_pExtraCache->user())->value(m_date));
-	ui->costLive95SpinBox->setValue(CostMonthPercentileMetric<6, 95>::get(m_pExtraCache->user())->value(m_date));
-	ui->costLive99SpinBox->setValue(CostMonthPercentileMetric<6, 99>::get(m_pExtraCache->user())->value(m_date));
+	ui->costLive50SpinBox->setValue(CostRateMonthPercentileMetric<6, 50>::get(m_pExtraCache->user())->value(m_date));
+	ui->costLive75SpinBox->setValue(CostRateMonthPercentileMetric<6, 75>::get(m_pExtraCache->user())->value(m_date));
+	ui->costLive90SpinBox->setValue(CostRateMonthPercentileMetric<6, 90>::get(m_pExtraCache->user())->value(m_date));
+	ui->costLive95SpinBox->setValue(CostRateMonthPercentileMetric<6, 95>::get(m_pExtraCache->user())->value(m_date));
+	ui->costLive99SpinBox->setValue(CostRateMonthPercentileMetric<6, 99>::get(m_pExtraCache->user())->value(m_date));
 
 	// transaction at the starting date of the playback
 	auto& real = m_pExtraCache->user()->allTrans();

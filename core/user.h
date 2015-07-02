@@ -33,13 +33,13 @@ class CORESHARED_EXPORT User : public DBobj
 public:
 	User(QString userId, QObject* parent = 0);
 
-	// gives the daily average of outcome for the withinPercentileCost outgoing transactions
+//	// gives the daily average of outcome for the withinPercentileCost outgoing transactions
 //private:
 //	double costLiving(double withinPercentileCost, double multiplicator = 1.0);
-public:
-	// gives the daily average of income for the withinPercentileCost outgoing transactions
-	double makeLiving(double withinPercentileCost, double multiplicator = 1.0);
+//	// gives the daily average of income for the withinPercentileCost outgoing transactions
+//	double makeLiving(double withinPercentileCost, double multiplicator = 1.0);
 
+public:
 	TransactionBundle& transBundle(int filterHash) {
 		if (filterHash >= 0)
 			return *m_hashBundles[filterHash];

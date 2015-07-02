@@ -33,19 +33,28 @@ User *MainWindow::user() const
 
 void MainWindow::onUserInjected(User* pUser)
 {
-	CostMonthPercentileMetric<2, 50>::get(pUser);
-	CostMonthPercentileMetric<2, 75>::get(pUser);
-	CostMonthPercentileMetric<2, 90>::get(pUser);
-	CostMonthPercentileMetric<2, 99>::get(pUser);
-	CostMonthPercentileMetric<2, 100>::get(pUser);
+	MetricSmoother<7>::get(CostRateMonthPercentileMetric<1, 90 >::get(pUser));
+	MetricSmoother<7>::get(CostRateMonthPercentileMetric<1, 99 >::get(pUser));
+	MetricSmoother<7>::get(CostRateMonthPercentileMetric<1, 100>::get(pUser));
+	MetricSmoother<7>::get(MakeRateMonthPercentileMetric<1, 90 >::get(pUser));
+	MetricSmoother<7>::get(MakeRateMonthPercentileMetric<1, 99 >::get(pUser));
+	MetricSmoother<7>::get(MakeRateMonthPercentileMetric<1, 100>::get(pUser));
+	MetricSmoother<7>::get(CostRateMonthPercentileMetric<3, 90 >::get(pUser));
+	MetricSmoother<7>::get(CostRateMonthPercentileMetric<3, 99 >::get(pUser));
+	MetricSmoother<7>::get(CostRateMonthPercentileMetric<3, 100>::get(pUser));
+	MetricSmoother<7>::get(MakeRateMonthPercentileMetric<3, 90 >::get(pUser));
+	MetricSmoother<7>::get(MakeRateMonthPercentileMetric<3, 99 >::get(pUser));
+	MetricSmoother<7>::get(MakeRateMonthPercentileMetric<3, 100>::get(pUser));
 
 	for (const QString& str: HistoMetric::allNames()) {
+		QColor color(qrand() % 192 + 64, qrand() % 192 + 64, qrand() % 192 + 64);
 		QListWidgetItem* item = new QListWidgetItem(str, ui->metricList);
 		item->setFlags(item->flags() | Qt::ItemIsUserCheckable); // set checkable flag
 		item->setCheckState(Qt::Checked); // AND initialize check state
+		item->setBackground(QBrush(color));
 		ui->metricList->addItem(item);
 		// adds the corresponding graph
-		ui->acPlot->addGraph();
+		ui->acPlot->addGraph()->setPen(QPen(color));
 	}
 
 	QDate day  = QDate::currentDate();
@@ -55,7 +64,7 @@ void MainWindow::onUserInjected(User* pUser)
 		double t = QDateTime(day).toTime_t();
 		int i = 0;
 		for (const QString& str: HistoMetric::allNames()) {
-			if (HistoMetric::get(str)->valid(day)) {
+			if (HistoMetric::get(str)->isValid(day)) {
 				double v = HistoMetric::get(str)->value(day);
 				ui->acPlot->graph(i)->addData(t, v);
 			}
