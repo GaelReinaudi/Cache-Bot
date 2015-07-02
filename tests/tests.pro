@@ -1,4 +1,4 @@
-include(../defaults.pri)
+include($$PWD/../defaults.pri)
 TEMPLATE = app
 QT       += testlib
 QT       += network

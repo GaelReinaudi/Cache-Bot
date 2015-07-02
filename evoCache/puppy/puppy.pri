@@ -9,13 +9,13 @@ SOURCES += \
     $$PWD/featureAllOthers.cpp
 
 HEADERS  += \
-	$$PWD/puppy/Primitive.hpp \
-	$$PWD/puppy/PrimitiveHandle.hpp \
-	$$PWD/puppy/PrimitiveInline.hpp \
-	$$PWD/puppy/Puppy.hpp \
-	$$PWD/puppy/Context.hpp \
-	$$PWD/puppy/Randomizer.hpp \
-	$$PWD/puppy/Token.hpp \
-	$$PWD/puppy/Tree.hpp \
+	$$PWD/puppy/include/puppy/Primitive.hpp \
+	$$PWD/puppy/include/puppy/PrimitiveHandle.hpp \
+	$$PWD/puppy/include/puppy/PrimitiveInline.hpp \
+	$$PWD/puppy/include/puppy/Puppy.hpp \
+	$$PWD/puppy/include/puppy/Context.hpp \
+	$$PWD/puppy/include/puppy/Randomizer.hpp \
+	$$PWD/puppy/include/puppy/Token.hpp \
+	$$PWD/puppy/include/puppy/Tree.hpp \
 	$$PWD/AccRegPrimits.h \
     $$PWD/featureAllOthers.h

@@ -1,5 +1,5 @@
-include(../defaults.pri)
-include(../evoCache/puppy/puppy.pri)
+include($$PWD/../defaults.pri)
+include($$PWD/../evoCache/puppy/puppy.pri)
 
 QT       += core
 QT       += network

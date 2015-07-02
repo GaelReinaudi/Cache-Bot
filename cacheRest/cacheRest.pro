@@ -1,4 +1,4 @@
-include(../defaults.pri)
+include($$PWD/../defaults.pri)
 QT       -= gui
 QT       += network
 

@@ -1,4 +1,4 @@
-include(../defaults.pri)
+include($$PWD/../defaults.pri)
 include(puppy/puppy.pri)
 
 QT += core
