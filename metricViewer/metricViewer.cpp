@@ -48,6 +48,7 @@ void MetricViewer::onUserInjected(User* pUser)
 	Flow01<95, 95>::get(pUser);
 	Flow01<99, 95>::get(pUser);
 	Flow01<99, 99>::get(pUser);
+//	Flow01<100, 100>::get(pUser);
 
 	for (const QString& str: HistoMetric::allNames()) {
 		QColor color(qrand() % 192 + 64, qrand() % 192 + 64, qrand() % 192 + 64);
@@ -67,7 +68,7 @@ void MetricViewer::onUserInjected(User* pUser)
 		double t = QDateTime(day).toTime_t();
 		int i = 0;
 		for (const QString& str: HistoMetric::allNames()) {
-			if (HistoMetric::get(str)->isValid(day)) {
+			if (1+HistoMetric::get(str)->isValid(day)) {
 				double v = HistoMetric::get(str)->value(day);
 				ui->acPlot->graph(i)->addData(t, v);
 			}

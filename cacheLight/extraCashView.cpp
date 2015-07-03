@@ -6,7 +6,7 @@
 
 const int dayPast = 60;
 const int dayFuture = 60;
-const int playBackStartAgo = 210;
+const int playBackStartAgo = 60;
 
 double smallInc = 1e-3;
 
@@ -61,28 +61,36 @@ ExtraCashView::~ExtraCashView()
 
 void ExtraCashView::init()
 {
-	m_date = QDate::currentDate();
-	ui->costLive50SpinBox->setValue(CostRateMonthPercentileMetric<6, 50>::get(m_pExtraCache->user())->value(m_date));
-	ui->costLive75SpinBox->setValue(CostRateMonthPercentileMetric<6, 75>::get(m_pExtraCache->user())->value(m_date));
-	ui->costLive90SpinBox->setValue(CostRateMonthPercentileMetric<6, 90>::get(m_pExtraCache->user())->value(m_date));
-	ui->costLive95SpinBox->setValue(CostRateMonthPercentileMetric<6, 95>::get(m_pExtraCache->user())->value(m_date));
-	ui->costLive99SpinBox->setValue(CostRateMonthPercentileMetric<6, 99>::get(m_pExtraCache->user())->value(m_date));
+	ui->costLive50SpinBox->setValue(CostRateMonthPercentileMetric<6, 50>::get(m_pExtraCache->user())->value(m_pbDate));
+	ui->costLive75SpinBox->setValue(CostRateMonthPercentileMetric<6, 75>::get(m_pExtraCache->user())->value(m_pbDate));
+	ui->costLive90SpinBox->setValue(CostRateMonthPercentileMetric<6, 90>::get(m_pExtraCache->user())->value(m_pbDate));
+	ui->costLive95SpinBox->setValue(CostRateMonthPercentileMetric<6, 95>::get(m_pExtraCache->user())->value(m_pbDate));
+	ui->costLive99SpinBox->setValue(CostRateMonthPercentileMetric<6, 99>::get(m_pExtraCache->user())->value(m_pbDate));
+
+	m_pbDate = QDate::currentDate().addDays(-playBackStartAgo);
+	m_pbBalance = m_pExtraCache->user()->balance(Account::Type::Checking);
 
 	// transaction at the starting date of the playback
 	auto& real = m_pExtraCache->user()->allTrans();
-	m_d0 = m_date.toJulianDay();
-	qDebug() << "m_date" << m_date;
+	qDebug() << "m_date" << m_pbDate;
 
 	for (int i = 0; i < real.count(); ++i) {
-		if (real.trans(i).date >= m_date) {
+		if (real.trans(i).date <= m_pbDate) {
 			m_ipb = i;
-			qDebug() << "initial trans("<<i<<")" << real.trans(i).date << real.trans(i).name;
-			break;
+		}
+		else {
+			// incrementally finds out the balance at the playback date
+			if (!real.trans(i).isInternal()) {
+				m_pbBalance -= real.trans(i).amountDbl();
+			}
 		}
 	}
+	m_pbDate = real.trans(m_ipb).date;
+	m_d0 = m_pbDate.toJulianDay();
+	LOG() << "initial pb balance"<< m_pbBalance << " at" << m_pbDate << endl;
+	LOG() << "initial pb trans("<< m_ipb <<")" << real.trans(m_ipb).name << endl;
 
-	m_lastBal = m_pExtraCache->user()->balance(Account::Type::Checking);
-	ui->spinBox->setValue(m_lastBal);
+	ui->spinBox->setValue(m_pbBalance);
 	ui->spinBox->editingFinished();
 	ui->plot->setFocus();
 	updateChart();
@@ -99,7 +107,7 @@ void ExtraCashView::keyPressEvent(QKeyEvent *event)
 	if(m_ipb < real.count()) {
 		Transaction& newTrans = real.trans(m_ipb);
 		// if new date, move forward
-		addDay = newTrans.jDay() - m_date.toJulianDay();
+		addDay = newTrans.jDay() - m_pbDate.toJulianDay();
 		qDebug() << newTrans.amountDbl() << newTrans.name << newTrans.date;
 		if (addDay > maxDayMove) {
 			// revert the soon to come increment so that we add a day and come back to this trans
@@ -108,15 +116,15 @@ void ExtraCashView::keyPressEvent(QKeyEvent *event)
 		}
 		else {
 			double delta = newTrans.amountDbl();
-			m_lastBal += delta;
-			ui->spinBox->setValue(m_lastBal);
+			m_pbBalance += delta;
+			ui->spinBox->setValue(m_pbBalance);
 		}
 		++m_ipb;
 	}
 	if (addDay < minDayMove) {
 		return keyPressEvent(event);
 	}
-	m_date = m_date.addDays(addDay);
+	m_pbDate = m_pbDate.addDays(addDay);
 	double posSlope = qMax(0.0, m_pExtraCache->minSlope());
 	double extraToday = posSlope * addDay / 2.0;
 	if(m_extraToday < 0.0)
@@ -132,7 +140,7 @@ void ExtraCashView::keyPressEvent(QKeyEvent *event)
 //	m_slushThreshold += m_extraToday;
 	ui->extraTodaySpinBox->setValue(m_extraToday);
 	ui->spinSlushThresh->setValue(m_pExtraCache->slushBaseStart());
-	pBars->addData(m_date.toJulianDay() - m_d0, m_extraToday);
+	pBars->addData(m_pbDate.toJulianDay() - m_d0, m_extraToday);
 	ui->plot->yAxis2->rescale();
 
 	updateChart();
@@ -144,8 +152,8 @@ void ExtraCashView::onWheelEvent(QWheelEvent * wEv)
 //	m_lastBal = ui->spinBox->value();
 	//int step = 200 * qrand() / RAND_MAX;
 	if(wEv->delta() > 0) {
-		ui->spinBox->setValue(m_lastBal);
-		m_date = m_date.addDays(1);
+		ui->spinBox->setValue(m_pbBalance);
+		m_pbDate = m_pbDate.addDays(1);
 	}
 	else {
 		keyPressEvent(0);
@@ -155,17 +163,16 @@ void ExtraCashView::onWheelEvent(QWheelEvent * wEv)
 
 void ExtraCashView::updateChart()
 {
-	//m_lastBal = ui->spinBox->value();
-	double t = m_date.toJulianDay() - m_d0;
+	double t = m_pbDate.toJulianDay() - m_d0;
 	if(!ui->plot->graph(1)->data()->isEmpty()) {
 		QCPData d1 = ui->plot->graph(1)->data()->last();
 		if (t <= d1.key)
 			t = d1.key + smallInc;
 	}
-	qDebug() << t << m_lastBal;
-	ui->plot->graph(1)->addData(t, m_lastBal);
+	ui->plot->graph(1)->addData(t, m_pbBalance);
+	ui->spinBox->setValue(m_pbBalance);
 
-	makePredictiPlot();
+	makePredictiPlot(t);
 	makePastiPlot();
 	makeMinSlope();
 
@@ -175,45 +182,31 @@ void ExtraCashView::updateChart()
 	ui->plot->replot();
 }
 
-void ExtraCashView::makePredictiPlot()
+void ExtraCashView::makePredictiPlot(double t)
 {
 	ui->plot->graph(2)->clearData();
-	double minPredict = m_lastBal;
-	auto temp = m_pExtraCache->user()->predictedFutureTransactions(1.0);
+	ui->plot->graph(2)->addData(t, m_pbBalance);
+	// the lowest predicted balance in the future
+	double minPredict = m_pbBalance;
+	double predBal = m_pbBalance;
+
+	auto temp = m_pExtraCache->user()->predictedFutureTransactions(0.5);
 	for(int i = 0; i < temp.count(); ++i) {
 		Transaction* trans = &temp[i];
 		// not do anything if it already came true
 		if (trans->flags & Transaction::CameTrue) {
-			qDebug() << "not charting prediction that came true";
+			LOG() << "not charting prediction that came true" << trans->amountDbl() << trans->date.toString() << trans->name << endl;
 			continue;
 		}
-		int dayTo = m_date.daysTo(trans->date);
-		if(dayTo == 0) {
-			for (auto dat = ui->plot->graph(1)->data()->begin(); dat != ui->plot->graph(1)->data()->end(); ++dat) {
-				//dat->value += trans->amountDbl();
-			}
-			m_lastBal = ui->plot->graph(1)->data()->last().value;
-			ui->spinBox->setValue(m_lastBal);
-			minPredict = m_lastBal;
-			qDebug() << "predicted today" << trans->amountDbl();
+		int dayTo = m_pbDate.daysTo(trans->date);
+		predBal += trans->amountDbl();
+		if(dayTo == 0) { // same day
+			LOG() << "predicted today " << trans->amountDbl() << endl;
 		}
 		if(dayTo > 0 && dayTo < dayFuture) {
-			// first point predicted
-			if(ui->plot->graph(2)->data()->isEmpty()) {
-				QCPData d = ui->plot->graph(1)->data()->last();
-				ui->plot->graph(2)->addData(d.key, d.value);
-			}
-			QCPData d1 = ui->plot->graph(1)->data()->last();
-			QCPData d2 = ui->plot->graph(2)->data()->last();
-			double predVal = d2.value + trans->amountDbl();
-			double t = d1.key + dayTo;
-			if (t <= d2.key)
-				t = d2.key + smallInc;
-			ui->plot->graph(2)->addData(t, predVal);
-			minPredict = qMin(minPredict, predVal);
-			if(dayTo < 5) {
-				//qDebug() << "fut" << dayTo << trans->amountDbl() << t;
-			}
+			double predT = t + dayTo;
+			ui->plot->graph(2)->addData(predT, predBal);
+			minPredict = qMin(minPredict, predBal);
 		}
 	}
 
@@ -230,7 +223,7 @@ void ExtraCashView::makePastiPlot()
 {
 	QCPGraph* graph = ui->plot->graph(3);
 	graph->clearData();
-	double minPredict = m_lastBal;
+	double minPredict = m_pbBalance;
 	auto temp = m_pExtraCache->user()->predictedFutureTransactions(1.0);
 	for(int i = 0; i < temp.count(); ++i) {
 		Transaction* trans = &temp[i];
@@ -239,7 +232,7 @@ void ExtraCashView::makePastiPlot()
 //			qDebug() << "not charting prediction that came true";
 //			continue;
 //		}
-		int dayTo = m_date.daysTo(trans->date);
+		int dayTo = m_pbDate.daysTo(trans->date);
 //		if(dayTo <== 0) {
 //			for (auto dat = ui->plot->graph(1)->data()->begin(); dat != ui->plot->graph(1)->data()->end(); ++dat) {
 //				//dat->value += trans->amountDbl();
@@ -273,7 +266,7 @@ void ExtraCashView::makeMinSlope()
 {
 	QCPGraph* graph = ui->plot->graph(4);
 	graph->clearData();
-	double tToday = m_date.toJulianDay() - m_d0;
+	double tToday = m_pbDate.toJulianDay() - m_d0;
 	double slushBase = m_pExtraCache->slushBaseStart();
 	if(graph->data()->isEmpty()) {
 		graph->addData(tToday, slushBase);
