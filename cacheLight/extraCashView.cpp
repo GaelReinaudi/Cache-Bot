@@ -87,7 +87,7 @@ void ExtraCashView::init()
 	}
 	m_pbDate = real.trans(m_ipb).date;
 	m_d0 = m_pbDate.toJulianDay();
-	LOG() << "initial pb balance"<< m_pbBalance << " at" << m_pbDate << endl;
+	LOG() << "initial pb balance"<< m_pbBalance << " at" << m_pbDate.toString() << endl;
 	LOG() << "initial pb trans("<< m_ipb <<")" << real.trans(m_ipb).name << endl;
 
 	ui->spinBox->setValue(m_pbBalance);
