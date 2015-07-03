@@ -25,6 +25,7 @@ public:
 public slots:
 	void onUserInjected(User* pUser);
 	void onBotInjected(Bot *bestBot);
+	void onHoverListIndex(QModelIndex index);
 
 private:
 	Ui::MetricViewer *ui;

@@ -16,6 +16,9 @@ MetricViewer::MetricViewer(QString userID)
 	m_pConnector = new CacheAccountConnector(userID);
 	connect(m_pConnector, SIGNAL(injected(User*)), this, SLOT(onUserInjected(User*)));
 	connect(m_pConnector, SIGNAL(botInjected(Bot*)), this, SLOT(onBotInjected(Bot*)));
+
+	ui->metricList->setMouseTracking(true);
+	connect(ui->metricList, SIGNAL(entered(QModelIndex)), this, SLOT(onHoverListIndex(QModelIndex)));
 }
 
 MetricViewer::~MetricViewer()
@@ -41,11 +44,10 @@ void MetricViewer::onUserInjected(User* pUser)
 	MetricSmoother<7>::get(CostRateMonthPercentileMetric<3, 99 >::get(pUser));
 	MetricSmoother<7>::get(MakeRateMonthPercentileMetric<3, 90 >::get(pUser));
 	MetricSmoother<7>::get(MakeRateMonthPercentileMetric<3, 99 >::get(pUser));
-	MetricSmoother<7>::get(Flow01<90, 90>::get(pUser));
-	MetricSmoother<7>::get(Flow01<95, 90>::get(pUser));
-	MetricSmoother<7>::get(Flow01<95, 95>::get(pUser));
-	MetricSmoother<7>::get(Flow01<99, 95>::get(pUser));
-//	MetricSmoother<7>::get(Flow01<100, 100>::get(pUser));
+	Flow01<95, 90>::get(pUser);
+	Flow01<95, 95>::get(pUser);
+	Flow01<99, 95>::get(pUser);
+	Flow01<99, 99>::get(pUser);
 
 	for (const QString& str: HistoMetric::allNames()) {
 		QColor color(qrand() % 192 + 64, qrand() % 192 + 64, qrand() % 192 + 64);
@@ -82,5 +84,16 @@ void MetricViewer::onUserInjected(User* pUser)
 void MetricViewer::onBotInjected(Bot* bestBot)
 {
 	bestBot->summarize();
+}
+
+void MetricViewer::onHoverListIndex(QModelIndex index)
+{
+	int iGraph = index.row();
+	for (int i = 0; i < ui->acPlot->graphCount(); ++i) {
+		QPen curPen = ui->acPlot->graph(i)->pen();
+		curPen.setWidth(i == iGraph ? 4 : 1);
+		ui->acPlot->graph(i)->setPen(curPen);
+	}
+	ui->acPlot->replot();
 }
 

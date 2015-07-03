@@ -115,8 +115,8 @@ protected:
 	Flow01(User* pUser)
 		: UserMetric(Name(), pUser)
 	{
-		inMet = MakeRateMonthPercentileMetric<1, InPercentile>::get(user());
-		outMet = CostRateMonthPercentileMetric<1, OutPercentile>::get(user());
+		inMet =  MetricSmoother<7>::get(MakeRateMonthPercentileMetric<1, InPercentile>::get(user()));
+		outMet = MetricSmoother<7>::get(CostRateMonthPercentileMetric<1, OutPercentile>::get(user()));
 	}
 //	Flow01(const QString& name, User* pUser)
 //		: UserMetric(name, pUser)
