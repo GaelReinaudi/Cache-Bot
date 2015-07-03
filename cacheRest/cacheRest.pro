@@ -20,11 +20,18 @@ HEADERS += \
 unix {
 LIBS += -L$${SRC_DIR}/bin/$${DEBUGRELEASE} -lcore
 }
+macx {
+LIBS += -L$${SRC_DIR}/bin/$${DEBUGRELEASE} -lcore
+}
 win32 {
 LIBS += -L$${SRC_DIR}/bin/$${DEBUGRELEASE} -lcore
 }
 
 unix {
+	target.path = /usr/lib
+	INSTALLS += target
+}
+macx {
 	target.path = /usr/lib
 	INSTALLS += target
 }

@@ -22,6 +22,10 @@ unix {
 LIBS += -L$${SRC_DIR}/bin/$${DEBUGRELEASE} -lcacheRest
 LIBS += -L$${SRC_DIR}/bin/$${DEBUGRELEASE} -lcore
 }
+macx {
+LIBS += -L$${SRC_DIR}/bin/$${DEBUGRELEASE} -lcacheRest
+LIBS += -L$${SRC_DIR}/bin/$${DEBUGRELEASE} -lcore
+}
 win32 {
 LIBS += -L$${SRC_DIR}/bin/$${DEBUGRELEASE} -lcacheRest
 LIBS += -L$${SRC_DIR}/bin/$${DEBUGRELEASE} -lcore
