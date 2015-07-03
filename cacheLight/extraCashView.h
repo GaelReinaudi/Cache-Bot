@@ -11,16 +11,16 @@
 class ExtraCache;
 
 namespace Ui {
-class MainWindow;
+class ExtraCashView;
 }
 
-class MainWindow : public QMainWindow
+class ExtraCashView : public QMainWindow
 {
 	Q_OBJECT
 
 public:
-	explicit MainWindow(QString userID, QWidget *parent = 0);
-	~MainWindow();
+	explicit ExtraCashView(QString userID, QWidget *parent = 0);
+	~ExtraCashView();
 	void keyPressEvent(QKeyEvent *event);
 
 protected slots:
@@ -62,7 +62,7 @@ private:
 	QNetworkAccessManager *manager = 0;
 
 private:
-	Ui::MainWindow *ui;
+	Ui::ExtraCashView *ui;
 	ExtraCache* m_pExtraCache = 0;
 	QDate m_date;
 	int m_d0 = 0;

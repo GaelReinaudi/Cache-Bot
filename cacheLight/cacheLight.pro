@@ -14,17 +14,17 @@ INCLUDEPATH  += ./ \
 
 SOURCES += \
 	main.cpp \
-	mainwindow.cpp \
 	$$PWD/../extraCash/extraCache.cpp \
-	$$PWD/../AccountChart/qcustomplot/qcustomplot.cpp
+	$$PWD/../AccountChart/qcustomplot/qcustomplot.cpp \
+    extraCashView.cpp
 
 HEADERS  += \
-	mainwindow.h \
 	$$PWD/log.h \
 	$$PWD/../extraCache/extraCache.h \
-	$$PWD/../AccountChart/qcustomplot/qcustomplot.h
+	$$PWD/../AccountChart/qcustomplot/qcustomplot.h \
+    extraCashView.h
 
-FORMS    += mainwindow.ui
+FORMS    += extraCashView.ui
 
 unix {
 LIBS += -L$${SRC_DIR}/bin/$${DEBUGRELEASE} -lcacheRest

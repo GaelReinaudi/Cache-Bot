@@ -79,7 +79,7 @@ signals:
 	void loggedIn(bool);
 	void repliedIds(QString);
 	void repliedUserData(QString);
-	void repliedExtraCache(QString);
+	void repliedSendExtraCache(QString);
 	void repliedSendNewBot(QString);
 	void repliedBestBot(QString);
 

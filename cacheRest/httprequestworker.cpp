@@ -324,7 +324,7 @@ void HttpRequestWorker::on_manager_finished(QNetworkReply *reply) {
 		emit repliedUserData(response);
 	}
 	else if(reply->request().url().toString().startsWith(SendExtraCashRoute)) {
-		emit repliedExtraCache(response);
+		emit repliedSendExtraCache(response);
 	}
 	else if(reply->request().url().toString().startsWith(SendNewBotRoute)) {
 		emit repliedSendNewBot(response);

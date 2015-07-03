@@ -78,9 +78,9 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 	}
 }
 
-void ExtraCache::onRepliedExtraCache(QString strData)
+void ExtraCache::onRepliedSendExtraCache(QString strData)
 {
-	CacheAccountConnector::onRepliedExtraCache(strData);
+	CacheAccountConnector::onRepliedSendExtraCache(strData);
 	if(CacheAccountConnector::flags & CacheAccountConnector::AutoExit)
 		qApp->exit();
 }

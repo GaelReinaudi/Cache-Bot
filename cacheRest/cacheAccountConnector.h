@@ -23,7 +23,7 @@ protected slots:
 	virtual void onBotInjected(Bot *bestBot);
 	virtual void onRepliedSendNewBot(QString strData);
 	virtual void onRepliedBestBot(QString strData);
-	virtual void onRepliedExtraCache(QString strData);
+	virtual void onRepliedSendExtraCache(QString strData);
 
 signals:
 	void injected(User* pUser);

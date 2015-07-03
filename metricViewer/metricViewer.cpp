@@ -35,16 +35,17 @@ void MetricViewer::onUserInjected(User* pUser)
 {
 	MetricSmoother<7>::get(CostRateMonthPercentileMetric<1, 90 >::get(pUser));
 	MetricSmoother<7>::get(CostRateMonthPercentileMetric<1, 99 >::get(pUser));
-	MetricSmoother<7>::get(CostRateMonthPercentileMetric<1, 100>::get(pUser));
 	MetricSmoother<7>::get(MakeRateMonthPercentileMetric<1, 90 >::get(pUser));
 	MetricSmoother<7>::get(MakeRateMonthPercentileMetric<1, 99 >::get(pUser));
-	MetricSmoother<7>::get(MakeRateMonthPercentileMetric<1, 100>::get(pUser));
 	MetricSmoother<7>::get(CostRateMonthPercentileMetric<3, 90 >::get(pUser));
 	MetricSmoother<7>::get(CostRateMonthPercentileMetric<3, 99 >::get(pUser));
-	MetricSmoother<7>::get(CostRateMonthPercentileMetric<3, 100>::get(pUser));
 	MetricSmoother<7>::get(MakeRateMonthPercentileMetric<3, 90 >::get(pUser));
 	MetricSmoother<7>::get(MakeRateMonthPercentileMetric<3, 99 >::get(pUser));
-	MetricSmoother<7>::get(MakeRateMonthPercentileMetric<3, 100>::get(pUser));
+	MetricSmoother<7>::get(Flow01<90, 90>::get(pUser));
+	MetricSmoother<7>::get(Flow01<95, 90>::get(pUser));
+	MetricSmoother<7>::get(Flow01<95, 95>::get(pUser));
+	MetricSmoother<7>::get(Flow01<99, 95>::get(pUser));
+//	MetricSmoother<7>::get(Flow01<100, 100>::get(pUser));
 
 	for (const QString& str: HistoMetric::allNames()) {
 		QColor color(qrand() % 192 + 64, qrand() % 192 + 64, qrand() % 192 + 64);

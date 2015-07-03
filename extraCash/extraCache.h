@@ -21,7 +21,7 @@ public:
 protected:
 	void onUserInjected(User* pUser) override;
 	void onBotInjected(Bot *bestBot) override;
-	void onRepliedExtraCache(QString strData) override;
+	void onRepliedSendExtraCache(QString strData) override;
 
 private:
 	void computeMinSlopeOver(int numDays);

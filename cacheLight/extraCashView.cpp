@@ -1,5 +1,5 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+#include "extraCashView.h"
+#include "ui_extraCashView.h"
 #include "cacherest.h"
 #include "../extraCash/extraCache.h"
 #include "userMetrics.h"
@@ -10,9 +10,9 @@ const int playBackStartAgo = 210;
 
 double smallInc = 1e-3;
 
-MainWindow::MainWindow(QString userID, QWidget *parent) :
+ExtraCashView::ExtraCashView(QString userID, QWidget *parent) :
 	QMainWindow(parent),
-	ui(new Ui::MainWindow)
+	ui(new Ui::ExtraCashView)
 {
 	ui->setupUi(this);
 
@@ -54,12 +54,12 @@ MainWindow::MainWindow(QString userID, QWidget *parent) :
 	connect(m_pExtraCache, SIGNAL(botInjected(Bot*)), this, SLOT(init()));
 }
 
-MainWindow::~MainWindow()
+ExtraCashView::~ExtraCashView()
 {
 	delete ui;
 }
 
-void MainWindow::init()
+void ExtraCashView::init()
 {
 	m_date = QDate::currentDate();
 	ui->costLive50SpinBox->setValue(CostRateMonthPercentileMetric<6, 50>::get(m_pExtraCache->user())->value(m_date));
@@ -88,7 +88,7 @@ void MainWindow::init()
 	updateChart();
 }
 
-void MainWindow::keyPressEvent(QKeyEvent *event)
+void ExtraCashView::keyPressEvent(QKeyEvent *event)
 {
 	int maxDayMove = 1;
 	int minDayMove = 0;
@@ -138,7 +138,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 	updateChart();
 }
 
-void MainWindow::onWheelEvent(QWheelEvent * wEv)
+void ExtraCashView::onWheelEvent(QWheelEvent * wEv)
 {
 
 //	m_lastBal = ui->spinBox->value();
@@ -153,7 +153,7 @@ void MainWindow::onWheelEvent(QWheelEvent * wEv)
 	updateChart();
 }
 
-void MainWindow::updateChart()
+void ExtraCashView::updateChart()
 {
 	//m_lastBal = ui->spinBox->value();
 	double t = m_date.toJulianDay() - m_d0;
@@ -175,7 +175,7 @@ void MainWindow::updateChart()
 	ui->plot->replot();
 }
 
-void MainWindow::makePredictiPlot()
+void ExtraCashView::makePredictiPlot()
 {
 	ui->plot->graph(2)->clearData();
 	double minPredict = m_lastBal;
@@ -226,7 +226,7 @@ void MainWindow::makePredictiPlot()
 	}
 }
 
-void MainWindow::makePastiPlot()
+void ExtraCashView::makePastiPlot()
 {
 	QCPGraph* graph = ui->plot->graph(3);
 	graph->clearData();
@@ -269,7 +269,7 @@ void MainWindow::makePastiPlot()
 	}
 }
 
-void MainWindow::makeMinSlope()
+void ExtraCashView::makeMinSlope()
 {
 	QCPGraph* graph = ui->plot->graph(4);
 	graph->clearData();

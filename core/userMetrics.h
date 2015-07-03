@@ -108,5 +108,49 @@ protected:
 	}
 };
 
+template <int InPercentile, int OutPercentile>
+class Flow01 : public UserMetric
+{
+protected:
+	Flow01(User* pUser)
+		: UserMetric(Name(), pUser)
+	{
+		inMet = MakeRateMonthPercentileMetric<1, InPercentile>::get(user());
+		outMet = CostRateMonthPercentileMetric<1, OutPercentile>::get(user());
+	}
+//	Flow01(const QString& name, User* pUser)
+//		: UserMetric(name, pUser)
+//	{ }
+	static QString Name() {
+		return QString("Flow01InP%1OutP%2").arg(InPercentile).arg(OutPercentile);
+	}
+
+public:
+	static Flow01<InPercentile, OutPercentile>* get(User* pUser) {
+		auto pMet = HistoMetric::get(Name());
+		if (pMet)
+			return reinterpret_cast<Flow01<InPercentile, OutPercentile>*>(pMet);
+		return new Flow01<InPercentile, OutPercentile>(pUser);
+	}
+
+protected:
+	double computeFor(const QDate& date, bool& isValid) override {
+		double in = inMet->value(date);
+		double out = outMet->value(date);
+		isValid = inMet->isValid(date) && outMet->isValid(date);
+		isValid &= in > 0.0;
+		if (!isValid)
+			return 0.0;
+		double flow = in + out;
+		flow /= in;
+		flow *= 100;
+		return flow;
+	}
+private:
+	HistoMetric* inMet;
+	HistoMetric* outMet;
+};
+
+
 
 #endif // USERMETRICS_H

@@ -26,7 +26,7 @@ void CacheAccountConnector::onLoggedIn(bool didLogin)
 		connect(m_user, SIGNAL(botInjected(Bot*)), this, SLOT(onBotInjected(Bot*)));
 		connect(m_user, SIGNAL(botInjected(Bot*)), this, SIGNAL(botInjected(Bot*)));
 		connect(CacheRest::Instance()->worker, SIGNAL(repliedBestBot(QString)), this, SLOT(onRepliedBestBot(QString)));
-		connect(CacheRest::Instance()->worker, SIGNAL(repliedExtraCache(QString)), this, SLOT(onRepliedExtraCache(QString)));
+		connect(CacheRest::Instance()->worker, SIGNAL(repliedSendExtraCache(QString)), this, SLOT(onRepliedSendExtraCache(QString)));
 	}
 	else {
 		qWarning() << "could not log into the server";
@@ -77,7 +77,7 @@ void CacheAccountConnector::onRepliedBestBot(QString strData)
 	Q_UNUSED(strData);
 }
 
-void CacheAccountConnector::onRepliedExtraCache(QString strData)
+void CacheAccountConnector::onRepliedSendExtraCache(QString strData)
 {
 	Q_UNUSED(strData);
 }
