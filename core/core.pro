@@ -34,11 +34,3 @@ HEADERS += \
     histoMetric.h \
     userMetrics.h
 
-unix {
-	target.path = /usr/lib
-	INSTALLS += target
-}
-macx {
-	target.path = /usr/lib
-	INSTALLS += target
-}

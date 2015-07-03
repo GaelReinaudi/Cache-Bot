@@ -27,11 +27,3 @@ win32 {
 LIBS += -L$${SRC_DIR}/bin/$${DEBUGRELEASE} -lcore
 }
 
-unix {
-	target.path = /usr/lib
-	INSTALLS += target
-}
-macx {
-	target.path = /usr/lib
-	INSTALLS += target
-}
