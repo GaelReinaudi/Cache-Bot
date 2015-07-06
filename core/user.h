@@ -117,13 +117,13 @@ private:
 			m_hashBundles[h]->append(&t);
 			m_allTransBundle.append(&t);
 		}
-		// assigns the index of the hash to the transactions
-		for (int i = 0; i < hashBundles().count(); ++i) {
-			int h = hashBundles().keys()[i];
-			for (int j = 0; j < hashBundles()[h]->count(); ++j) {
-				hashBundles()[h]->trans(j).indexHash = i;
-			}
-		}
+//		// assigns the index of the hash to the transactions
+//		for (int i = 0; i < hashBundles().count(); ++i) {
+//			int h = hashBundles().keys()[i];
+//			for (int j = 0; j < hashBundles()[h]->count(); ++j) {
+//				hashBundles()[h]->trans(j).indexHash = i;
+//			}
+//		}
 
 		//qDebug() << m_hashBundles.count() << m_hashBundles.keys().first() << m_hashBundles.keys().last();
 	}

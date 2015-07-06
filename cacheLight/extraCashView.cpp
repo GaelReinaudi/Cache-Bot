@@ -224,7 +224,7 @@ void ExtraCashView::makePastiPlot()
 	QCPGraph* graph = ui->plot->graph(3);
 	graph->clearData();
 	double minPredict = m_pbBalance;
-	auto temp = m_pExtraCache->user()->predictedFutureTransactions(1.0);
+	auto temp = m_pExtraCache->user()->predictedFutureTransactions(0.5);
 	for(int i = 0; i < temp.count(); ++i) {
 		Transaction* trans = &temp[i];
 //		// not do anything if it already came true

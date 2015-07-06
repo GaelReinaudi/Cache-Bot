@@ -19,7 +19,7 @@ public:
 	QDate date; // "2015-01-28"
 	QStringList categories; // ["Food and Drink", "Restaurants"] or ["Transfer", "Payroll"]
 	NameHashVector nameHash;
-	int indexHash = -1;
+//	int indexHash = -1;
 	// used to make the distance arbitrary far from anything
 	int dimensionOfVoid = 0;
 

@@ -2,6 +2,7 @@
 #include "AccRegPrimits.h"
 #include "botContext.h"
 #include "userMetrics.h"
+#include "oracle.h"
 
 Bot::Bot(QJsonObject jsonBot, QObject *parent)
 	:DBobj(jsonBot["_id"].toString(), parent)
@@ -27,11 +28,23 @@ Bot::Bot(QJsonObject jsonBot, QObject *parent)
 	qDebug() << m_botStrings;
 }
 
+Bot::~Bot()
+{
+}
+
 void Bot::init(BotContext *context) {
 	m_context = context;
 	BotContext::LIMIT_NUM_FEATURES = BotContext::MAX_NUM_FEATURES;
 	Puppy::initializeTree(m_puppyTree, *m_context, m_botStrings);
 	qDebug() << m_puppyTree.toStr();
+}
+
+double Bot::evaluate()
+{
+	double fit;
+	m_puppyTree.interpret(&fit, *m_context);
+
+	return fit;
 }
 
 QJsonObject Bot::summarize()
@@ -40,8 +53,7 @@ QJsonObject Bot::summarize()
 	jsonObj.insert("features", QJsonArray());
 	m_puppyTree.mValid = false;
 	m_context->m_summaryJsonObj = &jsonObj;
-	double fit;
-	m_puppyTree.interpret(&fit, *m_context);
+	double fit = evaluate();
 	m_context->m_summaryJsonObj = 0;
 
 	jsonObj.insert("fit", fit);
@@ -53,6 +65,17 @@ QJsonObject Bot::summarize()
 	LOG() << "tree (" << fit << "): " << m_puppyTree.toStr() << endl;
 	LOG() << "    " << jsonStr << endl;
 	return jsonObj;
+}
+
+Oracle *Bot::makeOracle()
+{
+	if (!m_mainOracle) {
+		LOG() << "Making new Oracle" << endl;
+		m_mainOracle = new Oracle(this);
+	}
+
+
+	return m_mainOracle;
 }
 
 QVector<Transaction> Bot::predictTrans(double threshProba)

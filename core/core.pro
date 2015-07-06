@@ -18,7 +18,8 @@ SOURCES += \
     fund.cpp \
     botContext.cpp \
     histoMetric.cpp \
-    userMetrics.cpp
+    userMetrics.cpp \
+    oracle.cpp
 
 
 HEADERS += \
@@ -32,5 +33,6 @@ HEADERS += \
     fund.h \
     botContext.h \
     histoMetric.h \
-    userMetrics.h
+    userMetrics.h \
+    oracle.h
 

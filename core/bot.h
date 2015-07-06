@@ -4,18 +4,7 @@
 #include "common.h"
 #include "puppy/Puppy.hpp"
 class BotContext;
-//class Bot;
-//
-//class CORESHARED_EXPORT BotStats
-//{
-//public:
-//	BotStats(Bot* parent) {};
-//
-//public:
-//
-//private:
-//	Bot* m_bot;
-//};
+class Oracle;
 
 class CORESHARED_EXPORT Bot : public DBobj
 {
@@ -23,12 +12,14 @@ class CORESHARED_EXPORT Bot : public DBobj
 //	Bot(BotContext* context, const Puppy::Tree& tree);
 public:
 	Bot(QJsonObject jsonBot, QObject* parent = 0);
+	~Bot();
 	//! builds the tree from the previously loaded json
 	void init(BotContext* context);
 	//! summaries the performances of the bot in a json
 	QJsonObject summarize();
 	//! predicted transactions
 	QVector<Transaction> predictTrans(double threshProba);
+	Oracle* makeOracle();
 
 //public:
 //	static Bot fromTree();
@@ -37,12 +28,16 @@ public:
 		return m_lastStats;
 	}
 
+protected:
+	double evaluate();
+
 private:
 	QDateTime m_created;
 	Puppy::Tree m_puppyTree;
 	QStringList m_botStrings;
 	BotContext* m_context;
 	QJsonObject m_lastStats;
+	Oracle* m_mainOracle = 0;
 
 private:
 	void postTreatment(QJsonObject &sumObj, const QVector<Transaction> &predictedTrans);

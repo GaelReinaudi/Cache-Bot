@@ -18,6 +18,19 @@ public:
 		lResult += lArg2;
 	}
 };
+class Avg : public Puppy::Primitive
+{
+public:
+	Avg() : Primitive(2, "AVG") { }
+	virtual void execute(void* outDatum, Puppy::Context& ioContext)  {
+		double& lResult = *(double*)outDatum;
+		double lArg2;
+		getArgument(0, &lResult, ioContext);
+		getArgument(1, &lArg2, ioContext);
+		lResult += lArg2;
+		lResult *= 0.5;
+	}
+};
 class Add4 : public Puppy::Primitive
 {
 public:
@@ -112,6 +125,7 @@ public:
 		return retObj;
 	}
 	bool isFeature() const override { return true; }
+protected:
 	virtual void getArgs(Puppy::Context &ioContext) { Q_UNUSED(ioContext); }
 	virtual void cleanArgs() {}
 
@@ -132,9 +146,7 @@ public:
 	static QString rootName() {
 		return "ROOT";
 	}
-	bool isRoot() const override {
-		return true;
-	}
+	bool isRoot() const override { return true; }
 	void execute(void* outDatum, Puppy::Context& ioContext) override {
 		double& lResult = *(double*)outDatum;
 		lResult = 0.0;
@@ -175,7 +187,7 @@ protected:
 	FeatureMonthlyAmount(QString featureName)
 		: FeaturePeriodicAmount(featureName)
 	{ }
-public:
+protected:
 	int approxSpacingPayment() override { return 31; }
 	void getArgs(Puppy::Context &ioContext) override {
 		// if we are forcing a given hashed bundle
@@ -238,9 +250,8 @@ public:
 			retObj.insert("info", str);
 			str = QString("On the ") + QString::number(m_dayOfMonth) + "th, ";
 			str += QString("hash: ") + QString::number(m_bundle.trans(0).nameHash.hash());
-			str += QString("  ind: ") + QString::number(m_bundle.trans(0).indexHash);
 			retObj.insert("hash", m_bundle.trans(0).nameHash.hash());
-			retObj.insert("indH", m_bundle.trans(0).indexHash);
+//			retObj.insert("indH", m_bundle.trans(0).indexHash);
 		}
 
 		return retObj;
@@ -275,7 +286,7 @@ public:
 	FeatureBiWeeklyAmount()
 		: FeatureMonthlyAmount("BiWeeklyIncome")
 	{ }
-	int approxSpacingPayment() override { return 15; }
+	int approxSpacingPayment() override { return 17; }
 	virtual void cleanArgs() override {
 		m_dayOfMonth2 = m_dayOfMonth+14;//(m_dayOfMonth / 32) % 31;
 		++m_dayOfMonth2;

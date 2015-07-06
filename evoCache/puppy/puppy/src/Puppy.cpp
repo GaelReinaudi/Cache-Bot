@@ -346,7 +346,7 @@ unsigned int Puppy::initializeTree(Puppy::Tree& ioTree,
 									   int depthAtCall /*= 0*/)
 {
 	QString name = "0";
-	// if we exausted the nodeNames, it should be because we have only that meany feature
+	// if we exausted the nodeNames, it should be because we have only that many features
 	if (nodeNames.isEmpty()) {
 		Q_ASSERT(depthAtCall == DEPTH_OF_FEATURES);
 	}

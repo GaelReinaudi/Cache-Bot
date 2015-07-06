@@ -179,16 +179,11 @@ void EvolutionSpinner::runEvolution() {
 			calculateStats(lPopulation, i);
 		}
 		LOG() << "End of evolution" << endl;
-
-//		QVector<Transaction> futureTransactions = predictTrans(veryBestTree, THRESHOLD_PROBA_BILL);
-//		m_context->m_pAccount->toJson(futureTransactions, "predicted");
-
 	}
 
 	m_doSpin = false;
 	qDebug() << "Exiting evolution. Features with positive fitness:" << finalBotObject["features"].toArray().count();
 	emit finishedEvolution(finalBotObject);
-//	qApp->exit();
 }
 
 unsigned int EvolutionSpinner::evaluateSymbReg(std::vector<Tree>& ioPopulation,

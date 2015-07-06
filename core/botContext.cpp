@@ -13,6 +13,7 @@ BotContext::BotContext(User *pUser)
 	LOG() << "Creating evolution context" << endl;
 	mRandom.seed(CONTEXT_SEED_DEFAULT);
 	insert(new Add);
+	insert(new Avg);
 	insert(new Subtract);
 	insert(new Multiply);
 	insert(new Divide);
