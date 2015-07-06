@@ -286,7 +286,7 @@ public:
 	FeatureBiWeeklyAmount()
 		: FeatureMonthlyAmount("BiWeeklyIncome")
 	{ }
-	int approxSpacingPayment() override { return 17; }
+	int approxSpacingPayment() override { return 17; } // +2d: gives some room for late payment
 	virtual void cleanArgs() override {
 		m_dayOfMonth2 = m_dayOfMonth+14;//(m_dayOfMonth / 32) % 31;
 		++m_dayOfMonth2;

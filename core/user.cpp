@@ -69,6 +69,8 @@ void User::injectJsonData(QString jsonStr)
 	//////// anihilates transactions based on certain rules, such as internal transfers
 	for (int i = 0; i < m_allTransactions.count(); ++i) {
 		Transaction* pT = &m_allTransactions.transArray()[i];
+		Transaction* pBestMatchN = 0;
+		qint64 bestDist = 999999999;
 		// for a ppositive transcation (rare)
 		if (pT->amountInt() > 0 && !pT->isInternal()) {
 			Transaction tP(*pT);
@@ -77,14 +79,21 @@ void User::injectJsonData(QString jsonStr)
 			for (int j = 0; j < m_allTransactions.count(); ++j) {
 				Transaction* pN = &m_allTransactions.transArray()[j];
 				// dist max 4 days, 2 parts of kla, and no hash sensitivity
-				if (tP.distanceWeighted<3, 2, 1024*1024*1024>(*pN) < Transaction::LIMIT_DIST_TRANS
-						&& !pN->isInternal()) {
-					pT->flags |= Transaction::Flag::Internal;
-					pN->flags |= Transaction::Flag::Internal;
-					LOG() << "Matching internal transactions" << endl;
-					LOG() << pT->name << pT->amountInt() << endl;
-					LOG() << pN->name << pN->amountInt() << endl;
+				qint64 d = tP.distanceWeighted<3, 2, 1024*1024*1024>(*pN);
+				if (d < Transaction::LIMIT_DIST_TRANS
+						&& pN->amountInt() < 0 && !pN->isInternal()) {
+					if (d < bestDist) {
+						bestDist = d;
+						pBestMatchN = pN;
+					}
 				}
+			}
+			if (pT && pBestMatchN) {
+				pT->flags |= Transaction::Flag::Internal;
+				pBestMatchN->flags |= Transaction::Flag::Internal;
+				LOG() << "Matching internal transactions" << endl;
+				LOG() << pT->name << pT->amountDbl() << "" << pT->date.toString() << endl;
+				LOG() << pBestMatchN->name << pBestMatchN->amountDbl() << "" << pBestMatchN->date.toString() << endl;
 			}
 		}
 	}

@@ -161,7 +161,7 @@ void AHashPlot::loadCompressedAmount(User *pUser)
 			break;
 		default:
 			pGraph = m_hashGraphs[h].at(3);
-			qDebug() << "tr.type() =" << tr.type();
+			LOG() << "default: tr.type() =" << tr.type() << tr.name << tr.date.toString() << endl;
 		}
 		pGraph->addData(tr.compressedAmount(), d);
 	}
