@@ -34,7 +34,9 @@ template <int Lambda>
 static inline double expoInt(qint64 x) {
 	return qExp(double(x) * (1.0 / double(Lambda)));
 }
-
+static inline bool randBool(double probaTrue) {
+	return qrand() < RAND_MAX * probaTrue;
+}
 
 
 class CORESHARED_EXPORT DBobj : public QObject

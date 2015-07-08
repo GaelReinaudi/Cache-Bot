@@ -71,7 +71,7 @@ Oracle *Bot::makeOracle()
 {
 	if (!m_mainOracle) {
 		LOG() << "Making new Oracle" << endl;
-		m_mainOracle = new Oracle(this);
+//		m_mainOracle = new Oracle(this);
 	}
 
 

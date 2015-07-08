@@ -115,6 +115,8 @@ public:
 		QJsonObject retObj;
 		retObj.insert("name", QString::fromStdString(getName()));
 		retObj.insert("numArgs", int(getNumberArguments()));
+		retObj.insert("fitness", m_fitness);
+		retObj.insert("billProba", m_billProba);
 		QJsonArray argList;
 		for (unsigned int i = 0; i < getNumberArguments(); ++i) {
 			double lArgi = 0.0;
@@ -134,6 +136,8 @@ protected:
 	// if any, the hash to filter the transaction on
 	int m_filterHash = -1;
 
+	double m_fitness = 0.0;
+	double m_billProba = 0.0;
 };
 
 class CacheBotRootPrimitive : public AccountFeature
@@ -198,7 +202,7 @@ protected:
 			std::string nodeName = QString("h%1").arg(m_filterHash).toStdString();
 			std::string nodeKLA = QString("kla%1").arg(avgKLA).toStdString();
 			bool ok = tryReplaceArgumentNode(2, nodeName.c_str(), ioContext);
-			ok &= tryReplaceArgumentNode(3, nodeKLA.c_str(), ioContext);
+//			ok &= tryReplaceArgumentNode(3, nodeKLA.c_str(), ioContext);
 			if(!ok) {
 				LOG() << "Could not replace the node with " << nodeName.c_str() << endl;
 			}
@@ -230,11 +234,9 @@ protected:
 		++m_dayOfMonth;
 	}
 
-	virtual QJsonObject toJson(Puppy::Context& ioContext) {
+	QJsonObject toJson(Puppy::Context& ioContext) override {
 		QJsonObject retObj = FeaturePeriodicAmount::toJson(ioContext);
 		retObj.insert("dayOfMonth", m_dayOfMonth);
-		retObj.insert("fitness", m_fitness);
-		retObj.insert("billProba", m_billProba);
 		retObj.insert("labels", QJsonArray::fromStringList(m_bundle.uniqueNames()));
 		retObj.insert("tot$", m_bundle.sumDollar());
 		retObj.insert("consecutive", m_consecMonthBeforeMissed);
@@ -273,11 +275,9 @@ protected:
 	int m_kla = 0;
 	int m_b[4];
 	// characteristics
-	double m_fitness = 0.0;
 	int m_consecMonthBeforeMissed = 0;
 	int m_consecMonth = 0;
 	int m_consecMissed = 0;
-	double m_billProba = 0;
 };
 
 class FeatureBiWeeklyAmount : public FeatureMonthlyAmount

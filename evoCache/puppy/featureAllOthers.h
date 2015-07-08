@@ -31,10 +31,8 @@ public:
 		AccountFeature::cleanArgs();
 	}
 
-	virtual QJsonObject toJson(Puppy::Context& ioContext) {
+	QJsonObject toJson(Puppy::Context& ioContext) override {
 		QJsonObject retObj = AccountFeature::toJson(ioContext);
-		retObj.insert("fitness", m_fitness);
-		retObj.insert("billProba", m_billProba);
 		retObj.insert("avgDayIn099", m_avgDayIn099);
 		retObj.insert("avgDayOut099", m_avgDayOut099);
 		retObj.insert("avgDayIn90", m_avgDayIn90);
@@ -56,8 +54,6 @@ private:
 	double m_avgDayOut95 = 0.0;
 	double m_avgDayIn099 = 0.0;
 	double m_avgDayOut099 = 0.0;
-	double m_fitness = 0.0;
-	double m_billProba = 0;
 };
 
 #endif // FEATUREALLOTHERS_H
