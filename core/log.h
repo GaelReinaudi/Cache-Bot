@@ -34,4 +34,6 @@ public:
 
 #define LOG() logger::Instance()->stream()
 
+#define noLOG(level) QDataStream(0)
+
 #endif // LOG_H

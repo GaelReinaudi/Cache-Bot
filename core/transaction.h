@@ -74,6 +74,7 @@ public:
 //		d += LIMIT_DIST_TRANS * qint64(absInt(indexHash - other.indexHash)) / mIH;
 		d |= (1<<20) * qint64(absInt(dimensionOfVoid - other.dimensionOfVoid));
 		d |= (1<<20) * qint64(isInternal() || other.isInternal());
+		d |= (1<<20) * qint64((amountInt() > 0 && other.amountInt() < 0) || (amountInt() < 0 && other.amountInt() > 0));
 		if(log) {
 			LOG() << "dist " << d
 				<< QString(" = %1 x day(%2)").arg(double(LIMIT_DIST_TRANS)/mD).arg(absInt(jDay() - other.jDay()))

@@ -1,5 +1,6 @@
 #include "featureStatDistrib.h"
 
+#define MIN_TRANSACTIONS_FOR_STAT 4
 
 void FeatureStatDistrib::getArgs(Puppy::Context &ioContext) {
 	AccountFeature::getArgs(ioContext);
@@ -41,7 +42,7 @@ void FeatureStatDistrib::execute(void *outDatum, Puppy::Context &ioContext)
 	m_modelTrans.nameHash.setFromHash(m_hash);
 	m_modelTrans.setAmount(-1.0); // only negative prices will have a usable distance
 	m_modelTrans.date = lastDate;
-	const int maxHashDist = 5;
+	const int maxHashDist = 2;
 
 	m_bundle.clear();
 	for (int i = 0; i < allTrans.count(); ++i) {
@@ -54,7 +55,8 @@ void FeatureStatDistrib::execute(void *outDatum, Puppy::Context &ioContext)
 			trans.dimensionOfVoid++;
 		}
 	}
-	if (m_bundle.count() <= 4) {
+	int numBund = m_bundle.count();
+	if (numBund <= MIN_TRANSACTIONS_FOR_STAT) {
 		m_fitness = 0.0;
 		m_billProba = 0.0;
 		output = m_fitness;
@@ -64,24 +66,26 @@ void FeatureStatDistrib::execute(void *outDatum, Puppy::Context &ioContext)
 	QDate firstDate = m_bundle.trans(0).date;
 
 	m_daysBundle = firstDate.daysTo(lastDate);
-	m_dayProba = m_bundle.count() / m_daysBundle;
+	m_dayProba = numBund / m_daysBundle;
 
-	double totkla = qAbs(kindaLog(m_bundle.sumDollar()));
-	m_fitness = totkla;
 	m_billProba = m_dayProba;
+	m_fitness = qAbs(kindaLog(m_bundle.sumDollar()));
+	m_fitness = numBund * numBund;
+	m_fitness /= MIN_TRANSACTIONS_FOR_STAT * MIN_TRANSACTIONS_FOR_STAT;
+	m_fitness *= m_dayProba;
 	output = m_fitness;
+
 	if (ioContext.m_summaryJsonObj) {
-//		LOG() << "FeatureStatDistrib #" << m_bundle.count()
-//			  << "fit" << m_fitness
-//			  << "hash" << m_hash
-//			  << "days" << m_daysBundle
-//			  << "proba" << m_dayProba
-//			  << endl;
 		if(m_billProba > 0.0) {
 			QJsonArray features = (*ioContext.m_summaryJsonObj)["features"].toArray();
 			features.append(toJson(ioContext));
 			ioContext.m_summaryJsonObj->insert("features", features);
 		}
+		for (int i = 0; i < numBund; ++i) {
+			Transaction& t = m_bundle.trans(i);
+			emit ioContext.m_pUser->botContext()->matchedTransaction(t.time_t(), t.amountDbl());
+		}
+//		qDebug() << firstDate << lastDate;
 	}
 }
 

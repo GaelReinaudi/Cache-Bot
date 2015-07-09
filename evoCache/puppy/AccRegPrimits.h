@@ -119,6 +119,7 @@ public:
 		retObj.insert("billProba", m_billProba);
 		retObj.insert("labels", QJsonArray::fromStringList(m_bundle.uniqueNames()));
 		retObj.insert("tot$", m_bundle.sumDollar());
+		retObj.insert("numBund", m_bundle.count());
 		QJsonArray argList;
 		for (unsigned int i = 0; i < getNumberArguments(); ++i) {
 			double lArgi = 0.0;
