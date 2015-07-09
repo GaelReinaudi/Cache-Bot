@@ -13,11 +13,15 @@ public:
 	~FeatureStatDistrib() {}
 
 protected:
-	void getArgs(Puppy::Context &ioContext) override {
-		AccountFeature::getArgs(ioContext);
-	}
+	void getArgs(Puppy::Context &ioContext) override;
 	void cleanArgs() override {
 		AccountFeature::cleanArgs();
+	}
+	QJsonObject toJson(Puppy::Context& ioContext) override {
+		QJsonObject retObj = AccountFeature::toJson(ioContext);
+		retObj.insert("dayProba", m_dayProba);
+		retObj.insert("avgKla", m_bundle.averageKLA());
+		return retObj;
 	}
 	void execute(void* outDatum, Puppy::Context& ioContext) override;
 	QVector<Transaction> revelation(QDate upToDate) override;

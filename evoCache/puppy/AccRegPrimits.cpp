@@ -1,7 +1,7 @@
 #include "AccRegPrimits.h"
 #include "bot.h"
 
-inline bool
+bool
 Puppy::Primitive::tryReplaceArgumentNode(unsigned int inN, std::string primName, Context &ioContext)
 {
 	assert(inN < mNumberArguments);

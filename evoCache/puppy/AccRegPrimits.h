@@ -198,10 +198,10 @@ protected:
 		int filterHashIndex = ioContext.filterHashIndex;
 		if(filterHashIndex >= 0) {
 			m_filterHash = ioContext.m_pUser->hashBundles().keys()[filterHashIndex];
-			int avgKLA = ioContext.m_pUser->hashBundles()[m_filterHash]->averageKLA();
+//			int avgKLA = ioContext.m_pUser->hashBundles()[m_filterHash]->averageKLA();
 			std::string nodeName = QString("h%1").arg(m_filterHash).toStdString();
-			std::string nodeKLA = QString("kla%1").arg(avgKLA).toStdString();
 			bool ok = tryReplaceArgumentNode(2, nodeName.c_str(), ioContext);
+//			std::string nodeKLA = QString("kla%1").arg(avgKLA).toStdString();
 //			ok &= tryReplaceArgumentNode(3, nodeKLA.c_str(), ioContext);
 			if(!ok) {
 				LOG() << "Could not replace the node with " << nodeName.c_str() << endl;
