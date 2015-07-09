@@ -117,6 +117,8 @@ public:
 		retObj.insert("numArgs", int(getNumberArguments()));
 		retObj.insert("fitness", m_fitness);
 		retObj.insert("billProba", m_billProba);
+		retObj.insert("labels", QJsonArray::fromStringList(m_bundle.uniqueNames()));
+		retObj.insert("tot$", m_bundle.sumDollar());
 		QJsonArray argList;
 		for (unsigned int i = 0; i < getNumberArguments(); ++i) {
 			double lArgi = 0.0;
@@ -237,8 +239,6 @@ protected:
 	QJsonObject toJson(Puppy::Context& ioContext) override {
 		QJsonObject retObj = FeaturePeriodicAmount::toJson(ioContext);
 		retObj.insert("dayOfMonth", m_dayOfMonth);
-		retObj.insert("labels", QJsonArray::fromStringList(m_bundle.uniqueNames()));
-		retObj.insert("tot$", m_bundle.sumDollar());
 		retObj.insert("consecutive", m_consecMonthBeforeMissed);
 		retObj.insert("cons-missed", m_consecMissed);
 

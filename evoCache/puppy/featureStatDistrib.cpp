@@ -71,12 +71,12 @@ void FeatureStatDistrib::execute(void *outDatum, Puppy::Context &ioContext)
 	m_billProba = m_dayProba;
 	output = m_fitness;
 	if (ioContext.m_summaryJsonObj) {
-		LOG() << "FeatureStatDistrib #" << m_bundle.count()
-			  << "fit" << m_fitness
-			  << "hash" << m_hash
-			  << "days" << m_daysBundle
-			  << "proba" << m_dayProba
-			  << endl;
+//		LOG() << "FeatureStatDistrib #" << m_bundle.count()
+//			  << "fit" << m_fitness
+//			  << "hash" << m_hash
+//			  << "days" << m_daysBundle
+//			  << "proba" << m_dayProba
+//			  << endl;
 		if(m_billProba > 0.0) {
 			QJsonArray features = (*ioContext.m_summaryJsonObj)["features"].toArray();
 			features.append(toJson(ioContext));

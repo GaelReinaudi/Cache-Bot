@@ -20,7 +20,16 @@ protected:
 	QJsonObject toJson(Puppy::Context& ioContext) override {
 		QJsonObject retObj = AccountFeature::toJson(ioContext);
 		retObj.insert("dayProba", m_dayProba);
-		retObj.insert("avgKla", m_bundle.averageKLA());
+		retObj.insert("hash", m_hash);
+		retObj.insert("days", m_daysBundle);
+		retObj.insert("proba", m_dayProba);
+		retObj.insert("avgAmn", m_bundle.sumDollar() / m_bundle.count());
+		//		LOG() << "FeatureStatDistrib #" << m_bundle.count()
+		//			  << "fit" << m_fitness
+		//			  << "hash" << m_hash
+		//			  << "days" << m_daysBundle
+		//			  << "proba" << m_dayProba
+		//			  << endl;
 		return retObj;
 	}
 	void execute(void* outDatum, Puppy::Context& ioContext) override;

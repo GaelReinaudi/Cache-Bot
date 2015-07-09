@@ -39,7 +39,6 @@ public:
 		retObj.insert("avgDayOut90", m_avgDayOut90);
 		retObj.insert("avgDayIn95", m_avgDayIn95);
 		retObj.insert("avgDayOut95", m_avgDayOut95);
-		retObj.insert("tot$", m_bundle.sumDollar());
 		return retObj;
 	}
 
