@@ -53,7 +53,7 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 {
 	double threshProba = 1.0;
 	// with the Bot, computes where the balance is going to go in the future
-	// this is goig to run summarize()
+	// this is going to run summarize() -> evaluate()
 	m_spark = user()->predictedSparkLine(threshProba);
 	// then, based on that, gets the smallest growth slope
 	computeMinSlopeOver(30);

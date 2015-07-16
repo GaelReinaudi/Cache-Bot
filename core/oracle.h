@@ -12,25 +12,49 @@ public:
 
 public:
 	// resets the oracle to a fresh state where it can provide transactions and reseting potential internal states
-	void resetDate(QDate initialDate) {
+	virtual void resetDate(QDate initialDate) {
 		m_iniDate = initialDate;
 		m_curDate = m_iniDate;
+	}
+	virtual void nextDay() {
+		m_curDate.addDays(1);
 	}
 	QDate curDate() const {
 		return m_curDate;
 	}
-	void nextDay() {
-		m_curDate.addDays(1);
-	}
 
 	virtual QVector<Transaction> revelation(QDate upToDate);
-
-protected:
-	//	virtual Transaction devineTransaction() = 0;
 
 private:
 	QDate m_iniDate;
 	QDate m_curDate;
+};
+
+class SuperOracle : public Oracle
+{
+public:
+	void resetDate(QDate initialDate) override {
+		Oracle::resetDate(initialDate);
+		for (Oracle* pOr : m_subOracles) {
+			pOr->resetDate(initialDate);
+		}
+	}
+	void nextDay() override {
+		Oracle::nextDay();
+		for (Oracle* pOr : m_subOracles) {
+			pOr->nextDay();
+		}
+	}
+	void clearSubOracles() {
+		m_subOracles.clear();
+	}
+	void addSubOracle(Oracle* pOr) {
+		m_subOracles.append(pOr);
+	}
+	QVector<Transaction> revelation(QDate upToDate) override;
+
+private:
+	QVector<Oracle*> m_subOracles;
 };
 
 #endif // ORACLE_H

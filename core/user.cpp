@@ -3,11 +3,30 @@
 #include "botContext.h"
 #include "fund.h"
 #include "userMetrics.h"
+#include "oracle.h"
 
 User::User(QString userId, QObject *parent)
 	:DBobj(userId, parent)
 {
 	m_today = QDate::currentDate();
+
+	//makes the oracle
+	oracle();
+}
+
+User::~User()
+{
+	if (m_mainOracle)
+		delete m_mainOracle;
+}
+
+SuperOracle* User::oracle()
+{
+	if (!m_mainOracle) {
+		LOG() << "Making new user's Oracle" << endl;
+		m_mainOracle = new SuperOracle();
+	}
+	return m_mainOracle;
 }
 
 void User::injectJsonData(QString jsonStr)

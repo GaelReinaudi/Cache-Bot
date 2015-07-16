@@ -19,7 +19,6 @@ public:
 	QJsonObject summarize();
 	//! predicted transactions
 	QVector<Transaction> predictTrans(double threshProba);
-	Oracle* makeOracle();
 
 //public:
 //	static Bot fromTree();
@@ -37,7 +36,6 @@ private:
 	QStringList m_botStrings;
 	BotContext* m_context;
 	QJsonObject m_lastStats;
-	Oracle* m_mainOracle = 0;
 
 private:
 	void postTreatment(QJsonObject &sumObj, const QVector<Transaction> &predictedTrans);

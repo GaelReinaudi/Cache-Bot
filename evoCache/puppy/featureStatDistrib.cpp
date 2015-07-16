@@ -1,6 +1,6 @@
 #include "featureStatDistrib.h"
 
-#define MIN_TRANSACTIONS_FOR_STAT 4
+#define MIN_TRANSACTIONS_FOR_STAT 6
 
 void FeatureStatDistrib::getArgs(Puppy::Context &ioContext) {
 	AccountFeature::getArgs(ioContext);
@@ -42,7 +42,7 @@ void FeatureStatDistrib::execute(void *outDatum, Puppy::Context &ioContext)
 	m_modelTrans.nameHash.setFromHash(m_hash);
 	m_modelTrans.setAmount(-1.0); // only negative prices will have a usable distance
 	m_modelTrans.date = lastDate;
-	const int maxHashDist = 2;
+	const int maxHashDist = 4;
 
 	m_bundle.clear();
 	for (int i = 0; i < allTrans.count(); ++i) {
@@ -51,7 +51,7 @@ void FeatureStatDistrib::execute(void *outDatum, Puppy::Context &ioContext)
 		if (dist < Transaction::LIMIT_DIST_TRANS) {
 			m_bundle.append(&trans);
 			// isolate the transaction that were fitted to the target
-			Q_ASSERT(localTrans->dimensionOfVoid == 0);
+			Q_ASSERT(trans.dimensionOfVoid == 0);
 			trans.dimensionOfVoid++;
 		}
 	}
@@ -70,13 +70,14 @@ void FeatureStatDistrib::execute(void *outDatum, Puppy::Context &ioContext)
 
 	m_billProba = m_dayProba;
 	m_fitness = qAbs(kindaLog(m_bundle.sumDollar()));
-	m_fitness = numBund * numBund;
+	m_fitness = 5.0;
+	m_fitness *= numBund * numBund;
 	m_fitness /= MIN_TRANSACTIONS_FOR_STAT * MIN_TRANSACTIONS_FOR_STAT;
 	m_fitness *= m_dayProba;
 	output = m_fitness;
 
 	if (ioContext.m_summaryJsonObj) {
-		if(m_billProba > 0.0) {
+		if(m_billProba > 0.001) {
 			QJsonArray features = (*ioContext.m_summaryJsonObj)["features"].toArray();
 			features.append(toJson(ioContext));
 			ioContext.m_summaryJsonObj->insert("features", features);
@@ -85,7 +86,7 @@ void FeatureStatDistrib::execute(void *outDatum, Puppy::Context &ioContext)
 			Transaction& t = m_bundle.trans(i);
 			emit ioContext.m_pUser->botContext()->matchedTransaction(t.time_t(), t.amountDbl());
 		}
-//		qDebug() << firstDate << lastDate;
+		ioContext.m_pUser->oracle()->addSubOracle(this);
 	}
 }
 

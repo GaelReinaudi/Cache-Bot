@@ -8,6 +8,7 @@
 class Bot;
 class BotContext;
 class Fund;
+class SuperOracle;
 
 typedef QMap<int, double> SparkLine;
 
@@ -32,12 +33,7 @@ class CORESHARED_EXPORT User : public DBobj
 
 public:
 	User(QString userId, QObject* parent = 0);
-
-//	// gives the daily average of outcome for the withinPercentileCost outgoing transactions
-//private:
-//	double costLiving(double withinPercentileCost, double multiplicator = 1.0);
-//	// gives the daily average of income for the withinPercentileCost outgoing transactions
-//	double makeLiving(double withinPercentileCost, double multiplicator = 1.0);
+	~User();
 
 public:
 	TransactionBundle& transBundle(int filterHash) {
@@ -81,6 +77,7 @@ public:
 	}
 
 	BotContext* makeBotContext();
+	SuperOracle* oracle();
 
 public slots:
 	void injectJsonData(QString jsonStr);
@@ -117,14 +114,6 @@ private:
 			m_hashBundles[h]->append(&t);
 			m_allTransBundle.append(&t);
 		}
-//		// assigns the index of the hash to the transactions
-//		for (int i = 0; i < hashBundles().count(); ++i) {
-//			int h = hashBundles().keys()[i];
-//			for (int j = 0; j < hashBundles()[h]->count(); ++j) {
-//				hashBundles()[h]->trans(j).indexHash = i;
-//			}
-//		}
-
 		//qDebug() << m_hashBundles.count() << m_hashBundles.keys().first() << m_hashBundles.keys().last();
 	}
 
@@ -139,6 +128,7 @@ private:
 	Fund* m_extraCacheFund = 0;
 	QDate m_today;
 	QString m_email;
+	SuperOracle* m_mainOracle = 0;
 };
 
 #endif // USER_H

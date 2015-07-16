@@ -9,6 +9,7 @@
 #include <QNetworkCookieJar>
 
 class ExtraCache;
+class Bot;
 
 namespace Ui {
 class ExtraCashView;
@@ -23,10 +24,11 @@ public:
 	~ExtraCashView();
 	void keyPressEvent(QKeyEvent *event);
 
+	void makeBalancePlot();
 protected slots:
-	void init();
+	void onBotInjected(Bot* pBot);
 	void updateChart();
-	void makePredictiPlot(double t);
+	void makeRevelationPlot();
 	void makePastiPlot();
 	void makeMinSlope();
 	void onWheelEvent(QWheelEvent*wEv);
@@ -65,7 +67,6 @@ private:
 	Ui::ExtraCashView *ui;
 	ExtraCache* m_pExtraCache = 0;
 	QDate m_pbDate;
-	int m_d0 = 0;
 	double m_pbBalance = 0.0;
 	double m_extraToday = -1.0;
 	int m_ipb = 0;

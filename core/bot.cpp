@@ -53,6 +53,7 @@ QJsonObject Bot::summarize()
 	jsonObj.insert("features", QJsonArray());
 	m_puppyTree.mValid = false;
 	m_context->m_summaryJsonObj = &jsonObj;
+	m_context->m_pUser->oracle()->clearSubOracles();
 	double fit = evaluate();
 	m_context->m_summaryJsonObj = 0;
 
@@ -65,17 +66,6 @@ QJsonObject Bot::summarize()
 	LOG() << "tree (" << fit << "): " << m_puppyTree.toStr() << endl;
 	LOG() << "    " << jsonStr << endl;
 	return jsonObj;
-}
-
-Oracle *Bot::makeOracle()
-{
-	if (!m_mainOracle) {
-		LOG() << "Making new Oracle" << endl;
-//		m_mainOracle = new Oracle(this);
-	}
-
-
-	return m_mainOracle;
 }
 
 QVector<Transaction> Bot::predictTrans(double threshProba)
