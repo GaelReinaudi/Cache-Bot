@@ -4,8 +4,13 @@
 #include "../extraCash/extraCache.h"
 #include "userMetrics.h"
 
-const int dayPast = 60;
-const int dayFuture = 60;
+static const int numRevelations = 10;
+static int IND_GR_REVEL = -1;
+static int IND_GR_BALANCE = -1;
+
+const int displayDayPast = 60;
+const int displayDayFuture = 60;
+
 const int playBackStartAgo = 60;
 
 double smallInc = 1e-3;
@@ -24,23 +29,23 @@ ExtraCashView::ExtraCashView(QString userID, QWidget *parent) :
 	ui->plot->yAxis2->setVisible(true);
 	ui->plot->yAxis->setSubTickCount(10);
 
-	ui->plot->addGraph();
-	ui->plot->graph(0)->setPen(QPen(QBrush(Qt::magenta), 5.0));
-	ui->plot->graph(0)->addData(-9999, 0);
-	ui->plot->graph(0)->addData(9999, 0);
+	int tempInd = -1;
 
+	++tempInd;
 	ui->plot->addGraph();
-	ui->plot->graph(1)->setLineStyle(QCPGraph::lsStepLeft);
+	ui->plot->graph(tempInd)->setLineStyle(QCPGraph::lsStepLeft);
+	IND_GR_BALANCE = tempInd;
 
-	ui->plot->addGraph();
-	ui->plot->graph(2)->setLineStyle(QCPGraph::lsStepLeft);
-	ui->plot->graph(2)->setPen(QPen(QBrush(Qt::gray), 5.0));
-	ui->plot->addGraph();
-	ui->plot->graph(3)->setLineStyle(QCPGraph::lsStepLeft);
-	ui->plot->graph(3)->setPen(QPen(QBrush(Qt::lightGray), 5.0));
-
-	ui->plot->addGraph();
-	ui->plot->graph(4)->setPen(QPen((QColor(255, 0, 0, 128)), 5.0));
+	for (int i = 0; i < numRevelations; ++i) {
+		++tempInd;
+		ui->plot->addGraph();
+		ui->plot->graph(tempInd)->setPen(QPen((QColor(255, 0, 0, 64)), 3.0));
+		ui->plot->graph(tempInd)->setLineStyle(QCPGraph::lsStepLeft);
+		ui->plot->graph(tempInd)->addData(-9999, 0);
+		ui->plot->graph(tempInd)->addData(9999, 0);
+		if (IND_GR_REVEL < 0)
+			IND_GR_REVEL = tempInd;
+	}
 
 	pBars = new QCPBars(ui->plot->xAxis, ui->plot->yAxis2);
 	ui->plot->addPlottable(pBars);
@@ -50,7 +55,6 @@ ExtraCashView::ExtraCashView(QString userID, QWidget *parent) :
 
 	connect(ui->plot, SIGNAL(mouseWheel(QWheelEvent*)), this, SLOT(onWheelEvent(QWheelEvent*)));
 
-//	init();
 	connect(m_pExtraCache, SIGNAL(botInjected(Bot*)), this, SLOT(init()));
 }
 
@@ -75,6 +79,7 @@ void ExtraCashView::init()
 	qDebug() << "m_date" << m_pbDate;
 
 	for (int i = 0; i < real.count(); ++i) {
+		// finds the index of the last transaction within the playback date
 		if (real.trans(i).date <= m_pbDate) {
 			m_ipb = i;
 		}
@@ -85,8 +90,6 @@ void ExtraCashView::init()
 			}
 		}
 	}
-	m_pbDate = real.trans(m_ipb).date;
-	m_d0 = m_pbDate.toJulianDay();
 	LOG() << "initial pb balance"<< m_pbBalance << " at" << m_pbDate.toString() << endl;
 	LOG() << "initial pb trans("<< m_ipb <<")" << real.trans(m_ipb).name << endl;
 
@@ -98,51 +101,6 @@ void ExtraCashView::init()
 
 void ExtraCashView::keyPressEvent(QKeyEvent *event)
 {
-	int maxDayMove = 1;
-	int minDayMove = 0;
-	if(event && event->key() == Qt::Key_Up)
-		minDayMove = 1;
-	auto& real = m_pExtraCache->user()->allTrans();
-	int addDay = 1;
-	if(m_ipb < real.count()) {
-		Transaction& newTrans = real.trans(m_ipb);
-		// if new date, move forward
-		addDay = newTrans.jDay() - m_pbDate.toJulianDay();
-		qDebug() << newTrans.amountDbl() << newTrans.name << newTrans.date;
-		if (addDay > maxDayMove) {
-			// revert the soon to come increment so that we add a day and come back to this trans
-			--m_ipb;
-			addDay = maxDayMove;
-		}
-		else {
-			double delta = newTrans.amountDbl();
-			m_pbBalance += delta;
-			ui->spinBox->setValue(m_pbBalance);
-		}
-		++m_ipb;
-	}
-	if (addDay < minDayMove) {
-		return keyPressEvent(event);
-	}
-	m_pbDate = m_pbDate.addDays(addDay);
-	double posSlope = qMax(0.0, m_pExtraCache->minSlope());
-	double extraToday = posSlope * addDay / 2.0;
-	if(m_extraToday < 0.0)
-		m_extraToday = extraToday;
-	if(extraToday > m_extraToday) {
-		m_extraToday *= 0.95;
-		m_extraToday += 0.05 * extraToday;
-	}
-	else {
-		m_extraToday *= 0.9;
-		m_extraToday += 0.1 * extraToday;
-	}
-//	m_slushThreshold += m_extraToday;
-	ui->extraTodaySpinBox->setValue(m_extraToday);
-	ui->spinSlushThresh->setValue(m_pExtraCache->slushBaseStart());
-	pBars->addData(m_pbDate.toJulianDay() - m_d0, m_extraToday);
-	ui->plot->yAxis2->rescale();
-
 	updateChart();
 }
 
@@ -163,58 +121,39 @@ void ExtraCashView::onWheelEvent(QWheelEvent * wEv)
 
 void ExtraCashView::updateChart()
 {
-	double t = m_pbDate.toJulianDay() - m_d0;
-	if(!ui->plot->graph(1)->data()->isEmpty()) {
-		QCPData d1 = ui->plot->graph(1)->data()->last();
-		if (t <= d1.key)
-			t = d1.key + smallInc;
-	}
-	ui->plot->graph(1)->addData(t, m_pbBalance);
-	ui->spinBox->setValue(m_pbBalance);
+	double x = QDate::currentDate().daysTo(m_pbDate);
 
-	makePredictiPlot(t);
+	makeBalancePlot();
+	makeRevelationPlot(x);
 	makePastiPlot();
 	makeMinSlope();
 
-	ui->plot->xAxis->setRange(t - dayPast, t + dayFuture + 1);
+	ui->plot->xAxis->setRange(x - displayDayPast, x + displayDayFuture + 1);
 	ui->plot->yAxis->rescale();
 	ui->plot->yAxis->setRange(-100, ui->plot->yAxis->range().upper + 100);
 	ui->plot->replot();
 }
 
-void ExtraCashView::makePredictiPlot(double t)
+void ExtraCashView::makeBalancePlot()
 {
-	ui->plot->graph(2)->clearData();
-	ui->plot->graph(2)->addData(t, m_pbBalance);
-	// the lowest predicted balance in the future
-	double minPredict = m_pbBalance;
-	double predBal = m_pbBalance;
+	double x = QDate::currentDate().daysTo(m_pbDate);
+	ui->plot->graph(IND_GR_BALANCE)->addData(x, m_pbBalance);
+	ui->spinBox->setValue(m_pbBalance);
+}
 
-	auto temp = m_pExtraCache->user()->predictedFutureTransactions(0.5);
-	for(int i = 0; i < temp.count(); ++i) {
-		Transaction* trans = &temp[i];
-		// not do anything if it already came true
-		if (trans->flags & Transaction::CameTrue) {
-			LOG() << "not charting prediction that came true" << trans->amountDbl() << trans->date.toString() << trans->name << endl;
-			continue;
-		}
-		int dayTo = m_pbDate.daysTo(trans->date);
-		predBal += trans->amountDbl();
-		if(dayTo == 0) { // same day
-			LOG() << "predicted today " << trans->amountDbl() << endl;
-		}
-		if(dayTo > 0 && dayTo < dayFuture) {
-			double predT = t + dayTo;
-			ui->plot->graph(2)->addData(predT, predBal);
-			minPredict = qMin(minPredict, predBal);
-		}
+void ExtraCashView::makeRevelationPlot(double t)
+{
+	for (int i = IND_GR_REVEL; i < IND_GR_REVEL + numRevelations; ++i) {
+		ui->plot->graph(i)->clearData();
+		ui->plot->graph(i)->addData(t, m_pbBalance);
+//		m_pExtraCache->user()->someProfecy();
 	}
 
-	if(minPredict <= m_pExtraCache->slushBaseStart()) {
+	if(false) {//minPredict <= m_pExtraCache->slushBaseStart()) {
 		ui->plot->setBackground(QBrush(Qt::red));
 	}
 	else {
-		int greenVal = qMin(4*255.0, minPredict - m_pExtraCache->slushBaseStart()) / 4;
+		int greenVal = 255;//qMin(4*255.0, minPredict - m_pExtraCache->slushBaseStart()) / 4;
 		ui->plot->setBackground(QBrush(QColor(255 - greenVal, greenVal, 0)));
 	}
 }
@@ -242,7 +181,7 @@ void ExtraCashView::makePastiPlot()
 //			minPredict = m_lastBal;
 //			//qDebug() << "predicted today" << trans->amountDbl();
 //		}
-		if(dayTo <= 0 && dayTo > -dayPast) {
+		if(dayTo <= 0 && dayTo > -displayDayPast) {
 			// first point predicted
 			QCPData d1 = ui->plot->graph(1)->data()->last();
 			if(graph->data()->isEmpty()) {
@@ -266,7 +205,7 @@ void ExtraCashView::makeMinSlope()
 {
 	QCPGraph* graph = ui->plot->graph(4);
 	graph->clearData();
-	double tToday = m_pbDate.toJulianDay() - m_d0;
+	double tToday = QDate::currentDate().daysTo(m_pbDate);
 	double slushBase = m_pExtraCache->slushBaseStart();
 	if(graph->data()->isEmpty()) {
 		graph->addData(tToday, slushBase);
@@ -274,11 +213,11 @@ void ExtraCashView::makeMinSlope()
 	double dayMin = m_pExtraCache->futDayMinSlope() - tToday;
 	double minSlope = qMax(0.0, m_pExtraCache->minSlope());
 	double effectiveSlushforDay = m_pExtraCache->slushNeed() * (0.5 + 1.0 * (dayMin) / 30.0);
-	graph->addData(tToday + dayFuture, slushBase + minSlope * dayFuture);
+	graph->addData(tToday + displayDayFuture, slushBase + minSlope * displayDayFuture);
 	graph->addData(tToday + dayMin, slushBase + minSlope * dayMin);
 	graph->addData(tToday + dayMin + 0.001, slushBase + minSlope * dayMin + effectiveSlushforDay);
 	graph->addData(tToday + dayMin + 0.002, slushBase + minSlope * dayMin);
-	graph->addData(tToday + dayFuture + 0.003, slushBase + minSlope * dayFuture);
-	qDebug() << tToday << dayFuture << dayMin << minSlope;
+	graph->addData(tToday + displayDayFuture + 0.003, slushBase + minSlope * displayDayFuture);
+	qDebug() << tToday << displayDayFuture << dayMin << minSlope;
 }
 
