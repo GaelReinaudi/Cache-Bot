@@ -160,10 +160,12 @@ void ExtraCashView::makeRevelationPlot()
 		pGr->addData(t, curBal);
 		m_pExtraCache->user()->oracle()->resetDate(m_pbDate);
 		QVector<Transaction> rev = m_pExtraCache->user()->oracle()->revelation(m_pbDate.addDays(displayDayFuture));
+		LOG() << "makeRevelationPlot" << i << curBal;
 		for (Transaction& tr : rev) {
 			curBal += tr.amountDbl();
 			t = QDate::currentDate().daysTo(tr.date);
 			pGr->addData(t, curBal);
+			LOG() << t << curBal;
 		}
 	}
 

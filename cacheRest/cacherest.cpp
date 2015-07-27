@@ -40,7 +40,7 @@ User *CacheRest::newUser(QString userId)
 
 void CacheRest::sendExtraCash(QString userId, double valExtra, QJsonObject newStats)
 {
-	HttpRequestInput httpRequest(SendExtraCashRoute + QString("/%1").arg(userId), "POST");
+	HttpRequestInput httpRequest(SendExtraCashRoute.arg(userId), "POST");
 	QJsonObject json;
 	json.insert("amount", valExtra);
 	newStats.insert("extraCash", json);

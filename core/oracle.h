@@ -17,7 +17,7 @@ public:
 		m_curDate = m_iniDate;
 	}
 	virtual void nextDay() {
-		m_curDate.addDays(1);
+		m_curDate = m_curDate.addDays(1);
 	}
 	QDate curDate() const {
 		return m_curDate;

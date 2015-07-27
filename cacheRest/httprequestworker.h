@@ -15,7 +15,7 @@ static const QString amazonServer = "http://ec2-52-24-203-78.us-west-2.compute.a
 static const QString LoginRoute = server + "/login";
 static const QString IdsRoute = server + "/cache-bot/user_ids";
 static const QString UserDataRoute = server + "/cache-bot/data";
-static const QString SendExtraCashRoute = server + "/cache-bot/extraCash";
+static const QString SendExtraCashRoute = server + "/api/cache-bot/user/%1/flow";
 static const QString SendNewBotRoute = server + "/cache-bot/newBot";
 static const QString BestBotRoute = server + "/cache-bot/bestBot";
 

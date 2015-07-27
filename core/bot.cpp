@@ -154,9 +154,13 @@ void Bot::postTreatment(QJsonObject& sumObj, const QVector<Transaction>& predict
 	statObj.insert("avgDayIn100", m_avgDayIn100);
 	statObj.insert("avgDayOut100", m_avgDayOut100);
 
-	double flow = m_avgDayIn95 + m_avgDayOut90;
-	flow /= m_avgDayIn95;
-	statObj.insert("flow", flow);
+	double flowrate = m_avgDayIn95 + m_avgDayOut90;
+	flowrate /= m_avgDayIn95;
+	QJsonObject flowObj;
+	flowObj.insert("rate", flowrate);
+	flowObj.insert("state", "kFlow");
+
+	statObj.insert("flow", flowObj);
 
 	sumObj.insert("stat", statObj);
 
