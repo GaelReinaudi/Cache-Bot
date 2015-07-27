@@ -14,7 +14,7 @@ static int IND_GR_SLOPE = -1;
 const int displayDayPast = 60;
 const int displayDayFuture = 60;
 
-const int playBackStartAgo = 60;
+const int playBackStartAgo = 0;
 
 double smallInc = 1e-3;
 
@@ -160,12 +160,12 @@ void ExtraCashView::makeRevelationPlot()
 		pGr->addData(t, curBal);
 		m_pExtraCache->user()->oracle()->resetDate(m_pbDate);
 		QVector<Transaction> rev = m_pExtraCache->user()->oracle()->revelation(m_pbDate.addDays(displayDayFuture));
-		LOG() << "makeRevelationPlot" << i << curBal;
+		LOG() << "makeRevelationPlot" << i << curBal << endl;
 		for (Transaction& tr : rev) {
 			curBal += tr.amountDbl();
 			t = QDate::currentDate().daysTo(tr.date);
 			pGr->addData(t, curBal);
-			LOG() << t << curBal;
+			LOG() << t << curBal << endl;
 		}
 	}
 

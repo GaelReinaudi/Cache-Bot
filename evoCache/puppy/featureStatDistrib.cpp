@@ -91,10 +91,14 @@ void FeatureStatDistrib::execute(void *outDatum, Puppy::Context &ioContext)
 }
 
 QVector<Transaction> FeatureStatDistrib::revelation(QDate upToDate) {
+	LOG() << "FeatureStatDistrib::revelation" << endl;
 	QVector<Transaction> retVect;
 	while (curDate() <= upToDate) {
 		if (randBool(m_dayProba)) {
-			retVect.append(randomTransaction());
+			Transaction randTr = randomTransaction();
+			randTr.date = curDate();
+			LOG() << "randomTransaction " << randTr.amountDbl() << " " << randTr.date.toString() << endl;
+			retVect.append(randTr);
 		}
 		nextDay();
 	}
