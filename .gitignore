@@ -1,6 +1,6 @@
 /build*
 *.DS_Store
-*.user*
+*.user
 /Makefile
 
 /*/debug/
