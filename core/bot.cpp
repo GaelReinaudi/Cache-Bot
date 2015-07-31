@@ -7,7 +7,7 @@
 Bot::Bot(QJsonObject jsonBot, QObject *parent)
 	:DBobj(jsonBot["_id"].toString(), parent)
 {
-	Q_ASSERT(!jsonBot["_id"].toString().isEmpty());
+//	Q_ASSERT(!jsonBot["_id"].toString().isEmpty());
 	m_created = QDateTime::fromString(jsonBot["createdAt"].toString(), Qt::ISODate);
 
 	m_botStrings.clear();
@@ -97,10 +97,10 @@ void Bot::postTreatment(QJsonObject& sumObj, const QVector<Transaction>& predict
 	QDate lastDate = QDate::currentDate();
 	QDate iniDate = lastDate.addMonths(-6);
 
-	double m_avgDayIn90   = MakeRateMonthPercentileMetric<2, 90>::get(m_context->m_pUser)->value(lastDate);
-	double m_avgDayOut90  = CostRateMonthPercentileMetric<2, 90>::get(m_context->m_pUser)->value(lastDate);
-	double m_avgDayIn95   = MakeRateMonthPercentileMetric<2, 95>::get(m_context->m_pUser)->value(lastDate);
-	double m_avgDayOut95  = CostRateMonthPercentileMetric<2, 95>::get(m_context->m_pUser)->value(lastDate);
+	double m_avgDayIn090   = MakeRateMonthPercentileMetric<2, 90>::get(m_context->m_pUser)->value(lastDate);
+	double m_avgDayOut090  = CostRateMonthPercentileMetric<2, 90>::get(m_context->m_pUser)->value(lastDate);
+	double m_avgDayIn095   = MakeRateMonthPercentileMetric<2, 95>::get(m_context->m_pUser)->value(lastDate);
+	double m_avgDayOut095  = CostRateMonthPercentileMetric<2, 95>::get(m_context->m_pUser)->value(lastDate);
 	double m_avgDayIn099  = MakeRateMonthPercentileMetric<2, 99>::get(m_context->m_pUser)->value(lastDate);
 	double m_avgDayOut099 = CostRateMonthPercentileMetric<2, 99>::get(m_context->m_pUser)->value(lastDate);
 	double m_avgDayIn100  = MakeRateMonthPercentileMetric<2, 100>::get(m_context->m_pUser)->value(lastDate);
@@ -147,15 +147,15 @@ void Bot::postTreatment(QJsonObject& sumObj, const QVector<Transaction>& predict
 	statObj.insert("predictedRateOut", predictedRateOut);
 	statObj.insert("avgDayIn099", m_avgDayIn099);
 	statObj.insert("avgDayOut099", m_avgDayOut099);
-	statObj.insert("avgDayIn090", m_avgDayIn90);
-	statObj.insert("avgDayOut090", m_avgDayOut90);
-	statObj.insert("avgDayIn095", m_avgDayIn95);
-	statObj.insert("avgDayOut095", m_avgDayOut95);
+	statObj.insert("avgDayIn090", m_avgDayIn090);
+	statObj.insert("avgDayOut090", m_avgDayOut090);
+	statObj.insert("avgDayIn095", m_avgDayIn095);
+	statObj.insert("avgDayOut095", m_avgDayOut095);
 	statObj.insert("avgDayIn100", m_avgDayIn100);
 	statObj.insert("avgDayOut100", m_avgDayOut100);
 
-	double flowrate = m_avgDayIn95 + m_avgDayOut90;
-	flowrate /= m_avgDayIn95;
+	double flowrate = m_avgDayIn095 + m_avgDayOut099;
+	flowrate /= m_avgDayIn095;
 
 	QJsonObject flowObj;
 	flowObj.insert("rate", flowrate);

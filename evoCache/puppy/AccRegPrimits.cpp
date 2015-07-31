@@ -196,6 +196,7 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 			emit ioContext.m_pUser->botContext()->matchedTransaction(t.time_t(), t.amountDbl());
 		}
 		//qDebug() << targetTrans.count() << m_bundle.count();
+		ioContext.m_pUser->oracle()->addSubOracle(this);
 	}
 }
 

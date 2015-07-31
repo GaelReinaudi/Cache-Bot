@@ -4,6 +4,7 @@
 #include <QtCore>
 #include "puppy/Puppy.hpp"
 #include "botContext.h"
+#include "oracle.h"
 
 class Add : public Puppy::Primitive
 {
@@ -184,7 +185,7 @@ public:
 	virtual int approxSpacingPayment() = 0;
 };
 
-class FeatureMonthlyAmount : public FeaturePeriodicAmount
+class FeatureMonthlyAmount : public FeaturePeriodicAmount, public Oracle
 {
 public:
 	FeatureMonthlyAmount()
@@ -270,6 +271,10 @@ protected:
 	}
 
 	virtual QVector<Transaction> targetTransactions(QDate iniDate, QDate lastDate);
+	QVector<Transaction> revelation(QDate upToDate) override {
+		LOG() << "FeatureMonthlyAmount::revelation" << endl;
+		return targetTransactions(QDate::currentDate(), upToDate);
+	}
 
 protected:
 	int m_dayOfMonth = 0;
