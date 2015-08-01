@@ -39,15 +39,6 @@ void Account::loadJsonData(QJsonObject json)
 		m_type = Type::Credit;
 	}
 	m_balance = json["balance"].toObject()["available"].toDouble();
-
-//	predictedTransactions().read(json["predicted"].toArray());
-//
-//	// make a bundle of all the transactions
-//	m_allTrans.clear();
-//	for (int i = 0; i < m_allTransactions.count(); ++i) {
-//		m_allTrans.append(&m_allTransactions.transArray()[i]);
-//	}
-//	makeHashBundles();
 }
 
 bool Account::loadPlaidJson(QString jsonFile) {
@@ -89,7 +80,6 @@ bool Account::toJson(QVector<Transaction> transactions, QString category)
 	}
 	json[category] = transArray;
 	qDebug() << transactions.count();
-	//qDebug() << json["predicted"];
 
 	QFile writeFile(m_jsonFilePath + ".out");
 	if (!writeFile.open(QIODevice::WriteOnly)) {

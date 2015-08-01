@@ -33,9 +33,6 @@ public:
 		m_allTrans.append(pT);
 	}
 
-//	// gives the daily average of outcome for the withinPercentileCost outgoing transactions
-//	double costLiving(double withinPercentileCost);
-
 	double balance() const{
 		return m_balance;
 	}

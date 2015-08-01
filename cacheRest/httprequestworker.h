@@ -60,15 +60,16 @@ public:
 };
 
 
-class HttpRequestWorker : public QObject {
+class HttpRequestWorker : public QObject
+{
 	Q_OBJECT
 
 public:
+	explicit HttpRequestWorker(QObject *parent = 0);
+
 	QByteArray response;
 	QNetworkReply::NetworkError error_type;
 	QString error_str;
-
-	explicit HttpRequestWorker(QObject *parent = 0);
 
 	QString http_attribute_encode(QString attribute_name, QString input);
 	QNetworkReply *execute(HttpRequestInput *input);
@@ -90,10 +91,19 @@ private:
 	QByteArray m_jsonByte;
 
 public slots:
-	void on_manager_finished(QNetworkReply *reply);
+	virtual void on_manager_finished(QNetworkReply *reply);
 
 private:
 	bool m_isLoggedIn = false;
+};
+
+class OfflineHttpRequestWorker : public HttpRequestWorker
+{
+public:
+	explicit OfflineHttpRequestWorker(QObject *parent = 0)
+		: HttpRequestWorker(parent)
+	{}
+	void on_manager_finished(QNetworkReply *reply) override;
 };
 
 #endif // HTTPREQUESTWORKER_H

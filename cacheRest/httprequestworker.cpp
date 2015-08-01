@@ -275,7 +275,7 @@ QNetworkReply* HttpRequestWorker::execute(HttpRequestInput *input) {
 	else if (input->http_method == "POST") {
 		reply = manager->post(request, request_content);
 		LOG() << request_content << endl;
-		qDebug() << request_content;
+		qDebug() << QJsonDocument(input->jsonObject).toJson();
 	}
 	else if (input->http_method == "PUT") {
 		reply = manager->put(request, request_content);
@@ -313,8 +313,12 @@ void HttpRequestWorker::on_manager_finished(QNetworkReply *reply) {
 		if(response == StringLoggedInReplySuccess) {
 			emit loggedIn(true);
 		}
-		if(response == StringLoggedInReplyFailure) {
+		else if(response == StringLoggedInReplyFailure) {
 			emit loggedIn(false);
+		}
+		else {
+			qWarning() << "Warning: Not connecting normally !!!!!!!!!!";
+			LOG() << "Warning: Not connecting normally !!!!!!!!!!" << endl;
 		}
 	}
 	else if(reply->request().url() == QUrl(IdsRoute)) {
@@ -337,3 +341,40 @@ void HttpRequestWorker::on_manager_finished(QNetworkReply *reply) {
 	}
 }
 
+
+
+void OfflineHttpRequestWorker::on_manager_finished(QNetworkReply *reply)
+{
+	if(reply->request().url() == QUrl(LoginRoute)) {
+		emit loggedIn(true);
+	}
+	else if(reply->request().url().toString().startsWith(UserDataRoute)) {
+		QString userDataPath = reply->request().url().toString().split("/").last();
+		userDataPath += "Data.json";
+		userDataPath.prepend("../../data/");
+		LOG() << "Loading user data from file " << userDataPath << endl;
+		QFile fileReply(userDataPath);
+		fileReply.open(QFile::ReadOnly);
+		response = fileReply.readAll();
+		emit repliedUserData(response);
+	}
+	else if(reply->request().url().toString().endsWith(SendExtraCashRoute.split("/").last())) {
+		emit repliedSendExtraCache("");
+	}
+	else if(reply->request().url().toString().startsWith(SendNewBotRoute)) {
+		emit repliedSendNewBot("");
+	}
+	else if(reply->request().url().toString().startsWith(BestBotRoute)) {
+		QString userBotPath = reply->request().url().toString().split("/").last();
+		userBotPath += "Bot.json";
+		userBotPath.prepend("../../data/");
+		LOG() << "Loading user bota from file " << userBotPath << endl;
+		QFile fileReply(userBotPath);
+		fileReply.open(QFile::ReadOnly);
+		response = fileReply.readAll();
+		emit repliedBestBot(response);
+	}
+	else if(reply->request().url().toString().startsWith(ExtraCashEC2Compute)) {
+		emit repliedExtraCashEC2Computation("");
+	}
+}
