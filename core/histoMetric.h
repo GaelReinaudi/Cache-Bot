@@ -95,6 +95,10 @@ protected:
 			avg += m_pMetric->value(ad);
 			isValid &= m_pMetric->isValid(ad);
 			//qDebug() << i << avg;
+			if (!isValid) {
+				LOG() << "m_pMetric" << i << " not valid" << endl;
+				break;
+			}
 		}
 		avg /= DayPast;
 		return avg;

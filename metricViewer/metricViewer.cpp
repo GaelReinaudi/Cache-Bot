@@ -48,7 +48,7 @@ void MetricViewer::onUserInjected(User* pUser)
 	Flow01<95, 95>::get(pUser);
 	Flow01<99, 95>::get(pUser);
 	Flow01<99, 99>::get(pUser);
-//	Flow01<100, 100>::get(pUser);
+	Flow01<95, 99>::get(pUser);
 
 	for (const QString& str: HistoMetric::allNames()) {
 		QColor color(qrand() % 192 + 64, qrand() % 192 + 64, qrand() % 192 + 64);

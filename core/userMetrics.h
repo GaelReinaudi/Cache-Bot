@@ -71,6 +71,10 @@ protected:
 			// set as valid if we had at least one value
 			isValid |= true;
 		}
+		if (!isValid) {
+			LOG() << "templateComputeFor<" << PastMonth << Percentile << "> not valid " << lastCostsInd << costs.count() << endl;
+			return 0.0;
+		}
 		double numDays = startDate.daysTo(date);
 		if (numDays) {
 			avg /= numDays;
@@ -115,8 +119,8 @@ protected:
 	Flow01(User* pUser)
 		: UserMetric(Name(), pUser)
 	{
-		inMet =  MetricSmoother<7>::get(MakeRateMonthPercentileMetric<1, InPercentile>::get(user()));
-		outMet = MetricSmoother<7>::get(CostRateMonthPercentileMetric<1, OutPercentile>::get(user()));
+		inMet =  MetricSmoother<7>::get(MakeRateMonthPercentileMetric<2, InPercentile>::get(user()));
+		outMet = MetricSmoother<7>::get(CostRateMonthPercentileMetric<2, OutPercentile>::get(user()));
 	}
 //	Flow01(const QString& name, User* pUser)
 //		: UserMetric(name, pUser)
@@ -139,8 +143,10 @@ protected:
 		double out = outMet->value(date);
 		isValid = inMet->isValid(date) && outMet->isValid(date);
 		isValid &= in > 0.0;
-		if (!isValid)
+		if (!isValid) {
+			LOG() << "in or out not valid" << endl;
 			return 0.0;
+		}
 		double flow = in + out;
 		flow /= in;
 		flow *= 100;

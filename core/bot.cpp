@@ -157,6 +157,9 @@ void Bot::postTreatment(QJsonObject& sumObj, const QVector<Transaction>& predict
 	double flowrate = m_avgDayIn095 + m_avgDayOut099;
 	flowrate /= m_avgDayIn095;
 
+	flowrate += Flow01<95, 99>::get(m_context->m_pUser)->value(lastDate) * 0.01;
+	flowrate *= 0.5;
+
 	QJsonObject flowObj;
 	flowObj.insert("rate", flowrate);
 	flowObj.insert("state", QString("kFlow"));
