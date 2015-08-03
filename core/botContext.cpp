@@ -1,8 +1,8 @@
 #include "botContext.h"
 #include "bot.h"
-#include "AccRegPrimits.h"
 #include "featureAllOthers.h"
 #include "featureStatDistrib.h"
+#include "featurePeriodicAmount.h"
 
 unsigned int BotContext::LIMIT_NUM_FEATURES = 1;
 unsigned int BotContext::TARGET_TRANS_FUTUR_DAYS = 100;

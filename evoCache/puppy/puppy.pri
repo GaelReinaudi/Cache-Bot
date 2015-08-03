@@ -7,7 +7,8 @@ SOURCES += \
 	$$PWD/puppy/src/Tree.cpp \
 	$$PWD/AccRegPrimits.cpp \
     $$PWD/featureAllOthers.cpp \
-    $$PWD/featureStatDistrib.cpp
+    $$PWD/featureStatDistrib.cpp \
+    $$PWD/featurePeriodicAmount.cpp
 
 HEADERS  += \
 	$$PWD/puppy/include/puppy/Primitive.hpp \
@@ -20,4 +21,5 @@ HEADERS  += \
 	$$PWD/puppy/include/puppy/Tree.hpp \
 	$$PWD/AccRegPrimits.h \
     $$PWD/featureAllOthers.h \
-    $$PWD/featureStatDistrib.h
+    $$PWD/featureStatDistrib.h \
+    $$PWD/featurePeriodicAmount.h
