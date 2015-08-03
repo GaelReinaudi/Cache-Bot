@@ -87,7 +87,7 @@ void FeatureStatDistrib::execute(void *outDatum, Puppy::Context &ioContext)
 		}
 		for (int i = 0; i < numBund; ++i) {
 			Transaction& t = m_bundle.trans(i);
-			emit ioContext.m_pUser->botContext()->matchedTransaction(t.time_t(), t.amountDbl());
+			emit ioContext.m_pUser->botContext()->matchedTransaction(t.time_t(), t.amountDbl(), 2);
 		}
 		ioContext.m_pUser->oracle()->addSubOracle(this);
 	}

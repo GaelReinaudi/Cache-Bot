@@ -50,8 +50,7 @@ void UserViewer::onUserInjected(User* pUser)
 
 void UserViewer::onBotInjected(Bot* bestBot)
 {
-	connect(user()->botContext(), &BotContext::targetedTransaction, this, &UserViewer::plotTargetedTransaction);
-	connect(user()->botContext(), &BotContext::matchedTransaction, this, &UserViewer::plotMatchedTransaction);
+	connect(user()->botContext(), &BotContext::matchedTransaction, this, &UserViewer::plotMask);
 	connect(user()->botContext(), &BotContext::summarizingTree, this, &UserViewer::clearMasks);
 	connect(user()->botContext(), &BotContext::needsReplot, this, &UserViewer::replotCharts);
 	connect(user()->botContext(), &BotContext::newSummarizedTree, this, &UserViewer::onNewSummarizedTree);
@@ -65,13 +64,16 @@ void UserViewer::clearMasks()
 	ui->acPlot->clearItems();
 }
 
-void UserViewer::plotMask(double x, double y, bool isTarget)
+void UserViewer::plotMask(double x, double y, int flag)
 {
 	QCPItemRect* itRect = new QCPItemRect(ui->acPlot);
 	y = kindaLog(y);
+	bool isTarget = flag == 0;
 	itRect->topLeft->setCoords(QPointF(x - 4*3600*24, y + (10+6*isTarget)*0.01));
 	itRect->bottomRight->setCoords(QPointF(x + 4*3600*24, y - (10+6*isTarget)*0.01));
 	QColor colZone = isTarget ? QColor(239, 64, 53, 32) : QColor(0, 64, 253, 32);
+	if (flag & 2)
+		colZone = QColor(0, 253, 64, 32);
 	itRect->setPen(QPen(QBrush(colZone), 3.0));
 	itRect->setBrush(QBrush(colZone));
 	itRect->setClipToAxisRect(false);

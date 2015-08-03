@@ -38,8 +38,7 @@ void EvoCacheView::onUserInjected(User* pUser)
 
 //	ui->acPlot->setPlottingHints(QCP::phFastPolylines | QCP::phCacheLabels);
 
-	connect(pUser->botContext(), &BotContext::targetedTransaction, this, &EvoCacheView::plotTargetedTransaction);
-	connect(pUser->botContext(), &BotContext::matchedTransaction, this, &EvoCacheView::plotMatchedTransaction);
+	connect(pUser->botContext(), &BotContext::matchedTransaction, this, &EvoCacheView::plotMask);
 	connect(pUser->botContext(), &BotContext::summarizingTree, this, &EvoCacheView::clearMasks, Qt::BlockingQueuedConnection);
 	connect(pUser->botContext(), &BotContext::needsReplot, this, &EvoCacheView::replotCharts, Qt::BlockingQueuedConnection);
 	connect(pUser->botContext(), &BotContext::needsReplot, this, &EvoCacheView::clearList);
@@ -51,13 +50,16 @@ void EvoCacheView::clearMasks()
 	ui->acPlot->clearItems();
 }
 
-void EvoCacheView::plotMask(double x, double y, bool isTarget)
+void EvoCacheView::plotMask(double x, double y, int flag)
 {
 	QCPItemRect* itRect = new QCPItemRect(ui->acPlot);
 	y = kindaLog(y);
+	bool isTarget = flag == 0;
 	itRect->topLeft->setCoords(QPointF(x - 4*3600*24, y + (10+6*isTarget)*0.01));
 	itRect->bottomRight->setCoords(QPointF(x + 4*3600*24, y - (10+6*isTarget)*0.01));
-	QColor colZone = isTarget ? QColor(239, 64, 53, 32) : QColor(0, 64, 253, 64);
+	QColor colZone = flag == 0 ? QColor(239, 64, 53, 32) : QColor(0, 64, 253, 64);
+	if (flag & 2)
+		colZone = QColor(0, 253, 64, 32);
 	itRect->setPen(QPen(QBrush(colZone), 3.0));
 	itRect->setBrush(QBrush(colZone));
 	itRect->setClipToAxisRect(false);

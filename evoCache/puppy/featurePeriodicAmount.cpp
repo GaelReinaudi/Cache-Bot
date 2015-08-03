@@ -143,11 +143,11 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 
 		for (int i = 0; i < targetTrans.count(); ++i) {
 			Transaction* iTarg = &targetTrans[i];
-			emit ioContext.m_pUser->botContext()->targetedTransaction(iTarg->time_t(), iTarg->amountDbl());
+			emit ioContext.m_pUser->botContext()->matchedTransaction(iTarg->time_t(), iTarg->amountDbl());
 		}
 		for (int i = 0; i < m_bundle.count(); ++i) {
 			Transaction& t = m_bundle.trans(i);
-			emit ioContext.m_pUser->botContext()->matchedTransaction(t.time_t(), t.amountDbl());
+			emit ioContext.m_pUser->botContext()->matchedTransaction(t.time_t(), t.amountDbl(), 1);
 		}
 		//qDebug() << targetTrans.count() << m_bundle.count();
 		ioContext.m_pUser->oracle()->addSubOracle(this);

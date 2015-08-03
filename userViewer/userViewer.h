@@ -27,14 +27,12 @@ public slots:
 	void handleResults(const QString &) {
 
 	}
-	void plotMask(double x, double y, bool isTarget);
+	void plotMask(double x, double y, int flag = 0);
 	void clearMasks();
 	void replotCharts();
 	void onNewSummarizedTree(QJsonObject jsonObj);
 	void onUserInjected(User* pUser);
 	void onBotInjected(Bot *bestBot);
-	void plotTargetedTransaction(double x, double y) { plotMask(x, y, true); }
-	void plotMatchedTransaction(double x, double y) { plotMask(x, y, false); }
 
 
 signals:

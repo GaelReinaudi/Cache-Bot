@@ -19,8 +19,7 @@ public:
 	static unsigned int TARGET_TRANS_FUTUR_DAYS;
 
 signals:
-	void targetedTransaction(double t, double amount);
-	void matchedTransaction(double t, double amount);
+	void matchedTransaction(double t, double amount, int flag = 0);
 	void summarizingTree();
 	void needsReplot();
 	void newSummarizedTree(QJsonObject);
