@@ -81,7 +81,7 @@ void ExtraCashView::onBotInjected(Bot* pBot)
 	ui->costLive99SpinBox->setValue(CostRateMonthPercentileMetric<6, 99>::get(m_pExtraCache->user())->value(m_pbDate));
 
 	m_pbDate = QDate::currentDate().addDays(-playBackStartAgo);
-	m_pbBalance = m_pExtraCache->user()->balance(Account::Type::Checking);
+	m_pbBalance = m_pExtraCache->user()->balance(Account::Type::Checking | Account::Type::Saving);
 
 	// transaction at the starting date of the playback
 	auto& real = m_pExtraCache->user()->allTrans();

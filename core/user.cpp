@@ -218,7 +218,7 @@ SparkLine User::predictedSparkLine(double threshProba)
 	}
 
 	// now we sort them and make absolute values in the Sparkline
-	double balanceNow = balance(Account::Type::Checking);
+	double balanceNow = balance(Account::Type::Checking | Account::Type::Saving);
 	LOG() << "predictedSparkLine(" << threshProba << "), temp.size = " << temp.size() << ", temp.uniqueKeys = " << temp.uniqueKeys().size() << ". balanceNow = " << balanceNow << endl;
 	qDebug() << "temp.uniqueKeys()" << temp.uniqueKeys();
 	SparkLine ret;

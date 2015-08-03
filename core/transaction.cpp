@@ -3,7 +3,7 @@
 
 QVector<int> Transaction::onlyLoadHashes = QVector<int>();
 QDate Transaction::onlyAfterDate = QDate::currentDate().addMonths(-6);
-int Transaction::onlyAccountType = Account::Type::Checking | Account::Type::Credit;
+int Transaction::onlyAccountType = Account::Type::Saving | Account::Type::Checking | Account::Type::Credit;
 
 int Transaction::type() const {
 	return account->type() + 16 * (flags & Internal);

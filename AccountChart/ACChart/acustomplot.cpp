@@ -39,7 +39,7 @@ void ACustomPlot::makeGraphs(HashedBundles& hashBundles) {
 				pGraph->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 5.0));
 				break;
 			case Account::Type::Saving:
-				pGraph->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssSquare, 5.0));
+				pGraph->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssSquare, 7.0));
 				break;
 			case Account::Type::Credit:
 				pGraph->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssPlus, 6.0));
@@ -110,7 +110,7 @@ void ACustomPlot::loadCompressedAmount(User* pUser)
 	}
 	graph(0)->clearData();
 	// redo the integral to match the last point known.
-	m_integral = pUser->balance(Account::Type::Checking) - m_integral;
+	m_integral = pUser->balance(Account::Type::Checking | Account::Type::Saving) - m_integral;
 	for (int i = 0; i < allTrans.count(); ++i) {
 		Transaction& tr = allTrans.trans(i);
 		double t = tr.time_t();
@@ -145,9 +145,20 @@ void AHashPlot::loadCompressedAmount(User *pUser)
 		Transaction& tr = allTrans.trans(i);
 		uint h = tr.nameHash.hash();
 		uint d = tr.nameHash.manLength();
-		if (!tr.isInternal())
-			m_integral += 1.0;
-		graph(0)->addData(tr.compressedAmount(), m_integral);
+		if (!tr.isInternal()) {
+			if (tr.amountDbl() >= 1.0) {
+				graph(0)->addData(tr.compressedAmount(), 0.0);
+				graph(0)->addData(tr.compressedAmount(), 0.0);
+				graph(0)->addData(tr.compressedAmount(), 0.0);
+				graph(0)->addData(tr.compressedAmount(), 0.0);
+				graph(0)->addData(tr.compressedAmount(), 0.0);
+				graph(0)->addData(tr.compressedAmount(), 0.0);
+				graph(0)->addData(tr.compressedAmount(), 0.0);
+				graph(0)->addData(tr.compressedAmount(), 0.0);
+				graph(0)->addData(tr.compressedAmount(), 0.0);
+			}
+			graph(0)->addData(tr.compressedAmount(), 0.0);
+		}
 		QCPGraph* pGraph = 0;
 		switch (tr.type()) {
 		case Account::Type::Checking:
@@ -168,10 +179,9 @@ void AHashPlot::loadCompressedAmount(User *pUser)
 	QList<double> orderedKeys = graph(0)->data()->keys();
 	qDebug() << orderedKeys;
 	graph(0)->clearData();
-	double tot = 1.0;//m_integral;
 	m_integral = 0.0;
 	for (double dat : orderedKeys) {
-		m_integral += 1.0 / tot;
+		m_integral += 1.0;
 		graph(0)->addData(dat, m_integral);
 	}
 	rescaleAxes();
