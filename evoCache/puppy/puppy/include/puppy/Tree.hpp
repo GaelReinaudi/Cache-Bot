@@ -90,7 +90,7 @@ public:
 	unsigned int getDepth(unsigned int inIndex=0) const;
 	void         interpret(void* outResult, Context& ioContext);
 	void         setStackToNode(unsigned int inIndex, std::vector<unsigned int>& outCallStack) const;
-	void         write(std::ostream& ioOS, unsigned int inIndex=0) const;
+	void         write(std::ostream& ioOS, unsigned int inIndex=0, bool multiline = false) const;
 
 	bool isValidTree() {
 		bool isValid = true;

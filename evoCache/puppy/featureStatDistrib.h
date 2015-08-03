@@ -19,7 +19,7 @@ protected:
 		retObj.insert("hash", m_hash);
 		retObj.insert("days", m_daysBundle);
 		retObj.insert("proba", m_dayProba);
-		retObj.insert("avgAmn", m_bundle.sumDollar() / m_bundle.count());
+		retObj.insert("avgAmn", m_bundle.count() ? m_bundle.sumDollar() / m_bundle.count() : 0.0);
 		return retObj;
 	}
 	void execute(void* outDatum, Puppy::Context& ioContext) override;

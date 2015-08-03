@@ -135,7 +135,7 @@ void Puppy::Tree::setStackToNode(unsigned int inIndex,
  *  \param ioOS C++ output stream to write tree into.
  *  \param inIndex Actual node index in tree.
  */
-void Puppy::Tree::write(std::ostream& ioOS, unsigned int inIndex) const
+void Puppy::Tree::write(std::ostream& ioOS, unsigned int inIndex, bool multiline) const
 {
 	assert(inIndex < size());
 	unsigned int lNbArgs = (*this)[inIndex].mPrimitive->getNumberArguments();
@@ -143,7 +143,7 @@ void Puppy::Tree::write(std::ostream& ioOS, unsigned int inIndex) const
 	ioOS << (*this)[inIndex].mPrimitive->getName();
 	unsigned int j = inIndex + 1;
 	for(unsigned int i=0; i<lNbArgs; ++i) {
-		ioOS << ' ';
+		ioOS << multiline ? '\n' : ' ';
 		write(ioOS, j);
 		j += (*this)[j].mSubTreeSize;
 	}
@@ -152,6 +152,6 @@ void Puppy::Tree::write(std::ostream& ioOS, unsigned int inIndex) const
 
 QString Puppy::Tree::toStr() const {
 	std::ostringstream stream;
-	write(stream, 0);
+	write(stream, 0, true);
 	return QString::fromStdString(stream.str());
 }
