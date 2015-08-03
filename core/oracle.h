@@ -46,9 +46,11 @@ public:
 		}
 	}
 	void clearSubOracles() {
+		LOG() << "clearSubOracles" << endl;
 		m_subOracles.clear();
 	}
 	void addSubOracle(Oracle* pOr) {
+		LOG() << "addSubOracle " << pOr << endl;
 		m_subOracles.append(pOr);
 	}
 	QVector<Transaction> revelation(QDate upToDate) override;

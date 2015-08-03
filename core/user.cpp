@@ -152,9 +152,10 @@ BotContext* User::makeBotContext()
 
 void User::injectJsonBot(QString jsonStr)
 {
-	qDebug() << "injecting" << jsonStr.left(1024);
 	QJsonDocument jsonDoc(QJsonDocument::fromJson(jsonStr.toUtf8()));
 	const QJsonObject& jsonObj = jsonDoc.object();
+
+	LOG() << "User::injectJsonBot " << QJsonDocument(jsonObj).toJson() << endl;
 
 	{
 		QFile sampleReturn("jsonBot.json");

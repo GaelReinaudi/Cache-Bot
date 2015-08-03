@@ -51,6 +51,7 @@ void ExtraCache::onUserInjected(User* pUser)
 
 void ExtraCache::onBotInjected(Bot* bestBot)
 {
+	LOG() << "ExtraCache::onBotInjected" << endl;
 	double threshProba = 1.0;
 	// with the Bot, computes where the balance is going to go in the future
 	// this is going to run summarize() -> evaluate()

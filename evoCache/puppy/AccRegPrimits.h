@@ -272,8 +272,12 @@ protected:
 
 	virtual QVector<Transaction> targetTransactions(QDate iniDate, QDate lastDate);
 	QVector<Transaction> revelation(QDate upToDate) override {
-		LOG() << "FeatureMonthlyAmount::revelation" << endl;
-		return targetTransactions(QDate::currentDate(), upToDate);
+		auto ret = targetTransactions(QDate::currentDate(), upToDate);
+		LOG() << "FeatureMonthlyAmount::revelation " << ret.count() << endl;
+		for (Transaction& tr : ret) {
+			LOG() << "monthly " << tr.amountDbl() << " " << tr.date.toString() << endl;
+		}
+		return ret;
 	}
 
 protected:

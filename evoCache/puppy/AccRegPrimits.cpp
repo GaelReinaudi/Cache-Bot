@@ -95,7 +95,7 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 		LOG() << "MonthlyAmount(0 TARGET): day "<<m_dayOfMonth<<" kla "<< m_kla << endl;
 	}
 	else if (ioContext.m_summaryJsonObj) {
-		LOG() << getName().c_str() << targetTrans.count()
+		LOG() << getName().c_str() << " " << this << targetTrans.count()
 			<<" TARGET: day "<<m_dayOfMonth
 			<<" kla"<< m_kla <<"="<<targetTrans.first().amountDbl()
 			<< " h=" <<targetTrans.first().nameHash.hash()

@@ -10,7 +10,7 @@ QVector<Transaction> Oracle::revelation(QDate upToDate) {
 
 QVector<Transaction> SuperOracle::revelation(QDate upToDate)
 {
-	LOG() << "SuperOracle::revelation" << endl;
+	LOG() << "SuperOracle::revelation from " << m_subOracles.count() << endl;
 	QVector<Transaction> ret = Oracle::revelation(upToDate);
 	// naive adding up the revelations for now
 	for (Oracle* pOr : m_subOracles) {

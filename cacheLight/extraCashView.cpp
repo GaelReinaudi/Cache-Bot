@@ -6,13 +6,13 @@
 #include "oracle.h"
 #include "bot.h"
 
-static const int numRevelations = 10;
+static const int numRevelations = 1;
 static int IND_GR_REVEL = -1;
 static int IND_GR_BALANCE = -1;
 static int IND_GR_SLOPE = -1;
 
 const int displayDayPast = 60;
-const int displayDayFuture = 60;
+const int displayDayFuture = 180;
 
 const int playBackStartAgo = 0;
 
@@ -47,7 +47,7 @@ ExtraCashView::ExtraCashView(QString userID, QWidget *parent) :
 	for (int i = 0; i < numRevelations; ++i) {
 		++tempInd;
 		ui->plot->addGraph();
-		ui->plot->graph(tempInd)->setPen(QPen((QColor(255, 0, 0, 64)), 3.0));
+		ui->plot->graph(tempInd)->setPen(QPen((QColor(255, 0, 0, 16)), 3.0));
 		ui->plot->graph(tempInd)->setLineStyle(QCPGraph::lsStepLeft);
 		ui->plot->graph(tempInd)->addData(-9999, 0);
 		ui->plot->graph(tempInd)->addData(9999, 0);
@@ -73,6 +73,7 @@ ExtraCashView::~ExtraCashView()
 
 void ExtraCashView::onBotInjected(Bot* pBot)
 {
+	LOG() << "ExtraCashView::onBotInjected" << endl;
 	ui->costLive50SpinBox->setValue(CostRateMonthPercentileMetric<6, 50>::get(m_pExtraCache->user())->value(m_pbDate));
 	ui->costLive75SpinBox->setValue(CostRateMonthPercentileMetric<6, 75>::get(m_pExtraCache->user())->value(m_pbDate));
 	ui->costLive90SpinBox->setValue(CostRateMonthPercentileMetric<6, 90>::get(m_pExtraCache->user())->value(m_pbDate));
@@ -173,8 +174,8 @@ void ExtraCashView::makeRevelationPlot()
 		ui->plot->setBackground(QBrush(Qt::red));
 	}
 	else {
-		int greenVal = 255;//qMin(4*255.0, minPredict - m_pExtraCache->slushBaseStart()) / 4;
-		ui->plot->setBackground(QBrush(QColor(255 - greenVal, greenVal, 0)));
+		int greenVal = 32;//qMin(4*255.0, minPredict - m_pExtraCache->slushBaseStart()) / 4;
+		ui->plot->setBackground(QBrush(QColor(255 - greenVal, 255-32+greenVal, 255-32)));
 	}
 }
 

@@ -77,6 +77,11 @@ void FeatureStatDistrib::execute(void *outDatum, Puppy::Context &ioContext)
 	output = m_fitness;
 
 	if (ioContext.m_summaryJsonObj) {
+		LOG() << getName().c_str() << " " << this
+			<< " p=" << m_billProba
+			<< " n=" << numBund
+			<< " h=" << m_modelTrans.nameHash.hash()
+			<< endl;
 		if(m_billProba > 0.001) {
 			QJsonArray features = (*ioContext.m_summaryJsonObj)["features"].toArray();
 			features.append(toJson(ioContext));
@@ -91,13 +96,13 @@ void FeatureStatDistrib::execute(void *outDatum, Puppy::Context &ioContext)
 }
 
 QVector<Transaction> FeatureStatDistrib::revelation(QDate upToDate) {
-	LOG() << "FeatureStatDistrib::revelation" << endl;
+	LOG() << "FeatureStatDistrib::revelation proba = " << m_dayProba << " bundle = " << m_bundle.count() << endl;
 	QVector<Transaction> retVect;
 	while (curDate() <= upToDate) {
 		if (randBool(m_dayProba)) {
 			Transaction randTr = randomTransaction();
 			randTr.date = curDate();
-			LOG() << "randomTransaction " << randTr.amountDbl() << " " << randTr.date.toString() << endl;
+			LOG() << "randomTransaction " << randTr.amountDbl() << " " << randTr.date.toString() << randTr.name << endl;
 			retVect.append(randTr);
 		}
 		nextDay();

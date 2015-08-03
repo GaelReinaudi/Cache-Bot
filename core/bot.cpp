@@ -25,7 +25,10 @@ Bot::Bot(QJsonObject jsonBot, QObject *parent)
 			m_botStrings += strVal;
 		}
 	}
-	qDebug() << m_botStrings;
+	LOG() << "Bot::Bot from JsonObject" << endl;
+	for (auto& s : m_botStrings) {
+		LOG() << s << endl;
+	}
 }
 
 Bot::~Bot()
@@ -36,7 +39,7 @@ void Bot::init(BotContext *context) {
 	m_context = context;
 	BotContext::LIMIT_NUM_FEATURES = BotContext::MAX_NUM_FEATURES;
 	Puppy::initializeTree(m_puppyTree, *m_context, m_botStrings);
-	qDebug() << m_puppyTree.toStr();
+	LOG() << "Bot::init" << m_puppyTree.toStr() << endl;
 }
 
 double Bot::evaluate()
@@ -63,7 +66,7 @@ QJsonObject Bot::summarize()
 	emit m_context->newSummarizedTree(jsonObj);
 
 	QString jsonStr = QJsonDocument(jsonObj).toJson(/*QJsonDocument::Compact*/);
-	LOG() << "tree (" << fit << "): " << m_puppyTree.toStr() << endl;
+	LOG() << "Bot::summarize() tree (" << fit << "): " << m_puppyTree.toStr() << endl;
 	LOG() << "    " << jsonStr << endl;
 	return jsonObj;
 }
