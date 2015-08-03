@@ -143,7 +143,7 @@ void Puppy::Tree::write(std::ostream& ioOS, unsigned int inIndex, bool multiline
 	ioOS << (*this)[inIndex].mPrimitive->getName();
 	unsigned int j = inIndex + 1;
 	for(unsigned int i=0; i<lNbArgs; ++i) {
-		ioOS << multiline ? '\n' : ' ';
+		ioOS << (multiline ? "\n" : " ");
 		write(ioOS, j);
 		j += (*this)[j].mSubTreeSize;
 	}
