@@ -145,6 +145,11 @@ public:
 			return *m_vector[index];
 		return trans(index + m_vector.count());
 	}
+	Transaction randomTransaction() {
+		if (count() == 0)
+			return Transaction();
+		return trans(qrand() % count());
+	}
 	int count() const {
 		return m_vector.count();
 	}

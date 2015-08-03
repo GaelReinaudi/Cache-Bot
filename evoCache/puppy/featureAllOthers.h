@@ -27,9 +27,6 @@ public:
 		getArgument(++ind, &a, ioContext);
 		m_avgDayOut95 = a;
 	}
-	void cleanArgs() override {
-		AccountFeature::cleanArgs();
-	}
 
 	QJsonObject toJson(Puppy::Context& ioContext) override {
 		QJsonObject retObj = AccountFeature::toJson(ioContext);

@@ -3,7 +3,6 @@
 #define MIN_TRANSACTIONS_FOR_STAT 6
 
 void FeatureStatDistrib::getArgs(Puppy::Context &ioContext) {
-	AccountFeature::getArgs(ioContext);
 	// if we are forcing a given hashed bundle
 	int filterHashIndex = ioContext.filterHashIndex;
 	if(filterHashIndex >= 0) {
@@ -35,10 +34,9 @@ void FeatureStatDistrib::execute(void *outDatum, Puppy::Context &ioContext)
 	// will be ALL the transactions if m_filterHash < 0
 	auto& allTrans = ioContext.m_pUser->transBundle(m_filterHash);
 	QDate lastDate = QDate::currentDate();
-	//	QDate iniDate = lastDate.addMonths(-6);
 
 	// transaction to compare the hash with
-	m_modelTrans = Transaction();
+	Transaction m_modelTrans;
 	m_modelTrans.nameHash.setFromHash(m_hash);
 	m_modelTrans.setAmount(-1.0); // only negative prices will have a usable distance
 	m_modelTrans.date = lastDate;
@@ -100,7 +98,7 @@ QVector<Transaction> FeatureStatDistrib::revelation(QDate upToDate) {
 	QVector<Transaction> retVect;
 	while (curDate() <= upToDate) {
 		if (randBool(m_dayProba)) {
-			Transaction randTr = randomTransaction();
+			Transaction randTr = m_bundle.randomTransaction();
 			randTr.date = curDate();
 			LOG() << "randomTransaction " << randTr.amountDbl() << " " << randTr.date.toString() << randTr.name << endl;
 			retVect.append(randTr);
