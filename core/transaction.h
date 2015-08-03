@@ -128,7 +128,7 @@ private:
 
 
 
-class CORESHARED_EXPORT TransactionBundle : public QObject
+class CORESHARED_EXPORT TransactionBundle// : public QObject
 {
 public:
 	TransactionBundle() {

@@ -89,11 +89,17 @@ void FeatureStatDistrib::execute(void *outDatum, Puppy::Context &ioContext)
 			Transaction& t = m_bundle.trans(i);
 			emit ioContext.m_pUser->botContext()->matchedTransaction(t.time_t(), t.amountDbl(), 2);
 		}
-		ioContext.m_pUser->oracle()->addSubOracle(this);
+		OracleStatDistrib* pNewOr = new OracleStatDistrib();
+		pNewOr->m_bundle = m_bundle;
+		pNewOr->m_hash = m_hash;
+		pNewOr->m_dayProba = m_dayProba;
+		pNewOr->m_daysBundle = m_daysBundle;
+		QSharedPointer<Oracle> newOracle(pNewOr);
+		ioContext.m_pUser->oracle()->addSubOracle(newOracle);
 	}
 }
 
-QVector<Transaction> FeatureStatDistrib::revelation(QDate upToDate) {
+QVector<Transaction> OracleStatDistrib::revelation(QDate upToDate) {
 	LOG() << "FeatureStatDistrib::revelation proba = " << m_dayProba << " bundle = " << m_bundle.count() << endl;
 	QVector<Transaction> retVect;
 	while (curDate() <= upToDate) {

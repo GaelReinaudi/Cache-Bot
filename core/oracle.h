@@ -35,13 +35,13 @@ class SuperOracle : public Oracle
 public:
 	void resetDate(QDate initialDate) override {
 		Oracle::resetDate(initialDate);
-		for (Oracle* pOr : m_subOracles) {
+		for (auto pOr : m_subOracles) {
 			pOr->resetDate(initialDate);
 		}
 	}
 	void nextDay() override {
 		Oracle::nextDay();
-		for (Oracle* pOr : m_subOracles) {
+		for (auto pOr : m_subOracles) {
 			pOr->nextDay();
 		}
 	}
@@ -49,14 +49,14 @@ public:
 		LOG() << "clearSubOracles" << endl;
 		m_subOracles.clear();
 	}
-	void addSubOracle(Oracle* pOr) {
-		LOG() << "addSubOracle " << pOr << endl;
+	void addSubOracle(QSharedPointer<Oracle> pOr) {
+		LOG() << "addSubOracle " << pOr.data() << endl;
 		m_subOracles.append(pOr);
 	}
 	QVector<Transaction> revelation(QDate upToDate) override;
 
 private:
-	QVector<Oracle*> m_subOracles;
+	QVector<QSharedPointer<Oracle> > m_subOracles;
 };
 
 #endif // ORACLE_H
