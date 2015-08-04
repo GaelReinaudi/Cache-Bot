@@ -118,9 +118,6 @@ public:
 		retObj.insert("numArgs", int(getNumberArguments()));
 		retObj.insert("fitness", m_fitness);
 		retObj.insert("billProba", m_billProba);
-		retObj.insert("labels", QJsonArray::fromStringList(m_bundle.uniqueNames()));
-		retObj.insert("tot$", m_bundle.sumDollar());
-		retObj.insert("numBund", m_bundle.count());
 		QJsonArray argList;
 		for (unsigned int i = 0; i < getNumberArguments(); ++i) {
 			double lArgi = 0.0;
@@ -136,10 +133,10 @@ protected:
 	virtual void cleanArgs() {}
 
 protected:
-	TransactionBundle m_bundle;
 	// if any, the hash to filter the transaction on
 	int m_filterHash = -1;
 
+//	TransactionBundle m_bundle;
 	double m_fitness = 0.0;
 	double m_billProba = 0.0;
 };
