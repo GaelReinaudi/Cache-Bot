@@ -3,6 +3,48 @@
 #include "AccRegPrimits.h"
 #include "oracle.h"
 
+class OraclePeriodicAmount : public Oracle
+{
+public:
+
+protected:
+	QVector<Transaction> revelation(QDate upToDate) override;
+
+private:
+	struct Args
+	{
+		void intoJson(QJsonObject& o_retObj) {
+			o_retObj.insert("dayOfMonth", m_dayOfMonth);
+			o_retObj.insert("consecutive", m_consecMonthBeforeMissed);
+			o_retObj.insert("cons-missed", m_consecMissed);
+
+//			if(m_bundle.count()) {
+//				QString str = QString::fromStdString(getName()) + " ("
+//					  + QString::number(m_bundle.count()) +  ") "
+//					  + " kl$ " + QString::number(double(m_kla) / KLA_MULTIPLICATOR)
+//					  + " / " + QString::number(kindaLog(m_bundle.sumDollar() / m_bundle.count()))
+//					  + " = " + QString::number(unKindaLog(double(m_kla) / KLA_MULTIPLICATOR))
+//					  + " / " + QString::number(m_bundle.sumDollar() / m_bundle.count());
+//				o_retObj.insert("info", str);
+//				str = QString("On the ") + QString::number(m_dayOfMonth) + "th, ";
+//				str += QString("hash: ") + QString::number(m_bundle.trans(0).nameHash.hash());
+//				o_retObj.insert("hash", m_bundle.trans(0).nameHash.hash());
+//			}
+		}
+		TransactionBundle m_bundle;
+		int m_dayOfMonth = 0;
+		int m_kla = 0;
+		int m_b[4];
+		// characteristics
+		int m_consecMonthBeforeMissed = 0;
+		int m_consecMonth = 0;
+		int m_consecMissed = 0;
+	} m_args;
+	friend class FeaturePeriodicAmount;
+	friend class FeatureMonthlyAmount;
+	friend class FeatureBiWeeklyAmount;
+};
+
 class FeaturePeriodicAmount : public AccountFeature
 {
 public:
@@ -47,46 +89,29 @@ protected:
 		double a = 0;
 		int ind = -1;
 		getArgument(++ind, &a, ioContext);
-		m_dayOfMonth = a;
+		m_localStaticArgs.m_dayOfMonth = a;
 		getArgument(++ind, &a, ioContext);
-		m_kla = a;
+		m_localStaticArgs.m_kla = a;
 
 		int bInd = -1;
 		getArgument(++ind, &a, ioContext);
-		m_b[++bInd] = a;
+		m_localStaticArgs.m_b[++bInd] = a;
 		getArgument(++ind, &a, ioContext);
-		m_b[++bInd] = a;
+		m_localStaticArgs.m_b[++bInd] = a;
 		getArgument(++ind, &a, ioContext);
-		m_b[++bInd] = a;
+		m_localStaticArgs.m_b[++bInd] = a;
 		getArgument(++ind, &a, ioContext);
-		m_b[++bInd] = a;
+		m_localStaticArgs.m_b[++bInd] = a;
 	}
 	void cleanArgs() override {
 		FeaturePeriodicAmount::cleanArgs();
-		m_dayOfMonth %= 31;
-		++m_dayOfMonth;
+		m_localStaticArgs.m_dayOfMonth %= 31;
+		++m_localStaticArgs.m_dayOfMonth;
 	}
 
 	QJsonObject toJson(Puppy::Context& ioContext) override {
 		QJsonObject retObj = FeaturePeriodicAmount::toJson(ioContext);
-		retObj.insert("dayOfMonth", m_dayOfMonth);
-		retObj.insert("consecutive", m_consecMonthBeforeMissed);
-		retObj.insert("cons-missed", m_consecMissed);
-
-		if(m_bundle.count()) {
-			QString str = QString::fromStdString(getName()) + " ("
-				  + QString::number(m_bundle.count()) +  ") "
-				  + " kl$ " + QString::number(double(m_kla) / KLA_MULTIPLICATOR)
-				  + " / " + QString::number(kindaLog(m_bundle.sumDollar() / m_bundle.count()))
-				  + " = " + QString::number(unKindaLog(double(m_kla) / KLA_MULTIPLICATOR))
-				  + " / " + QString::number(m_bundle.sumDollar() / m_bundle.count());
-			retObj.insert("info", str);
-			str = QString("On the ") + QString::number(m_dayOfMonth) + "th, ";
-			str += QString("hash: ") + QString::number(m_bundle.trans(0).nameHash.hash());
-			retObj.insert("hash", m_bundle.trans(0).nameHash.hash());
-//			retObj.insert("indH", m_bundle.trans(0).indexHash);
-		}
-
+		m_localStaticArgs.intoJson(retObj);
 		return retObj;
 	}
 
@@ -94,29 +119,23 @@ protected:
 
 	double billProbability() const {
 		double proba = m_fitness;
-		proba *= m_consecMonthBeforeMissed;
-		proba /= 4 + 2 * m_consecMissed;
+		proba *= m_localStaticArgs.m_consecMonthBeforeMissed;
+		proba /= 4 + 2 * m_localStaticArgs.m_consecMissed;
 		return proba;
 	}
 
 	virtual QVector<Transaction> targetTransactions(QDate iniDate, QDate lastDate);
-	QVector<Transaction> revelation(QDate upToDate) override {
-		auto ret = targetTransactions(QDate::currentDate(), upToDate);
-		LOG() << "FeatureMonthlyAmount::revelation " << ret.count() << endl;
-		for (Transaction& tr : ret) {
-			LOG() << "monthly " << tr.amountDbl() << " " << tr.date.toString() << endl;
-		}
-		return ret;
-	}
+//	QVector<Transaction> revelation(QDate upToDate) override {
+//		auto ret = targetTransactions(QDate::currentDate(), upToDate);
+//		LOG() << "FeatureMonthlyAmount::revelation " << ret.count() << endl;
+//		for (Transaction& tr : ret) {
+//			LOG() << "monthly " << tr.amountDbl() << " " << tr.date.toString() << endl;
+//		}
+//		return ret;
+//	}
 
 protected:
-	int m_dayOfMonth = 0;
-	int m_kla = 0;
-	int m_b[4];
-	// characteristics
-	int m_consecMonthBeforeMissed = 0;
-	int m_consecMonth = 0;
-	int m_consecMissed = 0;
+	OraclePeriodicAmount::Args m_localStaticArgs;
 };
 
 class FeatureBiWeeklyAmount : public FeatureMonthlyAmount
@@ -127,7 +146,7 @@ public:
 	{ }
 	int approxSpacingPayment() override { return 17; } // +2d: gives some room for late payment
 	virtual void cleanArgs() override {
-		m_dayOfMonth2 = m_dayOfMonth+14;//(m_dayOfMonth / 32) % 31;
+		m_dayOfMonth2 = m_localStaticArgs.m_dayOfMonth+14;//(m_dayOfMonth / 32) % 31;
 		++m_dayOfMonth2;
 		FeatureMonthlyAmount::cleanArgs();
 	}

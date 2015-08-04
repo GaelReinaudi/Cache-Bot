@@ -17,13 +17,13 @@ void FeatureAllOthers::execute(void *outDatum, Puppy::Context &ioContext)
 	QDate lastDate = QDate::currentDate();
 	QDate iniDate = lastDate.addMonths(-6);
 
-	m_bundle.clear();
-	m_avgDayIn90 = 123456;//ioContext.m_pUser->makeLiving(0.90);
-	m_avgDayOut90 = 123456;//HistoMetric::get("cost2MonthP90")[lastDate];
-	m_avgDayIn95 = 123456;//ioContext.m_pUser->makeLiving(0.95);
-	m_avgDayOut95 = 123456;//HistoMetric::get("cost2MonthP95")[lastDate];
-	m_avgDayIn099 = 123456;//ioContext.m_pUser->makeLiving(0.99);
-	m_avgDayOut099 = 123456;//HistoMetric::get("cost2MonthP99")[lastDate];
+	m_localStaticArgs.m_bundle.clear();
+	m_localStaticArgs.m_avgDayIn90 = 123456;//ioContext.m_pUser->makeLiving(0.90);
+	m_localStaticArgs.m_avgDayOut90 = 123456;//HistoMetric::get("cost2MonthP90")[lastDate];
+	m_localStaticArgs.m_avgDayIn95 = 123456;//ioContext.m_pUser->makeLiving(0.95);
+	m_localStaticArgs.m_avgDayOut95 = 123456;//HistoMetric::get("cost2MonthP95")[lastDate];
+	m_localStaticArgs.m_avgDayIn099 = 123456;//ioContext.m_pUser->makeLiving(0.99);
+	m_localStaticArgs.m_avgDayOut099 = 123456;//HistoMetric::get("cost2MonthP99")[lastDate];
 	int posTr = 0;
 	int negTr = 0;
 	int alreadyMatched = 0;
@@ -46,15 +46,14 @@ void FeatureAllOthers::execute(void *outDatum, Puppy::Context &ioContext)
 	m_fitness = double(alreadyMatched * (posTr + negTr)) / allTrans.count();
 	m_billProba = 1000000.0;
 
-	QVector<Transaction> targetTrans = targetTransactions(iniDate, lastDate.addDays(BotContext::TARGET_TRANS_FUTUR_DAYS));
 	if (ioContext.m_summaryJsonObj) {
-		LOG() << getName().c_str() << targetTrans.count()
-			  << "avgDayIn099" << m_avgDayIn099
-			  << "avgDayOut099" << m_avgDayOut099
-			  << "avgDayIn90" << m_avgDayIn90
-			  << "avgDayOut90" << m_avgDayOut90
-			  << "avgDayIn95" << m_avgDayIn95
-			  << "avgDayOut95" << m_avgDayOut95
+		LOG() << getName().c_str()
+			  << "avgDayIn099" << m_localStaticArgs.m_avgDayIn099
+			  << "avgDayOut099" << m_localStaticArgs.m_avgDayOut099
+			  << "avgDayIn90" << m_localStaticArgs.m_avgDayIn90
+			  << "avgDayOut90" << m_localStaticArgs.m_avgDayOut90
+			  << "avgDayIn95" << m_localStaticArgs.m_avgDayIn95
+			  << "avgDayOut95" << m_localStaticArgs.m_avgDayOut95
 			  << endl;
 	}
 
@@ -62,10 +61,6 @@ void FeatureAllOthers::execute(void *outDatum, Puppy::Context &ioContext)
 
 	// summary if the json object exists
 	if (ioContext.m_summaryJsonObj) {
-		if(ioContext.m_mapPredicted) {
-			(*(ioContext.m_mapPredicted))[m_billProba] += targetTrans;
-		}
-
 		if(m_billProba > 0.0) {
 			QJsonArray features = (*ioContext.m_summaryJsonObj)["features"].toArray();
 			features.append(toJson(ioContext));
@@ -74,21 +69,3 @@ void FeatureAllOthers::execute(void *outDatum, Puppy::Context &ioContext)
 	}
 }
 
-QVector<Transaction> FeatureAllOthers::targetTransactions(QDate iniDate, QDate lastDate)
-{
-	Q_UNUSED(iniDate);
-	Q_UNUSED(lastDate);
-	QVector<Transaction> targetTrans;
-//	QDate currentDate = iniDate;
-//	while (currentDate < lastDate) {
-//		targetTrans.append(Transaction());
-//		targetTrans.last().date = currentDate;
-//		targetTrans.last().setAmount(m_avgDayIn90 - m_avgDayOut90);
-//		targetTrans.last().indexHash = 0;
-//		targetTrans.last().nameHash.setFromHash(0);
-//		targetTrans.last().flags |= Transaction::Predicted;
-
-//		currentDate = currentDate.addDays(1);
-//	}
-	return targetTrans;
-}

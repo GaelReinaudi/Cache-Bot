@@ -91,14 +91,16 @@ void FeatureStatDistrib::execute(void *outDatum, Puppy::Context &ioContext)
 		}
 		OracleStatDistrib* pNewOr = new OracleStatDistrib();
 		pNewOr->m_args = m_localStaticArgs;
+		// making a shared pointer that will take care of cleaning once the oracle is no longer referenced
 		QSharedPointer<Oracle> newOracle(pNewOr);
 		ioContext.m_pUser->oracle()->addSubOracle(newOracle);
 	}
 }
 
 QVector<Transaction> OracleStatDistrib::revelation(QDate upToDate) {
-	LOG() << "FeatureStatDistrib::revelation proba = " << m_args.m_dayProba << " bundle = " << m_args.m_bundle.count() << endl;
-	QVector<Transaction> retVect;
+	LOG() << "OracleStatDistrib::revelation proba = " << m_args.m_dayProba << " bundle = " << m_args.m_bundle.count() << endl;
+	static QVector<Transaction> retVect;
+	retVect.clear();
 	while (curDate() <= upToDate) {
 		if (randBool(m_args.m_dayProba)) {
 			Transaction randTr = m_args.m_bundle.randomTransaction();
