@@ -6,7 +6,7 @@
 #include "oracle.h"
 #include "bot.h"
 
-static const int numRevelations = 1;
+static const int numRevelations = 10;
 static int IND_GR_REVEL = -1;
 static int IND_GR_BALANCE = -1;
 static int IND_GR_SLOPE = -1;
@@ -73,6 +73,7 @@ ExtraCashView::~ExtraCashView()
 
 void ExtraCashView::onBotInjected(Bot* pBot)
 {
+	Q_UNUSED(pBot);
 	LOG() << "ExtraCashView::onBotInjected" << endl;
 	ui->costLive50SpinBox->setValue(CostRateMonthPercentileMetric<6, 50>::get(m_pExtraCache->user())->value(m_pbDate));
 	ui->costLive75SpinBox->setValue(CostRateMonthPercentileMetric<6, 75>::get(m_pExtraCache->user())->value(m_pbDate));
@@ -136,11 +137,11 @@ void ExtraCashView::updateChart()
 	makeBalancePlot();
 	makeRevelationPlot();
 	makePastiPlot();
-	makeMinSlope();
+//	makeMinSlope();
 
 	ui->plot->xAxis->setRange(x - displayDayPast, x + displayDayFuture + 1);
 	ui->plot->yAxis->rescale();
-	ui->plot->yAxis->setRange(-100, ui->plot->yAxis->range().upper + 100);
+	ui->plot->yAxis->setRange(qMin(ui->plot->yAxis->range().lower, -100.0), ui->plot->yAxis->range().upper + 100);
 	ui->plot->replot();
 }
 
