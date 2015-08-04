@@ -17,6 +17,9 @@ private:
 			o_retObj.insert("dayOfMonth", m_dayOfMonth);
 			o_retObj.insert("consecutive", m_consecMonthBeforeMissed);
 			o_retObj.insert("cons-missed", m_consecMissed);
+			o_retObj.insert("labels", QJsonArray::fromStringList(m_bundle.uniqueNames()));
+			o_retObj.insert("tot$", m_bundle.sumDollar());
+			o_retObj.insert("numBund", m_bundle.count());
 
 //			if(m_bundle.count()) {
 //				QString str = QString::fromStdString(getName()) + " ("
@@ -56,12 +59,13 @@ public:
 	virtual int approxSpacingPayment() = 0;
 };
 
-class FeatureMonthlyAmount : public FeaturePeriodicAmount, public Oracle
+class FeatureMonthlyAmount : public FeaturePeriodicAmount
 {
 public:
 	FeatureMonthlyAmount()
 		: FeaturePeriodicAmount("MonthlyAmount")
 	{ }
+	static QVector<Transaction> BlankTransactionsForDayOfMonth(QDate iniDate, QDate lastDate, int dayOfMonth);
 protected:
 	FeatureMonthlyAmount(QString featureName)
 		: FeaturePeriodicAmount(featureName)
@@ -73,11 +77,8 @@ protected:
 		int filterHashIndex = ioContext.filterHashIndex;
 		if(filterHashIndex >= 0) {
 			m_filterHash = ioContext.m_pUser->hashBundles().keys()[filterHashIndex];
-//			int avgKLA = ioContext.m_pUser->hashBundles()[m_filterHash]->averageKLA();
 			std::string nodeName = QString("h%1").arg(m_filterHash).toStdString();
 			bool ok = tryReplaceArgumentNode(2, nodeName.c_str(), ioContext);
-//			std::string nodeKLA = QString("kla%1").arg(avgKLA).toStdString();
-//			ok &= tryReplaceArgumentNode(3, nodeKLA.c_str(), ioContext);
 			if(!ok) {
 				LOG() << "Could not replace the node with " << nodeName.c_str() << endl;
 			}
@@ -116,6 +117,7 @@ protected:
 	}
 
 	void execute(void* outDatum, Puppy::Context& ioContext) override;
+	double apply(TransactionBundle &allTrans, bool doLog = false);
 
 	double billProbability() const {
 		double proba = m_fitness;
@@ -125,17 +127,10 @@ protected:
 	}
 
 	virtual QVector<Transaction> targetTransactions(QDate iniDate, QDate lastDate);
-//	QVector<Transaction> revelation(QDate upToDate) override {
-//		auto ret = targetTransactions(QDate::currentDate(), upToDate);
-//		LOG() << "FeatureMonthlyAmount::revelation " << ret.count() << endl;
-//		for (Transaction& tr : ret) {
-//			LOG() << "monthly " << tr.amountDbl() << " " << tr.date.toString() << endl;
-//		}
-//		return ret;
-//	}
 
 protected:
 	OraclePeriodicAmount::Args m_localStaticArgs;
+	QVector<Transaction> m_targetTrans;
 };
 
 class FeatureBiWeeklyAmount : public FeatureMonthlyAmount

@@ -2,16 +2,10 @@
 
 
 
-QVector<Transaction> Oracle::revelation(QDate upToDate) {
-	Q_UNUSED(upToDate);
-	return QVector<Transaction>();
-}
-
-
 QVector<Transaction> SuperOracle::revelation(QDate upToDate)
 {
 	LOG() << "SuperOracle::revelation from " << m_subOracles.count() << endl;
-	QVector<Transaction> ret = Oracle::revelation(upToDate);
+	QVector<Transaction> ret;
 	// naive adding up the revelations for now
 	for (auto pOr : m_subOracles) {
 		ret += pOr->revelation(upToDate);

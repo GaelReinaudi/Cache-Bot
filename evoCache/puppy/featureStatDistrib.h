@@ -48,6 +48,8 @@ protected:
 	}
 	void execute(void* outDatum, Puppy::Context& ioContext) override;
 
+	double apply(TransactionBundle& allTrans);
+
 private:
 	OracleStatDistrib::Args m_localStaticArgs;
 };

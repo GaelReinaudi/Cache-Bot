@@ -23,16 +23,8 @@ void FeatureStatDistrib::getArgs(Puppy::Context &ioContext) {
 	m_localStaticArgs.m_hash = a;
 }
 
-void FeatureStatDistrib::execute(void *outDatum, Puppy::Context &ioContext)
+double FeatureStatDistrib::apply(TransactionBundle& allTrans)
 {
-	AccountFeature::execute(outDatum, ioContext);
-	double& output = *(double*)outDatum;
-
-	getArgs(ioContext);
-	cleanArgs();
-
-	// will be ALL the transactions if m_filterHash < 0
-	auto& allTrans = ioContext.m_pUser->transBundle(m_filterHash);
 	QDate lastDate = QDate::currentDate();
 
 	// transaction to compare the hash with
@@ -57,8 +49,7 @@ void FeatureStatDistrib::execute(void *outDatum, Puppy::Context &ioContext)
 	if (numBund <= MIN_TRANSACTIONS_FOR_STAT) {
 		m_fitness = 0.0;
 		m_billProba = 0.0;
-		output = m_fitness;
-		return;
+		return m_fitness;
 	}
 	// get the date those transaction started
 	QDate firstDate = m_localStaticArgs.m_bundle.trans(0).date;
@@ -72,20 +63,34 @@ void FeatureStatDistrib::execute(void *outDatum, Puppy::Context &ioContext)
 	m_fitness *= numBund * numBund;
 	m_fitness /= MIN_TRANSACTIONS_FOR_STAT * MIN_TRANSACTIONS_FOR_STAT;
 	m_fitness *= m_localStaticArgs.m_dayProba;
-	output = m_fitness;
+	return m_fitness;
+}
+
+void FeatureStatDistrib::execute(void *outDatum, Puppy::Context &ioContext)
+{
+	AccountFeature::execute(outDatum, ioContext);
+	double& output = *(double*)outDatum;
+
+	getArgs(ioContext);
+	cleanArgs();
+
+	// will be ALL the transactions if m_filterHash < 0
+	auto& allTrans = ioContext.m_pUser->transBundle(m_filterHash);
+
+	output = apply(allTrans);
 
 	if (ioContext.m_summaryJsonObj) {
 		LOG() << getName().c_str() << " " << this
 			<< " p=" << m_billProba
-			<< " n=" << numBund
-			<< " h=" << modelTrans.nameHash.hash()
+			<< " n=" << m_localStaticArgs.m_bundle.count()
+			<< " h=" << m_localStaticArgs.m_hash
 			<< endl;
-		if(m_billProba > 0.001) {
+		if (m_billProba > 0.001) {
 			QJsonArray features = (*ioContext.m_summaryJsonObj)["features"].toArray();
 			features.append(toJson(ioContext));
 			ioContext.m_summaryJsonObj->insert("features", features);
 		}
-		for (int i = 0; i < numBund; ++i) {
+		for (int i = 0; i < m_localStaticArgs.m_bundle.count(); ++i) {
 			Transaction& t = m_localStaticArgs.m_bundle.trans(i);
 			emit ioContext.m_pUser->botContext()->matchedTransaction(t.time_t(), t.amountDbl(), 2);
 		}

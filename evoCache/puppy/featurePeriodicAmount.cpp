@@ -1,57 +1,19 @@
 #include "featurePeriodicAmount.h"
 
-QVector<Transaction> FeatureMonthlyAmount::targetTransactions(QDate iniDate, QDate lastDate)
+double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 {
-	QVector<Transaction> targetTrans;
-	QDate currentDate = iniDate;
-	while (currentDate < lastDate) {
-		// the target day of this month. If neg, make it count from the end of the month.
-		int targetDayThisMonth = qMin(m_localStaticArgs.m_dayOfMonth, currentDate.daysInMonth());
-		targetDayThisMonth = qMax(targetDayThisMonth, 1 - currentDate.daysInMonth());
-		while (targetDayThisMonth <= 0)
-			targetDayThisMonth += currentDate.daysInMonth();
-
-		// move current date to the correct target day that month
-		currentDate = currentDate.addDays(targetDayThisMonth - currentDate.day());
-		// assert that it is 30ish days after the previous date
-		assert(targetTrans.count() == 0 || qAbs(targetTrans.last().date.daysTo(currentDate) - 30) <= 2);
-
-		targetTrans.append(Transaction());
-		targetTrans.last().date = currentDate;
-		targetTrans.last().setKLA(m_localStaticArgs.m_kla);
-		targetTrans.last().nameHash.setFromHash(m_localStaticArgs.m_b[0]);
-		targetTrans.last().flags |= Transaction::Predicted;
-
-		currentDate = currentDate.addMonths(1);
-	}
-
-	return targetTrans;
-}
-
-void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
-{
-	AccountFeature::execute(outDatum, ioContext);
-	double& output = *(double*)outDatum;
-
-	getArgs(ioContext);
-	cleanArgs();
-
-	m_fitness = 0.0;
-
-	// will be ALL the transactions if m_filterHash < 0
-	auto& allTrans = ioContext.m_pUser->transBundle(m_filterHash);
 	QDate lastDate = QDate::currentDate();
 	QDate iniDate = lastDate.addMonths(-6);
 
-	QVector<Transaction> targetTrans = targetTransactions(iniDate, lastDate.addDays(BotContext::TARGET_TRANS_FUTUR_DAYS));
-	if (targetTrans.count() == 0) {
+	m_targetTrans = targetTransactions(iniDate, lastDate.addDays(BotContext::TARGET_TRANS_FUTUR_DAYS));
+	if (m_targetTrans.count() == 0) {
 		LOG() << "MonthlyAmount(0 TARGET): day "<<m_localStaticArgs.m_dayOfMonth<<" kla "<< m_localStaticArgs.m_kla << endl;
 	}
-	else if (ioContext.m_summaryJsonObj) {
-		LOG() << getName().c_str() << " " << this << targetTrans.count()
+	else if (doLog) {
+		LOG() << getName().c_str() << " " << this << m_targetTrans.count()
 			<<" TARGET: day " << m_localStaticArgs.m_dayOfMonth
-			<<" kla"<< m_localStaticArgs.m_kla << "=" << targetTrans.first().amountDbl()
-			<< " h=" << targetTrans.first().nameHash.hash()
+			<<" kla"<< m_localStaticArgs.m_kla << "=" << m_targetTrans.first().amountDbl()
+			<< " h=" << m_targetTrans.first().nameHash.hash()
 			<< endl;
 	}
 
@@ -60,9 +22,8 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 	quint64 localDist = 18446744073709551615ULL;
 	Transaction* localTrans = 0;
 	// the current target to compare to
-	Transaction* iTarg = &targetTrans[0];
-	static TransactionBundle m_bundle;
-	m_bundle.clear();
+	Transaction* iTarg = &m_targetTrans[0];
+	m_localStaticArgs.m_bundle.clear();
 
 	m_localStaticArgs.m_consecMonth = 0;
 	m_localStaticArgs.m_consecMonthBeforeMissed = 0;
@@ -78,8 +39,8 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 		// if we get further away by approxSpacingPayment() / 2 days, we take the next target, or if last trans
 		if (trans.jDay() > approxSpacingPayment() / 2 + iTarg->jDay() || i == allTrans.count() - 1) {
 			if (localDist < Transaction::LIMIT_DIST_TRANS) {
-				m_bundle.append(localTrans);
-				if (ioContext.m_summaryJsonObj) {
+				m_localStaticArgs.m_bundle.append(localTrans);
+				if (doLog) {
 					iTarg->dist(*localTrans, true);
 				}
 				// isolate the transaction that were fitted to the target
@@ -95,7 +56,7 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 				totalOneOverDistClosest += 64.0 / (64 + localDist);
 			}
 			else {
-				if (ioContext.m_summaryJsonObj) {
+				if (doLog) {
 					LOG() << "missed: ";
 					iTarg->dist(*localTrans, true);
 				}
@@ -104,7 +65,7 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 				totalOneOverDistClosest += 1.0 / (1 + localDist);
 			}
 
-			if (iTarg == &targetTrans.last() || (iTarg + 1)->date >= lastDate)
+			if (iTarg == &m_targetTrans.last() || (iTarg + 1)->date >= lastDate)
 				break;
 			++iTarg;
 			localTrans = 0;
@@ -117,36 +78,44 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 	}
 	totalOneOverDistOthers -= totalOneOverDistClosest;
 	// only sum that add up to > $N
-	if (qAbs(m_bundle.sumDollar()) > 1) {
+	if (qAbs(m_localStaticArgs.m_bundle.sumDollar()) > 1) {
 		m_fitness += totalOneOverDistClosest;
-		m_fitness *= 1.0 * double(m_bundle.count() + m_bundle.count()) / double(targetTrans.count());
+		m_fitness *= 1.0 * double(m_localStaticArgs.m_bundle.count() + m_localStaticArgs.m_bundle.count()) / double(m_targetTrans.count());
 		m_fitness *= 1.0 + (1.0 / (1.0 + m_localStaticArgs.m_consecMissed));
 	}
 	m_billProba = billProbability();
-	output = m_fitness;
+	return m_fitness;
+}
+
+void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
+{
+	AccountFeature::execute(outDatum, ioContext);
+	double& output = *(double*)outDatum;
+
+	getArgs(ioContext);
+	cleanArgs();
+
+	m_fitness = 0.0;
+
+	// will be ALL the transactions if m_filterHash < 0
+	auto& allTrans = ioContext.m_pUser->transBundle(m_filterHash);
+
+	output = apply(allTrans, ioContext.m_summaryJsonObj);
 
 	// summary if the json object exists
 	if (ioContext.m_summaryJsonObj) {
-		if(ioContext.m_mapPredicted) {
-			(*(ioContext.m_mapPredicted))[m_billProba] += targetTrans;
-			for (auto& t : targetTrans) {
-				Q_UNUSED(t);
-				Q_ASSERT(t.flags & Transaction::Predicted);
-			}
-		}
-
 		if(m_billProba > 0.0) {
 			QJsonArray features = (*ioContext.m_summaryJsonObj)["features"].toArray();
 			features.append(toJson(ioContext));
 			ioContext.m_summaryJsonObj->insert("features", features);
 		}
 
-		for (int i = 0; i < targetTrans.count(); ++i) {
-			Transaction* iTarg = &targetTrans[i];
+		for (int i = 0; i < m_targetTrans.count(); ++i) {
+			Transaction* iTarg = &m_targetTrans[i];
 			emit ioContext.m_pUser->botContext()->matchedTransaction(iTarg->time_t(), iTarg->amountDbl());
 		}
-		for (int i = 0; i < m_bundle.count(); ++i) {
-			Transaction& t = m_bundle.trans(i);
+		for (int i = 0; i < m_localStaticArgs.m_bundle.count(); ++i) {
+			Transaction& t = m_localStaticArgs.m_bundle.trans(i);
 			emit ioContext.m_pUser->botContext()->matchedTransaction(t.time_t(), t.amountDbl(), 1);
 		}
 		OraclePeriodicAmount* pNewOr = new OraclePeriodicAmount();
@@ -157,34 +126,58 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 	}
 }
 
-QVector<Transaction> FeatureBiWeeklyAmount::targetTransactions(QDate iniDate, QDate lastDate)
+QVector<Transaction> FeatureMonthlyAmount::BlankTransactionsForDayOfMonth(QDate iniDate, QDate lastDate, int dayOfMonth)
 {
 	QVector<Transaction> targetTrans;
 	QDate currentDate = iniDate;
 	while (currentDate < lastDate) {
 		// the target day of this month. If neg, make it count from the end of the month.
-		int targetDayThisMonth = qMin(m_dayOfMonth2, currentDate.daysInMonth());
+		int targetDayThisMonth = qMin(dayOfMonth, currentDate.daysInMonth());
 		targetDayThisMonth = qMax(targetDayThisMonth, 1 - currentDate.daysInMonth());
 		while (targetDayThisMonth <= 0)
 			targetDayThisMonth += currentDate.daysInMonth();
+		// now we have a targetDay that is strictly in the month and
 
 		// move current date to the correct target day that month
 		currentDate = currentDate.addDays(targetDayThisMonth - currentDate.day());
-		// assert that it is 30ish days after the previous date
+		// asserts that it is 30ish days after the previous date we made
 		assert(targetTrans.count() == 0 || qAbs(targetTrans.last().date.daysTo(currentDate) - 30) <= 2);
 
 		targetTrans.append(Transaction());
 		targetTrans.last().date = currentDate;
-		targetTrans.last().setKLA(m_localStaticArgs.m_kla);
-//		targetTrans.last().indexHash = 0;
-		targetTrans.last().nameHash.setFromHash(m_localStaticArgs.m_b[0]);
-		targetTrans.last().flags |= Transaction::Predicted;
 
 		currentDate = currentDate.addMonths(1);
 	}
 
-	targetTrans += (FeatureMonthlyAmount::targetTransactions(iniDate, lastDate));
+	return targetTrans;
+}
+
+QVector<Transaction> FeatureMonthlyAmount::targetTransactions(QDate iniDate, QDate lastDate)
+{
+	int dayOfMonth = m_localStaticArgs.m_dayOfMonth;
+	QVector<Transaction> targetTrans = BlankTransactionsForDayOfMonth(iniDate, lastDate, dayOfMonth);
+	// loops through to set a few variables of the transactions
+	for (Transaction& tr : targetTrans) {
+		tr.setKLA(m_localStaticArgs.m_kla);
+		tr.nameHash.setFromHash(m_localStaticArgs.m_b[0]);
+		tr.flags |= Transaction::Predicted;
+	}
+	return targetTrans;
+}
+
+QVector<Transaction> FeatureBiWeeklyAmount::targetTransactions(QDate iniDate, QDate lastDate)
+{
+	int dayOfMonth = m_localStaticArgs.m_dayOfMonth;
+	QVector<Transaction> targetTrans = BlankTransactionsForDayOfMonth(iniDate, lastDate, dayOfMonth);
+	dayOfMonth = m_dayOfMonth2;
+	targetTrans += BlankTransactionsForDayOfMonth(iniDate, lastDate, dayOfMonth);
 	qSort(targetTrans.begin(), targetTrans.end(), Transaction::earlierThan);
+	// loops through to set a few variables of the transactions
+	for (Transaction& tr : targetTrans) {
+		tr.setKLA(m_localStaticArgs.m_kla);
+		tr.nameHash.setFromHash(m_localStaticArgs.m_b[0]);
+		tr.flags |= Transaction::Predicted;
+	}
 	return targetTrans;
 }
 
@@ -206,10 +199,11 @@ QVector<Transaction> OraclePeriodicAmount::revelation(QDate upToDate)
 			testDate = testDate.addDays(m_args.m_dayOfMonth);
 			distDayToTrigger = qMin(distDayToTrigger, qAbs(curDate().day() - testDate.day()));
 		}
-		if (distDayToTrigger == 0) {
+		if (distDayToTrigger == 0)
+		{
 			Transaction randTr = m_args.m_bundle.randomTransaction();
 			randTr.date = curDate();
-			LOG() << "randomTransaction " << randTr.amountDbl() << " " << randTr.date.toString() << randTr.name << endl;
+			LOG() << "randomTransaction " << randTr.amountDbl() << " " << randTr.date.toString() << "" << randTr.name << endl;
 			retVect.append(randTr);
 		}
 		nextDay();

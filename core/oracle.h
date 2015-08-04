@@ -23,7 +23,11 @@ public:
 		return m_curDate;
 	}
 
-	virtual QVector<Transaction> revelation(QDate upToDate);
+	virtual QVector<Transaction> revelation(QDate upToDate) = 0;
+//	{
+//		Q_UNUSED(upToDate);
+//		return QVector<Transaction>();
+//	}
 
 private:
 	QDate m_iniDate;
