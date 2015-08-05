@@ -44,6 +44,7 @@ double FeatureAllOthers::apply(TransactionBundle& allTrans)
 	// min of the ration already/tot per side Neg/Pos
 	m_fitness = qMin(alreadyMatchedPos / totPos, alreadyMatchedNeg / totNeg);
 	m_fitness *= 100.0;
+	m_fitness = qMin(m_fitness, 1.0);
 	return m_fitness;
 }
 
@@ -98,8 +99,8 @@ QVector<Transaction> OracleFilteredRest::revelation(QDate upToDate)
 			double avgAmnt = m_args.m_sumPos + m_args.m_sumNeg;
 			// Note that for now the average is done from the oldes date of the account readings
 			// to the current date, so it slowly dissolves as the oracle is predicting for latter dates
-			avgAmnt /= Transaction::onlyAfterDate.daysTo(curDate();
-			randTr.setAmount();
+			avgAmnt /= Transaction::onlyAfterDate.daysTo(curDate());
+			randTr.setAmount(avgAmnt);
 			LOG() << "avgTrans " << randTr.amountDbl() << " " << randTr.date.toString() << randTr.name << endl;
 			retVect.append(randTr);
 		}
