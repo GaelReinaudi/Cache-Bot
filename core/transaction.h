@@ -54,10 +54,10 @@ public:
 	double compressedAmount() const{
 		return kindaLog(amountDbl());
 	}
-	static bool earlierThan(const Transaction first, const Transaction second) {
+	inline static bool earlierThan(const Transaction& first, const Transaction& second) {
 		return first.date < second.date;
 	}
-	static bool smallerAmountThan(const Transaction first, const Transaction second) {
+	inline static bool smallerAmountThan(const Transaction& first, const Transaction& second) {
 		return first.amountInt() < second.amountInt();
 	}
 	//! julian day

@@ -110,7 +110,7 @@ QVector<Transaction> OracleStatDistrib::revelation(QDate upToDate) {
 		if (randBool(m_args.m_dayProba)) {
 			Transaction randTr = m_args.m_bundle.randomTransaction();
 			randTr.date = curDate();
-			LOG() << "randomTransaction " << randTr.amountDbl() << " " << randTr.date.toString() << randTr.name << endl;
+			LOG() << "randomTransaction " << randTr.amountDbl() << " " << randTr.date.toString() << "" << randTr.name << endl;
 			retVect.append(randTr);
 		}
 		nextDay();

@@ -6,8 +6,8 @@ double FeatureAllOthers::apply(TransactionBundle& allTrans)
 	m_localStaticArgs.m_bundle.clear();
 	m_localStaticArgs.m_numPos = 0;
 	m_localStaticArgs.m_numNeg = 0;
-	m_localStaticArgs.m_sumPos = 0.0;
-	m_localStaticArgs.m_sumNeg = 0.0;
+	m_localStaticArgs.m_sumPos = 0;
+	m_localStaticArgs.m_sumNeg = 0;
 	double totPos = 0;
 	double totNeg = 0;
 	double alreadyMatchedPos = 0;
@@ -18,7 +18,7 @@ double FeatureAllOthers::apply(TransactionBundle& allTrans)
 			continue;
 
 		double amnt = trans.amountDbl();
-		if (amnt >= 0.0) {
+		if (amnt > 0.0) {
 			++totPos;
 			if (trans.dimensionOfVoid) {
 				++alreadyMatchedPos;
@@ -44,7 +44,7 @@ double FeatureAllOthers::apply(TransactionBundle& allTrans)
 	// min of the ration already/tot per side Neg/Pos
 	m_fitness = qMin(alreadyMatchedPos / totPos, alreadyMatchedNeg / totNeg);
 	m_fitness *= 100.0;
-	m_fitness = qMin(m_fitness, 1.0);
+	m_fitness = qMax(m_fitness, 1.0);
 	return m_fitness;
 }
 

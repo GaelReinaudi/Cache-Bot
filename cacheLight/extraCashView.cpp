@@ -6,7 +6,7 @@
 #include "oracle.h"
 #include "bot.h"
 
-static const int numRevelations = 100;
+static const int numRevelations = 64;
 static int IND_GR_REVEL = -1;
 static int IND_GR_BALANCE = -1;
 static int IND_GR_SLOPE = -1;
@@ -47,7 +47,7 @@ ExtraCashView::ExtraCashView(QString userID, QWidget *parent) :
 	for (int i = 0; i < numRevelations; ++i) {
 		++tempInd;
 		ui->plot->addGraph();
-		ui->plot->graph(tempInd)->setPen(QPen((QColor(255, 0, 0, 16)), 3.0));
+		ui->plot->graph(tempInd)->setPen(QPen((QColor(255, 0, 0, 8)), 3.0));
 		ui->plot->graph(tempInd)->setLineStyle(QCPGraph::lsStepLeft);
 		ui->plot->graph(tempInd)->addData(-9999, 0);
 		ui->plot->graph(tempInd)->addData(9999, 0);

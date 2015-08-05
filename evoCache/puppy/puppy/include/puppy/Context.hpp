@@ -80,7 +80,7 @@ public:
 	{
 		assert(mPrimitiveMap.find(inPrimitive->getName()) == mPrimitiveMap.end());
 		mPrimitiveMap[inPrimitive->getName()] = inPrimitive;
-		if(inPrimitive->getNumberArguments() == 0)
+		if(inPrimitive->getNumberArguments() == 0 && !inPrimitive->isFeature())
 			mTerminalSet.push_back(inPrimitive);
 		else if(!inPrimitive->isFeature())
 			mFunctionSet.push_back(inPrimitive);
