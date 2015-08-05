@@ -88,6 +88,9 @@ void Puppy::Tree::interpret(void* outResult, Puppy::Context& ioContext)
 		// reset the dimensionOfVoid
 		ioContext.m_pUser->allTrans().trans(i).dimensionOfVoid = 0;
 	}
+	// reset all flags
+	ioContext.flags = 0;
+
 	assert(size() > 0);
 	ioContext.mTree = this;
 	ioContext.mCallStack.push_back(0);

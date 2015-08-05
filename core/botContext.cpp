@@ -49,6 +49,6 @@ BotContext::BotContext(User *pUser)
 	insert(new FeatureBiWeeklyAmount());
 	insert(new FeatureMonthlyAmount());
 	insert(new FeatureStatDistrib());
-//	insert(new FeatureAllOthers());
+	insert(new FeatureAllOthers());
 }
 

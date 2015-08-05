@@ -147,6 +147,8 @@ public:
 	virtual void cleanArgs() override {
 		m_localStaticArgs.m_dayOfMonth2 = m_localStaticArgs.m_dayOfMonth+14;//(m_dayOfMonth / 32) % 31;
 		++m_localStaticArgs.m_dayOfMonth2;
+		m_localStaticArgs.m_dayOfMonth2 %= 31;
+		++m_localStaticArgs.m_dayOfMonth2;
 		FeatureMonthlyAmount::cleanArgs();
 	}
 	QJsonObject toJson(Puppy::Context& ioContext) override {

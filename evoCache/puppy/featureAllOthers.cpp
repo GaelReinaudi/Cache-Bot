@@ -2,28 +2,48 @@
 
 double FeatureAllOthers::apply(TransactionBundle& allTrans)
 {
+	m_billProba = 1000000.0;
 	m_localStaticArgs.m_bundle.clear();
-	int posTr = 0;
-	int negTr = 0;
-	int alreadyMatched = 0;
+	m_localStaticArgs.m_numPos = 0;
+	m_localStaticArgs.m_numNeg = 0;
+	m_localStaticArgs.m_sumPos = 0.0;
+	m_localStaticArgs.m_sumNeg = 0.0;
+	double totPos = 0;
+	double totNeg = 0;
+	double alreadyMatchedPos = 0;
+	double alreadyMatchedNeg = 0;
 	for (int i = 0; i < allTrans.count(); ++i) {
 		Transaction& trans = allTrans.trans(i);
 		if (trans.isInternal())
 			continue;
-		if (trans.dimensionOfVoid) {
-			++alreadyMatched;
-			continue;
+
+		double amnt = trans.amountDbl();
+		if (amnt >= 0.0) {
+			++totPos;
+			if (trans.dimensionOfVoid) {
+				++alreadyMatchedPos;
+				continue;
+			}
+			++m_localStaticArgs.m_numPos;
+			m_localStaticArgs.m_sumPos += amnt;
 		}
-		if (trans.amountInt() > 0) {
-			++posTr;
+		if (amnt < 0.0) {
+			++totNeg;
+			if (trans.dimensionOfVoid) {
+				++alreadyMatchedNeg;
+				continue;
+			}
+			++m_localStaticArgs.m_numNeg;
+			m_localStaticArgs.m_sumNeg += amnt;
 		}
-		if (trans.amountInt() < 0) {
-			++negTr;
-		}
+
 		++trans.dimensionOfVoid;
+		m_localStaticArgs.m_bundle.append(&trans);
 	}
-	m_fitness = double(alreadyMatched * (posTr + negTr)) / allTrans.count();
-	m_billProba = 1000000.0;
+
+	// min of the ration already/tot per side Neg/Pos
+	m_fitness = qMin(alreadyMatchedPos / totPos, alreadyMatchedNeg / totNeg);
+	m_fitness *= 100.0;
 	return m_fitness;
 }
 
@@ -35,7 +55,13 @@ void FeatureAllOthers::execute(void *outDatum, Puppy::Context &ioContext)
 	getArgs(ioContext);
 	cleanArgs();
 
-	m_fitness = 0.0;
+	output = m_fitness = 0.0;
+
+	// if we already have aplied this feature, nothing to be done here.
+	if (ioContext.flags & Puppy::Context::AllOthers) {
+		return;
+	}
+	ioContext.flags |= Puppy::Context::AllOthers;
 
 	// will be ALL the transactions if m_filterHash < 0
 	auto& allTrans = ioContext.m_pUser->transBundle(m_filterHash);
@@ -49,6 +75,35 @@ void FeatureAllOthers::execute(void *outDatum, Puppy::Context &ioContext)
 			features.append(toJson(ioContext));
 			ioContext.m_summaryJsonObj->insert("features", features);
 		}
+		OracleFilteredRest* pNewOr = new OracleFilteredRest();
+		pNewOr->m_args = m_localStaticArgs;
+		// making a shared pointer that will take care of cleaning once the oracle is no longer referenced
+		QSharedPointer<Oracle> newOracle(pNewOr);
+		ioContext.m_pUser->oracle()->addSubOracle(newOracle);
 	}
 }
 
+
+
+QVector<Transaction> OracleFilteredRest::revelation(QDate upToDate)
+{
+	LOG() << "OracleFilteredRest::revelation sumPos = " << m_args.m_sumPos << " sumNeg = " << m_args.m_sumNeg << " bundle = " << m_args.m_bundle.count() << endl;
+	static QVector<Transaction> retVect;
+	retVect.clear();
+	while (curDate() <= upToDate) {
+//		if (randBool(m_args.m_dayProba))
+		{
+			Transaction randTr;// = m_args.m_bundle.randomTransaction();
+			randTr.date = curDate();
+			double avgAmnt = m_args.m_sumPos + m_args.m_sumNeg;
+			// Note that for now the average is done from the oldes date of the account readings
+			// to the current date, so it slowly dissolves as the oracle is predicting for latter dates
+			avgAmnt /= Transaction::onlyAfterDate.daysTo(curDate();
+			randTr.setAmount();
+			LOG() << "avgTrans " << randTr.amountDbl() << " " << randTr.date.toString() << randTr.name << endl;
+			retVect.append(randTr);
+		}
+		nextDay();
+	}
+	return retVect;
+}

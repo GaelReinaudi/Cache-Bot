@@ -5,7 +5,7 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 	QDate lastDate = QDate::currentDate();
 	QDate iniDate = lastDate.addMonths(-6);
 
-	m_targetTrans = targetTransactions(iniDate, lastDate.addDays(BotContext::TARGET_TRANS_FUTUR_DAYS));
+	m_targetTrans = targetTransactions(iniDate, lastDate);
 	if (m_targetTrans.count() == 0) {
 		LOG() << "MonthlyAmount(0 TARGET): day "<<m_localStaticArgs.m_dayOfMonth<<" kla "<< m_localStaticArgs.m_kla << endl;
 	}
@@ -144,9 +144,10 @@ QVector<Transaction> FeatureMonthlyAmount::BlankTransactionsForDayOfMonth(QDate 
 		// asserts that it is 30ish days after the previous date we made
 		assert(targetTrans.count() == 0 || qAbs(targetTrans.last().date.daysTo(currentDate) - 30) <= 2);
 
-		targetTrans.append(Transaction());
-		targetTrans.last().date = currentDate;
-
+		if (currentDate < lastDate) {
+			targetTrans.append(Transaction());
+			targetTrans.last().date = currentDate;
+		}
 		currentDate = currentDate.addMonths(1);
 	}
 

@@ -131,6 +131,8 @@ public:
 	QMap<double, QVector<Transaction> >* m_mapPredicted = 0;
 	User* m_pUser;
 	int filterHashIndex = -1;
+	enum {None = 0x0, AllOthers = 0x1};
+	int flags = 0;
 };
 
 }
