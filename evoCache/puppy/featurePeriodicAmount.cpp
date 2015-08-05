@@ -118,7 +118,7 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 			Transaction& t = m_localStaticArgs.m_bundle.trans(i);
 			emit ioContext.m_pUser->botContext()->matchedTransaction(t.time_t(), t.amountDbl(), 1);
 		}
-		OraclePeriodicAmount* pNewOr = new OraclePeriodicAmount();
+		OracleOneDayOfMonth* pNewOr = new OracleOneDayOfMonth();
 		pNewOr->m_args = m_localStaticArgs;
 		// making a shared pointer that will take care of cleaning once the oracle is no longer referenced
 		QSharedPointer<Oracle> newOracle(pNewOr);
@@ -128,7 +128,8 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 
 QVector<Transaction> FeatureMonthlyAmount::BlankTransactionsForDayOfMonth(QDate iniDate, QDate lastDate, int dayOfMonth)
 {
-	QVector<Transaction> targetTrans;
+	static QVector<Transaction> targetTrans;
+	targetTrans.clear();
 	QDate currentDate = iniDate;
 	while (currentDate < lastDate) {
 		// the target day of this month. If neg, make it count from the end of the month.
@@ -154,8 +155,9 @@ QVector<Transaction> FeatureMonthlyAmount::BlankTransactionsForDayOfMonth(QDate 
 
 QVector<Transaction> FeatureMonthlyAmount::targetTransactions(QDate iniDate, QDate lastDate)
 {
+	static QVector<Transaction> targetTrans;
 	int dayOfMonth = m_localStaticArgs.m_dayOfMonth;
-	QVector<Transaction> targetTrans = BlankTransactionsForDayOfMonth(iniDate, lastDate, dayOfMonth);
+	targetTrans = BlankTransactionsForDayOfMonth(iniDate, lastDate, dayOfMonth);
 	// loops through to set a few variables of the transactions
 	for (Transaction& tr : targetTrans) {
 		tr.setKLA(m_localStaticArgs.m_kla);
@@ -167,10 +169,9 @@ QVector<Transaction> FeatureMonthlyAmount::targetTransactions(QDate iniDate, QDa
 
 QVector<Transaction> FeatureBiWeeklyAmount::targetTransactions(QDate iniDate, QDate lastDate)
 {
-	int dayOfMonth = m_localStaticArgs.m_dayOfMonth;
-	QVector<Transaction> targetTrans = BlankTransactionsForDayOfMonth(iniDate, lastDate, dayOfMonth);
-	dayOfMonth = m_dayOfMonth2;
-	targetTrans += BlankTransactionsForDayOfMonth(iniDate, lastDate, dayOfMonth);
+	static QVector<Transaction> targetTrans;
+	targetTrans = BlankTransactionsForDayOfMonth(iniDate, lastDate, m_localStaticArgs.m_dayOfMonth);
+	targetTrans += BlankTransactionsForDayOfMonth(iniDate, lastDate, m_localStaticArgs.m_dayOfMonth2);
 	qSort(targetTrans.begin(), targetTrans.end(), Transaction::earlierThan);
 	// loops through to set a few variables of the transactions
 	for (Transaction& tr : targetTrans) {
@@ -181,32 +182,23 @@ QVector<Transaction> FeatureBiWeeklyAmount::targetTransactions(QDate iniDate, QD
 	return targetTrans;
 }
 
-
-QVector<Transaction> OraclePeriodicAmount::revelation(QDate upToDate)
+QVector<Transaction> OracleOneDayOfMonth::revelation(QDate upToDate)
 {
-	LOG() << "OraclePeriodicAmount::revelation. bundle = " << m_args.m_bundle.count() << endl;
-	static QVector<Transaction> retVect;
-	retVect.clear();
-	while (curDate() <= upToDate) {
-		// a distance to the dayofMonth
-		int distDayToTrigger = qAbs(curDate().day() - m_args.m_dayOfMonth);
-		// but if it was negative (from the end of the month.
-		// we make the corresponding date
-		if (m_args.m_dayOfMonth <= 0) {
-			QDate testDate = curDate();
-			testDate = testDate.addMonths(1);
-			testDate.setDate(testDate.year(), testDate.month(), 1);
-			testDate = testDate.addDays(m_args.m_dayOfMonth);
-			distDayToTrigger = qMin(distDayToTrigger, qAbs(curDate().day() - testDate.day()));
-		}
-		if (distDayToTrigger == 0)
-		{
-			Transaction randTr = m_args.m_bundle.randomTransaction();
-			randTr.date = curDate();
-			LOG() << "randomTransaction " << randTr.amountDbl() << " " << randTr.date.toString() << "" << randTr.name << endl;
-			retVect.append(randTr);
-		}
-		nextDay();
+	LOG() << "OracleOneDayOfMonth::revelation. bundle = " << m_args.m_bundle.count() << endl;
+	QDate iniDate = QDate::currentDate();
+	static QVector<Transaction> targetTrans;
+	targetTrans = FeatureMonthlyAmount::BlankTransactionsForDayOfMonth(iniDate, upToDate, m_args.m_dayOfMonth);
+	if (m_args.m_dayOfMonth2) {
+		targetTrans += FeatureMonthlyAmount::BlankTransactionsForDayOfMonth(iniDate, upToDate, m_args.m_dayOfMonth2);
 	}
-	return retVect;
+	qSort(targetTrans.begin(), targetTrans.end(), Transaction::earlierThan);
+	// loops through to set a few variables of the transactions
+	for (Transaction& tr : targetTrans) {
+		tr.setKLA(m_args.m_kla);
+		tr.nameHash.setFromHash(m_args.m_b[0]);
+		tr.flags |= Transaction::Predicted;
+		LOG() << "m_args.m_dayOfMonth2 " << m_args.m_dayOfMonth2 << ""
+			  << tr.amountDbl() << " " << tr.date.toString() << tr.name << endl;
+	}
+	return targetTrans;
 }

@@ -3,7 +3,7 @@
 #include "AccRegPrimits.h"
 #include "oracle.h"
 
-class OraclePeriodicAmount : public Oracle
+class OracleOneDayOfMonth : public Oracle
 {
 public:
 
@@ -36,6 +36,7 @@ private:
 		}
 		TransactionBundle m_bundle;
 		int m_dayOfMonth = 0;
+		int m_dayOfMonth2 = 0;
 		int m_kla = 0;
 		int m_b[4];
 		// characteristics
@@ -66,12 +67,15 @@ public:
 		: FeaturePeriodicAmount("MonthlyAmount")
 	{ }
 	static QVector<Transaction> BlankTransactionsForDayOfMonth(QDate iniDate, QDate lastDate, int dayOfMonth);
+
 protected:
 	FeatureMonthlyAmount(QString featureName)
 		: FeaturePeriodicAmount(featureName)
 	{ }
 protected:
-	int approxSpacingPayment() override { return 31; }
+	int approxSpacingPayment() override {
+		return 31;
+	}
 	void getArgs(Puppy::Context &ioContext) override {
 		// if we are forcing a given hashed bundle
 		int filterHashIndex = ioContext.filterHashIndex;
@@ -129,7 +133,7 @@ protected:
 	virtual QVector<Transaction> targetTransactions(QDate iniDate, QDate lastDate);
 
 protected:
-	OraclePeriodicAmount::Args m_localStaticArgs;
+	OracleOneDayOfMonth::Args m_localStaticArgs;
 	QVector<Transaction> m_targetTrans;
 };
 
@@ -141,19 +145,16 @@ public:
 	{ }
 	int approxSpacingPayment() override { return 17; } // +2d: gives some room for late payment
 	virtual void cleanArgs() override {
-		m_dayOfMonth2 = m_localStaticArgs.m_dayOfMonth+14;//(m_dayOfMonth / 32) % 31;
-		++m_dayOfMonth2;
+		m_localStaticArgs.m_dayOfMonth2 = m_localStaticArgs.m_dayOfMonth+14;//(m_dayOfMonth / 32) % 31;
+		++m_localStaticArgs.m_dayOfMonth2;
 		FeatureMonthlyAmount::cleanArgs();
 	}
 	QJsonObject toJson(Puppy::Context& ioContext) override {
 		QJsonObject retObj = FeatureMonthlyAmount::toJson(ioContext);
-		retObj.insert("dayOfMonth2", m_dayOfMonth2);
+		retObj.insert("dayOfMonth2", m_localStaticArgs.m_dayOfMonth2);
 		return retObj;
 	}
 	QVector<Transaction> targetTransactions(QDate iniDate, QDate lastDate) override;
-
-protected:
-	int m_dayOfMonth2 = 0;
 };
 
 #endif // FEATUREPERIODICAMOUNT_H

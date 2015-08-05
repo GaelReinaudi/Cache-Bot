@@ -6,7 +6,7 @@
 #include "oracle.h"
 #include "bot.h"
 
-static const int numRevelations = 10;
+static const int numRevelations = 100;
 static int IND_GR_REVEL = -1;
 static int IND_GR_BALANCE = -1;
 static int IND_GR_SLOPE = -1;
@@ -82,7 +82,7 @@ void ExtraCashView::onBotInjected(Bot* pBot)
 	ui->costLive99SpinBox->setValue(CostRateMonthPercentileMetric<6, 99>::get(m_pExtraCache->user())->value(m_pbDate));
 
 	m_pbDate = QDate::currentDate().addDays(-playBackStartAgo);
-	m_pbBalance = m_pExtraCache->user()->balance(Account::Type::Checking | Account::Type::Saving);
+	m_pbBalance = m_pExtraCache->user()->balance(Account::Type::Checking);
 
 	// transaction at the starting date of the playback
 	auto& real = m_pExtraCache->user()->allTrans();
