@@ -27,7 +27,7 @@ public:
 	void loadJsonData(QJsonObject json);
 	bool toJson(QVector<Transaction> transactions, QString category);
 
-	QString plaidId() const { return m_plaidId; }
+	const QString& plaidId() const { return m_plaidId; }
 
 	void append(Transaction* pT) {
 		m_allTrans.append(pT);

@@ -44,7 +44,7 @@ double FeatureAllOthers::apply(TransactionBundle& allTrans)
 	// min of the ration already/tot per side Neg/Pos
 	m_fitness = qMin(alreadyMatchedPos / totPos, alreadyMatchedNeg / totNeg);
 	m_fitness *= 100.0;
-	m_fitness = qMax(m_fitness, 1.0);
+//	m_fitness = qMax(m_fitness, 1.0);
 	return m_fitness;
 }
 
