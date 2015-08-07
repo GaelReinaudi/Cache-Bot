@@ -144,7 +144,7 @@ QVector<Transaction> FeatureMonthlyAmount::BlankTransactionsForDayOfMonth(QDate 
 		// asserts that it is 30ish days after the previous date we made
 		assert(targetTrans.count() == 0 || qAbs(targetTrans.last().date.daysTo(currentDate) - 30) <= 2);
 
-		if (currentDate < lastDate) {
+		if (currentDate <= lastDate && currentDate >= iniDate) {
 			targetTrans.append(Transaction());
 			targetTrans.last().date = currentDate;
 		}
