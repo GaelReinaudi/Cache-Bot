@@ -188,11 +188,15 @@ void ExtraCashView::makeRevelationPlot()
 		LOG() << "makeRevelationPlot balance = " << curBal << endl;
 		double epsilon = 0.0000001;
 		double manyEspilon = epsilon;
+		double blah = 0;
 		for (Transaction& tr : rev) {
 			double amnt = tr.amountDbl();
 			curBal += amnt;
+			if (amnt > 0)
+				blah += amnt;
 			t = QDate::currentDate().daysTo(tr.date) + manyEspilon;
-			pGr->addData(t, curBal);
+			if (blah > 0)
+			pGr->addData(t, 10000 * (curBal - m_pbBalance) / blah);
 			LOG() << "t =" << t << "amnt =" << amnt
 				  << "    -> bal = " << curBal
 				  << "    label = " << tr.name
