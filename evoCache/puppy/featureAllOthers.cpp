@@ -18,7 +18,7 @@ double FeatureAllOthers::apply(TransactionBundle& allTrans)
 			continue;
 
 		double amnt = trans.amountDbl();
-		if (amnt > 0.0) {
+		if (amnt > 0.0 && amnt < 2 * 10000) {
 			++totPos;
 			if (trans.dimensionOfVoid) {
 				++alreadyMatchedPos;
