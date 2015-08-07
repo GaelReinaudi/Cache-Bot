@@ -12,7 +12,7 @@ static int IND_GR_BALANCE = -1;
 static int IND_GR_SLOPE = -1;
 
 const int displayDayPast = 1;//60;
-const int displayDayFuture = 32;//180;
+const int displayDayFuture = 62;//180;
 
 const int playBackStartAgo = 0;
 
@@ -140,8 +140,10 @@ void ExtraCashView::updateChart()
 //	makeMinSlope();
 
 	ui->plot->xAxis->setRange(x - displayDayPast, x + displayDayFuture + 1);
+	static double maxY = 0.0;
 	ui->plot->yAxis->rescale();
-	ui->plot->yAxis->setRange(qMin(ui->plot->yAxis->range().lower, -100.0), ui->plot->yAxis->range().upper + 100);
+	maxY = qMax(maxY, ui->plot->yAxis->range().upper + 100);
+	ui->plot->yAxis->setRange(qMin(ui->plot->yAxis->range().lower, -100.0), maxY);
 	ui->plot->replot();
 }
 
