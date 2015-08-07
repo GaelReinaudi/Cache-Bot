@@ -17,8 +17,6 @@ public:
 	void init(BotContext* context);
 	//! summaries the performances of the bot in a json
 	QJsonObject summarize();
-	//! predicted transactions
-	QVector<Transaction> predictTrans(double threshProba);
 
 //public:
 //	static Bot fromTree();

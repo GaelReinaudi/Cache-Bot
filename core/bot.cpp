@@ -71,28 +71,6 @@ QJsonObject Bot::summarize()
 	return jsonObj;
 }
 
-QVector<Transaction> Bot::predictTrans(double threshProba)
-{
-	QVector<Transaction> ret;
-	QMap<double, QVector<Transaction> > mapFitPredicted;
-	// makes the summary to compute predictions
-	m_context->m_mapPredicted = &mapFitPredicted;
-	QJsonObject sumObj = summarize();
-
-	for (int i = 0; i < mapFitPredicted.count(); ++i) {
-		double proBill = mapFitPredicted.keys()[i];
-		if (proBill > threshProba)
-			ret += mapFitPredicted[proBill];
-	}
-
-	qSort(ret.begin(), ret.end(), Transaction::earlierThan);
-
-	postTreatment(sumObj, ret);
-
-	m_context->m_mapPredicted = 0;
-	return ret;
-}
-
 void Bot::postTreatment(QJsonObject& sumObj, const QVector<Transaction>& predictedTrans)
 {
 	Q_ASSERT(m_context->m_mapPredicted);

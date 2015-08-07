@@ -47,12 +47,6 @@ public:
 	StaticTransactionArray& allTrans() {
 		return m_allTransactions;
 	}
-	//! gives the transactions predicted by the best bot
-	QVector<Transaction> predictedFutureTransactions(double threshProba);
-	//! gives the predicted rate that was not detected by the transaction matching
-	double predictedRemainingRate() const;
-	//! returns a map of dayInTheFuture (0 is today), with multiple values (if on same day) organized by amount
-	SparkLine predictedSparkLine(double threshProba);
 
 	double balance(int flagType) const {
 		double bal = 0.0;

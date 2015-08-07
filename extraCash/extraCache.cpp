@@ -20,31 +20,31 @@ void ExtraCache::onUserInjected(User* pUser)
 	auto& real = user()->allTrans();
 	m_date = QDate::currentDate();
 	m_d0 = m_date.toJulianDay();
-	qDebug() << "m_date" << m_date << "jD0" << m_d0;
+	LOG() << "m_date" << m_date.toString() << "jD0" << m_d0 << endl;
 
 	for (int i = 0; i < real.count(); ++i) {
 		if (real.trans(i).date >= m_date) {
 			//m_ipb = i;
-			qDebug() << "initial trans("<<i<<")" << real.trans(i).date << real.trans(i).name;
+			LOG() << "initial trans("<<i<<")" << real.trans(i).date.toString() << real.trans(i).name << endl;
 			break;
 		}
 	}
 
 	// some arbitrary slush need to (try to) never go under of
 	m_slushFundTypicalNeed = 0.0;
-	m_slushFundTypicalNeed += 0.5 * user()->balance(Account::Type::Checking | Account::Type::Saving);
+	m_slushFundTypicalNeed += 0.5 * user()->balance(Account::Type::Checking);
 	m_slushFundTypicalNeed += 0.5 * -CostRateMonthPercentileMetric<6, 75>::get(user())->value(m_date) * 30;
 
-	qDebug() << "m_slushFundTypicalNeed" << m_slushFundTypicalNeed;
+	LOG() << "m_slushFundTypicalNeed" << m_slushFundTypicalNeed << endl;
 
 	// the amount of money on the extraCash fund already
 	Fund* extraFund = user()->extraCacheFund();
 	double extraTotal = 0.0;
-	for (const Cash& c : extraFund->cashes()) {
-		extraTotal += c.amount;
-	}
+//	for (const Cash& c : extraFund->cashes()) {
+//		extraTotal += c.amount;
+//	}
 	m_slushFundStartsAt = extraTotal;
-	qDebug() << "extraTotal" << m_slushFundStartsAt;
+	LOG() << "extraTotal" << m_slushFundStartsAt << endl;
 
 	CacheRest::Instance()->getBestBot(userID(), user());
 }
@@ -52,11 +52,8 @@ void ExtraCache::onUserInjected(User* pUser)
 void ExtraCache::onBotInjected(Bot* bestBot)
 {
 	LOG() << "ExtraCache::onBotInjected" << endl;
-	double threshProba = 1.0;
-	// with the Bot, computes where the balance is going to go in the future
-	// this is going to run summarize() -> evaluate()
-	m_spark = user()->predictedSparkLine(threshProba);
-	// then, based on that, gets the smallest growth slope
+	bestBot->summarize();
+
 	computeMinSlopeOver(30);
 
 	double m_extraToday = -1.0;
