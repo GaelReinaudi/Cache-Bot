@@ -6,13 +6,13 @@
 #include "oracle.h"
 #include "bot.h"
 
-static const int numRevelations = 64;
+static const int numRevelations = 1;
 static int IND_GR_REVEL = -1;
 static int IND_GR_BALANCE = -1;
 static int IND_GR_SLOPE = -1;
 
-const int displayDayPast = 60;
-const int displayDayFuture = 180;
+const int displayDayPast = 1;//60;
+const int displayDayFuture = 32;//180;
 
 const int playBackStartAgo = 0;
 
@@ -47,7 +47,7 @@ ExtraCashView::ExtraCashView(QString userID, QWidget *parent) :
 	for (int i = 0; i < numRevelations; ++i) {
 		++tempInd;
 		ui->plot->addGraph();
-		ui->plot->graph(tempInd)->setPen(QPen((QColor(255, 0, 0, 8)), 3.0));
+		ui->plot->graph(tempInd)->setPen(QPen((QColor(255, 0, 0, 198)), 3.0));
 		ui->plot->graph(tempInd)->setLineStyle(QCPGraph::lsStepLeft);
 		ui->plot->graph(tempInd)->addData(-9999, 0);
 		ui->plot->graph(tempInd)->addData(9999, 0);
@@ -158,16 +158,22 @@ void ExtraCashView::makeRevelationPlot()
 		QCPGraph* pGr = ui->plot->graph(i);
 		double curBal = m_pbBalance;
 		pGr->clearData();
-		double t = QDate::currentDate().daysTo(m_pbDate);
+		double t = QDate::currentDate().daysTo(m_pbDate) - 0.01; // to be the first point, slightly on the left
 		pGr->addData(t, curBal);
 		m_pExtraCache->user()->oracle()->resetDate(m_pbDate);
 		QVector<Transaction> rev = m_pExtraCache->user()->oracle()->revelation(m_pbDate.addDays(displayDayFuture));
-		LOG() << "makeRevelationPlot" << i << curBal << endl;
+		LOG() << "makeRevelationPlot balance = " << curBal << endl;
+		double epsilon = 0.0000001;
+		double manyEspilon = epsilon;
 		for (Transaction& tr : rev) {
 			curBal += tr.amountDbl();
-			t = QDate::currentDate().daysTo(tr.date);
+			t = QDate::currentDate().daysTo(tr.date) + manyEspilon;
 			pGr->addData(t, curBal);
-			LOG() << t << curBal << endl;
+			LOG() << "t =" << t << "amnt =" << tr.amountDbl()
+				  << "    -> bal = " << curBal
+				  << "    label = " << tr.name
+				  << endl;
+			manyEspilon += epsilon;
 		}
 	}
 
