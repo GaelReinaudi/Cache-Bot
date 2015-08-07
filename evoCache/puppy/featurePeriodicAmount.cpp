@@ -122,7 +122,10 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 		pNewOr->m_args = m_localStaticArgs;
 		// making a shared pointer that will take care of cleaning once the oracle is no longer referenced
 		QSharedPointer<Oracle> newOracle(pNewOr);
-		ioContext.m_pUser->oracle()->addSubOracle(newOracle);
+		double theOracleThreshold = 1.0;
+		if(m_billProba > theOracleThreshold) {
+			ioContext.m_pUser->oracle()->addSubOracle(newOracle);
+		}
 	}
 }
 
