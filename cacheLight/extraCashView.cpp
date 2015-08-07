@@ -6,13 +6,14 @@
 #include "oracle.h"
 #include "bot.h"
 
-static const int numRevelations = 1;
+static const int numRevelations = 128;
+static int alpha = 8;
 static int IND_GR_REVEL = -1;
 static int IND_GR_BALANCE = -1;
 static int IND_GR_SLOPE = -1;
 
 const int displayDayPast = 1;//60;
-const int displayDayFuture = 62;//180;
+const int displayDayFuture = 128;//180;
 
 const int playBackStartAgo = 0;
 
@@ -47,7 +48,27 @@ ExtraCashView::ExtraCashView(QString userID, QWidget *parent) :
 	for (int i = 0; i < numRevelations; ++i) {
 		++tempInd;
 		ui->plot->addGraph();
-		ui->plot->graph(tempInd)->setPen(QPen((QColor(255, 0, 0, 198)), 3.0));
+		ui->plot->graph(tempInd)->setPen(QPen((QColor(255, 0, 255, alpha)), 3.0));
+		ui->plot->graph(tempInd)->setLineStyle(QCPGraph::lsStepLeft);
+		ui->plot->graph(tempInd)->addData(-9999, 0);
+		ui->plot->graph(tempInd)->addData(9999, 0);
+		if (IND_GR_REVEL < 0)
+			IND_GR_REVEL = tempInd;
+	}
+	for (int i = 0; i < numRevelations; ++i) {
+		++tempInd;
+		ui->plot->addGraph();
+		ui->plot->graph(tempInd)->setPen(QPen((QColor(0, 0, 255, alpha)), 3.0));
+		ui->plot->graph(tempInd)->setLineStyle(QCPGraph::lsStepLeft);
+		ui->plot->graph(tempInd)->addData(-9999, 0);
+		ui->plot->graph(tempInd)->addData(9999, 0);
+		if (IND_GR_REVEL < 0)
+			IND_GR_REVEL = tempInd;
+	}
+	for (int i = 0; i < numRevelations; ++i) {
+		++tempInd;
+		ui->plot->addGraph();
+		ui->plot->graph(tempInd)->setPen(QPen((QColor(255, 0, 0, alpha)), 3.0));
 		ui->plot->graph(tempInd)->setLineStyle(QCPGraph::lsStepLeft);
 		ui->plot->graph(tempInd)->addData(-9999, 0);
 		ui->plot->graph(tempInd)->addData(9999, 0);
@@ -168,13 +189,42 @@ void ExtraCashView::makeRevelationPlot()
 		double epsilon = 0.0000001;
 		double manyEspilon = epsilon;
 		for (Transaction& tr : rev) {
-			curBal += tr.amountDbl();
+			double amnt = tr.amountDbl();
+			curBal += amnt;
 			t = QDate::currentDate().daysTo(tr.date) + manyEspilon;
 			pGr->addData(t, curBal);
-			LOG() << "t =" << t << "amnt =" << tr.amountDbl()
+			LOG() << "t =" << t << "amnt =" << amnt
 				  << "    -> bal = " << curBal
 				  << "    label = " << tr.name
 				  << endl;
+			manyEspilon += epsilon;
+		}
+		pGr = ui->plot->graph(i + numRevelations);
+		curBal = m_pbBalance;
+		pGr->clearData();
+		t = QDate::currentDate().daysTo(m_pbDate) - 0.01; // to be the first point, slightly on the left
+		pGr->addData(t, curBal);
+		for (Transaction& tr : rev) {
+			double amnt = tr.amountDbl();
+			if(amnt < 0)
+				continue;
+			curBal += amnt;
+			t = QDate::currentDate().daysTo(tr.date) + manyEspilon;
+			pGr->addData(t, curBal);
+			manyEspilon += epsilon;
+		}
+		pGr = ui->plot->graph(i + numRevelations + numRevelations);
+		curBal = m_pbBalance;
+		pGr->clearData();
+		t = QDate::currentDate().daysTo(m_pbDate) - 0.01; // to be the first point, slightly on the left
+		pGr->addData(t, curBal);
+		for (Transaction& tr : rev) {
+			double amnt = tr.amountDbl();
+			if(amnt > 0)
+				continue;
+			curBal += amnt;
+			t = QDate::currentDate().daysTo(tr.date) + manyEspilon;
+			pGr->addData(t, curBal);
 			manyEspilon += epsilon;
 		}
 	}
