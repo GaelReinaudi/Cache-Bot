@@ -6,14 +6,14 @@
 #include "oracle.h"
 #include "bot.h"
 
-static const int numRevelations = 128;
-static int alpha = 8;
+static const int numRevelations = 1;
+static int alpha = 128;
 static int IND_GR_REVEL = -1;
 static int IND_GR_BALANCE = -1;
 static int IND_GR_SLOPE = -1;
 
 const int displayDayPast = 1;//60;
-const int displayDayFuture = 128;//180;
+const int displayDayFuture = 32;//180;
 
 const int playBackStartAgo = 0;
 

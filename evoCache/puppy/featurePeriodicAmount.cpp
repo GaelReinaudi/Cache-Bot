@@ -129,7 +129,7 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 	}
 }
 
-QVector<Transaction> FeatureMonthlyAmount::BlankTransactionsForDayOfMonth(QDate iniDate, QDate lastDate, int dayOfMonth)
+QVector<Transaction> FeatureMonthlyAmount::BlankTransactionsForDayOfMonth(QDate iniDate, QDate lastDate, int dayOfMonth, std::function<Transaction(void)> lambda)
 {
 	static QVector<Transaction> targetTrans;
 	targetTrans.clear();
@@ -148,7 +148,7 @@ QVector<Transaction> FeatureMonthlyAmount::BlankTransactionsForDayOfMonth(QDate 
 		assert(targetTrans.count() == 0 || qAbs(targetTrans.last().date.daysTo(currentDate) - 30) <= 2);
 
 		if (currentDate <= lastDate && currentDate >= iniDate) {
-			targetTrans.append(Transaction());
+			targetTrans.append(lambda());
 			targetTrans.last().date = currentDate;
 		}
 		currentDate = currentDate.addMonths(1);
@@ -188,21 +188,20 @@ QVector<Transaction> FeatureBiWeeklyAmount::targetTransactions(QDate iniDate, QD
 
 QVector<Transaction> OracleOneDayOfMonth::revelation(QDate upToDate)
 {
+	auto lambdaTrans = [this](){
+		Transaction tr = m_args.m_bundle.randomTransaction();
+		tr.flags |= Transaction::Predicted;
+		LOG() << QString("dayOfMonth %1/%2 ").arg(m_args.m_dayOfMonth).arg(m_args.m_dayOfMonth2)
+			  << tr.amountDbl() << " " << tr.date.toString() << "" << tr.name << endl;
+		return tr;
+	};
 	LOG() << "OracleOneDayOfMonth::revelation. bundle = " << m_args.m_bundle.count() << endl;
 	QDate iniDate = QDate::currentDate();
 	static QVector<Transaction> targetTrans;
-	targetTrans = FeatureMonthlyAmount::BlankTransactionsForDayOfMonth(iniDate, upToDate, m_args.m_dayOfMonth);
+	targetTrans = FeatureMonthlyAmount::BlankTransactionsForDayOfMonth(iniDate, upToDate, m_args.m_dayOfMonth, lambdaTrans);
 	if (m_args.m_dayOfMonth2) {
-		targetTrans += FeatureMonthlyAmount::BlankTransactionsForDayOfMonth(iniDate, upToDate, m_args.m_dayOfMonth2);
+		targetTrans += FeatureMonthlyAmount::BlankTransactionsForDayOfMonth(iniDate, upToDate, m_args.m_dayOfMonth2, lambdaTrans);
 	}
 	qSort(targetTrans.begin(), targetTrans.end(), Transaction::earlierThan);
-	// loops through to set a few variables of the transactions
-	for (Transaction& tr : targetTrans) {
-		tr.setKLA(m_args.m_kla);
-		tr.nameHash.setFromHash(m_args.m_b[0]);
-		tr.flags |= Transaction::Predicted;
-		LOG() << "m_args.m_dayOfMonth2 " << m_args.m_dayOfMonth2 << ""
-			  << tr.amountDbl() << " " << tr.date.toString() << tr.name << endl;
-	}
 	return targetTrans;
 }

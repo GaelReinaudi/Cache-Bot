@@ -66,7 +66,7 @@ public:
 	FeatureMonthlyAmount()
 		: FeaturePeriodicAmount("MonthlyAmount")
 	{ }
-	static QVector<Transaction> BlankTransactionsForDayOfMonth(QDate iniDate, QDate lastDate, int dayOfMonth);
+	static QVector<Transaction> BlankTransactionsForDayOfMonth(QDate iniDate, QDate lastDate, int dayOfMonth, std::function<Transaction(void)> lambda = [](){return Transaction();});
 
 protected:
 	FeatureMonthlyAmount(QString featureName)
