@@ -13,7 +13,7 @@ static int IND_GR_BALANCE = -1;
 static int IND_GR_SLOPE = -1;
 
 const int displayDayPast = 1;//60;
-const int displayDayFuture = 32;//180;
+const int displayDayFuture = 62;//180;
 
 const int playBackStartAgo = 0;
 
@@ -96,14 +96,14 @@ void ExtraCashView::onBotInjected(Bot* pBot)
 {
 	Q_UNUSED(pBot);
 	LOG() << "ExtraCashView::onBotInjected" << endl;
+	m_pbDate = QDate::currentDate().addDays(-playBackStartAgo);
+	m_pbBalance = m_pExtraCache->user()->balance(Account::Type::Checking);
+
 	ui->costLive50SpinBox->setValue(CostRateMonthPercentileMetric<6, 50>::get(m_pExtraCache->user())->value(m_pbDate));
 	ui->costLive75SpinBox->setValue(CostRateMonthPercentileMetric<6, 75>::get(m_pExtraCache->user())->value(m_pbDate));
 	ui->costLive90SpinBox->setValue(CostRateMonthPercentileMetric<6, 90>::get(m_pExtraCache->user())->value(m_pbDate));
 	ui->costLive95SpinBox->setValue(CostRateMonthPercentileMetric<6, 95>::get(m_pExtraCache->user())->value(m_pbDate));
 	ui->costLive99SpinBox->setValue(CostRateMonthPercentileMetric<6, 99>::get(m_pExtraCache->user())->value(m_pbDate));
-
-	m_pbDate = QDate::currentDate().addDays(-playBackStartAgo);
-	m_pbBalance = m_pExtraCache->user()->balance(Account::Type::Checking);
 
 	// transaction at the starting date of the playback
 	auto& real = m_pExtraCache->user()->allTrans();
@@ -133,6 +133,8 @@ void ExtraCashView::onBotInjected(Bot* pBot)
 void ExtraCashView::keyPressEvent(QKeyEvent *event)
 {
 	Q_UNUSED(event);
+	m_pExtraCache->user()->addHypotheTrans(-500.0);
+	m_pExtraCache->user()->m_bestBot->summarize();
 	updateChart();
 }
 

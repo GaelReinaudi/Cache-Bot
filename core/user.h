@@ -44,8 +44,8 @@ public:
 	QMap<uint, TransactionBundle*>& hashBundles() {
 		return m_hashBundles;
 	}
-	StaticTransactionArray& allTrans() {
-		return m_allTransactions;
+	TransactionBundle& allTrans() {
+		return m_allTransBundle;
 	}
 
 	double balance(int flagType) const {
@@ -72,6 +72,13 @@ public:
 
 	BotContext* makeBotContext();
 	SuperOracle* oracle();
+
+	void addHypotheTrans(double amount) {
+		Transaction* pTr = new Transaction();
+		pTr->setAmount(amount);
+		pTr->date = QDate::currentDate();
+		m_allTransBundle.append(pTr);
+	}
 
 public slots:
 	void injectJsonData(QString jsonStr);
@@ -112,7 +119,7 @@ private:
 	}
 
 private:
-	QVector<Bank*> m_banks;
+public:	QVector<Bank*> m_banks;
 	QVector<Account*> m_accounts;
 	StaticTransactionArray m_allTransactions;
 	HashedBundles m_hashBundles;
@@ -123,6 +130,7 @@ private:
 	QDate m_today;
 	QString m_email;
 	SuperOracle* m_mainOracle = 0;
+	QVector<Transaction*> m_hypotheticTransactions;
 };
 
 #endif // USER_H

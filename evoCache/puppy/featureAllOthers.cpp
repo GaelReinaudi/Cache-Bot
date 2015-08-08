@@ -65,7 +65,7 @@ void FeatureAllOthers::execute(void *outDatum, Puppy::Context &ioContext)
 	ioContext.flags |= Puppy::Context::AllOthers;
 
 	// will be ALL the transactions if m_filterHash < 0
-	auto& allTrans = ioContext.m_pUser->transBundle(m_filterHash);
+	TransactionBundle& allTrans = ioContext.m_pUser->transBundle(m_filterHash);
 
 	output = apply(allTrans);
 
