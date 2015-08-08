@@ -32,6 +32,7 @@ protected slots:
 	void makePastiPlot();
 	void makeMinSlope();
 	void onWheelEvent(QWheelEvent*wEv);
+	void onHypotheTrans(int transAmount);
 private:
 	QNetworkAccessManager *manager = 0;
 

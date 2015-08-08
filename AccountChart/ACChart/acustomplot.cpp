@@ -180,10 +180,15 @@ void AHashPlot::loadCompressedAmount(User *pUser)
 	qDebug() << orderedKeys;
 	graph(0)->clearData();
 	m_integral = 0.0;
+	graph(0)->addData(orderedKeys.first() - 0.5, m_integral);
+	double epsilon = 0.0000001;
+	double manyEspilon = epsilon;
 	for (double dat : orderedKeys) {
-		m_integral += 1.0;
-		graph(0)->addData(dat, m_integral);
+		m_integral += dat < 0 ? qAbs(unKindaLog(dat)) : 1.0;
+		graph(0)->addData(dat + manyEspilon, m_integral);
+		manyEspilon += epsilon;
 	}
 	rescaleAxes();
 	xAxis->setRange(xAxis->range().lower - 0.5, xAxis->range().upper + 0.5);
+	yAxis->setRange(0.0, yAxis->range().upper);
 }

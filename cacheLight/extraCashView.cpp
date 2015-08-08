@@ -6,8 +6,8 @@
 #include "oracle.h"
 #include "bot.h"
 
-static const int numRevelations = 1;
-static int alpha = 128;
+static const int numRevelations = 128;
+static int alpha = 32;
 static int IND_GR_REVEL = -1;
 static int IND_GR_BALANCE = -1;
 static int IND_GR_SLOPE = -1;
@@ -83,6 +83,7 @@ ExtraCashView::ExtraCashView(QString userID, QWidget *parent) :
 	pBars->setBrush(QColor(255, 131, 0, 50));
 
 	connect(ui->plot, SIGNAL(mouseWheel(QWheelEvent*)), this, SLOT(onWheelEvent(QWheelEvent*)));
+	connect(ui->spinHypotheTrans, SIGNAL(valueChanged(int)), this, SLOT(onHypotheTrans(int)));
 
 	connect(m_pExtraCache, SIGNAL(botInjected(Bot*)), this, SLOT(onBotInjected(Bot*)));
 }
@@ -130,11 +131,17 @@ void ExtraCashView::onBotInjected(Bot* pBot)
 	updateChart();
 }
 
+void ExtraCashView::onHypotheTrans(int transAmount)
+{
+	m_pExtraCache->user()->setHypotheTrans(transAmount);
+	m_pbBalance = m_pExtraCache->user()->balance(Account::Type::Checking);
+	ui->spinBox->setValue(m_pbBalance);
+	updateChart();
+}
+
 void ExtraCashView::keyPressEvent(QKeyEvent *event)
 {
 	Q_UNUSED(event);
-	m_pExtraCache->user()->addHypotheTrans(-500.0);
-	m_pExtraCache->user()->m_bestBot->summarize();
 	updateChart();
 }
 

@@ -55,6 +55,9 @@ public:
 				bal += pAcc->balance();
 			}
 		}
+		if (flagType & Account::Type::Checking) {
+			bal += m_hypotheTrans.amountDbl();
+		}
 		return bal;
 	}
 
@@ -73,12 +76,7 @@ public:
 	BotContext* makeBotContext();
 	SuperOracle* oracle();
 
-	void addHypotheTrans(double amount) {
-		Transaction* pTr = new Transaction();
-		pTr->setAmount(amount);
-		pTr->date = QDate::currentDate();
-		m_allTransBundle.append(pTr);
-	}
+	void setHypotheTrans(double amount);
 
 public slots:
 	void injectJsonData(QString jsonStr);
@@ -119,7 +117,7 @@ private:
 	}
 
 private:
-public:	QVector<Bank*> m_banks;
+	QVector<Bank*> m_banks;
 	QVector<Account*> m_accounts;
 	StaticTransactionArray m_allTransactions;
 	HashedBundles m_hashBundles;
@@ -130,7 +128,7 @@ public:	QVector<Bank*> m_banks;
 	QDate m_today;
 	QString m_email;
 	SuperOracle* m_mainOracle = 0;
-	QVector<Transaction*> m_hypotheticTransactions;
+	Transaction m_hypotheTrans;
 };
 
 #endif // USER_H

@@ -72,7 +72,7 @@
         <item row="1" column="0">
          <widget class="QLabel" name="label_2">
           <property name="text">
-           <string>slush start</string>
+           <string>hypothe-Trans</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -80,7 +80,7 @@
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QSpinBox" name="spinSlushThresh">
+         <widget class="QSpinBox" name="spinHypotheTrans">
           <property name="prefix">
            <string>$</string>
           </property>
@@ -91,10 +91,10 @@
            <number>1000000</number>
           </property>
           <property name="singleStep">
-           <number>10</number>
+           <number>100</number>
           </property>
           <property name="value">
-           <number>1500</number>
+           <number>0</number>
           </property>
          </widget>
         </item>
