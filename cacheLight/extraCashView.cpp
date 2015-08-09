@@ -6,8 +6,8 @@
 #include "oracle.h"
 #include "bot.h"
 
-static const int numRevelations = 32;
-static int alpha = 32;
+static const int numRevelations = 1;
+static int alpha = 132;
 static int IND_GR_REVEL = -1;
 static int IND_GR_BALANCE = -1;
 static int IND_GR_SLOPE = -1;
@@ -175,6 +175,8 @@ void ExtraCashView::updateChart()
 	maxY = qMax(maxY, ui->plot->yAxis->range().upper + 100);
 	ui->plot->yAxis->setRange(qMin(ui->plot->yAxis->range().lower, -100.0), maxY);
 	ui->plot->replot();
+
+	ui->spinAvgCashFlow->setValue(100.0 * m_pExtraCache->user()->oracle()->avgCashFlow());
 }
 
 void ExtraCashView::makeBalancePlot()

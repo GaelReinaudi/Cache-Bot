@@ -32,7 +32,7 @@ private:
 	QDate m_curDate;
 };
 
-class SuperOracle : public Oracle
+class CORESHARED_EXPORT SuperOracle : public Oracle
 {
 public:
 	void resetDate(QDate initialDate) override {
