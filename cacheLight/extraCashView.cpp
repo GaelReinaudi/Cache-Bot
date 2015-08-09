@@ -6,7 +6,7 @@
 #include "oracle.h"
 #include "bot.h"
 
-static const int numRevelations = 128;
+static const int numRevelations = 32;
 static int alpha = 32;
 static int IND_GR_REVEL = -1;
 static int IND_GR_BALANCE = -1;
@@ -134,7 +134,7 @@ void ExtraCashView::onBotInjected(Bot* pBot)
 void ExtraCashView::onHypotheTrans(int transAmount)
 {
 	m_pExtraCache->user()->setHypotheTrans(transAmount);
-	m_pbBalance = m_pExtraCache->user()->balance(Account::Type::Checking);
+//	m_pbBalance = m_pExtraCache->user()->balance(Account::Type::Checking);
 	ui->spinBox->setValue(m_pbBalance);
 	updateChart();
 }
