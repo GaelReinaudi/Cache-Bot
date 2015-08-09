@@ -24,10 +24,8 @@ public:
 	}
 
 	virtual QVector<Transaction> revelation(QDate upToDate) = 0;
-//	{
-//		Q_UNUSED(upToDate);
-//		return QVector<Transaction>();
-//	}
+	virtual double avgDaily() const = 0;
+
 
 private:
 	QDate m_iniDate;
@@ -58,6 +56,8 @@ public:
 		m_subOracles.append(pOr);
 	}
 	QVector<Transaction> revelation(QDate upToDate) override;
+	double avgDaily() const override;
+	double avgCashFlow() const;
 
 private:
 	QVector<QSharedPointer<Oracle> > m_subOracles;

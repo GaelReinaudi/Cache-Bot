@@ -205,3 +205,12 @@ QVector<Transaction> OracleOneDayOfMonth::revelation(QDate upToDate)
 	qSort(targetTrans.begin(), targetTrans.end(), Transaction::earlierThan);
 	return targetTrans;
 }
+
+double OracleOneDayOfMonth::avgDaily() const
+{
+	double avgMonth = m_args.m_bundle.averageAmount();
+	if (m_args.m_dayOfMonth2) {
+		avgMonth *= 2;
+	}
+	return avgMonth * (12.0 / 365.25);
+}

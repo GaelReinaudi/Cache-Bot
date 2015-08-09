@@ -108,3 +108,10 @@ QVector<Transaction> OracleFilteredRest::revelation(QDate upToDate)
 	}
 	return retVect;
 }
+
+double OracleFilteredRest::avgDaily() const
+{
+	double avgAmnt = m_args.m_sumPos + m_args.m_sumNeg;
+	avgAmnt /= Transaction::onlyAfterDate.daysTo(QDate::currentDate());
+	return avgAmnt;
+}

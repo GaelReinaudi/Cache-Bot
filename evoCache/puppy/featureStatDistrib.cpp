@@ -117,3 +117,8 @@ QVector<Transaction> OracleStatDistrib::revelation(QDate upToDate) {
 	}
 	return retVect;
 }
+
+double OracleStatDistrib::avgDaily() const
+{
+	return m_args.m_dayProba * m_args.m_bundle.averageAmount();
+}

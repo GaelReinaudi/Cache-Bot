@@ -9,6 +9,7 @@ public:
 
 protected:
 	QVector<Transaction> revelation(QDate upToDate) override;
+	double avgDaily() const override;
 
 private:
 	struct Args

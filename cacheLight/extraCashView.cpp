@@ -189,23 +189,20 @@ void ExtraCashView::makeRevelationPlot()
 	for (int i = IND_GR_REVEL; i < IND_GR_REVEL + numRevelations; ++i) {
 		QCPGraph* pGr = ui->plot->graph(i);
 		double curBal = m_pbBalance;
+		LOG() << "makeRevelationPlot balance = " << curBal << endl;
 		pGr->clearData();
 		double t = QDate::currentDate().daysTo(m_pbDate) - 0.01; // to be the first point, slightly on the left
 		pGr->addData(t, curBal);
 		m_pExtraCache->user()->oracle()->resetDate(m_pbDate);
-		QVector<Transaction> rev = m_pExtraCache->user()->oracle()->revelation(m_pbDate.addDays(displayDayFuture));
-		LOG() << "makeRevelationPlot balance = " << curBal << endl;
+		const QVector<Transaction> rev = m_pExtraCache->user()->oracle()->revelation(m_pbDate.addDays(displayDayFuture));
 		double epsilon = 0.0000001;
 		double manyEspilon = epsilon;
-		for (Transaction& tr : rev) {
+		for (const Transaction& tr : rev) {
 			double amnt = tr.amountDbl();
 			curBal += amnt;
 			t = QDate::currentDate().daysTo(tr.date) + manyEspilon;
 			pGr->addData(t, curBal);
-			LOG() << "t =" << t << "amnt =" << amnt
-				  << "    -> bal = " << curBal
-				  << "    label = " << tr.name
-				  << endl;
+			LOG() << "-> bal = " << curBal << endl;
 			manyEspilon += epsilon;
 		}
 		pGr = ui->plot->graph(i + numRevelations);
@@ -213,7 +210,7 @@ void ExtraCashView::makeRevelationPlot()
 		pGr->clearData();
 		t = QDate::currentDate().daysTo(m_pbDate) - 0.01; // to be the first point, slightly on the left
 		pGr->addData(t, curBal);
-		for (Transaction& tr : rev) {
+		for (const Transaction& tr : rev) {
 			double amnt = tr.amountDbl();
 			if(amnt < 0)
 				continue;
@@ -227,7 +224,7 @@ void ExtraCashView::makeRevelationPlot()
 		pGr->clearData();
 		t = QDate::currentDate().daysTo(m_pbDate) - 0.01; // to be the first point, slightly on the left
 		pGr->addData(t, curBal);
-		for (Transaction& tr : rev) {
+		for (const Transaction& tr : rev) {
 			double amnt = tr.amountDbl();
 			if(amnt > 0)
 				continue;
