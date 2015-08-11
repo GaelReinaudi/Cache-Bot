@@ -180,7 +180,6 @@ public:
 
 protected:
 	double computeFor(const QDate& date, bool& isValid) override {
-		Q_UNUSED(date);
 		isValid = true;
 		double flow = m_pUser->oracle()->avgCashFlow();
 		return flow;
