@@ -17,6 +17,7 @@ public:
 	void init(BotContext* context);
 	//! summaries the performances of the bot in a json
 	QJsonObject summarize();
+	QJsonObject postTreatment();
 
 //public:
 //	static Bot fromTree();
@@ -34,9 +35,6 @@ private:
 	QStringList m_botStrings;
 	BotContext* m_context;
 	QJsonObject m_lastStats;
-
-private:
-	void postTreatment(QJsonObject &sumObj, const QVector<Transaction> &predictedTrans);
 };
 
 #endif // BOT_H

@@ -71,12 +71,10 @@ QJsonObject Bot::summarize()
 	return jsonObj;
 }
 
-void Bot::postTreatment(QJsonObject& sumObj, const QVector<Transaction>& predictedTrans)
+QJsonObject Bot::postTreatment()
 {
-	Q_ASSERT(m_context->m_mapPredicted);
 	auto& allTrans = m_context->m_pUser->allTrans();
 	QDate lastDate = QDate::currentDate();
-	QDate iniDate = lastDate.addMonths(-6);
 
 	double avgDayIn090  = MakeRateMonthPercentileMetric<2, 90>::get(m_context->m_pUser)->value(lastDate);
 	double avgDayOut090 = CostRateMonthPercentileMetric<2, 90>::get(m_context->m_pUser)->value(lastDate);
@@ -105,27 +103,10 @@ void Bot::postTreatment(QJsonObject& sumObj, const QVector<Transaction>& predict
 		}
 		++tr.dimensionOfVoid;
 	}
-	double predictedRateIn = 0.0;
-	double predictedRateOut = 0.0;
-	for (const Transaction& tr : predictedTrans) {
-		if (tr.date < lastDate)
-			continue;
-		if (tr.amountInt() > 0) {
-			predictedRateIn += tr.amountDbl();
-		}
-		if (tr.amountInt() < 0) {
-			predictedRateOut += tr.amountDbl();
-		}
-	}
-	predictedRateIn /= BotContext::TARGET_TRANS_FUTUR_DAYS;
-	predictedRateOut /= BotContext::TARGET_TRANS_FUTUR_DAYS;
 
 	QJsonObject statObj;
-	statObj.insert("rangeDays", iniDate.daysTo(lastDate));
 	statObj.insert("matchedIn", posTr);
 	statObj.insert("matchedOut", negTr);
-	statObj.insert("predictedRateIn", predictedRateIn);
-	statObj.insert("predictedRateOut", predictedRateOut);
 	statObj.insert("avgDayIn099", avgDayIn099);
 	statObj.insert("avgDayOut099", avgDayOut099);
 	statObj.insert("avgDayIn090", avgDayIn090);
@@ -141,15 +122,10 @@ void Bot::postTreatment(QJsonObject& sumObj, const QVector<Transaction>& predict
 	flowrate += Flow01<95, 99>::get(m_context->m_pUser)->value(lastDate) * 0.01;
 	flowrate *= 0.5;
 
-	QJsonObject flowObj;
-	flowObj.insert("rate", flowrate);
-	flowObj.insert("state", QString("kFlow"));
+	statObj.insert("Flow01", flowrate);
 
-	statObj.insert("flow", flowObj);
+	QString jsonStr = QJsonDocument(statObj).toJson();
+	LOG() << "Bot::postTreatment    statObj  " << jsonStr << endl;
 
-	sumObj.insert("stat", statObj);
-
-	m_lastStats = statObj;
-	QString jsonStr = QJsonDocument(m_lastStats).toJson();
-	LOG() << "statObj  " << jsonStr << endl;
+	return statObj;
 }
