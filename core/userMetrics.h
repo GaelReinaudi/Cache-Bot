@@ -2,6 +2,7 @@
 #define USERMETRICS_H
 #include "histoMetric.h"
 #include "user.h"
+#include "oracle.h"
 
 class UserMetric : public HistoMetric
 {
@@ -155,6 +156,37 @@ protected:
 private:
 	HistoMetric* inMet;
 	HistoMetric* outMet;
+};
+
+class Flow02 : public UserMetric
+{
+protected:
+	Flow02(User* pUser)
+		: UserMetric(Name(), pUser)
+		, m_pUser(pUser)
+	{
+	}
+	static QString Name() {
+		return QString("Flow02");
+	}
+
+public:
+	static Flow02* get(User* pUser) {
+		auto pMet = HistoMetric::get(Name());
+		if (pMet)
+			return reinterpret_cast<Flow02*>(pMet);
+		return new Flow02(pUser);
+	}
+
+protected:
+	double computeFor(const QDate& date, bool& isValid) override {
+		Q_UNUSED(date);
+		isValid = true;
+		double flow = m_pUser->oracle()->avgCashFlow();
+		return flow;
+	}
+private:
+	User* m_pUser = 0;
 };
 
 
