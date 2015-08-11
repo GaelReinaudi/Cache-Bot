@@ -39,7 +39,7 @@ double SuperOracle::avgCashFlow() const
 		if (avg > 0) {
 			posAvg += avg;
 		}
-		if (avg < 0) {
+		else if (avg < 0) {
 			negAvg += avg;
 		}
 		else {

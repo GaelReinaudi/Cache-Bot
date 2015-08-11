@@ -6,8 +6,8 @@
 #include "oracle.h"
 #include "bot.h"
 
-static const int numRevelations = 1;
-static int alpha = 132;
+static const int numRevelations = 128;
+static int alpha = 32;
 static int IND_GR_REVEL = -1;
 static int IND_GR_BALANCE = -1;
 static int IND_GR_SLOPE = -1;
