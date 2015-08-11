@@ -10,6 +10,16 @@ public:
 protected:
 	QVector<Transaction> revelation(QDate upToDate) override;
 	double avgDaily() const override;
+	double avgDailyPos() const override{
+		double avgAmnt = m_args.m_sumPos;
+		avgAmnt /= Transaction::onlyAfterDate.daysTo(QDate::currentDate());
+		return avgAmnt;
+	}
+	double avgDailyNeg() const override{
+		double avgAmnt = m_args.m_sumNeg;
+		avgAmnt /= Transaction::onlyAfterDate.daysTo(QDate::currentDate());
+		return avgAmnt;
+	}
 
 private:
 	struct Args

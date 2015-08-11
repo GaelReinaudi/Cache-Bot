@@ -25,6 +25,14 @@ public:
 
 	virtual QVector<Transaction> revelation(QDate upToDate) = 0;
 	virtual double avgDaily() const = 0;
+	virtual double avgDailyPos() const {
+		double avg = avgDaily();
+		return avg >= 0 ? avg : 0.0;
+	}
+	virtual double avgDailyNeg() const {
+		double avg = avgDaily();
+		return avg <= 0 ? avg : 0.0;
+	}
 
 
 private:

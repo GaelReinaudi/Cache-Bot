@@ -42,6 +42,10 @@ double SuperOracle::avgCashFlow() const
 		if (avg < 0) {
 			negAvg += avg;
 		}
+		else {
+			posAvg += pOr->avgDailyPos();
+			negAvg += pOr->avgDailyNeg();
+		}
 	}
 	if (posAvg == 0)
 		return -1.0;

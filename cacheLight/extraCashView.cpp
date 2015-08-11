@@ -204,7 +204,7 @@ void ExtraCashView::makeRevelationPlot()
 			curBal += amnt;
 			t = QDate::currentDate().daysTo(tr.date) + manyEspilon;
 			pGr->addData(t, curBal);
-			LOG() << "-> bal = " << curBal << endl;
+			LOG() << amnt << " -> bal = " << curBal << endl;
 			manyEspilon += epsilon;
 		}
 		pGr = ui->plot->graph(i + numRevelations);
