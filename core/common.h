@@ -158,7 +158,8 @@ public:
 	qint64 dist(const NameHashVector2& other) const {
 		quint64 h1 = coord[0];
 		quint64 h2 = other.coord[0];
-		return pop(h1 ^ h2);
+		// the number of bits that are different
+		return numBits(h1 ^ h2);
 	}
 
 	qint64 hash() const {
@@ -166,11 +167,11 @@ public:
 	}
 
 	qint64 manLength() const {
-		return pop(hash());
+		return numBits(hash());
 	}
 
 private:
-	int pop(quint64 n) const {
+	int numBits(quint64 n) const {
 		quint64 x = n;
 		const uint64_t m1  = 0x5555555555555555; //binary: 0101...
 		const uint64_t m2  = 0x3333333333333333; //binary: 00110011..

@@ -8,6 +8,7 @@
 
 static const int numRevelations = 128;
 static int alpha = 32;
+static bool breakDown = false;
 static int IND_GR_REVEL = -1;
 static int IND_GR_BALANCE = -1;
 static int IND_GR_SLOPE = -1;
@@ -207,6 +208,8 @@ void ExtraCashView::makeRevelationPlot()
 			LOG() << amnt << " -> bal = " << curBal << endl;
 			manyEspilon += epsilon;
 		}
+		if (!breakDown)
+			continue;
 		pGr = ui->plot->graph(i + numRevelations);
 		curBal = m_pbBalance;
 		pGr->clearData();

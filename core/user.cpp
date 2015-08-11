@@ -32,6 +32,8 @@ SuperOracle* User::oracle()
 void User::setHypotheTrans(double amount) {
 	m_hypotheTrans.setAmount(amount);
 	m_hypotheTrans.date = QDate::currentDate();
+	m_hypotheTrans.name += "Hypothetic Transaction, fucking take the red pill dude!";
+	m_hypotheTrans.nameHash.setFromString(m_hypotheTrans.name);
 	if (&m_allTransBundle.trans(-1) != &m_hypotheTrans)
 		m_allTransBundle.append(&m_hypotheTrans);
 	if (m_bestBot)

@@ -25,6 +25,8 @@ private:
 	struct Args
 	{
 		void intoJson(QJsonObject& o_retObj) {
+			o_retObj.insert("days", m_daysBundle);
+			o_retObj.insert("proba", m_dayProba);
 			o_retObj.insert("numPos", m_numPos);
 			o_retObj.insert("numNeg", m_numNeg);
 			o_retObj.insert("sumPos", m_sumPos);
@@ -32,6 +34,8 @@ private:
 			o_retObj.insert("numBund", m_bundle.count());
 		}
 		TransactionBundle m_bundle;
+		double m_dayProba = 0.0;
+		double m_daysBundle = 0.0;
 		int m_numPos = 0;
 		int m_numNeg = 0;
 		int m_sumPos = 0;
