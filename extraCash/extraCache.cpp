@@ -1,6 +1,7 @@
 #include "extraCache.h"
 #include "account.h"
 #include "bot.h"
+#include "oracle.h"
 #include "cacherest.h"
 #include "fund.h"
 #include "userMetrics.h"
@@ -56,23 +57,16 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 
 	computeMinSlopeOver(30);
 
-	double m_extraToday = -1.0;
-	double posSlope = m_minSlope;//qMax(0.0, m_minSlope);
-	double extraToday = SLOPE_MULTIPLICATION_EXTRA_TODAY * posSlope;
-	if(m_extraToday < 0.0)
-		m_extraToday = extraToday;
-	if(extraToday > m_extraToday) {
-		m_extraToday *= 0.95;
-		m_extraToday += 0.05 * extraToday;
-	}
-	else {
-		m_extraToday *= 0.9;
-		m_extraToday += 0.1 * extraToday;
-	}
-	m_slushFundStartsAt += m_extraToday;
+	QJsonObject statObj = bestBot->postTreatment();
+
+	double flow = user()->oracle()->avgCashFlow();
+	QJsonObject flowObj;
+	flowObj.insert("rate", flow);
+	flowObj.insert("state", QString("kFlow"));
+	statObj.insert("flow", flowObj);
 
 	if (flags & SendExtraCash) {
-		CacheRest::Instance()->sendExtraCash(user()->id(), m_extraToday, bestBot->lastStats());
+		CacheRest::Instance()->sendExtraCash(user()->id(), 0.0, statObj);
 	}
 }
 
