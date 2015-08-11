@@ -3,6 +3,7 @@
 
 #include "core_global.h"
 #include "common.h"
+#include <array>
 class Account;
 
 typedef NameHashVector2 NameHashVector;
