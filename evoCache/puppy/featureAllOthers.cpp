@@ -18,7 +18,10 @@ double FeatureAllOthers::apply(TransactionBundle& allTrans)
 			continue;
 
 		double amnt = trans.amountDbl();
-		if (amnt > 0.0 && amnt < 2 * 10000) {
+		// BONUS OUT HACK
+		if (amnt > 2 * 10000)
+			continue;
+		if (amnt > 0.0) {
 			++totPos;
 			if (trans.dimensionOfVoid) {
 				++alreadyMatchedPos;
@@ -94,13 +97,13 @@ QVector<Transaction> OracleFilteredRest::revelation(QDate upToDate)
 	while (curDate() <= upToDate) {
 //		if (randBool(m_args.m_dayProba))
 		{
-			Transaction randTr;// = m_args.m_bundle.randomTransaction();
+			Transaction randTr = m_args.m_bundle.randomTransaction();
 			randTr.date = curDate();
 			double avgAmnt = m_args.m_sumPos + m_args.m_sumNeg;
 			// Note that for now the average is done from the oldes date of the account readings
 			// to the current date, so it slowly dissolves as the oracle is predicting for latter dates
 			avgAmnt /= Transaction::onlyAfterDate.daysTo(curDate());
-			randTr.setAmount(avgAmnt);
+//			randTr.setAmount(avgAmnt);
 			LOG() << "avgTrans " << randTr.amountDbl() << " " << randTr.date.toString() << randTr.name << endl;
 			retVect.append(randTr);
 		}

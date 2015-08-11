@@ -84,29 +84,8 @@ QJsonObject Bot::postTreatment()
 	double avgDayOut099 = CostRateMonthPercentileMetric<2, 99>::get(m_context->m_pUser)->value(lastDate);
 	double avgDayIn100  = MakeRateMonthPercentileMetric<2, 100>::get(m_context->m_pUser)->value(lastDate);
 	double avgDayOut100 = CostRateMonthPercentileMetric<2, 100>::get(m_context->m_pUser)->value(lastDate);
-	int posTr = 0;
-	int negTr = 0;
-	int alreadyMatched = 0;
-	for (int i = 0; i < allTrans.count(); ++i) {
-		Transaction& tr = allTrans.trans(i);
-		if (tr.isInternal())
-			continue;
-		if (tr.dimensionOfVoid) {
-			++alreadyMatched;
-			continue;
-		}
-		if (tr.amountInt() > 0) {
-			++posTr;
-		}
-		if (tr.amountInt() < 0) {
-			++negTr;
-		}
-		++tr.dimensionOfVoid;
-	}
 
 	QJsonObject statObj;
-	statObj.insert("matchedIn", posTr);
-	statObj.insert("matchedOut", negTr);
 	statObj.insert("avgDayIn099", avgDayIn099);
 	statObj.insert("avgDayOut099", avgDayOut099);
 	statObj.insert("avgDayIn090", avgDayIn090);

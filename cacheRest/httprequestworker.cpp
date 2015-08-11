@@ -245,8 +245,6 @@ QNetworkReply* HttpRequestWorker::execute(HttpRequestInput *input) {
 		QJsonDocument jsonDoc(input->jsonObject);
 		m_jsonByte = QByteArray(jsonDoc.toJson(QJsonDocument::Compact));
 		request_content.append(m_jsonByte);
-		// clean object to not have JSON next time
-		input->jsonObject = QJsonObject();
 	}
 
 
@@ -274,7 +272,7 @@ QNetworkReply* HttpRequestWorker::execute(HttpRequestInput *input) {
 	}
 	else if (input->http_method == "POST") {
 		reply = manager->post(request, request_content);
-		LOG() << request_content << endl;
+		LOG() << QJsonDocument(input->jsonObject).toJson() << endl;
 		qDebug() << QJsonDocument(input->jsonObject).toJson();
 	}
 	else if (input->http_method == "PUT") {
@@ -290,6 +288,8 @@ QNetworkReply* HttpRequestWorker::execute(HttpRequestInput *input) {
 		QBuffer buff(&request_content);
 		reply = manager->sendCustomRequest(request, input->http_method.toLatin1(), &buff);
 	}
+	// clean object to not have JSON next time
+	input->jsonObject = QJsonObject();
 	return reply;
 }
 
