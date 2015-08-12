@@ -18,10 +18,10 @@ double FeatureOutlier::apply(TransactionBundle& allTrans)
 		m_localStaticArgs.m_bundle.append(&trans);
 		m_localStaticArgs.m_amount = trans.amountDbl();
 		m_localStaticArgs.m_effect = trans.effect128;
+		m_fitness = m_localStaticArgs.m_effect;
 
 		break;
 	}
-	m_fitness = m_localStaticArgs.m_effect;
 	return m_fitness;
 }
 
