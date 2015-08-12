@@ -8,7 +8,8 @@ SOURCES += \
 	$$PWD/AccRegPrimits.cpp \
     $$PWD/featureAllOthers.cpp \
     $$PWD/featureStatDistrib.cpp \
-    $$PWD/featurePeriodicAmount.cpp
+    $$PWD/featurePeriodicAmount.cpp \
+    $$PWD/featureOutlier.cpp
 
 HEADERS  += \
 	$$PWD/puppy/include/puppy/Primitive.hpp \
@@ -22,4 +23,5 @@ HEADERS  += \
 	$$PWD/AccRegPrimits.h \
     $$PWD/featureAllOthers.h \
     $$PWD/featureStatDistrib.h \
-    $$PWD/featurePeriodicAmount.h
+    $$PWD/featurePeriodicAmount.h \
+    $$PWD/featureOutlier.h

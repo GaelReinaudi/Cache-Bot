@@ -129,7 +129,16 @@ public:
 	}
 	bool isFeature() const override { return true; }
 protected:
-	virtual void getArgs(Puppy::Context &ioContext) { Q_UNUSED(ioContext); }
+	virtual void getArgs(Puppy::Context &ioContext) {
+		// if we are forcing a given hashed bundle
+		int filterHashIndex = ioContext.filterHashIndex;
+		if(filterHashIndex >= 0) {
+			m_filterHash = ioContext.m_pUser->hashBundles().keys()[filterHashIndex];
+		}
+		else {
+			m_filterHash = -1;
+		}
+	}
 	virtual void cleanArgs() {}
 
 protected:

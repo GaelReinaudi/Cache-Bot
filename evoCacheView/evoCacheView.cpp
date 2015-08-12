@@ -60,6 +60,8 @@ void EvoCacheView::plotMask(double x, double y, int flag)
 	QColor colZone = flag == 0 ? QColor(239, 64, 53, 32) : QColor(0, 64, 253, 64);
 	if (flag & 2)
 		colZone = QColor(0, 253, 64, 32);
+	if (flag & 4)
+		colZone = QColor(255, 165, 0, 32);
 	itRect->setPen(QPen(QBrush(colZone), 3.0));
 	itRect->setBrush(QBrush(colZone));
 	itRect->setClipToAxisRect(false);

@@ -2,6 +2,7 @@
 #include "bot.h"
 #include "featureAllOthers.h"
 #include "featureStatDistrib.h"
+#include "featureOutlier.h"
 #include "featurePeriodicAmount.h"
 
 unsigned int BotContext::LIMIT_NUM_FEATURES = 1;
@@ -49,6 +50,7 @@ BotContext::BotContext(User *pUser)
 	insert(new FeatureBiWeeklyAmount());
 	insert(new FeatureMonthlyAmount());
 	insert(new FeatureStatDistrib());
+	insert(new FeatureOutlier());
 	insert(new FeatureAllOthers());
 }
 
