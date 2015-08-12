@@ -146,17 +146,17 @@ void AHashPlot::loadCompressedAmount(User *pUser)
 		uint h = tr.nameHash.hash();
 		uint d = tr.nameHash.manLength();
 		if (!tr.isInternal()) {
-			if (tr.amountDbl() >= 1.0) {
-				graph(0)->addData(tr.compressedAmount(), 0.0);
-				graph(0)->addData(tr.compressedAmount(), 0.0);
-				graph(0)->addData(tr.compressedAmount(), 0.0);
-				graph(0)->addData(tr.compressedAmount(), 0.0);
-				graph(0)->addData(tr.compressedAmount(), 0.0);
-				graph(0)->addData(tr.compressedAmount(), 0.0);
-				graph(0)->addData(tr.compressedAmount(), 0.0);
-				graph(0)->addData(tr.compressedAmount(), 0.0);
-				graph(0)->addData(tr.compressedAmount(), 0.0);
-			}
+//			if (tr.amountDbl() >= 1.0) {
+//				graph(0)->addData(tr.compressedAmount(), 0.0);
+//				graph(0)->addData(tr.compressedAmount(), 0.0);
+//				graph(0)->addData(tr.compressedAmount(), 0.0);
+//				graph(0)->addData(tr.compressedAmount(), 0.0);
+//				graph(0)->addData(tr.compressedAmount(), 0.0);
+//				graph(0)->addData(tr.compressedAmount(), 0.0);
+//				graph(0)->addData(tr.compressedAmount(), 0.0);
+//				graph(0)->addData(tr.compressedAmount(), 0.0);
+//				graph(0)->addData(tr.compressedAmount(), 0.0);
+//			}
 			graph(0)->addData(tr.compressedAmount(), 0.0);
 		}
 		QCPGraph* pGraph = 0;
@@ -183,11 +183,19 @@ void AHashPlot::loadCompressedAmount(User *pUser)
 	graph(0)->addData(orderedKeys.first() - 0.5, m_integral);
 	double epsilon = 0.0000001;
 	double manyEspilon = epsilon;
+	bool pos = false;
 	for (double dat : orderedKeys) {
-		m_integral += dat < 0 ? qAbs(unKindaLog(dat)) : 1.0;
+		// for positive, restart at 0
+		if (!pos && dat >= 0.0) {
+			pos = true;
+			m_integral = 0;
+			graph(0)->addData(0.0, 0.0);
+		}
+		m_integral += qAbs(unKindaLog(dat));
 		graph(0)->addData(dat + manyEspilon, m_integral);
 		manyEspilon += epsilon;
 	}
+	graph(0)->addData(orderedKeys.last() + 0.5, m_integral);
 	rescaleAxes();
 	xAxis->setRange(xAxis->range().lower - 0.5, xAxis->range().upper + 0.5);
 	yAxis->setRange(0.0, yAxis->range().upper);
