@@ -198,11 +198,14 @@ QVector<Transaction> OracleOneDayOfMonth::revelation(QDate upToDate)
 	LOG() << "OracleOneDayOfMonth::revelation. bundle = " << m_args.m_bundle.count() << endl;
 	QDate iniDate = QDate::currentDate();
 	static QVector<Transaction> targetTrans;
-	targetTrans = FeatureMonthlyAmount::BlankTransactionsForDayOfMonth(iniDate, upToDate, m_args.m_dayOfMonth, lambdaTrans);
-	if (m_args.m_dayOfMonth2) {
-		targetTrans += FeatureMonthlyAmount::BlankTransactionsForDayOfMonth(iniDate, upToDate, m_args.m_dayOfMonth2, lambdaTrans);
+//	if (m_args.m_consecMissed == 0 || m_args.m_dayOfMonth2 == 0)
+	{
+		targetTrans = FeatureMonthlyAmount::BlankTransactionsForDayOfMonth(iniDate, upToDate, m_args.m_dayOfMonth, lambdaTrans);
+		if (m_args.m_dayOfMonth2) {
+			targetTrans += FeatureMonthlyAmount::BlankTransactionsForDayOfMonth(iniDate, upToDate, m_args.m_dayOfMonth2, lambdaTrans);
+		}
+		qSort(targetTrans.begin(), targetTrans.end(), Transaction::earlierThan);
 	}
-	qSort(targetTrans.begin(), targetTrans.end(), Transaction::earlierThan);
 	return targetTrans;
 }
 

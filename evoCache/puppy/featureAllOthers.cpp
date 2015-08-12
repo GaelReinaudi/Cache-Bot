@@ -118,7 +118,7 @@ QVector<Transaction> OracleFilteredRest::revelation(QDate upToDate)
 			// to the current date, so it slowly dissolves as the oracle is predicting for latter dates
 			avgAmnt /= Transaction::onlyAfterDate.daysTo(curDate());
 //			randTr.setAmount(avgAmnt / m_args.m_dayProba);
-			LOG() << "avgTrans " << randTr.amountDbl() << " " << randTr.date.toString() << randTr.name << endl;
+			LOG() << "avgTrans " << randTr.amountDbl() << " " << randTr.date.toString() << "" << randTr.name << endl;
 			retVect.append(randTr);
 		}
 		nextDay();
