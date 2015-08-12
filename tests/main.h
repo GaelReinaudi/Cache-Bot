@@ -82,7 +82,7 @@ private slots:
 		QList<QVariant> arguments = spyUserData.takeFirst();
 		//qDebug() << arguments.at(0).toString();
 		QSTARTSWITH(arguments.at(0).toString()
-					, "{\"error\":\"Error: user has no banks.\":");
+					, "{\"error\":\"Error: user has no banks.\"");
 	}
 
 	void getUseraData() {
