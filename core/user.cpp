@@ -127,6 +127,7 @@ void User::injectJsonData(QString jsonStr)
 			}
 		}
 	}
+	m_allTransactions.stampAllTransactionEffect();
 
 	//////// "funds"
 	QJsonArray jsonFundArray = jsonObj["funds"].toArray();

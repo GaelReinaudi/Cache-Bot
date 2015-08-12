@@ -53,37 +53,6 @@ qint64 Transaction::dist(const Transaction &other, bool log) const {
 	return distanceWeighted<16, 512, 2>(other, log);
 }
 
-
-
-void StaticTransactionArray::read(const QJsonArray& npcArray, int afterJday, int beforeJday, const QVector<QString> &onlyAcIds /*= anyID*/) {
-	for (int npcIndex = 0; npcIndex < npcArray.size(); ++npcIndex) {
-		QJsonObject jsonTrans = npcArray[npcIndex].toObject();
-		QString accountTrans = jsonTrans["_account"].toString();
-		if (onlyAcIds.isEmpty() || onlyAcIds.contains(accountTrans)) {
-			auto ok = appendNew(jsonTrans, 0);
-			if ((afterJday && last()->jDay() < afterJday) || (beforeJday && last()->jDay() > beforeJday)) {
-				if (ok)
-					removeLast();
-				continue;
-			}
-		}
-		else {
-			LOG() << "transaction not matching an account:"<< accountTrans
-				  << " object:" << npcArray[npcIndex].toString() << endl;
-		}
-	}
-	qSort(m_transArray.begin(), m_transArray.begin() + m_numTrans, Transaction::earlierThan);
-	qDebug() << "transaction loaded " << count() << "/" << npcArray.size();
-}
-
-void StaticTransactionArray::write(QJsonArray& npcArray) const {
-	for (int i = 0; i < count(); ++i) {
-		QJsonObject npcObject;
-		m_transArray[i].write(npcObject);
-		npcArray.append(npcObject);
-	}
-}
-
 Transaction* StaticTransactionArray::appendNew(QJsonObject jsonTrans, Account *pInAcc) {
 	QString name = jsonTrans["name"].toString();
 	QDate date = QDate::fromString(jsonTrans["date"].toString().left(10), "yyyy-MM-dd");
@@ -114,6 +83,30 @@ Transaction* StaticTransactionArray::appendNew(QJsonObject jsonTrans, Account *p
 	pNewTrans->read(jsonTrans);
 	pNewTrans->account = pInAcc;
 	return pNewTrans;
+}
+
+void StaticTransactionArray::stampAllTransactionEffect()
+{
+	int totNeg = 0;
+	int totPos = 0;
+	for (int  i = 0; i < m_numTrans; ++i) {
+		if (trans(i).isInternal())
+			continue;
+		int amnt = trans(i).amountDbl();
+		if (amnt > 0)
+			totPos += amnt;
+		if (amnt < 0)
+			totNeg += amnt;
+	}
+	for (int  i = 0; i < m_numTrans; ++i) {
+		if (trans(i).isInternal())
+			continue;
+		int amnt128 = 128 * trans(i).amountDbl();
+		if (amnt128 > 0)
+			trans(i).effect128 = amnt128 / totPos;
+		if (amnt128 < 0)
+			trans(i).effect128 = amnt128 / totNeg;
+	}
 }
 
 

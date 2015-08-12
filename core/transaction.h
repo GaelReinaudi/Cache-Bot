@@ -23,6 +23,7 @@ public:
 //	int indexHash = -1;
 	// used to make the distance arbitrary far from anything
 	int dimensionOfVoid = 0;
+	char effect128 = 0;
 
 	enum Flag { None = 0x0, Predicted = 0x1, CameTrue = 0x2 , Internal = 0x4 };
 	int flags = Flag::None;
@@ -99,10 +100,6 @@ public:
 
 struct StaticTransactionArray
 {
-	//! json in
-	void read(const QJsonArray& npcArray, int afterJday = 0, int beforeJday = 0, const QVector<QString>& onlyAcIds = QVector<QString>());
-	//! json out
-	void write(QJsonArray &npcArray) const;
 	Transaction* transArray() { return &m_transArray[0]; }
 	Transaction& trans(int i) { return i >= 0 ? m_transArray[i] : m_transArray[i + count()]; }
 	void clear() { m_numTrans = 0; }
@@ -113,6 +110,7 @@ struct StaticTransactionArray
 	void sort() {
 		qSort(m_transArray.begin(), m_transArray.begin() + m_numTrans, Transaction::earlierThan);
 	}
+	void stampAllTransactionEffect();
 
 	QDate lastTransactionDate() {
 		return transArray()[count() - 1].date;
