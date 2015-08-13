@@ -22,6 +22,8 @@ private:
 			o_retObj.insert("proba", m_dayProba);
 			o_retObj.insert("amount", m_amount);
 			o_retObj.insert("effect", m_effect);
+			o_retObj.insert("avgAmn", m_bundle.count() ? m_bundle.sumDollar() / m_bundle.count() : 0.0);
+			o_retObj.insert("labels", QJsonArray::fromStringList(m_bundle.uniqueNames()));
 		}
 		TransactionBundle m_bundle;
 		double m_dayProba = 0.0;

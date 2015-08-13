@@ -5,6 +5,8 @@ static const int THRESHOLD_EFFECT128 = 20;
 double FeatureOutlier::apply(TransactionBundle& allTrans)
 {
 	m_localStaticArgs.m_bundle.clear();
+	m_localStaticArgs.m_effect = 0;
+	m_localStaticArgs.m_amount = 0;
 	for (int i = 0; i < allTrans.count(); ++i) {
 		Transaction& trans = allTrans.trans(i);
 		if (trans.isInternal())
@@ -14,14 +16,19 @@ double FeatureOutlier::apply(TransactionBundle& allTrans)
 		if (trans.dimensionOfVoid)
 			continue;
 
-		++trans.dimensionOfVoid;
-		m_localStaticArgs.m_bundle.append(&trans);
-		m_localStaticArgs.m_amount = trans.amountDbl();
-		m_localStaticArgs.m_effect = trans.effect128;
-		m_fitness = m_localStaticArgs.m_effect;
-
-		break;
+		if (trans.effect128 > m_localStaticArgs.m_effect) {
+			m_localStaticArgs.m_effect = trans.effect128;
+			m_localStaticArgs.m_bundle.clear();
+			m_localStaticArgs.m_bundle.append(&trans);
+			m_localStaticArgs.m_amount = trans.amountDbl();
+		}
 	}
+	Q_ASSERT(m_localStaticArgs.m_bundle.count() <= 1);
+	// for the chosen one, set the dimensionOfVoid
+	for (int i = 0; i < m_localStaticArgs.m_bundle.count(); ++i)
+		++m_localStaticArgs.m_bundle.trans(i).dimensionOfVoid;
+
+	m_fitness = double(m_localStaticArgs.m_effect) / double(THRESHOLD_EFFECT128);
 	return m_fitness;
 }
 
