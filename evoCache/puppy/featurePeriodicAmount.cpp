@@ -79,9 +79,10 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 	totalOneOverDistOthers -= totalOneOverDistClosest;
 	// only sum that add up to > $N
 	if (qAbs(m_localStaticArgs.m_bundle.sumDollar()) > 1) {
-		m_fitness += totalOneOverDistClosest;
-		m_fitness *= 1.0 * double(m_localStaticArgs.m_bundle.count() + m_localStaticArgs.m_bundle.count()) / double(m_targetTrans.count());
+		m_fitness = totalOneOverDistClosest;
+		m_fitness *= 0.2 * double(m_localStaticArgs.m_bundle.count() - 1) / double(m_targetTrans.count());
 		m_fitness *= 1.0 + (1.0 / (1.0 + m_localStaticArgs.m_consecMissed));
+		m_fitness *= double(m_localStaticArgs.m_consecMonthBeforeMissed) - 0.75;
 	}
 	m_billProba = billProbability();
 	return m_fitness;
@@ -198,7 +199,7 @@ QVector<Transaction> OracleOneDayOfMonth::revelation(QDate upToDate)
 	LOG() << "OracleOneDayOfMonth::revelation. bundle = " << m_args.m_bundle.count() << endl;
 	QDate iniDate = QDate::currentDate();
 	static QVector<Transaction> targetTrans;
-//	if (m_args.m_consecMissed == 0 || m_args.m_dayOfMonth2 == 0)
+	if (m_args.m_consecMissed == 0 || m_args.m_kla < 0)
 	{
 		targetTrans = FeatureMonthlyAmount::BlankTransactionsForDayOfMonth(iniDate, upToDate, m_args.m_dayOfMonth, lambdaTrans);
 		if (m_args.m_dayOfMonth2) {
