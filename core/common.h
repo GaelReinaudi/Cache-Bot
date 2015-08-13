@@ -158,6 +158,10 @@ public:
 	qint64 dist(const NameHashVector2& other) const {
 		quint64 h1 = coord[0];
 		quint64 h2 = other.coord[0];
+		// tries to make differences of short labels look more important
+		quint64 allBits = numBits(h1 | h2);
+		if (allBits <= 6)
+			return numBits(h1 ^ h2) * (7 - allBits);
 		// the number of bits that are different
 		return numBits(h1 ^ h2);
 	}
