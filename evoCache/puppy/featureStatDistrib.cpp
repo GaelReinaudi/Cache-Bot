@@ -1,6 +1,7 @@
 #include "featureStatDistrib.h"
 
 #define MIN_TRANSACTIONS_FOR_STAT 3
+#define EFFECT_RANGE_WIDTH_RATIO 2.0
 
 void FeatureStatDistrib::getArgs(Puppy::Context &ioContext) {
 	// if we are forcing a given hashed bundle
@@ -21,6 +22,8 @@ void FeatureStatDistrib::getArgs(Puppy::Context &ioContext) {
 	int ind = -1;
 	getArgument(++ind, &a, ioContext);
 	m_localStaticArgs.m_hash = a;
+	getArgument(++ind, &a, ioContext);
+	m_localStaticArgs.m_effect = a;
 }
 
 double FeatureStatDistrib::apply(TransactionBundle& allTrans)
@@ -38,18 +41,24 @@ double FeatureStatDistrib::apply(TransactionBundle& allTrans)
 	for (int i = 0; i < allTrans.count(); ++i) {
 		Transaction& trans = allTrans.trans(i);
 		quint64 dist = trans.distanceWeighted<1024*1024*1024, 1024*1024*1024, maxHashDist>(modelTrans);
-		if (dist < Transaction::LIMIT_DIST_TRANS) {
+		if (dist < Transaction::LIMIT_DIST_TRANS
+				&& trans.effect128 <=  1 + m_localStaticArgs.m_effect * EFFECT_RANGE_WIDTH_RATIO
+				&& trans.effect128 >= -1 + m_localStaticArgs.m_effect / EFFECT_RANGE_WIDTH_RATIO
+				) {
 			m_localStaticArgs.m_bundle.append(&trans);
-			// isolate the transaction that were fitted to the target
-			Q_ASSERT(trans.dimensionOfVoid == 0);
-			trans.dimensionOfVoid++;
 		}
 	}
 	int numBund = m_localStaticArgs.m_bundle.count();
 	if (numBund <= MIN_TRANSACTIONS_FOR_STAT) {
+		m_localStaticArgs.m_bundle.clear();
 		m_fitness = 0.0;
 		m_billProba = 0.0;
 		return m_fitness;
+	}
+	// isolate the transaction that were fitted to the target
+	for (int i = 0; i < m_localStaticArgs.m_bundle.count(); ++i) {
+		Q_ASSERT(m_localStaticArgs.m_bundle.trans(i).dimensionOfVoid == 0);
+		++m_localStaticArgs.m_bundle.trans(i).dimensionOfVoid;
 	}
 	// get the date those transaction started
 	QDate firstDate = m_localStaticArgs.m_bundle.trans(0).date;
