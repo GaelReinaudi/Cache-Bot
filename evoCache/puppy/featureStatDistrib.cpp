@@ -1,6 +1,6 @@
 #include "featureStatDistrib.h"
 
-#define MIN_TRANSACTIONS_FOR_STAT 6
+#define MIN_TRANSACTIONS_FOR_STAT 3
 
 void FeatureStatDistrib::getArgs(Puppy::Context &ioContext) {
 	// if we are forcing a given hashed bundle
