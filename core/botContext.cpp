@@ -49,7 +49,7 @@ BotContext::BotContext(User *pUser)
 	insert(new CacheBotRootPrimitive());
 	insert(new FeatureBiWeeklyAmount());
 	insert(new FeatureMonthlyAmount());
-	insert(new FeatureStatDistrib());
+//	insert(new FeatureStatDistrib());
 	insert(new FeatureOutlier());
 	insert(new FeatureAllOthers());
 }

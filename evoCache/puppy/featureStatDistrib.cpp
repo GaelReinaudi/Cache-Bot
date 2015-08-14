@@ -67,7 +67,7 @@ double FeatureStatDistrib::apply(TransactionBundle& allTrans)
 	m_localStaticArgs.m_dayProba = numBund / m_localStaticArgs.m_daysBundle;
 
 	m_billProba = m_localStaticArgs.m_dayProba;
-	m_fitness = qAbs(kindaLog(m_localStaticArgs.m_bundle.sumDollar()));
+//	m_fitness = qAbs(kindaLog(m_localStaticArgs.m_bundle.sumDollar()));
 	m_fitness = 5.0;
 	m_fitness *= numBund * numBund;
 	m_fitness /= MIN_TRANSACTIONS_FOR_STAT * MIN_TRANSACTIONS_FOR_STAT;

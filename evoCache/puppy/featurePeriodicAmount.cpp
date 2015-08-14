@@ -81,8 +81,8 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 	if (qAbs(m_localStaticArgs.m_bundle.sumDollar()) > 1) {
 		m_fitness = totalOneOverDistClosest;
 		m_fitness *= 0.2 * double(m_localStaticArgs.m_bundle.count() - 1) / double(m_targetTrans.count());
-		m_fitness *= 1.0 + (1.0 / (1.0 + m_localStaticArgs.m_consecMissed));
-		m_fitness *= double(m_localStaticArgs.m_consecMonthBeforeMissed) - 0.75;
+//		m_fitness *= 1.0 + (1.0 / (1.0 + m_localStaticArgs.m_consecMissed));
+		m_fitness *= double(m_localStaticArgs.m_consecMonthBeforeMissed) - 1.5;
 	}
 	m_billProba = billProbability();
 	return m_fitness;
@@ -166,7 +166,7 @@ QVector<Transaction> FeatureMonthlyAmount::targetTransactions(QDate iniDate, QDa
 	// loops through to set a few variables of the transactions
 	for (Transaction& tr : targetTrans) {
 		tr.setKLA(m_localStaticArgs.m_kla);
-		tr.nameHash.setFromHash(m_localStaticArgs.m_b[0]);
+		tr.nameHash.setFromHash(m_localStaticArgs.m_hash);
 		tr.flags |= Transaction::Predicted;
 	}
 	return targetTrans;
@@ -181,7 +181,7 @@ QVector<Transaction> FeatureBiWeeklyAmount::targetTransactions(QDate iniDate, QD
 	// loops through to set a few variables of the transactions
 	for (Transaction& tr : targetTrans) {
 		tr.setKLA(m_localStaticArgs.m_kla);
-		tr.nameHash.setFromHash(m_localStaticArgs.m_b[0]);
+		tr.nameHash.setFromHash(m_localStaticArgs.m_hash);
 		tr.flags |= Transaction::Predicted;
 	}
 	return targetTrans;
