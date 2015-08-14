@@ -39,7 +39,7 @@ private:
 		int m_dayOfMonth = 0;
 		int m_dayOfMonth2 = 0;
 		int m_kla = 0;
-		int m_b[4];
+		int m_hash = 0;
 		// characteristics
 		int m_consecMonthBeforeMissed = 0;
 		int m_consecMonth = 0;
@@ -83,7 +83,7 @@ protected:
 		if(filterHashIndex >= 0) {
 			m_filterHash = ioContext.m_pUser->hashBundles().keys()[filterHashIndex];
 			std::string nodeName = QString("h%1").arg(m_filterHash).toStdString();
-			bool ok = tryReplaceArgumentNode(2, nodeName.c_str(), ioContext);
+			bool ok = tryReplaceArgumentNode(0, nodeName.c_str(), ioContext);
 			if(!ok) {
 				LOG() << "Could not replace the node with " << nodeName.c_str() << endl;
 			}
@@ -95,19 +95,11 @@ protected:
 		double a = 0;
 		int ind = -1;
 		getArgument(++ind, &a, ioContext);
+		m_localStaticArgs.m_hash = a;
+		getArgument(++ind, &a, ioContext);
 		m_localStaticArgs.m_dayOfMonth = a;
 		getArgument(++ind, &a, ioContext);
 		m_localStaticArgs.m_kla = a;
-
-		int bInd = -1;
-		getArgument(++ind, &a, ioContext);
-		m_localStaticArgs.m_b[++bInd] = a;
-		getArgument(++ind, &a, ioContext);
-		m_localStaticArgs.m_b[++bInd] = a;
-		getArgument(++ind, &a, ioContext);
-		m_localStaticArgs.m_b[++bInd] = a;
-		getArgument(++ind, &a, ioContext);
-		m_localStaticArgs.m_b[++bInd] = a;
 	}
 	void cleanArgs() override {
 		FeaturePeriodicAmount::cleanArgs();
