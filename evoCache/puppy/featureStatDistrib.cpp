@@ -1,6 +1,6 @@
 #include "featureStatDistrib.h"
 
-#define MIN_TRANSACTIONS_FOR_STAT 3
+#define MIN_TRANSACTIONS_FOR_STAT 30
 #define EFFECT_RANGE_WIDTH_RATIO 2.0
 
 void FeatureStatDistrib::getArgs(Puppy::Context &ioContext) {
