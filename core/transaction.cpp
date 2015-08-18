@@ -87,6 +87,7 @@ Transaction* StaticTransactionArray::appendNew(QJsonObject jsonTrans, Account *p
 
 void StaticTransactionArray::stampAllTransactionEffect()
 {
+	QMap<int, int> effectCount;
 	int totNeg = 0;
 	int totPos = 0;
 	for (int  i = 0; i < m_numTrans; ++i) {
@@ -104,9 +105,12 @@ void StaticTransactionArray::stampAllTransactionEffect()
 		int amnt128 = 128 * trans(i).amountDbl();
 		if (amnt128 > 0)
 			trans(i).effect128 = amnt128 / totPos;
-		if (amnt128 < 0)
+		if (amnt128 < 0) {
 			trans(i).effect128 = amnt128 / totNeg;
+			++effectCount[trans(i).effect128];
+		}
 	}
+	qDebug() << "effectCount" << effectCount;
 }
 
 
