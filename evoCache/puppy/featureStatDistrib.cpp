@@ -40,16 +40,17 @@ double FeatureStatDistrib::apply(TransactionBundle& allTrans)
 	m_localStaticArgs.m_bundle.clear();
 	for (int i = 0; i < allTrans.count(); ++i) {
 		Transaction& trans = allTrans.trans(i);
+		if (trans.isInternal())
+			continue;
+		if (trans.dimensionOfVoid)
+			continue;
 		quint64 dist = trans.distanceWeighted<1024*1024*1024, 1024*1024*1024, maxHashDist>(modelTrans);
-		if (dist < Transaction::LIMIT_DIST_TRANS
-				&& trans.effect128 <=  1 + m_localStaticArgs.m_effect * EFFECT_RANGE_WIDTH_RATIO
-				&& trans.effect128 >= -1 + m_localStaticArgs.m_effect / EFFECT_RANGE_WIDTH_RATIO
-				) {
+		if (passFilter(dist, trans)) {
 			m_localStaticArgs.m_bundle.append(&trans);
 		}
 	}
 	int numBund = m_localStaticArgs.m_bundle.count();
-	if (numBund <= MIN_TRANSACTIONS_FOR_STAT) {
+	if (numBund <= MIN_TRANSACTIONS_FOR_STAT*0+3) {
 		m_localStaticArgs.m_bundle.clear();
 		m_fitness = 0.0;
 		m_billProba = 0.0;

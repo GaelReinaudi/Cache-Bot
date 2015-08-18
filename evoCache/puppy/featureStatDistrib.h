@@ -31,6 +31,7 @@ private:
 		double m_daysBundle = 0.0;
 	} m_args;
 	friend class FeatureStatDistrib;
+	friend class FeaturePriceWindow;
 };
 
 class FeatureStatDistrib : public AccountFeature
@@ -53,7 +54,13 @@ protected:
 
 	double apply(TransactionBundle& allTrans);
 
-private:
+	virtual bool passFilter(quint64 dist, const Transaction& trans) const {
+		return dist < Transaction::LIMIT_DIST_TRANS
+				&& trans.effect128 <=  1 + m_localStaticArgs.m_effect * EFFECT_RANGE_WIDTH_RATIO
+				&& trans.effect128 >= -1 + m_localStaticArgs.m_effect / EFFECT_RANGE_WIDTH_RATIO;
+	}
+
+protected:
 	OracleStatDistrib::Args m_localStaticArgs;
 };
 
