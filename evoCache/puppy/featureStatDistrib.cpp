@@ -76,6 +76,12 @@ double FeatureStatDistrib::apply(TransactionBundle& allTrans)
 	return m_fitness;
 }
 
+bool FeatureStatDistrib::passFilter(quint64 dist, const Transaction &trans) const {
+	return dist < Transaction::LIMIT_DIST_TRANS
+			&& trans.effect128 <=  1 + m_localStaticArgs.m_effect * EFFECT_RANGE_WIDTH_RATIO
+			&& trans.effect128 >= -1 + m_localStaticArgs.m_effect / EFFECT_RANGE_WIDTH_RATIO;
+}
+
 void FeatureStatDistrib::execute(void *outDatum, Puppy::Context &ioContext)
 {
 	AccountFeature::execute(outDatum, ioContext);

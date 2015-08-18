@@ -54,11 +54,7 @@ protected:
 
 	double apply(TransactionBundle& allTrans);
 
-	virtual bool passFilter(quint64 dist, const Transaction& trans) const {
-		return dist < Transaction::LIMIT_DIST_TRANS
-				&& trans.effect128 <=  1 + m_localStaticArgs.m_effect * EFFECT_RANGE_WIDTH_RATIO
-				&& trans.effect128 >= -1 + m_localStaticArgs.m_effect / EFFECT_RANGE_WIDTH_RATIO;
-	}
+	virtual bool passFilter(quint64 dist, const Transaction& trans) const;
 
 protected:
 	OracleStatDistrib::Args m_localStaticArgs;
