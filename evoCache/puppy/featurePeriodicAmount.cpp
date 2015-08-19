@@ -5,6 +5,7 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 	QDate lastDate = QDate::currentDate();
 	QDate iniDate = lastDate.addMonths(-6);
 
+	m_fitness = 0.0;
 	m_targetTrans = targetTransactions(iniDate, lastDate);
 	if (m_targetTrans.count() == 0) {
 		LOG() << "MonthlyAmount(0 TARGET): day "<<m_localStaticArgs.m_dayOfMonth<<" kla "<< m_localStaticArgs.m_kla << endl;
@@ -43,9 +44,9 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 				if (doLog) {
 					iTarg->dist(*localTrans, true);
 				}
-				// isolate the transaction that were fitted to the target
-				Q_ASSERT(localTrans->dimensionOfVoid == 0);
-				localTrans->dimensionOfVoid++;
+//				// isolate the transaction that were fitted to the target
+//				Q_ASSERT(localTrans->dimensionOfVoid == 0);
+//				localTrans->dimensionOfVoid++;
 				iTarg->flags |= Transaction::CameTrue;
 				if(m_localStaticArgs.m_consecMonth == 0) {
 					m_localStaticArgs.m_consecMonthBeforeMissed = 0;
@@ -53,7 +54,7 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 				++m_localStaticArgs.m_consecMonthBeforeMissed;
 				++m_localStaticArgs.m_consecMonth;
 				m_localStaticArgs.m_consecMissed = 0;
-				totalOneOverDistClosest += 4.0 / (4 + localDist);
+				totalOneOverDistClosest += 8.0 / (8 + localDist);
 			}
 			else {
 				if (doLog) {
@@ -68,11 +69,11 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 			if (iTarg == &m_targetTrans.last() || (iTarg + 1)->date >= lastDate)
 				break;
 			++iTarg;
-			localTrans = 0;
-			localDist = quint64(-1);
 			// keep this last trans in the pool if it was not just added
 			if (&trans != localTrans)
 				--i;
+			localTrans = 0;
+			localDist = quint64(-1);
 		}
 		totalOneOverDistOthers += 1.0 / (1 + dist);
 	}
@@ -102,6 +103,20 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 	auto& allTrans = ioContext.m_pUser->transBundle(m_filterHash);
 
 	output = apply(allTrans, ioContext.m_summaryJsonObj);
+	// isolate the transaction that were fitted to the target
+	for (int i = 0; i < m_localStaticArgs.m_bundle.count(); ++i) {
+		Q_ASSERT(m_localStaticArgs.m_bundle.trans(i).dimensionOfVoid == 0);
+		++m_localStaticArgs.m_bundle.trans(i).dimensionOfVoid;
+	}
+	// tries to re-run this periodic and if it has a high vlaue, it is a sign that
+	// it is actually more frequent and should have a bad grade
+	auto temp = m_localStaticArgs;
+	double rereun = apply(allTrans, false);
+	if (ioContext.m_summaryJsonObj)
+		LOG() << "  output " << output << "- 2x " << rereun << endl;
+	m_localStaticArgs = temp;
+	output -= 2 * rereun;
+	m_fitness = output;
 
 	// summary if the json object exists
 	if (ioContext.m_summaryJsonObj) {

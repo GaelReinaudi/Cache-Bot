@@ -164,8 +164,9 @@ public:
 	void execute(void* outDatum, Puppy::Context& ioContext) override {
 		double& lResult = *(double*)outDatum;
 		lResult = 0.0;
-		double lArgi;
+		double lArgi = 0.0;
 		for(unsigned int i = 0; i < BotContext::LIMIT_NUM_FEATURES; ++i) {
+//			LOG() << "BotContext::LIMIT_NUM_FEATURES" << BotContext::LIMIT_NUM_FEATURES << i << endl;
 			getArgument(i, &lArgi, ioContext);
 			lResult += lArgi;
 		}
