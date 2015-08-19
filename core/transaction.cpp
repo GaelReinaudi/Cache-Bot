@@ -103,11 +103,13 @@ void StaticTransactionArray::stampAllTransactionEffect()
 		if (trans(i).isInternal())
 			continue;
 		int amnt128 = 128 * trans(i).amountDbl();
-		if (amnt128 > 0)
+		if (amnt128 > 0) {
 			trans(i).effect128 = amnt128 / totPos;
+			++effectCount[trans(i).effect128];
+		}
 		if (amnt128 < 0) {
 			trans(i).effect128 = amnt128 / totNeg;
-			++effectCount[trans(i).effect128];
+			++effectCount[-trans(i).effect128];
 		}
 	}
 	qDebug() << "effectCount" << effectCount;
