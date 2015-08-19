@@ -17,6 +17,7 @@ private:
 		void intoJson(QJsonObject& o_retObj) {
 			o_retObj.insert("hash", m_hash);
 			o_retObj.insert("effect", m_effect);
+			o_retObj.insert("kla", m_kla);
 			o_retObj.insert("days", m_daysBundle);
 			o_retObj.insert("proba", m_dayProba);
 			o_retObj.insert("avgAmn", m_bundle.count() ? m_bundle.sumDollar() / m_bundle.count() : 0.0);
@@ -27,6 +28,7 @@ private:
 		TransactionBundle m_bundle;
 		int m_hash = 0;
 		double m_effect = 0;
+		double m_kla = 0;
 		double m_dayProba = 0.0;
 		double m_daysBundle = 0.0;
 	} m_args;

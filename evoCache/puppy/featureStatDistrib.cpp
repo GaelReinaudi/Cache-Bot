@@ -1,6 +1,6 @@
 #include "featureStatDistrib.h"
 
-#define MIN_TRANSACTIONS_FOR_STAT 30
+#define MIN_TRANSACTIONS_FOR_STAT 10
 #define EFFECT_RANGE_WIDTH_RATIO 2.0
 
 void FeatureStatDistrib::getArgs(Puppy::Context &ioContext) {
@@ -24,6 +24,8 @@ void FeatureStatDistrib::getArgs(Puppy::Context &ioContext) {
 	m_localStaticArgs.m_hash = a;
 	getArgument(++ind, &a, ioContext);
 	m_localStaticArgs.m_effect = a;
+	getArgument(++ind, &a, ioContext);
+	m_localStaticArgs.m_kla = a;
 }
 
 double FeatureStatDistrib::apply(TransactionBundle& allTrans)
@@ -50,7 +52,7 @@ double FeatureStatDistrib::apply(TransactionBundle& allTrans)
 		}
 	}
 	int numBund = m_localStaticArgs.m_bundle.count();
-	if (numBund <= MIN_TRANSACTIONS_FOR_STAT*0+3) {
+	if (numBund <= MIN_TRANSACTIONS_FOR_STAT) {
 		m_localStaticArgs.m_bundle.clear();
 		m_fitness = 0.0;
 		m_billProba = 0.0;
@@ -69,9 +71,9 @@ double FeatureStatDistrib::apply(TransactionBundle& allTrans)
 
 	m_billProba = m_localStaticArgs.m_dayProba;
 //	m_fitness = qAbs(kindaLog(m_localStaticArgs.m_bundle.sumDollar()));
-	m_fitness = 5.0;
-	m_fitness *= numBund * numBund;
-	m_fitness /= MIN_TRANSACTIONS_FOR_STAT * MIN_TRANSACTIONS_FOR_STAT;
+	m_fitness = 50.0;
+//	m_fitness *= numBund * numBund;
+//	m_fitness /= MIN_TRANSACTIONS_FOR_STAT * MIN_TRANSACTIONS_FOR_STAT;
 	m_fitness *= m_localStaticArgs.m_dayProba;
 	return m_fitness;
 }

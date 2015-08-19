@@ -191,6 +191,9 @@ public:
 		double ret = sumDollar() / m_vector.count();
 		return kindaLog(ret) * KLA_MULTIPLICATOR;
 	}
+	QDate firstDate() const {
+		return m_vector[0]->date;
+	}
 
 private:
 	QVector<Transaction*> m_vector;

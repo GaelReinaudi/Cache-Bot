@@ -53,7 +53,7 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 				++m_localStaticArgs.m_consecMonthBeforeMissed;
 				++m_localStaticArgs.m_consecMonth;
 				m_localStaticArgs.m_consecMissed = 0;
-				totalOneOverDistClosest += 64.0 / (64 + localDist);
+				totalOneOverDistClosest += 4.0 / (4 + localDist);
 			}
 			else {
 				if (doLog) {
@@ -79,8 +79,8 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 	totalOneOverDistOthers -= totalOneOverDistClosest;
 	// only sum that add up to > $N
 	if (qAbs(m_localStaticArgs.m_bundle.sumDollar()) > 1) {
-		m_fitness = totalOneOverDistClosest;
-		m_fitness *= 0.2 * double(m_localStaticArgs.m_bundle.count() - 1) / double(m_targetTrans.count());
+		m_fitness = totalOneOverDistClosest - totalOneOverDistOthers;
+//		m_fitness *= 0.2 * double(m_localStaticArgs.m_bundle.count() - 1) / double(m_targetTrans.count());
 //		m_fitness *= 1.0 + (1.0 / (1.0 + m_localStaticArgs.m_consecMissed));
 		m_fitness *= double(m_localStaticArgs.m_consecMonthBeforeMissed) - 1.5;
 	}
@@ -199,7 +199,7 @@ QVector<Transaction> OracleOneDayOfMonth::revelation(QDate upToDate)
 	LOG() << "OracleOneDayOfMonth::revelation. bundle = " << m_args.m_bundle.count() << endl;
 	QDate iniDate = QDate::currentDate();
 	static QVector<Transaction> targetTrans;
-	if (m_args.m_consecMissed == 0 || m_args.m_kla < 0)
+	if (m_args.m_consecMissed == 0)
 	{
 		targetTrans = FeatureMonthlyAmount::BlankTransactionsForDayOfMonth(iniDate, upToDate, m_args.m_dayOfMonth, lambdaTrans);
 		if (m_args.m_dayOfMonth2) {
@@ -212,9 +212,14 @@ QVector<Transaction> OracleOneDayOfMonth::revelation(QDate upToDate)
 
 double OracleOneDayOfMonth::avgDaily() const
 {
-	double avgMonth = m_args.m_bundle.averageAmount();
-	if (m_args.m_dayOfMonth2) {
-		avgMonth *= 2;
+	double avgMonth = 0.0;
+	if (m_args.m_consecMissed == 0)
+	{
+//		double daysAgo = m_args.m_bundle.firstDate().daysTo(QDate::currentDate());
+		avgMonth = m_args.m_bundle.averageAmount();
+		if (m_args.m_dayOfMonth2) {
+			avgMonth *= 2;
+		}
 	}
-	return avgMonth * (12.0 / 365.25);
+	return avgMonth;
 }

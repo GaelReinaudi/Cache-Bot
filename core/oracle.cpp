@@ -38,13 +38,18 @@ double SuperOracle::avgCashFlow() const
 		double avg = pOr->avgDaily();
 		if (avg > 0) {
 			posAvg += avg;
+			LOG() << "subOracle daily > 0 " << avg << endl;
 		}
 		else if (avg < 0) {
 			negAvg += avg;
+			LOG() << "subOracle daily < 0 " << avg << endl;
 		}
 		else {
 			posAvg += pOr->avgDailyPos();
 			negAvg += pOr->avgDailyNeg();
+			LOG() << "subOracle daily = 0 " << avg
+				  << "" << pOr->avgDailyPos()
+				  << "" << pOr->avgDailyNeg() << endl;
 		}
 	}
 	if (posAvg == 0.0)
