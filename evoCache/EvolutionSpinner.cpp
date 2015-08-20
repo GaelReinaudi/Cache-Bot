@@ -174,7 +174,13 @@ void EvolutionSpinner::runEvolution() {
 
 			bestTree.mValid = false;
 			lPopulation.push_back(bestTree);
-
+			// re-adding the orifginal features to re-insert some that could have been lost
+			if (i && i % 100 == 0) {
+				LOG() << "Re-introducing the original bundle features in case some died out" << endl;
+				for(unsigned int j = 0; j < bestPreEvoTrees.size(); ++j) {
+					lPopulation.push_back(bestPreEvoTrees.at(j % bestPreEvoTrees.size()));
+				}
+			}
 			evaluateSymbReg(lPopulation, *m_context);
 			calculateStats(lPopulation, i);
 		}
