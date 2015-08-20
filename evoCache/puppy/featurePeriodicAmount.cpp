@@ -111,16 +111,19 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 	// tries to re-run this periodic and if it has a high vlaue, it is a sign that
 	// it is actually more frequent and should have a bad grade
 	auto temp = m_localStaticArgs;
+	auto tempProba = m_billProba;
 	double rereun = apply(allTrans, false);
 	if (ioContext.m_summaryJsonObj)
 		LOG() << "  output " << output << "- 2x " << rereun << endl;
 	m_localStaticArgs = temp;
 	output -= 2 * rereun;
 	m_fitness = output;
+	m_billProba = tempProba;
 
 	// summary if the json object exists
 	if (ioContext.m_summaryJsonObj) {
-		if(m_billProba > 0.0) {
+//		if(m_billProba > 0.0)
+		{
 			QJsonArray features = (*ioContext.m_summaryJsonObj)["features"].toArray();
 			features.append(toJson(ioContext));
 			ioContext.m_summaryJsonObj->insert("features", features);
@@ -139,7 +142,8 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 		// making a shared pointer that will take care of cleaning once the oracle is no longer referenced
 		QSharedPointer<Oracle> newOracle(pNewOr);
 		double theOracleThreshold = 1.0;
-		if(m_billProba > theOracleThreshold) {
+//		if(m_billProba > theOracleThreshold)
+		{
 			ioContext.m_pUser->oracle()->addSubOracle(newOracle);
 		}
 	}
