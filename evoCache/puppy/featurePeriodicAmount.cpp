@@ -246,5 +246,5 @@ double OracleOneDayOfMonth::avgDaily() const
 			avgMonth *= 2;
 		}
 	}
-	return avgMonth;
+	return avgMonth * (12.0 / 365.25);
 }
