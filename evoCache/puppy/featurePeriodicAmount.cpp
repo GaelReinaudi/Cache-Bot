@@ -112,13 +112,19 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 	// it is actually more frequent and should have a bad grade
 	auto temp = m_localStaticArgs;
 	auto tempProba = m_billProba;
-	double rereun = apply(allTrans, false);
+	auto tempTarg = m_targetTrans;
+	m_localStaticArgs.m_dayOfMonth += approxSpacingPayment() / 2;
+	cleanArgs();
+	double rerun = apply(allTrans, false);
 	if (ioContext.m_summaryJsonObj)
-		LOG() << "  output " << output << "- 2x " << rereun << endl;
+		LOG() << "  output " << output << "- 2x " << rerun << endl;
 	m_localStaticArgs = temp;
-	output -= 2 * rereun;
+	m_localStaticArgs.m_fitRerun = rerun;
+	cleanArgs();
+	output -= 2 * qMax(0.0, rerun);
 	m_fitness = output;
 	m_billProba = tempProba;
+	m_targetTrans = tempTarg;
 
 	// summary if the json object exists
 	if (ioContext.m_summaryJsonObj) {
