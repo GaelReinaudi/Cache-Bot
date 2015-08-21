@@ -120,10 +120,19 @@ void FeatureStatDistrib::execute(void *outDatum, Puppy::Context &ioContext)
 void FeatureStatDistrib::computeNextDayProba(QDate lastDate)
 {
 	m_localStaticArgs.m_dayProba = 0.0;
-	QDate firstDate = m_localStaticArgs.m_bundle.trans(0).date;
+	double EMA_FACTOR = 0.6;
 
-	m_localStaticArgs.m_daysBundle = firstDate.daysTo(lastDate);
-	m_localStaticArgs.m_dayProba = m_localStaticArgs.m_bundle.count() / m_localStaticArgs.m_daysBundle;
+	for (int i = 1; i < m_localStaticArgs.m_bundle.count(); ++i) {
+		double daysToNext = m_localStaticArgs.m_bundle.trans(i - 1).date.daysTo(m_localStaticArgs.m_bundle.trans(i).date);
+		m_localStaticArgs.m_dayProba *= (1.0 - EMA_FACTOR);
+		m_localStaticArgs.m_dayProba += EMA_FACTOR * 1.0 / daysToNext;
+	}
+	// if time since last is getting larger than when we should have seen one, we take it as a new point
+	double daysToEnd = m_localStaticArgs.m_bundle.trans(-1).date.daysTo(lastDate);
+	if (1.0 / daysToEnd > m_localStaticArgs.m_dayProba) {
+		m_localStaticArgs.m_dayProba *= (1.0 - EMA_FACTOR);
+		m_localStaticArgs.m_dayProba += EMA_FACTOR * 1.0 / daysToEnd;
+	}
 }
 
 QVector<Transaction> OracleStatDistrib::revelation(QDate upToDate)
