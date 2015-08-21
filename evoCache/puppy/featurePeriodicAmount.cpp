@@ -3,7 +3,7 @@
 double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 {
 	QDate lastDate = QDate::currentDate();
-	QDate iniDate = lastDate.addMonths(-6);
+	QDate iniDate = Transaction::onlyAfterDate;//lastDate.addMonths(-6);
 
 	m_fitness = 0.0;
 	m_targetTrans = targetTransactions(iniDate, lastDate);

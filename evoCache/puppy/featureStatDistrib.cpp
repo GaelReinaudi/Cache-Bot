@@ -64,10 +64,7 @@ double FeatureStatDistrib::apply(TransactionBundle& allTrans)
 		++m_localStaticArgs.m_bundle.trans(i).dimensionOfVoid;
 	}
 	// get the date those transaction started
-	QDate firstDate = m_localStaticArgs.m_bundle.trans(0).date;
-
-	m_localStaticArgs.m_daysBundle = firstDate.daysTo(lastDate);
-	m_localStaticArgs.m_dayProba = numBund / m_localStaticArgs.m_daysBundle;
+	computeNextDayProba(lastDate);
 
 	m_billProba = m_localStaticArgs.m_dayProba;
 //	m_fitness = qAbs(kindaLog(m_localStaticArgs.m_bundle.sumDollar()));
@@ -120,7 +117,17 @@ void FeatureStatDistrib::execute(void *outDatum, Puppy::Context &ioContext)
 	}
 }
 
-QVector<Transaction> OracleStatDistrib::revelation(QDate upToDate) {
+void FeatureStatDistrib::computeNextDayProba(QDate lastDate)
+{
+	m_localStaticArgs.m_dayProba = 0.0;
+	QDate firstDate = m_localStaticArgs.m_bundle.trans(0).date;
+
+	m_localStaticArgs.m_daysBundle = firstDate.daysTo(lastDate);
+	m_localStaticArgs.m_dayProba = m_localStaticArgs.m_bundle.count() / m_localStaticArgs.m_daysBundle;
+}
+
+QVector<Transaction> OracleStatDistrib::revelation(QDate upToDate)
+{
 	LOG() << "OracleStatDistrib::revelation proba = " << m_args.m_dayProba << " bundle = " << m_args.m_bundle.count() << endl;
 	static QVector<Transaction> retVect;
 	retVect.clear();
