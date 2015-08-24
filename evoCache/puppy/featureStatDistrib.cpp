@@ -121,13 +121,13 @@ void FeatureStatDistrib::computeNextDayProba(QDate lastDate)
 {
 	double daysTo = m_localStaticArgs.m_bundle.trans(0).date.daysTo(m_localStaticArgs.m_bundle.trans(1).date);
 	double EMA_FACTOR = 0.5;
-	LOG() << "daysTo " << daysTo << endl;
+//	LOG() << "daysTo " << daysTo << endl;
 
 	for (int i = 2; i < m_localStaticArgs.m_bundle.count(); ++i) {
 		double daysToNext = m_localStaticArgs.m_bundle.trans(i - 1).date.daysTo(m_localStaticArgs.m_bundle.trans(i).date);
 		daysTo *= (1.0 - EMA_FACTOR);
 		daysTo += daysToNext * EMA_FACTOR;
-		LOG() << "daysToNext " << daysToNext << "daysTo " << daysTo << endl;
+//		LOG() << "daysToNext " << daysToNext << "daysTo " << daysTo << endl;
 	}
 	// if time since last is getting larger than when we should have seen one, we take it as a new point
 	double daysToEnd = m_localStaticArgs.m_bundle.trans(-1).date.daysTo(lastDate);
@@ -135,7 +135,7 @@ void FeatureStatDistrib::computeNextDayProba(QDate lastDate)
 		daysTo *= (1.0 - EMA_FACTOR);
 		daysTo += daysToEnd * EMA_FACTOR;
 	}
-	LOG() << "daysToEnd " << daysToEnd << " final daysTo " << daysTo << endl;
+//	LOG() << "daysToEnd " << daysToEnd << " final daysTo " << daysTo << endl;
 	m_localStaticArgs.m_dayProba = 1.0 / daysTo;
 }
 
