@@ -63,7 +63,7 @@ void MetricViewer::onUserInjected(User* pUser)
 	}
 
 	QDate day  = QDate::currentDate();
-	QDate downToDate = Transaction::onlyAfterDate;//day.addMonths(-6);
+	QDate downToDate = Transaction::onlyAfterDate;
 	while (day >= downToDate) {
 		qDebug() << day;
 		double t = QDateTime(day).toTime_t();

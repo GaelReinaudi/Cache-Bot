@@ -147,11 +147,11 @@ void User::injectJsonData(QString jsonStr)
 
 	emit injected(this);
 
-	CostRateMonthPercentileMetric<2, 50>::get(this)->value(m_today);
-	CostRateMonthPercentileMetric<2, 75>::get(this)->value(m_today);
-	CostRateMonthPercentileMetric<2, 90>::get(this)->value(m_today);
-	CostRateMonthPercentileMetric<2, 95>::get(this)->value(m_today);
-	CostRateMonthPercentileMetric<2, 99>::get(this)->value(m_today);
+	CostRateMonthPercentileMetric<2, 50>::get(this)->value(currentDay());
+	CostRateMonthPercentileMetric<2, 75>::get(this)->value(currentDay());
+	CostRateMonthPercentileMetric<2, 90>::get(this)->value(currentDay());
+	CostRateMonthPercentileMetric<2, 95>::get(this)->value(currentDay());
+	CostRateMonthPercentileMetric<2, 99>::get(this)->value(currentDay());
 }
 
 BotContext* User::makeBotContext()

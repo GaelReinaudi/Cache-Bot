@@ -13,7 +13,7 @@ static int IND_GR_REVEL = -1;
 static int IND_GR_BALANCE = -1;
 static int IND_GR_SLOPE = -1;
 
-const int displayDayPast = 180;//60;
+const int displayDayPast = 1;//80;//60;
 const int displayDayFuture = 62;//180;
 
 const int playBackStartAgo = 0;

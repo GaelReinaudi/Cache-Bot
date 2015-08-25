@@ -24,11 +24,9 @@ protected:
 	void onRepliedSendExtraCache(QString strData) override;
 
 private:
-	void computeMinSlopeOver(int numDays);
 
 private:
 	QDate m_date;
-	int m_d0 = 0;
 	double m_minSlope = 0.0;
 	int m_futDayMinSlopeCollision = 0;
 	double m_slushFundStartsAt = 0.0;
