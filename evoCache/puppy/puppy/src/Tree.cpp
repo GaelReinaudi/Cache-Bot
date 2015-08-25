@@ -84,10 +84,7 @@ unsigned int Puppy::Tree::getDepth(unsigned int inIndex) const
  */
 void Puppy::Tree::interpret(void* outResult, Puppy::Context& ioContext)
 {
-	for(int i = 0; i < ioContext.m_pUser->allTrans().count(); ++i) {
-		// reset the dimensionOfVoid
-		ioContext.m_pUser->allTrans().trans(i).dimensionOfVoid = 0;
-	}
+	ioContext.m_pUser->resetDimensionOfVoid();
 	// reset all flags
 	ioContext.flags = 0;
 

@@ -54,7 +54,7 @@ protected:
 		QVector<double> costs;
 		QDate startDate = date.addMonths(-PastMonth);
 		for (int i = 0; i < user()->allTrans().count(); ++i) {
-			Transaction& tr = user()->allTrans().trans(i);
+			const Transaction& tr = user()->allTrans().trans(i);
 			double amnt = tr.amountDbl();
 			amnt *= Multiplicator;
 			// filter on date

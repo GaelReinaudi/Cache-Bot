@@ -21,7 +21,7 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 	double totalOneOverDistClosest = 0.0;
 	double totalOneOverDistOthers = 0.0;
 	quint64 localDist = 18446744073709551615ULL;
-	Transaction* localTrans = 0;
+	const Transaction* localTrans = 0;
 	// the current target to compare to
 	Transaction* iTarg = &m_targetTrans[0];
 	m_localStaticArgs.m_bundle.clear();
@@ -30,7 +30,7 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 	m_localStaticArgs.m_consecMonthBeforeMissed = 0;
 	m_localStaticArgs.m_consecMissed = 0;
 	for (int i = 0; i < allTrans.count(); ++i) {
-		Transaction& trans = allTrans.trans(i);
+		const Transaction& trans = allTrans.trans(i);
 		quint64 dist = iTarg->dist(trans);
 		if (dist < localDist) {
 			localDist = dist;
@@ -105,8 +105,7 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 	output = apply(allTrans, ioContext.m_summaryJsonObj);
 	// isolate the transaction that were fitted to the target
 	for (int i = 0; i < m_localStaticArgs.m_bundle.count(); ++i) {
-		Q_ASSERT(m_localStaticArgs.m_bundle.trans(i).dimensionOfVoid == 0);
-		++m_localStaticArgs.m_bundle.trans(i).dimensionOfVoid;
+		m_localStaticArgs.m_bundle.trans(i).setDimensionOfVoid();
 	}
 	// tries to re-run this periodic and if it has a high vlaue, it is a sign that
 	// it is actually more frequent and should have a bad grade
@@ -140,8 +139,8 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 			emit ioContext.m_pUser->botContext()->matchedTransaction(iTarg->time_t(), iTarg->amountDbl());
 		}
 		for (int i = 0; i < m_localStaticArgs.m_bundle.count(); ++i) {
-			Transaction& t = m_localStaticArgs.m_bundle.trans(i);
-			emit ioContext.m_pUser->botContext()->matchedTransaction(t.time_t(), t.amountDbl(), 1);
+			const Transaction& tr = m_localStaticArgs.m_bundle.trans(i);
+			emit ioContext.m_pUser->botContext()->matchedTransaction(tr.time_t(), tr.amountDbl(), 1);
 		}
 		OracleOneDayOfMonth* pNewOr = new OracleOneDayOfMonth();
 		pNewOr->m_args = m_localStaticArgs;

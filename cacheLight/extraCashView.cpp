@@ -187,7 +187,7 @@ void ExtraCashView::makeBalancePlot()
 	ui->spinBox->setValue(m_pbBalance);
 	double balanceThen = m_pbBalance;
 	for (int i = m_pExtraCache->user()->allTrans().count() - 1; i >= 0; --i) {
-		Transaction& tr = m_pExtraCache->user()->allTrans().trans(i);
+		const Transaction& tr = m_pExtraCache->user()->allTrans().trans(i);
 		if (tr.isInternal())
 			continue;
 		double x = QDate::currentDate().daysTo(tr.date);

@@ -53,7 +53,7 @@ void AMPlot::loadAmount(User* pUser)
 	int colorInc = 0;
 	for (int minAmort = 2; minAmort > 0; --minAmort) {
 		for (int i = 0; i < pUser->allTrans().count(); ++i) {
-			Transaction& trans = pUser->allTrans().trans(i);
+			const Transaction& trans = pUser->allTrans().trans(i);
 			amortDur = 1;//qRound(trans.numDays());
 			//int perDay = qAbs(kindaLog((trans.amountDbl() * 1.0) / amort));
 			double perDay = trans.amountDbl() / amortDur;

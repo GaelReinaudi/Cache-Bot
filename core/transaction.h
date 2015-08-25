@@ -22,7 +22,7 @@ public:
 	NameHashVector nameHash;
 //	int indexHash = -1;
 	// used to make the distance arbitrary far from anything
-	int dimensionOfVoid = 0;
+	mutable int dimensionOfVoid = 0;
 	char effect128 = 0;
 
 	enum Flag { None = 0x0, Predicted = 0x1, CameTrue = 0x2 , Internal = 0x4 };
@@ -65,6 +65,10 @@ public:
 	//! julian day
 	qint64 jDay() const {
 		return date.toJulianDay();
+	}
+	void setDimensionOfVoid() const {
+		Q_ASSERT(dimensionOfVoid == 0);
+		++dimensionOfVoid;
 	}
 
 	template <qint64 mD, qint64 mA, qint64 mH>
@@ -136,12 +140,17 @@ public:
 	void clear() {
 		m_vector.clear();
 	}
-	void append(Transaction* pTrans) {
+	void append(const Transaction* pTrans) {
 		m_vector.append(pTrans);
 	}
-	Transaction& trans(int index) {
+//	Transaction& transRef(int index) {
+//		if(index >= 0)
+//			return *m_vector[index];
+//		return transRef(index + m_vector.count());
+//	}
+	const Transaction& trans(int index) const {
 		if(index >= 0)
-			return *m_vector[index];
+			return *m_vector.at(index);
 		return trans(index + m_vector.count());
 	}
 	Transaction randomTransaction() {
@@ -156,7 +165,7 @@ public:
 		QVector<uint> sum(64, 0);
 		int tot = m_vector.count();
 		for (int i = 0; i < tot; ++i) {
-			Transaction* t = m_vector[i];
+			const Transaction* t = m_vector.at(i);
 			for (int c = 0; c < qMin(63, t->name.length()); ++c) {
 				sum[c] += t->name[c].toLatin1();
 			}
@@ -170,7 +179,7 @@ public:
 	QStringList uniqueNames() const {
 		QStringList ret;
 		for (int i = 0; i < m_vector.count(); ++i) {
-			Transaction* t = m_vector[i];
+			const Transaction* t = m_vector.at(i);
 			if (!ret.contains(t->name))
 				ret.append(t->name);
 		}
@@ -179,7 +188,7 @@ public:
 	double sumDollar() const {
 		double ret = 0.0;
 		for (int i = 0; i < m_vector.count(); ++i) {
-			Transaction* t = m_vector[i];
+			const Transaction* t = m_vector.at(i);
 			ret += t->amountDbl();
 		}
 		return ret;
@@ -196,11 +205,11 @@ public:
 		return kindaLog(ret) * KLA_MULTIPLICATOR;
 	}
 	QDate firstDate() const {
-		return m_vector[0]->date;
+		return m_vector.at(0)->date;
 	}
 
 private:
-	QVector<Transaction*> m_vector;
+	QVector<const Transaction*> m_vector;
 };
 
 #endif // TRANSACTION_H

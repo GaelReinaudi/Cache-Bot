@@ -13,17 +13,17 @@ double FeatureAllOthers::apply(TransactionBundle& allTrans)
 	double alreadyMatchedPos = 0;
 	double alreadyMatchedNeg = 0;
 	for (int i = 0; i < allTrans.count(); ++i) {
-		Transaction& trans = allTrans.trans(i);
-		if (trans.isInternal())
+		const Transaction& tr = allTrans.trans(i);
+		if (tr.isInternal())
 			continue;
 
-		double amnt = trans.amountDbl();
+		double amnt = tr.amountDbl();
 		// BONUS OUT HACK
 		if (amnt > 2 * 10000)
 			continue;
 		if (amnt > 0.0) {
 			++totPos;
-			if (trans.dimensionOfVoid) {
+			if (tr.dimensionOfVoid) {
 				++alreadyMatchedPos;
 				continue;
 			}
@@ -32,7 +32,7 @@ double FeatureAllOthers::apply(TransactionBundle& allTrans)
 		}
 		if (amnt < 0.0) {
 			++totNeg;
-			if (trans.dimensionOfVoid) {
+			if (tr.dimensionOfVoid) {
 				++alreadyMatchedNeg;
 				continue;
 			}
@@ -40,8 +40,7 @@ double FeatureAllOthers::apply(TransactionBundle& allTrans)
 			m_localStaticArgs.m_sumNeg += amnt;
 		}
 
-		++trans.dimensionOfVoid;
-		m_localStaticArgs.m_bundle.append(&trans);
+		m_localStaticArgs.m_bundle.append(&tr);
 	}
 
 	QDate lastDate = QDate::currentDate();
@@ -85,6 +84,10 @@ void FeatureAllOthers::execute(void *outDatum, Puppy::Context &ioContext)
 	TransactionBundle& allTrans = ioContext.m_pUser->transBundle(m_filterHash);
 
 	output = apply(allTrans);
+	// isolate the transaction that were fitted to the target
+	for (int i = 0; i < m_localStaticArgs.m_bundle.count(); ++i) {
+		m_localStaticArgs.m_bundle.trans(i).setDimensionOfVoid();
+	}
 
 	// summary if the json object exists
 	if (ioContext.m_summaryJsonObj) {

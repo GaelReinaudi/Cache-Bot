@@ -47,6 +47,12 @@ public:
 	TransactionBundle& allTrans() {
 		return m_allTransBundle;
 	}
+	void resetDimensionOfVoid() {
+		for(int i = 0; i < m_allTransactions.count(); ++i) {
+			// reset the dimensionOfVoid
+			m_allTransactions.trans(i).dimensionOfVoid = 0;
+		}
+	}
 
 	double balance(int flagType) const {
 		double bal = 0.0;

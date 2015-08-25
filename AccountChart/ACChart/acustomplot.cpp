@@ -92,7 +92,7 @@ void ACustomPlot::loadCompressedAmount(User* pUser)
 	// add the purchase points
 	auto& allTrans = pUser->allTrans();
 	for (int i = 0; i < allTrans.count(); ++i) {
-		Transaction& tr = allTrans.trans(i);
+		const Transaction& tr = allTrans.trans(i);
 		double t = tr.time_t();
 		uint h = tr.nameHash.hash();
 		if (!tr.isInternal())
@@ -119,7 +119,7 @@ void ACustomPlot::loadCompressedAmount(User* pUser)
 	// redo the integral to match the last point known.
 	m_integral = pUser->balance(Account::Type::Checking | Account::Type::Saving) - m_integral;
 	for (int i = 0; i < allTrans.count(); ++i) {
-		Transaction& tr = allTrans.trans(i);
+		const Transaction& tr = allTrans.trans(i);
 		double t = tr.time_t();
 		if (!tr.isInternal())
 			m_integral += tr.amountDbl();
@@ -149,7 +149,7 @@ void AHashPlot::loadCompressedAmount(User *pUser)
 	// add the purchase points
 	auto& allTrans = pUser->allTrans();
 	for (int i = 0; i < allTrans.count(); ++i) {
-		Transaction& tr = allTrans.trans(i);
+		const Transaction& tr = allTrans.trans(i);
 		uint h = tr.nameHash.hash();
 		uint d = tr.nameHash.manLength();
 		if (!tr.isInternal()) {

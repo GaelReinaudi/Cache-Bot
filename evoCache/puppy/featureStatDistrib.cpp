@@ -41,7 +41,7 @@ double FeatureStatDistrib::apply(TransactionBundle& allTrans)
 
 	m_localStaticArgs.m_bundle.clear();
 	for (int i = 0; i < allTrans.count(); ++i) {
-		Transaction& trans = allTrans.trans(i);
+		const Transaction& trans = allTrans.trans(i);
 		if (trans.isInternal())
 			continue;
 		if (trans.dimensionOfVoid)
@@ -57,11 +57,6 @@ double FeatureStatDistrib::apply(TransactionBundle& allTrans)
 		m_fitness = 0.0;
 		m_billProba = 0.0;
 		return m_fitness;
-	}
-	// isolate the transaction that were fitted to the target
-	for (int i = 0; i < m_localStaticArgs.m_bundle.count(); ++i) {
-		Q_ASSERT(m_localStaticArgs.m_bundle.trans(i).dimensionOfVoid == 0);
-		++m_localStaticArgs.m_bundle.trans(i).dimensionOfVoid;
 	}
 	// get the date those transaction started
 	computeNextDayProba(lastDate);
@@ -93,6 +88,10 @@ void FeatureStatDistrib::execute(void *outDatum, Puppy::Context &ioContext)
 	auto& allTrans = ioContext.m_pUser->transBundle(m_filterHash);
 
 	output = apply(allTrans);
+	// isolate the transaction that were fitted to the target
+	for (int i = 0; i < m_localStaticArgs.m_bundle.count(); ++i) {
+		m_localStaticArgs.m_bundle.trans(i).setDimensionOfVoid();
+	}
 
 	if (ioContext.m_summaryJsonObj) {
 		LOG() << getName().c_str() << " " << this
@@ -106,8 +105,8 @@ void FeatureStatDistrib::execute(void *outDatum, Puppy::Context &ioContext)
 			ioContext.m_summaryJsonObj->insert("features", features);
 		}
 		for (int i = 0; i < m_localStaticArgs.m_bundle.count(); ++i) {
-			Transaction& t = m_localStaticArgs.m_bundle.trans(i);
-			emit ioContext.m_pUser->botContext()->matchedTransaction(t.time_t(), t.amountDbl(), 2);
+			const Transaction& tr = m_localStaticArgs.m_bundle.trans(i);
+			emit ioContext.m_pUser->botContext()->matchedTransaction(tr.time_t(), tr.amountDbl(), 2);
 		}
 		OracleStatDistrib* pNewOr = new OracleStatDistrib();
 		pNewOr->m_args = m_localStaticArgs;
