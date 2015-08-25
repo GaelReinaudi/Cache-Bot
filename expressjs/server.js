@@ -1,7 +1,8 @@
 // server.js
 var express = require('express');
-var app     = express().createServer();
-app.use(express.bodyParser());
+var app     = express();
+bodyParser  = require('body-parser')
+app.use(bodyParser());
 
 var port    =   process.env.PORT || 8081;
 var child_process = require('child_process');
