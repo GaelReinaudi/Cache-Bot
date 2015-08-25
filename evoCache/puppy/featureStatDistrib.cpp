@@ -1,6 +1,6 @@
 #include "featureStatDistrib.h"
 
-#define MIN_TRANSACTIONS_FOR_STAT 3
+#define MIN_TRANSACTIONS_FOR_STAT 16
 #define EFFECT_RANGE_WIDTH_RATIO 2.0
 
 void FeatureStatDistrib::getArgs(Puppy::Context &ioContext) {
@@ -24,6 +24,8 @@ void FeatureStatDistrib::getArgs(Puppy::Context &ioContext) {
 	m_localStaticArgs.m_hash = a;
 	getArgument(++ind, &a, ioContext);
 	m_localStaticArgs.m_effect = a;
+	getArgument(++ind, &a, ioContext);
+	m_localStaticArgs.m_kla = a;
 }
 
 double FeatureStatDistrib::apply(TransactionBundle& allTrans)
@@ -40,11 +42,12 @@ double FeatureStatDistrib::apply(TransactionBundle& allTrans)
 	m_localStaticArgs.m_bundle.clear();
 	for (int i = 0; i < allTrans.count(); ++i) {
 		Transaction& trans = allTrans.trans(i);
+		if (trans.isInternal())
+			continue;
+		if (trans.dimensionOfVoid)
+			continue;
 		quint64 dist = trans.distanceWeighted<1024*1024*1024, 1024*1024*1024, maxHashDist>(modelTrans);
-		if (dist < Transaction::LIMIT_DIST_TRANS
-				&& trans.effect128 <=  1 + m_localStaticArgs.m_effect * EFFECT_RANGE_WIDTH_RATIO
-				&& trans.effect128 >= -1 + m_localStaticArgs.m_effect / EFFECT_RANGE_WIDTH_RATIO
-				) {
+		if (passFilter(dist, trans)) {
 			m_localStaticArgs.m_bundle.append(&trans);
 		}
 	}
@@ -61,18 +64,21 @@ double FeatureStatDistrib::apply(TransactionBundle& allTrans)
 		++m_localStaticArgs.m_bundle.trans(i).dimensionOfVoid;
 	}
 	// get the date those transaction started
-	QDate firstDate = m_localStaticArgs.m_bundle.trans(0).date;
-
-	m_localStaticArgs.m_daysBundle = firstDate.daysTo(lastDate);
-	m_localStaticArgs.m_dayProba = numBund / m_localStaticArgs.m_daysBundle;
+	computeNextDayProba(lastDate);
 
 	m_billProba = m_localStaticArgs.m_dayProba;
 //	m_fitness = qAbs(kindaLog(m_localStaticArgs.m_bundle.sumDollar()));
-	m_fitness = 5.0;
-	m_fitness *= numBund * numBund;
-	m_fitness /= MIN_TRANSACTIONS_FOR_STAT * MIN_TRANSACTIONS_FOR_STAT;
+	m_fitness = 10.0;
+//	m_fitness *= numBund * numBund;
+//	m_fitness /= MIN_TRANSACTIONS_FOR_STAT * MIN_TRANSACTIONS_FOR_STAT;
 	m_fitness *= m_localStaticArgs.m_dayProba;
 	return m_fitness;
+}
+
+bool FeatureStatDistrib::passFilter(quint64 dist, const Transaction &trans) const {
+	return dist < Transaction::LIMIT_DIST_TRANS
+			&& trans.effect128 <=  1 + m_localStaticArgs.m_effect * EFFECT_RANGE_WIDTH_RATIO
+			&& trans.effect128 >= -1 + m_localStaticArgs.m_effect / EFFECT_RANGE_WIDTH_RATIO;
 }
 
 void FeatureStatDistrib::execute(void *outDatum, Puppy::Context &ioContext)
@@ -111,7 +117,30 @@ void FeatureStatDistrib::execute(void *outDatum, Puppy::Context &ioContext)
 	}
 }
 
-QVector<Transaction> OracleStatDistrib::revelation(QDate upToDate) {
+void FeatureStatDistrib::computeNextDayProba(QDate lastDate)
+{
+	double daysTo = m_localStaticArgs.m_bundle.trans(0).date.daysTo(m_localStaticArgs.m_bundle.trans(1).date);
+	double EMA_FACTOR = 0.5;
+//	LOG() << "daysTo " << daysTo << endl;
+
+	for (int i = 2; i < m_localStaticArgs.m_bundle.count(); ++i) {
+		double daysToNext = m_localStaticArgs.m_bundle.trans(i - 1).date.daysTo(m_localStaticArgs.m_bundle.trans(i).date);
+		daysTo *= (1.0 - EMA_FACTOR);
+		daysTo += daysToNext * EMA_FACTOR;
+//		LOG() << "daysToNext " << daysToNext << "daysTo " << daysTo << endl;
+	}
+	// if time since last is getting larger than when we should have seen one, we take it as a new point
+	double daysToEnd = m_localStaticArgs.m_bundle.trans(-1).date.daysTo(lastDate);
+	if (daysToEnd > daysTo) {
+		daysTo *= (1.0 - EMA_FACTOR);
+		daysTo += daysToEnd * EMA_FACTOR;
+	}
+//	LOG() << "daysToEnd " << daysToEnd << " final daysTo " << daysTo << endl;
+	m_localStaticArgs.m_dayProba = 1.0 / daysTo;
+}
+
+QVector<Transaction> OracleStatDistrib::revelation(QDate upToDate)
+{
 	LOG() << "OracleStatDistrib::revelation proba = " << m_args.m_dayProba << " bundle = " << m_args.m_bundle.count() << endl;
 	static QVector<Transaction> retVect;
 	retVect.clear();

@@ -119,7 +119,7 @@ void EvolutionSpinner::runEvolution() {
 		double fitness = jsonBest["features"].toArray().first().toObject()["fitness"].toDouble();
 		output[billProba].append(jsonBest);
 		qDebug() << "billProba" << billProba;
-		if(fitness > THRESHOLD_PROBA_BILL || bestPreEvoTrees.isEmpty()) {
+		if(fitness > 0*THRESHOLD_PROBA_BILL || bestPreEvoTrees.isEmpty()) {
 			(*lBestIndividual).mValid = false;
 			bestPreEvoTrees.push_back(*lBestIndividual);
 		}

@@ -4,6 +4,7 @@
 #include "featureStatDistrib.h"
 #include "featureOutlier.h"
 #include "featurePeriodicAmount.h"
+#include "featurePriceWindow.h"
 
 unsigned int BotContext::LIMIT_NUM_FEATURES = 1;
 unsigned int BotContext::TARGET_TRANS_FUTUR_DAYS = 100;
@@ -52,5 +53,6 @@ BotContext::BotContext(User *pUser)
 //	insert(new FeatureStatDistrib());
 	insert(new FeatureOutlier());
 	insert(new FeatureAllOthers());
+	insert(new FeaturePriceWindow());
 }
 

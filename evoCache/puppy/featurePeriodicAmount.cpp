@@ -3,8 +3,9 @@
 double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 {
 	QDate lastDate = QDate::currentDate();
-	QDate iniDate = lastDate.addMonths(-6);
+	QDate iniDate = Transaction::onlyAfterDate;//lastDate.addMonths(-6);
 
+	m_fitness = 0.0;
 	m_targetTrans = targetTransactions(iniDate, lastDate);
 	if (m_targetTrans.count() == 0) {
 		LOG() << "MonthlyAmount(0 TARGET): day "<<m_localStaticArgs.m_dayOfMonth<<" kla "<< m_localStaticArgs.m_kla << endl;
@@ -43,9 +44,9 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 				if (doLog) {
 					iTarg->dist(*localTrans, true);
 				}
-				// isolate the transaction that were fitted to the target
-				Q_ASSERT(localTrans->dimensionOfVoid == 0);
-				localTrans->dimensionOfVoid++;
+//				// isolate the transaction that were fitted to the target
+//				Q_ASSERT(localTrans->dimensionOfVoid == 0);
+//				localTrans->dimensionOfVoid++;
 				iTarg->flags |= Transaction::CameTrue;
 				if(m_localStaticArgs.m_consecMonth == 0) {
 					m_localStaticArgs.m_consecMonthBeforeMissed = 0;
@@ -53,7 +54,7 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 				++m_localStaticArgs.m_consecMonthBeforeMissed;
 				++m_localStaticArgs.m_consecMonth;
 				m_localStaticArgs.m_consecMissed = 0;
-				totalOneOverDistClosest += 64.0 / (64 + localDist);
+				totalOneOverDistClosest += 8.0 / (8 + localDist);
 			}
 			else {
 				if (doLog) {
@@ -68,19 +69,19 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 			if (iTarg == &m_targetTrans.last() || (iTarg + 1)->date >= lastDate)
 				break;
 			++iTarg;
-			localTrans = 0;
-			localDist = quint64(-1);
 			// keep this last trans in the pool if it was not just added
 			if (&trans != localTrans)
 				--i;
+			localTrans = 0;
+			localDist = quint64(-1);
 		}
 		totalOneOverDistOthers += 1.0 / (1 + dist);
 	}
 	totalOneOverDistOthers -= totalOneOverDistClosest;
 	// only sum that add up to > $N
 	if (qAbs(m_localStaticArgs.m_bundle.sumDollar()) > 1) {
-		m_fitness = totalOneOverDistClosest;
-		m_fitness *= 0.2 * double(m_localStaticArgs.m_bundle.count() - 1) / double(m_targetTrans.count());
+		m_fitness = totalOneOverDistClosest - totalOneOverDistOthers;
+//		m_fitness *= 0.2 * double(m_localStaticArgs.m_bundle.count() - 1) / double(m_targetTrans.count());
 //		m_fitness *= 1.0 + (1.0 / (1.0 + m_localStaticArgs.m_consecMissed));
 		m_fitness *= double(m_localStaticArgs.m_consecMonthBeforeMissed) - 1.5;
 	}
@@ -102,10 +103,33 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 	auto& allTrans = ioContext.m_pUser->transBundle(m_filterHash);
 
 	output = apply(allTrans, ioContext.m_summaryJsonObj);
+	// isolate the transaction that were fitted to the target
+	for (int i = 0; i < m_localStaticArgs.m_bundle.count(); ++i) {
+		Q_ASSERT(m_localStaticArgs.m_bundle.trans(i).dimensionOfVoid == 0);
+		++m_localStaticArgs.m_bundle.trans(i).dimensionOfVoid;
+	}
+	// tries to re-run this periodic and if it has a high vlaue, it is a sign that
+	// it is actually more frequent and should have a bad grade
+	auto temp = m_localStaticArgs;
+	auto tempProba = m_billProba;
+	auto tempTarg = m_targetTrans;
+	m_localStaticArgs.m_dayOfMonth += approxSpacingPayment() / 2;
+	cleanArgs();
+	double rerun = apply(allTrans, false);
+	if (ioContext.m_summaryJsonObj)
+		LOG() << "  output " << output << "- 2x " << rerun << endl;
+	m_localStaticArgs = temp;
+	m_localStaticArgs.m_fitRerun = rerun;
+	cleanArgs();
+	output -= 2 * qMax(0.0, rerun);
+	m_fitness = output;
+	m_billProba = tempProba;
+	m_targetTrans = tempTarg;
 
 	// summary if the json object exists
 	if (ioContext.m_summaryJsonObj) {
-		if(m_billProba > 0.0) {
+//		if(m_billProba > 0.0)
+		{
 			QJsonArray features = (*ioContext.m_summaryJsonObj)["features"].toArray();
 			features.append(toJson(ioContext));
 			ioContext.m_summaryJsonObj->insert("features", features);
@@ -124,7 +148,8 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 		// making a shared pointer that will take care of cleaning once the oracle is no longer referenced
 		QSharedPointer<Oracle> newOracle(pNewOr);
 		double theOracleThreshold = 1.0;
-		if(m_billProba > theOracleThreshold) {
+//		if(m_billProba > theOracleThreshold)
+		{
 			ioContext.m_pUser->oracle()->addSubOracle(newOracle);
 		}
 	}
@@ -199,7 +224,7 @@ QVector<Transaction> OracleOneDayOfMonth::revelation(QDate upToDate)
 	LOG() << "OracleOneDayOfMonth::revelation. bundle = " << m_args.m_bundle.count() << endl;
 	QDate iniDate = QDate::currentDate();
 	static QVector<Transaction> targetTrans;
-	if (m_args.m_consecMissed == 0 || m_args.m_kla < 0)
+	if (m_args.m_consecMissed == 0)
 	{
 		targetTrans = FeatureMonthlyAmount::BlankTransactionsForDayOfMonth(iniDate, upToDate, m_args.m_dayOfMonth, lambdaTrans);
 		if (m_args.m_dayOfMonth2) {
@@ -212,9 +237,14 @@ QVector<Transaction> OracleOneDayOfMonth::revelation(QDate upToDate)
 
 double OracleOneDayOfMonth::avgDaily() const
 {
-	double avgMonth = m_args.m_bundle.averageAmount();
-	if (m_args.m_dayOfMonth2) {
-		avgMonth *= 2;
+	double avgMonth = 0.0;
+	if (m_args.m_consecMissed == 0)
+	{
+//		double daysAgo = m_args.m_bundle.firstDate().daysTo(QDate::currentDate());
+		avgMonth = m_args.m_bundle.averageAmount();
+		if (m_args.m_dayOfMonth2) {
+			avgMonth *= 2;
+		}
 	}
 	return avgMonth * (12.0 / 365.25);
 }

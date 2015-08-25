@@ -5,7 +5,9 @@ ACustomPlot::ACustomPlot(QWidget *parent) :
 {
 	xAxis->setTickLabelType(QCPAxis::ltDateTime);
 	xAxis->setDateTimeFormat("yyyy/MM/dd hh");
-//	yAxis->setAutoTickCount(18);
+	yAxis->setAutoTickStep(false);
+	yAxis->setTickStep(1.0);
+	yAxis->setSubTickCount(5);
 //	yAxis2->setAutoTickCount(10);
 	setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
 	axisRect(0)->setRangeZoomAxes(xAxis, 0);
@@ -21,6 +23,11 @@ void ACustomPlot::makeGraphs(HashedBundles& hashBundles) {
 	graph(0)->setLineStyle(QCPGraph::lsStepLeft);
 	graph(0)->setPen(QPen(Qt::gray, 3));
 	graph(0)->setAdaptiveSampling(false);
+	addGraph(xAxis, yAxis2);
+	graph(1)->setLineStyle(QCPGraph::lsStepLeft);
+	graph(1)->setPen(QPen(Qt::red, 3));
+	graph(1)->setAdaptiveSampling(false);
+
 	for (const auto& h : hashBundles.keys()) {
 		TransactionBundle* bundle = hashBundles[h];
 		m_hashBund[h] = bundle;

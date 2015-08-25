@@ -13,7 +13,7 @@ static int IND_GR_REVEL = -1;
 static int IND_GR_BALANCE = -1;
 static int IND_GR_SLOPE = -1;
 
-const int displayDayPast = 1;//60;
+const int displayDayPast = 180;//60;
 const int displayDayFuture = 62;//180;
 
 const int playBackStartAgo = 0;
@@ -185,6 +185,16 @@ void ExtraCashView::makeBalancePlot()
 	double x = QDate::currentDate().daysTo(m_pbDate);
 	ui->plot->graph(IND_GR_BALANCE)->addData(x, m_pbBalance);
 	ui->spinBox->setValue(m_pbBalance);
+	double balanceThen = m_pbBalance;
+	for (int i = m_pExtraCache->user()->allTrans().count() - 1; i >= 0; --i) {
+		Transaction& tr = m_pExtraCache->user()->allTrans().trans(i);
+		if (tr.isInternal())
+			continue;
+		double x = QDate::currentDate().daysTo(tr.date);
+		ui->plot->graph(IND_GR_BALANCE)->addData(x, balanceThen);
+		balanceThen -= tr.amountDbl();
+	}
+	ui->plot->graph(IND_GR_BALANCE)->addData(-9999, balanceThen);
 }
 
 void ExtraCashView::makeRevelationPlot()

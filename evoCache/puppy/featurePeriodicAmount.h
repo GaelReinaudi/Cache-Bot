@@ -21,6 +21,7 @@ private:
 			o_retObj.insert("labels", QJsonArray::fromStringList(m_bundle.uniqueNames()));
 			o_retObj.insert("tot$", m_bundle.sumDollar());
 			o_retObj.insert("numBund", m_bundle.count());
+			o_retObj.insert("fitRerun", m_fitRerun);
 
 //			if(m_bundle.count()) {
 //				QString str = QString::fromStdString(getName()) + " ("
@@ -44,6 +45,7 @@ private:
 		int m_consecMonthBeforeMissed = 0;
 		int m_consecMonth = 0;
 		int m_consecMissed = 0;
+		double m_fitRerun = 0;
 	} m_args;
 	friend class FeaturePeriodicAmount;
 	friend class FeatureMonthlyAmount;
