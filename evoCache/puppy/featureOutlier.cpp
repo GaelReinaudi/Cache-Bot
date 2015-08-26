@@ -11,6 +11,8 @@ double FeatureOutlier::apply(TransactionBundle& allTrans)
 		const Transaction& tr = allTrans.trans(i);
 		if (tr.isInternal())
 			continue;
+		if (tr.isFuture())
+			continue;
 		if (tr.effect128 < THRESHOLD_EFFECT128)
 			continue;
 		if (tr.dimensionOfVoid)

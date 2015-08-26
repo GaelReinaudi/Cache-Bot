@@ -39,6 +39,7 @@ private:
 	Ui::ExtraCashView *ui;
 	ExtraCache* m_pExtraCache = 0;
 	QDate m_pbDate;
+	double m_realBalance = 0.0;
 	double m_pbBalance = 0.0;
 	double m_extraToday = -1.0;
 	int m_ipb = 0;

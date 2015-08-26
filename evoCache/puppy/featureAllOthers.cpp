@@ -16,6 +16,8 @@ double FeatureAllOthers::apply(TransactionBundle& allTrans)
 		const Transaction& tr = allTrans.trans(i);
 		if (tr.isInternal())
 			continue;
+		if (tr.isFuture())
+			continue;
 
 		double amnt = tr.amountDbl();
 		// BONUS OUT HACK

@@ -39,14 +39,16 @@ double FeatureStatDistrib::apply(TransactionBundle& allTrans)
 
 	m_localStaticArgs.m_bundle.clear();
 	for (int i = 0; i < allTrans.count(); ++i) {
-		const Transaction& trans = allTrans.trans(i);
-		if (trans.isInternal())
+		const Transaction& tr = allTrans.trans(i);
+		if (tr.isInternal())
 			continue;
-		if (trans.dimensionOfVoid)
+		if (tr.isFuture())
 			continue;
-		quint64 dist = trans.distanceWeighted<1024*1024*1024, 1024*1024*1024, maxHashDist>(modelTrans);
-		if (passFilter(dist, trans)) {
-			m_localStaticArgs.m_bundle.append(&trans);
+		if (tr.dimensionOfVoid)
+			continue;
+		quint64 dist = tr.distanceWeighted<1024*1024*1024, 1024*1024*1024, maxHashDist>(modelTrans);
+		if (passFilter(dist, tr)) {
+			m_localStaticArgs.m_bundle.append(&tr);
 		}
 	}
 	int numBund = m_localStaticArgs.m_bundle.count();

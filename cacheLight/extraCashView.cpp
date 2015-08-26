@@ -6,7 +6,7 @@
 #include "oracle.h"
 #include "bot.h"
 
-static const int numRevelations = 128;
+static const int numRevelations = 16;
 static int alpha = 32;
 static bool breakDown = false;
 static int IND_GR_REVEL = -1;
@@ -15,7 +15,7 @@ static int IND_GR_SLOPE = -1;
 static int IND_GR_PERCENTILE = -1;
 static int IND_GR_AVG = -1;
 
-const int displayDayPast = 1;//80;//60;
+const int displayDayPast = 31;//80;//60;
 const int displayDayFuture = 62;//180;
 
 const int playBackStartAgo = 0;
@@ -113,7 +113,8 @@ void ExtraCashView::onBotInjected(Bot* pBot)
 	Q_UNUSED(pBot);
 	LOG() << "ExtraCashView::onBotInjected" << endl;
 	m_pbDate = Transaction::currentDay();//.addDays(-playBackStartAgo);
-	m_pbBalance = m_pExtraCache->user()->balance(Account::Type::Checking);
+	m_realBalance = m_pExtraCache->user()->balance(Account::Type::Checking);
+	m_pbBalance = m_realBalance;
 
 	ui->costLive50SpinBox->setValue(CostRateMonthPercentileMetric<6, 50>::get(m_pExtraCache->user())->value(m_pbDate));
 	ui->costLive75SpinBox->setValue(CostRateMonthPercentileMetric<6, 75>::get(m_pExtraCache->user())->value(m_pbDate));
@@ -138,7 +139,7 @@ void ExtraCashView::onBotInjected(Bot* pBot)
 		}
 	}
 	LOG() << "initial pb balance"<< m_pbBalance << " at" << m_pbDate.toString() << endl;
-	LOG() << "initial pb trans("<< m_ipb <<")" << real.trans(m_ipb).name << endl;
+	LOG() << "initial pb trans("<< m_ipb <<")" << real.trans(m_ipb).date.toString() << "" << real.trans(m_ipb).name << endl;
 
 	ui->spinBox->setValue(m_pbBalance);
 	ui->spinBox->editingFinished();
@@ -197,9 +198,9 @@ void ExtraCashView::updateChart()
 void ExtraCashView::makeBalancePlot()
 {
 	double x = Transaction::currentDay().daysTo(QDate::currentDate());
-	ui->plot->graph(IND_GR_BALANCE)->addData(x, m_pbBalance);
+	ui->plot->graph(IND_GR_BALANCE)->addData(x, m_realBalance);
 	ui->spinBox->setValue(m_pbBalance);
-	double balanceThen = m_pbBalance;
+	double balanceThen = m_realBalance;
 	for (int i = m_pExtraCache->user()->allTrans().count() - 1; i >= 0; --i) {
 		const Transaction& tr = m_pExtraCache->user()->allTrans().trans(i);
 		if (tr.isInternal())

@@ -59,7 +59,8 @@ protected:
 			amnt *= Multiplicator;
 			// filter on date
 			if (tr.date <= date && tr.date > startDate) {
-				if (amnt > 0.0 && !tr.isInternal()) {
+				if (amnt > 0.0 && !tr.isInternal()
+						 && !tr.isFuture()) {
 					costs.append(amnt);
 				}
 			}
