@@ -1,6 +1,6 @@
 #include "featureStatDistrib.h"
 
-#define MIN_TRANSACTIONS_FOR_STAT 16
+#define MIN_TRANSACTIONS_FOR_STAT 3//16
 #define EFFECT_RANGE_WIDTH_RATIO 2.0
 
 void FeatureStatDistrib::getArgs(Puppy::Context &ioContext) {
@@ -136,6 +136,8 @@ void FeatureStatDistrib::computeNextDayProba()
 	}
 //	LOG() << "daysToEnd " << daysToEnd << " final daysTo " << daysTo << endl;
 	m_localStaticArgs.m_dayProba = 1.0 / daysTo;
+	// correction for proba not small
+	m_localStaticArgs.m_dayProba = m_localStaticArgs.m_dayProba / (1.0 + m_localStaticArgs.m_dayProba);
 }
 
 QVector<Transaction> OracleStatDistrib::revelation(QDate upToDate)
@@ -144,11 +146,16 @@ QVector<Transaction> OracleStatDistrib::revelation(QDate upToDate)
 	static QVector<Transaction> retVect;
 	retVect.clear();
 	while (curDate() <= upToDate) {
-		if (randBool(m_args.m_dayProba)) {
-			Transaction randTr = m_args.m_bundle.randomTransaction();
-			randTr.date = curDate();
-			LOG() << "randomTransaction " << randTr.amountDbl() << " " << randTr.date.toString() << "" << randTr.name << endl;
-			retVect.append(randTr);
+		double prob = 1.0;
+		while (prob > 1e-2)
+		{
+			prob *= m_args.m_dayProba;
+			if (randBool(prob)) {
+				Transaction randTr = m_args.m_bundle.randomTransaction();
+				randTr.date = curDate();
+				LOG() << QString("randTrans(%1) ").arg(prob) << randTr.amountDbl() << " " << randTr.date.toString() << "" << randTr.name << endl;
+				retVect.append(randTr);
+			}
 		}
 		nextDay();
 	}
@@ -157,5 +164,5 @@ QVector<Transaction> OracleStatDistrib::revelation(QDate upToDate)
 
 double OracleStatDistrib::avgDaily() const
 {
-	return m_args.m_dayProba * m_args.m_bundle.averageAmount();
+	return m_args.m_dayProba / (1 - m_args.m_dayProba) * m_args.m_bundle.averageAmount();
 }
