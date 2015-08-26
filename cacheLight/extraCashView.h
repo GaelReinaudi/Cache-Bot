@@ -29,7 +29,7 @@ protected slots:
 	void onBotInjected(Bot* pBot);
 	void updateChart();
 	void makeRevelationPlot();
-	void makePastiPlot();
+	void makePercentilePlot(double fracPerc);
 	void makeMinSlope();
 	void onWheelEvent(QWheelEvent*wEv);
 	void onHypotheTrans(int transAmount = 0);

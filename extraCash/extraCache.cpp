@@ -62,6 +62,13 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 	flowObj.insert("state", QString("kFlow"));
 	statObj.insert("flow", flowObj);
 
+	// if critically low flow
+	if (flow <= -0.95) {
+		LOG() << "Cache flow critically low, re-running with no Bot" << endl;
+		user()->injectJsonBot("");
+		return;
+	}
+
 	if (flags & SendExtraCash) {
 		CacheRest::Instance()->sendExtraCash(user()->id(), 0.0, statObj);
 	}

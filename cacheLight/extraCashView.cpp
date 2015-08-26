@@ -12,6 +12,8 @@ static bool breakDown = false;
 static int IND_GR_REVEL = -1;
 static int IND_GR_BALANCE = -1;
 static int IND_GR_SLOPE = -1;
+static int IND_GR_PERCENTILE = -1;
+static int IND_GR_AVG = -1;
 
 const int displayDayPast = 1;//80;//60;
 const int displayDayFuture = 62;//180;
@@ -76,6 +78,18 @@ ExtraCashView::ExtraCashView(QString userID, QWidget *parent) :
 		if (IND_GR_REVEL < 0)
 			IND_GR_REVEL = tempInd;
 	}
+
+	++tempInd;
+	ui->plot->addGraph();
+	ui->plot->graph(tempInd)->setPen(QPen((QColor(0, 255, 0, 128)), 5.0));
+	ui->plot->graph(tempInd)->setLineStyle(QCPGraph::lsStepLeft);
+	IND_GR_PERCENTILE = tempInd;
+
+	++tempInd;
+	ui->plot->addGraph();
+	ui->plot->graph(tempInd)->setPen(QPen((QColor(0, 0, 0, 128)), 5.0));
+	ui->plot->graph(tempInd)->setLineStyle(QCPGraph::lsStepLeft);
+	IND_GR_AVG = tempInd;
 
 	pBars = new QCPBars(ui->plot->xAxis, ui->plot->yAxis2);
 	ui->plot->addPlottable(pBars);
@@ -167,7 +181,7 @@ void ExtraCashView::updateChart()
 
 	makeBalancePlot();
 	makeRevelationPlot();
-	makePastiPlot();
+	makePercentilePlot(0.5);
 //	makeMinSlope();
 
 	ui->plot->xAxis->setRange(x - displayDayPast, x + displayDayFuture + 1);
@@ -259,8 +273,35 @@ void ExtraCashView::makeRevelationPlot()
 	}
 }
 
-void ExtraCashView::makePastiPlot()
+void ExtraCashView::makePercentilePlot(double fracPerc)
 {
+	QCPGraph* pGrPerc = ui->plot->graph(IND_GR_PERCENTILE);
+	QCPGraph* pGrAvg = ui->plot->graph(IND_GR_AVG);
+	pGrPerc->clearData();
+	pGrAvg->clearData();
+	for (double d = 0; d < displayDayFuture; ++d) {
+		double val = 0.0;
+		QVector<double> allY;
+		for (int i = IND_GR_REVEL; i < IND_GR_REVEL + numRevelations; ++i) {
+			QCPDataMap* pDat = ui->plot->graph(i)->data();
+			auto it = pDat->upperBound(d + 0.1) - 1;
+			if (it+1 != pDat->begin() && it != pDat->end()) {
+				double vi = it->value;
+				allY.append(vi);
+			}
+			else
+				allY.append(0.0);
+		}
+		qSort(allY);
+		if (allY.count()) {
+			double vAtPerc = allY[qRound((allY.count() - 1) * fracPerc)];
+			pGrPerc->addData(d, vAtPerc);
+			double sum = 0.0;
+			for (auto v : allY)
+				sum += v;
+			pGrAvg->addData(d, sum / allY.count());
+		}
+	}
 }
 
 void ExtraCashView::makeMinSlope()
