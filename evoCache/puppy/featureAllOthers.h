@@ -12,12 +12,12 @@ protected:
 	double avgDaily() const override;
 	double avgDailyPos() const override{
 		double avgAmnt = m_args.m_sumPos;
-		avgAmnt /= Transaction::onlyAfterDate.daysTo(QDate::currentDate());
+		avgAmnt /= Transaction::onlyAfterDate.daysTo(Transaction::currentDay());
 		return avgAmnt;
 	}
 	double avgDailyNeg() const override{
 		double avgAmnt = m_args.m_sumNeg;
-		avgAmnt /= Transaction::onlyAfterDate.daysTo(QDate::currentDate());
+		avgAmnt /= Transaction::onlyAfterDate.daysTo(Transaction::currentDay());
 		return avgAmnt;
 	}
 

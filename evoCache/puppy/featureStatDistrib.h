@@ -55,7 +55,7 @@ protected:
 	double apply(TransactionBundle& allTrans);
 
 	virtual bool passFilter(quint64 dist, const Transaction& trans) const;
-	void computeNextDayProba(QDate lastDate);
+	void computeNextDayProba();
 
 protected:
 	OracleStatDistrib::Args m_localStaticArgs;

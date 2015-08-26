@@ -96,6 +96,17 @@ public:
 
 	static const qint64 LIMIT_DIST_TRANS = 512;
 
+	//! returns the date considered as being the current day for all computations to come
+	static QDate currentDay() {
+		return s_currentDay;
+	}
+	static void setCurrentDay(const QDate &value) {
+		s_currentDay = value;
+	}
+
+
+private:
+	static QDate s_currentDay;
 public:
 	static QVector<int> onlyLoadHashes;
 	static QDate onlyAfterDate;

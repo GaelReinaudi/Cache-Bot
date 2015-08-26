@@ -2,11 +2,10 @@
 
 double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 {
-	QDate lastDate = QDate::currentDate();
 	QDate iniDate = Transaction::onlyAfterDate;//lastDate.addMonths(-6);
 
 	m_fitness = 0.0;
-	m_targetTrans = targetTransactions(iniDate, lastDate);
+	m_targetTrans = targetTransactions(iniDate, Transaction::currentDay());
 	if (m_targetTrans.count() == 0) {
 		LOG() << "MonthlyAmount(0 TARGET): day "<<m_localStaticArgs.m_dayOfMonth<<" kla "<< m_localStaticArgs.m_kla << endl;
 	}
@@ -66,7 +65,7 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 				totalOneOverDistClosest += 1.0 / (1 + localDist);
 			}
 
-			if (iTarg == &m_targetTrans.last() || (iTarg + 1)->date >= lastDate)
+			if (iTarg == &m_targetTrans.last() || (iTarg + 1)->date >= Transaction::currentDay())
 				break;
 			++iTarg;
 			// keep this last trans in the pool if it was not just added
@@ -222,7 +221,7 @@ QVector<Transaction> OracleOneDayOfMonth::revelation(QDate upToDate)
 		return tr;
 	};
 	LOG() << "OracleOneDayOfMonth::revelation. bundle = " << m_args.m_bundle.count() << endl;
-	QDate iniDate = QDate::currentDate();
+	QDate iniDate = Transaction::currentDay();
 	static QVector<Transaction> targetTrans;
 	targetTrans.clear();
 	if (m_args.m_consecMissed == 0)
@@ -241,7 +240,6 @@ double OracleOneDayOfMonth::avgDaily() const
 	double avgMonth = 0.0;
 	if (m_args.m_consecMissed == 0)
 	{
-//		double daysAgo = m_args.m_bundle.firstDate().daysTo(QDate::currentDate());
 		avgMonth = m_args.m_bundle.averageAmount();
 		if (m_args.m_dayOfMonth2) {
 			avgMonth *= 2;

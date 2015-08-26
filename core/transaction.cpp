@@ -1,8 +1,10 @@
 #include "transaction.h"
 #include "account.h"
 
+QDate Transaction::s_currentDay = QDate::currentDate().addMonths(-1);
+
 QVector<int> Transaction::onlyLoadHashes = QVector<int>();
-QDate Transaction::onlyAfterDate = QDate::currentDate().addMonths(-6);
+QDate Transaction::onlyAfterDate = Transaction::currentDay().addMonths(-6);
 int Transaction::onlyAccountType = Account::Type::Saving | Account::Type::Checking | Account::Type::Credit;
 
 int Transaction::type() const {

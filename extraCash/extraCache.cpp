@@ -19,7 +19,7 @@ void ExtraCache::onUserInjected(User* pUser)
 
 	// transaction at the starting date of the playback
 	auto& real = user()->allTrans();
-	m_date = user()->currentDay();
+	m_date = Transaction::currentDay();
 	LOG() << "m_date" << m_date.toString() << endl;
 
 	for (int i = 0; i < real.count(); ++i) {

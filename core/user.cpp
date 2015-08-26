@@ -8,8 +8,6 @@
 User::User(QString userId, QObject *parent)
 	:DBobj(userId, parent)
 {
-	m_today = QDate::currentDate();
-
 	//makes the oracle
 	oracle();
 }
@@ -31,7 +29,7 @@ SuperOracle* User::oracle()
 
 void User::setHypotheTrans(double amount) {
 	m_hypotheTrans.setAmount(amount);
-	m_hypotheTrans.date = QDate::currentDate();
+	m_hypotheTrans.date = Transaction::currentDay();
 	m_hypotheTrans.name += "Hypothetic Transaction, fucking take the red pill dude!";
 	m_hypotheTrans.nameHash.setFromString(m_hypotheTrans.name);
 	if (&m_allTransBundle.trans(-1) != &m_hypotheTrans)
@@ -147,11 +145,11 @@ void User::injectJsonData(QString jsonStr)
 
 	emit injected(this);
 
-	CostRateMonthPercentileMetric<2, 50>::get(this)->value(currentDay());
-	CostRateMonthPercentileMetric<2, 75>::get(this)->value(currentDay());
-	CostRateMonthPercentileMetric<2, 90>::get(this)->value(currentDay());
-	CostRateMonthPercentileMetric<2, 95>::get(this)->value(currentDay());
-	CostRateMonthPercentileMetric<2, 99>::get(this)->value(currentDay());
+	CostRateMonthPercentileMetric<2, 50>::get(this)->value(Transaction::currentDay());
+	CostRateMonthPercentileMetric<2, 75>::get(this)->value(Transaction::currentDay());
+	CostRateMonthPercentileMetric<2, 90>::get(this)->value(Transaction::currentDay());
+	CostRateMonthPercentileMetric<2, 95>::get(this)->value(Transaction::currentDay());
+	CostRateMonthPercentileMetric<2, 99>::get(this)->value(Transaction::currentDay());
 }
 
 BotContext* User::makeBotContext()

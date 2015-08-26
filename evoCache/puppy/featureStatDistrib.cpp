@@ -30,13 +30,11 @@ void FeatureStatDistrib::getArgs(Puppy::Context &ioContext) {
 
 double FeatureStatDistrib::apply(TransactionBundle& allTrans)
 {
-	QDate lastDate = QDate::currentDate();
-
 	// transaction to compare the hash with
 	Transaction modelTrans;
 	modelTrans.nameHash.setFromHash(m_localStaticArgs.m_hash);
 	modelTrans.setAmount(-1.0); // only negative prices will have a usable distance
-	modelTrans.date = lastDate;
+	modelTrans.date = Transaction::currentDay();
 	const int maxHashDist = 4;
 
 	m_localStaticArgs.m_bundle.clear();
@@ -58,8 +56,8 @@ double FeatureStatDistrib::apply(TransactionBundle& allTrans)
 		m_billProba = 0.0;
 		return m_fitness;
 	}
-	// get the date those transaction started
-	computeNextDayProba(lastDate);
+
+	computeNextDayProba();
 
 	m_billProba = m_localStaticArgs.m_dayProba;
 //	m_fitness = qAbs(kindaLog(m_localStaticArgs.m_bundle.sumDollar()));
@@ -116,7 +114,7 @@ void FeatureStatDistrib::execute(void *outDatum, Puppy::Context &ioContext)
 	}
 }
 
-void FeatureStatDistrib::computeNextDayProba(QDate lastDate)
+void FeatureStatDistrib::computeNextDayProba()
 {
 	double daysTo = m_localStaticArgs.m_bundle.trans(0).date.daysTo(m_localStaticArgs.m_bundle.trans(1).date);
 	double EMA_FACTOR = 0.5;
@@ -129,7 +127,7 @@ void FeatureStatDistrib::computeNextDayProba(QDate lastDate)
 //		LOG() << "daysToNext " << daysToNext << "daysTo " << daysTo << endl;
 	}
 	// if time since last is getting larger than when we should have seen one, we take it as a new point
-	double daysToEnd = m_localStaticArgs.m_bundle.trans(-1).date.daysTo(lastDate);
+	double daysToEnd = m_localStaticArgs.m_bundle.trans(-1).date.daysTo(Transaction::currentDay());
 	if (daysToEnd > daysTo) {
 		daysTo *= (1.0 - EMA_FACTOR);
 		daysTo += daysToEnd * EMA_FACTOR;

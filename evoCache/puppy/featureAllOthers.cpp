@@ -43,7 +43,6 @@ double FeatureAllOthers::apply(TransactionBundle& allTrans)
 		m_localStaticArgs.m_bundle.append(&tr);
 	}
 
-	QDate lastDate = QDate::currentDate();
 	int numBund = m_localStaticArgs.m_bundle.count();
 	int MIN_TRANSACTIONS_FOR_RAND = 10;
 	if (numBund <= MIN_TRANSACTIONS_FOR_RAND) {
@@ -53,7 +52,7 @@ double FeatureAllOthers::apply(TransactionBundle& allTrans)
 		// get the date those transaction started
 		QDate firstDate = m_localStaticArgs.m_bundle.trans(0).date;
 
-		m_localStaticArgs.m_daysBundle = firstDate.daysTo(lastDate);
+		m_localStaticArgs.m_daysBundle = firstDate.daysTo(Transaction::currentDay());
 		m_localStaticArgs.m_dayProba = numBund / m_localStaticArgs.m_daysBundle;
 	}
 
@@ -132,7 +131,4 @@ QVector<Transaction> OracleFilteredRest::revelation(QDate upToDate)
 double OracleFilteredRest::avgDaily() const
 {
 	return 0.0;
-//	double avgAmnt = m_args.m_sumPos + m_args.m_sumNeg;
-//	avgAmnt /= Transaction::onlyAfterDate.daysTo(QDate::currentDate());
-//	return avgAmnt;
 }

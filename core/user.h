@@ -34,8 +34,6 @@ class CORESHARED_EXPORT User : public DBobj
 public:
 	User(QString userId, QObject* parent = 0);
 	~User();
-	//! returns the date considered as being the current day for all computations to come
-	QDate currentDay() { return m_today; }
 
 public:
 	TransactionBundle& transBundle(int filterHash) {
@@ -133,7 +131,6 @@ private:
 	Bot* m_bestBot = 0;
 	BotContext* m_botContext = 0;
 	Fund* m_extraCacheFund = 0;
-	QDate m_today;
 	QString m_email;
 	SuperOracle* m_mainOracle = 0;
 	Transaction m_hypotheTrans;
