@@ -84,6 +84,9 @@ public:
 
 	void setHypotheTrans(double amount);
 
+	//! simulates a re-injection of the bot in order ot recalculate downstream slots
+	void reInjectBot() { emit botInjected(m_bestBot); }
+
 public slots:
 	void injectJsonData(QString jsonStr);
 	void injectJsonBot(QString jsonStr);

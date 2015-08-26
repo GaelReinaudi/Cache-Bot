@@ -1,7 +1,7 @@
 #include "transaction.h"
 #include "account.h"
 
-QDate Transaction::s_currentDay = QDate::currentDate().addMonths(-1);
+QDate Transaction::s_currentDay = QDate::currentDate().addMonths(-2);
 
 QVector<int> Transaction::onlyLoadHashes = QVector<int>();
 QDate Transaction::onlyAfterDate = Transaction::currentDay().addMonths(-6);

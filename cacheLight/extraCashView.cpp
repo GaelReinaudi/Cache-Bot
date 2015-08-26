@@ -18,8 +18,6 @@ static int IND_GR_AVG = -1;
 const int displayDayPast = 31;//80;//60;
 const int displayDayFuture = 62;//180;
 
-const int playBackStartAgo = 0;
-
 double smallInc = 1e-3;
 
 ExtraCashView::ExtraCashView(QString userID, QWidget *parent) :
@@ -81,15 +79,15 @@ ExtraCashView::ExtraCashView(QString userID, QWidget *parent) :
 
 	++tempInd;
 	ui->plot->addGraph();
-	ui->plot->graph(tempInd)->setPen(QPen((QColor(0, 255, 0, 128)), 5.0));
+	ui->plot->graph(tempInd)->setPen(QPen((QColor(0, 0, 0, 64)), 5.0));
 	ui->plot->graph(tempInd)->setLineStyle(QCPGraph::lsStepLeft);
-	IND_GR_PERCENTILE = tempInd;
+	IND_GR_AVG = tempInd;
 
 	++tempInd;
 	ui->plot->addGraph();
-	ui->plot->graph(tempInd)->setPen(QPen((QColor(0, 0, 0, 128)), 5.0));
+	ui->plot->graph(tempInd)->setPen(QPen((QColor(0, 255, 0, 196)), 5.0));
 	ui->plot->graph(tempInd)->setLineStyle(QCPGraph::lsStepLeft);
-	IND_GR_AVG = tempInd;
+	IND_GR_PERCENTILE = tempInd;
 
 	pBars = new QCPBars(ui->plot->xAxis, ui->plot->yAxis2);
 	ui->plot->addPlottable(pBars);
@@ -112,7 +110,7 @@ void ExtraCashView::onBotInjected(Bot* pBot)
 {
 	Q_UNUSED(pBot);
 	LOG() << "ExtraCashView::onBotInjected" << endl;
-	m_pbDate = Transaction::currentDay();//.addDays(-playBackStartAgo);
+	m_pbDate = Transaction::currentDay();
 	m_realBalance = m_pExtraCache->user()->balance(Account::Type::Checking);
 	m_pbBalance = m_realBalance;
 
@@ -142,7 +140,6 @@ void ExtraCashView::onBotInjected(Bot* pBot)
 	LOG() << "initial pb trans("<< m_ipb <<")" << real.trans(m_ipb).date.toString() << "" << real.trans(m_ipb).name << endl;
 
 	ui->spinBox->setValue(m_pbBalance);
-	ui->spinBox->editingFinished();
 	ui->plot->setFocus();
 	updateChart();
 }
@@ -165,15 +162,14 @@ void ExtraCashView::onWheelEvent(QWheelEvent * wEv)
 {
 
 //	m_lastBal = ui->spinBox->value();
-	//int step = 200 * qrand() / RAND_MAX;
+	int step = 1;
 	if(wEv->delta() > 0) {
-		ui->spinBox->setValue(m_pbBalance);
-		m_pbDate = m_pbDate.addDays(1);
+		Transaction::setCurrentDay(Transaction::currentDay().addDays(step));
 	}
 	else {
-		keyPressEvent(0);
+		Transaction::setCurrentDay(Transaction::currentDay().addDays(-step));
 	}
-	updateChart();
+	m_pExtraCache->user()->reInjectBot();
 }
 
 void ExtraCashView::updateChart()
@@ -198,6 +194,7 @@ void ExtraCashView::updateChart()
 void ExtraCashView::makeBalancePlot()
 {
 	double x = Transaction::currentDay().daysTo(QDate::currentDate());
+	ui->plot->graph(IND_GR_BALANCE)->clearData();
 	ui->plot->graph(IND_GR_BALANCE)->addData(x, m_realBalance);
 	ui->spinBox->setValue(m_pbBalance);
 	double balanceThen = m_realBalance;
