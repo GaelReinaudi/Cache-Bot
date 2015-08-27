@@ -14,7 +14,7 @@ double FeatureAllOthers::apply(TransactionBundle& allTrans)
 	double alreadyMatchedNeg = 0;
 	for (int i = 0; i < allTrans.count(); ++i) {
 		const Transaction& tr = allTrans.trans(i);
-		if (tr.isInternal())
+		if (tr.noUse())
 			continue;
 
 		double amnt = tr.amountDbl();
@@ -43,9 +43,8 @@ double FeatureAllOthers::apply(TransactionBundle& allTrans)
 		m_localStaticArgs.m_bundle.append(&tr);
 	}
 
-	QDate lastDate = QDate::currentDate();
 	int numBund = m_localStaticArgs.m_bundle.count();
-	int MIN_TRANSACTIONS_FOR_RAND = 10;
+	int MIN_TRANSACTIONS_FOR_RAND = 3;
 	if (numBund <= MIN_TRANSACTIONS_FOR_RAND) {
 		m_localStaticArgs.m_dayProba = 0.0;
 	}
@@ -53,8 +52,10 @@ double FeatureAllOthers::apply(TransactionBundle& allTrans)
 		// get the date those transaction started
 		QDate firstDate = m_localStaticArgs.m_bundle.trans(0).date;
 
-		m_localStaticArgs.m_daysBundle = firstDate.daysTo(lastDate);
+		m_localStaticArgs.m_daysBundle = Transaction::maxDaysOld();//firstDate.daysTo(Transaction::currentDay());
 		m_localStaticArgs.m_dayProba = numBund / m_localStaticArgs.m_daysBundle;
+		// correction for proba not small
+		m_localStaticArgs.m_dayProba = m_localStaticArgs.m_dayProba / (1.0 + m_localStaticArgs.m_dayProba);
 	}
 
 	// min of the ration already/tot per side Neg/Pos
@@ -112,17 +113,21 @@ QVector<Transaction> OracleFilteredRest::revelation(QDate upToDate)
 	static QVector<Transaction> retVect;
 	retVect.clear();
 	while (curDate() <= upToDate) {
-		if (randBool(m_args.m_dayProba))
+		double prob = 1.0;
+		while (prob > 1e-2)
 		{
-			Transaction randTr = m_args.m_bundle.randomTransaction();
-			randTr.date = curDate();
-			double avgAmnt = m_args.m_sumPos + m_args.m_sumNeg;
-			// Note that for now the average is done from the oldes date of the account readings
-			// to the current date, so it slowly dissolves as the oracle is predicting for latter dates
-			avgAmnt /= Transaction::onlyAfterDate.daysTo(curDate());
-//			randTr.setAmount(avgAmnt / m_args.m_dayProba);
-			LOG() << "avgTrans " << randTr.amountDbl() << " " << randTr.date.toString() << "" << randTr.name << endl;
-			retVect.append(randTr);
+			prob *= m_args.m_dayProba;
+			if (randBool(prob)) {
+				Transaction randTr = m_args.m_bundle.randomTransaction();
+				randTr.date = curDate();
+				double avgAmnt = m_args.m_sumPos + m_args.m_sumNeg;
+				// Note that for now the average is done from the oldes date of the account readings
+				// to the current date, so it slowly dissolves as the oracle is predicting for latter dates
+				avgAmnt /= Transaction::onlyAfterDate.daysTo(curDate());
+				// randTr.setAmount(avgAmnt / m_args.m_dayProba);
+				LOG() << QString("allOthTrans(%1) ").arg(prob) << randTr.amountDbl() << " " << randTr.date.toString() << "" << randTr.name << endl;
+				retVect.append(randTr);
+			}
 		}
 		nextDay();
 	}
@@ -131,8 +136,8 @@ QVector<Transaction> OracleFilteredRest::revelation(QDate upToDate)
 
 double OracleFilteredRest::avgDaily() const
 {
+	LOG() << m_args.m_dayProba << m_args.m_daysBundle
+			 << m_args.m_sumNeg << m_args.m_sumPos
+			 << endl;
 	return 0.0;
-//	double avgAmnt = m_args.m_sumPos + m_args.m_sumNeg;
-//	avgAmnt /= Transaction::onlyAfterDate.daysTo(QDate::currentDate());
-//	return avgAmnt;
 }

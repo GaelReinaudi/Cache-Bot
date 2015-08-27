@@ -74,7 +74,7 @@ QJsonObject Bot::summarize()
 QJsonObject Bot::postTreatment()
 {
 	auto& allTrans = m_context->m_pUser->allTrans();
-	QDate lastDate = QDate::currentDate();
+	QDate lastDate = Transaction::currentDay();
 
 	double avgDayIn090  = MakeRateMonthPercentileMetric<2, 90>::get(m_context->m_pUser)->value(lastDate);
 	double avgDayOut090 = CostRateMonthPercentileMetric<2, 90>::get(m_context->m_pUser)->value(lastDate);

@@ -1,6 +1,6 @@
 #include "featureStatDistrib.h"
 
-#define MIN_TRANSACTIONS_FOR_STAT 16
+#define MIN_TRANSACTIONS_FOR_STAT 3//16
 #define EFFECT_RANGE_WIDTH_RATIO 2.0
 
 void FeatureStatDistrib::getArgs(Puppy::Context &ioContext) {
@@ -30,25 +30,23 @@ void FeatureStatDistrib::getArgs(Puppy::Context &ioContext) {
 
 double FeatureStatDistrib::apply(TransactionBundle& allTrans)
 {
-	QDate lastDate = QDate::currentDate();
-
 	// transaction to compare the hash with
 	Transaction modelTrans;
 	modelTrans.nameHash.setFromHash(m_localStaticArgs.m_hash);
 	modelTrans.setAmount(-1.0); // only negative prices will have a usable distance
-	modelTrans.date = lastDate;
+	modelTrans.date = Transaction::currentDay();
 	const int maxHashDist = 4;
 
 	m_localStaticArgs.m_bundle.clear();
 	for (int i = 0; i < allTrans.count(); ++i) {
-		const Transaction& trans = allTrans.trans(i);
-		if (trans.isInternal())
+		const Transaction& tr = allTrans.trans(i);
+		if (tr.noUse())
 			continue;
-		if (trans.dimensionOfVoid)
+		if (tr.dimensionOfVoid)
 			continue;
-		quint64 dist = trans.distanceWeighted<1024*1024*1024, 1024*1024*1024, maxHashDist>(modelTrans);
-		if (passFilter(dist, trans)) {
-			m_localStaticArgs.m_bundle.append(&trans);
+		quint64 dist = tr.distanceWeighted<1024*1024*1024, 1024*1024*1024, maxHashDist>(modelTrans);
+		if (passFilter(dist, tr)) {
+			m_localStaticArgs.m_bundle.append(&tr);
 		}
 	}
 	int numBund = m_localStaticArgs.m_bundle.count();
@@ -58,8 +56,8 @@ double FeatureStatDistrib::apply(TransactionBundle& allTrans)
 		m_billProba = 0.0;
 		return m_fitness;
 	}
-	// get the date those transaction started
-	computeNextDayProba(lastDate);
+
+	computeNextDayProba();
 
 	m_billProba = m_localStaticArgs.m_dayProba;
 //	m_fitness = qAbs(kindaLog(m_localStaticArgs.m_bundle.sumDollar()));
@@ -116,10 +114,10 @@ void FeatureStatDistrib::execute(void *outDatum, Puppy::Context &ioContext)
 	}
 }
 
-void FeatureStatDistrib::computeNextDayProba(QDate lastDate)
+void FeatureStatDistrib::computeNextDayProba()
 {
 	double daysTo = m_localStaticArgs.m_bundle.trans(0).date.daysTo(m_localStaticArgs.m_bundle.trans(1).date);
-	double EMA_FACTOR = 0.5;
+	double EMA_FACTOR = 0.25;
 //	LOG() << "daysTo " << daysTo << endl;
 
 	for (int i = 2; i < m_localStaticArgs.m_bundle.count(); ++i) {
@@ -129,13 +127,15 @@ void FeatureStatDistrib::computeNextDayProba(QDate lastDate)
 //		LOG() << "daysToNext " << daysToNext << "daysTo " << daysTo << endl;
 	}
 	// if time since last is getting larger than when we should have seen one, we take it as a new point
-	double daysToEnd = m_localStaticArgs.m_bundle.trans(-1).date.daysTo(lastDate);
+	double daysToEnd = m_localStaticArgs.m_bundle.trans(-1).date.daysTo(Transaction::currentDay());
 	if (daysToEnd > daysTo) {
 		daysTo *= (1.0 - EMA_FACTOR);
 		daysTo += daysToEnd * EMA_FACTOR;
 	}
 //	LOG() << "daysToEnd " << daysToEnd << " final daysTo " << daysTo << endl;
 	m_localStaticArgs.m_dayProba = 1.0 / daysTo;
+	// correction for proba not small
+	m_localStaticArgs.m_dayProba = m_localStaticArgs.m_dayProba / (1.0 + m_localStaticArgs.m_dayProba);
 }
 
 QVector<Transaction> OracleStatDistrib::revelation(QDate upToDate)
@@ -143,12 +143,19 @@ QVector<Transaction> OracleStatDistrib::revelation(QDate upToDate)
 	LOG() << "OracleStatDistrib::revelation proba = " << m_args.m_dayProba << " bundle = " << m_args.m_bundle.count() << endl;
 	static QVector<Transaction> retVect;
 	retVect.clear();
+	if (m_args.m_bundle.count() == 0)
+		return retVect;
 	while (curDate() <= upToDate) {
-		if (randBool(m_args.m_dayProba)) {
-			Transaction randTr = m_args.m_bundle.randomTransaction();
-			randTr.date = curDate();
-			LOG() << "randomTransaction " << randTr.amountDbl() << " " << randTr.date.toString() << "" << randTr.name << endl;
-			retVect.append(randTr);
+		double prob = 1.0;
+		while (prob > 1e-2)
+		{
+			prob *= m_args.m_dayProba;
+			if (randBool(prob)) {
+				Transaction randTr = m_args.m_bundle.randomTransaction();
+				randTr.date = curDate();
+				LOG() << QString("randTrans(%1) ").arg(prob) << randTr.amountDbl() << " " << randTr.date.toString() << "" << randTr.name << endl;
+				retVect.append(randTr);
+			}
 		}
 		nextDay();
 	}
@@ -157,5 +164,5 @@ QVector<Transaction> OracleStatDistrib::revelation(QDate upToDate)
 
 double OracleStatDistrib::avgDaily() const
 {
-	return m_args.m_dayProba * m_args.m_bundle.averageAmount();
+	return m_args.m_dayProba / (1 - m_args.m_dayProba) * m_args.m_bundle.averageAmount();
 }

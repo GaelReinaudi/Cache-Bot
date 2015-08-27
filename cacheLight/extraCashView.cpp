@@ -6,7 +6,7 @@
 #include "oracle.h"
 #include "bot.h"
 
-static const int numRevelations = 128;
+static const int numRevelations = 16;
 static int alpha = 32;
 static bool breakDown = false;
 static int IND_GR_REVEL = -1;
@@ -15,10 +15,8 @@ static int IND_GR_SLOPE = -1;
 static int IND_GR_PERCENTILE = -1;
 static int IND_GR_AVG = -1;
 
-const int displayDayPast = 1;//80;//60;
+const int displayDayPast = 31;//80;//60;
 const int displayDayFuture = 62;//180;
-
-const int playBackStartAgo = 0;
 
 double smallInc = 1e-3;
 
@@ -81,15 +79,15 @@ ExtraCashView::ExtraCashView(QString userID, QWidget *parent) :
 
 	++tempInd;
 	ui->plot->addGraph();
-	ui->plot->graph(tempInd)->setPen(QPen((QColor(0, 255, 0, 128)), 5.0));
+	ui->plot->graph(tempInd)->setPen(QPen((QColor(0, 0, 0, 64)), 5.0));
 	ui->plot->graph(tempInd)->setLineStyle(QCPGraph::lsStepLeft);
-	IND_GR_PERCENTILE = tempInd;
+	IND_GR_AVG = tempInd;
 
 	++tempInd;
 	ui->plot->addGraph();
-	ui->plot->graph(tempInd)->setPen(QPen((QColor(0, 0, 0, 128)), 5.0));
+	ui->plot->graph(tempInd)->setPen(QPen((QColor(0, 255, 0, 196)), 5.0));
 	ui->plot->graph(tempInd)->setLineStyle(QCPGraph::lsStepLeft);
-	IND_GR_AVG = tempInd;
+	IND_GR_PERCENTILE = tempInd;
 
 	pBars = new QCPBars(ui->plot->xAxis, ui->plot->yAxis2);
 	ui->plot->addPlottable(pBars);
@@ -99,6 +97,10 @@ ExtraCashView::ExtraCashView(QString userID, QWidget *parent) :
 
 	connect(ui->plot, SIGNAL(mouseWheel(QWheelEvent*)), this, SLOT(onWheelEvent(QWheelEvent*)));
 	connect(ui->spinHypotheTrans, SIGNAL(valueChanged(int)), this, SLOT(onHypotheTrans(int)));
+	ui->spinDaysOld->setValue(Transaction::maxDaysOld());
+	connect(ui->spinDaysOld, SIGNAL(valueChanged(int)), this, SLOT(onDaysOldSpin(int)));
+	ui->spinAgo->setValue(Transaction::currentDay().daysTo(QDate::currentDate()));
+	connect(ui->spinAgo, SIGNAL(valueChanged(int)), this, SLOT(onAgo()));
 
 	connect(m_pExtraCache, SIGNAL(botInjected(Bot*)), this, SLOT(onBotInjected(Bot*)));
 }
@@ -112,8 +114,9 @@ void ExtraCashView::onBotInjected(Bot* pBot)
 {
 	Q_UNUSED(pBot);
 	LOG() << "ExtraCashView::onBotInjected" << endl;
-	m_pbDate = QDate::currentDate().addDays(-playBackStartAgo);
-	m_pbBalance = m_pExtraCache->user()->balance(Account::Type::Checking);
+	m_pbDate = Transaction::currentDay();
+	m_realBalance = m_pExtraCache->user()->balance(Account::Type::Checking);
+	m_pbBalance = m_realBalance;
 
 	ui->costLive50SpinBox->setValue(CostRateMonthPercentileMetric<6, 50>::get(m_pExtraCache->user())->value(m_pbDate));
 	ui->costLive75SpinBox->setValue(CostRateMonthPercentileMetric<6, 75>::get(m_pExtraCache->user())->value(m_pbDate));
@@ -127,10 +130,7 @@ void ExtraCashView::onBotInjected(Bot* pBot)
 
 	for (int i = 0; i < real.count(); ++i) {
 		// finds the index of the last transaction within the playback date
-		if (real.trans(i).date <= m_pbDate) {
-			m_ipb = i;
-		}
-		else {
+		if (real.trans(i).date > m_pbDate) {
 			// incrementally finds out the balance at the playback date
 			if (!real.trans(i).isInternal()) {
 				m_pbBalance -= real.trans(i).amountDbl();
@@ -138,11 +138,9 @@ void ExtraCashView::onBotInjected(Bot* pBot)
 		}
 	}
 	LOG() << "initial pb balance"<< m_pbBalance << " at" << m_pbDate.toString() << endl;
-	LOG() << "initial pb trans("<< m_ipb <<")" << real.trans(m_ipb).name << endl;
 
 	ui->spinBox->setValue(m_pbBalance);
-	ui->spinBox->editingFinished();
-	ui->plot->setFocus();
+//	ui->plot->setFocus();
 	updateChart();
 }
 
@@ -152,6 +150,18 @@ void ExtraCashView::onHypotheTrans(int transAmount)
 //	m_pbBalance = m_pExtraCache->user()->balance(Account::Type::Checking);
 	ui->spinBox->setValue(m_pbBalance);
 	updateChart();
+}
+
+void ExtraCashView::onDaysOldSpin(int val)
+{
+	Transaction::setMaxDaysOld(val);
+	m_pExtraCache->user()->reInjectBot();
+}
+
+void ExtraCashView::onAgo()
+{
+	Transaction::setCurrentDay(QDate::currentDate().addDays(-ui->spinAgo->value()));
+	m_pExtraCache->user()->reInjectBot();
 }
 
 void ExtraCashView::keyPressEvent(QKeyEvent *event)
@@ -164,20 +174,20 @@ void ExtraCashView::onWheelEvent(QWheelEvent * wEv)
 {
 
 //	m_lastBal = ui->spinBox->value();
-	//int step = 200 * qrand() / RAND_MAX;
+	int step = 1;
 	if(wEv->delta() > 0) {
-		ui->spinBox->setValue(m_pbBalance);
-		m_pbDate = m_pbDate.addDays(1);
+		Transaction::setCurrentDay(Transaction::currentDay().addDays(step));
 	}
 	else {
-		keyPressEvent(0);
+		Transaction::setCurrentDay(Transaction::currentDay().addDays(-step));
 	}
-	updateChart();
+	ui->spinAgo->setValue(Transaction::currentDay().daysTo(QDate::currentDate()));
+//	m_pExtraCache->user()->reInjectBot();
 }
 
 void ExtraCashView::updateChart()
 {
-	double x = QDate::currentDate().daysTo(m_pbDate);
+	double x = 0.0;//QDate::currentDate().daysTo(m_pbDate);
 
 	makeBalancePlot();
 	makeRevelationPlot();
@@ -196,15 +206,16 @@ void ExtraCashView::updateChart()
 
 void ExtraCashView::makeBalancePlot()
 {
-	double x = QDate::currentDate().daysTo(m_pbDate);
-	ui->plot->graph(IND_GR_BALANCE)->addData(x, m_pbBalance);
+	double x = Transaction::currentDay().daysTo(QDate::currentDate());
+	ui->plot->graph(IND_GR_BALANCE)->clearData();
+	ui->plot->graph(IND_GR_BALANCE)->addData(x, m_realBalance);
 	ui->spinBox->setValue(m_pbBalance);
-	double balanceThen = m_pbBalance;
+	double balanceThen = m_realBalance;
 	for (int i = m_pExtraCache->user()->allTrans().count() - 1; i >= 0; --i) {
 		const Transaction& tr = m_pExtraCache->user()->allTrans().trans(i);
 		if (tr.isInternal())
 			continue;
-		double x = QDate::currentDate().daysTo(tr.date);
+		double x = Transaction::currentDay().daysTo(tr.date);
 		ui->plot->graph(IND_GR_BALANCE)->addData(x, balanceThen);
 		balanceThen -= tr.amountDbl();
 	}
@@ -218,7 +229,7 @@ void ExtraCashView::makeRevelationPlot()
 		double curBal = m_pbBalance;
 		LOG() << "makeRevelationPlot balance = " << curBal << endl;
 		pGr->clearData();
-		double t = QDate::currentDate().daysTo(m_pbDate) - 0.01; // to be the first point, slightly on the left
+		double t = -0.01; // to be the first point, slightly on the left
 		pGr->addData(t, curBal);
 		m_pExtraCache->user()->oracle()->resetDate(m_pbDate);
 		const QVector<Transaction> rev = m_pExtraCache->user()->oracle()->revelation(m_pbDate.addDays(displayDayFuture));
@@ -227,9 +238,9 @@ void ExtraCashView::makeRevelationPlot()
 		for (const Transaction& tr : rev) {
 			double amnt = tr.amountDbl();
 			curBal += amnt;
-			t = QDate::currentDate().daysTo(tr.date) + manyEspilon;
+			t = Transaction::currentDay().daysTo(tr.date) + manyEspilon;
 			pGr->addData(t, curBal);
-			LOG() << amnt << " -> bal = " << curBal << endl;
+//			LOG() << amnt << " -> bal = " << curBal << endl;
 			manyEspilon += epsilon;
 		}
 		if (!breakDown)
@@ -237,28 +248,28 @@ void ExtraCashView::makeRevelationPlot()
 		pGr = ui->plot->graph(i + numRevelations);
 		curBal = m_pbBalance;
 		pGr->clearData();
-		t = QDate::currentDate().daysTo(m_pbDate) - 0.01; // to be the first point, slightly on the left
+		t = -0.01; // to be the first point, slightly on the left
 		pGr->addData(t, curBal);
 		for (const Transaction& tr : rev) {
 			double amnt = tr.amountDbl();
 			if(amnt < 0)
 				continue;
 			curBal += amnt;
-			t = QDate::currentDate().daysTo(tr.date) + manyEspilon;
+			t = Transaction::currentDay().daysTo(tr.date) + manyEspilon;
 			pGr->addData(t, curBal);
 			manyEspilon += epsilon;
 		}
 		pGr = ui->plot->graph(i + numRevelations + numRevelations);
 		curBal = m_pbBalance;
 		pGr->clearData();
-		t = QDate::currentDate().daysTo(m_pbDate) - 0.01; // to be the first point, slightly on the left
+		t = -0.01; // to be the first point, slightly on the left
 		pGr->addData(t, curBal);
 		for (const Transaction& tr : rev) {
 			double amnt = tr.amountDbl();
 			if(amnt > 0)
 				continue;
 			curBal += amnt;
-			t = QDate::currentDate().daysTo(tr.date) + manyEspilon;
+			t = Transaction::currentDay().daysTo(tr.date) + manyEspilon;
 			pGr->addData(t, curBal);
 			manyEspilon += epsilon;
 		}
@@ -280,7 +291,6 @@ void ExtraCashView::makePercentilePlot(double fracPerc)
 	pGrPerc->clearData();
 	pGrAvg->clearData();
 	for (double d = 0; d < displayDayFuture; ++d) {
-		double val = 0.0;
 		QVector<double> allY;
 		for (int i = IND_GR_REVEL; i < IND_GR_REVEL + numRevelations; ++i) {
 			QCPDataMap* pDat = ui->plot->graph(i)->data();
@@ -304,23 +314,4 @@ void ExtraCashView::makePercentilePlot(double fracPerc)
 	}
 }
 
-void ExtraCashView::makeMinSlope()
-{
-	QCPGraph* graph = ui->plot->graph(IND_GR_SLOPE);
-	graph->clearData();
-	double tToday = QDate::currentDate().daysTo(m_pbDate);
-	double slushBase = m_pExtraCache->slushBaseStart();
-	if(graph->data()->isEmpty()) {
-		graph->addData(tToday, slushBase);
-	}
-	double dayMin = m_pExtraCache->futDayMinSlope() - tToday;
-	double minSlope = qMax(0.0, m_pExtraCache->minSlope());
-	double effectiveSlushforDay = m_pExtraCache->slushNeed() * (0.5 + 1.0 * (dayMin) / 30.0);
-	graph->addData(tToday + displayDayFuture, slushBase + minSlope * displayDayFuture);
-	graph->addData(tToday + dayMin, slushBase + minSlope * dayMin);
-	graph->addData(tToday + dayMin + 0.001, slushBase + minSlope * dayMin + effectiveSlushforDay);
-	graph->addData(tToday + dayMin + 0.002, slushBase + minSlope * dayMin);
-	graph->addData(tToday + displayDayFuture + 0.003, slushBase + minSlope * displayDayFuture);
-	qDebug() << tToday << displayDayFuture << dayMin << minSlope;
-}
 

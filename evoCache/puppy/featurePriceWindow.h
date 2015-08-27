@@ -14,7 +14,10 @@ protected:
 		Q_UNUSED(dist);
 		return true//dist < Transaction::LIMIT_DIST_TRANS * 1024 * 1024
 				&& trans.amountInt() >= 1.10 * m_localStaticArgs.m_kla
-				&& trans.amountInt() <= 0.90 * m_localStaticArgs.m_kla;
+				&& trans.amountInt() <= 0.90 * m_localStaticArgs.m_kla
+				|| trans.amountInt() <= 1.10 * m_localStaticArgs.m_kla
+				&& trans.amountInt() >= 0.90 * m_localStaticArgs.m_kla
+				;
 	}
 };
 

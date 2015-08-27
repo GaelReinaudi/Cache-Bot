@@ -28,6 +28,9 @@ public:
 	enum Flag { None = 0x0, Predicted = 0x1, CameTrue = 0x2 , Internal = 0x4 };
 	int flags = Flag::None;
 	bool isInternal() const { return flags & Transaction::Flag::Internal; }
+	bool isFuture() const { return date > Transaction::currentDay(); }
+	bool isToOld() const { return date < Transaction::currentDay().addDays(-Transaction::maxDaysOld()); }
+	bool noUse() const { return isFuture() || isToOld() || isInternal(); }
 	int type() const;
 
 	//! json in
@@ -96,6 +99,25 @@ public:
 
 	static const qint64 LIMIT_DIST_TRANS = 512;
 
+	//! returns the date considered as being the current day for all computations to come
+	static QDate currentDay() {
+		return s_currentDay;
+	}
+	static void setCurrentDay(const QDate &value) {
+		s_currentDay = value;
+	}
+	//! returns the maximum month to consider a transaction for
+	static int maxDaysOld() {
+		return s_maxDaysOld;
+	}
+	static void setMaxDaysOld(const int value) {
+		s_maxDaysOld = value;
+	}
+
+
+private:
+	static int s_maxDaysOld;
+	static QDate s_currentDay;
 public:
 	static QVector<int> onlyLoadHashes;
 	static QDate onlyAfterDate;

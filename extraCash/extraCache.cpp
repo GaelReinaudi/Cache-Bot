@@ -19,12 +19,11 @@ void ExtraCache::onUserInjected(User* pUser)
 
 	// transaction at the starting date of the playback
 	auto& real = user()->allTrans();
-	m_date = user()->currentDay();
+	m_date = Transaction::currentDay();
 	LOG() << "m_date" << m_date.toString() << endl;
 
 	for (int i = 0; i < real.count(); ++i) {
 		if (real.trans(i).date >= m_date) {
-			//m_ipb = i;
 			LOG() << "initial trans("<<i<<")" << real.trans(i).date.toString() << real.trans(i).name << endl;
 			break;
 		}
@@ -62,12 +61,12 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 	flowObj.insert("state", QString("kFlow"));
 	statObj.insert("flow", flowObj);
 
-	// if critically low flow
-	if (flow <= -0.95) {
-		LOG() << "Cache flow critically low, re-running with no Bot" << endl;
-		user()->injectJsonBot("");
-		return;
-	}
+//	// if critically low flow
+//	if (flow <= -0.95) {
+//		LOG() << "Cache flow critically low, re-running with no Bot" << endl;
+//		user()->injectJsonBot("");
+//		return;
+//	}
 
 	if (flags & SendExtraCash) {
 		CacheRest::Instance()->sendExtraCash(user()->id(), 0.0, statObj);
