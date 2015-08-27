@@ -220,11 +220,10 @@ public:
 			return 0.0;
 		return sumDollar() / m_vector.count();
 	}
-	int averageKLA() const {
+	int klaAverage() const {
 		if (m_vector.count() == 0)
 			return 0.0;
-		double ret = sumDollar() / m_vector.count();
-		return kindaLog(ret) * KLA_MULTIPLICATOR;
+		return kindaLog(averageAmount()) * KLA_MULTIPLICATOR;
 	}
 	QDate firstDate() const {
 		return m_vector.at(0)->date;
