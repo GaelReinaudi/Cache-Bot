@@ -6,7 +6,7 @@
 #include "oracle.h"
 #include "bot.h"
 
-static const int numRevelations = 64;
+static const int numRevelations = 8;
 static int alpha = 32;
 static bool breakDown = false;
 static int IND_GR_REVEL = -1;
@@ -197,14 +197,20 @@ void ExtraCashView::updateChart()
 
 	ui->plot->xAxis->setRange(-displayDayPast, displayDayFuture + 1);
 	static double maxY = 0.0;
-	ui->plot->yAxis->rescale();
+	static bool once = true;
+	if (once)
+		ui->plot->yAxis->rescale();
+	once = false;
 	maxY = qMax(maxY, ui->plot->yAxis->range().upper + 100);
 	ui->plot->yAxis->setRange(qMin(ui->plot->yAxis->range().lower, -100.0), maxY);
 
 	double perCentFlow = 100.0 * m_pExtraCache->user()->oracle()->avgCashFlow();
 	ui->spinAvgCashFlow->setValue(perCentFlow);
 	pBars->addData(-daysAgo, perCentFlow);
-	ui->plot->yAxis2->rescale();
+//	ui->plot->yAxis2->rescale();
+	double minY1 = ui->plot->yAxis->range().lower;
+	double maxY1 = ui->plot->yAxis->range().upper;
+	ui->plot->yAxis2->setRange(100.0*qMin(-1.0, minY1/maxY1), 100.0*qMax(1.0, -maxY1/minY1));
 	ui->plot->xAxis2->setRange(-daysAgo - displayDayPast, -daysAgo + displayDayFuture + 1);
 
 	ui->plot->replot();
