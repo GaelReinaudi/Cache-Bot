@@ -4,7 +4,13 @@ ACustomPlot::ACustomPlot(QWidget *parent) :
 	QCustomPlot(parent)
 {
 	xAxis->setTickLabelType(QCPAxis::ltDateTime);
-	xAxis->setDateTimeFormat("MM/dd");
+	xAxis->setDateTimeFormat("MM/dd:hh");
+//	xAxis->setAutoTickStep(false);
+	xAxis->setTickStep(3600*24*7);
+	xAxis->setSubTickCount(7);
+	xAxis->grid()->setSubGridVisible(true);
+	xAxis->grid()->setPen(QPen(QColor(220,220,220)));
+	xAxis->grid()->setSubGridPen(QPen(QColor(240,240,240)));
 	yAxis->setAutoTickStep(false);
 	yAxis->setTickStep(1.0);
 	yAxis->setSubTickCount(5);

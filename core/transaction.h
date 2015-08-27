@@ -40,7 +40,7 @@ public:
 
 	double time_t() const {
 		static const qint64 day0 = QDateTime::fromTime_t(0).date().toJulianDay();
-		return (3600.0 * 24.0) * (double(date.toJulianDay() - day0) - 0.3125);
+		return (3600.0 * 24.0) * (double(date.toJulianDay() - day0));
 	}
 	void setAmount(double amntDbl) {
 		 kamount = double(KA_MULTIPLICATOR) * amntDbl;
