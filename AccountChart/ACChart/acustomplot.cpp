@@ -5,7 +5,7 @@ ACustomPlot::ACustomPlot(QWidget *parent) :
 {
 	xAxis->setTickLabelType(QCPAxis::ltDateTime);
 	xAxis->setDateTimeFormat("MM/dd:hh");
-//	xAxis->setAutoTickStep(false);
+	xAxis->setAutoTickStep(false);
 	xAxis->setTickStep(3600*24*7);
 	xAxis->setSubTickCount(7);
 	xAxis->grid()->setSubGridVisible(true);

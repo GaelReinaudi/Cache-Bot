@@ -1,11 +1,14 @@
 #include "featurePeriodicAmount.h"
 
+static const int SLACK_FOR_LATE_TRANS = 2;
+
 double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 {
-	QDate iniDate = Transaction::onlyAfterDate;//lastDate.addMonths(-6);
+	QDate iniDate = Transaction::currentDay().addDays(-Transaction::maxDaysOld());
+	QDate endDate = Transaction::currentDay().addDays(approxSpacingPayment() / 2);
 
 	m_fitness = 0.0;
-	m_targetTrans = targetTransactions(iniDate, Transaction::currentDay());
+	m_targetTrans = targetTransactions(iniDate, endDate);
 	if (m_targetTrans.count() == 0) {
 		LOG() << "MonthlyAmount(0 TARGET): day "<<m_localStaticArgs.m_dayOfMonth<<" kla "<< m_localStaticArgs.m_kla << endl;
 	}
@@ -31,6 +34,9 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 	for (int i = 0; i < allTrans.count(); ++i) {
 		const Transaction& trans = allTrans.trans(i);
 		quint64 dist = iTarg->dist(trans);
+		if (trans.noUse()) {
+			dist = 1<<20;
+		}
 		if (dist < localDist) {
 			localDist = dist;
 			localTrans = &trans;
@@ -53,9 +59,12 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 				++m_localStaticArgs.m_consecMonthBeforeMissed;
 				++m_localStaticArgs.m_consecMonth;
 				m_localStaticArgs.m_consecMissed = 0;
+				// if transaction is in advance
+				if (iTarg->date > Transaction::currentDay())
+					m_localStaticArgs.m_consecMissed = -1;
 				totalOneOverDistClosest += 8.0 / (8 + localDist);
 			}
-			else {
+			else if (iTarg->date < Transaction::currentDay().addDays(-SLACK_FOR_LATE_TRANS)){
 				if (doLog) {
 					LOG() << "missed: ";
 					iTarg->dist(*localTrans, true);
@@ -65,7 +74,7 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 				totalOneOverDistClosest += 1.0 / (1 + localDist);
 			}
 
-			if (iTarg == &m_targetTrans.last() || (iTarg + 1)->date >= Transaction::currentDay())
+			if (iTarg == &m_targetTrans.last() || (iTarg + 1)->date >= endDate)
 				break;
 			++iTarg;
 			// keep this last trans in the pool if it was not just added
@@ -158,7 +167,7 @@ QVector<Transaction> FeatureMonthlyAmount::BlankTransactionsForDayOfMonth(QDate 
 	static QVector<Transaction> targetTrans;
 	targetTrans.clear();
 	QDate currentDate = iniDate;
-	while (currentDate < lastDate) {
+	while (currentDate <= lastDate) {
 		// the target day of this month. If neg, make it count from the end of the month.
 		int targetDayThisMonth = qMin(dayOfMonth, currentDate.daysInMonth());
 		targetDayThisMonth = qMax(targetDayThisMonth, 1 - currentDate.daysInMonth());
@@ -221,10 +230,10 @@ QVector<Transaction> OracleOneDayOfMonth::revelation(QDate upToDate)
 		return tr;
 	};
 	LOG() << "OracleOneDayOfMonth::revelation. bundle = " << m_args.m_bundle.count() << endl;
-	QDate iniDate = Transaction::currentDay();
+	QDate iniDate = Transaction::currentDay().addDays(1);
 	static QVector<Transaction> targetTrans;
 	targetTrans.clear();
-	if (m_args.m_consecMissed == 0)
+	if (m_args.m_consecMissed <= 0)
 	{
 		targetTrans = FeatureMonthlyAmount::BlankTransactionsForDayOfMonth(iniDate, upToDate, m_args.m_dayOfMonth, lambdaTrans);
 		if (m_args.m_dayOfMonth2) {
@@ -238,7 +247,7 @@ QVector<Transaction> OracleOneDayOfMonth::revelation(QDate upToDate)
 double OracleOneDayOfMonth::avgDaily() const
 {
 	double avgMonth = 0.0;
-	if (m_args.m_consecMissed == 0)
+	if (m_args.m_consecMissed <= 0)
 	{
 		avgMonth = m_args.m_bundle.averageAmount();
 		if (m_args.m_dayOfMonth2) {

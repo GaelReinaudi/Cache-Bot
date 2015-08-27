@@ -123,7 +123,7 @@ QVector<Transaction> OracleFilteredRest::revelation(QDate upToDate)
 				double avgAmnt = m_args.m_sumPos + m_args.m_sumNeg;
 				// Note that for now the average is done from the oldes date of the account readings
 				// to the current date, so it slowly dissolves as the oracle is predicting for latter dates
-				avgAmnt /= Transaction::onlyAfterDate.daysTo(curDate());
+				avgAmnt /= Transaction::maxDaysOld() + Transaction::currentDay().daysTo(curDate());
 				// randTr.setAmount(avgAmnt / m_args.m_dayProba);
 				LOG() << QString("allOthTrans(%1) ").arg(prob) << randTr.amountDbl() << " " << randTr.date.toString() << "" << randTr.name << endl;
 				retVect.append(randTr);
