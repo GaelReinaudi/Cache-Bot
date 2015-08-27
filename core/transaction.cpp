@@ -4,6 +4,7 @@
 QDate Transaction::s_currentDay = QDate::currentDate().addMonths(-2);
 
 QVector<int> Transaction::onlyLoadHashes = QVector<int>();
+int Transaction::s_maxDaysOld = 4 * 31;
 QDate Transaction::onlyAfterDate = Transaction::currentDay().addMonths(-6);
 int Transaction::onlyAccountType = Account::Type::Saving | Account::Type::Checking | Account::Type::Credit;
 

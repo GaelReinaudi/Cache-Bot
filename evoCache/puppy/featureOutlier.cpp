@@ -9,9 +9,7 @@ double FeatureOutlier::apply(TransactionBundle& allTrans)
 	m_localStaticArgs.m_amount = 0;
 	for (int i = 0; i < allTrans.count(); ++i) {
 		const Transaction& tr = allTrans.trans(i);
-		if (tr.isInternal())
-			continue;
-		if (tr.isFuture())
+		if (tr.noUse())
 			continue;
 		if (tr.effect128 < THRESHOLD_EFFECT128)
 			continue;

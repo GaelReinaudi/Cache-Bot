@@ -29,6 +29,8 @@ public:
 	int flags = Flag::None;
 	bool isInternal() const { return flags & Transaction::Flag::Internal; }
 	bool isFuture() const { return date > Transaction::currentDay(); }
+	bool isToOld() const { return date < Transaction::currentDay().addDays(Transaction::maxDaysOld()); }
+	bool noUse() const { return isFuture() || isToOld() || isInternal(); }
 	int type() const;
 
 	//! json in
@@ -104,9 +106,17 @@ public:
 	static void setCurrentDay(const QDate &value) {
 		s_currentDay = value;
 	}
+	//! returns the maximum month to consider a transaction for
+	static int maxDaysOld() {
+		return s_maxDaysOld;
+	}
+	static void setMaxDaysOld(const int value) {
+		s_maxDaysOld = value;
+	}
 
 
 private:
+	static int s_maxDaysOld;
 	static QDate s_currentDay;
 public:
 	static QVector<int> onlyLoadHashes;

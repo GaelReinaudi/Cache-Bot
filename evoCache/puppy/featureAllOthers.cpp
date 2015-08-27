@@ -14,9 +14,7 @@ double FeatureAllOthers::apply(TransactionBundle& allTrans)
 	double alreadyMatchedNeg = 0;
 	for (int i = 0; i < allTrans.count(); ++i) {
 		const Transaction& tr = allTrans.trans(i);
-		if (tr.isInternal())
-			continue;
-		if (tr.isFuture())
+		if (tr.noUse())
 			continue;
 
 		double amnt = tr.amountDbl();
@@ -54,7 +52,7 @@ double FeatureAllOthers::apply(TransactionBundle& allTrans)
 		// get the date those transaction started
 		QDate firstDate = m_localStaticArgs.m_bundle.trans(0).date;
 
-		m_localStaticArgs.m_daysBundle = firstDate.daysTo(Transaction::currentDay());
+		m_localStaticArgs.m_daysBundle = Transaction::maxDaysOld();//firstDate.daysTo(Transaction::currentDay());
 		m_localStaticArgs.m_dayProba = numBund / m_localStaticArgs.m_daysBundle;
 		// correction for proba not small
 		m_localStaticArgs.m_dayProba = m_localStaticArgs.m_dayProba / (1.0 + m_localStaticArgs.m_dayProba);
