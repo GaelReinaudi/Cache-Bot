@@ -97,6 +97,10 @@ ExtraCashView::ExtraCashView(QString userID, QWidget *parent) :
 
 	connect(ui->plot, SIGNAL(mouseWheel(QWheelEvent*)), this, SLOT(onWheelEvent(QWheelEvent*)));
 	connect(ui->spinHypotheTrans, SIGNAL(valueChanged(int)), this, SLOT(onHypotheTrans(int)));
+	ui->spinDaysOld->setValue(Transaction::maxDaysOld());
+	connect(ui->spinDaysOld, SIGNAL(valueChanged(int)), this, SLOT(onDaysOldSpin(int)));
+	ui->spinAgo->setValue(Transaction::currentDay().daysTo(QDate::currentDate()));
+	connect(ui->spinAgo, SIGNAL(valueChanged(int)), this, SLOT(onAgo()));
 
 	connect(m_pExtraCache, SIGNAL(botInjected(Bot*)), this, SLOT(onBotInjected(Bot*)));
 }
@@ -126,10 +130,7 @@ void ExtraCashView::onBotInjected(Bot* pBot)
 
 	for (int i = 0; i < real.count(); ++i) {
 		// finds the index of the last transaction within the playback date
-		if (real.trans(i).date <= m_pbDate) {
-			m_ipb = i;
-		}
-		else {
+		if (real.trans(i).date > m_pbDate) {
 			// incrementally finds out the balance at the playback date
 			if (!real.trans(i).isInternal()) {
 				m_pbBalance -= real.trans(i).amountDbl();
@@ -137,10 +138,9 @@ void ExtraCashView::onBotInjected(Bot* pBot)
 		}
 	}
 	LOG() << "initial pb balance"<< m_pbBalance << " at" << m_pbDate.toString() << endl;
-	LOG() << "initial pb trans("<< m_ipb <<")" << real.trans(m_ipb).date.toString() << "" << real.trans(m_ipb).name << endl;
 
 	ui->spinBox->setValue(m_pbBalance);
-	ui->plot->setFocus();
+//	ui->plot->setFocus();
 	updateChart();
 }
 
@@ -150,6 +150,18 @@ void ExtraCashView::onHypotheTrans(int transAmount)
 //	m_pbBalance = m_pExtraCache->user()->balance(Account::Type::Checking);
 	ui->spinBox->setValue(m_pbBalance);
 	updateChart();
+}
+
+void ExtraCashView::onDaysOldSpin(int val)
+{
+	Transaction::setMaxDaysOld(val);
+	m_pExtraCache->user()->reInjectBot();
+}
+
+void ExtraCashView::onAgo()
+{
+	Transaction::setCurrentDay(QDate::currentDate().addDays(-ui->spinAgo->value()));
+	m_pExtraCache->user()->reInjectBot();
 }
 
 void ExtraCashView::keyPressEvent(QKeyEvent *event)
@@ -169,7 +181,8 @@ void ExtraCashView::onWheelEvent(QWheelEvent * wEv)
 	else {
 		Transaction::setCurrentDay(Transaction::currentDay().addDays(-step));
 	}
-	m_pExtraCache->user()->reInjectBot();
+	ui->spinAgo->setValue(Transaction::currentDay().daysTo(QDate::currentDate()));
+//	m_pExtraCache->user()->reInjectBot();
 }
 
 void ExtraCashView::updateChart()
@@ -227,7 +240,7 @@ void ExtraCashView::makeRevelationPlot()
 			curBal += amnt;
 			t = Transaction::currentDay().daysTo(tr.date) + manyEspilon;
 			pGr->addData(t, curBal);
-			LOG() << amnt << " -> bal = " << curBal << endl;
+//			LOG() << amnt << " -> bal = " << curBal << endl;
 			manyEspilon += epsilon;
 		}
 		if (!breakDown)

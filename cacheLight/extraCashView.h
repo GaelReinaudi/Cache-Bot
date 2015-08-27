@@ -32,6 +32,9 @@ protected slots:
 	void makePercentilePlot(double fracPerc);
 	void onWheelEvent(QWheelEvent*wEv);
 	void onHypotheTrans(int transAmount = 0);
+	void onDaysOldSpin(int val);
+	void onAgo();
+
 private:
 	QNetworkAccessManager *manager = 0;
 
@@ -42,7 +45,6 @@ private:
 	double m_realBalance = 0.0;
 	double m_pbBalance = 0.0;
 	double m_extraToday = -1.0;
-	int m_ipb = 0;
 	// account to read predicted transactions from
 //	User* m_pUser;
 	QCPBars *pBars = 0;
