@@ -291,7 +291,6 @@ void ExtraCashView::makePercentilePlot(double fracPerc)
 	pGrPerc->clearData();
 	pGrAvg->clearData();
 	for (double d = 0; d < displayDayFuture; ++d) {
-		double val = 0.0;
 		QVector<double> allY;
 		for (int i = IND_GR_REVEL; i < IND_GR_REVEL + numRevelations; ++i) {
 			QCPDataMap* pDat = ui->plot->graph(i)->data();

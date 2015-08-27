@@ -117,7 +117,7 @@ void FeatureStatDistrib::execute(void *outDatum, Puppy::Context &ioContext)
 void FeatureStatDistrib::computeNextDayProba()
 {
 	double daysTo = m_localStaticArgs.m_bundle.trans(0).date.daysTo(m_localStaticArgs.m_bundle.trans(1).date);
-	double EMA_FACTOR = 0.5;
+	double EMA_FACTOR = 0.25;
 //	LOG() << "daysTo " << daysTo << endl;
 
 	for (int i = 2; i < m_localStaticArgs.m_bundle.count(); ++i) {
@@ -143,7 +143,7 @@ QVector<Transaction> OracleStatDistrib::revelation(QDate upToDate)
 	LOG() << "OracleStatDistrib::revelation proba = " << m_args.m_dayProba << " bundle = " << m_args.m_bundle.count() << endl;
 	static QVector<Transaction> retVect;
 	retVect.clear();
-	if (m_args.m_bundle == 0)
+	if (m_args.m_bundle.count() == 0)
 		return retVect;
 	while (curDate() <= upToDate) {
 		double prob = 1.0;
