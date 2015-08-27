@@ -105,8 +105,7 @@ protected:
 	}
 	void cleanArgs() override {
 		FeaturePeriodicAmount::cleanArgs();
-		m_localStaticArgs.m_dayOfMonth %= 31;
-		++m_localStaticArgs.m_dayOfMonth;
+		m_localStaticArgs.m_dayOfMonth = qBound(-28, m_localStaticArgs.m_dayOfMonth, 31);
 	}
 
 	QJsonObject toJson(Puppy::Context& ioContext) override {

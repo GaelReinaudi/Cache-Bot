@@ -42,7 +42,7 @@ BotContext::BotContext(User *pUser)
 		int h = pUser->hashBundles().keys()[i];
 		if (pUser->hashBundles()[h]->count() > 1)
 		{
-			int avgKLA = pUser->hashBundles()[h]->averageKLA();
+			int avgKLA = pUser->hashBundles()[h]->klaAverage();
 			insert(new Puppy::TokenT<double>(QString("h%1").arg(h).toStdString(), h));
 			insertIfNotThere(new Puppy::TokenT<double>(QString("kla%1").arg(avgKLA).toStdString(), avgKLA));
 		}

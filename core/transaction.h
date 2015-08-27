@@ -40,7 +40,7 @@ public:
 
 	double time_t() const {
 		static const qint64 day0 = QDateTime::fromTime_t(0).date().toJulianDay();
-		return (3600.0 * 24.0) * (double(date.toJulianDay() - day0) - 0.3125);
+		return (3600.0 * 24.0) * (double(date.toJulianDay() - day0));
 	}
 	void setAmount(double amntDbl) {
 		 kamount = double(KA_MULTIPLICATOR) * amntDbl;
@@ -220,11 +220,10 @@ public:
 			return 0.0;
 		return sumDollar() / m_vector.count();
 	}
-	int averageKLA() const {
+	int klaAverage() const {
 		if (m_vector.count() == 0)
 			return 0.0;
-		double ret = sumDollar() / m_vector.count();
-		return kindaLog(ret) * KLA_MULTIPLICATOR;
+		return kindaLog(averageAmount()) * KLA_MULTIPLICATOR;
 	}
 	QDate firstDate() const {
 		return m_vector.at(0)->date;
