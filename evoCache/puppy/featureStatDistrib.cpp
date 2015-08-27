@@ -143,6 +143,8 @@ QVector<Transaction> OracleStatDistrib::revelation(QDate upToDate)
 	LOG() << "OracleStatDistrib::revelation proba = " << m_args.m_dayProba << " bundle = " << m_args.m_bundle.count() << endl;
 	static QVector<Transaction> retVect;
 	retVect.clear();
+	if (m_args.m_bundle == 0)
+		return retVect;
 	while (curDate() <= upToDate) {
 		double prob = 1.0;
 		while (prob > 1e-2)

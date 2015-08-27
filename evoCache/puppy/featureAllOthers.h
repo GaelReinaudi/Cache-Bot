@@ -12,12 +12,12 @@ protected:
 	double avgDaily() const override;
 	double avgDailyPos() const override{
 		double avgAmnt = m_args.m_sumPos;
-		avgAmnt /= Transaction::onlyAfterDate.daysTo(Transaction::currentDay());
+		avgAmnt /= m_args.m_daysBundle;
 		return avgAmnt;
 	}
 	double avgDailyNeg() const override{
 		double avgAmnt = m_args.m_sumNeg;
-		avgAmnt /= Transaction::onlyAfterDate.daysTo(Transaction::currentDay());
+		avgAmnt /= m_args.m_daysBundle;
 		return avgAmnt;
 	}
 
@@ -53,8 +53,8 @@ public:
 
 public:
 	void getArgs(Puppy::Context &ioContext) override {
-		double a = 0;
-		int ind = -1;
+//		double a = 0;
+//		int ind = -1;
 //		getArgument(++ind, &a, ioContext);
 //		m_localStaticArgs.m_avgDayIn099 = a;
 //		getArgument(++ind, &a, ioContext);

@@ -24,7 +24,6 @@ void ExtraCache::onUserInjected(User* pUser)
 
 	for (int i = 0; i < real.count(); ++i) {
 		if (real.trans(i).date >= m_date) {
-			//m_ipb = i;
 			LOG() << "initial trans("<<i<<")" << real.trans(i).date.toString() << real.trans(i).name << endl;
 			break;
 		}
