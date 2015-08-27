@@ -89,9 +89,9 @@ ExtraCashView::ExtraCashView(QString userID, QWidget *parent) :
 	ui->plot->graph(tempInd)->setLineStyle(QCPGraph::lsStepLeft);
 	IND_GR_PERCENTILE = tempInd;
 
-	pBars = new QCPBars(ui->plot->xAxis, ui->plot->yAxis2);
+	pBars = new QCPBars(ui->plot->xAxis2, ui->plot->yAxis2);
 	ui->plot->addPlottable(pBars);
-	pBars->setName("Extra");
+	pBars->setName("Flow");
 	pBars->setPen(QColor(255, 131, 0));
 	pBars->setBrush(QColor(255, 131, 0, 50));
 
@@ -167,7 +167,8 @@ void ExtraCashView::onAgo()
 void ExtraCashView::keyPressEvent(QKeyEvent *event)
 {
 	Q_UNUSED(event);
-	updateChart();
+	if (event->key() == Qt::Key_Space)
+		updateChart();
 }
 
 void ExtraCashView::onWheelEvent(QWheelEvent * wEv)
@@ -187,21 +188,26 @@ void ExtraCashView::onWheelEvent(QWheelEvent * wEv)
 
 void ExtraCashView::updateChart()
 {
-	double x = 0.0;//QDate::currentDate().daysTo(m_pbDate);
+	double daysAgo = Transaction::currentDay().daysTo(QDate::currentDate());
 
 	makeBalancePlot();
 	makeRevelationPlot();
 	makePercentilePlot(0.5);
 //	makeMinSlope();
 
-	ui->plot->xAxis->setRange(x - displayDayPast, x + displayDayFuture + 1);
+	ui->plot->xAxis->setRange(-displayDayPast, displayDayFuture + 1);
 	static double maxY = 0.0;
 	ui->plot->yAxis->rescale();
 	maxY = qMax(maxY, ui->plot->yAxis->range().upper + 100);
 	ui->plot->yAxis->setRange(qMin(ui->plot->yAxis->range().lower, -100.0), maxY);
-	ui->plot->replot();
 
-	ui->spinAvgCashFlow->setValue(100.0 * m_pExtraCache->user()->oracle()->avgCashFlow());
+	double perCentFlow = 100.0 * m_pExtraCache->user()->oracle()->avgCashFlow();
+	ui->spinAvgCashFlow->setValue(perCentFlow);
+	pBars->addData(-daysAgo, perCentFlow);
+	ui->plot->yAxis2->rescale();
+	ui->plot->xAxis2->setRange(-daysAgo - displayDayPast, -daysAgo + displayDayFuture + 1);
+
+	ui->plot->replot();
 }
 
 void ExtraCashView::makeBalancePlot()

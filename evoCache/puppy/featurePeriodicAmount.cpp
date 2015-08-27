@@ -60,7 +60,7 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 				++m_localStaticArgs.m_consecMonth;
 				m_localStaticArgs.m_consecMissed = 0;
 				// if transaction is in advance
-				if (iTarg->date > Transaction::currentDay())
+				if (iTarg->date >= Transaction::currentDay().addDays(-SLACK_FOR_LATE_TRANS))
 					m_localStaticArgs.m_consecMissed = -1;
 				totalOneOverDistClosest += 8.0 / (8 + localDist);
 			}
@@ -230,7 +230,7 @@ QVector<Transaction> OracleOneDayOfMonth::revelation(QDate upToDate)
 		return tr;
 	};
 	LOG() << "OracleOneDayOfMonth::revelation. bundle = " << m_args.m_bundle.count() << endl;
-	QDate iniDate = Transaction::currentDay().addDays(1);
+	QDate iniDate = Transaction::currentDay().addDays(-SLACK_FOR_LATE_TRANS);
 	static QVector<Transaction> targetTrans;
 	targetTrans.clear();
 	if (m_args.m_consecMissed <= 0)
@@ -240,6 +240,10 @@ QVector<Transaction> OracleOneDayOfMonth::revelation(QDate upToDate)
 			targetTrans += FeatureMonthlyAmount::BlankTransactionsForDayOfMonth(iniDate, upToDate, m_args.m_dayOfMonth2, lambdaTrans);
 		}
 		qSort(targetTrans.begin(), targetTrans.end(), Transaction::earlierThan);
+		// if we have the first transaction, don't predict ityy
+		if (m_args.m_consecMissed < 0) {
+			targetTrans.pop_front();
+		}
 	}
 	return targetTrans;
 }

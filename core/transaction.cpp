@@ -1,7 +1,7 @@
 #include "transaction.h"
 #include "account.h"
 
-QDate Transaction::s_currentDay = QDate::currentDate().addDays(-26);//.addMonths(-2);
+QDate Transaction::s_currentDay = QDate::currentDate();//.addDays(-26);//.addMonths(-2);
 
 QVector<int> Transaction::onlyLoadHashes = QVector<int>();
 int Transaction::s_maxDaysOld = 4 * 31;
