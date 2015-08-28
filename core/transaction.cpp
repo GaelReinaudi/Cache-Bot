@@ -124,6 +124,7 @@ void StaticTransactionArray::stampAllTransactionEffect()
 
 double TransactionBundle::averageAmount(std::function<double (const Transaction &)> weight) const
 {
+	return emaAmount(0.1);
 	double totW = 0.0;
 	double avgW = 0.0;
 	for (const Transaction* tr : m_vector) {
