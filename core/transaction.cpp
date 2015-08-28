@@ -124,7 +124,6 @@ void StaticTransactionArray::stampAllTransactionEffect()
 
 double TransactionBundle::averageAmount(std::function<double (const Transaction &)> weight) const
 {
-	return emaAmount(0.1);
 	double totW = 0.0;
 	double avgW = 0.0;
 	for (const Transaction* tr : m_vector) {
@@ -132,7 +131,7 @@ double TransactionBundle::averageAmount(std::function<double (const Transaction 
 		totW += w;
 		avgW += w * tr->amountDbl();
 	}
-	return avgW ? avgW / totW : 0.0;
+	return totW ? avgW / totW : 0.0;
 }
 
 double TransactionBundle::emaAmount(const double facNew) const
@@ -146,6 +145,36 @@ double TransactionBundle::emaAmount(const double facNew) const
 		ret += facNew * t->amountDbl();
 	}
 	return ret;
+}
+
+auto lam = [](const Transaction& tr){
+	double daysOld = tr.date.daysTo(Transaction::currentDay());
+	double totSpan = Transaction::maxDaysOld();
+	double thresh = totSpan / 2;
+	return daysOld <= thresh ? 1.0 : 1.0 - (daysOld - thresh) / (totSpan - thresh);
+};
+
+double TransactionBundle::avgSmart() const
+{
+	return averageAmount(lam);
+	return emaAmount(0.1);
+}
+
+Transaction TransactionBundle::randomTransaction(std::function<double (const Transaction &)> weight) const
+{
+	double totW = 0.0;
+	double avgW = 0.0;
+	for (const Transaction* tr : m_vector) {
+		double w = weight(*tr);
+		totW += w;
+		avgW += w * tr->amountDbl();
+	}
+	if (totW == 0.0)
+		return Transaction();
+
+	avgW / totW;
+
+	return trans(qrand() % count());
 }
 
 Transaction TransactionBundle::randomTransaction() const

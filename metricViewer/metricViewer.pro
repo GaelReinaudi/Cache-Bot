@@ -18,7 +18,6 @@ SOURCES += \
     metricViewer.cpp
 
 HEADERS  += \
-	$$PWD/log.h \
 	$$PWD/../AccountChart/ACChart/acustomplot.h \
 	$$PWD/../AccountChart/qcustomplot/qcustomplot.h \
     metricViewer.h

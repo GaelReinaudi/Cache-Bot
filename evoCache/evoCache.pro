@@ -19,7 +19,6 @@ SOURCES += \
 
 HEADERS  += \
 	evolver.h \
-	$$PWD/log.h \
 	EvolutionSpinner.h
 
 unix {

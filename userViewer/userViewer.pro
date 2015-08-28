@@ -20,7 +20,6 @@ SOURCES += \
 
 
 HEADERS  += \
-	$$PWD/log.h \
 	$$PWD/../AccountChart/ACChart/acustomplot.h \
 	$$PWD/../AccountChart/AmortiChart/AMPlot.h \
 	$$PWD/../AccountChart/qcustomplot/qcustomplot.h \

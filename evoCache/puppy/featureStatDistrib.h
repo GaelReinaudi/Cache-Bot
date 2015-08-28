@@ -20,6 +20,7 @@ private:
 			o_retObj.insert("kla", m_kla);
 			o_retObj.insert("proba", m_dayProba);
 			o_retObj.insert("avgAmn", m_bundle.averageAmount());
+			o_retObj.insert("avgSmt", m_bundle.avgSmart());
 			o_retObj.insert("labels", QJsonArray::fromStringList(m_bundle.uniqueNames()));
 			o_retObj.insert("tot$", m_bundle.sumDollar());
 			o_retObj.insert("numBund", m_bundle.count());

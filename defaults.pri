@@ -1,5 +1,7 @@
 INCLUDEPATH += $$PWD/cacheRest
 INCLUDEPATH += $$PWD/core
+INCLUDEPATH += $$PWD/deps/spdlog/include
+
 SRC_DIR = $$PWD
 
 CONFIG += c++11
@@ -17,3 +19,6 @@ DEPENDPATH += $$DESTDIR
 MOC_DIR = ./$${DEBUGRELEASE}
 OBJECTS_DIR = ./$${DEBUGRELEASE}
 UI_DIR = ./$${DEBUGRELEASE}
+
+#HEADERS  += \
+#	$$PWD/core/log.h

@@ -253,7 +253,7 @@ double OracleOneDayOfMonth::avgDaily() const
 	double avgMonth = 0.0;
 	if (m_args.m_consecMissed <= 0)
 	{
-		avgMonth = m_args.m_bundle.averageAmount();
+		avgMonth = m_args.m_bundle.avgSmart();
 		if (m_args.m_dayOfMonth2) {
 			avgMonth *= 2;
 		}

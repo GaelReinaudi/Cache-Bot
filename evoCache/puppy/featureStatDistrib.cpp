@@ -164,5 +164,5 @@ QVector<Transaction> OracleStatDistrib::revelation(QDate upToDate)
 
 double OracleStatDistrib::avgDaily() const
 {
-	return m_args.m_bundle.averageAmount() * m_args.m_dayProba / (1 - m_args.m_dayProba);
+	return m_args.m_bundle.avgSmart() * m_args.m_dayProba / (1 - m_args.m_dayProba);
 }

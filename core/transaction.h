@@ -213,6 +213,8 @@ public:
 	}
 	double averageAmount(std::function<double(const Transaction&)> weight = [](const Transaction&){ return 1.0; }) const;
 	double emaAmount(const double facNew) const;
+	double avgSmart() const;
+	Transaction randomTransaction(std::function<double(const Transaction&)> weight) const;
 	Transaction randomTransaction() const;
 	int klaAverage() const {
 		if (m_vector.count() == 0)
