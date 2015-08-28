@@ -87,7 +87,7 @@ void FeatureAllOthers::execute(void *outDatum, Puppy::Context &ioContext)
 	output = apply(allTrans);
 	// isolate the transaction that were fitted to the target
 	for (int i = 0; i < m_localStaticArgs.m_bundle.count(); ++i) {
-		m_localStaticArgs.m_bundle.trans(i).setDimensionOfVoid();
+		m_localStaticArgs.m_bundle.trans(i).setDimensionOfVoid(2);
 	}
 
 	// summary if the json object exists

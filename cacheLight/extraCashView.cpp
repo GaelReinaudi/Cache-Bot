@@ -126,7 +126,7 @@ void ExtraCashView::onBotInjected(Bot* pBot)
 
 	// transaction at the starting date of the playback
 	auto& real = m_pExtraCache->user()->allTrans();
-	qDebug() << "m_date" << m_pbDate;
+//	qDebug() << "m_date" << m_pbDate;
 
 	for (int i = 0; i < real.count(); ++i) {
 		// finds the index of the last transaction within the playback date
@@ -302,6 +302,10 @@ void ExtraCashView::makePercentilePlot(double fracPerc)
 	QCPGraph* pGrAvg = ui->plot->graph(IND_GR_AVG);
 	pGrPerc->clearData();
 	pGrAvg->clearData();
+	double curBal = m_pbBalance;
+	double t = -0.01; // to be the first point, slightly on the left
+	pGrPerc->addData(t, curBal);
+	pGrAvg->addData(t, curBal);
 	for (double d = 0; d < displayDayFuture; ++d) {
 		QVector<double> allY;
 		for (int i = IND_GR_REVEL; i < IND_GR_REVEL + numRevelations; ++i) {

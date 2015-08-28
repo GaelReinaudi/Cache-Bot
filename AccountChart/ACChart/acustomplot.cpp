@@ -4,7 +4,7 @@ ACustomPlot::ACustomPlot(QWidget *parent) :
 	QCustomPlot(parent)
 {
 	xAxis->setTickLabelType(QCPAxis::ltDateTime);
-	xAxis->setDateTimeFormat("MM/dd:hh");
+	xAxis->setDateTimeFormat("MM/dd");
 	xAxis->setAutoTickStep(false);
 	xAxis->setTickStep(3600*24*7);
 	xAxis->setSubTickCount(7);
@@ -37,7 +37,8 @@ void ACustomPlot::makeGraphs(HashedBundles& hashBundles) {
 	for (const auto& h : hashBundles.keys()) {
 		TransactionBundle* bundle = hashBundles[h];
 		m_hashBund[h] = bundle;
-		m_labels.append(bundle->averageName() + "    last : " + bundle->trans(-1).name + "   uniques: " + bundle->uniqueNames().join(" | "));
+		m_labels.append(//bundle->averageName() + "    " +
+						"last: " + bundle->last().name + "   uniques: " + bundle->uniqueNames().join(" | "));
 		for (int iAccType = 0; iAccType <= 3; ++iAccType) {
 			QCPGraph* pGraph = addGraph();
 			m_hashGraphs[h].append(pGraph);
@@ -137,15 +138,49 @@ void ACustomPlot::loadCompressedAmount(User* pUser)
 }
 
 AHashPlot::AHashPlot(QWidget *parent)  :
-	ACustomPlot(parent) {
+	ACustomPlot(parent)
+{
 	xAxis->setTickLabelType(QCPAxis::ltNumber);
 	yAxis2->setVisible(true);
 
 	xAxis->setLabel("skblnrl($)");
 	yAxis->setLabel("hash");
-	yAxis2->setLabel("points");
+//	yAxis2->setLabel("$");
+	xAxis->setAutoTickStep(false);
+	xAxis->setTickStep(0.5);
+	xAxis->setSubTickCount(5);
+	xAxis->grid()->setSubGridVisible(true);
+	xAxis->grid()->setPen(QPen(QColor(220,220,220)));
+	xAxis->grid()->setSubGridPen(QPen(QColor(240,240,240)));
+	yAxis->setAutoTickStep(true);
 
 	disconnect(yAxis, SIGNAL(rangeChanged(QCPRange)), yAxis2, SLOT(setRange(QCPRange)));
+}
+
+void AHashPlot::histogramGraph(int indGr)
+{
+	QList<double> orderedKeys = graph(indGr)->data()->keys();
+	qDebug() << orderedKeys;
+	graph(indGr)->clearData();
+	m_integral = 0.0;
+	double firstKey = orderedKeys.count() ? orderedKeys.first() :  0.0;
+	graph(indGr)->addData(firstKey - 0.5, m_integral);
+	double epsilon = 0.0000001;
+	double manyEspilon = epsilon;
+	bool pos = false;
+	for (double dat : orderedKeys) {
+		// for positive, restart at 0
+		if (!pos && dat >= 0.0) {
+			pos = true;
+			m_integral = 0;
+			graph(indGr)->addData(0.0, 0.0);
+		}
+		m_integral += qAbs(unKindaLog(dat));
+		graph(indGr)->addData(dat + manyEspilon, m_integral);
+		manyEspilon += epsilon;
+	}
+	double lastKey = orderedKeys.count() ? orderedKeys.last() :  0.0;
+	graph(indGr)->addData(lastKey + 0.5, m_integral);
 }
 
 void AHashPlot::loadCompressedAmount(User *pUser)
@@ -158,8 +193,12 @@ void AHashPlot::loadCompressedAmount(User *pUser)
 		const Transaction& tr = allTrans.trans(i);
 		uint h = tr.nameHash.hash();
 		uint d = tr.nameHash.manLength();
-		if (!tr.isInternal()) {
+		if (!tr.noUse()) {
 			graph(0)->addData(tr.compressedAmount(), 0.0);
+			// code for featureAllOthers
+			if (tr.dimensionOfVoid == 2) {
+				graph(1)->addData(tr.compressedAmount(), 0.0);
+			}
 		}
 		QCPGraph* pGraph = 0;
 		switch (tr.type()) {
@@ -178,27 +217,8 @@ void AHashPlot::loadCompressedAmount(User *pUser)
 		}
 		pGraph->addData(tr.compressedAmount(), d);
 	}
-	QList<double> orderedKeys = graph(0)->data()->keys();
-	qDebug() << orderedKeys;
-	graph(0)->clearData();
-	m_integral = 0.0;
-	graph(0)->addData(orderedKeys.first() - 0.5, m_integral);
-	double epsilon = 0.0000001;
-	double manyEspilon = epsilon;
-	bool pos = false;
-	for (double dat : orderedKeys) {
-		// for positive, restart at 0
-		if (!pos && dat >= 0.0) {
-			pos = true;
-			m_integral = 0;
-			graph(0)->addData(0.0, 0.0);
-		}
-		m_integral += qAbs(unKindaLog(dat));
-		graph(0)->addData(dat + manyEspilon, m_integral);
-		manyEspilon += epsilon;
-	}
-	graph(0)->addData(orderedKeys.last() + 0.5, m_integral);
+	histogramGraph(0);
+	histogramGraph(1);
 	rescaleAxes();
-	xAxis->setRange(xAxis->range().lower - 0.5, xAxis->range().upper + 0.5);
 	yAxis->setRange(0.0, yAxis->range().upper);
 }
