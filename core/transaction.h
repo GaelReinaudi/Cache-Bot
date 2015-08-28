@@ -215,10 +215,22 @@ public:
 		}
 		return ret;
 	}
-	int averageAmount() const {
+	double averageAmount() const {
+		return emaAmount(0.1);
 		if (m_vector.count() == 0)
 			return 0.0;
 		return sumDollar() / m_vector.count();
+	}
+	double emaAmount(const double facNew) const {
+		if (m_vector.count() == 0)
+			return 0.0;
+		double ret = m_vector.first()->amountDbl();
+		for (int i = 1; i < m_vector.count(); ++i) {
+			const Transaction* t = m_vector.at(i);
+			ret *= (1.0 - facNew);
+			ret += facNew * t->amountDbl();
+		}
+		return ret;
 	}
 	int klaAverage() const {
 		if (m_vector.count() == 0)
