@@ -91,7 +91,7 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 		m_fitness = totalOneOverDistClosest - totalOneOverDistOthers;
 //		m_fitness *= 0.2 * double(m_localStaticArgs.m_bundle.count() - 1) / double(m_targetTrans.count());
 //		m_fitness *= 1.0 + (1.0 / (1.0 + m_localStaticArgs.m_consecMissed));
-		m_fitness *= 1.5 * double(m_localStaticArgs.m_consecMonthBeforeMissed) - 1.5;
+		m_fitness *= 1.75 * double(m_localStaticArgs.m_consecMonthBeforeMissed - 1.5);
 	}
 	m_billProba = billProbability();
 	return m_fitness;

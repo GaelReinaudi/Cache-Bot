@@ -32,7 +32,7 @@ void AMPlot::loadAmount(User* pUser)
 	const int height = 256*16;
 	const int midHeight = height / 2;
 	auto firstTrans = pUser->allTrans().trans(0);
-	auto lastTrans = pUser->allTrans().trans(-1);
+	auto lastTrans = pUser->allTrans().last();
 	colorMap->data()->setSize(1 + firstTrans.date.daysTo(lastTrans.date), height);
 	colorMap->data()->setRange(
 				QCPRange(firstTrans.time_t(), lastTrans.time_t())

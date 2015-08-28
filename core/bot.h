@@ -5,6 +5,7 @@
 #include "puppy/Puppy.hpp"
 class BotContext;
 class Oracle;
+class User;
 
 class CORESHARED_EXPORT Bot : public DBobj
 {
@@ -18,6 +19,7 @@ public:
 	//! summaries the performances of the bot in a json
 	QJsonObject summarize();
 	QJsonObject postTreatment();
+	User* user() const;
 
 //public:
 //	static Bot fromTree();

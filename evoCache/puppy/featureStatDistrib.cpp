@@ -127,7 +127,7 @@ void FeatureStatDistrib::computeNextDayProba()
 //		LOG() << "daysToNext " << daysToNext << "daysTo " << daysTo << endl;
 	}
 	// if time since last is getting larger than when we should have seen one, we take it as a new point
-	double daysToEnd = m_localStaticArgs.m_bundle.trans(-1).date.daysTo(Transaction::currentDay());
+	double daysToEnd = m_localStaticArgs.m_bundle.last().date.daysTo(Transaction::currentDay());
 	if (daysToEnd > daysTo) {
 		daysTo *= (1.0 - EMA_FACTOR);
 		daysTo += daysToEnd * EMA_FACTOR;

@@ -69,9 +69,9 @@ public:
 	qint64 jDay() const {
 		return date.toJulianDay();
 	}
-	void setDimensionOfVoid() const {
+	void setDimensionOfVoid(int n = 1) const {
 		Q_ASSERT(dimensionOfVoid == 0);
-		++dimensionOfVoid;
+		dimensionOfVoid += n;
 	}
 
 	template <qint64 mD, qint64 mA, qint64 mH>
@@ -171,33 +171,29 @@ public:
 //		return transRef(index + m_vector.count());
 //	}
 	const Transaction& trans(int index) const {
-		if(index >= 0)
-			return *m_vector.at(index);
-		return trans(index + m_vector.count());
+		return *m_vector.at(index);
 	}
-	Transaction randomTransaction() {
-		if (count() == 0)
-			return Transaction();
-		return trans(qrand() % count());
+	const Transaction& last() const {
+		return *m_vector.last();
 	}
 	int count() const {
 		return m_vector.count();
 	}
-	QString averageName() const {
-		QVector<uint> sum(64, 0);
-		int tot = m_vector.count();
-		for (int i = 0; i < tot; ++i) {
-			const Transaction* t = m_vector.at(i);
-			for (int c = 0; c < qMin(63, t->name.length()); ++c) {
-				sum[c] += t->name[c].toLatin1();
-			}
-		}
-		char charL[64];
-		for (int c = 0; c < 63; ++c) {
-			charL[c] = sum[c] / tot;
-		}
-		return QString::fromLatin1(charL);
-	}
+//	QString averageName() const {
+//		QVector<uint> sum(64, 0);
+//		int tot = m_vector.count();
+//		for (int i = 0; i < tot; ++i) {
+//			const Transaction* t = m_vector.at(i);
+//			for (int c = 0; c < qMin(63, t->name.length()); ++c) {
+//				sum[c] += t->name[c].toLatin1();
+//			}
+//		}
+//		char charL[64];
+//		for (int c = 0; c < 63; ++c) {
+//			charL[c] = sum[c] / tot;
+//		}
+//		return QString::fromLatin1(charL);
+//	}
 	QStringList uniqueNames() const {
 		QStringList ret;
 		for (int i = 0; i < m_vector.count(); ++i) {
@@ -215,30 +211,13 @@ public:
 		}
 		return ret;
 	}
-	double averageAmount() const {
-		return emaAmount(0.1);
-		if (m_vector.count() == 0)
-			return 0.0;
-		return sumDollar() / m_vector.count();
-	}
-	double emaAmount(const double facNew) const {
-		if (m_vector.count() == 0)
-			return 0.0;
-		double ret = m_vector.first()->amountDbl();
-		for (int i = 1; i < m_vector.count(); ++i) {
-			const Transaction* t = m_vector.at(i);
-			ret *= (1.0 - facNew);
-			ret += facNew * t->amountDbl();
-		}
-		return ret;
-	}
+	double averageAmount(std::function<double(const Transaction&)> weight = [](const Transaction&){ return 1.0; }) const;
+	double emaAmount(const double facNew) const;
+	Transaction randomTransaction() const;
 	int klaAverage() const {
 		if (m_vector.count() == 0)
 			return 0.0;
 		return kindaLog(averageAmount()) * KLA_MULTIPLICATOR;
-	}
-	QDate firstDate() const {
-		return m_vector.at(0)->date;
 	}
 
 private:

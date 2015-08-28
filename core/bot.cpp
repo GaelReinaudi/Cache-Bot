@@ -73,38 +73,42 @@ QJsonObject Bot::summarize()
 
 QJsonObject Bot::postTreatment()
 {
-	auto& allTrans = m_context->m_pUser->allTrans();
 	QDate lastDate = Transaction::currentDay();
 
-	double avgDayIn090  = MakeRateMonthPercentileMetric<2, 90>::get(m_context->m_pUser)->value(lastDate);
-	double avgDayOut090 = CostRateMonthPercentileMetric<2, 90>::get(m_context->m_pUser)->value(lastDate);
+//	double avgDayIn090  = MakeRateMonthPercentileMetric<2, 90>::get(m_context->m_pUser)->value(lastDate);
+//	double avgDayOut090 = CostRateMonthPercentileMetric<2, 90>::get(m_context->m_pUser)->value(lastDate);
 	double avgDayIn095  = MakeRateMonthPercentileMetric<2, 95>::get(m_context->m_pUser)->value(lastDate);
-	double avgDayOut095 = CostRateMonthPercentileMetric<2, 95>::get(m_context->m_pUser)->value(lastDate);
-	double avgDayIn099  = MakeRateMonthPercentileMetric<2, 99>::get(m_context->m_pUser)->value(lastDate);
+//	double avgDayOut095 = CostRateMonthPercentileMetric<2, 95>::get(m_context->m_pUser)->value(lastDate);
+//	double avgDayIn099  = MakeRateMonthPercentileMetric<2, 99>::get(m_context->m_pUser)->value(lastDate);
 	double avgDayOut099 = CostRateMonthPercentileMetric<2, 99>::get(m_context->m_pUser)->value(lastDate);
-	double avgDayIn100  = MakeRateMonthPercentileMetric<2, 100>::get(m_context->m_pUser)->value(lastDate);
-	double avgDayOut100 = CostRateMonthPercentileMetric<2, 100>::get(m_context->m_pUser)->value(lastDate);
+//	double avgDayIn100  = MakeRateMonthPercentileMetric<2, 100>::get(m_context->m_pUser)->value(lastDate);
+//	double avgDayOut100 = CostRateMonthPercentileMetric<2, 100>::get(m_context->m_pUser)->value(lastDate);
 
 	QJsonObject statObj;
-	statObj.insert("avgDayIn099", avgDayIn099);
-	statObj.insert("avgDayOut099", avgDayOut099);
-	statObj.insert("avgDayIn090", avgDayIn090);
-	statObj.insert("avgDayOut090", avgDayOut090);
-	statObj.insert("avgDayIn095", avgDayIn095);
-	statObj.insert("avgDayOut095", avgDayOut095);
-	statObj.insert("avgDayIn100", avgDayIn100);
-	statObj.insert("avgDayOut100", avgDayOut100);
+//	statObj.insert("avgDayIn099", avgDayIn099);
+//	statObj.insert("avgDayOut099", avgDayOut099);
+//	statObj.insert("avgDayIn090", avgDayIn090);
+//	statObj.insert("avgDayOut090", avgDayOut090);
+//	statObj.insert("avgDayIn095", avgDayIn095);
+//	statObj.insert("avgDayOut095", avgDayOut095);
+//	statObj.insert("avgDayIn100", avgDayIn100);
+//	statObj.insert("avgDayOut100", avgDayOut100);
 
 	double flowrate = avgDayIn095 + avgDayOut099;
 	flowrate /= avgDayIn095;
 
-	flowrate += Flow01<95, 99>::get(m_context->m_pUser)->value(lastDate) * 0.01;
-	flowrate *= 0.5;
+	statObj.insert("Flow00", flowrate);
 
+	flowrate = 0.01 * Flow01<95, 99>::get(m_context->m_pUser)->value(lastDate);
 	statObj.insert("Flow01", flowrate);
 
 	QString jsonStr = QJsonDocument(statObj).toJson();
 	LOG() << "Bot::postTreatment    statObj  " << jsonStr << endl;
 
 	return statObj;
+}
+
+User* Bot::user() const
+{
+	return m_context->m_pUser;
 }
