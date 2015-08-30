@@ -163,18 +163,25 @@ double TransactionBundle::avgSmart() const
 Transaction TransactionBundle::randomTransaction(std::function<double (const Transaction &)> weight) const
 {
 	double totW = 0.0;
-	double avgW = 0.0;
+	static QVector<double> summingWeights;
+	summingWeights.clear();
 	for (const Transaction* tr : m_vector) {
 		double w = weight(*tr);
 		totW += w;
-		avgW += w * tr->amountDbl();
+		summingWeights.append(totW);
 	}
 	if (totW == 0.0)
 		return Transaction();
 
-	avgW / totW;
+	double randInTotW = totW * double(qrand()) * (1.0 / double(RAND_MAX));
 
-	return trans(qrand() % count());
+	for (int i = 0; i < summingWeights.count(); ++i) {
+		if (randInTotW <= summingWeights[i]) {
+			return trans(i);
+		}
+	}
+	Q_ASSERT(false); // should never get there if this code works...
+	return Transaction();
 }
 
 Transaction TransactionBundle::randomTransaction() const
