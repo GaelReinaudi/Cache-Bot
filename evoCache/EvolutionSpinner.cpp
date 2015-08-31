@@ -76,18 +76,18 @@ void EvolutionSpinner::runEvolution() {
 		m_context->filterHashIndex = j;
 		// Initialize population.
 		std::vector<Tree> lPopulation(lPopSize);
-		std::cout << "Initializing population for hash " << h << std::endl;
+		std::cout << "Initializing population for hash " << h << endl;
 		initializePopulation(lPopulation, *m_context, lInitGrowProba, lMinInitDepth, lMaxInitDepth);
 		evaluateSymbReg(lPopulation, *m_context);
 		calculateStats(lPopulation, 0);
 
 		// Evolve population for the given number of generations
-		LOG() << "Starting evolution" << endl;
+		INFO() << "Starting evolution";
 		for(unsigned int i=1; i<=lNbrGen; ++i) {
 			while(!m_doSpin)  {
 				QThread::msleep(100);
 			}
-			LOG() << "Generation " << i << endl;
+			DEBUG() << "Generation " << i;
 			auto result = std::minmax_element(lPopulation.begin(), lPopulation.end());
 			Tree bestTree = lPopulation[result.second - lPopulation.begin()];
 
@@ -104,13 +104,13 @@ void EvolutionSpinner::runEvolution() {
 			evaluateSymbReg(lPopulation, *m_context);
 		}
 		calculateStats(lPopulation, lNbrGen);
-		LOG() << "End of evolution" << endl;
+		DEBUG() << "End of evolution";
 
 		// Outputting best individual
 		std::vector<Tree>::iterator lBestIndividual =
 				std::max_element(lPopulation.begin(), lPopulation.end());
-		LOG() << "Best individual at generation " << lNbrGen << " is: ";
-		LOG() << lBestIndividual->toStr() << endl;
+		DEBUG() << "Best individual at generation " << lNbrGen << " is: "
+			  << lBestIndividual->toStr();
 //		std::vector<unsigned int> outCallStack = (*lBestIndividual).getFeatureStack(0, *m_context);
 //		qDebug() << QVector<unsigned int>::fromStdVector(outCallStack);
 
@@ -127,9 +127,9 @@ void EvolutionSpinner::runEvolution() {
 
 	for (int i = 0; i < output.count(); ++i) {
 		double fit = output.keys()[i];
-		LOG() << "-------------------------------- " << fit << " --------------------------------" << endl;
+		INFO() << "-------------------------------- " << fit << " --------------------------------";
 		for (const auto& jsonTree : output[fit]) {
-			LOG() << QJsonDocument(jsonTree.toObject()).toJson() << endl;
+			INFO() << jsonTree.toObject();
 		}
 	}
 
@@ -143,9 +143,8 @@ void EvolutionSpinner::runEvolution() {
 	Tree veryBestTree;
 	// Initialize population.
 	std::vector<Tree> lPopulation(0);
-	std::cout << "Initializing population" << std::endl;
 	initializePopulation(lPopulation, *m_context, lInitGrowProba, lMinInitDepth, lMaxInitDepth);
-	qDebug() << bestPreEvoTrees.count();
+	NOTICE() << "bestPreEvoTrees.count " << bestPreEvoTrees.count();
 	if(bestPreEvoTrees.count()) {
 		for(unsigned int i = 0; i < 5*lPopSize; ++i) {
 			lPopulation.push_back(bestPreEvoTrees.at(i % bestPreEvoTrees.size()));
@@ -154,12 +153,12 @@ void EvolutionSpinner::runEvolution() {
 		calculateStats(lPopulation, 0);
 
 		// Evolve population for the given number of generations
-		LOG() << "Starting evolution" << endl;
+		NOTICE() << "Starting evolution";
 		for(unsigned int i=1; i<=10*lNbrGen; ++i) {
 			if(!m_doSpin)  {
 				break;
 			}
-			LOG() << "Generation " << i << endl;
+			INFO() << "Generation " << i;
 			auto result = std::minmax_element(lPopulation.begin(), lPopulation.end());
 			Tree bestTree = lPopulation[result.second - lPopulation.begin()];
 
@@ -178,7 +177,7 @@ void EvolutionSpinner::runEvolution() {
 			evaluateSymbReg(lPopulation, *m_context);
 			calculateStats(lPopulation, i);
 		}
-		LOG() << "End of evolution" << endl;
+		NOTICE() << "End of evolution";
 	}
 
 	m_doSpin = false;
@@ -197,7 +196,7 @@ unsigned int EvolutionSpinner::evaluateSymbReg(std::vector<Tree>& ioPopulation,
 		ioPopulation[i].interpret(&lResult, ioContext);
 		ioPopulation[i].mFitness = lResult;
 		ioPopulation[i].mValid = true;
-		//LOG() << "Eval tree ("<<lResult<<"): " << ioPopulation[i].toStr() << endl;
+		//DEBUG() << "Eval tree ("<<lResult<<"): " << ioPopulation[i].toStr();
 		++lNbrEval;
 	}
 	return lNbrEval;
@@ -216,9 +215,8 @@ QJsonObject EvolutionSpinner::summarize(Tree& tree)
 
 	jsonObj.insert("fit", fit);
 
-	QString jsonStr = QJsonDocument(jsonObj).toJson(/*QJsonDocument::Compact*/);
-	LOG() << "tree (" << fit << "): " << tree.toStr() << endl;
-	LOG() << "    " << jsonStr << endl;
+	DEBUG() << "tree (" << fit << "): " << tree.toStr();
+	DEBUG() << "    " << jsonObj;
 	emit m_context->needsReplot();
 	emit m_context->newSummarizedTree(jsonObj);
 	return jsonObj;

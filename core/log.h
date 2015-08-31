@@ -10,6 +10,7 @@
 #include "spdlog/spdlog.h"
 
 std::ostream& operator<<(std::ostream& os, const QString& c);
+std::ostream& operator<<(std::ostream& os, const QJsonObject& c);
 //std::ostream& operator<<(std::ostream& os, const QByteArray& c);
 
 class logger
@@ -26,7 +27,7 @@ public:
 			if(ret)
 				ret = false;
 			s_pLog->optout.setDevice(&s_pLog->data);
-			s_pLog->optout << QDateTime::currentDateTime().toString("HH:mm:ss.zzz") << "endl";
+			s_pLog->optout << QDateTime::currentDateTime().toString("HH:mm:ss.zzz") << endl;
 
 
 			setupSpdLog(logFileName);

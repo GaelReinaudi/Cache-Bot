@@ -1,5 +1,6 @@
 #include "core_global.h"
 #include "log.h"
+#include <QJsonDocument>
 
 CORESHARED_EXPORT logger* logger::s_pLog = 0;
 
@@ -7,6 +8,10 @@ CORESHARED_EXPORT logger* logger::s_pLog = 0;
 std::ostream CORESHARED_EXPORT &operator<<(std::ostream &os, const QString &c)
 {
 	return os << c.toStdString();
+}
+std::ostream CORESHARED_EXPORT &operator<<(std::ostream &os, const QJsonObject &c)
+{
+	return os << QString(QJsonDocument(c).toJson()).toStdString();
 }
 //std::ostream CORESHARED_EXPORT &operator<<(std::ostream &os, const QByteArray &c)
 //{
@@ -25,6 +30,6 @@ void CORESHARED_EXPORT logger::setupSpdLog(QString logFileName)
 	}
 	catch (const spdlog::spdlog_ex& ex)
 	{
-		std::cout << "Log failed: " << ex.what() << "endl";
+		std::cout << "Log failed: " << ex.what() << endl;
 	}
 }

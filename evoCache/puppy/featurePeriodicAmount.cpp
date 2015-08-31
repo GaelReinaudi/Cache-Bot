@@ -65,7 +65,7 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 			}
 			else if (iTarg->date < Transaction::currentDay().addDays(-SLACK_FOR_LATE_TRANS)){
 				if (doLog) {
-					LOG() << "missed: ";
+					DEBUG() << "missed: ";
 					iTarg->dist(*localTrans, true);
 				}
 				m_localStaticArgs.m_consecMonth = 0;
