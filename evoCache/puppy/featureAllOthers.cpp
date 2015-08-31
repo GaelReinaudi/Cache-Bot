@@ -133,7 +133,7 @@ QVector<Transaction> OracleFilteredRest::revelation(QDate upToDate)
 
 double OracleFilteredRest::avgDaily() const
 {
-	DEBUG() << m_args.m_dayProba << m_args.m_daysBundle
+	DBG() << m_args.m_dayProba << m_args.m_daysBundle
 			 << m_args.m_sumNeg << m_args.m_sumPos;
 	return 0.0;
 }

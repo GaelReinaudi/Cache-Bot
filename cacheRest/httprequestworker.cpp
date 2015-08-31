@@ -308,7 +308,7 @@ void HttpRequestWorker::on_manager_finished(QNetworkReply *reply) {
 
 	QString strResponseJsonDoc = QString(QJsonDocument::fromJson(response).toJson());
 	qDebug() << "response is" << strResponseJsonDoc.left(256);
-	DEBUG() << "response is" << strResponseJsonDoc;
+	DBG() << "response is" << strResponseJsonDoc;
 	if(reply->request().url() == QUrl(LoginRoute)) {
 		emit repliedLogin(response);
 		if(response == StringLoggedInReplySuccess) {
@@ -319,7 +319,7 @@ void HttpRequestWorker::on_manager_finished(QNetworkReply *reply) {
 		}
 		else {
 			qWarning() << "Warning: Not connecting normally !!!!!!!!!!";
-			ERROR() << "Warning: Not connecting normally !!!!!!!!!!";
+			ERR() << "Warning: Not connecting normally !!!!!!!!!!";
 		}
 	}
 	else if(reply->request().url() == QUrl(IdsRoute)) {

@@ -68,16 +68,16 @@ Transaction* StaticTransactionArray::appendNew(QJsonObject jsonTrans, Account *p
 		}
 	}
 	if (!Transaction::onlyLoadHashes.isEmpty() && !Transaction::onlyLoadHashes.contains(hash)) {
-		DEBUG() << "not Adding transaction because Transaction::onlyLoadHashes doesn't contain "
+		DBG() << "not Adding transaction because Transaction::onlyLoadHashes doesn't contain "
 			  << hash;
 		return 0;
 	}
 	if (date < Transaction::onlyAfterDate) {
-		DEBUG() << "not Adding transaction because Transaction::onlyAfterDate ";
+		DBG() << "not Adding transaction because Transaction::onlyAfterDate ";
 		return 0;
 	}
 	if (!(pInAcc->type() & Transaction::onlyAccountType)) {
-		DEBUG() << "not Adding transaction because Transaction::onlyAccountType "
+		DBG() << "not Adding transaction because Transaction::onlyAccountType "
 			  << QString("b%1").arg(QString::number(Transaction::onlyAccountType, 2));
 		return 0;
 	}

@@ -24,7 +24,7 @@ void CORESHARED_EXPORT logger::setupSpdLog(QString logFileName)
 	try
 	{
 		//Create console, multithreaded logger
-		s_pLog->m_fileLogger = spdlog::create<spdlog::sinks::rotating_file_sink_mt>("file", logFileName.toStdString(), "log", 1024 * 1024 * 5, 3);
+		s_pLog->m_fileLogger = spdlog::create<spdlog::sinks::rotating_file_sink_mt>("file", logFileName.toStdString(), "log", 1024 * 1024 * 20, 1);
 		s_pLog->m_fileLogger->set_pattern("[%l] %v");
 		s_pLog->m_fileLogger->set_level(spdlog::level::info);
 	}

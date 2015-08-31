@@ -31,7 +31,7 @@ double SuperOracle::avgDaily() const
 
 double SuperOracle::avgCashFlow() const
 {
-	DEBUG() << "SuperOracle::avgCashFlow";
+	DBG() << "SuperOracle::avgCashFlow";
 	double posAvg = 0.0;
 	double negAvg = 0.0;
 	for (auto pOr : m_subOracles) {

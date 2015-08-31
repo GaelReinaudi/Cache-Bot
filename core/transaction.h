@@ -85,7 +85,7 @@ public:
 		d |= (1<<20) * qint64(isInternal() || other.isInternal());
 		d |= (1<<20) * qint64((amountInt() > 0 && other.amountInt() < 0) || (amountInt() < 0 && other.amountInt() > 0));
 		if(log) {
-			DEBUG() << "dist " << d
+			DBG() << "dist " << d
 				<< QString(" = %1 x day(%2)").arg(double(LIMIT_DIST_TRANS)/mD).arg(absInt(jDay() - other.jDay()))
 				<< QString(" = %1 x kamount(%2)").arg(double(LIMIT_DIST_TRANS)/mA).arg(absInt(amountInt() - other.amountInt()))
 				<< QString(" = %1 x hash(%2)").arg(double(LIMIT_DIST_TRANS)/mH).arg(nameHash.dist(other.nameHash));

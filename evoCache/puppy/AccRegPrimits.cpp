@@ -7,7 +7,7 @@ Puppy::Primitive::tryReplaceArgumentNode(unsigned int inN, std::string primName,
 	assert(inN < mNumberArguments);
 	auto iterPrim = ioContext.mPrimitiveMap.find(primName);
 	if(iterPrim == ioContext.mPrimitiveMap.end()) {
-		ERROR() << "Could not find the primitive " << primName.c_str();
+		ERR() << "Could not find the primitive " << primName.c_str();
 		return false;
 	}
 	// make a tree made of only that primitive to later use the swap node function

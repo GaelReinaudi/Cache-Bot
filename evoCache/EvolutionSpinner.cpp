@@ -87,7 +87,7 @@ void EvolutionSpinner::runEvolution() {
 			while(!m_doSpin)  {
 				QThread::msleep(100);
 			}
-			DEBUG() << "Generation " << i;
+			DBG() << "Generation " << i;
 			auto result = std::minmax_element(lPopulation.begin(), lPopulation.end());
 			Tree bestTree = lPopulation[result.second - lPopulation.begin()];
 
@@ -104,12 +104,12 @@ void EvolutionSpinner::runEvolution() {
 			evaluateSymbReg(lPopulation, *m_context);
 		}
 		calculateStats(lPopulation, lNbrGen);
-		DEBUG() << "End of evolution";
+		DBG() << "End of evolution";
 
 		// Outputting best individual
 		std::vector<Tree>::iterator lBestIndividual =
 				std::max_element(lPopulation.begin(), lPopulation.end());
-		DEBUG() << "Best individual at generation " << lNbrGen << " is: "
+		DBG() << "Best individual at generation " << lNbrGen << " is: "
 			  << lBestIndividual->toStr();
 //		std::vector<unsigned int> outCallStack = (*lBestIndividual).getFeatureStack(0, *m_context);
 //		qDebug() << QVector<unsigned int>::fromStdVector(outCallStack);
@@ -196,7 +196,7 @@ unsigned int EvolutionSpinner::evaluateSymbReg(std::vector<Tree>& ioPopulation,
 		ioPopulation[i].interpret(&lResult, ioContext);
 		ioPopulation[i].mFitness = lResult;
 		ioPopulation[i].mValid = true;
-		//DEBUG() << "Eval tree ("<<lResult<<"): " << ioPopulation[i].toStr();
+		//DBG() << "Eval tree ("<<lResult<<"): " << ioPopulation[i].toStr();
 		++lNbrEval;
 	}
 	return lNbrEval;
@@ -215,8 +215,8 @@ QJsonObject EvolutionSpinner::summarize(Tree& tree)
 
 	jsonObj.insert("fit", fit);
 
-	DEBUG() << "tree (" << fit << "): " << tree.toStr();
-	DEBUG() << "    " << jsonObj;
+	DBG() << "tree (" << fit << "): " << tree.toStr();
+	DBG() << "    " << jsonObj;
 	emit m_context->needsReplot();
 	emit m_context->newSummarizedTree(jsonObj);
 	return jsonObj;

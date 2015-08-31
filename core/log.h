@@ -56,12 +56,12 @@ public:
 // 5 Notice: normal but significant condition
 // 6 Informational: informational messages
 // 7 Debug: debug-level messages
-#define DEBUG() logger::Instance()->m_fileLogger->debug()
-#define DEBUG(lev) logger::Instance()->m_fileLogger->debug()
+#define DBG() logger::Instance()->m_fileLogger->debug()
+#define DBG(lev) logger::Instance()->m_fileLogger->debug()
 #define INFO() logger::Instance()->m_fileLogger->info()
 #define NOTICE() logger::Instance()->m_fileLogger->notice()
 #define WARN() logger::Instance()->m_fileLogger->warn()
-#define ERROR() logger::Instance()->m_fileLogger->error()
+#define ERR() logger::Instance()->m_fileLogger->error()
 #define ALERT() logger::Instance()->m_fileLogger->alert()
 
 #define LOG() logger::Instance()->stream()

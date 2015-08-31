@@ -239,7 +239,7 @@ void ExtraCashView::makeRevelationPlot()
 	for (int i = IND_GR_REVEL; i < IND_GR_REVEL + numRevelations; ++i) {
 		QCPGraph* pGr = ui->plot->graph(i);
 		double curBal = m_pbBalance;
-		DEBUG() << "makeRevelationPlot balance = " << curBal;
+		DBG() << "makeRevelationPlot balance = " << curBal;
 		pGr->clearData();
 		double t = -0.01; // to be the first point, slightly on the left
 		pGr->addData(t, curBal);
@@ -252,7 +252,7 @@ void ExtraCashView::makeRevelationPlot()
 			curBal += amnt;
 			t = Transaction::currentDay().daysTo(tr.date) + manyEspilon;
 			pGr->addData(t, curBal);
-			DEBUG() << amnt << " -> bal = " << curBal;
+			DBG() << amnt << " -> bal = " << curBal;
 			manyEspilon += epsilon;
 		}
 		if (!breakDown)

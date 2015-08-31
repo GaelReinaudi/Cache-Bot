@@ -45,7 +45,7 @@ public:
 		double val = computeFor(date, isValid);
 		m_values[date] = val;
 		m_valid[date] = isValid;
-		DEBUG() << QString("value %1(%2): %3").arg(m_name).arg(date.toString()).arg(val);
+		DBG() << QString("value %1(%2): %3").arg(m_name).arg(date.toString()).arg(val);
 
 		return val;
 	}

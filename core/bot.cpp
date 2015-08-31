@@ -66,8 +66,8 @@ QJsonObject Bot::summarize()
 	emit m_context->newSummarizedTree(jsonObj);
 
 	QString jsonStr = QJsonDocument(jsonObj).toJson(/*QJsonDocument::Compact*/);
-	DEBUG() << "Bot::summarize() tree (" << fit << "): " << m_puppyTree.toStr();
-	DEBUG() << "    " << jsonStr;
+	DBG() << "Bot::summarize() tree (" << fit << "): " << m_puppyTree.toStr();
+	DBG() << "    " << jsonStr;
 	return jsonObj;
 }
 
