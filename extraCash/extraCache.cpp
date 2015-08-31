@@ -20,11 +20,11 @@ void ExtraCache::onUserInjected(User* pUser)
 	// transaction at the starting date of the playback
 	auto& real = user()->allTrans();
 	m_date = Transaction::currentDay();
-	LOG() << "m_date" << m_date.toString() << endl;
+	NOTICE() << "currentDay " << m_date.toString();
 
 	for (int i = 0; i < real.count(); ++i) {
 		if (real.trans(i).date >= m_date) {
-			LOG() << "initial trans("<<i<<")" << real.trans(i).date.toString() << real.trans(i).name << endl;
+			NOTICE() << "initial trans("<<i<<")" << real.trans(i).date.toString() << real.trans(i).name;
 			break;
 		}
 	}
@@ -34,7 +34,7 @@ void ExtraCache::onUserInjected(User* pUser)
 	m_slushFundTypicalNeed += 0.5 * user()->balance(Account::Type::Checking);
 	m_slushFundTypicalNeed += 0.5 * -CostRateMonthPercentileMetric<6, 75>::get(user())->value(m_date) * 30;
 
-	LOG() << "m_slushFundTypicalNeed" << m_slushFundTypicalNeed << endl;
+	NOTICE() << "m_slushFundTypicalNeed" << m_slushFundTypicalNeed;
 
 	// the amount of money on the extraCash fund already
 	Fund* extraFund = user()->extraCacheFund();
@@ -43,14 +43,14 @@ void ExtraCache::onUserInjected(User* pUser)
 //		extraTotal += c.amount;
 //	}
 	m_slushFundStartsAt = extraTotal;
-	LOG() << "extraTotal" << m_slushFundStartsAt << endl;
+	NOTICE() << "extraTotal" << m_slushFundStartsAt;
 
 	CacheRest::Instance()->getBestBot(userID(), user());
 }
 
 void ExtraCache::onBotInjected(Bot* bestBot)
 {
-	LOG() << "ExtraCache::onBotInjected" << endl;
+	NOTICE() << "ExtraCache::onBotInjected";
 	bestBot->summarize();
 
 	QJsonObject statObj = bestBot->postTreatment();
@@ -63,7 +63,7 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 
 //	// if critically low flow
 //	if (flow <= -0.95) {
-//		LOG() << "Cache flow critically low, re-running with no Bot" << endl;
+//		WARN() << "Cache flow critically low, re-running with no Bot";
 //		user()->injectJsonBot("");
 //		return;
 //	}

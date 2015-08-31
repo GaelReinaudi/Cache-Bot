@@ -85,7 +85,7 @@ void MetricViewer::onUserInjected(User* pUser)
 
 void MetricViewer::onBotInjected(Bot* bestBot)
 {
-	LOG() << "MetricViewer::onBotInjected" << endl;
+	NOTICE() << "MetricViewer::onBotInjected";
 	bestBot->summarize();
 }
 

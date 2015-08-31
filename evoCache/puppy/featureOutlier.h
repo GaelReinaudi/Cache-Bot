@@ -9,6 +9,7 @@ public:
 
 protected:
 	QVector<Transaction> revelation(QDate upToDate) override {
+		Q_UNUSED(upToDate);
 		return QVector<Transaction>();
 	}
 	double avgDaily() const override {

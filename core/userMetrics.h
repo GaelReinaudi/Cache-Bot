@@ -73,7 +73,7 @@ protected:
 			isValid |= true;
 		}
 		if (!isValid) {
-			LOG() << "templateComputeFor<" << PastMonth << Percentile << "> not valid " << lastCostsInd << costs.count() << endl;
+			WARN() << "templateComputeFor<" << PastMonth << Percentile << "> not valid " << lastCostsInd << costs.count();
 			return 0.0;
 		}
 		double numDays = startDate.daysTo(date);
@@ -145,7 +145,7 @@ protected:
 		isValid = inMet->isValid(date) && outMet->isValid(date);
 		isValid &= in > 0.0;
 		if (!isValid) {
-			LOG() << "in or out not valid" << endl;
+			WARN() << "in or out not valid";
 			return 0.0;
 		}
 		double flow = in + out;

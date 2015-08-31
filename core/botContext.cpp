@@ -13,7 +13,7 @@ BotContext::BotContext(User *pUser)
 	: DBobj(pUser)
 	, Puppy::Context(pUser)
 {
-	LOG() << "Creating evolution context" << endl;
+	NOTICE() << "Creating evolution context";
 	mRandom.seed(CONTEXT_SEED_DEFAULT);
 	insert(new Add);
 	insert(new Avg);

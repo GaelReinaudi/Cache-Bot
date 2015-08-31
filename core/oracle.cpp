@@ -2,7 +2,7 @@
 
 QVector<Transaction> SuperOracle::revelation(QDate upToDate)
 {
-	LOG() << "SuperOracle::revelation from " << m_subOracles.count() << endl;
+	INFO() << "SuperOracle::revelation from " << m_subOracles.count();
 	QVector<Transaction> ret;
 	// naive adding up the revelations for now
 	for (auto pOr : m_subOracles) {
@@ -12,8 +12,8 @@ QVector<Transaction> SuperOracle::revelation(QDate upToDate)
 	std::stable_sort(ret.begin(), ret.end(), Transaction::earlierThan);
 
 	for (const Transaction& tr : ret) {
-		LOG() << "t =" << QDate::currentDate().daysTo(tr.date) << "amnt =" << tr.amountDbl()
-			  << "    label = " << tr.name << endl;
+		INFO() << "t =" << QDate::currentDate().daysTo(tr.date) << "amnt =" << tr.amountDbl()
+			  << "    label = " << tr.name;
 	}
 
 	return ret;
@@ -21,7 +21,7 @@ QVector<Transaction> SuperOracle::revelation(QDate upToDate)
 
 double SuperOracle::avgDaily() const
 {
-	LOG() << "SuperOracle::avgDaily" << endl;
+	NOTICE() << "SuperOracle::avgDaily";
 	double avg = 0.0;
 	for (auto pOr : m_subOracles) {
 		avg += pOr->avgDaily();
@@ -31,31 +31,31 @@ double SuperOracle::avgDaily() const
 
 double SuperOracle::avgCashFlow() const
 {
-	LOG() << "SuperOracle::avgCashFlow" << endl;
+	DBG() << "SuperOracle::avgCashFlow";
 	double posAvg = 0.0;
 	double negAvg = 0.0;
 	for (auto pOr : m_subOracles) {
 		double avg = pOr->avgDaily();
 		if (avg > 0) {
 			posAvg += avg;
-			LOG() << "subOracle daily > 0 " << avg << endl;
+			INFO() << "subOracle daily > 0 " << avg;
 		}
 		else if (avg < 0) {
 			negAvg += avg;
-			LOG() << "subOracle daily < 0 " << avg << endl;
+			INFO() << "subOracle daily < 0 " << avg;
 		}
 		else {
 			posAvg += pOr->avgDailyPos();
 			negAvg += pOr->avgDailyNeg();
-			LOG() << "subOracle daily = 0 " << avg
-				  << "" << pOr->avgDailyPos()
-				  << "" << pOr->avgDailyNeg() << endl;
+			INFO() << "subOracle daily = 0 " << avg
+				  << " " << pOr->avgDailyPos()
+				  << " " << pOr->avgDailyNeg();
 		}
 	}
 	if (posAvg == 0.0)
 		return -1.0;
 	double flow = (posAvg + negAvg) / posAvg;
-	LOG() << "SuperOracle::avgCashFlow " << flow << endl;
+	NOTICE() << "SuperOracle::avgCashFlow " << flow;
 	if (flow < -1.0)
 		return -1.0;
 	if (flow > 1.0)

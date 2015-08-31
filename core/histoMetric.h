@@ -15,7 +15,7 @@ protected:
 	{
 		s_AllMetrics.insert(name, this);
 		qDebug() << "making HistoMetric:" << m_name;
-		LOG() << "making HistoMetric:" << m_name << endl;
+		NOTICE() << "making HistoMetric:" << m_name;
 		}
 	virtual ~HistoMetric() {
 		s_AllMetrics.remove(m_name);
@@ -30,7 +30,7 @@ public:
 			return s_AllMetrics.value(withName, 0);
 		}
 		qDebug() << "HistoMetric::get() couldn't find" << withName;
-		LOG() << "HistoMetric::get() couldn't find" << withName << endl;
+		NOTICE() << "HistoMetric::get() couldn't find" << withName;
 		return 0;
 	}
 	QString name() const { return m_name; }
@@ -45,7 +45,7 @@ public:
 		double val = computeFor(date, isValid);
 		m_values[date] = val;
 		m_valid[date] = isValid;
-		LOG() << QString("value %1(%2): %3").arg(m_name).arg(date.toString()).arg(val) << endl;
+		DBG() << QString("value %1(%2): %3").arg(m_name).arg(date.toString()).arg(val);
 
 		return val;
 	}
@@ -96,7 +96,7 @@ protected:
 			isValid &= m_pMetric->isValid(ad);
 			//qDebug() << i << avg;
 			if (!isValid) {
-				LOG() << "m_pMetric" << i << " not valid" << endl;
+				WARN() << "m_pMetric" << i << " not valid";
 				break;
 			}
 		}

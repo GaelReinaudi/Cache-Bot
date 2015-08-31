@@ -68,7 +68,10 @@ void CacheRest::getBestBot(QString userId, User *pUserToInject /*= 0*/)
 
 void CacheRest::extraCashEC2Computation(QString userId)
 {
-	HttpRequestInput httpRequest(ExtraCashEC2Compute + QString("/%1").arg(userId), "GET");
+	HttpRequestInput httpRequest(ExtraCashEC2Compute, "POST");
+	QJsonObject jsonUserID;
+	jsonUserID.insert("user_id", userId);
+	httpRequest.add_json(jsonUserID);
 	worker->execute(&httpRequest);
 }
 

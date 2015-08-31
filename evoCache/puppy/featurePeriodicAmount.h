@@ -87,7 +87,7 @@ protected:
 			std::string nodeName = QString("h%1").arg(m_filterHash).toStdString();
 			bool ok = tryReplaceArgumentNode(0, nodeName.c_str(), ioContext);
 			if(!ok) {
-				LOG() << "Could not replace the node with " << nodeName.c_str() << endl;
+				ERR() << "Could not replace the node with " << nodeName.c_str();
 			}
 		}
 		else {

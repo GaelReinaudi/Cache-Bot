@@ -21,7 +21,7 @@ User::~User()
 SuperOracle* User::oracle()
 {
 	if (!m_mainOracle) {
-		LOG() << "Making new user's Oracle" << endl;
+		NOTICE() << "Making new user's Oracle";
 		m_mainOracle = new SuperOracle();
 	}
 	return m_mainOracle;
@@ -119,9 +119,9 @@ void User::injectJsonData(QString jsonStr)
 			if (pT && pBestMatchN) {
 				pT->flags |= Transaction::Flag::Internal;
 				pBestMatchN->flags |= Transaction::Flag::Internal;
-				LOG() << "Matching internal transactions" << endl;
-				LOG() << pT->name << pT->amountDbl() << "" << pT->date.toString() << endl;
-				LOG() << pBestMatchN->name << pBestMatchN->amountDbl() << "" << pBestMatchN->date.toString() << endl;
+				INFO() << "Matching internal transactions";
+				INFO() << pT->name << pT->amountDbl() << " " << pT->date.toString();
+				INFO() << pBestMatchN->name << pBestMatchN->amountDbl() << " " << pBestMatchN->date.toString();
 			}
 		}
 	}
@@ -165,7 +165,7 @@ void User::injectJsonBot(QString jsonStr)
 	QJsonDocument jsonDoc(QJsonDocument::fromJson(jsonStr.toUtf8()));
 	const QJsonObject& jsonObj = jsonDoc.object();
 
-	LOG() << "User::injectJsonBot " << QJsonDocument(jsonObj).toJson() << endl;
+	INFO() << "User::injectJsonBot " << QString(QJsonDocument(jsonObj).toJson());
 
 	{
 		QFile sampleReturn("jsonBot.json");
