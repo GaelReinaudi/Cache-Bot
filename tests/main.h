@@ -109,14 +109,6 @@ private slots:
 //		QVERIFY(spyExtraCash.wait(10000));
 //	}
 
-//	void sendNewBot() {
-//		QJsonObject json;
-//		json.insert("features", QJsonArray());
-//		CacheRest::Instance()->sendNewBot(m_testUser->id(), json);
-//		QSignalSpy spyExtraCash(CacheRest::Instance()->worker, SIGNAL(repliedSendNewBot(QString)));
-//		QVERIFY(spyExtraCash.wait(10000));
-//	}
-
 	void getBestBot() {
 		CacheRest::Instance()->getBestBot(TEST_USER_ID_2);
 		QSignalSpy spyBestBot(CacheRest::Instance()->worker, SIGNAL(repliedBestBot(QString)));
