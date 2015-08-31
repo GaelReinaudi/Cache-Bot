@@ -264,7 +264,7 @@ QNetworkReply* HttpRequestWorker::execute(HttpRequestInput *input) {
 		request.setHeader(QNetworkRequest::ContentLengthHeader, QString::number(m_jsonByte.size()));
 	}
 
-	LOG() << "Sending to " << input->url_str << endl;
+	NOTICE() << "Sending to " << input->url_str;
 	qDebug() << "Sending to" << input->url_str;
 	QNetworkReply* reply = 0;
 	if (input->http_method == "GET") {
@@ -272,7 +272,7 @@ QNetworkReply* HttpRequestWorker::execute(HttpRequestInput *input) {
 	}
 	else if (input->http_method == "POST") {
 		reply = manager->post(request, request_content);
-		LOG() << QJsonDocument(input->jsonObject).toJson() << endl;
+		INFO() << QJsonDocument(input->jsonObject).toJson();
 		qDebug() << QJsonDocument(input->jsonObject).toJson();
 	}
 	else if (input->http_method == "PUT") {
@@ -306,8 +306,9 @@ void HttpRequestWorker::on_manager_finished(QNetworkReply *reply) {
 
 	emit on_execution_finished(this);
 
-	qDebug() << "response is" << response.left(256);
-	LOG() << "response is" << response << endl;
+	QString strResponseJsonDoc = QString(QJsonDocument::fromJson(response).toJson());
+	qDebug() << "response is" << strResponseJsonDoc.left(256);
+	DEBUG() << "response is" << strResponseJsonDoc;
 	if(reply->request().url() == QUrl(LoginRoute)) {
 		emit repliedLogin(response);
 		if(response == StringLoggedInReplySuccess) {
@@ -318,7 +319,7 @@ void HttpRequestWorker::on_manager_finished(QNetworkReply *reply) {
 		}
 		else {
 			qWarning() << "Warning: Not connecting normally !!!!!!!!!!";
-			LOG() << "Warning: Not connecting normally !!!!!!!!!!" << endl;
+			ERROR() << "Warning: Not connecting normally !!!!!!!!!!";
 		}
 	}
 	else if(reply->request().url() == QUrl(IdsRoute)) {
@@ -352,7 +353,7 @@ void OfflineHttpRequestWorker::on_manager_finished(QNetworkReply *reply)
 		QString userDataPath = reply->request().url().toString().split("/").last();
 		userDataPath += "Data.json";
 		userDataPath.prepend("../../data/");
-		LOG() << "Loading user data from file " << userDataPath << endl;
+		WARN() << "Loading user data from file " << userDataPath;
 		QFile fileReply(userDataPath);
 		fileReply.open(QFile::ReadOnly);
 		response = fileReply.readAll();
@@ -368,7 +369,7 @@ void OfflineHttpRequestWorker::on_manager_finished(QNetworkReply *reply)
 		QString userBotPath = reply->request().url().toString().split("/").last();
 		userBotPath += "Bot.json";
 		userBotPath.prepend("../../data/");
-		LOG() << "Loading user bota from file " << userBotPath << endl;
+		WARN() << "Loading user bota from file " << userBotPath;
 		QFile fileReply(userBotPath);
 		fileReply.open(QFile::ReadOnly);
 		response = fileReply.readAll();
