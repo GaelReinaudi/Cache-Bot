@@ -49,9 +49,6 @@ double FeatureAllOthers::apply(TransactionBundle& allTrans)
 		m_localStaticArgs.m_dayProba = 0.0;
 	}
 	else {
-		// get the date those transaction started
-		QDate firstDate = m_localStaticArgs.m_bundle.trans(0).date;
-
 		m_localStaticArgs.m_daysBundle = Transaction::maxDaysOld();//firstDate.daysTo(Transaction::currentDay());
 		m_localStaticArgs.m_dayProba = numBund / m_localStaticArgs.m_daysBundle;
 		// correction for proba not small
