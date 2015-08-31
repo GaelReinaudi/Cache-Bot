@@ -272,7 +272,7 @@ QNetworkReply* HttpRequestWorker::execute(HttpRequestInput *input) {
 	}
 	else if (input->http_method == "POST") {
 		reply = manager->post(request, request_content);
-		INFO() << QJsonDocument(input->jsonObject).toJson();
+		INFO() << QString(QJsonDocument(input->jsonObject).toJson());
 		qDebug() << QJsonDocument(input->jsonObject).toJson();
 	}
 	else if (input->http_method == "PUT") {

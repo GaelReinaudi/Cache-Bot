@@ -11,7 +11,7 @@ void FeatureStatDistrib::getArgs(Puppy::Context &ioContext) {
 		std::string nodeName = QString("h%1").arg(m_filterHash).toStdString();
 		bool ok = tryReplaceArgumentNode(0, nodeName.c_str(), ioContext);
 		if(!ok) {
-			LOG() << "Could not replace the node with " << nodeName.c_str() << endl;
+			ERROR() << "Could not replace the node with " << nodeName.c_str();
 		}
 	}
 	else {
@@ -92,11 +92,10 @@ void FeatureStatDistrib::execute(void *outDatum, Puppy::Context &ioContext)
 	}
 
 	if (ioContext.m_summaryJsonObj) {
-		LOG() << getName().c_str() << " " << this
+		NOTICE() << getName().c_str() << " "
 			<< " p=" << m_billProba
 			<< " n=" << m_localStaticArgs.m_bundle.count()
-			<< " h=" << m_localStaticArgs.m_hash
-			<< endl;
+			<< " h=" << m_localStaticArgs.m_hash;
 		if (m_billProba > 0.001) {
 			QJsonArray features = (*ioContext.m_summaryJsonObj)["features"].toArray();
 			features.append(toJson(ioContext));
@@ -118,13 +117,13 @@ void FeatureStatDistrib::computeNextDayProba()
 {
 	double daysTo = m_localStaticArgs.m_bundle.trans(0).date.daysTo(m_localStaticArgs.m_bundle.trans(1).date);
 	double EMA_FACTOR = 0.25;
-//	LOG() << "daysTo " << daysTo << endl;
+	DEBUG() << "daysTo " << daysTo;
 
 	for (int i = 2; i < m_localStaticArgs.m_bundle.count(); ++i) {
 		double daysToNext = m_localStaticArgs.m_bundle.trans(i - 1).date.daysTo(m_localStaticArgs.m_bundle.trans(i).date);
 		daysTo *= (1.0 - EMA_FACTOR);
 		daysTo += daysToNext * EMA_FACTOR;
-//		LOG() << "daysToNext " << daysToNext << "daysTo " << daysTo << endl;
+		DEBUG() << "daysToNext " << daysToNext << "daysTo " << daysTo;
 	}
 	// if time since last is getting larger than when we should have seen one, we take it as a new point
 	double daysToEnd = m_localStaticArgs.m_bundle.last().date.daysTo(Transaction::currentDay());
@@ -132,7 +131,7 @@ void FeatureStatDistrib::computeNextDayProba()
 		daysTo *= (1.0 - EMA_FACTOR);
 		daysTo += daysToEnd * EMA_FACTOR;
 	}
-//	LOG() << "daysToEnd " << daysToEnd << " final daysTo " << daysTo << endl;
+	DEBUG() << "daysToEnd " << daysToEnd << " final daysTo " << daysTo;
 	m_localStaticArgs.m_dayProba = 1.0 / daysTo;
 	// correction for proba not small
 	m_localStaticArgs.m_dayProba = m_localStaticArgs.m_dayProba / (1.0 + m_localStaticArgs.m_dayProba);
@@ -140,7 +139,7 @@ void FeatureStatDistrib::computeNextDayProba()
 
 QVector<Transaction> OracleStatDistrib::revelation(QDate upToDate)
 {
-	LOG() << "OracleStatDistrib::revelation proba = " << m_args.m_dayProba << " bundle = " << m_args.m_bundle.count() << endl;
+	INFO() << "OracleStatDistrib::revelation proba = " << m_args.m_dayProba << " bundle = " << m_args.m_bundle.count();
 	static QVector<Transaction> retVect;
 	retVect.clear();
 	if (m_args.m_bundle.count() == 0)
@@ -153,7 +152,7 @@ QVector<Transaction> OracleStatDistrib::revelation(QDate upToDate)
 			if (randBool(prob)) {
 				Transaction randTr = m_args.m_bundle.randomTransaction();
 				randTr.date = curDate();
-				LOG() << QString("randTrans(%1) ").arg(prob) << randTr.amountDbl() << " " << randTr.date.toString() << "" << randTr.name << endl;
+				INFO() << QString("randTrans(%1) ").arg(prob) << randTr.amountDbl() << " " << randTr.date.toString() << " " << randTr.name;
 				retVect.append(randTr);
 			}
 		}

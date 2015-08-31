@@ -10,14 +10,13 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 	m_fitness = 0.0;
 	m_targetTrans = targetTransactions(iniDate, endDate);
 	if (m_targetTrans.count() == 0) {
-		LOG() << "MonthlyAmount(0 TARGET): day "<<m_localStaticArgs.m_dayOfMonth<<" kla "<< m_localStaticArgs.m_kla << endl;
+		WARN() << "MonthlyAmount(0 TARGET): day "<<m_localStaticArgs.m_dayOfMonth<<" kla "<< m_localStaticArgs.m_kla;
 	}
 	else if (doLog) {
-		LOG() << getName().c_str() << " " << this << m_targetTrans.count()
+		NOTICE() << getName().c_str() << " " << m_targetTrans.count()
 			<<" TARGET: day " << m_localStaticArgs.m_dayOfMonth
 			<<" kla"<< m_localStaticArgs.m_kla << "=" << m_targetTrans.first().amountDbl()
-			<< " h=" << m_targetTrans.first().nameHash.hash()
-			<< endl;
+			<< " h=" << m_targetTrans.first().nameHash.hash();
 	}
 
 	double totalOneOverDistClosest = 0.0;
@@ -123,8 +122,9 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 	m_localStaticArgs.m_dayOfMonth += approxSpacingPayment() / 2;
 	cleanArgs();
 	double rerun = apply(allTrans, false);
-	if (ioContext.m_summaryJsonObj)
-		LOG() << "  output " << output << "- 2x " << rerun << endl;
+	if (ioContext.m_summaryJsonObj) {
+		INFO() << "  output " << output << "- 2x " << rerun;
+	}
 	m_localStaticArgs = temp;
 	m_localStaticArgs.m_fitRerun = rerun;
 	cleanArgs();
@@ -183,7 +183,6 @@ QVector<Transaction> FeatureMonthlyAmount::BlankTransactionsForDayOfMonth(QDate 
 		if (currentDate <= lastDate && currentDate >= iniDate) {
 			targetTrans.append(lambda());
 			targetTrans.last().date = currentDate;
-//			LOG() << "targetTrans.last() " << targetTrans.last().amountDbl() << " " << targetTrans.last().date.toString() << "" << targetTrans.last().name << endl;
 		}
 		currentDate = currentDate.addMonths(1);
 	}
@@ -225,11 +224,11 @@ QVector<Transaction> OracleOneDayOfMonth::revelation(QDate upToDate)
 	auto lambdaTrans = [this](){
 		Transaction tr = m_args.m_bundle.randomTransaction();
 		tr.flags |= Transaction::Predicted;
-		LOG() << QString("dayOfMonth %1/%2 ").arg(m_args.m_dayOfMonth).arg(m_args.m_dayOfMonth2)
-			  << tr.amountDbl() << " " << tr.date.toString() << "" << tr.name << endl;
+		INFO() << QString("dayOfMonth %1/%2 ").arg(m_args.m_dayOfMonth).arg(m_args.m_dayOfMonth2)
+			  << tr.amountDbl() << " " << tr.date.toString() << " " << tr.name;
 		return tr;
 	};
-	LOG() << "OracleOneDayOfMonth::revelation. bundle = " << m_args.m_bundle.count() << endl;
+	INFO() << "OracleOneDayOfMonth::revelation. bundle = " << m_args.m_bundle.count();
 	QDate iniDate = Transaction::currentDay().addDays(-SLACK_FOR_LATE_TRANS);
 	static QVector<Transaction> targetTrans;
 	targetTrans.clear();

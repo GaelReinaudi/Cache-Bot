@@ -106,7 +106,7 @@ void FeatureAllOthers::execute(void *outDatum, Puppy::Context &ioContext)
 
 QVector<Transaction> OracleFilteredRest::revelation(QDate upToDate)
 {
-	LOG() << "OracleFilteredRest::revelation sumPos = " << m_args.m_sumPos << " sumNeg = " << m_args.m_sumNeg << " bundle = " << m_args.m_bundle.count() << endl;
+	INFO() << "OracleFilteredRest::revelation sumPos = " << m_args.m_sumPos << " sumNeg = " << m_args.m_sumNeg << " bundle = " << m_args.m_bundle.count();
 	static QVector<Transaction> retVect;
 	retVect.clear();
 	while (curDate() <= upToDate) {
@@ -122,7 +122,7 @@ QVector<Transaction> OracleFilteredRest::revelation(QDate upToDate)
 				// to the current date, so it slowly dissolves as the oracle is predicting for latter dates
 				avgAmnt /= Transaction::maxDaysOld() + Transaction::currentDay().daysTo(curDate());
 				// randTr.setAmount(avgAmnt / m_args.m_dayProba);
-				LOG() << QString("allOthTrans(%1) ").arg(prob) << randTr.amountDbl() << " " << randTr.date.toString() << "" << randTr.name << endl;
+				INFO() << QString("allOthTrans(%1) ").arg(prob) << randTr.amountDbl() << " " << randTr.date.toString() << " " << randTr.name;
 				retVect.append(randTr);
 			}
 		}
@@ -133,8 +133,7 @@ QVector<Transaction> OracleFilteredRest::revelation(QDate upToDate)
 
 double OracleFilteredRest::avgDaily() const
 {
-	LOG() << m_args.m_dayProba << m_args.m_daysBundle
-			 << m_args.m_sumNeg << m_args.m_sumPos
-			 << endl;
+	DEBUG() << m_args.m_dayProba << m_args.m_daysBundle
+			 << m_args.m_sumNeg << m_args.m_sumPos;
 	return 0.0;
 }

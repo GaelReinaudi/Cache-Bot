@@ -113,7 +113,7 @@ ExtraCashView::~ExtraCashView()
 void ExtraCashView::onBotInjected(Bot* pBot)
 {
 	Q_UNUSED(pBot);
-	LOG() << "ExtraCashView::onBotInjected" << endl;
+	NOTICE() << "ExtraCashView::onBotInjected";
 	m_pbDate = Transaction::currentDay();
 	m_realBalance = m_pExtraCache->user()->balance(Account::Type::Checking);
 	m_pbBalance = m_realBalance;
@@ -137,7 +137,7 @@ void ExtraCashView::onBotInjected(Bot* pBot)
 			}
 		}
 	}
-	LOG() << "initial pb balance"<< m_pbBalance << " at" << m_pbDate.toString() << endl;
+	NOTICE() << "initial pb balance"<< m_pbBalance << " at" << m_pbDate.toString();
 
 	ui->spinBox->setValue(m_pbBalance);
 //	ui->plot->setFocus();
@@ -239,7 +239,7 @@ void ExtraCashView::makeRevelationPlot()
 	for (int i = IND_GR_REVEL; i < IND_GR_REVEL + numRevelations; ++i) {
 		QCPGraph* pGr = ui->plot->graph(i);
 		double curBal = m_pbBalance;
-		LOG() << "makeRevelationPlot balance = " << curBal << endl;
+		DEBUG() << "makeRevelationPlot balance = " << curBal;
 		pGr->clearData();
 		double t = -0.01; // to be the first point, slightly on the left
 		pGr->addData(t, curBal);
@@ -252,7 +252,7 @@ void ExtraCashView::makeRevelationPlot()
 			curBal += amnt;
 			t = Transaction::currentDay().daysTo(tr.date) + manyEspilon;
 			pGr->addData(t, curBal);
-//			LOG() << amnt << " -> bal = " << curBal << endl;
+			DEBUG() << amnt << " -> bal = " << curBal;
 			manyEspilon += epsilon;
 		}
 		if (!breakDown)
