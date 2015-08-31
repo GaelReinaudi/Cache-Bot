@@ -47,11 +47,22 @@ public:
 	QMutex logMutex;
 };
 
+// 0 Emergency: system is unusable
+// 1 Alert: action must be taken immediately
+// 2 Critical: critical conditions
+// 3 Error: error conditions
+// 4 Warning: warning conditions
+// 5 Notice: normal but significant condition
+// 6 Informational: informational messages
+// 7 Debug: debug-level messages
 #define DEBUG() logger::Instance()->m_fileLogger->debug()
+#define DEBUG(lev) logger::Instance()->m_fileLogger->debug()
 #define INFO() logger::Instance()->m_fileLogger->info()
+#define NOTICE() logger::Instance()->m_fileLogger->notice()
 #define WARN() logger::Instance()->m_fileLogger->warn()
 #define ERROR() logger::Instance()->m_fileLogger->error()
 #define ALERT() logger::Instance()->m_fileLogger->alert()
+
 #define LOG() logger::Instance()->stream()
 
 #define noLOG(level) QDataStream(0)

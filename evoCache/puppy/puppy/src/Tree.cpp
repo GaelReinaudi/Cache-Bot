@@ -101,7 +101,7 @@ void Puppy::Tree::interpret(void* outResult, Puppy::Context& ioContext)
 	}
 	else {
 		double& lResult = *(double*)outResult;
-		LOG() << "Invalid tree: " << toStr() << endl;
+		ERROR() << "Invalid tree: " << toStr();
 		lResult = -11111e6;
 	}
 	ioContext.mCallStack.pop_back();

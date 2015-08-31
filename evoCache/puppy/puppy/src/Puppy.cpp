@@ -116,7 +116,7 @@ void Puppy::applyCrossover(std::vector<Tree>& ioPopulation,
 		lMateVector.pop_back();
 
 	//for(unsigned int j=0; j<lMateVector.size(); ++j) {
-	//  std::cout << j << ": " << ioPopulation[lMateVector[j]] << std::endl;
+	//  std::cout << j << ": " << ioPopulation[lMateVector[j]];
 	//}
 
 	for(unsigned int j=0; j<lMateVector.size(); j+=2) {
@@ -199,8 +199,8 @@ bool Puppy::mateTrees(Puppy::Tree& ioTree1,
 	assert(ioTree1.size() > 0);
 	assert(ioTree2.size() > 0);
 
-//	LOG() << "Mate:" << ioTree1.toStr() << endl;
-//	LOG() << "With:" << ioTree2.toStr() << endl;
+//	DEBUG(4) << "Mate:" << ioTree1.toStr();
+//	DEBUG(4) << "With:" << ioTree2.toStr();
 
 	// Crossover loop. Try the given number of attempts to mate two individuals.
 	for(unsigned int i=0; i<64; ++i) {
@@ -245,18 +245,18 @@ bool Puppy::mateTrees(Puppy::Tree& ioTree1,
 			continue;
 
 		// The crossover is valid.
-//		LOG() << "Mate at #" << i << "  nodes " << lChoosenNode1 << "/" << lChoosenNode2 << endl;
-//		LOG() << "Mate:" << ioTree1.toStr() << endl;
-//		LOG() << "With:" << ioTree2.toStr() << endl;
+//		DEBUG(4) << "Mate at #" << i << "  nodes " << lChoosenNode1 << "/" << lChoosenNode2;
+//		DEBUG(4) << "Mate:" << ioTree1.toStr();
+//		DEBUG(4) << "With:" << ioTree2.toStr();
 		exchangeSubTrees(ioTree1, lChoosenNode1, lStack1, ioTree2, lChoosenNode2, lStack2);
 		ioTree1.mValid = false;
 		ioTree2.mValid = false;
-//		LOG() << "  ->:" << ioTree1.toStr() << endl;
-//		LOG() << "  ->:" << ioTree2.toStr() << endl;
+//		DEBUG(4) << "  ->:" << ioTree1.toStr();
+//		DEBUG(4) << "  ->:" << ioTree2.toStr();
 		return true;
 	}
-//	LOG() << "Not Mate:" << ioTree1.toStr() << endl;
-//	LOG() << "    With:" << ioTree2.toStr() << endl;
+//	DEBUG(4) << "Not Mate:" << ioTree1.toStr();
+//	DEBUG(4) << "    With:" << ioTree2.toStr();
 	return false;
 }
 
@@ -284,11 +284,11 @@ void Puppy::initializePopulation(std::vector<Puppy::Tree>& ioPopulation,
 		unsigned int lInitDepth = ioContext.mRandom.rollInteger(inMinDepth, inMaxDepth);
 		if(ioContext.mRandom.rollUniform() >= inInitGrowProba) {
 			initializeTreeFull(ioPopulation[i], ioContext, lInitDepth);
-			noLOG(3) << "initializeTreeFull:" << ioPopulation[i].toStr() << endl;
+			DEBUG(3) << "initializeTreeFull:" << ioPopulation[i].toStr();
 		}
 		else {
 			initializeTreeGrow(ioPopulation[i], ioContext, inMinDepth, lInitDepth);
-			noLOG(3) << "initializeTreeGrow:" << ioPopulation[i].toStr() << endl;
+			DEBUG(3) << "initializeTreeGrow:" << ioPopulation[i].toStr();
 		}
 	}
 }
@@ -451,9 +451,9 @@ void Puppy::applyMutationStandard(std::vector<Puppy::Tree>& ioPopulation,
 {
 	for(unsigned int i=0; i<ioPopulation.size(); ++i) {
 		if(ioContext.mRandom.rollUniform() < inMutationProba) {
-//			LOG() << "applyMutationStandard: " << ioPopulation[i].toStr() << endl;
+//			DEBUG(4) << "applyMutationStandard: " << ioPopulation[i].toStr();
 			mutateStandard(ioPopulation[i], ioContext, inMaxRegenDepth, inMaxDepth);
-//			LOG() << "-> " << ioPopulation[i].toStr() << endl;
+//			DEBUG(4) << "-> " << ioPopulation[i].toStr();
 		}
 	}
 }
@@ -486,7 +486,7 @@ void Puppy::mutateStandard(Puppy::Tree& ioTree,
 	if(lStack.size() == 1)
 		lTreeDepth = 1 + ioContext.mRandom.rollInteger(1, inMaxRegenDepth - 1);
 	unsigned int lTreeDepth2 = inMaxDepth - lStack.size();
-//	LOG() << lMutIndex << lStack.size() << lTreeDepth << lTreeDepth2 << ioTree[lMutIndex].mSubTreeSize << endl;
+//	DEBUG(4) << lMutIndex << lStack.size() << lTreeDepth << lTreeDepth2 << ioTree[lMutIndex].mSubTreeSize;
 	if(lTreeDepth2 < lTreeDepth)
 		lTreeDepth = lTreeDepth2;
 	assert(lTreeDepth > 0);
@@ -520,9 +520,9 @@ void Puppy::applyMutationSwap(std::vector<Puppy::Tree>& ioPopulation,
 {
 	for(unsigned int i=0; i<ioPopulation.size(); ++i) {
 		if(ioContext.mRandom.rollUniform() < inMutationProba) {
-//			LOG() << "applyMutationSwap: " << ioPopulation[i].toStr() << endl;
+//			DEBUG(4) << "applyMutationSwap: " << ioPopulation[i].toStr();
 			mutateSwap(ioPopulation[i], ioContext, inDistribProba);
-//			LOG() << "-> " << ioPopulation[i].toStr() << endl;
+//			DEBUG(4) << "-> " << ioPopulation[i].toStr();
 		}
 	}
 }

@@ -42,7 +42,7 @@ void UserViewer::onBotInjected(Bot* bestBot)
 	connect(user()->botContext(), &BotContext::needsReplot, this, &UserViewer::replotCharts);
 	connect(user()->botContext(), &BotContext::newSummarizedTree, this, &UserViewer::onNewSummarizedTree);
 
-	LOG() << "UserViewer::onBotInjected" << endl;
+	INFO() << "UserViewer::onBotInjected";
 	bestBot->summarize();
 
 	ui->acPlot->loadCompressedAmount(bestBot->user());
