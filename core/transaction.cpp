@@ -14,7 +14,7 @@ int Transaction::type() const {
 
 void Transaction::read(const QJsonObject &json) {
 	bool ok = false;
-	QString accountStr = json["_account"].toString();
+	QString accountStr = json["plaid_account"].toString();
 	name = json["name"].toString();
 	nameHash.setFromString(name);
 	setAmount(-json["amount"].toDouble(ok));
@@ -25,19 +25,19 @@ void Transaction::read(const QJsonObject &json) {
 	}
 
 	// logs all in the LOG.
-	QTextStream& out = LOG();
-	out.setFieldWidth(8);
-	out.setPadChar(' ');
-	out.setFieldAlignment(QTextStream::AlignRight);
-	out << "Transaction::read()" << amountDbl() << " date " << date.toString("MM/dd")
-		  << " name " << name;
-	out << " cat:[";
+	auto out = INFO();
+//	out.setFieldWidth(8);
+//	out.setPadChar(' ');
+//	out.setFieldAlignment(QTextStream::AlignRight);
+	out << "Transaction::read() " << amountDbl() << "   " << date.toString("MM/dd")
+		  << "   " << name;
+	out << "   [";
 	for (QString& s : categories) {
 		out << " " << s;
 	}
-	out << "]"
-		<< " account " << accountStr
-		<< endl;
+	out << " ]"
+		<< " account .." << accountStr.right(4)
+		   ;
 }
 
 void Transaction::write(QJsonObject &json) const {
@@ -62,24 +62,23 @@ Transaction* StaticTransactionArray::appendNew(QJsonObject jsonTrans, Account *p
 	qint64 hash = NameHashVector::fromString(name);
 	for (const QString& nono : pInAcc->excludeNameTransContain()) {
 		if (name.contains(nono, Qt::CaseInsensitive)) {
-			LOG() << "not Adding transaction because it looks like an internal transfer based on name containing"
-				  << nono << endl;
+			WARN() << "not Adding transaction because it looks like an internal transfer based on name containing"
+				  << nono;
 			return 0;
 		}
 	}
 	if (!Transaction::onlyLoadHashes.isEmpty() && !Transaction::onlyLoadHashes.contains(hash)) {
-		LOG() << "not Adding transaction because Transaction::onlyLoadHashes doesn't contain "
-			  << hash << endl;
+		DEBUG() << "not Adding transaction because Transaction::onlyLoadHashes doesn't contain "
+			  << hash;
 		return 0;
 	}
 	if (date < Transaction::onlyAfterDate) {
-		LOG() << "not Adding transaction because Transaction::onlyAfterDate "
-			  << endl;
+		DEBUG() << "not Adding transaction because Transaction::onlyAfterDate ";
 		return 0;
 	}
 	if (!(pInAcc->type() & Transaction::onlyAccountType)) {
-		LOG() << "not Adding transaction because Transaction::onlyAccountType "
-			  << QString("b%1").arg(QString::number(Transaction::onlyAccountType, 2)) << endl;
+		DEBUG() << "not Adding transaction because Transaction::onlyAccountType "
+			  << QString("b%1").arg(QString::number(Transaction::onlyAccountType, 2));
 		return 0;
 	}
 	Transaction* pNewTrans = &m_transArray[m_numTrans++];

@@ -10,37 +10,26 @@
 #include "spdlog/spdlog.h"
 
 std::ostream& operator<<(std::ostream& os, const QString& c);
+//std::ostream& operator<<(std::ostream& os, const QByteArray& c);
 
 class logger
 {
 public:
+	static void setupSpdLog(QString logFileName);
+
 	static logger* Instance() {
 		if(!s_pLog) {
 			s_pLog = new logger();
-			s_pLog->data.setFileName(QString("../../%1.log").arg(qAppName()));
+			QString logFileName = QString("../../%1.log").arg(qAppName());
+			s_pLog->data.setFileName(logFileName);
 			static bool ret = s_pLog->data.open(QFile::WriteOnly | QFile::Truncate);
 			if(ret)
 				ret = false;
 			s_pLog->optout.setDevice(&s_pLog->data);
-			s_pLog->optout << QDateTime::currentDateTime().toString("HH:mm:ss.zzz") << endl;
+			s_pLog->optout << QDateTime::currentDateTime().toString("HH:mm:ss.zzz") << "endl";
 
 
-			try
-			{
-				 //Create console, multithreaded logger
-				//auto console = spdlog::stdout_logger_mt("console");
-				// create a file rotating logger with 5mb size max and 3 rotated files
-				s_pLog->m_fileLogger = spdlog::rotating_logger_mt("file", "../../mylogfile.log", 1024 * 1024 * 5, 3);
-				s_pLog->m_fileLogger->info("Welcome to spdlog!") ;
-				s_pLog->m_fileLogger->info("An info message example {} ..", 1);
-				s_pLog->m_fileLogger->info() << "Streams are supported too  " << 2;
-				s_pLog->m_fileLogger->info("Hello spdlog {} {} {}", 1, 2, "three");
-				s_pLog->m_fileLogger->info() << QString("sss") << 2;
-			}
-			catch (const spdlog::spdlog_ex& ex)
-			{
-				std::cout << "Log failed: " << ex.what() << std::endl;
-			}
+			setupSpdLog(logFileName);
 
 
 		}
@@ -58,6 +47,11 @@ public:
 	QMutex logMutex;
 };
 
+#define DEBUG() logger::Instance()->m_fileLogger->debug()
+#define INFO() logger::Instance()->m_fileLogger->info()
+#define WARN() logger::Instance()->m_fileLogger->warn()
+#define ERROR() logger::Instance()->m_fileLogger->error()
+#define ALERT() logger::Instance()->m_fileLogger->alert()
 #define LOG() logger::Instance()->stream()
 
 #define noLOG(level) QDataStream(0)
