@@ -156,7 +156,11 @@ auto lam = [](const Transaction& tr){
 double TransactionBundle::avgSmart() const
 {
 	return averageAmount(lam);
-	return emaAmount(0.1);
+}
+
+Transaction TransactionBundle::randSmart() const
+{
+	return randomTransaction(lam);
 }
 
 Transaction TransactionBundle::randomTransaction(std::function<double (const Transaction &)> weight) const

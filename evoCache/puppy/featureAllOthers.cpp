@@ -115,7 +115,7 @@ QVector<Transaction> OracleFilteredRest::revelation(QDate upToDate)
 		{
 			prob *= m_args.m_dayProba;
 			if (randBool(prob)) {
-				Transaction randTr = m_args.m_bundle.randomTransaction();
+				Transaction randTr = m_args.m_bundle.randSmart();
 				randTr.date = curDate();
 				double avgAmnt = m_args.m_sumPos + m_args.m_sumNeg;
 				// Note that for now the average is done from the oldes date of the account readings

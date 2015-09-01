@@ -7,7 +7,7 @@ ACustomPlot::ACustomPlot(QWidget *parent) :
 	xAxis->setDateTimeFormat("MM/dd");
 	xAxis->setAutoTickStep(false);
 	xAxis->setTickStep(3600*24*7);
-	xAxis->setSubTickCount(7);
+	xAxis->setSubTickCount(6);
 	xAxis->grid()->setSubGridVisible(true);
 	xAxis->grid()->setPen(QPen(QColor(220,220,220)));
 	xAxis->grid()->setSubGridPen(QPen(QColor(240,240,240)));

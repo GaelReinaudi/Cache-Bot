@@ -222,7 +222,7 @@ QVector<Transaction> FeatureBiWeeklyAmount::targetTransactions(QDate iniDate, QD
 QVector<Transaction> OracleOneDayOfMonth::revelation(QDate upToDate)
 {
 	auto lambdaTrans = [this](){
-		Transaction tr = m_args.m_bundle.randomTransaction();
+		Transaction tr = m_args.m_bundle.randSmart();
 		tr.flags |= Transaction::Predicted;
 		INFO() << QString("dayOfMonth %1/%2 ").arg(m_args.m_dayOfMonth).arg(m_args.m_dayOfMonth2)
 			  << tr.amountDbl() << " " << tr.date.toString() << " " << tr.name;
