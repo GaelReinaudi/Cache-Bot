@@ -31,7 +31,7 @@ public slots:
 	void runEvolution();
 
 protected:
-	unsigned int evaluateSymbReg(std::vector<Puppy::Tree> &ioPopulation, Puppy::Context &ioContext);
+	double evaluateSymbReg(std::vector<Puppy::Tree> &ioPopulation, Puppy::Context &ioContext);
 	QJsonObject summarize(Puppy::Tree &tree);
 
 signals:

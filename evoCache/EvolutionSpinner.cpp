@@ -76,20 +76,24 @@ void EvolutionSpinner::runEvolution() {
 		m_context->filterHashIndex = j;
 		// Initialize population.
 		std::vector<Tree> lPopulation(lPopSize);
-		std::cout << "Initializing population for hash " << h << endl;
+		DBG() << "Initializing population for hash " << h;
 		initializePopulation(lPopulation, *m_context, lInitGrowProba, lMinInitDepth, lMaxInitDepth);
-		evaluateSymbReg(lPopulation, *m_context);
+		double bestFitness = evaluateSymbReg(lPopulation, *m_context);
+		double newBestFitness = bestFitness;
+		auto result = std::minmax_element(lPopulation.begin(), lPopulation.end());
+		Tree bestTree = lPopulation[result.second - lPopulation.begin()];
 		calculateStats(lPopulation, 0);
 
 		// Evolve population for the given number of generations
-		INFO() << "Starting evolution";
+		INFO() << "Starting evolution " << newBestFitness;
+
 		for(unsigned int i=1; i<=lNbrGen; ++i) {
 			while(!m_doSpin)  {
 				QThread::msleep(100);
 			}
 			DBG() << "Generation " << i;
-			auto result = std::minmax_element(lPopulation.begin(), lPopulation.end());
-			Tree bestTree = lPopulation[result.second - lPopulation.begin()];
+//			auto result = std::minmax_element(lPopulation.begin(), lPopulation.end());
+//			bestTree = lPopulation[result.second - lPopulation.begin()];
 
 //			summarize(bestTree);
 
@@ -98,13 +102,25 @@ void EvolutionSpinner::runEvolution() {
 			applyMutationStandard(lPopulation, *m_context, lMutStdProba, lMutMaxRegenDepth, lMaxDepth);
 			applyMutationSwap(lPopulation, *m_context, lMutSwapProba, lMutSwapDistribProba);
 
-			bestTree.mValid = false;
+			//bestTree.mValid = false;
 			//lPopulation.push_back(bestTree);
 
-			evaluateSymbReg(lPopulation, *m_context);
+			newBestFitness = evaluateSymbReg(lPopulation, *m_context);
+			if (newBestFitness > bestFitness * 1.01) {
+				NOTICE() << "newBestFitness " << newBestFitness
+						 << " > bestFitness " << bestFitness
+						 << ". Reseting i=" << i << " to 0";
+				i = 0;
+				bestFitness = newBestFitness;
+				auto result = std::minmax_element(lPopulation.begin(), lPopulation.end());
+				bestTree = lPopulation[result.second - lPopulation.begin()];
+			}
 		}
+		bestTree.mValid = false;
+		lPopulation.push_back(bestTree);
+		newBestFitness = evaluateSymbReg(lPopulation, *m_context);
 		calculateStats(lPopulation, lNbrGen);
-		DBG() << "End of evolution";
+		INFO() << "End of evolution " << newBestFitness;
 
 		// Outputting best individual
 		std::vector<Tree>::iterator lBestIndividual =
@@ -185,10 +201,10 @@ void EvolutionSpinner::runEvolution() {
 	emit finishedEvolution(finalBotObject);
 }
 
-unsigned int EvolutionSpinner::evaluateSymbReg(std::vector<Tree>& ioPopulation,
+double EvolutionSpinner::evaluateSymbReg(std::vector<Tree>& ioPopulation,
 											   Context& ioContext)
 {
-	unsigned int lNbrEval = 0;
+	double bestFitness = -1e6;
 	for(unsigned int i=0; i<ioPopulation.size(); ++i) {
 		if(ioPopulation[i].mValid)
 			continue;
@@ -197,9 +213,9 @@ unsigned int EvolutionSpinner::evaluateSymbReg(std::vector<Tree>& ioPopulation,
 		ioPopulation[i].mFitness = lResult;
 		ioPopulation[i].mValid = true;
 		//DBG() << "Eval tree ("<<lResult<<"): " << ioPopulation[i].toStr();
-		++lNbrEval;
+		bestFitness = qMax(bestFitness, lResult);
 	}
-	return lNbrEval;
+	return bestFitness;
 }
 
 QJsonObject EvolutionSpinner::summarize(Tree& tree)
