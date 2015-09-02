@@ -21,7 +21,9 @@ void Account::loadJsonData(QJsonObject json)
 	QString accountName = json["meta"].toObject()["name"].toString();
 	QString accountType = json["type"].toString();
 	Q_ASSERT(!accountID.isEmpty());
-	NOTICE() << "read account:" << accountID << ": " << accountName << "(" << accountLast4Digits << "): " << accountType;
+	NOTICE() << "read account:" << accountID << ": " << accountName
+			 << "(" << accountLast4Digits << "): " << accountType
+			 << ". plaid " << m_plaidId;
 
 	// quick and dirty account type
 	QString metaName = json["meta"].toObject()["name"].toString();

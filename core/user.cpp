@@ -99,7 +99,7 @@ void User::injectJsonData(QString jsonStr)
 		Transaction* pT = &m_allTransactions.transArray()[i];
 		Transaction* pBestMatchN = 0;
 		qint64 bestDist = 999999999;
-		// for a ppositive transcation (rare)
+		// for a positive transcation (rare)
 		if (pT->amountInt() > 0 && !pT->isInternal()) {
 			Transaction tP(*pT);
 			// take its symetrical and look for some closeby (negative) transaction that matches
@@ -109,7 +109,8 @@ void User::injectJsonData(QString jsonStr)
 				// dist max 4 days, 2 parts of kla, and no hash sensitivity
 				qint64 d = tP.distanceWeighted<3, 2, 1024*1024*1024>(*pN);
 				if (d < Transaction::LIMIT_DIST_TRANS
-						&& pN->amountInt() < 0 && !pN->isInternal()) {
+						&& pN->amountInt() < 0 && !pN->isInternal()
+						&& pT->account != pN->account) {
 					if (d < bestDist) {
 						bestDist = d;
 						pBestMatchN = pN;
@@ -120,8 +121,8 @@ void User::injectJsonData(QString jsonStr)
 				pT->flags |= Transaction::Flag::Internal;
 				pBestMatchN->flags |= Transaction::Flag::Internal;
 				INFO() << "Matching internal transactions";
-				INFO() << pT->name << pT->amountDbl() << " " << pT->date.toString();
-				INFO() << pBestMatchN->name << pBestMatchN->amountDbl() << " " << pBestMatchN->date.toString();
+				INFO() << pT->name << " " << pT->amountDbl() << " " << pT->date.toString();
+				INFO() << pBestMatchN->name << " " << pBestMatchN->amountDbl() << " " << pBestMatchN->date.toString();
 			}
 		}
 	}
