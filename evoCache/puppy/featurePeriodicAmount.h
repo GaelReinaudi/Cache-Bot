@@ -22,6 +22,7 @@ private:
 			o_retObj.insert("tot$", m_bundle.sumDollar());
 			o_retObj.insert("numBund", m_bundle.count());
 			o_retObj.insert("fitRerun", m_fitRerun);
+			o_retObj.insert("amnt", unKindaLog(double(m_kla) / double(KLA_MULTIPLICATOR)));
 
 //			if(m_bundle.count()) {
 //				QString str = QString::fromStdString(getName()) + " ("
@@ -105,7 +106,9 @@ protected:
 	}
 	void cleanArgs() override {
 		FeaturePeriodicAmount::cleanArgs();
-		m_localStaticArgs.m_dayOfMonth = qBound(-28, m_localStaticArgs.m_dayOfMonth, 31);
+		m_localStaticArgs.m_dayOfMonth = qBound(-14, m_localStaticArgs.m_dayOfMonth, 31);
+		if (m_localStaticArgs.m_dayOfMonth == 0)
+			++m_localStaticArgs.m_dayOfMonth;
 	}
 
 	QJsonObject toJson(Puppy::Context& ioContext) override {

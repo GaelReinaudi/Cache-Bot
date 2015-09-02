@@ -193,8 +193,7 @@ QVector<Transaction> FeatureMonthlyAmount::BlankTransactionsForDayOfMonth(QDate 
 QVector<Transaction> FeatureMonthlyAmount::targetTransactions(QDate iniDate, QDate lastDate)
 {
 	static QVector<Transaction> targetTrans;
-	int dayOfMonth = m_localStaticArgs.m_dayOfMonth;
-	targetTrans = BlankTransactionsForDayOfMonth(iniDate, lastDate, dayOfMonth);
+	targetTrans = BlankTransactionsForDayOfMonth(iniDate, lastDate, m_localStaticArgs.m_dayOfMonth);
 	// loops through to set a few variables of the transactions
 	for (Transaction& tr : targetTrans) {
 		tr.setKLA(m_localStaticArgs.m_kla);
