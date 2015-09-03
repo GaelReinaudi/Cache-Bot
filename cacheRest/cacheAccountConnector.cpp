@@ -6,6 +6,8 @@ CacheAccountConnector::CacheAccountConnector(QString userID)
 	: QObject()
 	, m_userId(userID)
 {
+	CREATE_LOGGER(userID);
+
 	// login as cache-bot
 	CacheRest::Instance()->login();
 	connect(CacheRest::Instance()->worker, SIGNAL(loggedIn(bool)), this, SLOT(onLoggedIn(bool)));

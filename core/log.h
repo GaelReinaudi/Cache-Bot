@@ -18,10 +18,13 @@ class logger
 public:
 	static void setupSpdLog(QString logFileName);
 
-	static logger* Instance() {
+	static logger* Instance(QString appendFileStr = "") {
 		if(!s_pLog) {
 			s_pLog = new logger();
-			QString logFileName = QString("../../%1.log").arg(qAppName());
+			QString logFileName = QString("../../logs/%1").arg(qAppName());
+			if (!appendFileStr.isEmpty()) {
+				logFileName.append(QString("-%1").arg(appendFileStr));
+			}
 
 //			s_pLog->data.setFileName(logFileName);
 //			static bool ret = s_pLog->data.open(QFile::WriteOnly | QFile::Truncate);
@@ -48,6 +51,8 @@ public:
 	static logger* s_pLog;
 	QMutex logMutex;
 };
+
+#define CREATE_LOGGER(str) logger::Instance(str);
 
 // 0 Emergency: system is unusable
 // 1 Alert: action must be taken immediately
