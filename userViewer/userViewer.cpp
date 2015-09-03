@@ -6,11 +6,12 @@
 #include "cacherest.h"
 #include "cacheAccountConnector.h"
 
-UserViewer::UserViewer(QString userID)
+UserViewer::UserViewer(QString userID, QVector<int> onlyLoadHashes)
 	: QMainWindow()
 	, ui(new Ui::UserViewer)
 {
 	ui->setupUi(this);
+	Transaction::onlyLoadHashes = onlyLoadHashes;
 
 	m_pConnector = new CacheAccountConnector(userID);
 	connect(m_pConnector, SIGNAL(injected(User*)), this, SLOT(onUserInjected(User*)));

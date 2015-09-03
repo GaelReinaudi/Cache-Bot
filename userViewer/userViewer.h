@@ -18,7 +18,7 @@ class UserViewer : public QMainWindow
 	Q_OBJECT
 
 public:
-	explicit UserViewer(QString userID);
+	explicit UserViewer(QString userID, QVector<int> onlyLoadHashes = QVector<int>());
 	~UserViewer();
 
 	User* user() const;
