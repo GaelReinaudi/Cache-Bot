@@ -67,7 +67,7 @@ protected:
 	{ }
 protected:
 	int approxSpacingPayment() override {
-		return 31;
+		return 30;
 	}
 	void getArgs(Puppy::Context &ioContext) override {
 		// if we are forcing a given hashed bundle
@@ -116,7 +116,7 @@ protected:
 
 	double billProbability() const {
 		double proba = m_fitness;
-		proba *= m_localStaticArgs.m_consecMonthBeforeMissed;
+		proba *= qMax(1, m_localStaticArgs.m_consecMonthBeforeMissed);
 		proba /= 4 + 2 * m_localStaticArgs.m_consecMissed;
 		return proba;
 	}
@@ -132,9 +132,9 @@ class FeatureBiWeeklyAmount : public FeatureMonthlyAmount
 {
 public:
 	FeatureBiWeeklyAmount()
-		: FeatureMonthlyAmount("BiWeeklyIncome")
+		: FeatureMonthlyAmount("BiWeeklyAmount")
 	{ }
-	int approxSpacingPayment() override { return 17; } // +2d: gives some room for late payment
+	int approxSpacingPayment() override { return 15; } // +2d: gives some room for late payment
 	virtual void cleanArgs() override {
 		FeatureMonthlyAmount::cleanArgs();
 		m_localStaticArgs.m_dayOfMonth2 = m_localStaticArgs.m_dayOfMonth + 15;
@@ -143,7 +143,6 @@ public:
 		if (qAbs(m_localStaticArgs.m_dayOfMonth - m_localStaticArgs.m_dayOfMonth2) < 14) {
 			ERR() << "m_dayOfMonth " << m_localStaticArgs.m_dayOfMonth << " " << m_localStaticArgs.m_dayOfMonth2;
 		}
-		FeatureMonthlyAmount::cleanArgs();
 	}
 	QJsonObject toJson(Puppy::Context& ioContext) override {
 		QJsonObject retObj = FeatureMonthlyAmount::toJson(ioContext);

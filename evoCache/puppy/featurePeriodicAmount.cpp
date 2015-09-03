@@ -41,10 +41,10 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 			localTrans = &trans;
 		}
 		Q_ASSERT(localDist < 18446744073709551615ULL);
-		double factOld = 2.0;
+		double factOld = 1.0;
 		double daysAgo = localTrans->date.daysTo(QDate::currentDate());
 		if (daysAgo > Transaction::maxDaysOld() / 2)
-			factOld -= daysAgo / double(Transaction::maxDaysOld() / 2);
+			factOld -= 0.5 * daysAgo / double(Transaction::maxDaysOld() / 2);
 		// if we get further away by approxSpacingPayment() / 2 days, we take the next target, or if last trans
 		if (trans.jDay() > approxSpacingPayment() / 2 + iTarg->jDay() || i == allTrans.count() - 1) {
 			if (localDist < Transaction::LIMIT_DIST_TRANS) {
@@ -94,7 +94,7 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 	// only sum that add up to > $N
 	if (qAbs(m_localStaticArgs.m_bundle.sumDollar()) > 1) {
 		m_fitness = totalOneOverDistClosest - totalOneOverDistOthers;
-		m_fitness *= 1.75 * qMax(0.0, double(m_localStaticArgs.m_consecMonthBeforeMissed) - 1.5);
+		m_fitness *= 1.75 * (double(m_localStaticArgs.m_consecMonthBeforeMissed) - 1.5);
 	}
 	m_billProba = billProbability();
 	return m_fitness;
@@ -124,6 +124,7 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 	auto tempProba = m_billProba;
 	auto tempTarg = m_targetTrans;
 	m_localStaticArgs.m_dayOfMonth += approxSpacingPayment() / 2;
+	m_localStaticArgs.m_dayOfMonth %= 31;
 	cleanArgs();
 	double rerun = apply(allTrans, false);
 	if (ioContext.m_summaryJsonObj) {
@@ -139,7 +140,7 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 
 	// summary if the json object exists
 	if (ioContext.m_summaryJsonObj) {
-//		if(m_billProba > 0.0)
+		if(m_billProba > 0.0)
 		{
 			QJsonArray features = (*ioContext.m_summaryJsonObj)["features"].toArray();
 			features.append(toJson(ioContext));
@@ -158,8 +159,7 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 		pNewOr->m_args = m_localStaticArgs;
 		// making a shared pointer that will take care of cleaning once the oracle is no longer referenced
 		QSharedPointer<Oracle> newOracle(pNewOr);
-		double theOracleThreshold = 1.0;
-//		if(m_billProba > theOracleThreshold)
+		if(m_billProba > 0.0)
 		{
 			ioContext.m_pUser->oracle()->addSubOracle(newOracle);
 		}
