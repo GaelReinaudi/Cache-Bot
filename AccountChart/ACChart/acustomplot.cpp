@@ -133,7 +133,7 @@ void ACustomPlot::loadCompressedAmount(User* pUser)
 		graph(0)->addData(t, kindaLog(m_integral));
 	}
 	rescaleAxes();
-	//xAxis->setRange(xAxis->range().lower - 7*24*3600, xAxis->range().upper + 7*24*3600);
+	xAxis->setRange(xAxis->range().lower - 7*24*3600, xAxis->range().upper + 7*24*3600);
 	yAxis->setRange(yAxis->range().lower - 0.5, yAxis->range().upper + 0.5);
 }
 

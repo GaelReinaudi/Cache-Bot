@@ -117,6 +117,7 @@ void EvolutionSpinner::runEvolution() {
 			}
 		}
 		bestTree.mValid = false;
+		summarize(bestTree);
 		lPopulation.push_back(bestTree);
 		newBestFitness = evaluateSymbReg(lPopulation, *m_context);
 		calculateStats(lPopulation, lNbrGen);
@@ -232,7 +233,7 @@ QJsonObject EvolutionSpinner::summarize(Tree& tree)
 	jsonObj.insert("fit", fit);
 
 	DBG() << "tree (" << fit << "): " << tree.toStr();
-	DBG() << "    " << jsonObj;
+	INFO() << "    " << jsonObj;
 	emit m_context->needsReplot();
 	emit m_context->newSummarizedTree(jsonObj);
 	return jsonObj;

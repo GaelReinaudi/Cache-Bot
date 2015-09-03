@@ -140,7 +140,7 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 
 	// summary if the json object exists
 	if (ioContext.m_summaryJsonObj) {
-		if(m_billProba > 0.0)
+//		if(m_billProba > 0.0)
 		{
 			QJsonArray features = (*ioContext.m_summaryJsonObj)["features"].toArray();
 			features.append(toJson(ioContext));
@@ -159,7 +159,7 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 		pNewOr->m_args = m_localStaticArgs;
 		// making a shared pointer that will take care of cleaning once the oracle is no longer referenced
 		QSharedPointer<Oracle> newOracle(pNewOr);
-		if(m_billProba > 0.0)
+//		if(m_billProba > 0.0)
 		{
 			ioContext.m_pUser->oracle()->addSubOracle(newOracle);
 		}
