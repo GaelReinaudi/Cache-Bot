@@ -11,8 +11,7 @@ typedef NameHashVector2 NameHashVector;
 class CORESHARED_EXPORT Transaction// : public DBobj
 {
 private:
-	//	double amount = 0.0;
-		qint64 kamount = 0; // integer = round(amount * Mult)
+		double amount = 0.0;
 		double kla = 0; // Mult * kindaLog(amount)
 public:
 	Account* account = 0;
@@ -43,18 +42,18 @@ public:
 		return (3600.0 * 24.0) * (double(date.toJulianDay() - day0));
 	}
 	void setAmount(double amntDbl) {
-		 kamount = double(KA_MULTIPLICATOR) * amntDbl;
-		 kla = double(KLA_MULTIPLICATOR) * kindaLog(amntDbl);
+		amount = amntDbl;
+		kla = double(KLA_MULTIPLICATOR) * kindaLog(amntDbl);
 	}
 	void setKLA(double newKLA) {
 		kla = newKLA;
-		kamount = KA_MULTIPLICATOR * unKindaLog(double(newKLA) / double(KLA_MULTIPLICATOR));
+		amount = unKindaLog(double(newKLA) / double(KLA_MULTIPLICATOR));
 	}
 	int amountInt() const {
 		return kla;
 	}
 	double amountDbl() const {
-		return double(kamount) / double(KA_MULTIPLICATOR);
+		return amount;
 	}
 	double compressedAmount() const{
 		return kindaLog(amountDbl());
