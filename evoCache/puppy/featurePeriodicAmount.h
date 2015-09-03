@@ -90,6 +90,11 @@ protected:
 			if(!ok) {
 				ERR() << "Could not replace the node with " << nodeName.c_str();
 			}
+//			nodeName = QString("%1").arg(ioContext.m_pUser->hashBundles()[m_filterHash]->klaAverage()).toStdString();
+//			ok = tryReplaceArgumentNode(2, nodeName.c_str(), ioContext);
+//			if(!ok) {
+//				ERR() << "Could not replace the node with " << nodeName.c_str();
+//			}
 		}
 		else {
 			m_filterHash = -1;

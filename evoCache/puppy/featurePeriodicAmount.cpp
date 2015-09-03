@@ -61,17 +61,23 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 				// if transaction is in advance
 				if (iTarg->date >= Transaction::currentDay().addDays(-SLACK_FOR_LATE_TRANS))
 					m_localStaticArgs.m_consecMissed = -1;
-				totalOneOverDistClosest += 8.0 / (8 + localDist);
+				double transFit = 8.0 / (8 + localDist);
+				double factOld = 2.0;
+				double daysAgo = localTrans->date.daysTo(QDate::currentDate());
+				if (daysAgo > Transaction::maxDaysOld() / 2.0)
+					factOld -= 2.0 * double(daysAgo) / double(Transaction::maxDaysOld() / 2.0);
+				transFit *= factOld;
+				totalOneOverDistClosest += transFit;
 			}
-			else if (iTarg->date < Transaction::currentDay().addDays(-SLACK_FOR_LATE_TRANS)){
-				if (doLog) {
-					DBG() << "missed: ";
-					iTarg->dist(*localTrans, true);
-				}
-				m_localStaticArgs.m_consecMonth = 0;
-				++m_localStaticArgs.m_consecMissed;
-				totalOneOverDistClosest += 1.0 / (1 + localDist);
-			}
+//			else if (iTarg->date < Transaction::currentDay().addDays(-SLACK_FOR_LATE_TRANS)){
+//				if (doLog) {
+//					DBG() << "missed: ";
+//					iTarg->dist(*localTrans, true);
+//				}
+//				m_localStaticArgs.m_consecMonth = 0;
+//				++m_localStaticArgs.m_consecMissed;
+//				totalOneOverDistClosest += 1.0 / (1 + localDist);
+//			}
 
 			if (iTarg == &m_targetTrans.last() || (iTarg + 1)->date >= endDate)
 				break;
@@ -90,7 +96,7 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 		m_fitness = totalOneOverDistClosest - totalOneOverDistOthers;
 //		m_fitness *= 0.2 * double(m_localStaticArgs.m_bundle.count() - 1) / double(m_targetTrans.count());
 //		m_fitness *= 1.0 + (1.0 / (1.0 + m_localStaticArgs.m_consecMissed));
-		m_fitness *= 1.75 * double(m_localStaticArgs.m_consecMonthBeforeMissed - 1.5);
+		m_fitness *= 1.75 * qMax(0.0, double(m_localStaticArgs.m_consecMonthBeforeMissed) - 1.5);
 	}
 	m_billProba = billProbability();
 	return m_fitness;
