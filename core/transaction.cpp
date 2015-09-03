@@ -16,7 +16,7 @@ void Transaction::read(const QJsonObject &json) {
 	bool ok = false;
 	QString accountStr = json["plaid_account"].toString();
 	name = json["name"].toString();
-	name.remove("FROM").remove("TO").remove("ACCT");
+	name.remove(" FROM").remove(" TO").remove(" ACCT");
 	nameHash.setFromString(name);
 	setAmount(-json["amount"].toDouble(ok));
 	date = QDate::fromString(json["date"].toString().left(10), "yyyy-MM-dd");
@@ -193,4 +193,10 @@ Transaction TransactionBundle::randomTransaction() const
 	if (count() == 0)
 		return Transaction();
 	return trans(qrand() % count());
+}
+
+int TransactionBundle::klaAverage() const {
+	if (m_vector.count() == 0)
+		return 0.0;
+	return kindaLog(averageAmount(lam)) * KLA_MULTIPLICATOR;
 }

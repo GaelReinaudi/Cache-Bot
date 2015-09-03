@@ -218,11 +218,7 @@ public:
 	Transaction randSmart() const;
 	Transaction randomTransaction(std::function<double(const Transaction&)> weight) const;
 	Transaction randomTransaction() const;
-	int klaAverage() const {
-		if (m_vector.count() == 0)
-			return 0.0;
-		return kindaLog(averageAmount()) * KLA_MULTIPLICATOR;
-	}
+	int klaAverage() const;
 
 private:
 	QVector<const Transaction*> m_vector;
