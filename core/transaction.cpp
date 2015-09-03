@@ -50,8 +50,8 @@ void Transaction::write(QJsonObject &json) const {
 
 qint64 Transaction::dist(const Transaction &other, bool log) const {
 	// if both are positive, let's make them a lot closer
-	if ((amountInt() > 0 && other.amountInt() > 0)
-	 || (amountInt() < -2*KLA_MULTIPLICATOR && other.amountInt() < -2*KLA_MULTIPLICATOR)) {
+	if ((amount() > 0 && other.amount() > 0)
+	 || (amount() < -100 && other.amount() < -100)) {
 		return distanceWeighted<16*2, 512*2, 2*2>(other, log);
 	}
 	return distanceWeighted<16, 512, 2>(other, log);

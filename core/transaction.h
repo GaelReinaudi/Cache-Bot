@@ -11,8 +11,8 @@ typedef NameHashVector2 NameHashVector;
 class CORESHARED_EXPORT Transaction// : public DBobj
 {
 private:
-		double amount = 0.0;
-		double kla = 0; // Mult * kindaLog(amount)
+		double m_amountDbl = 0.0;
+		double m_kla = 0; // Mult * kindaLog(amount)
 public:
 	Account* account = 0;
 	QString name; // "YARROW HOTEL GRILL" or "STRIKE TECHNOLOG"
@@ -42,20 +42,23 @@ public:
 		return (3600.0 * 24.0) * (double(date.toJulianDay() - day0));
 	}
 	void setAmount(double amntDbl) {
-		amount = amntDbl;
-		kla = double(KLA_MULTIPLICATOR) * kindaLog(amntDbl);
+		m_amountDbl = amntDbl;
+		m_kla = double(KLA_MULTIPLICATOR) * kindaLog(amntDbl);
 	}
 	void setKLA(double newKLA) {
-		kla = newKLA;
-		amount = unKindaLog(double(newKLA) / double(KLA_MULTIPLICATOR));
+		m_kla = newKLA;
+		m_amountDbl = unKindaLog(double(newKLA) / double(KLA_MULTIPLICATOR));
 	}
 	int amountInt() const {
-		return kla;
+		return m_kla;
 	}
 	double amountDbl() const {
-		return amount;
+		return m_amountDbl;
 	}
-	double compressedAmount() const{
+	double amount() const {
+		return m_amountDbl;
+	}
+	double kla() const{
 		return kindaLog(amountDbl());
 	}
 	inline static bool earlierThan(const Transaction& first, const Transaction& second) {

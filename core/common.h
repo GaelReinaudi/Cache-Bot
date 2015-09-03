@@ -7,7 +7,6 @@
 
 static const int MAX_TRANSACTION_PER_ACCOUNT = 1024 * 8;
 static const int KLA_MULTIPLICATOR = 1024;
-static const int KA_MULTIPLICATOR = 1024;
 
 #define QSTARTSWITH(actual, expected) QCOMPARE(actual.left(QString(expected).length()), QString(expected))
 
