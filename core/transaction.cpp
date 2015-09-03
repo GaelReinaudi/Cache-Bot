@@ -16,7 +16,7 @@ void Transaction::read(const QJsonObject &json) {
 	bool ok = false;
 	QString accountStr = json["plaid_account"].toString();
 	name = json["name"].toString();
-	name.remove(" FROM").remove(" TO").remove(" ACCT");
+	name.remove("FROM").remove("TO");//.remove("ACCT");
 	nameHash.setFromString(name);
 	setAmount(-json["amount"].toDouble(ok));
 	date = QDate::fromString(json["date"].toString().left(10), "yyyy-MM-dd");
@@ -59,6 +59,7 @@ qint64 Transaction::dist(const Transaction &other, bool log) const {
 
 Transaction* StaticTransactionArray::appendNew(QJsonObject jsonTrans, Account *pInAcc) {
 	QString name = jsonTrans["name"].toString();
+	name.remove("FROM").remove("TO");//.remove("ACCT");
 	QDate date = QDate::fromString(jsonTrans["date"].toString().left(10), "yyyy-MM-dd");
 	qint64 hash = NameHashVector::fromString(name);
 	for (const QString& nono : pInAcc->excludeNameTransContain()) {
@@ -198,5 +199,5 @@ Transaction TransactionBundle::randomTransaction() const
 int TransactionBundle::klaAverage() const {
 	if (m_vector.count() == 0)
 		return 0.0;
-	return kindaLog(averageAmount(lam)) * KLA_MULTIPLICATOR;
+	return kindaLog(averageAmount(lam));
 }

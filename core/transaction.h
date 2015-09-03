@@ -43,14 +43,11 @@ public:
 	}
 	void setAmount(double amntDbl) {
 		m_amountDbl = amntDbl;
-		m_kla = double(KLA_MULTIPLICATOR) * kindaLog(amntDbl);
+		m_kla = kindaLog(amntDbl);
 	}
 	void setKLA(double newKLA) {
 		m_kla = newKLA;
-		m_amountDbl = unKindaLog(double(newKLA) / double(KLA_MULTIPLICATOR));
-	}
-	int amountInt() const {
-		return m_kla;
+		m_amountDbl = unKindaLog(newKLA);
 	}
 	double amountDbl() const {
 		return m_amountDbl;
@@ -59,13 +56,13 @@ public:
 		return m_amountDbl;
 	}
 	double kla() const{
-		return kindaLog(amountDbl());
+		return m_kla;
 	}
 	inline static bool earlierThan(const Transaction& first, const Transaction& second) {
 		return first.date < second.date;
 	}
 	inline static bool smallerAmountThan(const Transaction& first, const Transaction& second) {
-		return first.amountInt() < second.amountInt();
+		return first.amount() < second.amount();
 	}
 	//! julian day
 	qint64 jDay() const {
@@ -79,17 +76,16 @@ public:
 	template <qint64 mD, qint64 mA, qint64 mH>
 	qint64 distanceWeighted(const Transaction& other, bool log = false) const {
 		qint64 d = 0;
-		d += LIMIT_DIST_TRANS * (absInt(jDay() - other.jDay())) / mD;
-		d += LIMIT_DIST_TRANS * (absInt(amountInt() - other.amountInt())) / mA;
+		d += LIMIT_DIST_TRANS * (qAbs(jDay() - other.jDay())) / mD;
+		d += LIMIT_DIST_TRANS * (qAbs(kla() - other.kla()) * 1024) / mA;
 		d += LIMIT_DIST_TRANS * nameHash.dist(other.nameHash) / mH;
-//		d += LIMIT_DIST_TRANS * qint64(absInt(indexHash - other.indexHash)) / mIH;
-		d |= (1<<20) * qint64(absInt(dimensionOfVoid - other.dimensionOfVoid));
+		d |= (1<<20) * qint64(qAbs(dimensionOfVoid - other.dimensionOfVoid));
 		d |= (1<<20) * qint64(isInternal() || other.isInternal());
-		d |= (1<<20) * qint64((amountInt() > 0 && other.amountInt() < 0) || (amountInt() < 0 && other.amountInt() > 0));
+		d |= (1<<20) * qint64((amount() > 0 && other.amount() < 0) || (amount() < 0 && other.amount() > 0));
 		if(log) {
 			DBG() << "dist " << d
 				<< QString(" = %1 x day(%2)").arg(double(LIMIT_DIST_TRANS)/mD).arg(absInt(jDay() - other.jDay()))
-				<< QString(" = %1 x kamount(%2)").arg(double(LIMIT_DIST_TRANS)/mA).arg(absInt(amountInt() - other.amountInt()))
+				<< QString(" = %1 x kla(%2)").arg(double(LIMIT_DIST_TRANS)/mA).arg(qAbs(kla() - other.kla()))
 				<< QString(" = %1 x hash(%2)").arg(double(LIMIT_DIST_TRANS)/mH).arg(nameHash.dist(other.nameHash));
 		}
 		return d;
