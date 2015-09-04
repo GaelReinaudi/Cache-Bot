@@ -307,7 +307,7 @@ void Puppy::initializePopulation(std::vector<Puppy::Tree>& ioPopulation,
 unsigned int Puppy::initializeTreeFull(Puppy::Tree& ioTree,
 									   Puppy::Context& ioContext,
 									   unsigned int inDepth,
-									   int depthAtCall)
+									   int depthAtCall /*= 0*/)
 {
 	assert(inDepth >= 1);
 	if(inDepth == 1) {

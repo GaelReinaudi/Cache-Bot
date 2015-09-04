@@ -77,9 +77,9 @@ void calculateStats(const std::vector<Tree>& inPopulation,
 
 void applyCrossover(std::vector<Tree>& ioPopulation,
                     Context& ioContext,
-					float inMatingProba,
-					float inDistribProba,
-					unsigned int inMaxTreeDepth);
+                    float inMatingProba=0.9,
+                    float inDistribProba=0.9,
+                    unsigned int inMaxTreeDepth=17);
 
 void exchangeSubTrees(Tree& ioTree1,
                       unsigned int inNode1,
@@ -91,36 +91,36 @@ void exchangeSubTrees(Tree& ioTree1,
 bool mateTrees(Tree& ioTree1,
                Tree& ioTree2,
                Context& ioContext,
-			   float inDistribProba,
-			   unsigned int inMaxTreeDepth);
+               float inDistribProba=0.9,
+               unsigned int inMaxTreeDepth=17);
 
 void initializePopulation(std::vector<Tree>& ioPopulation,
                           Context& ioContext,
-						  float inInitGrowProba,
-						  unsigned int inMinDepth,
-						  unsigned int inMaxDepth);
+                          float inInitGrowProba=0.5,
+                          unsigned int inMinDepth=2,
+                          unsigned int inMaxDepth=5);
 
 unsigned int initializeTreeFull(Tree& ioTree,
 								Context& ioContext,
 								unsigned int inDepth
-								, int depthAtCall);
+								, int depthAtCall = 0);
 
 unsigned int initializeTree(Tree& ioTree,
 							Puppy::Context& ioContext,
 							QStringList &NodeNames,
-							int depthAtCall);
+							int depthAtCall = 0);
 
 unsigned int initializeTreeGrow(Tree& ioTree,
                                 Context& ioContext,
                                 unsigned int inMinDepth,
 								unsigned int inMaxDepth
-								, int depthAtCall);
+								, int depthAtCall = 0);
 
 void applyMutationStandard(std::vector<Tree>& ioPopulation,
                            Context& ioContext,
-						   float inMutationProba,
-						   unsigned int inMaxRegenDepth,
-						   unsigned int inMaxDepth);
+                           float inMutationProba=0.05,
+                           unsigned int inMaxRegenDepth=5,
+                           unsigned int inMaxDepth=17);
 
 void mutateStandard(Tree& ioTree,
                     Context& ioContext,
@@ -129,8 +129,8 @@ void mutateStandard(Tree& ioTree,
 
 void applyMutationSwap(std::vector<Tree>& ioPopulation,
                        Context& ioContext,
-					   float inMutationProba,
-					   float inDistribProba);
+                       float inMutationProba=0.05,
+                       float inDistribProba=0.5);
 
 void mutateSwap(Tree& ioTree,
                 Context& ioContext,
@@ -139,7 +139,7 @@ void mutateSwap(Tree& ioTree,
 
 void applySelectionTournament(std::vector<Tree>& ioPopulation,
                               Context& ioContext,
-							  unsigned int inNumberParticipants);
+                              unsigned int inNumberParticipants=2);
 
 void applySelectionRoulette(std::vector<Tree>& ioPopulation,
                             Context& ioContext);
