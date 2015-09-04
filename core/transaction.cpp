@@ -16,7 +16,7 @@ void Transaction::read(const QJsonObject &json) {
 	bool ok = false;
 	QString accountStr = json["plaid_account"].toString();
 	name = json["name"].toString();
-	name.remove("FROM").remove("TO").remove("ACCT");
+	name.remove("FROM").remove("TO");//.remove("ACCT");
 	nameHash.setFromString(name);
 	setAmount(-json["amount"].toDouble(ok));
 	date = QDate::fromString(json["date"].toString().left(10), "yyyy-MM-dd");
@@ -50,8 +50,8 @@ void Transaction::write(QJsonObject &json) const {
 
 qint64 Transaction::dist(const Transaction &other, bool log) const {
 	// if both are positive, let's make them a lot closer
-	if ((amountInt() > 0 && other.amountInt() > 0)
-	 || (amountInt() < -2*KLA_MULTIPLICATOR && other.amountInt() < -2*KLA_MULTIPLICATOR)) {
+	if ((amount() > 0 && other.amount() > 0)
+	 || (amount() < -100 && other.amount() < -100)) {
 		return distanceWeighted<16*2, 512*2, 2*2>(other, log);
 	}
 	return distanceWeighted<16, 512, 2>(other, log);
@@ -59,6 +59,7 @@ qint64 Transaction::dist(const Transaction &other, bool log) const {
 
 Transaction* StaticTransactionArray::appendNew(QJsonObject jsonTrans, Account *pInAcc) {
 	QString name = jsonTrans["name"].toString();
+	name.remove("FROM").remove("TO");//.remove("ACCT");
 	QDate date = QDate::fromString(jsonTrans["date"].toString().left(10), "yyyy-MM-dd");
 	qint64 hash = NameHashVector::fromString(name);
 	for (const QString& nono : pInAcc->excludeNameTransContain()) {
@@ -193,4 +194,10 @@ Transaction TransactionBundle::randomTransaction() const
 	if (count() == 0)
 		return Transaction();
 	return trans(qrand() % count());
+}
+
+int TransactionBundle::klaAverage() const {
+	if (m_vector.count() == 0)
+		return 0.0;
+	return kindaLog(averageAmount(lam));
 }

@@ -22,25 +22,14 @@ private:
 			o_retObj.insert("tot$", m_bundle.sumDollar());
 			o_retObj.insert("numBund", m_bundle.count());
 			o_retObj.insert("fitRerun", m_fitRerun);
-			o_retObj.insert("amnt", unKindaLog(double(m_kla) / double(KLA_MULTIPLICATOR)));
-
-//			if(m_bundle.count()) {
-//				QString str = QString::fromStdString(getName()) + " ("
-//					  + QString::number(m_bundle.count()) +  ") "
-//					  + " kl$ " + QString::number(double(m_kla) / KLA_MULTIPLICATOR)
-//					  + " / " + QString::number(kindaLog(m_bundle.sumDollar() / m_bundle.count()))
-//					  + " = " + QString::number(unKindaLog(double(m_kla) / KLA_MULTIPLICATOR))
-//					  + " / " + QString::number(m_bundle.sumDollar() / m_bundle.count());
-//				o_retObj.insert("info", str);
-//				str = QString("On the ") + QString::number(m_dayOfMonth) + "th, ";
-//				str += QString("hash: ") + QString::number(m_bundle.trans(0).nameHash.hash());
-//				o_retObj.insert("hash", m_bundle.trans(0).nameHash.hash());
-//			}
+			o_retObj.insert("amnt", unKindaLog(double(m_kla)));
+			o_retObj.insert("kla", m_kla);
+			o_retObj.insert("hash", m_hash);
 		}
 		TransactionBundle m_bundle;
 		int m_dayOfMonth = 0;
 		int m_dayOfMonth2 = 0;
-		int m_kla = 0;
+		double m_kla = 0;
 		int m_hash = 0;
 		// characteristics
 		int m_consecMonthBeforeMissed = 0;
@@ -78,7 +67,7 @@ protected:
 	{ }
 protected:
 	int approxSpacingPayment() override {
-		return 31;
+		return 30;
 	}
 	void getArgs(Puppy::Context &ioContext) override {
 		// if we are forcing a given hashed bundle
@@ -127,7 +116,7 @@ protected:
 
 	double billProbability() const {
 		double proba = m_fitness;
-		proba *= m_localStaticArgs.m_consecMonthBeforeMissed;
+		proba *= qMax(1, m_localStaticArgs.m_consecMonthBeforeMissed);
 		proba /= 4 + 2 * m_localStaticArgs.m_consecMissed;
 		return proba;
 	}
@@ -143,15 +132,17 @@ class FeatureBiWeeklyAmount : public FeatureMonthlyAmount
 {
 public:
 	FeatureBiWeeklyAmount()
-		: FeatureMonthlyAmount("BiWeeklyIncome")
+		: FeatureMonthlyAmount("BiWeeklyAmount")
 	{ }
-	int approxSpacingPayment() override { return 17; } // +2d: gives some room for late payment
+	int approxSpacingPayment() override { return 15; } // +2d: gives some room for late payment
 	virtual void cleanArgs() override {
-		m_localStaticArgs.m_dayOfMonth2 = m_localStaticArgs.m_dayOfMonth+14;//(m_dayOfMonth / 32) % 31;
-		++m_localStaticArgs.m_dayOfMonth2;
-		m_localStaticArgs.m_dayOfMonth2 %= 31;
-		++m_localStaticArgs.m_dayOfMonth2;
 		FeatureMonthlyAmount::cleanArgs();
+		m_localStaticArgs.m_dayOfMonth2 = m_localStaticArgs.m_dayOfMonth + 15;
+		m_localStaticArgs.m_dayOfMonth2 %= 32;
+		m_localStaticArgs.m_dayOfMonth2 = qBound(1, m_localStaticArgs.m_dayOfMonth2, 31);
+		if (qAbs(m_localStaticArgs.m_dayOfMonth - m_localStaticArgs.m_dayOfMonth2) < 14) {
+			ERR() << "m_dayOfMonth " << m_localStaticArgs.m_dayOfMonth << " " << m_localStaticArgs.m_dayOfMonth2;
+		}
 	}
 	QJsonObject toJson(Puppy::Context& ioContext) override {
 		QJsonObject retObj = FeatureMonthlyAmount::toJson(ioContext);

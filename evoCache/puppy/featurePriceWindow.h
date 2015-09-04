@@ -12,11 +12,11 @@ public:
 protected:
 	bool passFilter(quint64 dist, const Transaction& trans) const override {
 		Q_UNUSED(dist);
-		return (trans.amountInt() >= 1.10 * m_localStaticArgs.m_kla
-				&& trans.amountInt() <= 0.90 * m_localStaticArgs.m_kla)
+		return (trans.kla() >= 1.10 * m_localStaticArgs.m_kla
+				&& trans.kla() <= 0.90 * m_localStaticArgs.m_kla)
 				||
-				(trans.amountInt() <= 1.10 * m_localStaticArgs.m_kla
-				&& trans.amountInt() >= 0.90 * m_localStaticArgs.m_kla);
+				(trans.kla() <= 1.10 * m_localStaticArgs.m_kla
+				&& trans.kla() >= 0.90 * m_localStaticArgs.m_kla);
 	}
 };
 

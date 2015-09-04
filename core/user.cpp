@@ -100,16 +100,16 @@ void User::injectJsonData(QString jsonStr)
 		Transaction* pBestMatchN = 0;
 		qint64 bestDist = 999999999;
 		// for a positive transcation (rare)
-		if (pT->amountInt() > 0 && !pT->isInternal()) {
+		if (pT->amount() > 0 && !pT->isInternal()) {
 			Transaction tP(*pT);
 			// take its symetrical and look for some closeby (negative) transaction that matches
-			tP.setKLA(-tP.amountInt());
+			tP.setAmount(-tP.amountDbl());
 			for (int j = 0; j < m_allTransactions.count(); ++j) {
 				Transaction* pN = &m_allTransactions.transArray()[j];
 				// dist max 4 days, 2 parts of kla, and no hash sensitivity
 				qint64 d = tP.distanceWeighted<3, 2, 1024*1024*1024>(*pN);
 				if (d < Transaction::LIMIT_DIST_TRANS
-						&& pN->amountInt() < 0 && !pN->isInternal()
+						&& pN->amount() < 0 && !pN->isInternal()
 						&& pT->account != pN->account) {
 					if (d < bestDist) {
 						bestDist = d;

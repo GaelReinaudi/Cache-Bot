@@ -16,7 +16,7 @@ EvoCacheView::EvoCacheView(QString userID, QVector<int> onlyLoadHashes)
 	Transaction::onlyLoadHashes = onlyLoadHashes;
 
 	connect(pEvolver, SIGNAL(injected(User*)), this, SLOT(onUserInjected(User*)));
-//	connect(ui->startButton, SIGNAL(clicked(bool)), m_evoSpinner, SLOT(startStopEvolution(bool)), Qt::DirectConnection);
+	connect(ui->startButton, SIGNAL(clicked(bool)), pEvolver, SIGNAL(startStopEvolution(bool)), Qt::DirectConnection);
 
 	m_plotFitness = new QCustomPlot(ui->leftWidget);
 	m_plotFitness->addGraph();

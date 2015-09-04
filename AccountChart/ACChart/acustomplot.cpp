@@ -120,7 +120,7 @@ void ACustomPlot::loadCompressedAmount(User* pUser)
 			pGraph = m_hashGraphs[h].at(3);
 			qDebug() << "tr.type() =" << tr.type();
 		}
-		pGraph->addData(t, tr.compressedAmount());
+		pGraph->addData(t, tr.kla());
 	}
 	graph(0)->clearData();
 	// redo the integral to match the last point known.
@@ -133,7 +133,7 @@ void ACustomPlot::loadCompressedAmount(User* pUser)
 		graph(0)->addData(t, kindaLog(m_integral));
 	}
 	rescaleAxes();
-	//xAxis->setRange(xAxis->range().lower - 7*24*3600, xAxis->range().upper + 7*24*3600);
+	xAxis->setRange(xAxis->range().lower - 7*24*3600, xAxis->range().upper + 7*24*3600);
 	yAxis->setRange(yAxis->range().lower - 0.5, yAxis->range().upper + 0.5);
 }
 
@@ -194,10 +194,10 @@ void AHashPlot::loadCompressedAmount(User *pUser)
 		uint h = tr.nameHash.hash();
 		uint d = tr.nameHash.manLength();
 		if (!tr.noUse()) {
-			graph(0)->addData(tr.compressedAmount(), 0.0);
+			graph(0)->addData(tr.kla(), 0.0);
 			// code for featureAllOthers
 			if (tr.dimensionOfVoid == 2) {
-				graph(1)->addData(tr.compressedAmount(), 0.0);
+				graph(1)->addData(tr.kla(), 0.0);
 			}
 		}
 		QCPGraph* pGraph = 0;
@@ -215,7 +215,7 @@ void AHashPlot::loadCompressedAmount(User *pUser)
 			pGraph = m_hashGraphs[h].at(3);
 			WARN() << "default: tr.type() =" << tr.type() << tr.name << tr.date.toString();
 		}
-		pGraph->addData(tr.compressedAmount(), d);
+		pGraph->addData(tr.kla(), d);
 	}
 	histogramGraph(0);
 	histogramGraph(1);

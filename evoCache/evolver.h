@@ -22,10 +22,11 @@ protected:
 	void onRepliedSendNewBot(QString strData) override;
 
 protected slots:
-	void onFinishedEvolution(QJsonObject finalBotObject);
+	void onFinishedEvolution(QJsonObject finalBotObject = QJsonObject());
 
 signals:
 	void initialized(bool);
+	void startStopEvolution(bool doStart);
 	void sendMask(double, double, bool);
 	void summarizingTree();
 	void sendClearList();

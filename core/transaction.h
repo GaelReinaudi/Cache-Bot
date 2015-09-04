@@ -11,8 +11,8 @@ typedef NameHashVector2 NameHashVector;
 class CORESHARED_EXPORT Transaction// : public DBobj
 {
 private:
-		double amount = 0.0;
-		double kla = 0; // Mult * kindaLog(amount)
+		double m_amountDbl = 0.0;
+		double m_kla = 0; // Mult * kindaLog(amount)
 public:
 	Account* account = 0;
 	QString name; // "YARROW HOTEL GRILL" or "STRIKE TECHNOLOG"
@@ -42,27 +42,27 @@ public:
 		return (3600.0 * 24.0) * (double(date.toJulianDay() - day0));
 	}
 	void setAmount(double amntDbl) {
-		amount = amntDbl;
-		kla = double(KLA_MULTIPLICATOR) * kindaLog(amntDbl);
+		m_amountDbl = amntDbl;
+		m_kla = kindaLog(amntDbl);
 	}
 	void setKLA(double newKLA) {
-		kla = newKLA;
-		amount = unKindaLog(double(newKLA) / double(KLA_MULTIPLICATOR));
-	}
-	int amountInt() const {
-		return kla;
+		m_kla = newKLA;
+		m_amountDbl = unKindaLog(newKLA);
 	}
 	double amountDbl() const {
-		return amount;
+		return m_amountDbl;
 	}
-	double compressedAmount() const{
-		return kindaLog(amountDbl());
+	double amount() const {
+		return m_amountDbl;
+	}
+	double kla() const{
+		return m_kla;
 	}
 	inline static bool earlierThan(const Transaction& first, const Transaction& second) {
 		return first.date < second.date;
 	}
 	inline static bool smallerAmountThan(const Transaction& first, const Transaction& second) {
-		return first.amountInt() < second.amountInt();
+		return first.amount() < second.amount();
 	}
 	//! julian day
 	qint64 jDay() const {
@@ -76,17 +76,16 @@ public:
 	template <qint64 mD, qint64 mA, qint64 mH>
 	qint64 distanceWeighted(const Transaction& other, bool log = false) const {
 		qint64 d = 0;
-		d += LIMIT_DIST_TRANS * (absInt(jDay() - other.jDay())) / mD;
-		d += LIMIT_DIST_TRANS * (absInt(amountInt() - other.amountInt())) / mA;
+		d += LIMIT_DIST_TRANS * (qAbs(jDay() - other.jDay())) / mD;
+		d += LIMIT_DIST_TRANS * (qAbs(kla() - other.kla()) * 1024) / mA;
 		d += LIMIT_DIST_TRANS * nameHash.dist(other.nameHash) / mH;
-//		d += LIMIT_DIST_TRANS * qint64(absInt(indexHash - other.indexHash)) / mIH;
-		d |= (1<<20) * qint64(absInt(dimensionOfVoid - other.dimensionOfVoid));
+		d |= (1<<20) * qint64(qAbs(dimensionOfVoid - other.dimensionOfVoid));
 		d |= (1<<20) * qint64(isInternal() || other.isInternal());
-		d |= (1<<20) * qint64((amountInt() > 0 && other.amountInt() < 0) || (amountInt() < 0 && other.amountInt() > 0));
+		d |= (1<<20) * qint64((amount() > 0 && other.amount() < 0) || (amount() < 0 && other.amount() > 0));
 		if(log) {
 			DBG() << "dist " << d
 				<< QString(" = %1 x day(%2)").arg(double(LIMIT_DIST_TRANS)/mD).arg(absInt(jDay() - other.jDay()))
-				<< QString(" = %1 x kamount(%2)").arg(double(LIMIT_DIST_TRANS)/mA).arg(absInt(amountInt() - other.amountInt()))
+				<< QString(" = %1 x kla(%2)").arg(double(LIMIT_DIST_TRANS)/mA).arg(qAbs(kla() - other.kla()))
 				<< QString(" = %1 x hash(%2)").arg(double(LIMIT_DIST_TRANS)/mH).arg(nameHash.dist(other.nameHash));
 		}
 		return d;
@@ -215,11 +214,7 @@ public:
 	Transaction randSmart() const;
 	Transaction randomTransaction(std::function<double(const Transaction&)> weight) const;
 	Transaction randomTransaction() const;
-	int klaAverage() const {
-		if (m_vector.count() == 0)
-			return 0.0;
-		return kindaLog(averageAmount()) * KLA_MULTIPLICATOR;
-	}
+	int klaAverage() const;
 
 private:
 	QVector<const Transaction*> m_vector;
