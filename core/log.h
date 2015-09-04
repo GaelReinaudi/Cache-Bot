@@ -65,12 +65,12 @@ public:
 //#define DBG() logger::Instance()->m_fileLogger->debug()
 
 #define OUT_PUT_LOG logger::Instance()->m_fileLogger
-#define DBG(lev) qDebug()//OUT_PUT_LOG->debug()
-#define INFO()   qDebug()//OUT_PUT_LOG->info()
-#define NOTICE() qDebug()//OUT_PUT_LOG->notice()
-#define WARN()   qDebug()//OUT_PUT_LOG->warn()
-#define ERR()    qDebug()//OUT_PUT_LOG->error()
-#define ALERT()  qDebug()//OUT_PUT_LOG->alert()
+#define DBG(lev) OUT_PUT_LOG->debug()
+#define INFO()   OUT_PUT_LOG->info()
+#define NOTICE() OUT_PUT_LOG->notice()
+#define WARN()   OUT_PUT_LOG->warn()
+#define ERR()    OUT_PUT_LOG->error()
+#define ALERT()  OUT_PUT_LOG->alert()
 
 //#define LOG() logger::Instance()->stream()
 
