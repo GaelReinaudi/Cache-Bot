@@ -283,11 +283,11 @@ void Puppy::initializePopulation(std::vector<Puppy::Tree>& ioPopulation,
 		ioPopulation[i].mValid = false;
 		unsigned int lInitDepth = ioContext.mRandom.rollInteger(inMinDepth, inMaxDepth);
 		if(ioContext.mRandom.rollUniform() >= inInitGrowProba) {
-			initializeTreeFull(ioPopulation[i], ioContext, lInitDepth);
+			initializeTreeFull(ioPopulation[i], ioContext, lInitDepth, 0);
 			DBG(3) << "initializeTreeFull:" << ioPopulation[i].toStr();
 		}
 		else {
-			initializeTreeGrow(ioPopulation[i], ioContext, inMinDepth, lInitDepth);
+			initializeTreeGrow(ioPopulation[i], ioContext, inMinDepth, lInitDepth, 0);
 			DBG(3) << "initializeTreeGrow:" << ioPopulation[i].toStr();
 		}
 	}
@@ -307,7 +307,7 @@ void Puppy::initializePopulation(std::vector<Puppy::Tree>& ioPopulation,
 unsigned int Puppy::initializeTreeFull(Puppy::Tree& ioTree,
 									   Puppy::Context& ioContext,
 									   unsigned int inDepth,
-									   int depthAtCall /*= 0*/)
+									   int depthAtCall)
 {
 	assert(inDepth >= 1);
 	if(inDepth == 1) {
