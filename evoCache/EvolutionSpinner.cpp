@@ -84,13 +84,16 @@ void EvolutionSpinner::runEvolution() {
 		Tree bestTree = lPopulation[result.second - lPopulation.begin()];
 		calculateStats(lPopulation, 0);
 
+		if(!m_doSpin)  {
+			break;
+		}
 		// Evolve population for the given number of generations
 		INFO() << "Starting evolution " << newBestFitness;
 
 		for(unsigned int i=1; i<=lNbrGen; ++i) {
-			while(!m_doSpin)  {
-				QThread::msleep(100);
-			}
+//			while(!m_doSpin)  {
+//				QThread::msleep(100);
+//			}
 			DBG() << "Generation " << i;
 //			auto result = std::minmax_element(lPopulation.begin(), lPopulation.end());
 //			bestTree = lPopulation[result.second - lPopulation.begin()];
@@ -175,7 +178,7 @@ void EvolutionSpinner::runEvolution() {
 			if(!m_doSpin)  {
 				break;
 			}
-			INFO() << "Generation " << i;
+			INFO() << "Generation " << i << " pop " << lPopulation.size();
 			auto result = std::minmax_element(lPopulation.begin(), lPopulation.end());
 			Tree bestTree = lPopulation[result.second - lPopulation.begin()];
 

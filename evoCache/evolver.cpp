@@ -7,6 +7,7 @@ Evolver::Evolver(QString userID)
 	: CacheAccountConnector(userID)
 {
 	init();
+	connect(this, SIGNAL(startStopEvolution(bool)), m_evoSpinner, SLOT(startStopEvolution(bool)), Qt::DirectConnection);
 }
 
 Evolver::~Evolver()
@@ -39,7 +40,8 @@ void Evolver::onUserInjected(User* pUser)
 void Evolver::onFinishedEvolution(QJsonObject finalBotObject)
 {
 	if (flags & SendBot) {
-		CacheRest::Instance()->sendNewBot(userID(), finalBotObject);
+		static QJsonObject staticToSendObject = finalBotObject;
+		CacheRest::Instance()->sendNewBot(userID(), staticToSendObject);
 		connect(CacheRest::Instance()->worker, SIGNAL(repliedSendNewBot(QString)), this, SLOT(onRepliedSendNewBot(QString)));
 	}
 }
@@ -49,6 +51,15 @@ void Evolver::onRepliedSendNewBot(QString strData)
 	CacheAccountConnector::onRepliedSendNewBot(strData);
 
 	qDebug() << strData;
+	if (strData.contains("\"error\""))
+	{
+		ERR() << "Can't send Bot: " << strData;
+		ERR() << "Trying again by loging in again until it works";
+		disconnect(CacheRest::Instance()->worker, SIGNAL(loggedIn(bool)));
+		connect(CacheRest::Instance()->worker, SIGNAL(loggedIn(bool)), this, SLOT(onFinishedEvolution()));
+		CacheRest::Instance()->login();
+		return;
+	}
 	std::cout << "Exiting program";
 	qApp->exit();
 }
