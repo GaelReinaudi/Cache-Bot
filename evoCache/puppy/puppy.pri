@@ -4,13 +4,7 @@ INCLUDEPATH  += $$PWD \
 SOURCES += \
 	$$PWD/puppy/src/Primitive.cpp \
 	$$PWD/puppy/src/Puppy.cpp \
-	$$PWD/puppy/src/Tree.cpp \
-	$$PWD/AccRegPrimits.cpp \
-    $$PWD/featureAllOthers.cpp \
-    $$PWD/featureStatDistrib.cpp \
-    $$PWD/featurePeriodicAmount.cpp \
-    $$PWD/featureOutlier.cpp \
-    $$PWD/featurePriceWindow.cpp
+	$$PWD/puppy/src/Tree.cpp
 
 HEADERS  += \
 	$$PWD/puppy/include/puppy/Primitive.hpp \

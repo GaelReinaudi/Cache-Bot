@@ -27,7 +27,8 @@ void CORESHARED_EXPORT logger::setupSpdLog(QString logFileName)
 //		spdlog::set_async_mode(1024);
 //		s_pLog->m_fileLogger = spdlog::daily_logger_mt("file_logger", "myfilename");
 //		s_pLog->m_fileLogger = spdlog::create<spdlog::sinks::rotating_file_sink_mt>("file", logFileName.toStdString(), "log", 1024 * 1024 * 20, 1, true);
-		s_pLog->m_fileLogger = spdlog::create<spdlog::sinks::simple_file_sink_mt>("simplefile", logFileName.toStdString(), true);
+//		s_pLog->m_fileLogger = spdlog::create<spdlog::sinks::simple_file_sink_mt>("simplefile", logFileName.toStdString() + "log", true);
+		s_pLog->m_fileLogger = spdlog::stdout_logger_mt("console");
 		s_pLog->m_fileLogger->set_pattern("[%l] %v");
 		s_pLog->m_fileLogger->set_level(spdlog::level::info);
 		s_pLog->m_fileLogger->warn() << "********** NEW SESSION ********** "
