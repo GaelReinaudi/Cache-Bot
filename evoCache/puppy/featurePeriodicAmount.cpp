@@ -41,10 +41,10 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 			localTrans = &trans;
 		}
 		Q_ASSERT(localDist < 18446744073709551615ULL);
-		double factOld = 1.0;
+		double factOld = 2.0;
 		double daysAgo = localTrans->date.daysTo(QDate::currentDate());
 		if (daysAgo > Transaction::maxDaysOld() / 2)
-			factOld -= 0.5 * daysAgo / double(Transaction::maxDaysOld() / 2);
+			factOld -= 1.0 * daysAgo / double(Transaction::maxDaysOld() / 2);
 		// if we get further away by approxSpacingPayment() / 2 days, we take the next target, or if last trans
 		if (trans.jDay() > approxSpacingPayment() / 2 + iTarg->jDay() || i == allTrans.count() - 1) {
 			if (localDist < Transaction::LIMIT_DIST_TRANS) {
