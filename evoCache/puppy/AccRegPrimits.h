@@ -119,10 +119,12 @@ public:
 		retObj.insert("fitness", m_fitness);
 		retObj.insert("billProba", m_billProba);
 		QJsonArray argList;
-		for (unsigned int i = 0; i < getNumberArguments(); ++i) {
-			double lArgi = 0.0;
-			getArgument(i, &lArgi, ioContext);
-			argList.append(lArgi);
+		if (ioContext.mTree) {
+			for (unsigned int i = 0; i < getNumberArguments(); ++i) {
+				double lArgi = 0.0;
+				getArgument(i, &lArgi, ioContext);
+				argList.append(lArgi);
+			}
 		}
 		retObj.insert("args", argList);
 		return retObj;
