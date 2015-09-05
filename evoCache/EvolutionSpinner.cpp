@@ -5,7 +5,7 @@
 
 const double THRESHOLD_PROBA_BILL = 0.1;
 
-#define POP_SIZE_DEFAULT 750
+#define POP_SIZE_DEFAULT 75//0
 #define NBR_GEN_DEFAULT 30
 #define NBR_PART_TOURNAMENT_DEFAULT 2
 #define MAX_DEPTH_DEFAULT 6
@@ -90,11 +90,12 @@ void EvolutionSpinner::runEvolution() {
 		// Evolve population for the given number of generations
 		INFO() << "Starting evolution " << newBestFitness;
 
-		for(unsigned int i=1; i<=lNbrGen; ++i) {
+		for(m_context->currentGeneration = 1; m_context->currentGeneration <=lNbrGen; ++m_context->currentGeneration ) {
 //			while(!m_doSpin)  {
 //				QThread::msleep(100);
 //			}
-			DBG() << "Generation " << i;
+
+			DBG() << "Generation " << m_context->currentGeneration ;
 //			auto result = std::minmax_element(lPopulation.begin(), lPopulation.end());
 //			bestTree = lPopulation[result.second - lPopulation.begin()];
 
@@ -112,8 +113,8 @@ void EvolutionSpinner::runEvolution() {
 			if (newBestFitness > bestFitness * 1.01) {
 				NOTICE() << "newBestFitness " << newBestFitness
 						 << " > bestFitness " << bestFitness
-						 << ". Reseting i=" << i << " to 0";
-				i = 0;
+						 << ". Reseting i=" << m_context->currentGeneration  << " to 0";
+				m_context->currentGeneration  = 0;
 				bestFitness = newBestFitness;
 				auto result = std::minmax_element(lPopulation.begin(), lPopulation.end());
 				bestTree = lPopulation[result.second - lPopulation.begin()];
@@ -135,10 +136,10 @@ void EvolutionSpinner::runEvolution() {
 //		qDebug() << QVector<unsigned int>::fromStdVector(outCallStack);
 
 		QJsonObject jsonBest = summarize(*lBestIndividual);
-		double billProba = jsonBest["features"].toArray().first().toObject()["billProba"].toDouble();
+//		double billProba = jsonBest["features"].toArray().first().toObject()["billProba"].toDouble();
 		double fitness = jsonBest["features"].toArray().first().toObject()["fitness"].toDouble();
-		output[billProba].append(jsonBest);
-		qDebug() << "billProba" << billProba;
+		output[fitness].append(jsonBest);
+//		qDebug() << "billProba" << billProba;
 		if(fitness > 0*THRESHOLD_PROBA_BILL || bestPreEvoTrees.isEmpty()) {
 			(*lBestIndividual).mValid = false;
 			bestPreEvoTrees.push_back(*lBestIndividual);
@@ -174,11 +175,11 @@ void EvolutionSpinner::runEvolution() {
 
 		// Evolve population for the given number of generations
 		NOTICE() << "Starting evolution";
-		for(unsigned int i=1; i<=10*lNbrGen; ++i) {
+		for(m_context->currentGeneration = 1; m_context->currentGeneration <=10*lNbrGen; ++m_context->currentGeneration ) {
 			if(!m_doSpin)  {
 				break;
 			}
-			INFO() << "Generation " << i << " pop " << lPopulation.size();
+			INFO() << "Generation " << m_context->currentGeneration  << " pop " << lPopulation.size();
 			auto result = std::minmax_element(lPopulation.begin(), lPopulation.end());
 			Tree bestTree = lPopulation[result.second - lPopulation.begin()];
 
@@ -195,7 +196,7 @@ void EvolutionSpinner::runEvolution() {
 			lPopulation.push_back(bestTree);
 
 			evaluateSymbReg(lPopulation, *m_context);
-			calculateStats(lPopulation, i);
+			calculateStats(lPopulation, m_context->currentGeneration );
 		}
 		NOTICE() << "End of evolution";
 	}

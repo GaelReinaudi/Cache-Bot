@@ -134,6 +134,7 @@ public:
 	int filterHashIndex = -1;
 	enum {None = 0x0, AllOthers = 0x1};
 	int flags = 0;
+	unsigned int currentGeneration = 0;
 };
 
 }

@@ -79,11 +79,13 @@ protected:
 			if(!ok) {
 				ERR() << "Could not replace the node with " << nodeName;
 			}
-			nodeName = QString("%1").arg(ioContext.m_pUser->hashBundles()[m_filterHash]->klaAverage());
-			ioContext.getPrimitiveByName(nodeName);
-			ok = tryReplaceArgumentNode(2, nodeName.toStdString().c_str(), ioContext);
-			if(!ok) {
-				ERR() << "Could not replace the node with " << nodeName;
+			if (ioContext.currentGeneration == 1) {
+				nodeName = QString("%1").arg(ioContext.m_pUser->hashBundles()[m_filterHash]->klaAverage());
+				ioContext.getPrimitiveByName(nodeName);
+				ok = tryReplaceArgumentNode(2, nodeName.toStdString().c_str(), ioContext);
+				if(!ok) {
+					ERR() << "Could not replace the node with " << nodeName;
+				}
 			}
 		}
 		else {
