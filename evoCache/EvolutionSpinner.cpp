@@ -67,7 +67,7 @@ void EvolutionSpinner::runEvolution() {
 	float         lMutSwapDistribProba = MUT_SWAP_DISTRIB_PROBA_DEFAULT;
 
 	QMap<double, QJsonArray> output;
-	QVector<Tree> bestPreEvoTrees;
+	QMap<double, Tree> bestPreEvoTrees;
 	QJsonObject finalBotObject;
 	for (int j = 0; j < m_context->m_pUser->hashBundles().count(); ++j) {
 		int h = m_context->m_pUser->hashBundles().keys()[j];
@@ -142,7 +142,7 @@ void EvolutionSpinner::runEvolution() {
 //		qDebug() << "billProba" << billProba;
 		if(fitness > 0*THRESHOLD_PROBA_BILL || bestPreEvoTrees.isEmpty()) {
 			(*lBestIndividual).mValid = false;
-			bestPreEvoTrees.push_back(*lBestIndividual);
+			bestPreEvoTrees.insertMulti(fitness, *lBestIndividual);
 		}
 	}
 
@@ -167,8 +167,9 @@ void EvolutionSpinner::runEvolution() {
 	initializePopulation(lPopulation, *m_context, lInitGrowProba, lMinInitDepth, lMaxInitDepth);
 	NOTICE() << "bestPreEvoTrees.count " << bestPreEvoTrees.count();
 	if(bestPreEvoTrees.count()) {
-		for(unsigned int i = 0; i < 5*lPopSize; ++i) {
-			lPopulation.push_back(bestPreEvoTrees.at(i % bestPreEvoTrees.size()));
+		auto bestbundltree = bestPreEvoTrees.values();
+		for(unsigned int i = 0; i < lPopSize; ++i) {
+			lPopulation.push_back(bestbundltree.at(bestbundltree.size() - 1 - i % bestbundltree.size()));
 		}
 		evaluateSymbReg(lPopulation, *m_context);
 		calculateStats(lPopulation, 0);
