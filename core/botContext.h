@@ -14,7 +14,7 @@ public:
 	BotContext (User* pUser);
 
 public:
-	static const unsigned int MAX_NUM_FEATURES = 1;
+	static const unsigned int MAX_NUM_FEATURES = 16;
 	static unsigned int LIMIT_NUM_FEATURES;
 	static unsigned int TARGET_TRANS_FUTUR_DAYS;
 
