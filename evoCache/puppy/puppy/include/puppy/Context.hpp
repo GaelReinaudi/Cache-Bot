@@ -111,6 +111,7 @@ public:
 		double val = name.toDouble(&yes);
 		if (yes) {
 			PrimitiveHandle newTerminal = new TokenT<double>(stdname, val);
+			NOTICE() << "Making new terminal " << stdname << " = " << val;
 			insert(newTerminal);
 			return newTerminal;
 		}

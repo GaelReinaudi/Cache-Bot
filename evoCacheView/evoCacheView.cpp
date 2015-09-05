@@ -30,6 +30,7 @@ EvoCacheView::~EvoCacheView()
 
 void EvoCacheView::onUserInjected(User* pUser)
 {
+	NOTICE() << "EvoCacheView::onUserInjected";
 	ui->acPlot->loadCompressedAmount(pUser);
 	ui->amPlot->loadAmount(pUser);
 
