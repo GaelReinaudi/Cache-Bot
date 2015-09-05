@@ -89,7 +89,8 @@ void FeatureAllOthers::execute(void *outDatum, Puppy::Context &ioContext)
 
 	// summary if the json object exists
 	if (ioContext.m_summaryJsonObj) {
-		if(m_billProba > 0.0) {
+//		if(m_billProba > 0.0)
+		{
 			QJsonArray features = (*ioContext.m_summaryJsonObj)["features"].toArray();
 			features.append(toJson(ioContext));
 			ioContext.m_summaryJsonObj->insert("features", features);

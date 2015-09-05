@@ -74,16 +74,17 @@ protected:
 		int filterHashIndex = ioContext.filterHashIndex;
 		if(filterHashIndex >= 0) {
 			m_filterHash = ioContext.m_pUser->hashBundles().keys()[filterHashIndex];
-			std::string nodeName = QString("h%1").arg(m_filterHash).toStdString();
-			bool ok = tryReplaceArgumentNode(0, nodeName.c_str(), ioContext);
+			QString nodeName = QString("h%1").arg(m_filterHash);
+			bool ok = tryReplaceArgumentNode(0, nodeName.toStdString().c_str(), ioContext);
 			if(!ok) {
-				ERR() << "Could not replace the node with " << nodeName.c_str();
+				ERR() << "Could not replace the node with " << nodeName;
 			}
-//			nodeName = QString("%1").arg(ioContext.m_pUser->hashBundles()[m_filterHash]->klaAverage()).toStdString();
-//			ok = tryReplaceArgumentNode(2, nodeName.c_str(), ioContext);
-//			if(!ok) {
-//				ERR() << "Could not replace the node with " << nodeName.c_str();
-//			}
+			nodeName = QString("%1").arg(ioContext.m_pUser->hashBundles()[m_filterHash]->klaAverage());
+			ioContext.getPrimitiveByName(nodeName);
+			ok = tryReplaceArgumentNode(2, nodeName.toStdString().c_str(), ioContext);
+			if(!ok) {
+				ERR() << "Could not replace the node with " << nodeName;
+			}
 		}
 		else {
 			m_filterHash = -1;
@@ -100,7 +101,8 @@ protected:
 	}
 	void cleanArgs() override {
 		FeaturePeriodicAmount::cleanArgs();
-		m_localStaticArgs.m_kla = qBound(-8.0, m_localStaticArgs.m_kla, 8.0);
+		while (qAbs(m_localStaticArgs.m_kla) > 8.0)
+			m_localStaticArgs.m_kla /= 10.0;
 		m_localStaticArgs.m_dayOfMonth = qBound(-14, m_localStaticArgs.m_dayOfMonth, 31);
 		if (m_localStaticArgs.m_dayOfMonth == 0)
 			++m_localStaticArgs.m_dayOfMonth;
