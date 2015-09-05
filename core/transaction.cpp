@@ -196,7 +196,7 @@ Transaction TransactionBundle::randomTransaction() const
 	return trans(qrand() % count());
 }
 
-int TransactionBundle::klaAverage() const {
+double TransactionBundle::klaAverage() const {
 	if (m_vector.count() == 0)
 		return 0.0;
 	return kindaLog(averageAmount(lam));
