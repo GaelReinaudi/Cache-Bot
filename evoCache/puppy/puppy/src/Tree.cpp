@@ -94,10 +94,7 @@ void Puppy::Tree::interpret(void* outResult, Puppy::Context& ioContext)
 	if(isValidTree()) {
 		front().mPrimitive->execute(outResult, ioContext);
 		double lame = 0;
-		ioContext.getPrimitiveByName("FeatureAllOthers")->execute(&lame, ioContext);
-//		double& lResult = *(double*)outResult;
-//		ioContext.getPrimitiveByName("FeatureOutlier")->execute(&lame, ioContext);
-//		lResult += lame;
+//		ioContext.getPrimitiveByName("FeatureAllOthers")->execute(&lame, ioContext);
 	}
 	else {
 		double& lResult = *(double*)outResult;

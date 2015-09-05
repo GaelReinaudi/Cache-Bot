@@ -38,7 +38,7 @@ Bot::~Bot()
 void Bot::init(BotContext *context) {
 	m_context = context;
 	BotContext::LIMIT_NUM_FEATURES = BotContext::MAX_NUM_FEATURES;
-	Puppy::initializeTree(m_puppyTree, *m_context, m_botStrings, 0);
+	Puppy::initializeTree(m_puppyTree, *m_context, m_botStrings);
 	NOTICE() << "Bot::init" << m_puppyTree.toStr();
 }
 

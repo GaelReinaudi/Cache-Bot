@@ -100,6 +100,7 @@ protected:
 	}
 	void cleanArgs() override {
 		FeaturePeriodicAmount::cleanArgs();
+		m_localStaticArgs.m_kla = qBound(-8.0, m_localStaticArgs.m_kla, 8.0);
 		m_localStaticArgs.m_dayOfMonth = qBound(-14, m_localStaticArgs.m_dayOfMonth, 31);
 		if (m_localStaticArgs.m_dayOfMonth == 0)
 			++m_localStaticArgs.m_dayOfMonth;

@@ -52,6 +52,7 @@ void EvoCacheView::clearMasks()
 
 void EvoCacheView::plotMask(double x, double y, int flag)
 {
+	Q_ASSERT(x > -1e9 && x < 10e9 && y > -1e9 && y < 1e9);
 	QCPItemRect* itRect = new QCPItemRect(ui->acPlot);
 	y = kindaLog(y);
 	bool isTarget = flag == 0;
