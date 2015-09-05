@@ -89,12 +89,11 @@ void FeatureAllOthers::execute(void *outDatum, Puppy::Context &ioContext)
 
 	// summary if the json object exists
 	if (ioContext.m_summaryJsonObj) {
-//		if(m_billProba > 0.0)
-		{
-			QJsonArray features = (*ioContext.m_summaryJsonObj)["features"].toArray();
-			features.append(toJson(ioContext));
-			ioContext.m_summaryJsonObj->insert("features", features);
-		}
+
+		QJsonArray features = (*ioContext.m_summaryJsonObj)["features"].toArray();
+		features.append(toJson(ioContext));
+		ioContext.m_summaryJsonObj->insert("features", features);
+
 		OracleFilteredRest* pNewOr = new OracleFilteredRest();
 		pNewOr->m_args = m_localStaticArgs;
 		// making a shared pointer that will take care of cleaning once the oracle is no longer referenced

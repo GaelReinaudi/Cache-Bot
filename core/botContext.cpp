@@ -52,7 +52,7 @@ BotContext::BotContext(User *pUser)
 	insert(new FeatureMonthlyAmount());
 //	insert(new FeatureStatDistrib());
 	insert(new FeatureOutlier());
-	insert(new FeatureAllOthers());
+//	insert(new FeatureAllOthers());
 	insert(new FeaturePriceWindow());
 }
 
