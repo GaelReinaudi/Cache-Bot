@@ -15,8 +15,8 @@ protected:
 		return (trans.kla() >= 1.10 * m_localStaticArgs.m_kla
 				&& trans.kla() <= 0.90 * m_localStaticArgs.m_kla)
 				||
-				(trans.kla() <= 1.10 * m_localStaticArgs.m_kla
-				&& trans.kla() >= 0.90 * m_localStaticArgs.m_kla);
+				(trans.kla() <= 1.50 * m_localStaticArgs.m_kla
+				&& trans.kla() >= 0.50 * m_localStaticArgs.m_kla);
 	}
 };
 

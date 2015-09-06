@@ -111,9 +111,11 @@ Puppy::Tree* Bot::instancePostTreatmentBot(Puppy::Context& ioContext)
 	QStringList treeNodeList;
 	treeNodeList += "ROOT";
 	double klaArg = -4.0;
+	double ratio = 0.9 / 1.1;
 	for (uint i = 0; i < BotContext::MAX_NUM_FEATURES; ++i) {
 		if (qAbs(klaArg) < 0.5) {
-			klaArg = 4;
+			klaArg = 4.5;
+			ratio = 0.5 / 1.5;
 //			treeNodeList += "0";
 //			continue;
 		}
@@ -124,7 +126,7 @@ Puppy::Tree* Bot::instancePostTreatmentBot(Puppy::Context& ioContext)
 		ioContext.getPrimitiveByName(klaStr);
 		treeNodeList += klaStr;
 		treeNodeList += "0";
-		klaArg *= 0.90 / 1.10;
+		klaArg *= ratio;
 	}
 
 	WARN() << "Making postTreatmentBot: " << treeNodeList.join(' ');
