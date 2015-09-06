@@ -46,7 +46,7 @@ class FeaturePeriodicAmount : public AccountFeature
 {
 public:
 	FeaturePeriodicAmount(QString featureName = "FixedIncome")
-		: AccountFeature(6, featureName.toStdString())
+		: AccountFeature(3, featureName.toStdString())
 	{ }
 	~FeaturePeriodicAmount() { }
 

@@ -37,7 +37,7 @@ class FeatureOutlier : public AccountFeature
 {
 public:
 	FeatureOutlier()
-		: AccountFeature(2, "FeatureOutlier")
+		: AccountFeature(3, "FeatureOutlier")
 	{ }
 
 public:
