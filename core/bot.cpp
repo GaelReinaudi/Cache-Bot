@@ -113,8 +113,9 @@ Puppy::Tree* Bot::instancePostTreatmentBot(Puppy::Context& ioContext)
 	double klaArg = -4.0;
 	for (uint i = 0; i < BotContext::MAX_NUM_FEATURES; ++i) {
 		if (qAbs(klaArg) < 0.5) {
-			treeNodeList += "0";
-			continue;
+			klaArg = 4;
+//			treeNodeList += "0";
+//			continue;
 		}
 		treeNodeList += "PriceWindow";
 //		treeNodeList += "MonthlyAmount";
