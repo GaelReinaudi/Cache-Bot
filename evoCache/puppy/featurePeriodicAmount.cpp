@@ -134,6 +134,8 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 	m_localStaticArgs.m_fitRerun = rerun;
 	cleanArgs();
 	output -= 2 * qMax(0.0, rerun);
+	if (m_localStaticArgs.m_kla > 0)
+		output *= 2.0;
 	m_fitness = output;
 	m_billProba = tempProba;
 	m_targetTrans = tempTarg;

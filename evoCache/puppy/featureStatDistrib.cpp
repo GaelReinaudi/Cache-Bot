@@ -22,9 +22,9 @@ void FeatureStatDistrib::getArgs(Puppy::Context &ioContext) {
 	getArgument(++ind, &a, ioContext);
 	m_localStaticArgs.m_hash = a;
 	getArgument(++ind, &a, ioContext);
-	m_localStaticArgs.m_effect = a;
-	getArgument(++ind, &a, ioContext);
 	m_localStaticArgs.m_kla = a;
+	getArgument(++ind, &a, ioContext);
+	m_localStaticArgs.m_effect = a;
 }
 
 double FeatureStatDistrib::apply(TransactionBundle& allTrans)
@@ -89,7 +89,8 @@ void FeatureStatDistrib::execute(void *outDatum, Puppy::Context &ioContext)
 			<< " p=" << m_billProba
 			<< " n=" << m_localStaticArgs.m_bundle.count()
 			<< " h=" << m_localStaticArgs.m_hash;
-		if (m_billProba > 0.001) {
+//		if (m_billProba > 0.001)
+		{
 			QJsonArray features = (*ioContext.m_summaryJsonObj)["features"].toArray();
 			features.append(toJson(ioContext));
 			ioContext.m_summaryJsonObj->insert("features", features);

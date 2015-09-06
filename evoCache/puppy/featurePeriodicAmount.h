@@ -82,7 +82,7 @@ protected:
 			if (ioContext.currentGeneration == 1) {
 				nodeName = QString("%1").arg(ioContext.m_pUser->hashBundles()[m_filterHash]->klaAverage());
 				ioContext.getPrimitiveByName(nodeName);
-				ok = tryReplaceArgumentNode(2, nodeName.toStdString().c_str(), ioContext);
+				ok = tryReplaceArgumentNode(1, nodeName.toStdString().c_str(), ioContext);
 				if(!ok) {
 					ERR() << "Could not replace the node with " << nodeName;
 				}
@@ -97,9 +97,9 @@ protected:
 		getArgument(++ind, &a, ioContext);
 		m_localStaticArgs.m_hash = a;
 		getArgument(++ind, &a, ioContext);
-		m_localStaticArgs.m_dayOfMonth = a;
-		getArgument(++ind, &a, ioContext);
 		m_localStaticArgs.m_kla = a;
+		getArgument(++ind, &a, ioContext);
+		m_localStaticArgs.m_dayOfMonth = a;
 	}
 	void cleanArgs() override {
 		FeaturePeriodicAmount::cleanArgs();

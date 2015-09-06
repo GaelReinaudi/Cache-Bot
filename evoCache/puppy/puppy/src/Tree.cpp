@@ -95,14 +95,14 @@ void Puppy::Tree::interpret(void* outResult, Puppy::Context& ioContext)
 	if(isValidTree()) {
 		front().mPrimitive->execute(outResult, ioContext);
 		ioContext.mTree = 0;
-//		double lame = 0;
+		double lame = 0;
 //		if (ioContext.filterHashIndex < 0) {
 //			ioContext.getPrimitiveByName("FeatureAllOthers")->execute(&lame, ioContext);
 //		}
-		if (ioContext.m_summaryJsonObj) {
+		if (ioContext.m_summaryJsonObj && ioContext.filterHashIndex < 0) {
 			Tree* postTree = Bot::instancePostTreatmentBot(ioContext);
 			ioContext.mTree = postTree;
-			postTree->front().mPrimitive->execute(outResult, ioContext);
+			postTree->front().mPrimitive->execute(&lame, ioContext);
 			ioContext.mTree = 0;
 		}
 	}
