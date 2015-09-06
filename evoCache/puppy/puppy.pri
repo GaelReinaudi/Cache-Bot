@@ -19,5 +19,6 @@ HEADERS  += \
     $$PWD/featureAllOthers.h \
     $$PWD/featureStatDistrib.h \
     $$PWD/featurePeriodicAmount.h \
-    $$PWD/featureOutlier.h \
-    $$PWD/featurePriceWindow.h
+	$$PWD/featureOutlier.h \
+	$$PWD/featurePriceWindow.h \
+	$$PWD/featureLabelDistrib.h

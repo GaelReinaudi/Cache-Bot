@@ -38,8 +38,8 @@ private:
 class FeatureStatDistrib : public AccountFeature
 {
 public:
-	FeatureStatDistrib(QString featureName = "StatDistrib")
-		: AccountFeature(6, featureName.toStdString())
+	FeatureStatDistrib(QString featureName)
+		: AccountFeature(3, featureName.toStdString())
 	{
 	}
 	~FeatureStatDistrib() {}
@@ -55,7 +55,7 @@ protected:
 
 	double apply(TransactionBundle& allTrans);
 
-	virtual bool passFilter(quint64 dist, const Transaction& trans) const;
+	virtual bool passFilter(quint64 dist, const Transaction& trans) const = 0;
 	void computeNextDayProba();
 
 protected:
