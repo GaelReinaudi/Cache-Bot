@@ -126,7 +126,7 @@ void ExtraCashView::onBotInjected(Bot* pBot)
 
 	// transaction at the starting date of the playback
 	auto& real = m_pExtraCache->user()->allTrans();
-//	qDebug() << "m_date" << m_pbDate;
+	qDebug() << "m_date" << m_pbDate;
 
 	for (int i = 0; i < real.count(); ++i) {
 		// finds the index of the last transaction within the playback date
@@ -140,16 +140,13 @@ void ExtraCashView::onBotInjected(Bot* pBot)
 	NOTICE() << "initial pb balance"<< m_pbBalance << " at" << m_pbDate.toString();
 
 	ui->spinBox->setValue(m_pbBalance);
-//	ui->plot->setFocus();
 	updateChart();
 }
 
 void ExtraCashView::onHypotheTrans(int transAmount)
 {
 	m_pExtraCache->user()->setHypotheTrans(transAmount);
-//	m_pbBalance = m_pExtraCache->user()->balance(Account::Type::Checking);
-	ui->spinBox->setValue(m_pbBalance);
-	updateChart();
+	m_pExtraCache->user()->reInjectBot();
 }
 
 void ExtraCashView::onDaysOldSpin(int val)

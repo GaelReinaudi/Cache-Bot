@@ -52,6 +52,7 @@ public:
 			// reset the dimensionOfVoid
 			m_allTransactions.trans(i).dimensionOfVoid = 0;
 		}
+		m_hypotheTrans.dimensionOfVoid = 0;
 	}
 
 	double balance(int flagType) const {

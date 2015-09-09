@@ -34,8 +34,6 @@ void User::setHypotheTrans(double amount) {
 	m_hypotheTrans.nameHash.setFromString(m_hypotheTrans.name);
 	if (&m_allTransBundle.last() != &m_hypotheTrans)
 		m_allTransBundle.append(&m_hypotheTrans);
-	if (m_bestBot)
-		m_bestBot->summarize();
 }
 
 void User::injectJsonData(QString jsonStr)
@@ -188,10 +186,10 @@ QJsonObject User::trendSummary(int nDays) const
 {
 	QJsonObject trends;
 
-	Transaction::setCurrentDay(QDate::currentDate());
-	m_bestBot->summarize();
-	Transaction::setCurrentDay(QDate::currentDate().addDays(-nDays));
-	m_bestBot->summarize();
+//	Transaction::setCurrentDay(QDate::currentDate());
+//	m_bestBot->summarize();
+//	Transaction::setCurrentDay(QDate::currentDate().addDays(-nDays));
+//	m_bestBot->summarize();
 
 	return trends;
 }
