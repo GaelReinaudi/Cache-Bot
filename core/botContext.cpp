@@ -1,10 +1,10 @@
 #include "botContext.h"
 #include "bot.h"
 #include "featureAllOthers.h"
-#include "featureStatDistrib.h"
 #include "featureOutlier.h"
 #include "featurePeriodicAmount.h"
 #include "featurePriceWindow.h"
+#include "featureLabelDistrib.h"
 
 unsigned int BotContext::LIMIT_NUM_FEATURES = 1;
 unsigned int BotContext::TARGET_TRANS_FUTUR_DAYS = 100;
@@ -50,7 +50,7 @@ BotContext::BotContext(User *pUser)
 	insert(new CacheBotRootPrimitive());
 	insert(new FeatureBiWeeklyAmount());
 	insert(new FeatureMonthlyAmount());
-//	insert(new FeatureLabelDistrib());
+	insert(new FeatureLabelDistrib());
 	insert(new FeatureOutlier());
 //	insert(new FeatureAllOthers());
 	insert(new FeaturePriceWindow());

@@ -113,19 +113,18 @@ Puppy::Tree* Bot::instancePostTreatmentBot(Puppy::Context& ioContext)
 	double klaArg = -4.5;
 	double ratio = 0.95 / 1.04;
 	for (uint i = 0; i < BotContext::MAX_NUM_FEATURES; ++i) {
-		break;if (qAbs(klaArg) < 0.5) {
+		if (qAbs(klaArg) < 0.5) {
 			klaArg = 4.5;
 //			ratio = 0.5 / 1.5;
 //			treeNodeList += "0";
 //			continue;
 		}
 		treeNodeList += "PriceWindow";
-//		treeNodeList += "MonthlyAmount";
 		treeNodeList += "0";
 		QString klaStr = QString::number(klaArg);
 		ioContext.getPrimitiveByName(klaStr);
 		treeNodeList += klaStr;
-		treeNodeList += "0";
+		treeNodeList += "2";
 		klaArg *= ratio;
 	}
 

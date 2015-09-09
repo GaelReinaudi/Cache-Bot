@@ -102,8 +102,10 @@ void Puppy::Tree::interpret(void* outResult, Puppy::Context& ioContext)
 		if (ioContext.m_summaryJsonObj && ioContext.filterHashIndex < 0) {
 			Tree* postTree = Bot::instancePostTreatmentBot(ioContext);
 			ioContext.mTree = postTree;
+			ioContext.isPostTreatment = true;
 			postTree->front().mPrimitive->execute(&lame, ioContext);
 			ioContext.mTree = 0;
+			ioContext.isPostTreatment = false;
 		}
 	}
 	else {
