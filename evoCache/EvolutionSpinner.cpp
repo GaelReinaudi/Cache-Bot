@@ -7,14 +7,14 @@ const double THRESHOLD_PROBA_BILL = 0.1;
 
 #define POP_SIZE_DEFAULT 75//0
 #define NBR_GEN_DEFAULT 30
-#define NBR_PART_TOURNAMENT_DEFAULT 2
+#define NBR_PART_TOURNAMENT_DEFAULT 4
 #define MAX_DEPTH_DEFAULT 6
 #define MIN_INIT_DEPTH_DEFAULT 3
 #define MAX_INIT_DEPTH_DEFAULT 5
 #define INIT_GROW_PROBA_DEFAULT 0.15f
 #define CROSSOVER_PROBA_DEFAULT 0.8f
 #define CROSSOVER_DISTRIB_PROBA_DEFAULT 0.9f
-#define MUT_STD_PROBA_DEFAULT 0.535f
+#define MUT_STD_PROBA_DEFAULT 0.25f
 #define MUT_MAX_REGEN_DEPTH_DEFAULT 5
 #define MUT_SWAP_PROBA_DEFAULT 0.535f
 #define MUT_SWAP_DISTRIB_PROBA_DEFAULT 0.5f
@@ -140,7 +140,7 @@ void EvolutionSpinner::runEvolution() {
 		double fitness = jsonBest["features"].toArray().first().toObject()["fitness"].toDouble();
 		output[fitness].append(jsonBest);
 //		qDebug() << "billProba" << billProba;
-		if(fitness > 0*THRESHOLD_PROBA_BILL || bestPreEvoTrees.isEmpty()) {
+		if(fitness > THRESHOLD_PROBA_BILL || bestPreEvoTrees.isEmpty()) {
 			(*lBestIndividual).mValid = false;
 			bestPreEvoTrees.insertMulti(fitness, *lBestIndividual);
 		}

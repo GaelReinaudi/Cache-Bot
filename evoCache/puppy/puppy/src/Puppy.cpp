@@ -611,15 +611,18 @@ void Puppy::applySelectionTournament(std::vector<Puppy::Tree>& ioPopulation,
 
 	unsigned int lNextEmpty  = 0;
 	unsigned int lNextFilled = 0;
-	while((lNextFilled < ioPopulation.size()) && (lIndices[lNextFilled] <= 1)) lNextFilled++;
+	while((lNextFilled < ioPopulation.size()) && (lIndices[lNextFilled] <= 1))
+		lNextFilled++;
 	while(lNextFilled < ioPopulation.size()) {
 		while(lIndices[lNextFilled] > 1) {
-			while(lIndices[lNextEmpty] != 0) ++lNextEmpty;
+			while(lIndices[lNextEmpty] != 0)
+				++lNextEmpty;
 			ioPopulation[lNextEmpty] = ioPopulation[lNextFilled];
 			--lIndices[lNextFilled];
 			++lIndices[lNextEmpty];
 		}
-		while((lNextFilled < ioPopulation.size()) && (lIndices[lNextFilled] <= 1)) ++lNextFilled;
+		while((lNextFilled < ioPopulation.size()) && (lIndices[lNextFilled] <= 1))
+			++lNextFilled;
 	}
 }
 
