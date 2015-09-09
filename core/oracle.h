@@ -40,6 +40,11 @@ public:
 	AccountFeature* feature() const {
 		return m_feature;
 	}
+	QJsonObject toJson() const {
+		QJsonObject ret;
+		ret["aaaaaaaaaaaaaaaaaaaaaaaaaaaa"] = 123456;
+		return ret;
+	}
 
 private:
 	QDate m_iniDate;
@@ -76,7 +81,14 @@ public:
 	}
 	QVector<Transaction> revelation(QDate upToDate) override;
 	double avgDaily() const override;
-	double avgCashFlow() const;
+
+	struct Summary
+	{
+		double flow = 0.0;
+		QVector<double> dailyPerOracle;
+		QVector<QJsonObject> summaryPerOracle;
+	};
+	Summary computeAvgCashFlow() const;
 
 private:
 	QVector<QSharedPointer<Oracle> > m_subOracles;

@@ -187,8 +187,8 @@ protected:
 		isValid = true;
 //		Transaction::setCurrentDay(date);
 //		m_pUser->reInjectBot();
-		double flow = m_pUser->oracle()->avgCashFlow() * 100.0;
-		return flow;
+		SuperOracle::Summary summary = m_pUser->oracle()->computeAvgCashFlow();
+		return summary.flow * 100.0;
 	}
 private:
 	User* m_pUser = 0;

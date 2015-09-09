@@ -55,9 +55,9 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 
 	QJsonObject statObj = bestBot->postTreatment();
 
-	double flow = user()->oracle()->avgCashFlow();
+	SuperOracle::Summary summary = user()->oracle()->computeAvgCashFlow();
 	QJsonObject flowObj;
-	flowObj.insert("rate", flow);
+	flowObj.insert("rate", summary.flow);
 	flowObj.insert("state", QString("kFlow"));
 
 
@@ -65,8 +65,8 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 	statObj.insert("trends7", user()->trendSummary(7));
 
 	// if critically low flow
-	if (flow <= -0.95) {
-		WARN() << "Cache flow critically low: " << flow;
+	if (summary.flow <= -0.95) {
+		WARN() << "Cache flow critically low: " << summary.flow;
 	}
 
 	if (flags & SendExtraCash) {

@@ -201,7 +201,8 @@ void ExtraCashView::updateChart()
 	maxY = qMax(maxY, ui->plot->yAxis->range().upper);
 	ui->plot->yAxis->setRange(qMin(ui->plot->yAxis->range().lower, -100.0), maxY);
 
-	double perCentFlow = 100.0 * m_pExtraCache->user()->oracle()->avgCashFlow();
+	SuperOracle::Summary summary = m_pExtraCache->user()->oracle()->computeAvgCashFlow();
+	double perCentFlow = summary.flow * 100.0;
 	ui->spinAvgCashFlow->setValue(perCentFlow);
 	pBars->addData(-daysAgo, perCentFlow);
 //	ui->plot->yAxis2->rescale();

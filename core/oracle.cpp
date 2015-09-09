@@ -30,9 +30,10 @@ double SuperOracle::avgDaily() const
 	return avg;
 }
 
-double SuperOracle::avgCashFlow() const
+SuperOracle::Summary SuperOracle::computeAvgCashFlow() const
 {
 	DBG() << "SuperOracle::avgCashFlow";
+	SuperOracle::Summary summary;
 	double posAvg = 0.0;
 	double negAvg = 0.0;
 	for (auto pOr : m_subOracles) {
@@ -53,15 +54,20 @@ double SuperOracle::avgCashFlow() const
 				  << " " << pOr->avgDailyNeg()
 					 ;
 		}
+		summary.dailyPerOracle.append(avg);
+		summary.summaryPerOracle.append(pOr->toJson());
 	}
-	if (posAvg == 0.0)
-		return -1.0;
-	double flow = (posAvg + negAvg) / posAvg;
-	NOTICE() << "SuperOracle::avgCashFlow " << flow;
-	if (flow < -1.0)
-		return -1.0;
-	if (flow > 1.0)
-		return 1.0;
-	return flow;
+	if (posAvg == 0.0) {
+		WARN() << "SuperOracle::avgCashFlow posAvg == 0.0 ";
+		return summary;
+	}
+	summary.flow = (posAvg + negAvg) / posAvg;
+	NOTICE() << "SuperOracle::avgCashFlow " << summary.flow;
+	if (summary.flow < -1.0)
+		summary.flow = -1.0;
+	if (summary.flow > 1.0)
+		summary.flow = 1.0;
+
+	return summary;
 }
 
