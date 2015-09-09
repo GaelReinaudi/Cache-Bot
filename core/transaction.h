@@ -214,7 +214,7 @@ public:
 	Transaction randSmart() const;
 	Transaction randomTransaction(std::function<double(const Transaction&)> weight) const;
 	Transaction randomTransaction() const;
-	int klaAverage() const;
+	double klaAverage() const;
 
 private:
 	QVector<const Transaction*> m_vector;

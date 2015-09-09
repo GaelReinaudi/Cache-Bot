@@ -119,10 +119,12 @@ public:
 		retObj.insert("fitness", m_fitness);
 		retObj.insert("billProba", m_billProba);
 		QJsonArray argList;
-		for (unsigned int i = 0; i < getNumberArguments(); ++i) {
-			double lArgi = 0.0;
-			getArgument(i, &lArgi, ioContext);
-			argList.append(lArgi);
+		if (ioContext.mTree) {
+			for (unsigned int i = 0; i < getNumberArguments(); ++i) {
+				double lArgi = 0.0;
+				getArgument(i, &lArgi, ioContext);
+				argList.append(lArgi);
+			}
 		}
 		retObj.insert("args", argList);
 		return retObj;
@@ -166,7 +168,6 @@ public:
 		lResult = 0.0;
 		double lArgi = 0.0;
 		for(unsigned int i = 0; i < BotContext::LIMIT_NUM_FEATURES; ++i) {
-			DBG() << "BotContext::LIMIT_NUM_FEATURES" << BotContext::LIMIT_NUM_FEATURES << i;
 			getArgument(i, &lArgi, ioContext);
 			lResult += lArgi;
 		}
@@ -177,7 +178,7 @@ class DummyFeature : public AccountFeature
 {
 public:
 	DummyFeature(QString featureName = "Dummy")
-			: AccountFeature(6, featureName.toStdString())
+			: AccountFeature(3, featureName.toStdString())
 	{}
 };
 

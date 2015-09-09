@@ -6,6 +6,9 @@
 class OracleOutlier : public Oracle
 {
 public:
+	OracleOutlier(AccountFeature* pCreatingFeature)
+		: Oracle(pCreatingFeature)
+	{}
 
 protected:
 	QVector<Transaction> revelation(QDate upToDate) override {
@@ -37,7 +40,7 @@ class FeatureOutlier : public AccountFeature
 {
 public:
 	FeatureOutlier()
-		: AccountFeature(2, "FeatureOutlier")
+		: AccountFeature(3, "FeatureOutlier")
 	{ }
 
 public:

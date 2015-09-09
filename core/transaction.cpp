@@ -4,7 +4,7 @@
 QDate Transaction::s_currentDay = QDate::currentDate();//.addDays(-26);//.addMonths(-2);
 
 QVector<int> Transaction::onlyLoadHashes = QVector<int>();
-int Transaction::s_maxDaysOld = 4 * 31;
+int Transaction::s_maxDaysOld = 6 * 31;
 QDate Transaction::onlyAfterDate = Transaction::currentDay().addMonths(-6);
 int Transaction::onlyAccountType = Account::Type::Saving | Account::Type::Checking | Account::Type::Credit;
 
@@ -152,7 +152,12 @@ auto lam = [](const Transaction& tr){
 	double daysOld = tr.date.daysTo(Transaction::currentDay());
 	double totSpan = Transaction::maxDaysOld();
 	double thresh = totSpan / 2;
-	return daysOld <= thresh ? 1.0 : 1.0 - (daysOld - thresh) / (totSpan - thresh);
+	if (daysOld <= thresh)
+		return 1.0;
+	else if (daysOld <= totSpan)
+		return 1.0 - (daysOld - thresh) / (totSpan - thresh);
+	else
+		return 0.0;
 };
 
 double TransactionBundle::avgSmart() const
@@ -196,7 +201,7 @@ Transaction TransactionBundle::randomTransaction() const
 	return trans(qrand() % count());
 }
 
-int TransactionBundle::klaAverage() const {
+double TransactionBundle::klaAverage() const {
 	if (m_vector.count() == 0)
 		return 0.0;
 	return kindaLog(averageAmount(lam));

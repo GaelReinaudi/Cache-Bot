@@ -52,6 +52,7 @@ public:
 			// reset the dimensionOfVoid
 			m_allTransactions.trans(i).dimensionOfVoid = 0;
 		}
+		m_hypotheTrans.dimensionOfVoid = 0;
 	}
 
 	double balance(int flagType) const {
@@ -84,12 +85,13 @@ public:
 
 	void setHypotheTrans(double amount);
 
-	//! simulates a re-injection of the bot in order ot recalculate downstream slots
-	void reInjectBot() { emit botInjected(m_bestBot); }
+	QJsonObject trendSummary(int nDays) const;
 
 public slots:
 	void injectJsonData(QString jsonStr);
 	void injectJsonBot(QString jsonStr);
+	//! simulates a re-injection of the bot in order ot recalculate downstream slots
+	void reInjectBot() { emit botInjected(m_bestBot); }
 
 protected:
 	Bank* getBankByToken(QString bankTok) const {

@@ -19,7 +19,14 @@ SOURCES += \
     botContext.cpp \
     histoMetric.cpp \
     userMetrics.cpp \
-    oracle.cpp
+	oracle.cpp \
+	$$PWD/../evoCache/puppy/AccRegPrimits.cpp \
+	$$PWD/../evoCache/puppy/featureAllOthers.cpp \
+	$$PWD/../evoCache/puppy/featureStatDistrib.cpp \
+	$$PWD/../evoCache/puppy/featurePeriodicAmount.cpp \
+	$$PWD/../evoCache/puppy/featureOutlier.cpp \
+	$$PWD/../evoCache/puppy/featurePriceWindow.cpp \
+	$$PWD/../evoCache/puppy/featureLabelDistrib.cpp
 
 
 HEADERS += \

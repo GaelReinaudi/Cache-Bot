@@ -124,6 +124,9 @@ private slots:
 			CacheRest::Instance()->extraCashEC2Computation(userId);
 			QSignalSpy spyExtraCashComputation(CacheRest::Instance()->worker, SIGNAL(repliedExtraCashEC2Computation(QString)));
 			QVERIFY(spyExtraCashComputation.wait(10000));
+			QList<QVariant> arguments = spyExtraCashComputation.takeFirst();
+			QString bestBotJson = arguments.at(0).toString();
+			QVERIFY(!bestBotJson.isEmpty());
 		}
 	}
 

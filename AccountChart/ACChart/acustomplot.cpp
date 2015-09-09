@@ -118,7 +118,7 @@ void ACustomPlot::loadCompressedAmount(User* pUser)
 			break;
 		default:
 			pGraph = m_hashGraphs[h].at(3);
-			qDebug() << "tr.type() =" << tr.type();
+			DBG() << "tr.type() =" << tr.type();
 		}
 		pGraph->addData(t, tr.kla());
 	}

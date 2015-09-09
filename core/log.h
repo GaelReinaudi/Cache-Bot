@@ -63,12 +63,14 @@ public:
 // 6 Informational: informational messages
 // 7 Debug: debug-level messages
 //#define DBG() logger::Instance()->m_fileLogger->debug()
-#define DBG(lev) logger::Instance()->m_fileLogger->debug()
-#define INFO() logger::Instance()->m_fileLogger->info()
-#define NOTICE() logger::Instance()->m_fileLogger->notice()
-#define WARN() logger::Instance()->m_fileLogger->warn()
-#define ERR() logger::Instance()->m_fileLogger->error()
-#define ALERT() logger::Instance()->m_fileLogger->alert()
+
+#define OUT_PUT_LOG logger::Instance()->m_fileLogger
+#define DBG(lev) OUT_PUT_LOG->debug()
+#define INFO()   OUT_PUT_LOG->info()
+#define NOTICE() OUT_PUT_LOG->notice()
+#define WARN()   OUT_PUT_LOG->warn()
+#define ERR()    OUT_PUT_LOG->error()
+#define ALERT()  OUT_PUT_LOG->alert()
 
 //#define LOG() logger::Instance()->stream()
 

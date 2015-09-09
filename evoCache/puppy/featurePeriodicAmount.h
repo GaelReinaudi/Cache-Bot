@@ -6,6 +6,9 @@
 class OracleOneDayOfMonth : public Oracle
 {
 public:
+	OracleOneDayOfMonth(AccountFeature* pCreatingFeature)
+		: Oracle(pCreatingFeature)
+	{}
 
 protected:
 	QVector<Transaction> revelation(QDate upToDate) override;
@@ -46,7 +49,7 @@ class FeaturePeriodicAmount : public AccountFeature
 {
 public:
 	FeaturePeriodicAmount(QString featureName = "FixedIncome")
-		: AccountFeature(6, featureName.toStdString())
+		: AccountFeature(3, featureName.toStdString())
 	{ }
 	~FeaturePeriodicAmount() { }
 
@@ -74,16 +77,19 @@ protected:
 		int filterHashIndex = ioContext.filterHashIndex;
 		if(filterHashIndex >= 0) {
 			m_filterHash = ioContext.m_pUser->hashBundles().keys()[filterHashIndex];
-			std::string nodeName = QString("h%1").arg(m_filterHash).toStdString();
-			bool ok = tryReplaceArgumentNode(0, nodeName.c_str(), ioContext);
+			QString nodeName = QString("h%1").arg(m_filterHash);
+			bool ok = tryReplaceArgumentNode(0, nodeName.toStdString().c_str(), ioContext);
 			if(!ok) {
-				ERR() << "Could not replace the node with " << nodeName.c_str();
+				ERR() << "Could not replace the node with " << nodeName;
 			}
-//			nodeName = QString("%1").arg(ioContext.m_pUser->hashBundles()[m_filterHash]->klaAverage()).toStdString();
-//			ok = tryReplaceArgumentNode(2, nodeName.c_str(), ioContext);
-//			if(!ok) {
-//				ERR() << "Could not replace the node with " << nodeName.c_str();
-//			}
+			if (ioContext.currentGeneration == 1) {
+				nodeName = QString("%1").arg(ioContext.m_pUser->hashBundles()[m_filterHash]->klaAverage());
+				ioContext.getPrimitiveByName(nodeName);
+				ok = tryReplaceArgumentNode(1, nodeName.toStdString().c_str(), ioContext);
+				if(!ok) {
+					ERR() << "Could not replace the node with " << nodeName;
+				}
+			}
 		}
 		else {
 			m_filterHash = -1;
@@ -94,12 +100,14 @@ protected:
 		getArgument(++ind, &a, ioContext);
 		m_localStaticArgs.m_hash = a;
 		getArgument(++ind, &a, ioContext);
-		m_localStaticArgs.m_dayOfMonth = a;
-		getArgument(++ind, &a, ioContext);
 		m_localStaticArgs.m_kla = a;
+		getArgument(++ind, &a, ioContext);
+		m_localStaticArgs.m_dayOfMonth = a;
 	}
 	void cleanArgs() override {
 		FeaturePeriodicAmount::cleanArgs();
+		while (qAbs(m_localStaticArgs.m_kla) > 8.0)
+			m_localStaticArgs.m_kla /= 10.0;
 		m_localStaticArgs.m_dayOfMonth = qBound(-14, m_localStaticArgs.m_dayOfMonth, 31);
 		if (m_localStaticArgs.m_dayOfMonth == 0)
 			++m_localStaticArgs.m_dayOfMonth;

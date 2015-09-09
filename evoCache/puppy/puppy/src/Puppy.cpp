@@ -283,11 +283,11 @@ void Puppy::initializePopulation(std::vector<Puppy::Tree>& ioPopulation,
 		ioPopulation[i].mValid = false;
 		unsigned int lInitDepth = ioContext.mRandom.rollInteger(inMinDepth, inMaxDepth);
 		if(ioContext.mRandom.rollUniform() >= inInitGrowProba) {
-			initializeTreeFull(ioPopulation[i], ioContext, lInitDepth);
+			initializeTreeFull(ioPopulation[i], ioContext, lInitDepth, 0);
 			DBG(3) << "initializeTreeFull:" << ioPopulation[i].toStr();
 		}
 		else {
-			initializeTreeGrow(ioPopulation[i], ioContext, inMinDepth, lInitDepth);
+			initializeTreeGrow(ioPopulation[i], ioContext, inMinDepth, lInitDepth, 0);
 			DBG(3) << "initializeTreeGrow:" << ioPopulation[i].toStr();
 		}
 	}
@@ -611,15 +611,18 @@ void Puppy::applySelectionTournament(std::vector<Puppy::Tree>& ioPopulation,
 
 	unsigned int lNextEmpty  = 0;
 	unsigned int lNextFilled = 0;
-	while((lNextFilled < ioPopulation.size()) && (lIndices[lNextFilled] <= 1)) lNextFilled++;
+	while((lNextFilled < ioPopulation.size()) && (lIndices[lNextFilled] <= 1))
+		lNextFilled++;
 	while(lNextFilled < ioPopulation.size()) {
 		while(lIndices[lNextFilled] > 1) {
-			while(lIndices[lNextEmpty] != 0) ++lNextEmpty;
+			while(lIndices[lNextEmpty] != 0)
+				++lNextEmpty;
 			ioPopulation[lNextEmpty] = ioPopulation[lNextFilled];
 			--lIndices[lNextFilled];
 			++lIndices[lNextEmpty];
 		}
-		while((lNextFilled < ioPopulation.size()) && (lIndices[lNextFilled] <= 1)) ++lNextFilled;
+		while((lNextFilled < ioPopulation.size()) && (lIndices[lNextFilled] <= 1))
+			++lNextFilled;
 	}
 }
 

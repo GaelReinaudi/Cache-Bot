@@ -4,6 +4,8 @@
 #include "userMetrics.h"
 #include "oracle.h"
 
+Puppy::Tree* Bot::s_postTreatmentBot = 0;
+
 Bot::Bot(QJsonObject jsonBot, QObject *parent)
 	:DBobj(jsonBot["_id"].toString(), parent)
 {
@@ -35,11 +37,13 @@ Bot::~Bot()
 {
 }
 
-void Bot::init(BotContext *context) {
+void Bot::init(BotContext *context)
+{
+	NOTICE() << "Bot::init" << m_botStrings.join(" ");
 	m_context = context;
 	BotContext::LIMIT_NUM_FEATURES = BotContext::MAX_NUM_FEATURES;
 	Puppy::initializeTree(m_puppyTree, *m_context, m_botStrings);
-	NOTICE() << "Bot::init" << m_puppyTree.toStr();
+	NOTICE() << "-->" << m_puppyTree.toStr();
 }
 
 double Bot::evaluate()
@@ -97,4 +101,37 @@ QJsonObject Bot::postTreatment()
 User* Bot::user() const
 {
 	return m_context->m_pUser;
+}
+
+Puppy::Tree* Bot::instancePostTreatmentBot(Puppy::Context& ioContext)
+{
+	if (Bot::s_postTreatmentBot)
+		return Bot::s_postTreatmentBot;
+
+	QStringList treeNodeList;
+	treeNodeList += "ROOT";
+	double klaArg = -4.5;
+	double ratio = 0.95 / 1.04;
+	for (uint i = 0; i < BotContext::MAX_NUM_FEATURES; ++i) {
+		break;if (qAbs(klaArg) < 0.5) {
+			klaArg = 4.5;
+//			ratio = 0.5 / 1.5;
+//			treeNodeList += "0";
+//			continue;
+		}
+		treeNodeList += "PriceWindow";
+//		treeNodeList += "MonthlyAmount";
+		treeNodeList += "0";
+		QString klaStr = QString::number(klaArg);
+		ioContext.getPrimitiveByName(klaStr);
+		treeNodeList += klaStr;
+		treeNodeList += "0";
+		klaArg *= ratio;
+	}
+
+	WARN() << "Making postTreatmentBot: " << treeNodeList.join(' ');
+
+	Bot::s_postTreatmentBot = new Puppy::Tree;
+	Puppy::initializeTree(*Bot::s_postTreatmentBot, ioContext, treeNodeList);
+	return Bot::s_postTreatmentBot;
 }

@@ -4,6 +4,7 @@
 bool
 Puppy::Primitive::tryReplaceArgumentNode(unsigned int inN, std::string primName, Context &ioContext)
 {
+	DBG() << "tryReplaceArgumentNode " << inN << " " << primName;
 	assert(inN < mNumberArguments);
 	auto iterPrim = ioContext.mPrimitiveMap.find(primName);
 	if(iterPrim == ioContext.mPrimitiveMap.end()) {
@@ -15,6 +16,8 @@ Puppy::Primitive::tryReplaceArgumentNode(unsigned int inN, std::string primName,
 	std::vector<unsigned int> newStack;
 	newStack.push_back(0);
 	newTree.push_back(Node(iterPrim->second->giveReference(ioContext), 1));
+	DBG() << "newTree " << newTree.toStr();
+	DBG() << "ioContext.mTree " << ioContext.mTree->toStr();
 
 	// index in current tree
 	unsigned int lIndex = ioContext.mCallStack.back() + 1;
@@ -24,6 +27,8 @@ Puppy::Primitive::tryReplaceArgumentNode(unsigned int inN, std::string primName,
 
 	exchangeSubTrees(*ioContext.mTree, lIndex, ioContext.mCallStack
 					 , newTree, 0, newStack);
+	DBG() << "newTree " << newTree.toStr();
+	DBG() << "ioContext.mTree " << ioContext.mTree->toStr();
 
 	ioContext.mCallStack.pop_back();
 

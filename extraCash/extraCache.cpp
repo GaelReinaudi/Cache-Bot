@@ -59,7 +59,10 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 	QJsonObject flowObj;
 	flowObj.insert("rate", flow);
 	flowObj.insert("state", QString("kFlow"));
+
+
 	statObj.insert("flow", flowObj);
+	statObj.insert("trends7", user()->trendSummary(7));
 
 //	// if critically low flow
 //	if (flow <= -0.95) {

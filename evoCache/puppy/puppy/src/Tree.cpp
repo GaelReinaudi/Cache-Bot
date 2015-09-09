@@ -44,6 +44,7 @@
 #include <string>       // std::string
 #include <iostream>     // std::cout
 #include <sstream>      // std::ostringstream
+#include "bot.h"
 
 /*!
  *  \brief Construct a new tree, with given fitness and validity flag.
@@ -93,11 +94,17 @@ void Puppy::Tree::interpret(void* outResult, Puppy::Context& ioContext)
 	ioContext.mCallStack.push_back(0);
 	if(isValidTree()) {
 		front().mPrimitive->execute(outResult, ioContext);
+		ioContext.mTree = 0;
 		double lame = 0;
-		ioContext.getPrimitiveByName("FeatureAllOthers")->execute(&lame, ioContext);
-//		double& lResult = *(double*)outResult;
-//		ioContext.getPrimitiveByName("FeatureOutlier")->execute(&lame, ioContext);
-//		lResult += lame;
+//		if (ioContext.filterHashIndex < 0) {
+//			ioContext.getPrimitiveByName("FeatureAllOthers")->execute(&lame, ioContext);
+//		}
+		if (ioContext.m_summaryJsonObj && ioContext.filterHashIndex < 0) {
+			Tree* postTree = Bot::instancePostTreatmentBot(ioContext);
+			ioContext.mTree = postTree;
+			postTree->front().mPrimitive->execute(&lame, ioContext);
+			ioContext.mTree = 0;
+		}
 	}
 	else {
 		double& lResult = *(double*)outResult;

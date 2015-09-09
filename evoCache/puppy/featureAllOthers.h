@@ -6,6 +6,9 @@
 class OracleFilteredRest : public Oracle
 {
 public:
+	OracleFilteredRest(AccountFeature* pCreatingFeature)
+		: Oracle(pCreatingFeature)
+	{}
 
 protected:
 	QVector<Transaction> revelation(QDate upToDate) override;
@@ -48,7 +51,8 @@ class FeatureAllOthers : public AccountFeature
 {
 public:
 	FeatureAllOthers()
-		: AccountFeature(2, "FeatureAllOthers")
+		: AccountFeature(1/*keep to 0 or it will try to get the argument from a tree that doesn't exist when used at Tree.cpp:97*/
+						 , "FeatureAllOthers")
 	{ }
 
 public:
@@ -57,16 +61,6 @@ public:
 //		int ind = -1;
 //		getArgument(++ind, &a, ioContext);
 //		m_localStaticArgs.m_avgDayIn099 = a;
-//		getArgument(++ind, &a, ioContext);
-//		m_localStaticArgs.m_avgDayOut099 = a;
-//		getArgument(++ind, &a, ioContext);
-//		m_localStaticArgs.m_avgDayIn90 = a;
-//		getArgument(++ind, &a, ioContext);
-//		m_localStaticArgs.m_avgDayOut90 = a;
-//		getArgument(++ind, &a, ioContext);
-//		m_localStaticArgs.m_avgDayIn95 = a;
-//		getArgument(++ind, &a, ioContext);
-//		m_localStaticArgs.m_avgDayOut95 = a;
 	}
 
 	QJsonObject toJson(Puppy::Context& ioContext) override {

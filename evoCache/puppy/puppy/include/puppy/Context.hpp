@@ -111,6 +111,7 @@ public:
 		double val = name.toDouble(&yes);
 		if (yes) {
 			PrimitiveHandle newTerminal = new TokenT<double>(stdname, val);
+			NOTICE() << "Making new terminal " << stdname << " = " << val;
 			insert(newTerminal);
 			return newTerminal;
 		}
@@ -133,6 +134,7 @@ public:
 	int filterHashIndex = -1;
 	enum {None = 0x0, AllOthers = 0x1};
 	int flags = 0;
+	unsigned int currentGeneration = 0;
 };
 
 }

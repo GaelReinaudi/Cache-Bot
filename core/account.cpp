@@ -30,15 +30,22 @@ void Account::loadJsonData(QJsonObject json)
 	QString type = json["type"].toString();
 	if (metaName.contains("saving", Qt::CaseInsensitive)) {
 		m_type = Type::Saving;
+		NOTICE() << "Saving";
 	}
 	if (metaName.contains("checking", Qt::CaseInsensitive)) {
 		m_type = Type::Checking;
+		NOTICE() << "Checking";
 	}
 	if (metaName.contains("Ckg", Qt::CaseInsensitive)) {
 		m_type = Type::Checking;
+		NOTICE() << "Checking";
 	}
 	if (type.contains("credit", Qt::CaseInsensitive)) {
 		m_type = Type::Credit;
+		NOTICE() << "Credit";
+	}
+	if (m_type == Type::Unknown) {
+		ERR() << "Unknown account type. metaName: " << metaName << " . type: " << type;
 	}
 	m_balance = json["balance"].toObject()["available"].toDouble();
 }

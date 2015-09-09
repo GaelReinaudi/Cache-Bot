@@ -1,4 +1,5 @@
 #include "oracle.h"
+#include "AccRegPrimits.h"
 
 QVector<Transaction> SuperOracle::revelation(QDate upToDate)
 {
@@ -38,18 +39,19 @@ double SuperOracle::avgCashFlow() const
 		double avg = pOr->avgDaily();
 		if (avg > 0) {
 			posAvg += avg;
-			INFO() << "subOracle daily > 0 " << avg;
+			INFO() << "+daily " << avg << "      " << pOr->feature()->getName();
 		}
 		else if (avg < 0) {
 			negAvg += avg;
-			INFO() << "subOracle daily < 0 " << avg;
+			INFO() << "-daily " << avg << "      " << pOr->feature()->getName();
 		}
 		else {
 			posAvg += pOr->avgDailyPos();
 			negAvg += pOr->avgDailyNeg();
-			INFO() << "subOracle daily = 0 " << avg
+			INFO() << "daily = " << avg << " " << pOr->feature()->getName()
 				  << " " << pOr->avgDailyPos()
-				  << " " << pOr->avgDailyNeg();
+				  << " " << pOr->avgDailyNeg()
+					 ;
 		}
 	}
 	if (posAvg == 0.0)
@@ -62,3 +64,4 @@ double SuperOracle::avgCashFlow() const
 		return 1.0;
 	return flow;
 }
+

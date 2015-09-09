@@ -21,8 +21,7 @@ public:
 	QJsonObject postTreatment();
 	User* user() const;
 
-//public:
-//	static Bot fromTree();
+	static Puppy::Tree* instancePostTreatmentBot(Puppy::Context& ioContext);
 
 	QJsonObject lastStats() const {
 		return m_lastStats;
@@ -37,6 +36,9 @@ private:
 	QStringList m_botStrings;
 	BotContext* m_context;
 	QJsonObject m_lastStats;
+	static Puppy::Tree* s_postTreatmentBot;
+
+	friend class Puppy::Tree;
 };
 
 #endif // BOT_H
