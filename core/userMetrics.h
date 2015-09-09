@@ -180,8 +180,14 @@ public:
 
 protected:
 	double computeFor(const QDate& date, bool& isValid) override {
+		if (date.daysTo(QDate::currentDate()) >= Transaction::maxDaysOld() / 2) {
+			isValid = false;
+			return 0.0;
+		}
 		isValid = true;
-		double flow = m_pUser->oracle()->avgCashFlow();
+//		Transaction::setCurrentDay(date);
+//		m_pUser->reInjectBot();
+		double flow = m_pUser->oracle()->avgCashFlow() * 100.0;
 		return flow;
 	}
 private:

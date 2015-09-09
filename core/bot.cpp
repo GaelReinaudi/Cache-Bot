@@ -115,7 +115,7 @@ Puppy::Tree* Bot::instancePostTreatmentBot(Puppy::Context& ioContext)
 	for (uint i = 0; i < BotContext::MAX_NUM_FEATURES; ++i) {
 		if (qAbs(klaArg) < 0.5) {
 			klaArg = 4.5;
-//			ratio = 0.5 / 1.5;
+			ratio = 0.85 / 1.14;
 //			treeNodeList += "0";
 //			continue;
 		}

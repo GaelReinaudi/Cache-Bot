@@ -19,6 +19,8 @@ MetricViewer::MetricViewer(QString userID)
 
 	ui->metricList->setMouseTracking(true);
 	connect(ui->metricList, SIGNAL(entered(QModelIndex)), this, SLOT(onHoverListIndex(QModelIndex)));
+
+	ui->acPlot->yAxis->setAutoTickStep(true);
 }
 
 MetricViewer::~MetricViewer()

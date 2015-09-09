@@ -26,7 +26,7 @@ private:
 			o_retObj.insert("proba", m_dayProba);
 			o_retObj.insert("amount", m_amount);
 			o_retObj.insert("effect", m_effect);
-			o_retObj.insert("labels", QJsonArray::fromStringList(m_bundle.uniqueNames()));
+			o_retObj.insert("zlabels", QJsonArray::fromStringList(m_bundle.uniqueNames()));
 		}
 		TransactionBundle m_bundle;
 		double m_dayProba = 0.0;
