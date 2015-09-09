@@ -33,6 +33,7 @@ ExtraCashView::ExtraCashView(QString userID, QWidget *parent) :
 //	ui->plot->yAxis->setVisible(false);
 	ui->plot->yAxis2->setVisible(true);
 	ui->plot->yAxis->setSubTickCount(10);
+	ui->plot->yAxis2->setRange(-100.0, 100);
 
 	int tempInd = -1;
 
@@ -126,7 +127,7 @@ void ExtraCashView::onBotInjected(Bot* pBot)
 
 	// transaction at the starting date of the playback
 	auto& real = m_pExtraCache->user()->allTrans();
-	qDebug() << "m_date" << m_pbDate;
+	qDebug() << "date" << m_pbDate;
 
 	for (int i = 0; i < real.count(); ++i) {
 		// finds the index of the last transaction within the playback date
@@ -139,7 +140,6 @@ void ExtraCashView::onBotInjected(Bot* pBot)
 	}
 	NOTICE() << "initial pb balance"<< m_pbBalance << " at" << m_pbDate.toString();
 
-	ui->spinBox->setValue(m_pbBalance);
 	updateChart();
 }
 
@@ -205,9 +205,9 @@ void ExtraCashView::updateChart()
 	ui->spinAvgCashFlow->setValue(perCentFlow);
 	pBars->addData(-daysAgo, perCentFlow);
 //	ui->plot->yAxis2->rescale();
-	double minY1 = ui->plot->yAxis->range().lower;
-	double maxY1 = ui->plot->yAxis->range().upper;
-	ui->plot->yAxis2->setRange(100.0*qMin(-1.0, minY1/maxY1), 100.0*qMax(1.0, -maxY1/minY1));
+//	double minY1 = ui->plot->yAxis->range().lower;
+//	double maxY1 = ui->plot->yAxis->range().upper;
+//	ui->plot->yAxis2->setRange(100.0*qMin(-1.0, minY1/maxY1), 100.0*qMax(1.0, -maxY1/minY1));
 	ui->plot->xAxis2->setRange(-daysAgo - displayDayPast, -daysAgo + displayDayFuture + 1);
 
 	ui->plot->replot();

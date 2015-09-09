@@ -4,6 +4,11 @@
 #include "cacheAccountConnector.h"
 #include <QThread>
 
+//class FlowTrend : public QMap<int /*daysAgo*/, QList
+//{
+
+//};
+
 class ExtraCache : public CacheAccountConnector
 {
 	//Q_OBJECT
