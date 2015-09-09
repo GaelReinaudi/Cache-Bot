@@ -1,7 +1,5 @@
 #include "featureStatDistrib.h"
 
-#define MIN_TRANSACTIONS_FOR_STAT 3//16
-
 void FeatureStatDistrib::getArgs(Puppy::Context &ioContext) {
 	// if we are forcing a given hashed bundle
 	int filterHashIndex = ioContext.filterHashIndex;
@@ -49,7 +47,7 @@ double FeatureStatDistrib::apply(TransactionBundle& allTrans)
 		}
 	}
 	int numBund = m_localStaticArgs.m_bundle.count();
-	if (numBund <= MIN_TRANSACTIONS_FOR_STAT) {
+	if (numBund <= minTransactionForBundle()) {
 		m_localStaticArgs.m_bundle.clear();
 		m_fitness = 0.0;
 		m_billProba = 0.0;
@@ -59,10 +57,7 @@ double FeatureStatDistrib::apply(TransactionBundle& allTrans)
 	computeNextDayProba();
 
 	m_billProba = m_localStaticArgs.m_dayProba;
-//	m_fitness = qAbs(kindaLog(m_localStaticArgs.m_bundle.sumDollar()));
 	m_fitness = 10.0;
-//	m_fitness *= numBund * numBund;
-//	m_fitness /= MIN_TRANSACTIONS_FOR_STAT * MIN_TRANSACTIONS_FOR_STAT;
 	m_fitness *= m_localStaticArgs.m_dayProba;
 	return m_fitness;
 }
@@ -89,17 +84,16 @@ void FeatureStatDistrib::execute(void *outDatum, Puppy::Context &ioContext)
 			<< " p=" << m_billProba
 			<< " n=" << m_localStaticArgs.m_bundle.count()
 			<< " h=" << m_localStaticArgs.m_hash;
-//		if (m_billProba > 0.001)
-		{
-			QJsonArray features = (*ioContext.m_summaryJsonObj)["features"].toArray();
-			features.append(toJson(ioContext));
-			ioContext.m_summaryJsonObj->insert("features", features);
-		}
+
+		QJsonArray features = (*ioContext.m_summaryJsonObj)["features"].toArray();
+		features.append(toJson(ioContext));
+		ioContext.m_summaryJsonObj->insert("features", features);
+
 		for (int i = 0; i < m_localStaticArgs.m_bundle.count(); ++i) {
 			const Transaction& tr = m_localStaticArgs.m_bundle.trans(i);
 			emit ioContext.m_pUser->botContext()->matchedTransaction(tr.time_t(), tr.amountDbl(), 2);
 		}
-		OracleStatDistrib* pNewOr = new OracleStatDistrib();
+		OracleStatDistrib* pNewOr = new OracleStatDistrib(this);
 		pNewOr->m_args = m_localStaticArgs;
 		// making a shared pointer that will take care of cleaning once the oracle is no longer referenced
 		QSharedPointer<Oracle> newOracle(pNewOr);

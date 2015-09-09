@@ -17,6 +17,7 @@ protected:
 				&& trans.effect128 <=  1 + m_localStaticArgs.m_effect * EFFECT_RANGE_WIDTH_RATIO
 				&& trans.effect128 >= -1 + m_localStaticArgs.m_effect / EFFECT_RANGE_WIDTH_RATIO;
 	}
+	int minTransactionForBundle() const override { return 16; }
 };
 
 #endif // FEATURELABELDISTRIB_H

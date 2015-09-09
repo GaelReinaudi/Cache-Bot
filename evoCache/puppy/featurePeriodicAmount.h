@@ -6,6 +6,9 @@
 class OracleOneDayOfMonth : public Oracle
 {
 public:
+	OracleOneDayOfMonth(AccountFeature* pCreatingFeature)
+		: Oracle(pCreatingFeature)
+	{}
 
 protected:
 	QVector<Transaction> revelation(QDate upToDate) override;

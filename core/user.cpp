@@ -184,6 +184,16 @@ void User::injectJsonBot(QString jsonStr)
 	emit botInjected(m_bestBot);
 }
 
+QJsonObject User::trendSummary(int nDays) const
+{
+	QJsonObject trends;
 
+	Transaction::setCurrentDay(QDate::currentDate());
+	m_bestBot->summarize();
+	Transaction::setCurrentDay(QDate::currentDate().addDays(-nDays));
+	m_bestBot->summarize();
+
+	return trends;
+}
 
 

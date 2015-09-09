@@ -6,6 +6,9 @@
 class OracleOutlier : public Oracle
 {
 public:
+	OracleOutlier(AccountFeature* pCreatingFeature)
+		: Oracle(pCreatingFeature)
+	{}
 
 protected:
 	QVector<Transaction> revelation(QDate upToDate) override {

@@ -158,7 +158,7 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 			const Transaction& tr = m_localStaticArgs.m_bundle.trans(i);
 			emit ioContext.m_pUser->botContext()->matchedTransaction(tr.time_t(), tr.amountDbl(), 1);
 		}
-		OracleOneDayOfMonth* pNewOr = new OracleOneDayOfMonth();
+		OracleOneDayOfMonth* pNewOr = new OracleOneDayOfMonth(this);
 		pNewOr->m_args = m_localStaticArgs;
 		// making a shared pointer that will take care of cleaning once the oracle is no longer referenced
 		QSharedPointer<Oracle> newOracle(pNewOr);

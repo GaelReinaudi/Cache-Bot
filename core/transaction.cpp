@@ -152,7 +152,12 @@ auto lam = [](const Transaction& tr){
 	double daysOld = tr.date.daysTo(Transaction::currentDay());
 	double totSpan = Transaction::maxDaysOld();
 	double thresh = totSpan / 2;
-	return daysOld <= thresh ? 1.0 : 1.0 - (daysOld - thresh) / (totSpan - thresh);
+	if (daysOld <= thresh)
+		return 1.0;
+	else if (daysOld <= totSpan)
+		return 1.0 - (daysOld - thresh) / (totSpan - thresh);
+	else
+		return 0.0;
 };
 
 double TransactionBundle::avgSmart() const

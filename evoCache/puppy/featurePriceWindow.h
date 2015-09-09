@@ -18,6 +18,8 @@ protected:
 				(trans.kla() <= 1.50 * m_localStaticArgs.m_kla
 				&& trans.kla() >= 0.50 * m_localStaticArgs.m_kla);
 	}
+	int minTransactionForBundle() const override { return 2; }
+
 };
 
 #endif // FEATUREPRICEWINDOW_H

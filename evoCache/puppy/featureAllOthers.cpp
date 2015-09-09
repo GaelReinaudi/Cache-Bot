@@ -94,7 +94,7 @@ void FeatureAllOthers::execute(void *outDatum, Puppy::Context &ioContext)
 		features.append(toJson(ioContext));
 		ioContext.m_summaryJsonObj->insert("features", features);
 
-		OracleFilteredRest* pNewOr = new OracleFilteredRest();
+		OracleFilteredRest* pNewOr = new OracleFilteredRest(this);
 		pNewOr->m_args = m_localStaticArgs;
 		// making a shared pointer that will take care of cleaning once the oracle is no longer referenced
 		QSharedPointer<Oracle> newOracle(pNewOr);

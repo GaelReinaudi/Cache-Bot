@@ -6,6 +6,9 @@
 class OracleFilteredRest : public Oracle
 {
 public:
+	OracleFilteredRest(AccountFeature* pCreatingFeature)
+		: Oracle(pCreatingFeature)
+	{}
 
 protected:
 	QVector<Transaction> revelation(QDate upToDate) override;

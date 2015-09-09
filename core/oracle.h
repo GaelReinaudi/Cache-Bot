@@ -3,11 +3,14 @@
 #include "core_global.h"
 #include "common.h"
 #include "transaction.h"
+class AccountFeature;
 
 class CORESHARED_EXPORT Oracle
 {
 public:
-	Oracle() {}
+	Oracle(AccountFeature* pCreatingFeature)
+	 : m_feature(pCreatingFeature)
+	{}
 	virtual ~Oracle() {}
 
 public:
@@ -34,15 +37,23 @@ public:
 		return avg <= 0 ? avg : 0.0;
 	}
 
+	AccountFeature* feature() const {
+		return m_feature;
+	}
 
 private:
 	QDate m_iniDate;
 	QDate m_curDate;
+	AccountFeature* m_feature = 0;
 };
 
 class CORESHARED_EXPORT SuperOracle : public Oracle
 {
 public:
+	SuperOracle()
+		: Oracle(0)
+	{}
+
 	void resetDate(QDate initialDate) override {
 		Oracle::resetDate(initialDate);
 		for (auto pOr : m_subOracles) {

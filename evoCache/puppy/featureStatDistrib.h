@@ -6,6 +6,9 @@
 class OracleStatDistrib : public Oracle
 {
 public:
+	OracleStatDistrib(AccountFeature* pCreatingFeature)
+		: Oracle(pCreatingFeature)
+	{}
 
 protected:
 	QVector<Transaction> revelation(QDate upToDate) override;
@@ -56,6 +59,7 @@ protected:
 	double apply(TransactionBundle& allTrans);
 
 	virtual bool passFilter(quint64 dist, const Transaction& trans) const = 0;
+	virtual int minTransactionForBundle() const = 0;
 	void computeNextDayProba();
 
 protected:
