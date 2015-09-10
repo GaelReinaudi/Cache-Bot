@@ -74,6 +74,7 @@ void AccountFeature::execute(void *outDatum, Puppy::Context &ioContext)
 	isolateBundledTransactions(ioContext.isPostTreatment);
 
 	onJustApplied(allTrans, ioContext.m_summaryJsonObj);
+	output = m_fitness;
 
 	m_billProba = maxDailyProbability();
 
