@@ -137,30 +137,43 @@ public:
 	bool isFeature() const override { return true; }
 protected:
 	virtual FeatureArgs* localStaticArgs() = 0;
-	virtual void getArgs(Puppy::Context &ioContext) {
-		// if we are forcing a given hashed bundle
-		int filterHashIndex = ioContext.filterHashIndex;
-		if(filterHashIndex >= 0) {
-			m_filterHash = ioContext.m_pUser->hashBundles().keys()[filterHashIndex];
-		}
-		else {
-			m_filterHash = -1;
+	virtual void getArgs(Puppy::Context &ioContext) { Q_UNUSED(ioContext); }
+	virtual void onGeneration(int nGen, Puppy::Context &ioContext) {
+		if (nGen == 1) {
+			// if we are forcing a given hashed bundle
+			int filterHashIndex = ioContext.filterHashIndex;
+			if(filterHashIndex >= 0) {
+				m_filterHash = ioContext.m_pUser->hashBundles().keys()[filterHashIndex];
+				QString nodeName = QString("h%1").arg(m_filterHash);
+				bool ok = tryReplaceArgumentNode(0, nodeName.toStdString().c_str(), ioContext);
+				if(!ok) {
+					ERR() << "Could not replace the node with " << nodeName;
+				}
+				nodeName = QString("%1").arg(ioContext.m_pUser->hashBundles()[m_filterHash]->klaAverage());
+				ioContext.getPrimitiveByName(nodeName);
+				ok = tryReplaceArgumentNode(1, nodeName.toStdString().c_str(), ioContext);
+				if(!ok) {
+					ERR() << "Could not replace the node with " << nodeName;
+				}
+			}
+			else {
+				m_filterHash = -1;
+			}
 		}
 	}
 	virtual void cleanArgs() {}
-	virtual bool cannotExecute(Puppy::Context& ioContext) const { return false; }
+	virtual bool cannotExecute(Puppy::Context& ioContext) const { Q_UNUSED(ioContext); return false; }
 	virtual double apply(TransactionBundle& allTrans, bool doLog = false) = 0;
 	virtual void isolateBundledTransactions(bool isPostTreatment = false);
 	virtual void onJustApplied(TransactionBundle&, bool) {}
-	virtual void emitGraphics() const {};
+	virtual void emitGraphics() const {}
 	virtual double maxDailyProbability() const { return m_fitness; }
 
 protected:
+	double m_fitness = 0.0;
+private:
 	// if any, the hash to filter the transaction on
 	int m_filterHash = -1;
-
-//	TransactionBundle m_bundle;
-	double m_fitness = 0.0;
 	double m_billProba = 0.0;
 };
 

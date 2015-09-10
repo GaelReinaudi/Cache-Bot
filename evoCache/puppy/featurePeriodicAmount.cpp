@@ -2,6 +2,17 @@
 
 static const int SLACK_FOR_LATE_TRANS = 2;
 
+void FeatureMonthlyAmount::getArgs(Puppy::Context &ioContext) {
+	double a = 0;
+	int ind = -1;
+	getArgument(++ind, &a, ioContext);
+	m_localStaticArgs.m_hash = a;
+	getArgument(++ind, &a, ioContext);
+	m_localStaticArgs.m_kla = a;
+	getArgument(++ind, &a, ioContext);
+	m_localStaticArgs.m_dayOfMonth = a;
+}
+
 double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 {
 	QDate iniDate = Transaction::currentDay().addDays(-Transaction::maxDaysOld());

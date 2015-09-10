@@ -59,6 +59,7 @@ QJsonObject Bot::summarize()
 	QJsonObject jsonObj;
 	jsonObj.insert("features", QJsonArray());
 	m_puppyTree.mValid = false;
+	emit m_context->summarizingTree();
 	m_context->m_summaryJsonObj = &jsonObj;
 	m_context->m_pUser->oracle()->clearSubOracles();
 	double fit = evaluate();

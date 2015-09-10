@@ -1,20 +1,6 @@
 #include "featureStatDistrib.h"
 
 void FeatureStatDistrib::getArgs(Puppy::Context &ioContext) {
-	// if we are forcing a given hashed bundle
-	int filterHashIndex = ioContext.filterHashIndex;
-	if(filterHashIndex >= 0) {
-		m_filterHash = ioContext.m_pUser->hashBundles().keys()[filterHashIndex];
-		std::string nodeName = QString("h%1").arg(m_filterHash).toStdString();
-		bool ok = tryReplaceArgumentNode(0, nodeName.c_str(), ioContext);
-		if(!ok) {
-			ERR() << "Could not replace the node with " << nodeName.c_str();
-		}
-	}
-	else {
-		m_filterHash = -1;
-	}
-
 	double a = 0;
 	int ind = -1;
 	getArgument(++ind, &a, ioContext);
@@ -88,24 +74,8 @@ void FeatureStatDistrib::isolateBundledTransactions(bool isPostTreatment /*= fal
 
 void FeatureStatDistrib::computeNextDayProba()
 {
-	double daysTo = m_localStaticArgs.m_bundle.trans(0).date.daysTo(m_localStaticArgs.m_bundle.trans(1).date);
-	double EMA_FACTOR = 0.25;
-	DBG() << "daysTo " << daysTo;
-
-	for (int i = 2; i < m_localStaticArgs.m_bundle.count(); ++i) {
-		double daysToNext = m_localStaticArgs.m_bundle.trans(i - 1).date.daysTo(m_localStaticArgs.m_bundle.trans(i).date);
-		daysTo *= (1.0 - EMA_FACTOR);
-		daysTo += daysToNext * EMA_FACTOR;
-		DBG() << "daysToNext " << daysToNext << "daysTo " << daysTo;
-	}
-	// if time since last is getting larger than when we should have seen one, we take it as a new point
-	double daysToEnd = m_localStaticArgs.m_bundle.last().date.daysTo(Transaction::currentDay());
-	if (daysToEnd > daysTo) {
-		daysTo *= (1.0 - EMA_FACTOR);
-		daysTo += daysToEnd * EMA_FACTOR;
-	}
-	DBG() << "daysToEnd " << daysToEnd << " final daysTo " << daysTo;
-	m_localStaticArgs.m_dayProba = 1.0 / daysTo;
+	double daysToNext = m_localStaticArgs.m_bundle.daysToNextSmart();
+	m_localStaticArgs.m_dayProba = 1.0 / daysToNext;
 	// correction for proba not small
 	m_localStaticArgs.m_dayProba = m_localStaticArgs.m_dayProba / (1.0 + m_localStaticArgs.m_dayProba);
 }

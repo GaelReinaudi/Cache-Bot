@@ -71,38 +71,7 @@ protected:
 	int approxSpacingPayment() override {
 		return 30;
 	}
-	void getArgs(Puppy::Context &ioContext) override {
-		// if we are forcing a given hashed bundle
-		int filterHashIndex = ioContext.filterHashIndex;
-		if(filterHashIndex >= 0) {
-			m_filterHash = ioContext.m_pUser->hashBundles().keys()[filterHashIndex];
-			QString nodeName = QString("h%1").arg(m_filterHash);
-			bool ok = tryReplaceArgumentNode(0, nodeName.toStdString().c_str(), ioContext);
-			if(!ok) {
-				ERR() << "Could not replace the node with " << nodeName;
-			}
-			if (ioContext.currentGeneration == 1) {
-				nodeName = QString("%1").arg(ioContext.m_pUser->hashBundles()[m_filterHash]->klaAverage());
-				ioContext.getPrimitiveByName(nodeName);
-				ok = tryReplaceArgumentNode(1, nodeName.toStdString().c_str(), ioContext);
-				if(!ok) {
-					ERR() << "Could not replace the node with " << nodeName;
-				}
-			}
-		}
-		else {
-			m_filterHash = -1;
-		}
-
-		double a = 0;
-		int ind = -1;
-		getArgument(++ind, &a, ioContext);
-		m_localStaticArgs.m_hash = a;
-		getArgument(++ind, &a, ioContext);
-		m_localStaticArgs.m_kla = a;
-		getArgument(++ind, &a, ioContext);
-		m_localStaticArgs.m_dayOfMonth = a;
-	}
+	void getArgs(Puppy::Context &ioContext) override;
 	void cleanArgs() override {
 		FeaturePeriodicAmount::cleanArgs();
 		while (qAbs(m_localStaticArgs.m_kla) > 8.0)
@@ -123,7 +92,7 @@ protected:
 	void onJustApplied(TransactionBundle &allTrans, bool doLog) override;
 
 	double maxDailyProbability() const override {
-		double proba = m_fitness;
+		double proba = 1.0;
 		proba *= qMax(1, m_localStaticArgs.m_consecMonthBeforeMissed);
 		proba /= 4 + 2 * m_localStaticArgs.m_consecMissed;
 		return proba;

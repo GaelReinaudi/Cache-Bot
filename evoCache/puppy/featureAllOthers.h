@@ -56,13 +56,6 @@ public:
 	{ }
 
 protected:
-	void getArgs(Puppy::Context &ioContext) override {
-//		double a = 0;
-//		int ind = -1;
-//		getArgument(++ind, &a, ioContext);
-//		m_localStaticArgs.m_avgDayIn099 = a;
-	}
-
 	QJsonObject toJson(Puppy::Context& ioContext) override {
 		QJsonObject retObj = AccountFeature::toJson(ioContext);
 		m_localStaticArgs.intoJson(retObj);

@@ -133,14 +133,10 @@ void EvolutionSpinner::runEvolution() {
 				std::max_element(lPopulation.begin(), lPopulation.end());
 		DBG() << "Best individual at generation " << lNbrGen << " is: "
 			  << lBestIndividual->toStr();
-//		std::vector<unsigned int> outCallStack = (*lBestIndividual).getFeatureStack(0, *m_context);
-//		qDebug() << QVector<unsigned int>::fromStdVector(outCallStack);
 
 		QJsonObject jsonBest = summarize(*lBestIndividual);
-//		double billProba = jsonBest["features"].toArray().first().toObject()["billProba"].toDouble();
 		double fitness = jsonBest["features"].toArray().first().toObject()["fitness"].toDouble();
 		output[fitness].append(jsonBest);
-//		qDebug() << "billProba" << billProba;
 		if(fitness > THRESHOLD_PROBA_BILL || bestPreEvoTrees.isEmpty()) {
 			(*lBestIndividual).mValid = false;
 			bestPreEvoTrees.insertMulti(fitness, *lBestIndividual);

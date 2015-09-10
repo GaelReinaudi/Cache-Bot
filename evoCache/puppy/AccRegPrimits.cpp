@@ -56,14 +56,14 @@ Puppy::Primitive::tryReplaceArgumentNode(unsigned int inN, std::string primName,
 void AccountFeature::execute(void *outDatum, Puppy::Context &ioContext)
 {
 	double& output = *(double*)outDatum;
+	m_fitness = output = 0.0;
+	if (cannotExecute(ioContext))
+		return;
+
+	onGeneration(ioContext.currentGeneration, ioContext);
 
 	getArgs(ioContext);
 	cleanArgs();
-
-	m_fitness = output = 0.0;
-
-	if (cannotExecute(ioContext))
-		return;
 
 	// will be ALL the transactions if m_filterHash < 0
 	TransactionBundle& allTrans = ioContext.m_pUser->transBundle(m_filterHash);

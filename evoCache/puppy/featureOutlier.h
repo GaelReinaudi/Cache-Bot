@@ -43,12 +43,6 @@ public:
 	{ }
 
 protected:
-	void getArgs(Puppy::Context &ioContext) override {
-		AccountFeature::getArgs(ioContext);
-		double a = 0;
-		int ind = -1;
-	}
-
 	QJsonObject toJson(Puppy::Context& ioContext) override {
 		QJsonObject retObj = AccountFeature::toJson(ioContext);
 		m_localStaticArgs.intoJson(retObj);
