@@ -1,7 +1,7 @@
 #include "transaction.h"
 #include "account.h"
 
-QDate Transaction::s_currentDay = QDate::currentDate();//.addDays(-26);//.addMonths(-2);
+QDate Transaction::s_currentDay = QDate::currentDate();//.addDays(-25);//.addMonths(-2);
 
 QVector<int> Transaction::onlyLoadHashes = QVector<int>();
 int Transaction::s_maxDaysOld = 4 * 31;
@@ -205,4 +205,34 @@ double TransactionBundle::klaAverage() const {
 	if (m_vector.count() == 0)
 		return 0.0;
 	return kindaLog(averageAmount(lam));
+}
+
+double TransactionBundle::daysToNextSmart() const
+{
+	double daysToNext = double(Transaction::maxDaysOld()) / count();
+	double EMA_FACTOR = 0.5;
+
+	for (int i = 1; i < count(); ++i) {
+		double daysTo_i = trans(i - 1).date.daysTo(trans(i).date);
+		double oldD2N = daysToNext;
+		if (daysTo_i <= 0.0) {
+//			continue;
+		}
+		else if (daysToNext == 0.0) {
+			daysToNext = daysTo_i;
+		}
+		else {
+			daysToNext *= (1.0 - EMA_FACTOR);
+			daysToNext += daysTo_i * EMA_FACTOR;
+		}
+		DBG() << "daysTo_ " << i << ": " << daysTo_i << " daysToNext: " << oldD2N << " -> " << daysToNext;
+	}
+	// if time since last is getting larger than when we should have seen one, we take it as a new point
+	double daysToEnd = last().date.daysTo(Transaction::currentDay());
+	if (daysToEnd > daysToNext) {
+		daysToNext *= (1.0 - EMA_FACTOR);
+		daysToNext += daysToEnd * EMA_FACTOR;
+	}
+	WARN() << "daysToEnd " << daysToEnd << " final daysTo " << daysToNext;
+	return daysToNext;
 }
