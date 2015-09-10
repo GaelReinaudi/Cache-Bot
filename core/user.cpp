@@ -142,6 +142,9 @@ void User::injectJsonData(QString jsonStr)
 
 	makeHashBundles();
 
+	// remake the context just in case
+	makeBotContext();
+
 	emit injected(this);
 
 	CostRateMonthPercentileMetric<2, 50>::get(this)->value(Transaction::currentDay());
@@ -153,8 +156,10 @@ void User::injectJsonData(QString jsonStr)
 
 BotContext* User::makeBotContext()
 {
-	if(m_botContext)
+	if(m_botContext) {
+		WARN() << "Remaking BotContext";
 		delete m_botContext;
+	}
 	m_botContext = new BotContext(this);
 	return m_botContext;
 }
@@ -173,8 +178,6 @@ void User::injectJsonBot(QString jsonStr)
 		fileout << jsonDoc.toJson(QJsonDocument::Indented);
 	}
 
-	// remake the context just in case
-	makeBotContext();
 	// makes the bot and build the tree inside
 	m_bestBot = new Bot(jsonObj, this);
 	m_bestBot->init(m_botContext);

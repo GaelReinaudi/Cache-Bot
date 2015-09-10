@@ -16,6 +16,7 @@ UserViewer::UserViewer(QString userID, QVector<int> onlyLoadHashes)
 	m_pConnector = new CacheAccountConnector(userID);
 	connect(m_pConnector, SIGNAL(injected(User*)), this, SLOT(onUserInjected(User*)));
 	connect(m_pConnector, SIGNAL(botInjected(Bot*)), this, SLOT(onBotInjected(Bot*)));
+	connect(ui->spinAgo, SIGNAL(valueChanged(int)), this, SLOT(onAgo()));
 }
 
 UserViewer::~UserViewer()
@@ -31,33 +32,42 @@ User *UserViewer::user() const
 	return m_pConnector->user();
 }
 
+void UserViewer::onAgo()
+{
+	Transaction::setCurrentDay(QDate::currentDate().addDays(-ui->spinAgo->value()));
+	user()->reInjectBot();
+}
+
 void UserViewer::onUserInjected(User* pUser)
 {
+	connect(user()->botContext(), &BotContext::matchedTransaction, this, &UserViewer::plotMask, Qt::UniqueConnection);
+	connect(user()->botContext(), &BotContext::summarizingTree, this, &UserViewer::clearMasks, Qt::UniqueConnection);
+	connect(user()->botContext(), &BotContext::needsReplot, this, &UserViewer::replotCharts, Qt::UniqueConnection);
+	connect(user()->botContext(), &BotContext::newSummarizedTree, this, &UserViewer::onNewSummarizedTree, Qt::UniqueConnection);
+
 	CacheRest::Instance()->getBestBot(pUser->id(), pUser);
+
+	ui->acPlot->loadCompressedAmount(user());
+	ui->sliderHash->setRange(-1, ui->acPlot->hashKeys().count() - 1);
+	ui->sliderHash->setValue(-1);
+
+	connect(ui->sliderHash, SIGNAL(valueChanged(int)), ui->acPlot, SLOT(showHash(int)), Qt::UniqueConnection);
+	connect(ui->sliderHash, SIGNAL(valueChanged(int)), ui->ahPlot, SLOT(showHash(int)), Qt::UniqueConnection);
+	connect(ui->sliderHash, SIGNAL(valueChanged(int)), ui->spinHash, SLOT(setValue(int)), Qt::UniqueConnection);
+	connect(ui->spinHash, SIGNAL(valueChanged(int)), ui->sliderHash, SLOT(setValue(int)), Qt::UniqueConnection);
+	connect(ui->acPlot, SIGNAL(newLabel(QString)), ui->labelBundle, SLOT(setText(QString)), Qt::UniqueConnection);
+	connect(ui->acPlot, SIGNAL(newSum(double)), ui->spinSum, SLOT(setValue(double)), Qt::UniqueConnection);
+	connect(ui->acPlot, SIGNAL(newHashValue(int)), ui->spinHashVal, SLOT(setValue(int)), Qt::UniqueConnection);
 }
 
 void UserViewer::onBotInjected(Bot* bestBot)
 {
-	connect(user()->botContext(), &BotContext::matchedTransaction, this, &UserViewer::plotMask);
-	connect(user()->botContext(), &BotContext::summarizingTree, this, &UserViewer::clearMasks);
-	connect(user()->botContext(), &BotContext::needsReplot, this, &UserViewer::replotCharts);
-	connect(user()->botContext(), &BotContext::newSummarizedTree, this, &UserViewer::onNewSummarizedTree);
-
-	INFO() << "UserViewer::onBotInjected";
+	NOTICE() << "UserViewer::onBotInjected";
 	bestBot->summarize();
 
-	ui->acPlot->loadCompressedAmount(bestBot->user());
-	ui->ahPlot->loadCompressedAmount(bestBot->user());
-	ui->sliderHash->setRange(-1, ui->acPlot->hashKeys().count() - 1);
-	ui->sliderHash->setValue(-1);
+	ui->ahPlot->loadCompressedAmount(user());
 
-	connect(ui->sliderHash, SIGNAL(valueChanged(int)), ui->acPlot, SLOT(showHash(int)));
-	connect(ui->sliderHash, SIGNAL(valueChanged(int)), ui->ahPlot, SLOT(showHash(int)));
-	connect(ui->sliderHash, SIGNAL(valueChanged(int)), ui->spinHash, SLOT(setValue(int)));
-	connect(ui->spinHash, SIGNAL(valueChanged(int)), ui->sliderHash, SLOT(setValue(int)));
-	connect(ui->acPlot, SIGNAL(newLabel(QString)), ui->labelBundle, SLOT(setText(QString)));
-	connect(ui->acPlot, SIGNAL(newSum(double)), ui->spinSum, SLOT(setValue(double)));
-	connect(ui->acPlot, SIGNAL(newHashValue(int)), ui->spinHashVal, SLOT(setValue(int)));
+
 	replotCharts();
 }
 
