@@ -29,8 +29,9 @@ EvolutionSpinner::EvolutionSpinner(QObject* parent)
 
 void EvolutionSpinner::init(User* pUser)
 {
-	// Create evolution context add primitives used into it.
-	m_context = pUser->makeBotContext();
+//	// Create evolution context add primitives used into it.
+//	m_context = pUser->makeBotContext();
+	m_context = pUser->botContext();
 	emit initialized(true);
 }
 
@@ -122,7 +123,7 @@ void EvolutionSpinner::runEvolution() {
 			}
 		}
 		bestTree.mValid = false;
-		summarize(bestTree);
+//		summarize(bestTree);
 		lPopulation.push_back(bestTree);
 		newBestFitness = evaluateSymbReg(lPopulation, *m_context);
 		calculateStats(lPopulation, lNbrGen);
@@ -244,7 +245,7 @@ QJsonObject EvolutionSpinner::summarize(Tree& tree)
 	jsonObj.insert("fit", fit);
 
 	DBG() << "tree (" << fit << "): " << tree.toStr();
-	INFO() << "    " << jsonObj;
+	INFO() << "----" << jsonObj;
 	emit m_context->needsReplot();
 	emit m_context->newSummarizedTree(jsonObj);
 	return jsonObj;
