@@ -102,7 +102,7 @@ Puppy::TokenT<T>::TokenT(std::string inName, const T& inToken) :
  *  \param ioContext Evolutionary context.
  */
 template <class T>
-void Puppy::TokenT<T>::execute(void* outDatum, Puppy::Context& ioContext)
+void Puppy::TokenT<T>::execute(void *outDatum, Puppy::Context& ioContext)
 {
 	Q_UNUSED(ioContext);
   T& lResult = *(T*)outDatum;

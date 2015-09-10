@@ -120,7 +120,8 @@ protected:
 	}
 
 	void execute(void* outDatum, Puppy::Context& ioContext) override;
-	double apply(TransactionBundle &allTrans, bool doLog = false);
+	double apply(TransactionBundle &allTrans, bool doLog = false) override;
+	void onJustApplied() override;
 
 	double billProbability() const {
 		double proba = m_fitness;

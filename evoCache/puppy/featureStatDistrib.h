@@ -55,8 +55,8 @@ protected:
 		return retObj;
 	}
 	void execute(void* outDatum, Puppy::Context& ioContext) override;
-
-	double apply(TransactionBundle& allTrans);
+	void isolateBundledTransactions(bool isPostTreatment = false) const override;
+	double apply(TransactionBundle& allTrans, bool doLog = false) override;
 
 	virtual bool passFilter(quint64 dist, const Transaction& trans) const = 0;
 	virtual int minTransactionForBundle() const = 0;

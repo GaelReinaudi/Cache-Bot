@@ -20,15 +20,14 @@ protected:
 	}
 
 private:
-	struct Args
+	struct Args : public FeatureArgs
 	{
 		void intoJson(QJsonObject& o_retObj) {
+			FeatureArgs::intoJson(o_retObj);
 			o_retObj.insert("proba", m_dayProba);
 			o_retObj.insert("amount", m_amount);
 			o_retObj.insert("effect", m_effect);
-			o_retObj.insert("zlabels", QJsonArray::fromStringList(m_bundle.uniqueNames()));
 		}
-		TransactionBundle m_bundle;
 		double m_dayProba = 0.0;
 		double m_amount = 0.0;
 		char m_effect = 0;
@@ -43,7 +42,8 @@ public:
 		: AccountFeature(3, "FeatureOutlier")
 	{ }
 
-public:
+protected:
+	FeatureArgs* localStaticArgs() const { return &m_localStaticArgs; }
 	void getArgs(Puppy::Context &ioContext) override {
 		AccountFeature::getArgs(ioContext);
 		double a = 0;
@@ -56,9 +56,10 @@ public:
 		return retObj;
 	}
 
+protected:
 	void execute(void* outDatum, Puppy::Context& ioContext) override;
 
-	double apply(TransactionBundle &allTrans);
+	double apply(TransactionBundle &allTrans, bool doLog = false) override;
 
 private:
 	OracleOutlier::Args m_localStaticArgs;

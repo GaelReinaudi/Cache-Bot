@@ -25,7 +25,7 @@ void FeatureStatDistrib::getArgs(Puppy::Context &ioContext) {
 	m_localStaticArgs.m_effect = a;
 }
 
-double FeatureStatDistrib::apply(TransactionBundle& allTrans)
+double FeatureStatDistrib::apply(TransactionBundle& allTrans, bool doLog)
 {
 	// transaction to compare the hash with
 	Transaction modelTrans;
@@ -62,33 +62,11 @@ double FeatureStatDistrib::apply(TransactionBundle& allTrans)
 	return m_fitness;
 }
 
-void FeatureStatDistrib::execute(void *outDatum, Puppy::Context &ioContext)
+void FeatureStatDistrib::execute(void* outDatum, Puppy::Context &ioContext)
 {
 	AccountFeature::execute(outDatum, ioContext);
-	double& output = *(double*)outDatum;
-
-	getArgs(ioContext);
-	cleanArgs();
-
-	// will be ALL the transactions if m_filterHash < 0
-	auto& allTrans = ioContext.m_pUser->transBundle(m_filterHash);
-
-	output = apply(allTrans);
-	// isolate the transaction that were fitted to the target
-	for (int i = 0; i < m_localStaticArgs.m_bundle.count(); ++i) {
-		m_localStaticArgs.m_bundle.trans(i).setDimensionOfVoid(ioContext.isPostTreatment ? 2 : 1);
-	}
 
 	if (ioContext.m_summaryJsonObj) {
-		NOTICE() << getName().c_str() << " "
-			<< " p=" << m_billProba
-			<< " n=" << m_localStaticArgs.m_bundle.count()
-			<< " h=" << m_localStaticArgs.m_hash;
-
-		QJsonArray features = (*ioContext.m_summaryJsonObj)["features"].toArray();
-		features.append(toJson(ioContext));
-		ioContext.m_summaryJsonObj->insert("features", features);
-
 		if (!ioContext.isPostTreatment)
 			for (int i = 0; i < m_localStaticArgs.m_bundle.count(); ++i) {
 				const Transaction& tr = m_localStaticArgs.m_bundle.trans(i);
@@ -99,6 +77,14 @@ void FeatureStatDistrib::execute(void *outDatum, Puppy::Context &ioContext)
 		// making a shared pointer that will take care of cleaning once the oracle is no longer referenced
 		QSharedPointer<Oracle> newOracle(pNewOr);
 		ioContext.m_pUser->oracle()->addSubOracle(newOracle);
+	}
+}
+
+void AccountFeature::isolateBundledTransactions(bool isPostTreatment /*= false*/) const
+{
+	// isolate the transaction that were fitted to the target
+	for (int i = 0; i < m_localStaticArgs.m_bundle.count(); ++i) {
+		m_localStaticArgs.m_bundle.trans(i).setDimensionOfVoid(isPostTreatment ? 2 : 1);
 	}
 }
 

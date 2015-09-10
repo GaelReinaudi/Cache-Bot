@@ -101,6 +101,14 @@ public:
 	}
 };
 
+struct FeatureArgs
+{
+	void intoJson(QJsonObject& o_retObj) {
+		o_retObj.insert("zlabels", QJsonArray::fromStringList(m_bundle.uniqueNames()));
+	}
+	TransactionBundle m_bundle;
+};
+
 class AccountFeature : public Puppy::Primitive
 {
 public:
@@ -108,10 +116,7 @@ public:
 		: Primitive(inNumberArguments, inName)
 	{}
 	virtual ~AccountFeature() {}
-	virtual void execute(void* outDatum, Puppy::Context& ioContext) {
-		Q_UNUSED(outDatum);
-		Q_UNUSED(ioContext);
-	}
+	virtual void execute(void* outDatum, Puppy::Context& ioContext);
 	virtual QJsonObject toJson(Puppy::Context& ioContext) {
 		QJsonObject retObj;
 		retObj.insert("name", QString::fromStdString(getName()));
@@ -131,6 +136,7 @@ public:
 	}
 	bool isFeature() const override { return true; }
 protected:
+	virtual FeatureArgs* localStaticArgs() = 0;
 	virtual void getArgs(Puppy::Context &ioContext) {
 		// if we are forcing a given hashed bundle
 		int filterHashIndex = ioContext.filterHashIndex;
@@ -142,6 +148,10 @@ protected:
 		}
 	}
 	virtual void cleanArgs() {}
+	virtual bool cannotExecute(Puppy::Context& ioContext) const { return false; }
+	virtual double apply(TransactionBundle &allTrans, bool doLog = false) = 0;
+	virtual void isolateBundledTransactions(bool isPostTreatment = false) const;
+	virtual void onJustApplied() {}
 
 protected:
 	// if any, the hash to filter the transaction on
@@ -172,6 +182,10 @@ public:
 			lResult += lArgi;
 		}
 	}
+	double apply(TransactionBundle&, bool) override {}
+protected:
+	FeatureArgs* localStaticArgs() const { return 0; }
+
 };
 
 class DummyFeature : public AccountFeature

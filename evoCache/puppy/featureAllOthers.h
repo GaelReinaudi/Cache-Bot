@@ -55,7 +55,7 @@ public:
 						 , "FeatureAllOthers")
 	{ }
 
-public:
+protected:
 	void getArgs(Puppy::Context &ioContext) override {
 //		double a = 0;
 //		int ind = -1;
@@ -69,9 +69,18 @@ public:
 		return retObj;
 	}
 
+	bool cannotExecute(Puppy::Context& ioContext) const override
+	{
+		// if we already have aplied this feature, nothing to be done here.
+		if (ioContext.flags & Puppy::Context::AllOthers) {
+			return true;
+		}
+		ioContext.flags |= Puppy::Context::AllOthers;
+		return false;
+	}
 	void execute(void* outDatum, Puppy::Context& ioContext) override;
 
-	double apply(TransactionBundle &allTrans);
+	double apply(TransactionBundle &allTrans, bool doLog = false) override;
 
 private:
 	OracleFilteredRest::Args m_localStaticArgs;

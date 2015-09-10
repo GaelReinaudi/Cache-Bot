@@ -100,24 +100,8 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 	return m_fitness;
 }
 
-void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
+void FeatureMonthlyAmount::onJustApplied()
 {
-	AccountFeature::execute(outDatum, ioContext);
-	double& output = *(double*)outDatum;
-
-	getArgs(ioContext);
-	cleanArgs();
-
-	m_fitness = 0.0;
-
-	// will be ALL the transactions if m_filterHash < 0
-	auto& allTrans = ioContext.m_pUser->transBundle(m_filterHash);
-
-	output = apply(allTrans, ioContext.m_summaryJsonObj);
-	// isolate the transaction that were fitted to the target
-	for (int i = 0; i < m_localStaticArgs.m_bundle.count(); ++i) {
-		m_localStaticArgs.m_bundle.trans(i).setDimensionOfVoid();
-	}
 	// tries to re-run this periodic and if it has a high vlaue, it is a sign that
 	// it is actually more frequent and should have a bad grade
 	auto temp = m_localStaticArgs;
@@ -130,25 +114,24 @@ void FeatureMonthlyAmount::execute(void *outDatum, Puppy::Context &ioContext)
 	if (ioContext.m_summaryJsonObj) {
 		INFO() << "  output " << output << "- 2x " << rerun;
 	}
+	// restore member variables
 	m_localStaticArgs = temp;
+	m_billProba = tempProba;
+	m_targetTrans = tempTarg;
 	m_localStaticArgs.m_fitRerun = rerun;
 	cleanArgs();
+	// recompute fitness
 	output -= 2 * qMax(0.0, rerun);
 	if (m_localStaticArgs.m_kla > 0)
 		output *= 2.0;
 	m_fitness = output;
-	m_billProba = tempProba;
-	m_targetTrans = tempTarg;
+}
 
-	// summary if the json object exists
+void FeatureMonthlyAmount::execute(void* outDatum, Puppy::Context &ioContext)
+{
+	AccountFeature::execute(outDatum, ioContext);
+
 	if (ioContext.m_summaryJsonObj) {
-//		if(m_billProba > 0.0)
-		{
-			QJsonArray features = (*ioContext.m_summaryJsonObj)["features"].toArray();
-			features.append(toJson(ioContext));
-			ioContext.m_summaryJsonObj->insert("features", features);
-		}
-
 		for (int i = 0; i < m_targetTrans.count(); ++i) {
 			Transaction* iTarg = &m_targetTrans[i];
 			Q_ASSERT(iTarg->time_t() > -1e9 && iTarg->time_t() < 10e9 && iTarg->amountDbl() > -1e9 && iTarg->amountDbl() < 1e9);

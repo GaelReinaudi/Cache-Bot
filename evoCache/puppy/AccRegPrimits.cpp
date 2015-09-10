@@ -51,3 +51,49 @@ Puppy::Primitive::tryReplaceArgumentNode(unsigned int inN, std::string primName,
 	return true;
 }
 
+
+
+void AccountFeature::execute(void *outDatum, Puppy::Context &ioContext)
+{
+	double& output = *(double*)outDatum;
+
+	getArgs(ioContext);
+	cleanArgs();
+
+	output = m_fitness = 0.0;
+
+	if (cannotExecute(ioContext))
+		return;
+
+	// will be ALL the transactions if m_filterHash < 0
+	TransactionBundle& allTrans = ioContext.m_pUser->transBundle(m_filterHash);
+
+	output = apply(allTrans, ioContext.m_summaryJsonObj);
+
+	isolateBundledTransactions();
+
+	onJustApplied();
+
+	if (ioContext.m_summaryJsonObj) {
+		QJsonArray features = (*ioContext.m_summaryJsonObj)["features"].toArray();
+		features.append(toJson(ioContext));
+		ioContext.m_summaryJsonObj->insert("features", features);
+
+		emitGraphics();
+	}
+}
+
+void AccountFeature::isolateBundledTransactions(bool isPostTreatment /*= false*/) const
+{
+	Q_UNUSED(isPostTreatment);
+	// isolate the transaction that were fitted to the target
+	for (int i = 0; i < m_localStaticArgs.m_bundle.count(); ++i) {
+		localStaticArgs()->m_bundle.trans(i).setDimensionOfVoid();
+	}
+}
+
+
+
+
+
+

@@ -2,7 +2,7 @@
 
 static const int THRESHOLD_EFFECT128 = 20;
 
-double FeatureOutlier::apply(TransactionBundle& allTrans)
+double FeatureOutlier::apply(TransactionBundle& allTrans, bool doLog)
 {
 	m_localStaticArgs.m_bundle.clear();
 	m_localStaticArgs.m_effect = 0;
@@ -29,32 +29,11 @@ double FeatureOutlier::apply(TransactionBundle& allTrans)
 	return m_fitness;
 }
 
-void FeatureOutlier::execute(void *outDatum, Puppy::Context &ioContext)
+void FeatureOutlier::execute(void* outDatum, Puppy::Context &ioContext)
 {
 	AccountFeature::execute(outDatum, ioContext);
-	double& output = *(double*)outDatum;
 
-	getArgs(ioContext);
-	cleanArgs();
-
-	output = m_fitness = 0.0;
-
-	// will be ALL the transactions if m_filterHash < 0
-	TransactionBundle& allTrans = ioContext.m_pUser->transBundle(m_filterHash);
-
-	output = apply(allTrans);
-	// isolate the transaction that were fitted to the target
-	for (int i = 0; i < m_localStaticArgs.m_bundle.count(); ++i) {
-		m_localStaticArgs.m_bundle.trans(i).setDimensionOfVoid();
-	}
-
-	// summary if the json object exists
 	if (ioContext.m_summaryJsonObj) {
-		if(m_fitness > 0.0) {
-			QJsonArray features = (*ioContext.m_summaryJsonObj)["features"].toArray();
-			features.append(toJson(ioContext));
-			ioContext.m_summaryJsonObj->insert("features", features);
-		}
 		for (int i = 0; i < m_localStaticArgs.m_bundle.count(); ++i) {
 			const Transaction& tr = m_localStaticArgs.m_bundle.trans(i);
 			emit ioContext.m_pUser->botContext()->matchedTransaction(tr.time_t(), tr.amountDbl(), 4);
