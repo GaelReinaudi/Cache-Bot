@@ -11,7 +11,7 @@
 
 //static const QString server = "http://127.0.0.1:8080";
 static const QString server = "https://cache-heroku.herokuapp.com";
-static const QString amazonServer = "http://ec2-52-24-203-78.us-west-2.compute.amazonaws.com:8081";
+static const QString amazonServer = "http://http://ec2-52-11-153-37.us-west-2.compute.amazonaws.com:8081";
 static const QString LoginRoute = server + "/login";
 static const QString IdsRoute = server + "/cache-bot/user_ids";
 static const QString UserDataRoute = server + "/cache-bot/data";
