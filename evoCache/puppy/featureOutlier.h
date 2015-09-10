@@ -43,7 +43,6 @@ public:
 	{ }
 
 protected:
-	FeatureArgs* localStaticArgs() const { return &m_localStaticArgs; }
 	void getArgs(Puppy::Context &ioContext) override {
 		AccountFeature::getArgs(ioContext);
 		double a = 0;
@@ -62,6 +61,7 @@ protected:
 	double apply(TransactionBundle &allTrans, bool doLog = false) override;
 
 private:
+	FeatureArgs* localStaticArgs() override { return &m_localStaticArgs; }
 	OracleOutlier::Args m_localStaticArgs;
 };
 

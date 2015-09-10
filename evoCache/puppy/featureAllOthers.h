@@ -25,9 +25,10 @@ protected:
 	}
 
 private:
-	struct Args
+	struct Args : public FeatureArgs
 	{
 		void intoJson(QJsonObject& o_retObj) {
+			FeatureArgs::intoJson(o_retObj);
 			o_retObj.insert("days", m_daysBundle);
 			o_retObj.insert("proba", m_dayProba);
 			o_retObj.insert("numPos", m_numPos);
@@ -36,7 +37,6 @@ private:
 			o_retObj.insert("sumNeg", m_sumNeg);
 			o_retObj.insert("numBund", m_bundle.count());
 		}
-		TransactionBundle m_bundle;
 		double m_dayProba = 0.0;
 		double m_daysBundle = 0.0;
 		int m_numPos = 0;
@@ -82,7 +82,8 @@ protected:
 
 	double apply(TransactionBundle &allTrans, bool doLog = false) override;
 
-private:
+protected:
+	FeatureArgs* localStaticArgs() override { return &m_localStaticArgs; }
 	OracleFilteredRest::Args m_localStaticArgs;
 };
 

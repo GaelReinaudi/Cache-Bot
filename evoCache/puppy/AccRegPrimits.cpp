@@ -83,11 +83,11 @@ void AccountFeature::execute(void *outDatum, Puppy::Context &ioContext)
 	}
 }
 
-void AccountFeature::isolateBundledTransactions(bool isPostTreatment /*= false*/) const
+void AccountFeature::isolateBundledTransactions(bool isPostTreatment /*= false*/)
 {
 	Q_UNUSED(isPostTreatment);
 	// isolate the transaction that were fitted to the target
-	for (int i = 0; i < m_localStaticArgs.m_bundle.count(); ++i) {
+	for (int i = 0; i < localStaticArgs()->m_bundle.count(); ++i) {
 		localStaticArgs()->m_bundle.trans(i).setDimensionOfVoid();
 	}
 }

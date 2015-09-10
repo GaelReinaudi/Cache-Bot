@@ -15,13 +15,13 @@ protected:
 	double avgDaily() const override;
 
 private:
-	struct Args
+	struct Args : public FeatureArgs
 	{
 		void intoJson(QJsonObject& o_retObj) {
+			FeatureArgs::intoJson(o_retObj);
 			o_retObj.insert("dayOfMonth", m_dayOfMonth);
 			o_retObj.insert("consecutive", m_consecMonthBeforeMissed);
 			o_retObj.insert("cons-missed", m_consecMissed);
-			o_retObj.insert("zlabels", QJsonArray::fromStringList(m_bundle.uniqueNames()));
 			o_retObj.insert("tot$", m_bundle.sumDollar());
 			o_retObj.insert("numBund", m_bundle.count());
 			o_retObj.insert("fitRerun", m_fitRerun);
@@ -29,7 +29,6 @@ private:
 			o_retObj.insert("kla", m_kla);
 			o_retObj.insert("hash", m_hash);
 		}
-		TransactionBundle m_bundle;
 		int m_dayOfMonth = 0;
 		int m_dayOfMonth2 = 0;
 		double m_kla = 0;
@@ -133,6 +132,7 @@ protected:
 	virtual QVector<Transaction> targetTransactions(QDate iniDate, QDate lastDate);
 
 protected:
+	FeatureArgs* localStaticArgs() override { return &m_localStaticArgs; }
 	OracleOneDayOfMonth::Args m_localStaticArgs;
 	QVector<Transaction> m_targetTrans;
 };

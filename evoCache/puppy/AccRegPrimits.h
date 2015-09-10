@@ -150,8 +150,9 @@ protected:
 	virtual void cleanArgs() {}
 	virtual bool cannotExecute(Puppy::Context& ioContext) const { return false; }
 	virtual double apply(TransactionBundle &allTrans, bool doLog = false) = 0;
-	virtual void isolateBundledTransactions(bool isPostTreatment = false) const;
+	virtual void isolateBundledTransactions(bool isPostTreatment = false);
 	virtual void onJustApplied() {}
+	virtual void emitGraphics() const {};
 
 protected:
 	// if any, the hash to filter the transaction on
@@ -184,7 +185,7 @@ public:
 	}
 	double apply(TransactionBundle&, bool) override {}
 protected:
-	FeatureArgs* localStaticArgs() const { return 0; }
+	FeatureArgs* localStaticArgs() override { return 0; }
 
 };
 
