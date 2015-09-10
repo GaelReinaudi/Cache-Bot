@@ -49,17 +49,15 @@ double FeatureStatDistrib::apply(TransactionBundle& allTrans, bool doLog)
 	int numBund = m_localStaticArgs.m_bundle.count();
 	if (numBund <= minTransactionForBundle()) {
 		m_localStaticArgs.m_bundle.clear();
-		m_fitness = 0.0;
-		m_billProba = 0.0;
-		return m_fitness;
+		m_localStaticArgs.m_dayProba = 0.0;
+		return 0.0;
 	}
 
 	computeNextDayProba();
 
-	m_billProba = m_localStaticArgs.m_dayProba;
-	m_fitness = 10.0;
-	m_fitness *= m_localStaticArgs.m_dayProba;
-	return m_fitness;
+	double tempFitness = 10.0;
+	tempFitness *= m_localStaticArgs.m_dayProba;
+	return tempFitness;
 }
 
 void FeatureStatDistrib::execute(void* outDatum, Puppy::Context &ioContext)
@@ -80,11 +78,11 @@ void FeatureStatDistrib::execute(void* outDatum, Puppy::Context &ioContext)
 	}
 }
 
-void AccountFeature::isolateBundledTransactions(bool isPostTreatment /*= false*/) const
+void FeatureStatDistrib::isolateBundledTransactions(bool isPostTreatment /*= false*/)
 {
 	// isolate the transaction that were fitted to the target
-	for (int i = 0; i < m_localStaticArgs.m_bundle.count(); ++i) {
-		m_localStaticArgs.m_bundle.trans(i).setDimensionOfVoid(isPostTreatment ? 2 : 1);
+	for (int i = 0; i < localStaticArgs()->m_bundle.count(); ++i) {
+		localStaticArgs()->m_bundle.trans(i).setDimensionOfVoid(isPostTreatment ? 2 : 1);
 	}
 }
 

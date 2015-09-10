@@ -2,7 +2,6 @@
 
 double FeatureAllOthers::apply(TransactionBundle& allTrans, bool doLog)
 {
-	m_billProba = 1000000.0;
 	m_localStaticArgs.m_bundle.clear();
 	m_localStaticArgs.m_numPos = 0;
 	m_localStaticArgs.m_numNeg = 0;
@@ -56,10 +55,10 @@ double FeatureAllOthers::apply(TransactionBundle& allTrans, bool doLog)
 	}
 
 	// min of the ration already/tot per side Neg/Pos
-	m_fitness = qMin(alreadyMatchedPos / totPos, alreadyMatchedNeg / totNeg);
-	m_fitness *= 100.0;
-//	m_fitness = qMax(m_fitness, 1.0);
-	return m_fitness;
+	double tempFitness = qMin(alreadyMatchedPos / totPos, alreadyMatchedNeg / totNeg);
+	tempFitness *= 100.0;
+
+	return tempFitness;
 }
 
 void FeatureAllOthers::execute(void* outDatum, Puppy::Context &ioContext)

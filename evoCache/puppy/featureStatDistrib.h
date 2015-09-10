@@ -60,6 +60,9 @@ protected:
 	virtual bool passFilter(quint64 dist, const Transaction& trans) const = 0;
 	virtual int minTransactionForBundle() const = 0;
 	void computeNextDayProba();
+	double maxDailyProbability() const override {
+		return m_localStaticArgs.m_dayProba;
+	}
 
 protected:
 	FeatureArgs* localStaticArgs() override { return &m_localStaticArgs; }

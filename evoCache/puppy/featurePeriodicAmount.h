@@ -119,10 +119,10 @@ protected:
 	}
 
 	void execute(void* outDatum, Puppy::Context& ioContext) override;
-	double apply(TransactionBundle &allTrans, bool doLog = false) override;
-	void onJustApplied() override;
+	double apply(TransactionBundle& allTrans, bool doLog = false) override;
+	void onJustApplied(TransactionBundle &allTrans, bool doLog) override;
 
-	double billProbability() const {
+	double maxDailyProbability() const override {
 		double proba = m_fitness;
 		proba *= qMax(1, m_localStaticArgs.m_consecMonthBeforeMissed);
 		proba /= 4 + 2 * m_localStaticArgs.m_consecMissed;

@@ -25,8 +25,8 @@ double FeatureOutlier::apply(TransactionBundle& allTrans, bool doLog)
 	}
 	Q_ASSERT(m_localStaticArgs.m_bundle.count() <= 1);
 
-	m_fitness = double(m_localStaticArgs.m_effect) / double(THRESHOLD_EFFECT128);
-	return m_fitness;
+	double tempFitness = double(m_localStaticArgs.m_effect) / double(THRESHOLD_EFFECT128);
+	return tempFitness;
 }
 
 void FeatureOutlier::execute(void* outDatum, Puppy::Context &ioContext)

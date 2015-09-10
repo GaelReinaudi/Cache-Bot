@@ -7,7 +7,6 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 	QDate iniDate = Transaction::currentDay().addDays(-Transaction::maxDaysOld());
 	QDate endDate = Transaction::currentDay().addDays(approxSpacingPayment() / 2);
 
-	m_fitness = 0.0;
 	m_targetTrans = targetTransactions(iniDate, endDate);
 	if (m_targetTrans.count() == 0) {
 		WARN() << "MonthlyAmount(0 TARGET): day "<<m_localStaticArgs.m_dayOfMonth<<" kla "<< m_localStaticArgs.m_kla;
@@ -91,40 +90,38 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 		totalOneOverDistOthers += factOld * 1.0 / (1 + dist);
 	}
 	totalOneOverDistOthers -= totalOneOverDistClosest;
+	double tempFitness = 0.0;
 	// only sum that add up to > $N
 	if (qAbs(m_localStaticArgs.m_bundle.sumDollar()) > 1) {
-		m_fitness = totalOneOverDistClosest - totalOneOverDistOthers;
-		m_fitness *= 1.75 * (double(m_localStaticArgs.m_consecMonthBeforeMissed) - 1.5);
+		tempFitness = totalOneOverDistClosest - totalOneOverDistOthers;
+		tempFitness *= 1.75 * (double(m_localStaticArgs.m_consecMonthBeforeMissed) - 1.5);
 	}
-	m_billProba = billProbability();
-	return m_fitness;
+	return tempFitness;
 }
 
-void FeatureMonthlyAmount::onJustApplied()
+void FeatureMonthlyAmount::onJustApplied(TransactionBundle& allTrans, bool doLog = false)
 {
 	// tries to re-run this periodic and if it has a high vlaue, it is a sign that
 	// it is actually more frequent and should have a bad grade
 	auto temp = m_localStaticArgs;
-	auto tempProba = m_billProba;
 	auto tempTarg = m_targetTrans;
 	m_localStaticArgs.m_dayOfMonth += approxSpacingPayment() / 2;
 	m_localStaticArgs.m_dayOfMonth %= 31;
 	cleanArgs();
 	double rerun = apply(allTrans, false);
-	if (ioContext.m_summaryJsonObj) {
-		INFO() << "  output " << output << "- 2x " << rerun;
+	if (doLog) {
+		INFO() << "fitness " << m_fitness << "- 2x " << rerun;
 	}
 	// restore member variables
 	m_localStaticArgs = temp;
-	m_billProba = tempProba;
 	m_targetTrans = tempTarg;
 	m_localStaticArgs.m_fitRerun = rerun;
 	cleanArgs();
+
 	// recompute fitness
-	output -= 2 * qMax(0.0, rerun);
+	m_fitness -= 2 * qMax(0.0, rerun);
 	if (m_localStaticArgs.m_kla > 0)
-		output *= 2.0;
-	m_fitness = output;
+		m_fitness *= 2.0;
 }
 
 void FeatureMonthlyAmount::execute(void* outDatum, Puppy::Context &ioContext)
@@ -145,10 +142,8 @@ void FeatureMonthlyAmount::execute(void* outDatum, Puppy::Context &ioContext)
 		pNewOr->m_args = m_localStaticArgs;
 		// making a shared pointer that will take care of cleaning once the oracle is no longer referenced
 		QSharedPointer<Oracle> newOracle(pNewOr);
-//		if(m_billProba > 0.0)
-		{
-			ioContext.m_pUser->oracle()->addSubOracle(newOracle);
-		}
+
+		ioContext.m_pUser->oracle()->addSubOracle(newOracle);
 	}
 }
 

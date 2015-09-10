@@ -58,7 +58,7 @@ protected:
 protected:
 	void execute(void* outDatum, Puppy::Context& ioContext) override;
 
-	double apply(TransactionBundle &allTrans, bool doLog = false) override;
+	double apply(TransactionBundle& allTrans, bool doLog = false) override;
 
 private:
 	FeatureArgs* localStaticArgs() override { return &m_localStaticArgs; }

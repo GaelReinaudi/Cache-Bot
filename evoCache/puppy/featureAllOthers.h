@@ -80,7 +80,10 @@ protected:
 	}
 	void execute(void* outDatum, Puppy::Context& ioContext) override;
 
-	double apply(TransactionBundle &allTrans, bool doLog = false) override;
+	double apply(TransactionBundle& allTrans, bool doLog = false) override;
+	double maxDailyProbability() const override {
+		return 1000000000.0;
+	}
 
 protected:
 	FeatureArgs* localStaticArgs() override { return &m_localStaticArgs; }

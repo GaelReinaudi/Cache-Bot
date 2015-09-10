@@ -149,10 +149,11 @@ protected:
 	}
 	virtual void cleanArgs() {}
 	virtual bool cannotExecute(Puppy::Context& ioContext) const { return false; }
-	virtual double apply(TransactionBundle &allTrans, bool doLog = false) = 0;
+	virtual double apply(TransactionBundle& allTrans, bool doLog = false) = 0;
 	virtual void isolateBundledTransactions(bool isPostTreatment = false);
-	virtual void onJustApplied() {}
+	virtual void onJustApplied(TransactionBundle&, bool) {}
 	virtual void emitGraphics() const {};
+	virtual double maxDailyProbability() const { return m_fitness; }
 
 protected:
 	// if any, the hash to filter the transaction on

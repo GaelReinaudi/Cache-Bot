@@ -60,7 +60,7 @@ void AccountFeature::execute(void *outDatum, Puppy::Context &ioContext)
 	getArgs(ioContext);
 	cleanArgs();
 
-	output = m_fitness = 0.0;
+	m_fitness = output = 0.0;
 
 	if (cannotExecute(ioContext))
 		return;
@@ -69,10 +69,13 @@ void AccountFeature::execute(void *outDatum, Puppy::Context &ioContext)
 	TransactionBundle& allTrans = ioContext.m_pUser->transBundle(m_filterHash);
 
 	output = apply(allTrans, ioContext.m_summaryJsonObj);
+	m_fitness = output;
 
-	isolateBundledTransactions();
+	isolateBundledTransactions(ioContext.isPostTreatment);
 
-	onJustApplied();
+	onJustApplied(allTrans, ioContext.m_summaryJsonObj);
+
+	m_billProba = maxDailyProbability();
 
 	if (ioContext.m_summaryJsonObj) {
 		QJsonArray features = (*ioContext.m_summaryJsonObj)["features"].toArray();
