@@ -87,9 +87,14 @@ protected:
 		return retObj;
 	}
 
-	void execute(void* outDatum, Puppy::Context& ioContext) override;
 	double apply(TransactionBundle& allTrans, bool doLog = false) override;
 	void onJustApplied(TransactionBundle &allTrans, bool doLog) override;
+	void emitGraphics(Puppy::Context& ioContext) const override;
+	Oracle* makeNewOracle() override {
+		OracleOneDayOfMonth* pNewOr = new OracleOneDayOfMonth(this);
+		pNewOr->m_args = m_localStaticArgs;
+		return pNewOr;
+	}
 
 	double maxDailyProbability() const override {
 		double proba = 1.0;

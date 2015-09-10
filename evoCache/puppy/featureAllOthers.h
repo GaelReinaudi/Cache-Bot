@@ -71,9 +71,13 @@ protected:
 		ioContext.flags |= Puppy::Context::AllOthers;
 		return false;
 	}
-	void execute(void* outDatum, Puppy::Context& ioContext) override;
-
 	double apply(TransactionBundle& allTrans, bool doLog = false) override;
+	Oracle* makeNewOracle() override {
+		OracleFilteredRest* pNewOr = new OracleFilteredRest(this);
+		pNewOr->m_args = m_localStaticArgs;
+		return pNewOr;
+	}
+
 	double maxDailyProbability() const override {
 		return 1000000000.0;
 	}

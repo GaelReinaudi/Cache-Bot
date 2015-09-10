@@ -61,21 +61,6 @@ double FeatureAllOthers::apply(TransactionBundle& allTrans, bool doLog)
 	return tempFitness;
 }
 
-void FeatureAllOthers::execute(void* outDatum, Puppy::Context &ioContext)
-{
-	AccountFeature::execute(outDatum, ioContext);
-
-	if (ioContext.m_summaryJsonObj) {
-		OracleFilteredRest* pNewOr = new OracleFilteredRest(this);
-		pNewOr->m_args = m_localStaticArgs;
-		// making a shared pointer that will take care of cleaning once the oracle is no longer referenced
-		QSharedPointer<Oracle> newOracle(pNewOr);
-		ioContext.m_pUser->oracle()->addSubOracle(newOracle);
-	}
-}
-
-
-
 QVector<Transaction> OracleFilteredRest::revelation(QDate upToDate)
 {
 	INFO() << "OracleFilteredRest::revelation sumPos = " << m_args.m_sumPos << " sumNeg = " << m_args.m_sumNeg << " bundle = " << m_args.m_bundle.count();

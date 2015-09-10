@@ -166,7 +166,9 @@ protected:
 	virtual double apply(TransactionBundle& allTrans, bool doLog = false) = 0;
 	virtual void isolateBundledTransactions(bool isPostTreatment = false);
 	virtual void onJustApplied(TransactionBundle&, bool) {}
-	virtual void emitGraphics() const {}
+	virtual void emitGraphics(Puppy::Context&) const { }
+	virtual Oracle* makeNewOracle() { return 0; }
+
 	virtual double maxDailyProbability() const { return m_fitness; }
 
 protected:
@@ -197,7 +199,7 @@ public:
 			lResult += lArgi;
 		}
 	}
-	double apply(TransactionBundle&, bool) override {}
+	double apply(TransactionBundle&, bool) override { return 0.0; }
 protected:
 	FeatureArgs* localStaticArgs() override { return 0; }
 

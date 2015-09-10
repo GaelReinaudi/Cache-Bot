@@ -135,26 +135,16 @@ void FeatureMonthlyAmount::onJustApplied(TransactionBundle& allTrans, bool doLog
 		m_fitness *= 2.0;
 }
 
-void FeatureMonthlyAmount::execute(void* outDatum, Puppy::Context &ioContext)
+void FeatureMonthlyAmount::emitGraphics(Puppy::Context& ioContext) const
 {
-	AccountFeature::execute(outDatum, ioContext);
-
-	if (ioContext.m_summaryJsonObj) {
-		for (int i = 0; i < m_targetTrans.count(); ++i) {
-			Transaction* iTarg = &m_targetTrans[i];
-			Q_ASSERT(iTarg->time_t() > -1e9 && iTarg->time_t() < 10e9 && iTarg->amountDbl() > -1e9 && iTarg->amountDbl() < 1e9);
-			emit ioContext.m_pUser->botContext()->matchedTransaction(iTarg->time_t(), iTarg->amountDbl());
-		}
-		for (int i = 0; i < m_localStaticArgs.m_bundle.count(); ++i) {
-			const Transaction& tr = m_localStaticArgs.m_bundle.trans(i);
-			emit ioContext.m_pUser->botContext()->matchedTransaction(tr.time_t(), tr.amountDbl(), 1);
-		}
-		OracleOneDayOfMonth* pNewOr = new OracleOneDayOfMonth(this);
-		pNewOr->m_args = m_localStaticArgs;
-		// making a shared pointer that will take care of cleaning once the oracle is no longer referenced
-		QSharedPointer<Oracle> newOracle(pNewOr);
-
-		ioContext.m_pUser->oracle()->addSubOracle(newOracle);
+	for (int i = 0; i < m_targetTrans.count(); ++i) {
+		const Transaction* iTarg = &m_targetTrans.at(i);
+		Q_ASSERT(iTarg->time_t() > -1e9 && iTarg->time_t() < 10e9 && iTarg->amountDbl() > -1e9 && iTarg->amountDbl() < 1e9);
+		emit ioContext.m_pUser->botContext()->matchedTransaction(iTarg->time_t(), iTarg->amountDbl());
+	}
+	for (int i = 0; i < m_localStaticArgs.m_bundle.count(); ++i) {
+		const Transaction& tr = m_localStaticArgs.m_bundle.trans(i);
+		emit ioContext.m_pUser->botContext()->matchedTransaction(tr.time_t(), tr.amountDbl(), 1);
 	}
 }
 

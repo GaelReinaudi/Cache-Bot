@@ -46,21 +46,13 @@ double FeatureStatDistrib::apply(TransactionBundle& allTrans, bool doLog)
 	return tempFitness;
 }
 
-void FeatureStatDistrib::execute(void* outDatum, Puppy::Context &ioContext)
+void FeatureStatDistrib::emitGraphics(Puppy::Context& ioContext) const
 {
-	AccountFeature::execute(outDatum, ioContext);
-
-	if (ioContext.m_summaryJsonObj) {
-		if (!ioContext.isPostTreatment)
-			for (int i = 0; i < m_localStaticArgs.m_bundle.count(); ++i) {
-				const Transaction& tr = m_localStaticArgs.m_bundle.trans(i);
-				emit ioContext.m_pUser->botContext()->matchedTransaction(tr.time_t(), tr.amountDbl(), 2);
-			}
-		OracleStatDistrib* pNewOr = new OracleStatDistrib(this);
-		pNewOr->m_args = m_localStaticArgs;
-		// making a shared pointer that will take care of cleaning once the oracle is no longer referenced
-		QSharedPointer<Oracle> newOracle(pNewOr);
-		ioContext.m_pUser->oracle()->addSubOracle(newOracle);
+	if (ioContext.isPostTreatment)
+		return;
+	for (int i = 0; i < m_localStaticArgs.m_bundle.count(); ++i) {
+		const Transaction& tr = m_localStaticArgs.m_bundle.trans(i);
+		emit ioContext.m_pUser->botContext()->matchedTransaction(tr.time_t(), tr.amountDbl(), 2);
 	}
 }
 

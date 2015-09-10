@@ -53,9 +53,14 @@ protected:
 		m_localStaticArgs.intoJson(retObj);
 		return retObj;
 	}
-	void execute(void* outDatum, Puppy::Context& ioContext) override;
 	void isolateBundledTransactions(bool isPostTreatment = false) override;
 	double apply(TransactionBundle& allTrans, bool doLog = false) override;
+	void emitGraphics(Puppy::Context& ioContext) const override;
+	Oracle* makeNewOracle() override {
+		OracleStatDistrib* pNewOr = new OracleStatDistrib(this);
+		pNewOr->m_args = m_localStaticArgs;
+		return pNewOr;
+	}
 
 	virtual bool passFilter(quint64 dist, const Transaction& trans) const = 0;
 	virtual int minTransactionForBundle() const = 0;

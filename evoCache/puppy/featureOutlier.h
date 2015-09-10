@@ -50,9 +50,13 @@ protected:
 	}
 
 protected:
-	void execute(void* outDatum, Puppy::Context& ioContext) override;
-
 	double apply(TransactionBundle& allTrans, bool doLog = false) override;
+	void emitGraphics(Puppy::Context& ioContext) const override;
+	Oracle* makeNewOracle() {
+		OracleOutlier* pNewOr = new OracleOutlier(this);
+		pNewOr->m_args = m_localStaticArgs;
+		return pNewOr;
+	}
 
 private:
 	FeatureArgs* localStaticArgs() override { return &m_localStaticArgs; }

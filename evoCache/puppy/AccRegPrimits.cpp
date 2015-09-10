@@ -82,7 +82,12 @@ void AccountFeature::execute(void *outDatum, Puppy::Context &ioContext)
 		features.append(toJson(ioContext));
 		ioContext.m_summaryJsonObj->insert("features", features);
 
-		emitGraphics();
+		emitGraphics(ioContext);
+
+		// making a shared pointer that will take care of cleaning once the oracle is no longer referenced
+		Oracle* pNewOr = makeNewOracle();
+		QSharedPointer<Oracle> newOracle(pNewOr);
+		ioContext.m_pUser->oracle()->addSubOracle(newOracle);
 	}
 }
 
