@@ -7,16 +7,16 @@ const double THRESHOLD_PROBA_BILL = 0.1;
 
 #define POP_SIZE_DEFAULT 15//75//0
 #define NBR_GEN_DEFAULT 30
-#define NBR_PART_TOURNAMENT_DEFAULT 4
+#define NBR_PART_TOURNAMENT_DEFAULT 3
 #define MAX_DEPTH_DEFAULT 6
 #define MIN_INIT_DEPTH_DEFAULT 3
 #define MAX_INIT_DEPTH_DEFAULT 5
 #define INIT_GROW_PROBA_DEFAULT 0.15f
 #define CROSSOVER_PROBA_DEFAULT 0.8f
 #define CROSSOVER_DISTRIB_PROBA_DEFAULT 0.9f
-#define MUT_STD_PROBA_DEFAULT 0.75f
+#define MUT_STD_PROBA_DEFAULT 0.5f
 #define MUT_MAX_REGEN_DEPTH_DEFAULT 5
-#define MUT_SWAP_PROBA_DEFAULT 0.535f
+#define MUT_SWAP_PROBA_DEFAULT 0.8535f
 #define MUT_SWAP_DISTRIB_PROBA_DEFAULT 0.5f
 
 using namespace Puppy;
@@ -68,6 +68,7 @@ void EvolutionSpinner::runEvolution() {
 
 	QMap<double, QJsonArray> output;
 	QMap<double, Tree> bestPreEvoTrees;
+	QMap<double, Tree> superBestPreEvoTrees;
 	QJsonObject finalBotObject;
 	for (int j = 0; j < m_context->m_pUser->hashBundles().count(); ++j) {
 		int h = m_context->m_pUser->hashBundles().keys()[j];
@@ -144,6 +145,10 @@ void EvolutionSpinner::runEvolution() {
 			(*lBestIndividual).mValid = false;
 			bestPreEvoTrees.insertMulti(fitness, *lBestIndividual);
 		}
+		if(fitness > 1.0 || superBestPreEvoTrees.isEmpty()) {
+			(*lBestIndividual).mValid = false;
+			superBestPreEvoTrees.insertMulti(fitness, *lBestIndividual);
+		}
 	}
 
 	for (int i = 0; i < output.count(); ++i) {
@@ -166,9 +171,14 @@ void EvolutionSpinner::runEvolution() {
 	std::vector<Tree> lPopulation(0);
 	initializePopulation(lPopulation, *m_context, lInitGrowProba, lMinInitDepth, lMaxInitDepth);
 	NOTICE() << "bestPreEvoTrees.count " << bestPreEvoTrees.count();
+	NOTICE() << "superBestPreEvoTrees.count " << superBestPreEvoTrees.count();
 	if(bestPreEvoTrees.count()) {
 		auto bestbundltree = bestPreEvoTrees.values();
 		for(unsigned int i = 0; i < lPopSize; ++i) {
+			lPopulation.push_back(bestbundltree.at(bestbundltree.size() - 1 - i % bestbundltree.size()));
+		}
+		bestbundltree = superBestPreEvoTrees.values();
+		for(unsigned int i = 0; i < bestbundltree.size(); ++i) {
 			lPopulation.push_back(bestbundltree.at(bestbundltree.size() - 1 - i % bestbundltree.size()));
 		}
 		evaluateSymbReg(lPopulation, *m_context);
@@ -194,7 +204,7 @@ void EvolutionSpinner::runEvolution() {
 			applyMutationSwap(lPopulation, *m_context, lMutSwapProba, lMutSwapDistribProba);
 
 			bestTree.mValid = false;
-			lPopulation.push_back(bestTree);
+//			lPopulation.push_back(bestTree);
 
 			evaluateSymbReg(lPopulation, *m_context);
 			calculateStats(lPopulation, m_context->currentGeneration );

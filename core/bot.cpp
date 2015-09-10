@@ -124,7 +124,7 @@ Puppy::Tree* Bot::instancePostTreatmentBot(Puppy::Context& ioContext)
 		QString klaStr = QString::number(klaArg);
 		ioContext.getPrimitiveByName(klaStr);
 		treeNodeList += klaStr;
-		treeNodeList += "2";
+		treeNodeList += "0";
 		klaArg *= ratio;
 	}
 

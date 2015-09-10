@@ -89,10 +89,11 @@ void FeatureStatDistrib::execute(void *outDatum, Puppy::Context &ioContext)
 		features.append(toJson(ioContext));
 		ioContext.m_summaryJsonObj->insert("features", features);
 
-		for (int i = 0; i < m_localStaticArgs.m_bundle.count(); ++i) {
-			const Transaction& tr = m_localStaticArgs.m_bundle.trans(i);
-			emit ioContext.m_pUser->botContext()->matchedTransaction(tr.time_t(), tr.amountDbl(), 2);
-		}
+		if (!ioContext.isPostTreatment)
+			for (int i = 0; i < m_localStaticArgs.m_bundle.count(); ++i) {
+				const Transaction& tr = m_localStaticArgs.m_bundle.trans(i);
+				emit ioContext.m_pUser->botContext()->matchedTransaction(tr.time_t(), tr.amountDbl(), 2);
+			}
 		OracleStatDistrib* pNewOr = new OracleStatDistrib(this);
 		pNewOr->m_args = m_localStaticArgs;
 		// making a shared pointer that will take care of cleaning once the oracle is no longer referenced
