@@ -224,8 +224,7 @@ public:
 		return new OracleTrend<overLastDays>(pUser);
 	}
 
-	QMap<QDate, SuperOracle::Summary> effectSummaries() const;
-	void setEffectSummaries(const QMap<QDate, SuperOracle::Summary> &effectSummaries) {
+	QMap<QDate, SuperOracle::Summary> effectSummaries() const {
 		return m_effectSummaries;
 	}
 

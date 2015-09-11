@@ -24,7 +24,7 @@ protected:
 	int minTransactionForBundle() const override { return 16; }
 	void onGeneration(int nGen, double progressGeneration, Puppy::Context &ioContext) override {
 		FeatureStatDistrib::onGeneration(nGen, progressGeneration, ioContext);
-		if (nGen <= 40) {
+		if (nGen <= 4) {
 			// if we are pre-training
 			int filterHashIndex = ioContext.filterHashIndex;
 			if(filterHashIndex >= 0) {

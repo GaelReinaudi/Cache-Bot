@@ -42,7 +42,7 @@ public:
 	}
 	QJsonObject toJson() const {
 		QJsonObject ret;
-		ret["aaaaaaaaaaaaaaaaaaaaaaaaaaaa"] = 123456;
+		m_feature.ret["aaaaaaaaaaaaaaaaaaaaaaaaaaaa"] = 123456;
 		return ret;
 	}
 
@@ -90,6 +90,18 @@ public:
 		QVector<double> dailyPerOracle;
 		QVector<QJsonObject> summaryPerOracle;
 //	public:
+		QJsonObject toJson() {
+			QJsonObject jsSum;
+			QJsonArray allVal;
+			QJsonArray allSum;
+			for (int i = 0; i < dailyPerOracle.count(); ++i) {
+				allVal.append(dailyPerOracle[i]);
+				allSum.append(summaryPerOracle[i]);
+			}
+			jsSum.insert("contribs", allVal);
+			jsSum.insert("oracles", allSum);
+			return jsSum;
+		}
 		double flow() const {
 			if (posSum == 0.0) {
 				WARN() << "Summary::flow() posAvg == 0.0 ";
@@ -103,7 +115,7 @@ public:
 		double negPartialDif() const {
 			return 1.0 / posSum;
 		}
-		Summary operator+(const Summary& other) {
+		Summary operator+(const Summary& other) const {
 			Q_ASSERT(dailyPerOracle.count() == other.dailyPerOracle.count());
 			Summary sum(*this);
 			sum.posSum += other.posSum;
@@ -113,7 +125,7 @@ public:
 			}
 			return sum;
 		}
-		Summary operator-(const Summary& other) {
+		Summary operator-(const Summary& other) const {
 			Q_ASSERT(dailyPerOracle.count() == other.dailyPerOracle.count());
 			Summary dif(*this);
 			dif.posSum -= other.posSum;
@@ -123,7 +135,7 @@ public:
 			}
 			return dif;
 		}
-		Summary operator*(const double& fac) {
+		Summary operator*(const double& fac) const {
 			Summary mul(*this);
 			mul.posSum *= fac;
 			mul.negSum *= fac;
@@ -132,13 +144,14 @@ public:
 			}
 			return mul;
 		}
-		Summary effectOf(const Summary& deltaSummary) {
+		Summary effectOf(const Summary& deltaSummary) const {
 			Q_ASSERT(dailyPerOracle.count() == deltaSummary.dailyPerOracle.count());
 			Summary eff(*this);
 			for (int i = 0; i < eff.dailyPerOracle.count(); ++i) {
 				double slope = eff.dailyPerOracle[i] > 0 ? posPartialDif() : negPartialDif();
 				eff.dailyPerOracle[i] = slope * deltaSummary.dailyPerOracle[i];
 			}
+
 			return eff;
 		}
 	};
