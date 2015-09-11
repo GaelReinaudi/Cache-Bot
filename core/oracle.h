@@ -84,11 +84,54 @@ public:
 
 	struct Summary
 	{
-		double flow = 0.0;
+//	private:
 		double posSum = 0.0;
 		double negSum = 0.0;
 		QVector<double> dailyPerOracle;
 		QVector<QJsonObject> summaryPerOracle;
+//	public:
+		double flow() const {
+			if (posSum == 0.0) {
+				WARN() << "Summary::flow() posAvg == 0.0 ";
+				return 0.0;
+			}
+			return (posSum + negSum) / posSum;
+		}
+		double posPartialDif() const {
+			return -negSum / (posSum * posSum);
+		}
+		double negPartialDif() const {
+			return 1.0 / posSum;
+		}
+		Summary operator+(const Summary& other) {
+			Q_ASSERT(dailyPerOracle.count() == other.dailyPerOracle.count());
+			Summary sum(*this);
+			sum.posSum += other.posSum;
+			sum.negSum += other.negSum;
+			for (int i = 0; i < sum.dailyPerOracle.count(); ++i) {
+				sum.dailyPerOracle[i] += other.dailyPerOracle[i];
+			}
+			return sum;
+		}
+		Summary operator-(const Summary& other) {
+			Q_ASSERT(dailyPerOracle.count() == other.dailyPerOracle.count());
+			Summary dif(*this);
+			dif.posSum -= other.posSum;
+			dif.negSum -= other.negSum;
+			for (int i = 0; i < dif.dailyPerOracle.count(); ++i) {
+				dif.dailyPerOracle[i] -= other.dailyPerOracle[i];
+			}
+			return dif;
+		}
+		Summary operator*(const double& fac) {
+			Summary mul(*this);
+			mul.posSum *= fac;
+			mul.negSum *= fac;
+			for (int i = 0; i < mul.dailyPerOracle.count(); ++i) {
+				mul.dailyPerOracle[i] *= fac;
+			}
+			return mul;
+		}
 	};
 	Summary computeAvgCashFlow() const;
 

@@ -88,6 +88,7 @@ void MetricViewer::onUserInjected(User* pUser)
 //	Flow01<95, 99>::get(pUser);
 //	Flow02::get(pUser);
 	OracleSummary::get(pUser);
+	OracleTrend<5>::get(pUser);
 
 	CacheRest::Instance()->getBestBot(pUser->id(), pUser);
 }

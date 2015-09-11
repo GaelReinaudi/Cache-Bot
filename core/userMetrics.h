@@ -158,42 +158,6 @@ private:
 	HistoMetric* outMet;
 };
 
-class Flow02 : public UserMetric
-{
-protected:
-	Flow02(User* pUser)
-		: UserMetric(Name(), pUser)
-		, m_pUser(pUser)
-	{
-	}
-	static QString Name() {
-		return QString("Flow02");
-	}
-
-public:
-	static Flow02* get(User* pUser) {
-		auto pMet = HistoMetric::get(Name());
-		if (pMet)
-			return reinterpret_cast<Flow02*>(pMet);
-		return new Flow02(pUser);
-	}
-
-protected:
-	double computeFor(const QDate& date, bool& isValid) override {
-		if (date.daysTo(QDate::currentDate()) >= Transaction::maxDaysOld() / 2) {
-			isValid = false;
-			return 0.0;
-		}
-		isValid = true;
-//		Transaction::setCurrentDay(date);
-//		m_pUser->reInjectBot();
-		SuperOracle::Summary summary = m_pUser->oracle()->computeAvgCashFlow();
-		return summary.flow * 100.0;
-	}
-private:
-	User* m_pUser = 0;
-};
-
 class OracleSummary : public UserMetric
 {
 protected:
@@ -214,23 +178,78 @@ public:
 		return new OracleSummary(pUser);
 	}
 
+	QMap<QDate, SuperOracle::Summary> summaries() const{ return m_summaries; }
+
 protected:
 	double computeFor(const QDate& date, bool& isValid) override {
 		NOTICE() << "OracleSummary computeFor " << date.toString();
+		if (m_summaries.contains(date)) {
+			return m_summaries[date].flow();
+		}
 		QDate oldCurrentDate = Transaction::currentDay();
 		// set computation date
 		Transaction::setCurrentDay(date);
 		m_pUser->reInjectBot();
 		SuperOracle::Summary summary = m_pUser->oracle()->computeAvgCashFlow();
+		m_summaries[date] = summary;
 
 		isValid = true;
 		// back to where we were
 		Transaction::setCurrentDay(oldCurrentDate);
-		return summary.flow;
+		return summary.flow();
 	}
 private:
 	User* m_pUser = 0;
+	QMap<QDate, SuperOracle::Summary> m_summaries;
 };
 
+template <int overLastDays>
+class OracleTrend : public UserMetric
+{
+protected:
+	OracleTrend(User* pUser)
+		: UserMetric(Name(), pUser)
+	{
+		summaryMet =  OracleSummary::get(pUser);
+	}
+	static QString Name() {
+		return QString("OracleTrend%1").arg(overLastDays);
+	}
+
+public:
+	static OracleTrend<overLastDays>* get(User* pUser) {
+		auto pMet = HistoMetric::get(Name());
+		if (pMet)
+			return reinterpret_cast<OracleTrend<overLastDays>*>(pMet);
+		return new OracleTrend<overLastDays>(pUser);
+	}
+
+protected:
+	double computeFor(const QDate& date, bool& isValid) override {
+		if (m_avgSummaries.contains(date)) {
+			return m_avgSummaries[date].flow();
+		}
+
+		QDate dateAgo = date.addDays(-overLastDays);
+		double end = summaryMet->value(date);
+		double ago = summaryMet->value(dateAgo);
+		isValid = summaryMet->isValid(date) && summaryMet->isValid(dateAgo);
+		if (!isValid) {
+			WARN() << "summaryMet not valid";
+			return 0.0;
+		}
+		SuperOracle::Summary sumarEnd = summaryMet->summaries()[date];
+		SuperOracle::Summary sumarAgo = summaryMet->summaries()[dateAgo];
+
+		// compute average
+		m_avgSummaries[date] = (sumarEnd + sumarAgo) * 0.5;
+		m_difSummaries[date] = sumarEnd - sumarAgo;
+		return m_difSummaries[date].flow();
+	}
+private:
+	OracleSummary* summaryMet;
+	QMap<QDate, SuperOracle::Summary> m_avgSummaries;
+	QMap<QDate, SuperOracle::Summary> m_difSummaries;
+};
 
 #endif // USERMETRICS_H

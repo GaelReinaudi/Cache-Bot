@@ -61,8 +61,7 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow() const
 		WARN() << "SuperOracle::avgCashFlow posAvg == 0.0 ";
 		return summary;
 	}
-	summary.flow = (summary.posSum + summary.negSum) / summary.posSum;
-	NOTICE() << "SuperOracle::avgCashFlow " << summary.flow;
+	NOTICE() << "SuperOracle::avgCashFlow " << summary.flow();
 //	if (summary.flow < -1.0)
 //		summary.flow = -1.0;
 //	if (summary.flow > 1.0)
