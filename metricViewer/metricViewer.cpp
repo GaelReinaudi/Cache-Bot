@@ -7,7 +7,7 @@
 #include "cacheAccountConnector.h"
 #include "userMetrics.h"
 
-const int daysToPlot = 30;
+const int daysToPlot = 60;
 
 MetricViewer::MetricViewer(QString userID)
 	: QMainWindow()
@@ -88,7 +88,7 @@ void MetricViewer::onUserInjected(User* pUser)
 //	Flow01<95, 99>::get(pUser);
 //	Flow02::get(pUser);
 	OracleSummary::get(pUser);
-	OracleTrend<5>::get(pUser);
+	OracleTrend<7>::get(pUser);
 
 	CacheRest::Instance()->getBestBot(pUser->id(), pUser);
 }

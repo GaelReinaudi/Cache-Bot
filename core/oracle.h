@@ -132,6 +132,15 @@ public:
 			}
 			return mul;
 		}
+		Summary effectOf(const Summary& deltaSummary) {
+			Q_ASSERT(dailyPerOracle.count() == deltaSummary.dailyPerOracle.count());
+			Summary eff(*this);
+			for (int i = 0; i < eff.dailyPerOracle.count(); ++i) {
+				double slope = eff.dailyPerOracle[i] > 0 ? posPartialDif() : negPartialDif();
+				eff.dailyPerOracle[i] = slope * deltaSummary.dailyPerOracle[i];
+			}
+			return eff;
+		}
 	};
 	Summary computeAvgCashFlow() const;
 

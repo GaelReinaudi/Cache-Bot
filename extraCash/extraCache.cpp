@@ -53,7 +53,7 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 	NOTICE() << "ExtraCache::onBotInjected";
 	bestBot->summarize();
 
-	QJsonObject statObj = bestBot->postTreatment();
+//	QJsonObject statObj = bestBot->postTreatment();
 
 	SuperOracle::Summary summary = user()->oracle()->computeAvgCashFlow();
 	QJsonObject flowObj;
