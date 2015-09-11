@@ -34,22 +34,22 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow() const
 {
 	DBG() << "SuperOracle::avgCashFlow";
 	SuperOracle::Summary summary;
-	double posAvg = 0.0;
-	double negAvg = 0.0;
+	int ind = -1;
 	for (auto pOr : m_subOracles) {
+		++ind;
 		double avg = pOr->avgDaily();
 		if (avg > 0) {
-			posAvg += avg;
-			INFO() << "+daily " << avg << "      " << pOr->feature()->getName();
+			summary.posSum += avg;
+			INFO() << ind <<  " +daily " << avg << "      " << pOr->feature()->getName();
 		}
 		else if (avg < 0) {
-			negAvg += avg;
-			INFO() << "-daily " << avg << "      " << pOr->feature()->getName();
+			summary.negSum += avg;
+			INFO() << ind <<  " -daily " << avg << "      " << pOr->feature()->getName();
 		}
 		else {
-			posAvg += pOr->avgDailyPos();
-			negAvg += pOr->avgDailyNeg();
-			INFO() << "daily = " << avg << " " << pOr->feature()->getName()
+			summary.posSum += pOr->avgDailyPos();
+			summary.negSum += pOr->avgDailyNeg();
+			DBG() << ind <<  " daily = " << avg << " " << pOr->feature()->getName()
 				  << " " << pOr->avgDailyPos()
 				  << " " << pOr->avgDailyNeg()
 					 ;
@@ -57,11 +57,11 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow() const
 		summary.dailyPerOracle.append(avg);
 		summary.summaryPerOracle.append(pOr->toJson());
 	}
-	if (posAvg == 0.0) {
+	if (summary.posSum == 0.0) {
 		WARN() << "SuperOracle::avgCashFlow posAvg == 0.0 ";
 		return summary;
 	}
-	summary.flow = (posAvg + negAvg) / posAvg;
+	summary.flow = (summary.posSum + summary.negSum) / summary.posSum;
 	NOTICE() << "SuperOracle::avgCashFlow " << summary.flow;
 //	if (summary.flow < -1.0)
 //		summary.flow = -1.0;

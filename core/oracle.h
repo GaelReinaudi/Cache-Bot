@@ -85,6 +85,8 @@ public:
 	struct Summary
 	{
 		double flow = 0.0;
+		double posSum = 0.0;
+		double negSum = 0.0;
 		QVector<double> dailyPerOracle;
 		QVector<QJsonObject> summaryPerOracle;
 	};

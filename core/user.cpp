@@ -147,11 +147,11 @@ void User::injectJsonData(QString jsonStr)
 
 	emit injected(this);
 
-	CostRateMonthPercentileMetric<2, 50>::get(this)->value(Transaction::currentDay());
-	CostRateMonthPercentileMetric<2, 75>::get(this)->value(Transaction::currentDay());
-	CostRateMonthPercentileMetric<2, 90>::get(this)->value(Transaction::currentDay());
-	CostRateMonthPercentileMetric<2, 95>::get(this)->value(Transaction::currentDay());
-	CostRateMonthPercentileMetric<2, 99>::get(this)->value(Transaction::currentDay());
+//	CostRateMonthPercentileMetric<2, 50>::get(this)->value(Transaction::currentDay());
+//	CostRateMonthPercentileMetric<2, 75>::get(this)->value(Transaction::currentDay());
+//	CostRateMonthPercentileMetric<2, 90>::get(this)->value(Transaction::currentDay());
+//	CostRateMonthPercentileMetric<2, 95>::get(this)->value(Transaction::currentDay());
+//	CostRateMonthPercentileMetric<2, 99>::get(this)->value(Transaction::currentDay());
 }
 
 BotContext* User::makeBotContext()
@@ -189,10 +189,11 @@ QJsonObject User::trendSummary(int nDays) const
 {
 	QJsonObject trends;
 
-//	Transaction::setCurrentDay(QDate::currentDate());
+	QDate endDate = Transaction::currentDay();
 //	m_bestBot->summarize();
-//	Transaction::setCurrentDay(QDate::currentDate().addDays(-nDays));
+	Transaction::setCurrentDay(endDate.addDays(-nDays));
 //	m_bestBot->summarize();
+	Transaction::setCurrentDay(endDate);
 
 	return trends;
 }

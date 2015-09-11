@@ -73,7 +73,7 @@ protected:
 			isValid |= true;
 		}
 		if (!isValid) {
-			WARN() << "templateComputeFor<" << PastMonth << Percentile << "> not valid " << lastCostsInd << costs.count();
+//			WARN() << "templateComputeFor<" << PastMonth << Percentile << "> not valid " << lastCostsInd << costs.count();
 			return 0.0;
 		}
 		double numDays = startDate.daysTo(date);
@@ -194,6 +194,43 @@ private:
 	User* m_pUser = 0;
 };
 
+class OracleSummary : public UserMetric
+{
+protected:
+	OracleSummary(User* pUser)
+		: UserMetric(Name(), pUser)
+		, m_pUser(pUser)
+	{
+	}
+	static QString Name() {
+		return QString("OracleSummary");
+	}
+
+public:
+	static OracleSummary* get(User* pUser) {
+		auto pMet = HistoMetric::get(Name());
+		if (pMet)
+			return reinterpret_cast<OracleSummary*>(pMet);
+		return new OracleSummary(pUser);
+	}
+
+protected:
+	double computeFor(const QDate& date, bool& isValid) override {
+		NOTICE() << "OracleSummary computeFor " << date.toString();
+		QDate oldCurrentDate = Transaction::currentDay();
+		// set computation date
+		Transaction::setCurrentDay(date);
+		m_pUser->reInjectBot();
+		SuperOracle::Summary summary = m_pUser->oracle()->computeAvgCashFlow();
+
+		isValid = true;
+		// back to where we were
+		Transaction::setCurrentDay(oldCurrentDate);
+		return summary.flow;
+	}
+private:
+	User* m_pUser = 0;
+};
 
 
 #endif // USERMETRICS_H
