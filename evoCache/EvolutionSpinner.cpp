@@ -78,7 +78,7 @@ void EvolutionSpinner::runEvolution() {
 		m_context->filterHashIndex = j;
 		// Initialize population.
 		std::vector<Tree> lPopulation(lPopSize);
-		DBG() << "Initializing population for hash " << h;
+		NOTICE() << "Initializing population for hash " << h;
 		initializePopulation(lPopulation, *m_context, lInitGrowProba, lMinInitDepth, lMaxInitDepth);
 		double bestFitness = evaluateSymbReg(lPopulation, *m_context);
 		double newBestFitness = bestFitness;
@@ -175,7 +175,7 @@ void EvolutionSpinner::runEvolution() {
 			lPopulation.push_back(bestbundltree.at(bestbundltree.size() - 1 - i % bestbundltree.size()));
 		}
 		bestbundltree = superBestPreEvoTrees.values();
-		for(unsigned int i = 0; i < bestbundltree.size(); ++i) {
+		for(unsigned int i = 0; i < 5*bestbundltree.size(); ++i) {
 			lPopulation.push_back(bestbundltree.at(bestbundltree.size() - 1 - i % bestbundltree.size()));
 		}
 		evaluateSymbReg(lPopulation, *m_context);
@@ -218,7 +218,9 @@ double EvolutionSpinner::evaluateSymbReg(std::vector<Tree>& ioPopulation,
 											   Context& ioContext)
 {
 	double bestFitness = -1e6;
+	double ratioPop = 1.0 / double(ioPopulation.size());
 	for(unsigned int i=0; i<ioPopulation.size(); ++i) {
+		ioContext.generationProgress = double(i+1) * ratioPop;
 		if(ioPopulation[i].mValid)
 			continue;
 		double lResult = 0.0;

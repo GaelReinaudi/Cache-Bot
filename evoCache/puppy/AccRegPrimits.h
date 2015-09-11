@@ -138,7 +138,8 @@ public:
 protected:
 	virtual FeatureArgs* localStaticArgs() = 0;
 	virtual void getArgs(Puppy::Context &ioContext) { Q_UNUSED(ioContext); }
-	virtual void onGeneration(int nGen, Puppy::Context &ioContext) {
+	virtual void onGeneration(int nGen, double progressGeneration, Puppy::Context &ioContext) {
+		Q_UNUSED(progressGeneration);
 		if (nGen == 1) {
 			// if we are forcing a given hashed bundle
 			int filterHashIndex = ioContext.filterHashIndex;

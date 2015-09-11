@@ -13,10 +13,11 @@ void FeatureStatDistrib::getArgs(Puppy::Context &ioContext) {
 
 double FeatureStatDistrib::apply(TransactionBundle& allTrans, bool doLog)
 {
+	DBG() << "FeatureStatDistrib::apply";
 	// transaction to compare the hash with
 	Transaction modelTrans;
 	modelTrans.nameHash.setFromHash(m_localStaticArgs.m_hash);
-	modelTrans.setAmount(-1.0); // only negative prices will have a usable distance
+//	modelTrans.setAmount(-1.0); // only negative prices will have a usable distance
 	modelTrans.date = Transaction::currentDay();
 	const int maxHashDist = 4;
 

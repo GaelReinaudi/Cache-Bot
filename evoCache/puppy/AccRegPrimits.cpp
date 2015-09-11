@@ -60,7 +60,7 @@ void AccountFeature::execute(void *outDatum, Puppy::Context &ioContext)
 	if (cannotExecute(ioContext))
 		return;
 
-	onGeneration(ioContext.currentGeneration, ioContext);
+	onGeneration(ioContext.currentGeneration, ioContext.generationProgress, ioContext);
 
 	getArgs(ioContext);
 	cleanArgs();

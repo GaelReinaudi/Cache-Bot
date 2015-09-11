@@ -88,6 +88,8 @@ void UserViewer::plotMask(double x, double y, int flag)
 		colZone = QColor(0, 253, 64, 32);
 	if (flag & 4)
 		colZone = QColor(255, 165, 0, 32);
+	if (flag & 8)
+		colZone = QColor(255, 69, 0, 64);
 	itRect->setPen(QPen(QBrush(colZone), 3.0));
 	itRect->setBrush(QBrush(colZone));
 	itRect->setClipToAxisRect(false);

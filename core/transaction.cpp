@@ -233,6 +233,6 @@ double TransactionBundle::daysToNextSmart() const
 		daysToNext *= (1.0 - EMA_FACTOR);
 		daysToNext += daysToEnd * EMA_FACTOR;
 	}
-	WARN() << "daysToEnd " << daysToEnd << " final daysTo " << daysToNext;
+	DBG() << "daysToEnd " << daysToEnd << " final daysTo " << daysToNext;
 	return daysToNext;
 }

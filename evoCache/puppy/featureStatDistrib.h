@@ -40,7 +40,7 @@ private:
 class FeatureStatDistrib : public AccountFeature
 {
 public:
-	FeatureStatDistrib(QString featureName)
+	FeatureStatDistrib(const QString& featureName)
 		: AccountFeature(3, featureName.toStdString())
 	{
 	}
