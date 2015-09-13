@@ -131,8 +131,8 @@ void FeatureMonthlyAmount::onJustApplied(TransactionBundle& allTrans, bool doLog
 
 	// recompute fitness
 	m_fitness -= 2 * qMax(0.0, rerun);
-	m_fitness *= 2.0;
-	if (m_localStaticArgs.m_kla > 0)
+//	m_fitness *= 2.0;
+	if (qAbs(m_localStaticArgs.m_kla) > 3)
 		m_fitness *= 5.0;
 }
 

@@ -151,21 +151,21 @@ public:
 				QString advice = "";
 				// negative effect from an outcome
 				if (eff.dailyPerOracle[i] < -0.05) {
-					if (eff.dailyPerOracle[i] < 0) {
+					if (dailyPerOracle[i] < 0) {
 						advice += "Careful with ";
 					}
 				// negative effect from an income
-					if (eff.dailyPerOracle[i] > 0) {
+					if (dailyPerOracle[i] > 0) {
 						advice += "I Was expecting ";
 					}
 				}
 				// positive effect from an outcome
 				else if (eff.dailyPerOracle[i] > 0.05) {
-					if (eff.dailyPerOracle[i] < 0) {
+					if (dailyPerOracle[i] < 0) {
 						advice += "Good job with ";
 					}
 				// positive effect from an income
-					if (eff.dailyPerOracle[i] > 0) {
+					if (dailyPerOracle[i] > 0) {
 						advice += "Nice! ";
 					}
 				}

@@ -1,6 +1,6 @@
 #include "featureOutlier.h"
 
-static const int THRESHOLD_EFFECT128 = 20;
+static const int THRESHOLD_EFFECT128 = 30;
 
 double FeatureOutlier::apply(TransactionBundle& allTrans, bool doLog)
 {

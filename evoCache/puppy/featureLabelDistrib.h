@@ -12,6 +12,8 @@ public:
 		: OracleStatDistrib(pCreatingFeature)
 	{}
 	QString description() const {
+		if (m_args.m_bundle.count() == 0)
+			return "";
 		QString desc;
 		if (m_args.m_kla > 0)
 			desc += "income from ";
@@ -21,7 +23,7 @@ public:
 		desc += ". Those happen ~ %1 times a month.";
 		return desc.arg(qRound(m_args.m_dayProba * 32));
 	}
-	friend class FeaturePriceWindow;
+	friend class FeatureLabelDistrib;
 };
 
 class CORESHARED_EXPORT FeatureLabelDistrib : public FeatureStatDistrib
@@ -41,6 +43,11 @@ protected:
 				&& double(trans.kla()) >= -1.0 + m_localStaticArgs.m_kla * EFFECT_RANGE_WIDTH_RATIO;
 	}
 	int minTransactionForBundle() const override { return 16; }
+	Oracle* makeNewOracle() override {
+		OracleLabelDistrib* pNewOr = new OracleLabelDistrib(this);
+		pNewOr->m_args = m_localStaticArgs;
+		return pNewOr;
+	}
 	void onGeneration(int nGen, double progressGeneration, Puppy::Context &ioContext) override {
 		FeatureStatDistrib::onGeneration(nGen, progressGeneration, ioContext);
 		if (nGen <= 4) {
