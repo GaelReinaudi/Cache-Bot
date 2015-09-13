@@ -19,7 +19,7 @@ static const QString SendExtraCashRoute = server + "/api/cache-bot/user/%1/flow"
 static const QString SendNewBotRoute = server + "/cache-bot/newBot";
 static const QString BestBotRoute = server + "/cache-bot/bestBot";
 
-static const QString ExtraCashEC2Compute = "https://qvg5wdby95.execute-api.us-west-2.amazonaws.com/prod/extraCash001";
+static const QString ExtraCashEC2Compute = "https://qvg5wdby95.execute-api.us-west-2.amazonaws.com/prod/extraCache002";
 
 static const QString StringLoggedInReplySuccess = "Moved Temporarily. Redirecting to /loginSuccess";
 static const QString StringLoggedInReplyFailure = "Moved Temporarily. Redirecting to /loginFailure";
