@@ -5,6 +5,25 @@
 
 #define EFFECT_RANGE_WIDTH_RATIO 2.0
 
+class OracleLabelDistrib : public OracleStatDistrib
+{
+public:
+	OracleLabelDistrib(AccountFeature* pCreatingFeature)
+		: OracleStatDistrib(pCreatingFeature)
+	{}
+	QString description() const {
+		QString desc;
+		if (m_args.m_kla > 0)
+			desc += "income from ";
+		else
+			desc += "purchases at ";
+		desc += m_args.m_bundle.last().name;
+		desc += ". Those happen ~ %1 times a month.";
+		return desc.arg(qRound(m_args.m_dayProba * 32));
+	}
+	friend class FeaturePriceWindow;
+};
+
 class CORESHARED_EXPORT FeatureLabelDistrib : public FeatureStatDistrib
 {
 public:

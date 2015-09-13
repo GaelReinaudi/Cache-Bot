@@ -70,3 +70,8 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow() const
 	return summary;
 }
 
+QJsonObject Oracle::toJson() const {
+	QJsonObject ret;
+	ret["descr"] = description();
+	return ret;
+}

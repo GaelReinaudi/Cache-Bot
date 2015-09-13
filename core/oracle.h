@@ -27,6 +27,7 @@ public:
 	}
 
 	virtual QVector<Transaction> revelation(QDate upToDate) = 0;
+	virtual QString description() const { return "????"; }
 	virtual double avgDaily() const = 0;
 	virtual double avgDailyPos() const {
 		double avg = avgDaily();
@@ -40,11 +41,7 @@ public:
 	AccountFeature* feature() const {
 		return m_feature;
 	}
-	QJsonObject toJson() const {
-		QJsonObject ret;
-		m_feature.ret["aaaaaaaaaaaaaaaaaaaaaaaaaaaa"] = 123456;
-		return ret;
-	}
+	QJsonObject toJson() const;
 
 private:
 	QDate m_iniDate;
@@ -150,6 +147,33 @@ public:
 			for (int i = 0; i < eff.dailyPerOracle.count(); ++i) {
 				double slope = eff.dailyPerOracle[i] > 0 ? posPartialDif() : negPartialDif();
 				eff.dailyPerOracle[i] = slope * deltaSummary.dailyPerOracle[i];
+				// try to make an advice
+				QString advice = "";
+				// negative effect from an outcome
+				if (eff.dailyPerOracle[i] < -0.05) {
+					if (eff.dailyPerOracle[i] < 0) {
+						advice += "Careful with ";
+					}
+				// negative effect from an income
+					if (eff.dailyPerOracle[i] > 0) {
+						advice += "I Was expecting ";
+					}
+				}
+				// positive effect from an outcome
+				else if (eff.dailyPerOracle[i] > 0.05) {
+					if (eff.dailyPerOracle[i] < 0) {
+						advice += "Good job with ";
+					}
+				// positive effect from an income
+					if (eff.dailyPerOracle[i] > 0) {
+						advice += "Nice! ";
+					}
+				}
+				else
+					continue;
+				advice += eff.summaryPerOracle[i]["descr"].toString();
+				eff.summaryPerOracle[i]["advice"] = advice;
+				eff.summaryPerOracle[i]["effect"] = eff.dailyPerOracle[i];
 			}
 
 			return eff;

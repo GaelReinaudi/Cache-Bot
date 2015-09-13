@@ -39,6 +39,21 @@ private:
 		int m_consecMissed = 0;
 		double m_fitRerun = 0;
 	} m_args;
+	QString description() const {
+		QString desc;
+		if (m_args.m_kla > 0)
+			desc += "income ";
+		else
+			desc += "bill ";
+		desc += "in the range ~%1";
+		desc += ", on the %2";
+		if (m_args.m_dayOfMonth2)
+			desc += " & %3";
+		desc += " of the month.";
+		return desc.arg(unKindaLog(qAbs(m_args.m_kla)), 0, 'f', 2)
+				.arg(m_args.m_dayOfMonth)
+				.arg(m_args.m_dayOfMonth2);
+	}
 	friend class FeaturePeriodicAmount;
 	friend class FeatureMonthlyAmount;
 	friend class FeatureBiWeeklyAmount;

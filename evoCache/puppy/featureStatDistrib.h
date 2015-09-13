@@ -14,7 +14,7 @@ protected:
 	QVector<Transaction> revelation(QDate upToDate) override;
 	double avgDaily() const override;
 
-private:
+protected:
 	struct Args : public FeatureArgs
 	{
 		void intoJson(QJsonObject& o_retObj) {
@@ -34,7 +34,6 @@ private:
 		double m_dayProba = 0.0;
 	} m_args;
 	friend class FeatureStatDistrib;
-	friend class FeaturePriceWindow;
 };
 
 class FeatureStatDistrib : public AccountFeature
