@@ -11,7 +11,7 @@
 
 //static const QString server = "http://127.0.0.1:8080";
 static const QString server = "https://cache-heroku.herokuapp.com";
-static const QString amazonServer = "http://ec2-52-24-203-78.us-west-2.compute.amazonaws.com:8081";
+static const QString amazonServer = "http://http://ec2-52-88-126-153.us-west-2.compute.amazonaws:8081";
 static const QString LoginRoute = server + "/login";
 static const QString IdsRoute = server + "/cache-bot/user_ids";
 static const QString UserDataRoute = server + "/cache-bot/data";
@@ -19,7 +19,7 @@ static const QString SendExtraCashRoute = server + "/api/cache-bot/user/%1/flow"
 static const QString SendNewBotRoute = server + "/cache-bot/newBot";
 static const QString BestBotRoute = server + "/cache-bot/bestBot";
 
-static const QString ExtraCashEC2Compute = "https://qvg5wdby95.execute-api.us-west-2.amazonaws.com/prod/extraCash001";
+static const QString ExtraCashEC2Compute = "https://qvg5wdby95.execute-api.us-west-2.amazonaws.com/prod/extraCache002";
 
 static const QString StringLoggedInReplySuccess = "Moved Temporarily. Redirecting to /loginSuccess";
 static const QString StringLoggedInReplyFailure = "Moved Temporarily. Redirecting to /loginFailure";

@@ -142,19 +142,24 @@ void User::injectJsonData(QString jsonStr)
 
 	makeHashBundles();
 
+	// remake the context just in case
+	makeBotContext();
+
 	emit injected(this);
 
-	CostRateMonthPercentileMetric<2, 50>::get(this)->value(Transaction::currentDay());
-	CostRateMonthPercentileMetric<2, 75>::get(this)->value(Transaction::currentDay());
-	CostRateMonthPercentileMetric<2, 90>::get(this)->value(Transaction::currentDay());
-	CostRateMonthPercentileMetric<2, 95>::get(this)->value(Transaction::currentDay());
-	CostRateMonthPercentileMetric<2, 99>::get(this)->value(Transaction::currentDay());
+//	CostRateMonthPercentileMetric<2, 50>::get(this)->value(Transaction::currentDay());
+//	CostRateMonthPercentileMetric<2, 75>::get(this)->value(Transaction::currentDay());
+//	CostRateMonthPercentileMetric<2, 90>::get(this)->value(Transaction::currentDay());
+//	CostRateMonthPercentileMetric<2, 95>::get(this)->value(Transaction::currentDay());
+//	CostRateMonthPercentileMetric<2, 99>::get(this)->value(Transaction::currentDay());
 }
 
 BotContext* User::makeBotContext()
 {
-	if(m_botContext)
+	if(m_botContext) {
+		WARN() << "Remaking BotContext";
 		delete m_botContext;
+	}
 	m_botContext = new BotContext(this);
 	return m_botContext;
 }
@@ -173,8 +178,6 @@ void User::injectJsonBot(QString jsonStr)
 		fileout << jsonDoc.toJson(QJsonDocument::Indented);
 	}
 
-	// remake the context just in case
-	makeBotContext();
 	// makes the bot and build the tree inside
 	m_bestBot = new Bot(jsonObj, this);
 	m_bestBot->init(m_botContext);
@@ -186,10 +189,11 @@ QJsonObject User::trendSummary(int nDays) const
 {
 	QJsonObject trends;
 
-//	Transaction::setCurrentDay(QDate::currentDate());
+	QDate endDate = Transaction::currentDay();
 //	m_bestBot->summarize();
-//	Transaction::setCurrentDay(QDate::currentDate().addDays(-nDays));
+	Transaction::setCurrentDay(endDate.addDays(-nDays));
 //	m_bestBot->summarize();
+	Transaction::setCurrentDay(endDate);
 
 	return trends;
 }

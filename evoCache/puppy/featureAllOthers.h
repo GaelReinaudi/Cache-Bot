@@ -25,9 +25,10 @@ protected:
 	}
 
 private:
-	struct Args
+	struct Args : public FeatureArgs
 	{
 		void intoJson(QJsonObject& o_retObj) {
+			FeatureArgs::intoJson(o_retObj);
 			o_retObj.insert("days", m_daysBundle);
 			o_retObj.insert("proba", m_dayProba);
 			o_retObj.insert("numPos", m_numPos);
@@ -36,7 +37,6 @@ private:
 			o_retObj.insert("sumNeg", m_sumNeg);
 			o_retObj.insert("numBund", m_bundle.count());
 		}
-		TransactionBundle m_bundle;
 		double m_dayProba = 0.0;
 		double m_daysBundle = 0.0;
 		int m_numPos = 0;
@@ -55,25 +55,35 @@ public:
 						 , "FeatureAllOthers")
 	{ }
 
-public:
-	void getArgs(Puppy::Context &ioContext) override {
-//		double a = 0;
-//		int ind = -1;
-//		getArgument(++ind, &a, ioContext);
-//		m_localStaticArgs.m_avgDayIn099 = a;
-	}
-
+protected:
 	QJsonObject toJson(Puppy::Context& ioContext) override {
 		QJsonObject retObj = AccountFeature::toJson(ioContext);
 		m_localStaticArgs.intoJson(retObj);
 		return retObj;
 	}
 
-	void execute(void* outDatum, Puppy::Context& ioContext) override;
+	bool cannotExecute(Puppy::Context& ioContext) const override
+	{
+		// if we already have aplied this feature, nothing to be done here.
+		if (ioContext.flags & Puppy::Context::AllOthers) {
+			return true;
+		}
+		ioContext.flags |= Puppy::Context::AllOthers;
+		return false;
+	}
+	double apply(TransactionBundle& allTrans, bool doLog = false) override;
+	Oracle* makeNewOracle() override {
+		OracleFilteredRest* pNewOr = new OracleFilteredRest(this);
+		pNewOr->m_args = m_localStaticArgs;
+		return pNewOr;
+	}
 
-	double apply(TransactionBundle &allTrans);
+	double maxDailyProbability() const override {
+		return 1000000000.0;
+	}
 
-private:
+protected:
+	FeatureArgs* localStaticArgs() override { return &m_localStaticArgs; }
 	OracleFilteredRest::Args m_localStaticArgs;
 };
 

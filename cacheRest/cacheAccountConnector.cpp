@@ -37,10 +37,10 @@ void CacheAccountConnector::onLoggedIn(bool didLogin)
 
 void CacheAccountConnector::onUserInjected(User* pUser)
 {
-	NOTICE() << "CacheAccountConnector has injected user" << pUser->email();
+	NOTICE() << "CacheAccountConnector has injected user: " << pUser->email();
 
 	double checkingBal = user()->balance(Account::Type::Checking);
-	NOTICE() << "checkingBal" << checkingBal << " (Un/Ch/Sa/Cr"
+	NOTICE() << "checkingBal " << checkingBal << " (Un/Ch/Sa/Cr"
 			 << user()->balance(Account::Type::Unknown)
 			 << user()->balance(Account::Type::Checking)
 			 << user()->balance(Account::Type::Saving)

@@ -33,7 +33,7 @@ public slots:
 	void onNewSummarizedTree(QJsonObject jsonObj);
 	void onUserInjected(User* pUser);
 	void onBotInjected(Bot *bestBot);
-
+	void onAgo();
 
 signals:
 	void operate(const QString &);

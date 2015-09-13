@@ -7,6 +7,8 @@
 #include "cacheAccountConnector.h"
 #include "userMetrics.h"
 
+const int daysToPlot = 60;
+
 MetricViewer::MetricViewer(QString userID)
 	: QMainWindow()
 	, ui(new Ui::MetricViewer)
@@ -19,6 +21,8 @@ MetricViewer::MetricViewer(QString userID)
 
 	ui->metricList->setMouseTracking(true);
 	connect(ui->metricList, SIGNAL(entered(QModelIndex)), this, SLOT(onHoverListIndex(QModelIndex)));
+
+	ui->acPlot->yAxis->setAutoTickStep(true);
 }
 
 MetricViewer::~MetricViewer()
@@ -34,23 +38,8 @@ User *MetricViewer::user() const
 	return m_pConnector->user();
 }
 
-void MetricViewer::onUserInjected(User* pUser)
+bool MetricViewer::plotAllMetrics()
 {
-	MetricSmoother<7>::get(CostRateMonthPercentileMetric<1, 90 >::get(pUser));
-	MetricSmoother<7>::get(CostRateMonthPercentileMetric<1, 99 >::get(pUser));
-	MetricSmoother<7>::get(MakeRateMonthPercentileMetric<1, 90 >::get(pUser));
-	MetricSmoother<7>::get(MakeRateMonthPercentileMetric<1, 99 >::get(pUser));
-	MetricSmoother<7>::get(CostRateMonthPercentileMetric<3, 90 >::get(pUser));
-	MetricSmoother<7>::get(CostRateMonthPercentileMetric<3, 99 >::get(pUser));
-	MetricSmoother<7>::get(MakeRateMonthPercentileMetric<3, 90 >::get(pUser));
-	MetricSmoother<7>::get(MakeRateMonthPercentileMetric<3, 99 >::get(pUser));
-	Flow01<95, 90>::get(pUser);
-	Flow01<95, 95>::get(pUser);
-	Flow01<99, 95>::get(pUser);
-	Flow01<99, 99>::get(pUser);
-	Flow01<95, 99>::get(pUser);
-	Flow02::get(pUser);
-
 	for (const QString& str: HistoMetric::allNames()) {
 		QColor color(qrand() % 192 + 64, qrand() % 192 + 64, qrand() % 192 + 64);
 		QListWidgetItem* item = new QListWidgetItem(str, ui->metricList);
@@ -63,7 +52,7 @@ void MetricViewer::onUserInjected(User* pUser)
 	}
 
 	QDate day  = QDate::currentDate();
-	QDate downToDate = Transaction::onlyAfterDate;
+	QDate downToDate = day.addDays(-daysToPlot);
 	while (day >= downToDate) {
 		qDebug() << day;
 		double t = QDateTime(day).toTime_t();
@@ -79,6 +68,27 @@ void MetricViewer::onUserInjected(User* pUser)
 	}
 	ui->acPlot->rescaleAxes();
 	ui->acPlot->replot();
+	return true;
+}
+
+void MetricViewer::onUserInjected(User* pUser)
+{
+//	MetricSmoother<7>::get(CostRateMonthPercentileMetric<1, 90 >::get(pUser));
+//	MetricSmoother<7>::get(CostRateMonthPercentileMetric<1, 99 >::get(pUser));
+//	MetricSmoother<7>::get(MakeRateMonthPercentileMetric<1, 90 >::get(pUser));
+//	MetricSmoother<7>::get(MakeRateMonthPercentileMetric<1, 99 >::get(pUser));
+//	MetricSmoother<7>::get(CostRateMonthPercentileMetric<3, 90 >::get(pUser));
+//	MetricSmoother<7>::get(CostRateMonthPercentileMetric<3, 99 >::get(pUser));
+//	MetricSmoother<7>::get(MakeRateMonthPercentileMetric<3, 90 >::get(pUser));
+//	MetricSmoother<7>::get(MakeRateMonthPercentileMetric<3, 99 >::get(pUser));
+//	Flow01<95, 90>::get(pUser);
+//	Flow01<95, 95>::get(pUser);
+//	Flow01<99, 95>::get(pUser);
+//	Flow01<99, 99>::get(pUser);
+//	Flow01<95, 99>::get(pUser);
+//	Flow02::get(pUser);
+	OracleSummary::get(pUser);
+	OracleTrend<7>::get(pUser);
 
 	CacheRest::Instance()->getBestBot(pUser->id(), pUser);
 }
@@ -87,6 +97,14 @@ void MetricViewer::onBotInjected(Bot* bestBot)
 {
 	NOTICE() << "MetricViewer::onBotInjected";
 	bestBot->summarize();
+
+	static bool alreadyOnce = false;
+	if (!alreadyOnce) {
+		alreadyOnce = true;
+
+		plotAllMetrics();
+		NOTICE() << "plotted All Metrics";
+	}
 }
 
 void MetricViewer::onHoverListIndex(QModelIndex index)

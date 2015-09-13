@@ -5,18 +5,18 @@
 
 const double THRESHOLD_PROBA_BILL = 0.1;
 
-#define POP_SIZE_DEFAULT 75//0
+#define POP_SIZE_DEFAULT 15//75//0
 #define NBR_GEN_DEFAULT 30
-#define NBR_PART_TOURNAMENT_DEFAULT 4
+#define NBR_PART_TOURNAMENT_DEFAULT 3
 #define MAX_DEPTH_DEFAULT 6
 #define MIN_INIT_DEPTH_DEFAULT 3
 #define MAX_INIT_DEPTH_DEFAULT 5
 #define INIT_GROW_PROBA_DEFAULT 0.15f
 #define CROSSOVER_PROBA_DEFAULT 0.8f
 #define CROSSOVER_DISTRIB_PROBA_DEFAULT 0.9f
-#define MUT_STD_PROBA_DEFAULT 0.25f
+#define MUT_STD_PROBA_DEFAULT 0.5f
 #define MUT_MAX_REGEN_DEPTH_DEFAULT 5
-#define MUT_SWAP_PROBA_DEFAULT 0.535f
+#define MUT_SWAP_PROBA_DEFAULT 0.8535f
 #define MUT_SWAP_DISTRIB_PROBA_DEFAULT 0.5f
 
 using namespace Puppy;
@@ -29,8 +29,9 @@ EvolutionSpinner::EvolutionSpinner(QObject* parent)
 
 void EvolutionSpinner::init(User* pUser)
 {
-	// Create evolution context add primitives used into it.
-	m_context = pUser->makeBotContext();
+//	// Create evolution context add primitives used into it.
+//	m_context = pUser->makeBotContext();
+	m_context = pUser->botContext();
 	emit initialized(true);
 }
 
@@ -68,6 +69,7 @@ void EvolutionSpinner::runEvolution() {
 
 	QMap<double, QJsonArray> output;
 	QMap<double, Tree> bestPreEvoTrees;
+	QMap<double, Tree> superBestPreEvoTrees;
 	QJsonObject finalBotObject;
 	for (int j = 0; j < m_context->m_pUser->hashBundles().count(); ++j) {
 		int h = m_context->m_pUser->hashBundles().keys()[j];
@@ -76,7 +78,7 @@ void EvolutionSpinner::runEvolution() {
 		m_context->filterHashIndex = j;
 		// Initialize population.
 		std::vector<Tree> lPopulation(lPopSize);
-		DBG() << "Initializing population for hash " << h;
+		NOTICE() << "Initializing population for hash " << h;
 		initializePopulation(lPopulation, *m_context, lInitGrowProba, lMinInitDepth, lMaxInitDepth);
 		double bestFitness = evaluateSymbReg(lPopulation, *m_context);
 		double newBestFitness = bestFitness;
@@ -121,7 +123,7 @@ void EvolutionSpinner::runEvolution() {
 			}
 		}
 		bestTree.mValid = false;
-		summarize(bestTree);
+//		summarize(bestTree);
 		lPopulation.push_back(bestTree);
 		newBestFitness = evaluateSymbReg(lPopulation, *m_context);
 		calculateStats(lPopulation, lNbrGen);
@@ -132,17 +134,17 @@ void EvolutionSpinner::runEvolution() {
 				std::max_element(lPopulation.begin(), lPopulation.end());
 		DBG() << "Best individual at generation " << lNbrGen << " is: "
 			  << lBestIndividual->toStr();
-//		std::vector<unsigned int> outCallStack = (*lBestIndividual).getFeatureStack(0, *m_context);
-//		qDebug() << QVector<unsigned int>::fromStdVector(outCallStack);
 
 		QJsonObject jsonBest = summarize(*lBestIndividual);
-//		double billProba = jsonBest["features"].toArray().first().toObject()["billProba"].toDouble();
 		double fitness = jsonBest["features"].toArray().first().toObject()["fitness"].toDouble();
 		output[fitness].append(jsonBest);
-//		qDebug() << "billProba" << billProba;
 		if(fitness > THRESHOLD_PROBA_BILL || bestPreEvoTrees.isEmpty()) {
 			(*lBestIndividual).mValid = false;
 			bestPreEvoTrees.insertMulti(fitness, *lBestIndividual);
+		}
+		if(fitness > 1.0 || superBestPreEvoTrees.isEmpty()) {
+			(*lBestIndividual).mValid = false;
+			superBestPreEvoTrees.insertMulti(fitness, *lBestIndividual);
 		}
 	}
 
@@ -166,9 +168,14 @@ void EvolutionSpinner::runEvolution() {
 	std::vector<Tree> lPopulation(0);
 	initializePopulation(lPopulation, *m_context, lInitGrowProba, lMinInitDepth, lMaxInitDepth);
 	NOTICE() << "bestPreEvoTrees.count " << bestPreEvoTrees.count();
+	NOTICE() << "superBestPreEvoTrees.count " << superBestPreEvoTrees.count();
 	if(bestPreEvoTrees.count()) {
 		auto bestbundltree = bestPreEvoTrees.values();
 		for(unsigned int i = 0; i < lPopSize; ++i) {
+			lPopulation.push_back(bestbundltree.at(bestbundltree.size() - 1 - i % bestbundltree.size()));
+		}
+		bestbundltree = superBestPreEvoTrees.values();
+		for(unsigned int i = 0; i < 5*bestbundltree.size(); ++i) {
 			lPopulation.push_back(bestbundltree.at(bestbundltree.size() - 1 - i % bestbundltree.size()));
 		}
 		evaluateSymbReg(lPopulation, *m_context);
@@ -194,7 +201,7 @@ void EvolutionSpinner::runEvolution() {
 			applyMutationSwap(lPopulation, *m_context, lMutSwapProba, lMutSwapDistribProba);
 
 			bestTree.mValid = false;
-			lPopulation.push_back(bestTree);
+//			lPopulation.push_back(bestTree);
 
 			evaluateSymbReg(lPopulation, *m_context);
 			calculateStats(lPopulation, m_context->currentGeneration );
@@ -211,7 +218,9 @@ double EvolutionSpinner::evaluateSymbReg(std::vector<Tree>& ioPopulation,
 											   Context& ioContext)
 {
 	double bestFitness = -1e6;
+	double ratioPop = 1.0 / double(ioPopulation.size());
 	for(unsigned int i=0; i<ioPopulation.size(); ++i) {
+		ioContext.generationProgress = double(i+1) * ratioPop;
 		if(ioPopulation[i].mValid)
 			continue;
 		double lResult = 0.0;
@@ -238,7 +247,7 @@ QJsonObject EvolutionSpinner::summarize(Tree& tree)
 	jsonObj.insert("fit", fit);
 
 	DBG() << "tree (" << fit << "): " << tree.toStr();
-	INFO() << "    " << jsonObj;
+	INFO() << "----" << jsonObj;
 	emit m_context->needsReplot();
 	emit m_context->newSummarizedTree(jsonObj);
 	return jsonObj;

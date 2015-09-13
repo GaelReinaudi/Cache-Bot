@@ -27,6 +27,7 @@ public:
 	}
 
 	virtual QVector<Transaction> revelation(QDate upToDate) = 0;
+	virtual QString description() const { return "????"; }
 	virtual double avgDaily() const = 0;
 	virtual double avgDailyPos() const {
 		double avg = avgDaily();
@@ -40,6 +41,7 @@ public:
 	AccountFeature* feature() const {
 		return m_feature;
 	}
+	QJsonObject toJson() const;
 
 private:
 	QDate m_iniDate;
@@ -76,7 +78,108 @@ public:
 	}
 	QVector<Transaction> revelation(QDate upToDate) override;
 	double avgDaily() const override;
-	double avgCashFlow() const;
+
+	struct Summary
+	{
+//	private:
+		double posSum = 0.0;
+		double negSum = 0.0;
+		QVector<double> dailyPerOracle;
+		QVector<QJsonObject> summaryPerOracle;
+//	public:
+		QJsonObject toJson() {
+			QJsonObject jsSum;
+			QJsonArray allVal;
+			QJsonArray allSum;
+			for (int i = 0; i < dailyPerOracle.count(); ++i) {
+				allVal.append(dailyPerOracle[i]);
+				allSum.append(summaryPerOracle[i]);
+			}
+			jsSum.insert("contribs", allVal);
+			jsSum.insert("oracles", allSum);
+			return jsSum;
+		}
+		double flow() const {
+			if (posSum == 0.0) {
+				WARN() << "Summary::flow() posAvg == 0.0 ";
+				return 0.0;
+			}
+			return (posSum + negSum) / posSum;
+		}
+		double posPartialDif() const {
+			return -negSum / (posSum * posSum);
+		}
+		double negPartialDif() const {
+			return 1.0 / posSum;
+		}
+		Summary operator+(const Summary& other) const {
+			Q_ASSERT(dailyPerOracle.count() == other.dailyPerOracle.count());
+			Summary sum(*this);
+			sum.posSum += other.posSum;
+			sum.negSum += other.negSum;
+			for (int i = 0; i < sum.dailyPerOracle.count(); ++i) {
+				sum.dailyPerOracle[i] += other.dailyPerOracle[i];
+			}
+			return sum;
+		}
+		Summary operator-(const Summary& other) const {
+			Q_ASSERT(dailyPerOracle.count() == other.dailyPerOracle.count());
+			Summary dif(*this);
+			dif.posSum -= other.posSum;
+			dif.negSum -= other.negSum;
+			for (int i = 0; i < dif.dailyPerOracle.count(); ++i) {
+				dif.dailyPerOracle[i] -= other.dailyPerOracle[i];
+			}
+			return dif;
+		}
+		Summary operator*(const double& fac) const {
+			Summary mul(*this);
+			mul.posSum *= fac;
+			mul.negSum *= fac;
+			for (int i = 0; i < mul.dailyPerOracle.count(); ++i) {
+				mul.dailyPerOracle[i] *= fac;
+			}
+			return mul;
+		}
+		Summary effectOf(const Summary& deltaSummary) const {
+			Q_ASSERT(dailyPerOracle.count() == deltaSummary.dailyPerOracle.count());
+			Summary eff(*this);
+			for (int i = 0; i < eff.dailyPerOracle.count(); ++i) {
+				double slope = eff.dailyPerOracle[i] > 0 ? posPartialDif() : negPartialDif();
+				eff.dailyPerOracle[i] = slope * deltaSummary.dailyPerOracle[i];
+				// try to make an advice
+				QString advice = "";
+				// negative effect from an outcome
+				if (eff.dailyPerOracle[i] < -0.05) {
+					if (dailyPerOracle[i] < 0) {
+						advice += "Careful with ";
+					}
+				// negative effect from an income
+					if (dailyPerOracle[i] > 0) {
+						advice += "I Was expecting ";
+					}
+				}
+				// positive effect from an outcome
+				else if (eff.dailyPerOracle[i] > 0.05) {
+					if (dailyPerOracle[i] < 0) {
+						advice += "Good job with ";
+					}
+				// positive effect from an income
+					if (dailyPerOracle[i] > 0) {
+						advice += "Nice! ";
+					}
+				}
+				else
+					continue;
+				advice += eff.summaryPerOracle[i]["descr"].toString();
+				eff.summaryPerOracle[i]["advice"] = advice;
+				eff.summaryPerOracle[i]["effect"] = eff.dailyPerOracle[i];
+			}
+
+			return eff;
+		}
+	};
+	Summary computeAvgCashFlow() const;
 
 private:
 	QVector<QSharedPointer<Oracle> > m_subOracles;

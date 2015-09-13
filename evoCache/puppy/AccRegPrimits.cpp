@@ -51,3 +51,58 @@ Puppy::Primitive::tryReplaceArgumentNode(unsigned int inN, std::string primName,
 	return true;
 }
 
+
+
+void AccountFeature::execute(void *outDatum, Puppy::Context &ioContext)
+{
+	double& output = *(double*)outDatum;
+	m_fitness = output = 0.0;
+	if (cannotExecute(ioContext))
+		return;
+
+	onGeneration(ioContext.currentGeneration, ioContext.generationProgress, ioContext);
+
+	getArgs(ioContext);
+	cleanArgs();
+
+	// will be ALL the transactions if m_filterHash < 0
+	TransactionBundle& allTrans = ioContext.m_pUser->transBundle(m_filterHash);
+
+	output = apply(allTrans, ioContext.m_summaryJsonObj);
+	m_fitness = output;
+
+	isolateBundledTransactions(ioContext.isPostTreatment);
+
+	onJustApplied(allTrans, ioContext.m_summaryJsonObj);
+	output = m_fitness;
+
+	m_billProba = maxDailyProbability();
+
+	if (ioContext.m_summaryJsonObj) {
+		QJsonArray features = (*ioContext.m_summaryJsonObj)["features"].toArray();
+		features.append(toJson(ioContext));
+		ioContext.m_summaryJsonObj->insert("features", features);
+
+		emitGraphics(ioContext);
+
+		// making a shared pointer that will take care of cleaning once the oracle is no longer referenced
+		Oracle* pNewOr = makeNewOracle();
+		QSharedPointer<Oracle> newOracle(pNewOr);
+		ioContext.m_pUser->oracle()->addSubOracle(newOracle);
+	}
+}
+
+void AccountFeature::isolateBundledTransactions(bool isPostTreatment /*= false*/)
+{
+	Q_UNUSED(isPostTreatment);
+	// isolate the transaction that were fitted to the target
+	for (int i = 0; i < localStaticArgs()->m_bundle.count(); ++i) {
+		localStaticArgs()->m_bundle.trans(i).setDimensionOfVoid();
+	}
+}
+
+
+
+
+
+

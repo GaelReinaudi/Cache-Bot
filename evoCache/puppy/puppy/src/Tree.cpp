@@ -85,6 +85,7 @@ unsigned int Puppy::Tree::getDepth(unsigned int inIndex) const
  */
 void Puppy::Tree::interpret(void* outResult, Puppy::Context& ioContext)
 {
+	DBG() << "Puppy::Tree::interpret";
 	ioContext.m_pUser->resetDimensionOfVoid();
 	// reset all flags
 	ioContext.flags = 0;
@@ -102,8 +103,10 @@ void Puppy::Tree::interpret(void* outResult, Puppy::Context& ioContext)
 		if (ioContext.m_summaryJsonObj && ioContext.filterHashIndex < 0) {
 			Tree* postTree = Bot::instancePostTreatmentBot(ioContext);
 			ioContext.mTree = postTree;
+			ioContext.isPostTreatment = true;
 			postTree->front().mPrimitive->execute(&lame, ioContext);
 			ioContext.mTree = 0;
+			ioContext.isPostTreatment = false;
 		}
 	}
 	else {

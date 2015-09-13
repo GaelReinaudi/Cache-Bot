@@ -22,6 +22,7 @@ public:
 
 	User* user() const;
 
+		bool plotAllMetrics();
 public slots:
 	void onUserInjected(User* pUser);
 	void onBotInjected(Bot *bestBot);

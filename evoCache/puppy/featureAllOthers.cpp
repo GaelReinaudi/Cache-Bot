@@ -1,8 +1,7 @@
 #include "featureAllOthers.h"
 
-double FeatureAllOthers::apply(TransactionBundle& allTrans)
+double FeatureAllOthers::apply(TransactionBundle& allTrans, bool doLog)
 {
-	m_billProba = 1000000.0;
 	m_localStaticArgs.m_bundle.clear();
 	m_localStaticArgs.m_numPos = 0;
 	m_localStaticArgs.m_numNeg = 0;
@@ -56,53 +55,11 @@ double FeatureAllOthers::apply(TransactionBundle& allTrans)
 	}
 
 	// min of the ration already/tot per side Neg/Pos
-	m_fitness = qMin(alreadyMatchedPos / totPos, alreadyMatchedNeg / totNeg);
-	m_fitness *= 100.0;
-//	m_fitness = qMax(m_fitness, 1.0);
-	return m_fitness;
+	double tempFitness = qMin(alreadyMatchedPos / totPos, alreadyMatchedNeg / totNeg);
+	tempFitness *= 100.0;
+
+	return tempFitness;
 }
-
-void FeatureAllOthers::execute(void *outDatum, Puppy::Context &ioContext)
-{
-	AccountFeature::execute(outDatum, ioContext);
-	double& output = *(double*)outDatum;
-
-	getArgs(ioContext);
-	cleanArgs();
-
-	output = m_fitness = 0.0;
-
-	// if we already have aplied this feature, nothing to be done here.
-	if (ioContext.flags & Puppy::Context::AllOthers) {
-		return;
-	}
-	ioContext.flags |= Puppy::Context::AllOthers;
-
-	// will be ALL the transactions if m_filterHash < 0
-	TransactionBundle& allTrans = ioContext.m_pUser->transBundle(m_filterHash);
-
-	output = apply(allTrans);
-	// isolate the transaction that were fitted to the target
-	for (int i = 0; i < m_localStaticArgs.m_bundle.count(); ++i) {
-		m_localStaticArgs.m_bundle.trans(i).setDimensionOfVoid(2);
-	}
-
-	// summary if the json object exists
-	if (ioContext.m_summaryJsonObj) {
-
-		QJsonArray features = (*ioContext.m_summaryJsonObj)["features"].toArray();
-		features.append(toJson(ioContext));
-		ioContext.m_summaryJsonObj->insert("features", features);
-
-		OracleFilteredRest* pNewOr = new OracleFilteredRest(this);
-		pNewOr->m_args = m_localStaticArgs;
-		// making a shared pointer that will take care of cleaning once the oracle is no longer referenced
-		QSharedPointer<Oracle> newOracle(pNewOr);
-		ioContext.m_pUser->oracle()->addSubOracle(newOracle);
-	}
-}
-
-
 
 QVector<Transaction> OracleFilteredRest::revelation(QDate upToDate)
 {
