@@ -43,6 +43,7 @@
 #include "puppy/PrimitiveHandle.hpp"
 #include "puppy/Primitive.hpp"
 #include "puppy/Context.hpp"
+#include <QString>
 
 namespace Puppy {
 
@@ -89,17 +90,28 @@ public:
 	unsigned int getDepth(unsigned int inIndex=0) const;
 	void         interpret(void* outResult, Context& ioContext);
 	void         setStackToNode(unsigned int inIndex, std::vector<unsigned int>& outCallStack) const;
-	void         write(std::ostream& ioOS, unsigned int inIndex=0) const;
+	void         write(std::ostream& ioOS, unsigned int inIndex=0, bool multiline = false) const;
 
 	bool isValidTree() {
 		bool isValid = true;
 		isValid &= front().mPrimitive->isRoot();
-//		for (int i = 0; i < NUM_FEATURES; ++i) {
-//			isValid &= front().mPrimitive->isRoot();
-//		}
 		return isValid;
 	}
-	double summarize(QStringList *strList, Context& ioContext);
+
+	std::vector<unsigned int> getFeatureStack(unsigned int indFeature, Context& ioContext) {
+		Q_UNUSED(ioContext);
+		std::vector<unsigned int> ret;
+		unsigned int i = 0;
+		ret.push_back(i);
+		unsigned int lNbArgs=(*this)[i].mPrimitive->getNumberArguments();
+		assert(indFeature < lNbArgs);
+		unsigned int lChildIndex = i + 1;
+		for(unsigned int j=0; j<indFeature; ++j) {
+			lChildIndex += (*this)[lChildIndex].mSubTreeSize;
+		}
+		ret.push_back(lChildIndex);
+		return ret;
+	}
 
 	float mFitness;  //!< Fitness value of the GP tree
 	bool  mValid;    //!< Flag indicating whether the fitness is valid.

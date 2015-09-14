@@ -44,6 +44,7 @@
 #include <string>       // std::string
 #include <iostream>     // std::cout
 #include <sstream>      // std::ostringstream
+#include "bot.h"
 
 /*!
  *  \brief Construct a new tree, with given fitness and validity flag.
@@ -69,7 +70,8 @@ unsigned int Puppy::Tree::getDepth(unsigned int inIndex) const
 	unsigned int j = inIndex + 1;
 	for(unsigned int i=0; i<lNbArgs; ++i) {
 		unsigned int lChildDepth = getDepth(j) + 1;
-		if(lChildDepth > lDepth) lDepth = lChildDepth;
+		if(lChildDepth > lDepth)
+			lDepth = lChildDepth;
 		j += (*this)[j].mSubTreeSize;
 	}
 	return lDepth;
@@ -83,34 +85,37 @@ unsigned int Puppy::Tree::getDepth(unsigned int inIndex) const
  */
 void Puppy::Tree::interpret(void* outResult, Puppy::Context& ioContext)
 {
-	for(int i = 0; i < ioContext.m_pAccount->allTrans().count(); ++i) {
-		// reset the dimensionOfVoid
-		ioContext.m_pAccount->allTrans().trans(i).dimensionOfVoid = 0;
-	}
+	DBG() << "Puppy::Tree::interpret";
+	ioContext.m_pUser->resetDimensionOfVoid();
+	// reset all flags
+	ioContext.flags = 0;
+
 	assert(size() > 0);
 	ioContext.mTree = this;
 	ioContext.mCallStack.push_back(0);
 	if(isValidTree()) {
 		front().mPrimitive->execute(outResult, ioContext);
+		ioContext.mTree = 0;
+		double lame = 0;
+//		if (ioContext.filterHashIndex < 0) {
+//			ioContext.getPrimitiveByName("FeatureAllOthers")->execute(&lame, ioContext);
+//		}
+		if (ioContext.m_summaryJsonObj && ioContext.filterHashIndex < 0) {
+			Tree* postTree = Bot::instancePostTreatmentBot(ioContext);
+			ioContext.mTree = postTree;
+			ioContext.isPostTreatment = true;
+			postTree->front().mPrimitive->execute(&lame, ioContext);
+			ioContext.mTree = 0;
+			ioContext.isPostTreatment = false;
+		}
 	}
 	else {
 		double& lResult = *(double*)outResult;
-		LOG() << "Invalid tree: " << toStr() << endl;
+		ERR() << "Invalid tree: " << toStr();
 		lResult = -11111e6;
 	}
 	ioContext.mCallStack.pop_back();
 }
-
-double Puppy::Tree::summarize(QStringList *strList, Puppy::Context &ioContext)
-{
-	mValid = false;
-	ioContext.m_sumamryStrList = strList;
-	double fit;
-	interpret(&fit, ioContext);
-	ioContext.m_sumamryStrList = 0;
-	return fit;
-}
-
 
 /*!
  *  \brief Set call stack to include the correctly refer to a given node.
@@ -145,7 +150,7 @@ void Puppy::Tree::setStackToNode(unsigned int inIndex,
  *  \param ioOS C++ output stream to write tree into.
  *  \param inIndex Actual node index in tree.
  */
-void Puppy::Tree::write(std::ostream& ioOS, unsigned int inIndex) const
+void Puppy::Tree::write(std::ostream& ioOS, unsigned int inIndex, bool multiline) const
 {
 	assert(inIndex < size());
 	unsigned int lNbArgs = (*this)[inIndex].mPrimitive->getNumberArguments();
@@ -153,7 +158,7 @@ void Puppy::Tree::write(std::ostream& ioOS, unsigned int inIndex) const
 	ioOS << (*this)[inIndex].mPrimitive->getName();
 	unsigned int j = inIndex + 1;
 	for(unsigned int i=0; i<lNbArgs; ++i) {
-		ioOS << ' ';
+		ioOS << (multiline ? "\n" : " ");
 		write(ioOS, j);
 		j += (*this)[j].mSubTreeSize;
 	}
@@ -162,6 +167,6 @@ void Puppy::Tree::write(std::ostream& ioOS, unsigned int inIndex) const
 
 QString Puppy::Tree::toStr() const {
 	std::ostringstream stream;
-	write(stream, 0);
+	write(stream, 0, true);
 	return QString::fromStdString(stream.str());
 }

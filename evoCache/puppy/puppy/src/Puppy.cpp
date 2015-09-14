@@ -116,7 +116,7 @@ void Puppy::applyCrossover(std::vector<Tree>& ioPopulation,
 		lMateVector.pop_back();
 
 	//for(unsigned int j=0; j<lMateVector.size(); ++j) {
-	//  std::cout << j << ": " << ioPopulation[lMateVector[j]] << std::endl;
+	//  std::cout << j << ": " << ioPopulation[lMateVector[j]];
 	//}
 
 	for(unsigned int j=0; j<lMateVector.size(); j+=2) {
@@ -180,7 +180,6 @@ void Puppy::exchangeSubTrees(Puppy::Tree& ioTree1,
 		ioTree2[inStack2[j]].mSubTreeSize += lDiffSize;
 }
 
-
 /*!
  *  \brief Mate two GP trees for crossover.
  *  \param ioTree1 First tree to mate.
@@ -200,8 +199,8 @@ bool Puppy::mateTrees(Puppy::Tree& ioTree1,
 	assert(ioTree1.size() > 0);
 	assert(ioTree2.size() > 0);
 
-//	LOG() << "Mate:" << ioTree1.toStr() << endl;
-//	LOG() << "With:" << ioTree2.toStr() << endl;
+//	DBG(4) << "Mate:" << ioTree1.toStr();
+//	DBG(4) << "With:" << ioTree2.toStr();
 
 	// Crossover loop. Try the given number of attempts to mate two individuals.
 	for(unsigned int i=0; i<64; ++i) {
@@ -246,18 +245,18 @@ bool Puppy::mateTrees(Puppy::Tree& ioTree1,
 			continue;
 
 		// The crossover is valid.
-//		LOG() << "Mate at #" << i << "  nodes " << lChoosenNode1 << "/" << lChoosenNode2 << endl;
-//		LOG() << "Mate:" << ioTree1.toStr() << endl;
-//		LOG() << "With:" << ioTree2.toStr() << endl;
+//		DBG(4) << "Mate at #" << i << "  nodes " << lChoosenNode1 << "/" << lChoosenNode2;
+//		DBG(4) << "Mate:" << ioTree1.toStr();
+//		DBG(4) << "With:" << ioTree2.toStr();
 		exchangeSubTrees(ioTree1, lChoosenNode1, lStack1, ioTree2, lChoosenNode2, lStack2);
 		ioTree1.mValid = false;
 		ioTree2.mValid = false;
-//		LOG() << "  ->:" << ioTree1.toStr() << endl;
-//		LOG() << "  ->:" << ioTree2.toStr() << endl;
+//		DBG(4) << "  ->:" << ioTree1.toStr();
+//		DBG(4) << "  ->:" << ioTree2.toStr();
 		return true;
 	}
-//	LOG() << "Not Mate:" << ioTree1.toStr() << endl;
-//	LOG() << "    With:" << ioTree2.toStr() << endl;
+//	DBG(4) << "Not Mate:" << ioTree1.toStr();
+//	DBG(4) << "    With:" << ioTree2.toStr();
 	return false;
 }
 
@@ -284,12 +283,12 @@ void Puppy::initializePopulation(std::vector<Puppy::Tree>& ioPopulation,
 		ioPopulation[i].mValid = false;
 		unsigned int lInitDepth = ioContext.mRandom.rollInteger(inMinDepth, inMaxDepth);
 		if(ioContext.mRandom.rollUniform() >= inInitGrowProba) {
-			initializeTreeFull(ioPopulation[i], ioContext, lInitDepth);
-			LOG() << "initializeTreeFull:" << ioPopulation[i].toStr() << endl;
+			initializeTreeFull(ioPopulation[i], ioContext, lInitDepth, 0);
+			DBG(3) << "initializeTreeFull:" << ioPopulation[i].toStr();
 		}
 		else {
-			initializeTreeGrow(ioPopulation[i], ioContext, inMinDepth, lInitDepth);
-			LOG() << "initializeTreeGrow:" << ioPopulation[i].toStr() << endl;
+			initializeTreeGrow(ioPopulation[i], ioContext, inMinDepth, lInitDepth, 0);
+			DBG(3) << "initializeTreeGrow:" << ioPopulation[i].toStr();
 		}
 	}
 }
@@ -336,6 +335,36 @@ unsigned int Puppy::initializeTreeFull(Puppy::Tree& ioTree,
 	++depthAtCall;
 	for(unsigned int i=0; i<lNbArgs; ++i) {
 		lTreeSize += initializeTreeFull(ioTree, ioContext, inDepth-1, depthAtCall);
+	}
+	ioTree[lNodeIndex].mSubTreeSize = lTreeSize;
+	return lTreeSize;
+}
+
+unsigned int Puppy::initializeTree(Puppy::Tree& ioTree,
+									   Puppy::Context& ioContext,
+									   QStringList& nodeNames,
+									   int depthAtCall /*= 0*/)
+{
+	QString name = "0";
+	// if we exausted the nodeNames, it should be because we have only that many features
+	if (nodeNames.isEmpty()) {
+		Q_ASSERT(depthAtCall == DEPTH_OF_FEATURES);
+	}
+	else {
+		name = nodeNames.takeFirst();
+	}
+	PrimitiveHandle prim = ioContext.getPrimitiveByName(name);
+	if(depthAtCall == 0) {
+		PrimitiveHandle lRoot = ioContext.mAccountRoot[0];
+		Q_ASSERT(prim == lRoot);
+	}
+	unsigned int lNodeIndex = ioTree.size();
+	ioTree.push_back(Node(prim->giveReference(ioContext), 0));
+	unsigned int lNbArgs = ioTree[lNodeIndex].mPrimitive->getNumberArguments();
+	unsigned int lTreeSize = 1;
+	++depthAtCall;
+	for(unsigned int i=0; i<lNbArgs; ++i) {
+		lTreeSize += initializeTree(ioTree, ioContext, nodeNames, depthAtCall);
 	}
 	ioTree[lNodeIndex].mSubTreeSize = lTreeSize;
 	return lTreeSize;
@@ -422,9 +451,9 @@ void Puppy::applyMutationStandard(std::vector<Puppy::Tree>& ioPopulation,
 {
 	for(unsigned int i=0; i<ioPopulation.size(); ++i) {
 		if(ioContext.mRandom.rollUniform() < inMutationProba) {
-//			LOG() << "applyMutationStandard: " << ioPopulation[i].toStr() << endl;
+//			DBG(4) << "applyMutationStandard: " << ioPopulation[i].toStr();
 			mutateStandard(ioPopulation[i], ioContext, inMaxRegenDepth, inMaxDepth);
-//			LOG() << "-> " << ioPopulation[i].toStr() << endl;
+//			DBG(4) << "-> " << ioPopulation[i].toStr();
 		}
 	}
 }
@@ -457,7 +486,7 @@ void Puppy::mutateStandard(Puppy::Tree& ioTree,
 	if(lStack.size() == 1)
 		lTreeDepth = 1 + ioContext.mRandom.rollInteger(1, inMaxRegenDepth - 1);
 	unsigned int lTreeDepth2 = inMaxDepth - lStack.size();
-//	LOG() << lMutIndex << lStack.size() << lTreeDepth << lTreeDepth2 << ioTree[lMutIndex].mSubTreeSize << endl;
+//	DBG(4) << lMutIndex << lStack.size() << lTreeDepth << lTreeDepth2 << ioTree[lMutIndex].mSubTreeSize;
 	if(lTreeDepth2 < lTreeDepth)
 		lTreeDepth = lTreeDepth2;
 	assert(lTreeDepth > 0);
@@ -491,9 +520,9 @@ void Puppy::applyMutationSwap(std::vector<Puppy::Tree>& ioPopulation,
 {
 	for(unsigned int i=0; i<ioPopulation.size(); ++i) {
 		if(ioContext.mRandom.rollUniform() < inMutationProba) {
-//			LOG() << "applyMutationSwap: " << ioPopulation[i].toStr() << endl;
+//			DBG(4) << "applyMutationSwap: " << ioPopulation[i].toStr();
 			mutateSwap(ioPopulation[i], ioContext, inDistribProba);
-//			LOG() << "-> " << ioPopulation[i].toStr() << endl;
+//			DBG(4) << "-> " << ioPopulation[i].toStr();
 		}
 	}
 }
@@ -582,15 +611,18 @@ void Puppy::applySelectionTournament(std::vector<Puppy::Tree>& ioPopulation,
 
 	unsigned int lNextEmpty  = 0;
 	unsigned int lNextFilled = 0;
-	while((lNextFilled < ioPopulation.size()) && (lIndices[lNextFilled] <= 1)) lNextFilled++;
+	while((lNextFilled < ioPopulation.size()) && (lIndices[lNextFilled] <= 1))
+		lNextFilled++;
 	while(lNextFilled < ioPopulation.size()) {
 		while(lIndices[lNextFilled] > 1) {
-			while(lIndices[lNextEmpty] != 0) ++lNextEmpty;
+			while(lIndices[lNextEmpty] != 0)
+				++lNextEmpty;
 			ioPopulation[lNextEmpty] = ioPopulation[lNextFilled];
 			--lIndices[lNextFilled];
 			++lIndices[lNextEmpty];
 		}
-		while((lNextFilled < ioPopulation.size()) && (lIndices[lNextFilled] <= 1)) ++lNextFilled;
+		while((lNextFilled < ioPopulation.size()) && (lIndices[lNextFilled] <= 1))
+			++lNextFilled;
 	}
 }
 

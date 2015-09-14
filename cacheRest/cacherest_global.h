@@ -1,0 +1,12 @@
+#ifndef CACHEREST_GLOBAL_H
+#define CACHEREST_GLOBAL_H
+
+#include <QtCore/qglobal.h>
+
+#if defined(CACHEREST_LIBRARY)
+#  define CACHERESTSHARED_EXPORT Q_DECL_EXPORT
+#else
+#  define CACHERESTSHARED_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // CACHEREST_GLOBAL_H

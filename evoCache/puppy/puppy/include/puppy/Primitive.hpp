@@ -78,7 +78,7 @@ public:
    *  \param outDatum Result of the execution.
    *  \param ioContext Evolutionary context.
    */
-	virtual void execute(void* outDatum, Context& ioContext) =0;
+	virtual void execute(void* outDatum, Context& ioContext) = 0;
 
 	inline  std::string     getName() const;
 	inline  unsigned int    getNumberArguments() const;
@@ -92,13 +92,14 @@ protected:
 	inline void getArgument(unsigned int inN, void* outResult, Context& ioContext);
 	void setName(std::string inName);
 	void setNumberArguments(unsigned int inNumberArguments);
+	bool tryReplaceArgumentNode(unsigned int inN, std::string primName, Context& ioContext);
 
 private:
 
 	std::string  mName;             //!< Name of the primitive.
 	unsigned int mNumberArguments;  //!< Number of arguments of the primitive.
 	unsigned int mRefCounter;       //!< Primitive's reference counter.
-
+	
 };
 
 }

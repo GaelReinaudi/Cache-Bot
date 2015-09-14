@@ -10,7 +10,7 @@ MainWindow::MainWindow(QString jsonFile, QWidget *parent) :
 
 	// an account object that is going to be populated by the json file
 	Account account;
-	account.loadPlaidJson(jsonFile);
+	account.loadPlaidJson(jsonFile, 0, 0);
 
     ui->plot->loadCompressedAmount(&account);
 //    ui->plot->loadAmount(&account);

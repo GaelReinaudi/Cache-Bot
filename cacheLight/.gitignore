@@ -1,0 +1,7 @@
+/debug/
+/release/
+/Makefile
+*.Debug
+*.Release
+*.log
+/jsonDataChris_2015-06-10.json

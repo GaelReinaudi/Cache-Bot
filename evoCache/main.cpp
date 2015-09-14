@@ -1,16 +1,14 @@
-#include "mainwindow.h"
-#include <QApplication>
-#include <qDebug>
+#include "evolver.h"
+#include <QCoreApplication>
 
 int main(int argc, char *argv[])
 {
-	QApplication a(argc, argv);
-    QString jsonFile;// = "/Users/alecto/Cache-Bot/data/chrisPurchases.json";
+	QCoreApplication a(argc, argv);
+	QString jsonFileOrUser = "../../data/adelineGaelTransactions.json";
 	if(argc > 1) {
-		jsonFile = argv[1];
+		jsonFileOrUser = argv[1];
 	}
-	MainWindow w(jsonFile);
-	w.show();
+	Evolver w(jsonFileOrUser);
 
 	return a.exec();
 }

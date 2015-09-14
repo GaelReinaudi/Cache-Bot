@@ -1,46 +1,35 @@
-QT += core gui widgets printsupport
-CONFIG += c++11
+include($$PWD/../defaults.pri)
+include(puppy/puppy.pri)
 
-INCLUDEPATH  += ./ \
-	$$PWD/puppy/puppy/include \
-	$$PWD/../AccountChart \
-	$$PWD/../ \
+QT += core
+QT += network
+QT -= gui
 
 TARGET = evoCache
 TEMPLATE = app
 
+INCLUDEPATH  += ./ \
+	$$PWD/../AccountChart \
+	$$PWD/../
+
 SOURCES += \
 	main.cpp\
-	mainwindow.cpp\
-	$$PWD/puppy/puppy/src/Primitive.cpp \
-	$$PWD/puppy/puppy/src/Puppy.cpp \
-	$$PWD/puppy/puppy/src/Tree.cpp \
-	$$PWD/../AccountChart/qcustomplot/qcustomplot.cpp \
-	$$PWD/../AccountChart/ACChart/acustomplot.cpp \
-	$$PWD/../core/acdata.cpp \
-	$$PWD/../AccountChart/AmortiChart/AMPlot.cpp \
-	EvolutionSpinner.cpp \
-    AccRegPrimits.cpp
+	evolver.cpp\
+	EvolutionSpinner.cpp
 
 HEADERS  += \
-	mainwindow.h \
-	$$PWD/log.h \
-	$$PWD/../AccountChart/qcustomplot/qcustomplot.h \
-	$$PWD/../AccountChart/ACChart/acustomplot.h \
-	$$PWD/../core/acdata.h \
-	$$PWD/../AccountChart/AmortiChart/AMPlot.h \
-	puppy/Primitive.hpp \
-	puppy/PrimitiveHandle.hpp \
-	puppy/PrimitiveInline.hpp \
-	puppy/Puppy.hpp \
-	puppy/Context.hpp \
-	puppy/Randomizer.hpp \
-	puppy/Token.hpp \
-	puppy/Tree.hpp \
-    EvolutionSpinner.h \
-    AccRegPrimits.h
+	evolver.h \
+	EvolutionSpinner.h
 
-
-FORMS    += mainwindow.ui
-
-
+unix {
+LIBS += -L$${SRC_DIR}/bin/$${DEBUGRELEASE} -lcacheRest
+LIBS += -L$${SRC_DIR}/bin/$${DEBUGRELEASE} -lcore
+}
+macx {
+LIBS += -L$${SRC_DIR}/bin/$${DEBUGRELEASE} -lcacheRest
+LIBS += -L$${SRC_DIR}/bin/$${DEBUGRELEASE} -lcore
+}
+win32 {
+LIBS += -L$${SRC_DIR}/bin/$${DEBUGRELEASE} -lcacheRest
+LIBS += -L$${SRC_DIR}/bin/$${DEBUGRELEASE} -lcore
+}

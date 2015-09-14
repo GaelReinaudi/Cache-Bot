@@ -43,7 +43,8 @@
 #include "puppy/PrimitiveHandle.hpp"
 #include "puppy/Primitive.hpp"
 #include "puppy/Randomizer.hpp"
-#include "core/acdata.h"
+#include "puppy/TokenT.hpp"
+#include "user.h"
 
 namespace Puppy {
 
@@ -65,9 +66,9 @@ public:
 	/*!
    *  \brief Build an evolutionary context.
    */
-	inline Context(Account* pAc) :
+	inline Context(User* pUser) :
 		mTree(NULL)
-	  , m_pAccount(pAc)
+	  , m_pUser(pUser)
 	{
 	}
 
@@ -79,7 +80,7 @@ public:
 	{
 		assert(mPrimitiveMap.find(inPrimitive->getName()) == mPrimitiveMap.end());
 		mPrimitiveMap[inPrimitive->getName()] = inPrimitive;
-		if(inPrimitive->getNumberArguments() == 0)
+		if(inPrimitive->getNumberArguments() == 0 && !inPrimitive->isFeature())
 			mTerminalSet.push_back(inPrimitive);
 		else if(!inPrimitive->isFeature())
 			mFunctionSet.push_back(inPrimitive);
@@ -87,6 +88,34 @@ public:
 			mAccountFeatureSet.push_back(inPrimitive);
 		else
 			mAccountRoot.push_back(inPrimitive);
+	}
+	inline void insertIfNotThere(PrimitiveHandle inPrimitive)
+	{
+		if(mPrimitiveMap.find(inPrimitive->getName()) == mPrimitiveMap.end())
+			insert(inPrimitive);
+	}
+	inline bool hasPrimitive(QString name)
+	{
+		if(mPrimitiveMap.find(name.toStdString()) == mPrimitiveMap.end())
+			return false;
+		return true;
+	}
+	inline PrimitiveHandle getPrimitiveByName(QString name)
+	{
+		std::string stdname = name.toStdString();
+		if (hasPrimitive(name)) {
+			return mPrimitiveMap[stdname];
+		}
+		// else, is this a number ?
+		bool yes = false;
+		double val = name.toDouble(&yes);
+		if (yes) {
+			PrimitiveHandle newTerminal = new TokenT<double>(stdname, val);
+			NOTICE() << "Making new terminal " << stdname << " = " << val;
+			insert(newTerminal);
+			return newTerminal;
+		}
+		return new TokenT<double>(std::string("ERROR_NAME_NOT_FOUND_AND_COULDNT_BE_CONVERTED"), 3.141592);
 	}
 
 	Randomizer                            mRandom;        //!< Random number generator.
@@ -99,9 +128,17 @@ public:
 	Tree*                                 mTree;          //!< Actual tree evaluated.
 	bool m_isInFeature = false;
 	bool m_hasRecursiveFeature = false;
-	QStringList* m_sumamryStrList = 0;
-	Account* m_pAccount;
+	QJsonObject* m_summaryJsonObj = 0;
+	QMap<double, QVector<Transaction> >* m_mapPredicted = 0;
+	User* m_pUser;
 	int filterHashIndex = -1;
+	enum {None = 0x0, AllOthers = 0x1};
+	int flags = 0;
+	// the generation being evaluated, first = 1
+	unsigned int currentGeneration = 0;
+	// 0.0 to 1.0 while generation is being evaluated
+	double generationProgress = 0.0;
+	bool isPostTreatment = false;
 };
 
 }
