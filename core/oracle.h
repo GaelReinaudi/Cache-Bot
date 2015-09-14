@@ -171,7 +171,7 @@ public:
 				}
 				else
 					continue;
-				advice += eff.summaryPerOracle[i]["descr"].toString();
+//				advice += eff.summaryPerOracle[i]["descr"].toString();
 				eff.summaryPerOracle[i]["advice"] = advice;
 				eff.summaryPerOracle[i]["effect"] = eff.dailyPerOracle[i];
 			}

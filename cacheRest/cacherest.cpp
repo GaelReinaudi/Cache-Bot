@@ -2,7 +2,7 @@
 
 CacheRest* CacheRest::pThisStatic = nullptr;
 
-#define SEND_TO_CACHEBOT_INSTEAD
+//#define SEND_TO_CACHEBOT_INSTEAD
 
 CacheRest::CacheRest(QObject *parent)
 	: QObject(parent)

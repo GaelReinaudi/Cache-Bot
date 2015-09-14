@@ -71,6 +71,9 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 		INFO() << QString(QJsonDocument(statObj).toJson());
 	}
 
+	if (!statObj.contains("trends7"))
+		return;
+
 	// if critically low flow
 	if (summary.flow() <= -0.95) {
 		WARN() << "Cache flow critically low: " << summary.flow();

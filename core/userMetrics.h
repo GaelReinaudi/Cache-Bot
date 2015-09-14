@@ -236,6 +236,8 @@ protected:
 		}
 
 		QDate dateAgo = date.addDays(-overLastDays);
+		summaryMet->value(dateAgo);
+		summaryMet->value(date);
 		isValid = summaryMet->isValid(date) && summaryMet->isValid(dateAgo);
 		if (!isValid) {
 			WARN() << "summaryMet not valid";
