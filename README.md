@@ -1,8 +1,11 @@
 # CacheBot README.md
-
-## Advice
-### Types
-#### Price windows
+## Prompts
+Prompts are notifications sent by Cache, that may or may not include a question (preferably yes/no)
+## Conversation flows
+### Yes / no buying decisions
+### Advice
+#### Types
+##### Price windows
 ```
 {
     type     : String (e.g. 'window')
