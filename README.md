@@ -2,7 +2,9 @@
 ## Conversation flows
 ### Prompts
 Prompts are notifications sent by Cache, that may or may not include a question (preferably yes/no)
-### Yes / no buying decisions
+#### Income prompts
+
+### Yes/no buying decisions
 ### Advice
 #### Types
 ##### Price windows
