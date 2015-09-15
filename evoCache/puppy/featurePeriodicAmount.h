@@ -50,7 +50,7 @@ private:
 		if (m_args.m_dayOfMonth2)
 			desc += " & %3";
 		desc += " of the month.";
-		return desc.arg(unKindaLog(qAbs(m_args.m_kla)), 0, 'f', 2)
+		return desc.arg(m_args.m_bundle.avgSmart(), 0, 'f', 2)
 				.arg(m_args.m_dayOfMonth)
 				.arg(m_args.m_dayOfMonth2);
 	}

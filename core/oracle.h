@@ -174,6 +174,7 @@ public:
 //				advice += eff.summaryPerOracle[i]["descr"].toString();
 				eff.summaryPerOracle[i]["advice"] = advice;
 				eff.summaryPerOracle[i]["effect"] = eff.dailyPerOracle[i];
+				eff.summaryPerOracle[i]["delta"] = deltaSummary.dailyPerOracle[i];
 			}
 
 			return eff;
