@@ -231,8 +231,8 @@ public:
 protected:
 	double computeFor(const QDate& date, bool& isValid) override {
 		NOTICE() << "OracleTrend<" << overLastDays << ">computeFor " << date.toString();
-		if (m_avgSummaries.contains(date)) {
-			return m_avgSummaries[date].flow();
+		if (m_effectSummaries.contains(date)) {
+			return m_effectSummaries[date].flow();
 		}
 
 		QDate dateAgo = date.addDays(-overLastDays);
@@ -247,26 +247,21 @@ protected:
 		SuperOracle::Summary sumarAgo = summaryMet->summaries()[dateAgo];
 
 		// compute average
-		m_avgSummaries[date] = (sumarEnd + sumarAgo) * 0.5;
-		m_difSummaries[date] = sumarEnd - sumarAgo;
-		m_effectSummaries[date] = m_avgSummaries[date].effectOf(m_difSummaries[date]);
+		m_effectSummaries[date] = sumarAgo.effectOf(sumarEnd, overLastDays);
 
 		for (int i = 0; i < m_effectSummaries[date].dailyPerOracle.count(); ++i) {
 			double effect = m_effectSummaries[date].dailyPerOracle[i];
 			if (qAbs(effect) > 0.001) {
 				INFO() << i
 					   << " effect: " << effect
-					   << " prop " << effect / m_avgSummaries[date].dailyPerOracle[i]
 							 ;
 			}
 		}
 
-		return m_avgSummaries[date].flow();
+		return m_effectSummaries[date].flow();
 	}
 private:
 	OracleSummary* summaryMet;
-	QMap<QDate, SuperOracle::Summary> m_avgSummaries;
-	QMap<QDate, SuperOracle::Summary> m_difSummaries;
 	QMap<QDate, SuperOracle::Summary> m_effectSummaries;
 };
 

@@ -55,29 +55,30 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 
 	QJsonObject statObj = bestBot->postTreatment();
 
+	static bool alreadyOnce = false;
+	if (!alreadyOnce) {
+		alreadyOnce = true;
+		OracleTrend<7>::get(user())->value(Transaction::currentDay());
+		SuperOracle::Summary effectsummary = OracleTrend<7>::get(user())->effectSummaries()[Transaction::currentDay()];
+		statObj.insert("trend7", effectsummary.toJson());
+		INFO() << QString(QJsonDocument(statObj).toJson());
+		OracleTrend<30>::get(user())->value(Transaction::currentDay());
+		effectsummary = OracleTrend<30>::get(user())->effectSummaries()[Transaction::currentDay()];
+		statObj.insert("trend30", effectsummary.toJson());
+		INFO() << QString(QJsonDocument(statObj).toJson());
+	}
+
+	if (!statObj.contains("trend7"))
+		return;
+	if (!statObj.contains("trend30"))
+		return;
+
 	SuperOracle::Summary summary = user()->oracle()->computeAvgCashFlow();
 	QJsonObject flowObj;
 	flowObj.insert("rate", summary.flow());
 	flowObj.insert("state", QString("kFlow"));
 
 	statObj.insert("flow", flowObj);
-
-	static bool alreadyOnce = false;
-	if (!alreadyOnce) {
-		alreadyOnce = true;
-		OracleTrend<7>::get(user())->value(Transaction::currentDay());
-		SuperOracle::Summary effectsummary = OracleTrend<7>::get(user())->effectSummaries()[Transaction::currentDay()];
-		statObj.insert("trends7", effectsummary.toJson());
-		INFO() << QString(QJsonDocument(statObj).toJson());
-		effectsummary = OracleTrend<30>::get(user())->effectSummaries()[Transaction::currentDay()];
-		statObj.insert("trends30", effectsummary.toJson());
-		INFO() << QString(QJsonDocument(statObj).toJson());
-	}
-
-	if (!statObj.contains("trends7"))
-		return;
-	if (!statObj.contains("trends30"))
-		return;
 
 	// if critically low flow
 	if (summary.flow() <= -0.95) {

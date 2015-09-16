@@ -12,6 +12,19 @@ double unKindaLog(double kindaLogAmount)
 	return -1.0 + qExp(kindaLogAmount * 2.3025850929940456840179914546844); // 1 / 0.43429448190325182765112891891661
 }
 
+int toSignifDigit_2(double val)
+{
+	if (qAbs(val) < 100.0)
+		return int(val);
+	if (qAbs(val) < 1000.0)
+		return 10 * int(val / 10.0);
+	if (qAbs(val) < 10000.0)
+		return 100 * int(val / 100.0);
+	if (qAbs(val) < 100000.0)
+		return 1000 * int(val / 1000.0);
+	return 10000 * int(val / 10000.0);
+}
+
 qint64 proximityHashString(const QString &str) {
 	qint64 ret = 0;
 	for (const QChar& c : str) {
@@ -36,4 +49,6 @@ qint64 proximityHashString2(const QString &str) {
 	}
 	return ret;
 }
+
+
 

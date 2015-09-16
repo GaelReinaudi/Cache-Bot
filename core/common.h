@@ -12,6 +12,7 @@ static const int KLA_MULTIPLICATOR = 1;
 
 double CORESHARED_EXPORT kindaLog(double amount);
 double CORESHARED_EXPORT unKindaLog(double kindaLogAmount);
+int CORESHARED_EXPORT toSignifDigit_2(double val);
 qint64 CORESHARED_EXPORT proximityHashString(const QString& str);
 qint64 CORESHARED_EXPORT proximityHashString2(const QString& str);
 

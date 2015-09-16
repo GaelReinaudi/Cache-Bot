@@ -85,8 +85,6 @@ public:
 
 	void setHypotheTrans(double amount);
 
-	QJsonObject trendSummary(int nDays) const;
-
 public slots:
 	void injectJsonData(QString jsonStr);
 	void injectJsonBot(QString jsonStr);
