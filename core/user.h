@@ -90,6 +90,7 @@ public slots:
 	void injectJsonBot(QString jsonStr);
 	//! simulates a re-injection of the bot in order ot recalculate downstream slots
 	void reInjectBot() { emit botInjected(m_bestBot); }
+	void reComputeBot();
 
 protected:
 	Bank* getBankByToken(QString bankTok) const {

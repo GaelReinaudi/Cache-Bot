@@ -185,3 +185,8 @@ void User::injectJsonBot(QString jsonStr)
 	emit botInjected(m_bestBot);
 }
 
+void User::reComputeBot()
+{
+	m_bestBot->summarize();
+}
+

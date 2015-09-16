@@ -11,7 +11,7 @@ public:
 	OracleLabelDistrib(AccountFeature* pCreatingFeature)
 		: OracleStatDistrib(pCreatingFeature)
 	{}
-	QString description() const {
+	QString description() const override {
 		if (m_args.m_bundle.count() == 0)
 			return "";
 		QString desc;

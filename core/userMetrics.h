@@ -189,7 +189,7 @@ protected:
 		QDate oldCurrentDate = Transaction::currentDay();
 		// set computation date
 		Transaction::setCurrentDay(date);
-		m_pUser->reInjectBot();
+		m_pUser->reComputeBot();
 		SuperOracle::Summary summary = m_pUser->oracle()->computeAvgCashFlow();
 		m_summaries[date] = summary;
 

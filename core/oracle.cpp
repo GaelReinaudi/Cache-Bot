@@ -72,6 +72,7 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow() const
 
 QJsonObject Oracle::toJson() const {
 	QJsonObject ret;
+	ret["type"] = feature()->getName().c_str();
 	ret["descr"] = description();
 	return ret;
 }

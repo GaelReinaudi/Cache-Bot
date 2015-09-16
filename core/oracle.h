@@ -27,6 +27,7 @@ public:
 	}
 
 	virtual QVector<Transaction> revelation(QDate upToDate) = 0;
+	virtual QJsonObject toJson() const;
 	virtual QString description() const { return "????"; }
 	virtual double avgDaily() const = 0;
 	virtual double avgDailyPos() const {
@@ -41,7 +42,6 @@ public:
 	AccountFeature* feature() const {
 		return m_feature;
 	}
-	QJsonObject toJson() const;
 
 private:
 	QDate m_iniDate;
