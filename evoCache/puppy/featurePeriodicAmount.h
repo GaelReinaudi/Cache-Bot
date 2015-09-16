@@ -9,6 +9,13 @@ public:
 	OracleOneDayOfMonth(AccountFeature* pCreatingFeature)
 		: Oracle(pCreatingFeature)
 	{}
+	QJsonObject toJson() const override {
+		QJsonObject ret = Oracle::toJson();
+		ret["approxAmnt"] = toSignifDigit_2(m_args.m_bundle.averageAmount());
+		ret["day1"] = m_args.m_dayOfMonth;
+		ret["day2"] = m_args.m_dayOfMonth2;
+		return ret;
+	}
 
 protected:
 	QVector<Transaction> revelation(QDate upToDate) override;
@@ -17,7 +24,7 @@ protected:
 private:
 	struct Args : public FeatureArgs
 	{
-		void intoJson(QJsonObject& o_retObj) {
+		void intoJson(QJsonObject& o_retObj) const override {
 			FeatureArgs::intoJson(o_retObj);
 			o_retObj.insert("dayOfMonth", m_dayOfMonth);
 			o_retObj.insert("consecutive", m_consecMonthBeforeMissed);
@@ -50,7 +57,7 @@ private:
 		if (m_args.m_dayOfMonth2)
 			desc += " & %3";
 		desc += " of the month.";
-		return desc.arg(qAbs(toSignifDigit_2(m_args.m_bundle.avgSmart())))
+		return desc.arg(qAbs(toSignifDigit_2(m_args.m_bundle.averageAmount())))
 				.arg(m_args.m_dayOfMonth)
 				.arg(m_args.m_dayOfMonth2);
 	}

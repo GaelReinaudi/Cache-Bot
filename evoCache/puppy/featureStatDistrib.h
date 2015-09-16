@@ -9,6 +9,15 @@ public:
 	OracleStatDistrib(AccountFeature* pCreatingFeature)
 		: Oracle(pCreatingFeature)
 	{}
+	QJsonObject toJson() const override {
+		QJsonObject ret = Oracle::toJson();
+//		QJsonObject args;
+//		m_args.intoJson(args);
+//		args.remove("zlabels");
+//		ret["args"] = args;
+		ret["approxAmnt"] = toSignifDigit_2(m_args.m_bundle.averageAmount());
+		return ret;
+	}
 
 protected:
 	QVector<Transaction> revelation(QDate upToDate) override;
@@ -17,10 +26,9 @@ protected:
 protected:
 	struct Args : public FeatureArgs
 	{
-		void intoJson(QJsonObject& o_retObj) {
+		void intoJson(QJsonObject& o_retObj) const override {
 			FeatureArgs::intoJson(o_retObj);
 			o_retObj.insert("hash", m_hash);
-			o_retObj.insert("effect", m_effect);
 			o_retObj.insert("kla", m_kla);
 			o_retObj.insert("proba", m_dayProba);
 			o_retObj.insert("avgAmn", m_bundle.averageAmount());
