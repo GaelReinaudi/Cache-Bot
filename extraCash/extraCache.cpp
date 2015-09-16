@@ -69,8 +69,7 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 		SuperOracle::Summary effectsummary = OracleTrend<7>::get(user())->effectSummaries()[Transaction::currentDay()];
 		statObj.insert("trends7", effectsummary.toJson());
 		INFO() << QString(QJsonDocument(statObj).toJson());
-		OracleTrend<30>::get(user())->value(Transaction::currentDay());
-		effectsummary = OracleTrend<7>::get(user())->effectSummaries()[Transaction::currentDay()];
+		effectsummary = OracleTrend<30>::get(user())->effectSummaries()[Transaction::currentDay()];
 		statObj.insert("trends30", effectsummary.toJson());
 		INFO() << QString(QJsonDocument(statObj).toJson());
 	}
