@@ -11,11 +11,8 @@ public:
 	{}
 	QJsonObject toJson() const override {
 		QJsonObject ret = Oracle::toJson();
-//		QJsonObject args;
-//		m_args.intoJson(args);
-//		args.remove("zlabels");
-//		ret["args"] = args;
 		ret["approxAmnt"] = toSignifDigit_2(m_args.m_bundle.averageAmount());
+		ret["dayOccur"] = m_args.m_dayProba;
 		return ret;
 	}
 
