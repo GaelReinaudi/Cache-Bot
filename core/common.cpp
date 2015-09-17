@@ -12,8 +12,12 @@ double unKindaLog(double kindaLogAmount)
 	return -1.0 + qExp(kindaLogAmount * 2.3025850929940456840179914546844); // 1 / 0.43429448190325182765112891891661
 }
 
-int toSignifDigit_2(double val)
+double toSignifDigit_2(double val)
 {
+	if (qAbs(val) < 1.0)
+		return double(int(val * 100) / 100.0);
+	if (qAbs(val) < 10.0)
+		return double(int(val * 10) / 10.0);
 	if (qAbs(val) < 100.0)
 		return int(val);
 	if (qAbs(val) < 1000.0)

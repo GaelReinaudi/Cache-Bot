@@ -55,16 +55,24 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 
 	QJsonObject statObj;// = bestBot->postTreatment();
 
+	QJsonObject trendObjects;
 	OracleTrend<7>::get(user())->value(Transaction::currentDay());
 	SuperOracle::Summary effectsummary = OracleTrend<7>::get(user())->effectSummaries()[Transaction::currentDay()];
-	statObj.insert("trend7", effectsummary.toJson());
+	trendObjects.insert("07", effectsummary.toJson());
 	OracleTrend<30>::get(user())->value(Transaction::currentDay());
 	effectsummary = OracleTrend<30>::get(user())->effectSummaries()[Transaction::currentDay()];
-	statObj.insert("trend30", effectsummary.toJson());
+	trendObjects.insert("30", effectsummary.toJson());
 	INFO() << QString(QJsonDocument(statObj).toJson());
+
+	statObj.insert("trends", trendObjects);
 
 	bestBot->summarize();
 	SuperOracle::Summary summary = OracleSummary::get(user())->summaries()[Transaction::currentDay()];
+
+	statObj.insert("oracles", summary.toJson());
+
+	makeAdvice(statObj, 0.05);
+
 	QJsonObject flowObj;
 	flowObj.insert("rate", summary.flow());
 	flowObj.insert("state", QString("kFlow"));
@@ -81,11 +89,47 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 	}
 }
 
+void ExtraCache::makeAdvice(QJsonObject &jsonToInject, double thresholdScore) const
+{
+	QJsonObject trends = jsonToInject.value("trends").toObject();
+	// list organized by index instead of by "overDays"
+	QList<std::vector<QJsonObject> > indexDaysList;
+	bool firstPass = true;
+	for (const auto d : trends.keys()) {
+		QJsonArray allFeat = trends[d].toArray();
+		for (int i = 0; i < allFeat.count(); ++i) {
+			if (firstPass)
+				indexDaysList.append(std::vector<QJsonObject>());
+			indexDaysList[i].push_back(allFeat[i].toObject());
+		}
+		firstPass = false;
+	}
+	// now we go through that list to cherry pick the json we want on that level
+	QList<QJsonObject> advice;
+	for (int i = 0; i < indexDaysList.count(); ++i) {
+		auto result = std::minmax_element(indexDaysList[i].begin(), indexDaysList[i].end()
+							   , [](const QJsonObject& a, const QJsonObject& b) {
+			return qAbs(a["score"].toDouble()) < qAbs(b["score"].toDouble());
+		});
+		QJsonObject mostEffect = indexDaysList[i][result.second - indexDaysList[i].begin()];
+		mostEffect["ind"] = i;
+		if (mostEffect["score"].toDouble() >= thresholdScore)
+			advice.append(mostEffect);
+	}
+	std::sort(advice.begin(), advice.end(), [](const QJsonObject& a, const QJsonObject& b) {
+		return qAbs(a["score"].toDouble()) > qAbs(b["score"].toDouble());
+	});
+	QJsonArray jsonAdvice;
+	for (int i = 0; i < advice.count(); ++i) {
+		jsonAdvice.append(advice[i]);
+	}
+	jsonToInject.insert("advice", jsonAdvice);
+}
+
+
 void ExtraCache::onRepliedSendExtraCache(QString strData)
 {
 	CacheAccountConnector::onRepliedSendExtraCache(strData);
 	if(CacheAccountConnector::flags & CacheAccountConnector::AutoExit)
 		qApp->exit();
 }
-
-

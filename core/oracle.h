@@ -81,23 +81,18 @@ public:
 
 	struct Summary
 	{
-//	private:
 		double posSum = 0.0;
 		double negSum = 0.0;
 		QVector<double> dailyPerOracle;
 		QVector<QJsonObject> summaryPerOracle;
-//	public:
-		QJsonObject toJson() {
-			QJsonObject jsSum;
-//			QJsonArray allVal;
+		QJsonArray toJson() {
+//			QJsonObject jsSum;
 			QJsonArray allSum;
 			for (int i = 0; i < dailyPerOracle.count(); ++i) {
-//				allVal.append(dailyPerOracle[i]);
 				allSum.append(summaryPerOracle[i]);
 			}
-//			jsSum.insert("contribs", allVal);
-			jsSum.insert("oracles", allSum);
-			return jsSum;
+//			jsSum.insert("oracles", allSum);
+			return allSum;
 		}
 		double flow() const {
 			if (posSum == 0.0) {
@@ -145,7 +140,7 @@ public:
 			Q_ASSERT(dailyPerOracle.count() == endSummary.dailyPerOracle.count());
 			// *this is the starting Summary, ie the N days ago Summary
 			// effect is constructed from the avg in order to save memory
-			Summary effect = (endSummary + *this) * 0.5;
+			Summary effect = (*this + endSummary) * 0.5;
 			Summary delta = endSummary - *this;
 			double posSlope = effect.posPartialDif();
 			double negSlope = effect.negPartialDif();
@@ -182,13 +177,13 @@ public:
 				}
 				else
 					continue;
-				effect.summaryPerOracle[i]["fact"] = fact;
 				effect.summaryPerOracle[i]["factStr"] = factStr;
-				effect.summaryPerOracle[i]["oldDaily"] = this->dailyPerOracle[i];
-				effect.summaryPerOracle[i]["newDaily"] = endSummary.dailyPerOracle[i];
-				effect.summaryPerOracle[i]["difDaily"] = delta.dailyPerOracle[i];
+				effect.summaryPerOracle[i]["dailyOld"] = this->dailyPerOracle[i];
+				effect.summaryPerOracle[i]["dailyNew"] = endSummary.dailyPerOracle[i];
+				effect.summaryPerOracle[i]["dailyDif"] = delta.dailyPerOracle[i];
 				effect.summaryPerOracle[i]["flowEffect"] = effect.dailyPerOracle[i];
 				effect.summaryPerOracle[i]["overDays"] = overDays;
+				effect.summaryPerOracle[i]["score"] = delta.dailyPerOracle[i] / overDays;
 			}
 
 			return effect;

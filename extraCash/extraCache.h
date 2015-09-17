@@ -22,8 +22,7 @@ protected:
 	void onUserInjected(User* pUser) override;
 	void onBotInjected(Bot *bestBot) override;
 	void onRepliedSendExtraCache(QString strData) override;
-
-private:
+	void makeAdvice(QJsonObject& jsonToInject, double thresholdScore) const;
 
 private:
 	QDate m_date;
