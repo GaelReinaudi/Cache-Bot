@@ -36,8 +36,8 @@ protected:
 		return trans.kla() >= m_localStaticArgs.m_kla + 0.2
 				&& trans.kla() <= m_localStaticArgs.m_kla - 0.2;
 		else
-			return trans.kla() <= m_localStaticArgs.m_kla + 0.2
-				&& trans.kla() >= m_localStaticArgs.m_kla - 0.2;
+			return trans.kla() <= m_localStaticArgs.m_kla + 0.4
+				&& trans.kla() >= m_localStaticArgs.m_kla - 0.4;
 	}
 	int minTransactionForBundle() const override { return 2; }
 

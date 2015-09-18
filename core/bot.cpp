@@ -111,14 +111,12 @@ Puppy::Tree* Bot::instancePostTreatmentBot(Puppy::Context& ioContext)
 
 	QStringList treeNodeList;
 	treeNodeList += "ROOT";
-	double klaArg = -4.5;
-	double ratio = 0.95 / 1.04;
+	double klaArg = -6;
+	double inc = 0.2 + 0.2;
 	for (uint i = 0; i < BotContext::MAX_NUM_FEATURES; ++i) {
-		if (qAbs(klaArg) < 0.5) {
-			klaArg = 4.5;
-			ratio = 0.85 / 1.14;
-//			treeNodeList += "0";
-//			continue;
+		if (klaArg > 0) {
+			klaArg = 6;
+			inc = -(0.4 + 0.4);
 		}
 		treeNodeList += "PriceWindow";
 		treeNodeList += "0";
@@ -127,7 +125,7 @@ Puppy::Tree* Bot::instancePostTreatmentBot(Puppy::Context& ioContext)
 		ioContext.getPrimitiveByName(klaStr);
 		treeNodeList += klaStr;
 		treeNodeList += "0";
-		klaArg *= ratio;
+		klaArg += inc;
 	}
 
 	WARN() << "Making postTreatmentBot: " << treeNodeList.join(' ');
