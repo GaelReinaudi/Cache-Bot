@@ -122,7 +122,8 @@ Puppy::Tree* Bot::instancePostTreatmentBot(Puppy::Context& ioContext)
 		}
 		treeNodeList += "PriceWindow";
 		treeNodeList += "0";
-		QString klaStr = QString::number(klaArg);
+		double amntBill2 = toBillDigits_2(unKindaLog(klaArg));
+		QString klaStr = QString::number(kindaLog(amntBill2));
 		ioContext.getPrimitiveByName(klaStr);
 		treeNodeList += klaStr;
 		treeNodeList += "0";

@@ -87,6 +87,7 @@ void AccountFeature::execute(void *outDatum, Puppy::Context &ioContext)
 
 		// making a shared pointer that will take care of cleaning once the oracle is no longer referenced
 		Oracle* pNewOr = makeNewOracle();
+		pNewOr->isPostTreatment = ioContext.isPostTreatment;
 		QSharedPointer<Oracle> newOracle(pNewOr);
 		ioContext.m_pUser->oracle()->addSubOracle(newOracle);
 	}

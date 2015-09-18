@@ -43,6 +43,7 @@ public:
 		return m_feature;
 	}
 
+	bool isPostTreatment = false;
 private:
 	QDate m_iniDate;
 	QDate m_curDate;

@@ -14,6 +14,7 @@ double unKindaLog(double kindaLogAmount)
 
 double toSignifDigit_2(double val)
 {
+return toBillDigits_2(val);
 	if (qAbs(val) < 1.0)
 		return double(int(val * 100) / 100.0);
 	if (qAbs(val) < 10.0)
@@ -27,6 +28,41 @@ double toSignifDigit_2(double val)
 	if (qAbs(val) < 100000.0)
 		return 1000 * int(val / 1000.0);
 	return 10000 * int(val / 10000.0);
+}
+
+double toBillDigits_2(double val)
+{
+	if (val == 0.0)
+		return 0;
+	double fac = 1.0;
+	if (val < 0)
+		fac = -1.0;
+	val = qAbs(val);
+	while (val > 100.0) {
+		val /= 10.0;
+		fac *= 10.0;
+	}
+	while (val < 10.0) {
+		val *= 10.0;
+		fac /= 10.0;
+	}
+
+	if (val < 12.5)
+		val = 10;
+	else if (val < 17.5)
+		val = 15;
+	else if (val < 25.0)
+		val = 20;
+	else if (val < 40.0)
+		val = 30;
+	else if (val < 62.0)
+		val = 50;
+	else if (val < 85.0)
+		val = 75;
+	else
+		val = 100;
+
+	return fac * val;
 }
 
 qint64 proximityHashString(const QString &str) {
