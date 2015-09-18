@@ -114,10 +114,6 @@ Puppy::Tree* Bot::instancePostTreatmentBot(Puppy::Context& ioContext)
 	double klaArg = -6;
 	double inc = 0.2 + 0.2;
 	for (uint i = 0; i < BotContext::MAX_NUM_FEATURES; ++i) {
-		if (klaArg > 0) {
-			klaArg = 6;
-			inc = -(0.4 + 0.4);
-		}
 		treeNodeList += "PriceWindow";
 		treeNodeList += "0";
 		double amntBill2 = toBillDigits_2(unKindaLog(klaArg));
@@ -126,6 +122,13 @@ Puppy::Tree* Bot::instancePostTreatmentBot(Puppy::Context& ioContext)
 		treeNodeList += klaStr;
 		treeNodeList += "0";
 		klaArg += inc;
+
+		if (klaArg <= inc/2 && inc < 0)
+			klaArg = inc = 0;
+		if (klaArg >= -inc/2 && inc > 0) {
+			klaArg = 8;
+			inc = -(0.4 + 0.4);
+		}
 	}
 
 	WARN() << "Making postTreatmentBot: " << treeNodeList.join(' ');

@@ -34,9 +34,7 @@ double toBillDigits_2(double val)
 {
 	if (val == 0.0)
 		return 0;
-	double fac = 1.0;
-	if (val < 0)
-		fac = -1.0;
+	double fac = val > 0 ? 1.0 : -1.0;
 	val = qAbs(val);
 	while (val > 100.0) {
 		val /= 10.0;

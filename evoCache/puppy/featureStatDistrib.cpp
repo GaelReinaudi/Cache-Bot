@@ -75,7 +75,7 @@ void FeatureStatDistrib::computeNextDayProba()
 
 QVector<Transaction> OracleStatDistrib::revelation(QDate upToDate)
 {
-	INFO() << "OracleStatDistrib::revelation proba = " << m_args.m_dayProba << " bundle = " << m_args.m_bundle.count();
+	DBG() << "OracleStatDistrib::revelation proba = " << m_args.m_dayProba << " bundle = " << m_args.m_bundle.count();
 	static QVector<Transaction> retVect;
 	retVect.clear();
 	if (m_args.m_bundle.count() == 0)

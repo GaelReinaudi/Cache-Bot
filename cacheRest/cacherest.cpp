@@ -9,6 +9,7 @@ CacheRest::CacheRest(QObject *parent)
 {
 	qDebug() << "creating CacheRest instance...............................";
 	worker = new HttpRequestWorker(this);
+//	worker = new OfflineHttpRequestWorker(this);
 }
 
 void CacheRest::login(QString username, QString password) {

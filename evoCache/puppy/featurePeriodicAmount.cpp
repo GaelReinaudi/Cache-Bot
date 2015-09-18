@@ -214,7 +214,7 @@ QVector<Transaction> OracleOneDayOfMonth::revelation(QDate upToDate)
 			  << tr.amountDbl() << " " << tr.date.toString() << " " << tr.name;
 		return tr;
 	};
-	INFO() << "OracleOneDayOfMonth::revelation. bundle = " << m_args.m_bundle.count();
+	DBG() << "OracleOneDayOfMonth::revelation. bundle = " << m_args.m_bundle.count();
 	QDate iniDate = Transaction::currentDay().addDays(-SLACK_FOR_LATE_TRANS);
 	static QVector<Transaction> targetTrans;
 	targetTrans.clear();

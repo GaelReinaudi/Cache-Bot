@@ -33,11 +33,11 @@ protected:
 	bool passFilter(quint64 dist, const Transaction& trans) const override {
 		Q_UNUSED(dist);
 		if (m_localStaticArgs.m_kla < 0)
-		return trans.kla() >= m_localStaticArgs.m_kla + 0.2
-				&& trans.kla() <= m_localStaticArgs.m_kla - 0.2;
+			return trans.kla() <= m_localStaticArgs.m_kla + 0.2
+					&& trans.kla() >= m_localStaticArgs.m_kla - 0.2;
 		else
 			return trans.kla() <= m_localStaticArgs.m_kla + 0.4
-				&& trans.kla() >= m_localStaticArgs.m_kla - 0.4;
+					&& trans.kla() >= m_localStaticArgs.m_kla - 0.4;
 	}
 	int minTransactionForBundle() const override { return 2; }
 

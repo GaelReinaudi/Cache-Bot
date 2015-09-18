@@ -62,7 +62,6 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 	OracleTrend<30>::get(user())->value(Transaction::currentDay());
 	effectsummary = OracleTrend<30>::get(user())->effectSummaries()[Transaction::currentDay()];
 	trendObjects.insert("30", effectsummary.toJson());
-	INFO() << QString(QJsonDocument(statObj).toJson());
 
 	statObj.insert("trends", trendObjects);
 
@@ -87,6 +86,8 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 	if (flags & SendExtraCash) {
 		CacheRest::Instance()->sendExtraCash(user()->id(), 0.0, statObj);
 	}
+	else
+		INFO() << QString(QJsonDocument(statObj).toJson());
 }
 
 void ExtraCache::makeAdvice(QJsonObject &jsonToInject, double thresholdScore) const
