@@ -123,7 +123,7 @@ void ExtraCache::makeAdvice(QJsonObject &jsonToInject, double thresholdScore) co
 	for (int i = 0; i < advice.count(); ++i) {
 		jsonAdvice.append(advice[i]);
 	}
-	jsonToInject.insert("advice", jsonAdvice);
+	jsonToInject.insert("advices", jsonAdvice);
 }
 
 
