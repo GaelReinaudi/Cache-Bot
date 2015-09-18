@@ -113,7 +113,7 @@ void ExtraCache::makeAdvice(QJsonObject &jsonToInject, double thresholdScore) co
 		});
 		QJsonObject mostEffect = indexDaysList[i][result.second - indexDaysList[i].begin()];
 		mostEffect["ind"] = i;
-		if (mostEffect["score"].toDouble() >= thresholdScore)
+		if (qAbs(mostEffect["score"].toDouble()) >= thresholdScore)
 			advice.append(mostEffect);
 	}
 	std::sort(advice.begin(), advice.end(), [](const QJsonObject& a, const QJsonObject& b) {
