@@ -185,7 +185,6 @@ public:
 				effect.summaryPerOracle[i]["flowEffect"] = effect.dailyPerOracle[i];
 				effect.summaryPerOracle[i]["overDays"] = overDays;
 				effect.summaryPerOracle[i]["score"] = delta.dailyPerOracle[i] / overDays;
-				effect.summaryPerOracle[i]["transNow"] = endSummary.summaryPerOracle[i]["trans"];
 			}
 
 			return effect;
