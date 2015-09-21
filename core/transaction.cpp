@@ -19,6 +19,7 @@ void Transaction::read(const QJsonObject &json) {
 	name = json["name"].toString();
 	name.remove("FROM").remove("TO");
 	name.remove("from").remove("to");
+//	name.remove("CHK").remove("SAV");
 	name.remove("Online").remove("Banking").remove("Confirmation");
 	name.remove("Image");
 	name = name.trimmed();
@@ -133,6 +134,8 @@ double TransactionBundle::averageAmount(std::function<double (const Transaction 
 	double totW = 0.0;
 	double avgW = 0.0;
 	for (const Transaction* tr : m_vector) {
+		if (tr->noUse())
+			continue;
 		double w = weight(*tr);
 		totW += w;
 		avgW += w * tr->amountDbl();

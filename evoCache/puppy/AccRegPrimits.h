@@ -150,7 +150,7 @@ protected:
 				if(!ok) {
 					ERR() << "Could not replace the node with " << nodeName;
 				}
-				nodeName = QString("%1").arg(ioContext.m_pUser->hashBundles()[m_filterHash]->klaAverage());
+				nodeName = QString("%1").arg(kindaLog(ioContext.m_pUser->hashBundles()[m_filterHash]->avgSmart()));
 				ioContext.getPrimitiveByName(nodeName);
 				ok = tryReplaceArgumentNode(1, nodeName.toStdString().c_str(), ioContext);
 				if(!ok) {
