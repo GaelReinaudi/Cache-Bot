@@ -83,6 +83,7 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 		WARN() << "Cache flow critically low: " << summary.flow();
 	}
 
+	statObj["_v"] = GIT_VERSION;
 	if (flags & SendExtraCash) {
 		CacheRest::Instance()->sendExtraCash(user()->id(), 0.0, statObj);
 	}
