@@ -19,7 +19,7 @@ void Transaction::read(const QJsonObject &json) {
 	name = json["name"].toString();
 	name.remove("FROM").remove("TO");
 	name.remove("from").remove("to");
-//	name.remove("CHK").remove("SAV");
+	name.remove("CHK").remove("SAV");
 	name.remove("Online").remove("Banking").remove("Confirmation");
 	name.remove("Image");
 	name = name.trimmed();

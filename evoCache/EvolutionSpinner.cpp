@@ -172,11 +172,11 @@ void EvolutionSpinner::runEvolution() {
 	if(bestPreEvoTrees.count()) {
 		auto bestbundltree = bestPreEvoTrees.values();
 		for(unsigned int i = 0; i < lPopSize; ++i) {
-			lPopulation.push_back(bestbundltree.at(bestbundltree.size() - 1 - i % bestbundltree.size()));
+			lPopulation.push_back(bestbundltree.at(i % bestbundltree.size()));
 		}
 		bestbundltree = superBestPreEvoTrees.values();
 		for(unsigned int i = 0; i < 5*bestbundltree.size(); ++i) {
-			lPopulation.push_back(bestbundltree.at(bestbundltree.size() - 1 - i % bestbundltree.size()));
+			lPopulation.push_back(bestbundltree.at(i % bestbundltree.size()));
 		}
 		evaluateSymbReg(lPopulation, *m_context);
 		calculateStats(lPopulation, 0);
