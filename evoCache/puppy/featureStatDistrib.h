@@ -13,6 +13,12 @@ public:
 		QJsonObject ret = Oracle::toJson();
 		ret["approxAmnt"] = toSignifDigit_2(m_args.m_bundle.averageAmount());
 		ret["dayOccur"] = m_args.m_dayProba;
+		QJsonArray transIds;
+		for (int i = 0; i < m_args.m_bundle.count(); ++i) {
+			const Transaction& tr = m_args.m_bundle.trans(i);
+			transIds.append(tr.id);
+		}
+		ret["trans"] = transIds;
 		return ret;
 	}
 

@@ -15,6 +15,7 @@ private:
 		double m_kla = 0; // Mult * kindaLog(amount)
 public:
 	Account* account = 0;
+	QString id; // "YARROW HOTEL GRILL" or "STRIKE TECHNOLOG"
 	QString name; // "YARROW HOTEL GRILL" or "STRIKE TECHNOLOG"
 	QDate date; // "2015-01-28"
 	QStringList categories; // ["Food and Drink", "Restaurants"] or ["Transfer", "Payroll"]
