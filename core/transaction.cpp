@@ -17,7 +17,11 @@ void Transaction::read(const QJsonObject &json) {
 	QString accountStr = json["plaid_account"].toString();
 	id = json["_id"].toString();
 	name = json["name"].toString();
-	name.remove("FROM").remove("TO");//.remove("ACCT");
+	name.remove("FROM").remove("TO");
+	name.remove("from").remove("to");
+	name.remove("Online").remove("Banking").remove("Confirmation");
+	name.remove("Image");
+	name = name.trimmed();
 	nameHash.setFromString(name);
 	setAmount(-json["amount"].toDouble(ok));
 	date = QDate::fromString(json["date"].toString().left(10), "yyyy-MM-dd");

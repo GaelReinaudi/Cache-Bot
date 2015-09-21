@@ -139,8 +139,8 @@ public:
 			int n = c.toUpper().toLatin1();
 			if (c.isDigit())
 				continue;
-			n -= QChar(' ').toLatin1();
-			if(n >= 0 && n < 64) {
+			n -= QChar('@').toLatin1();
+			if(n >= 0 && n < 25) {
 				// flips the ith bit
 				h |=  (1 << (n));
 			}
