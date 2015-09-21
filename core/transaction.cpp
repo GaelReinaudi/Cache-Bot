@@ -4,7 +4,7 @@
 QDate Transaction::s_currentDay = QDate::currentDate();//.addDays(-25);//.addMonths(-2);
 
 QVector<int> Transaction::onlyLoadHashes = QVector<int>();
-int Transaction::s_maxDaysOld = 4 * 31;
+int Transaction::s_maxDaysOld = 5 * 31;
 QDate Transaction::onlyAfterDate = Transaction::currentDay().addMonths(-6);
 int Transaction::onlyAccountType = Account::Type::Saving | Account::Type::Checking | Account::Type::Credit;
 
@@ -159,7 +159,7 @@ double TransactionBundle::emaAmount(const double facNew) const
 auto lam = [](const Transaction& tr){
 	double daysOld = tr.date.daysTo(Transaction::currentDay());
 	double totSpan = Transaction::maxDaysOld();
-	double thresh = totSpan / 2;
+	double thresh = totSpan * 2 / 3;
 	if (daysOld <= thresh)
 		return 1.0;
 	else if (daysOld <= totSpan)
