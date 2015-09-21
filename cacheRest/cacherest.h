@@ -30,6 +30,7 @@ public:
 	void getBestBot(QString userId, User *pUserToInject = 0);
 
 	void extraCashEC2Computation(QString userId);
+	void evoCacheEC2Computation(QString userId);
 
 public:
 	HttpRequestWorker *worker = 0;

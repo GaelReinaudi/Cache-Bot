@@ -119,6 +119,12 @@ private slots:
 		QVERIFY(bestBotJson.contains("features\":"));
 	}
 
+//	void allUsersEvoCacheComputations() {
+//		for (const QString& userId : m_userIds) {
+//			CacheRest::Instance()->evoCacheEC2Computation(userId);
+//		}
+//	}
+
 	void allUsersExtraCashComputations() {
 		for (const QString& userId : m_userIds) {
 			CacheRest::Instance()->extraCashEC2Computation(userId);
