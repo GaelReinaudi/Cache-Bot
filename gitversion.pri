@@ -15,9 +15,9 @@ BASE_GIT_COMMAND = git --git-dir $$PWD/.git --work-tree $$PWD
 GIT_VERSION = $$system($$BASE_GIT_COMMAND describe --always --tags 2> $$NULL_DEVICE)
 
 # Check if we only have hash without version number
-!contains("$${GIT_VERSION}",\d+\.\d+\.\d+) {
+!contains($$GIT_VERSION,\d+\.\d+\.\d+) {
 	# If there is nothing we simply use version defined manually
-	isEmpty("$${GIT_VERSION}") {
+	isEmpty($$GIT_VERSION) {
 		GIT_VERSION = $$VERSION
 	} else { # otherwise construct proper git describe string
 		GIT_COMMIT_COUNT = $$system($$BASE_GIT_COMMAND rev-list HEAD --count 2> $$NULL_DEVICE)

@@ -210,7 +210,8 @@ void EvolutionSpinner::runEvolution() {
 	}
 
 	m_doSpin = false;
-	finalBotObject["_v"] = QString(GIT_VERSION);
+
+	finalBotObject["_git"] = QString(GIT_VERSION);
 	qDebug() << "Exiting evolution. Features with positive fitness:" << finalBotObject["features"].toArray().count();
 	emit finishedEvolution(finalBotObject);
 }
