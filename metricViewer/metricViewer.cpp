@@ -51,7 +51,7 @@ bool MetricViewer::plotAllMetrics()
 		ui->acPlot->addGraph()->setPen(QPen(color));
 	}
 
-	QDate day  = QDate::currentDate();
+	QDate day  = Transaction::currentDay();
 	QDate downToDate = day.addDays(-daysToPlot);
 	while (day >= downToDate) {
 		qDebug() << day;

@@ -1,7 +1,9 @@
 #include "transaction.h"
 #include "account.h"
 
-QDate Transaction::s_currentDay = QDate::currentDate();//.addDays(-25);//.addMonths(-2);
+int hoursOffsetToHack_issue_9 = -5;
+QDateTime Transaction::s_actualCurrentDayTime = QDateTime::currentDateTime().addSecs(hoursOffsetToHack_issue_9 * 3600);
+QDate Transaction::s_currentDay = Transaction::s_actualCurrentDayTime.date();//.addDays(-25);//.addMonths(-2);
 
 QVector<int> Transaction::onlyLoadHashes = QVector<int>();
 int Transaction::s_maxDaysOld = 5 * 31;

@@ -84,6 +84,9 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 	}
 
 	statObj["_git"] = QString(GIT_VERSION);
+	statObj["_currentDay"] = Transaction::currentDay().toString();
+	statObj["_actualCurrentDayTimeUTC"] = Transaction::actualCurrentDayTime().toUTC().toString();
+	statObj["_actualCurrentDayTime"] = Transaction::actualCurrentDayTime().toString();
 	statObj["_currentDateTime"] = QDateTime::currentDateTime().toString();
 	statObj["_toUTC"] = QDateTime::currentDateTime().toUTC().toString();
 	statObj["_toLocalTime"] = QDateTime::currentDateTime().toLocalTime().toString();

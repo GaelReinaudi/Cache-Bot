@@ -13,7 +13,7 @@ QVector<Transaction> SuperOracle::revelation(QDate upToDate)
 	std::stable_sort(ret.begin(), ret.end(), Transaction::earlierThan);
 
 	for (const Transaction& tr : ret) {
-		INFO() << "t =" << QDate::currentDate().daysTo(tr.date) << "amnt =" << tr.amountDbl()
+		INFO() << "t =" << Transaction::currentDay().daysTo(tr.date) << "amnt =" << tr.amountDbl()
 			  << "    label = " << tr.name;
 	}
 

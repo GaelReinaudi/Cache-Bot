@@ -101,6 +101,9 @@ public:
 	static QDate currentDay() {
 		return s_currentDay;
 	}
+	static QDateTime actualCurrentDayTime() {
+		return s_actualCurrentDayTime;
+	}
 	static void setCurrentDay(const QDate &value) {
 		s_currentDay = value;
 	}
@@ -116,6 +119,7 @@ public:
 private:
 	static int s_maxDaysOld;
 	static QDate s_currentDay;
+	static QDateTime s_actualCurrentDayTime;
 public:
 	static QVector<int> onlyLoadHashes;
 	static QDate onlyAfterDate;
