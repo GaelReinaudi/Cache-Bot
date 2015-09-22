@@ -38,7 +38,7 @@ void Transaction::read(const QJsonObject &json) {
 //	out.setFieldWidth(8);
 //	out.setPadChar(' ');
 //	out.setFieldAlignment(QTextStream::AlignRight);
-	out << "Transaction::read() " << amountDbl() << "   " << date.toString("MM/dd")
+	out << "Transaction::read("<<id<<") " << amountDbl() << "   " << date.toString("MM/dd")
 		  << "   " << name;
 	out << "   [";
 	for (QString& s : categories) {

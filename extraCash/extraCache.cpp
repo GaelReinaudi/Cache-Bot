@@ -65,6 +65,14 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 
 	statObj.insert("trends", trendObjects);
 
+	double flowMA_2 = MetricSmoother<2>::get(OracleSummary::get(user()))->value(Transaction::currentDay());
+	double flowMA_3 = MetricSmoother<3>::get(OracleSummary::get(user()))->value(Transaction::currentDay());
+	double flowMA_4 = MetricSmoother<4>::get(OracleSummary::get(user()))->value(Transaction::currentDay());
+
+	double flowDif_1 = MetricDiff<1>::get(MetricSmoother<2>::get(OracleSummary::get(user())))->value(Transaction::currentDay());
+	double flowDif_2 = MetricDiff<2>::get(MetricSmoother<2>::get(OracleSummary::get(user())))->value(Transaction::currentDay());
+	double flowDif_3 = MetricDiff<3>::get(MetricSmoother<2>::get(OracleSummary::get(user())))->value(Transaction::currentDay());
+
 	bestBot->summarize();
 	SuperOracle::Summary summary = OracleSummary::get(user())->summaries()[Transaction::currentDay()];
 
@@ -74,7 +82,19 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 
 	QJsonObject flowObj;
 	flowObj.insert("rate", summary.flow());
-	flowObj.insert("state", QString("kFlow"));
+	flowObj.insert("ma_2", flowMA_2);
+	flowObj.insert("ma_3", flowMA_3);
+	flowObj.insert("ma_4", flowMA_4);
+	flowObj.insert("dif_1", flowDif_1);
+	flowObj.insert("dif_2", flowDif_2);
+	flowObj.insert("dif_3", flowDif_3);
+
+	QString changeFlag = "kStable";
+	if (flowDif_2 > 0.05)
+		changeFlag = "kUp";
+	if (flowDif_2 < -0.05)
+		changeFlag = "kDown";
+	flowObj.insert("change", changeFlag);
 
 	statObj.insert("flow", flowObj);
 
