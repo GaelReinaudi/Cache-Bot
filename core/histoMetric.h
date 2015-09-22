@@ -109,4 +109,37 @@ private:
 	HistoMetric* m_pMetric = 0;
 };
 
+template <int DayPast>
+class MetricDiff : public HistoMetric
+{
+public:
+	MetricDiff(HistoMetric* pMetric)
+		: HistoMetric(Name(pMetric), pMetric)
+		, m_pMetric(pMetric)
+	{
+	}
+	static QString Name(HistoMetric* pMetric) {
+		return QString("Diff%1_%2").arg(DayPast).arg(pMetric->name());
+	}
+	static MetricDiff<DayPast>* get(HistoMetric* pMetric) {
+		auto pMet = HistoMetric::get(Name(pMetric));
+		if (pMet)
+			return reinterpret_cast<MetricDiff<DayPast>*>(pMet);
+		return new MetricDiff<DayPast>(pMetric);
+	}
+protected:
+	double computeFor(const QDate& date, bool& isValid) override {
+		isValid = m_pMetric->isValid(date);
+		double dif = m_pMetric->value(date);
+		QDate ad = date.addDays(-DayPast);
+		isValid &= m_pMetric->isValid(ad);
+		dif -= m_pMetric->value(ad);
+		return dif;
+	}
+
+private:
+
+	HistoMetric* m_pMetric = 0;
+};
+
 #endif // HISTOMETRIC_H
