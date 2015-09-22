@@ -84,6 +84,8 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 	}
 
 	statObj["_git"] = QString(GIT_VERSION);
+	statObj["_currentDateTime"] = QDateTime::currentDateTime().toString();
+	statObj["_lastTransDate"] = user()->allTrans().last().date.toString();
 	if (flags & SendExtraCash) {
 		CacheRest::Instance()->sendExtraCash(user()->id(), 0.0, statObj);
 	}
