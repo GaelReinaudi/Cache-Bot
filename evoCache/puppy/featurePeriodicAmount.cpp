@@ -130,10 +130,10 @@ void FeatureMonthlyAmount::onJustApplied(TransactionBundle& allTrans, bool doLog
 	cleanArgs();
 
 	// recompute fitness
-	m_fitness -= 2 * qMax(0.0, rerun);
-//	m_fitness *= 2.0;
+	m_fitness -= 3 * qMax(0.0, rerun);
+	m_fitness *= 2.0;
 	if (qAbs(m_localStaticArgs.m_kla) > 2)
-		m_fitness *= 5.0;
+		m_fitness *= qAbs(m_localStaticArgs.m_kla);
 }
 
 void FeatureMonthlyAmount::emitGraphics(Puppy::Context& ioContext) const

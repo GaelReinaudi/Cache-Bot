@@ -242,7 +242,7 @@ void ExtraCashView::makeRevelationPlot()
 		double t = -0.01; // to be the first point, slightly on the left
 		pGr->addData(t, curBal);
 		m_pExtraCache->user()->oracle()->resetDate(m_pbDate);
-		const QVector<Transaction> rev = m_pExtraCache->user()->oracle()->revelation(m_pbDate.addDays(displayDayFuture));
+		const QVector<Transaction>& rev = m_pExtraCache->user()->oracle()->revelation(m_pbDate.addDays(displayDayFuture));
 		double epsilon = 0.0000001;
 		double manyEspilon = epsilon;
 		for (const Transaction& tr : rev) {

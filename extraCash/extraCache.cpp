@@ -89,6 +89,7 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 	flowObj.insert("dif_2", flowDif_2);
 	flowObj.insert("dif_3", flowDif_3);
 
+	// flag as kStable/kUp/kDown
 	QString changeFlag = "kStable";
 	if (flowDif_2 > 0.05)
 		changeFlag = "kUp";
@@ -105,12 +106,12 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 
 	statObj["_git"] = QString(GIT_VERSION);
 	statObj["_currentDay"] = Transaction::currentDay().toString();
-	statObj["_actualCurrentDayTimeUTC"] = Transaction::actualCurrentDayTime().toUTC().toString();
-	statObj["_actualCurrentDayTime"] = Transaction::actualCurrentDayTime().toString();
-	statObj["_currentDateTime"] = QDateTime::currentDateTime().toString();
-	statObj["_toUTC"] = QDateTime::currentDateTime().toUTC().toString();
-	statObj["_toLocalTime"] = QDateTime::currentDateTime().toLocalTime().toString();
-	statObj["_lastTransDate"] = user()->allTrans().count() == 0 ? "none" : user()->allTrans().last().date.toString();
+//	statObj["_actualCurrentDayTimeUTC"] = Transaction::actualCurrentDayTime().toUTC().toString();
+//	statObj["_actualCurrentDayTime"] = Transaction::actualCurrentDayTime().toString();
+//	statObj["_currentDateTime"] = QDateTime::currentDateTime().toString();
+//	statObj["_toUTC"] = QDateTime::currentDateTime().toUTC().toString();
+//	statObj["_toLocalTime"] = QDateTime::currentDateTime().toLocalTime().toString();
+//	statObj["_lastTransDate"] = user()->allTrans().count() == 0 ? "none" : user()->allTrans().last().date.toString();
 	if (flags & SendExtraCash) {
 		CacheRest::Instance()->sendExtraCash(user()->id(), 0.0, statObj);
 	}
