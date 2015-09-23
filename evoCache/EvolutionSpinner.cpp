@@ -170,13 +170,13 @@ void EvolutionSpinner::runEvolution() {
 	NOTICE() << "bestPreEvoTrees.count " << bestPreEvoTrees.count();
 	NOTICE() << "superBestPreEvoTrees.count " << superBestPreEvoTrees.count();
 	if(bestPreEvoTrees.count()) {
-		auto bestbundltree = bestPreEvoTrees.values();
+		const auto bestbundltree = bestPreEvoTrees.values();
 		for(unsigned int i = 0; i < lPopSize; ++i) {
 			lPopulation.push_back(bestbundltree.at(i % bestbundltree.size()));
 		}
-		bestbundltree = superBestPreEvoTrees.values();
-		for(unsigned int i = 0; i < 5*bestbundltree.size(); ++i) {
-			lPopulation.push_back(bestbundltree.at(i % bestbundltree.size()));
+		const auto superBestbundltree = superBestPreEvoTrees.values();
+		for(unsigned int i = 0; i < 5*superBestbundltree.size(); ++i) {
+			lPopulation.push_back(superBestbundltree.at(i % superBestbundltree.size()));
 		}
 		evaluateSymbReg(lPopulation, *m_context);
 		calculateStats(lPopulation, 0);
@@ -195,9 +195,12 @@ void EvolutionSpinner::runEvolution() {
 				veryBestTree = bestTree;
 			finalBotObject = summarize(bestTree);
 
+			if (m_context->currentGeneration > 10)
 			applySelectionTournament(lPopulation, *m_context, lNbrPartTournament);
 			applyCrossover(lPopulation, *m_context, lCrossoverProba, lCrossDistribProba, lMaxDepth);
+			if (m_context->currentGeneration > 10)
 			applyMutationStandard(lPopulation, *m_context, lMutStdProba, lMutMaxRegenDepth, lMaxDepth);
+			if (m_context->currentGeneration > 10)
 			applyMutationSwap(lPopulation, *m_context, lMutSwapProba, lMutSwapDistribProba);
 
 			bestTree.mValid = false;
