@@ -89,6 +89,11 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 	flowObj.insert("dif_2", flowDif_2);
 	flowObj.insert("dif_3", flowDif_3);
 
+	flowObj.insert("dailyPos", -1);
+	flowObj.insert("dailyNeg", -1);
+	flowObj.insert("dailyBill", -1);
+	flowObj.insert("dailySalary", -1);
+
 	// flag as kStable/kUp/kDown
 	QString changeFlag = "kStable";
 	if (flowDif_2 > 0.05)
