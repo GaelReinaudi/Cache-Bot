@@ -16,6 +16,7 @@ void CacheRest::login(QString username, QString password) {
 	HttpRequestInput httpRequest(LoginRoute, "POST");
 	httpRequest.add_var("email", username);
 	httpRequest.add_var("password", password);
+	qDebug() << "loging in";
 	worker->execute(&httpRequest);
 }
 
@@ -28,6 +29,7 @@ void CacheRest::getUserIds()
 void CacheRest::getUserData(QString userId, User *pUserToInject /*= 0*/)
 {
 	HttpRequestInput httpRequest(UserDataRoute + QString("/%1").arg(userId), "POST");
+	qDebug() << "getUserData";
 	worker->execute(&httpRequest);
 	if (pUserToInject) {
 		QObject::connect(worker, SIGNAL(repliedUserData(QString)), pUserToInject, SLOT(injectJsonData(QString)));
@@ -72,6 +74,7 @@ void CacheRest::getBestBot(QString userId, User *pUserToInject /*= 0*/)
 	userId = "55518f01574600030092a822";
 #endif
 	HttpRequestInput httpRequest(BestBotRoute + QString("/%1").arg(userId), "POST");
+	qDebug() << "getBestBot";
 	worker->execute(&httpRequest);
 	if (pUserToInject) {
 		QObject::connect(worker, SIGNAL(repliedBestBot(QString)), pUserToInject, SLOT(injectJsonBot(QString)));

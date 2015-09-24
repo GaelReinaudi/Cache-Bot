@@ -320,6 +320,7 @@ void HttpRequestWorker::on_manager_finished(QNetworkReply *reply) {
 		else {
 			qWarning() << "Warning: Not connecting normally !!!!!!!!!!";
 			ERR() << "Warning: Not connecting normally !!!!!!!!!!";
+			qApp->exit(1);
 		}
 	}
 	else if(reply->request().url() == QUrl(IdsRoute)) {
