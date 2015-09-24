@@ -67,7 +67,12 @@ qint64 Transaction::dist(const Transaction &other, bool log) const {
 
 Transaction* StaticTransactionArray::appendNew(QJsonObject jsonTrans, Account *pInAcc) {
 	QString name = jsonTrans["name"].toString();
-	name.remove("FROM").remove("TO");//.remove("ACCT");
+	name.remove("FROM").remove("TO");
+	name.remove("from").remove("to");
+	name.remove("CHK").remove("SAV");
+	name.remove("Online").remove("Banking").remove("Confirmation");
+	name.remove("Image");
+	name = name.trimmed();
 	QDate date = QDate::fromString(jsonTrans["date"].toString().left(10), "yyyy-MM-dd");
 	qint64 hash = NameHashVector::fromString(name);
 	for (const QString& nono : pInAcc->excludeNameTransContain()) {
