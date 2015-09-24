@@ -142,9 +142,9 @@ void EvolutionSpinner::runEvolution() {
 			(*lBestIndividual).mValid = false;
 			bestPreEvoTrees.insertMulti(fitness, *lBestIndividual);
 		}
-		if(fitness > 1.0 || superBestPreEvoTrees.isEmpty()) {
+		if(fitness > 1.0) {
 			(*lBestIndividual).mValid = false;
-			superBestPreEvoTrees.insertMulti(fitness, *lBestIndividual);
+			superBestPreEvoTrees.insertMulti(fitness, Tree(*lBestIndividual));
 		}
 	}
 
@@ -169,20 +169,25 @@ void EvolutionSpinner::runEvolution() {
 	initializePopulation(lPopulation, *m_context, lInitGrowProba, lMinInitDepth, lMaxInitDepth);
 	NOTICE() << "bestPreEvoTrees.count " << bestPreEvoTrees.count();
 	NOTICE() << "superBestPreEvoTrees.count " << superBestPreEvoTrees.count();
+	const int NthReAddSuper = 8;
 	if(bestPreEvoTrees.count()) {
 		const auto bestbundltree = bestPreEvoTrees.values();
 		for(unsigned int i = 0; i < lPopSize; ++i) {
 			lPopulation.push_back(bestbundltree.at(i % bestbundltree.size()));
 		}
 		const auto superBestbundltree = superBestPreEvoTrees.values();
-		for(unsigned int i = 0; i < 5*superBestbundltree.size(); ++i) {
-			lPopulation.push_back(superBestbundltree.at(i % superBestbundltree.size()));
+		for (unsigned int j = 0; j <= NthReAddSuper; ++j) {
+			for(unsigned int i = j * superBestbundltree.size() / NthReAddSuper; i < superBestbundltree.size(); ++i) {
+				lPopulation.push_back(superBestbundltree.at(superBestbundltree.size()-1-i));
+			}
 		}
 		evaluateSymbReg(lPopulation, *m_context);
 		calculateStats(lPopulation, 0);
 
 		// Evolve population for the given number of generations
 		NOTICE() << "Starting evolution";
+		// 0 after a reinjection of features
+		int afterReinjection = 0;
 		for(m_context->currentGeneration = 1; m_context->currentGeneration <=10*lNbrGen; ++m_context->currentGeneration ) {
 			if(!m_doSpin)  {
 				break;
@@ -195,19 +200,31 @@ void EvolutionSpinner::runEvolution() {
 				veryBestTree = bestTree;
 			finalBotObject = summarize(bestTree);
 
-			if (m_context->currentGeneration > 10)
-			applySelectionTournament(lPopulation, *m_context, lNbrPartTournament);
-			applyCrossover(lPopulation, *m_context, lCrossoverProba, lCrossDistribProba, lMaxDepth);
-			if (m_context->currentGeneration > 10)
-			applyMutationStandard(lPopulation, *m_context, lMutStdProba, lMutMaxRegenDepth, lMaxDepth);
-			if (m_context->currentGeneration > 10)
-			applyMutationSwap(lPopulation, *m_context, lMutSwapProba, lMutSwapDistribProba);
+			if (afterReinjection > NthReAddSuper)
+				applySelectionTournament(lPopulation, *m_context, lNbrPartTournament);
 
-			bestTree.mValid = false;
-//			lPopulation.push_back(bestTree);
+			veryBestTree.mValid = false;
+			if (m_context->currentGeneration % 32 == 0) {
+				lPopulation.push_back(veryBestTree);
+				for(unsigned int i = 0; i < superBestbundltree.size(); ++i) {
+					lPopulation.push_back(superBestbundltree.at(i));
+//					NOTICE() << "-----------------" << i;
+//					summarize(lPopulation.back());
+				}
+				afterReinjection = 0;
+			}
+
+			applyCrossover(lPopulation, *m_context, lCrossoverProba, lCrossDistribProba, lMaxDepth);
+
+			if (afterReinjection > NthReAddSuper)
+				applyMutationStandard(lPopulation, *m_context, lMutStdProba, lMutMaxRegenDepth, lMaxDepth);
+			if (afterReinjection > NthReAddSuper)
+				applyMutationSwap(lPopulation, *m_context, lMutSwapProba, lMutSwapDistribProba);
+
 
 			evaluateSymbReg(lPopulation, *m_context);
 			calculateStats(lPopulation, m_context->currentGeneration );
+			++afterReinjection;
 		}
 		NOTICE() << "End of evolution";
 	}
