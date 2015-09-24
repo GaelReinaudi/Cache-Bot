@@ -10,6 +10,7 @@ void FeatureMonthlyAmount::getArgs(Puppy::Context &ioContext) {
 	getArgument(++ind, &a, ioContext);
 	m_localStaticArgs.m_kla = a;
 	getArgument(++ind, &a, ioContext);
+	a = qBound(-1000.0, a, 1000.0);
 	m_localStaticArgs.m_dayOfMonth = a;
 }
 
@@ -23,10 +24,10 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 		WARN() << "MonthlyAmount(0 TARGET): day "<<m_localStaticArgs.m_dayOfMonth<<" kla "<< m_localStaticArgs.m_kla;
 	}
 	else if (doLog) {
-		NOTICE() << getName().c_str() << " " << m_targetTrans.count()
-			<<" TARGET: day " << m_localStaticArgs.m_dayOfMonth
-			<<" kla"<< m_localStaticArgs.m_kla << "=" << m_targetTrans.first().amountDbl()
-			<< " h=" << m_targetTrans.first().nameHash.hash();
+//		NOTICE() << getName().c_str() << " " << m_targetTrans.count()
+//			<<" TARGET: day " << m_localStaticArgs.m_dayOfMonth
+//			<<" kla"<< m_localStaticArgs.m_kla << "=" << m_targetTrans.first().amountDbl()
+//			<< " h=" << m_targetTrans.first().nameHash.hash();
 	}
 
 	double totalOneOverDistClosest = 0.0;
@@ -40,24 +41,26 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 	m_localStaticArgs.m_consecMonth = 0;
 	m_localStaticArgs.m_consecMonthBeforeMissed = 0;
 	m_localStaticArgs.m_consecMissed = 0;
+	if (m_localStaticArgs.m_dayOfMonth < -13 || m_localStaticArgs.m_dayOfMonth > 31)
+		return 0.0;
 	for (int i = 0; i < allTrans.count(); ++i) {
 		const Transaction& trans = allTrans.trans(i);
 		quint64 dist = iTarg->dist(trans);
 		if (trans.noUse()) {
 			dist = 1<<20;
 		}
-		if (dist < localDist) {
+		double factOld = 2.0;
+		if (dist < localDist && trans.jDay() <= approxSpacingPayment() / 2 + iTarg->jDay()) {
 			localDist = dist;
 			localTrans = &trans;
+			double daysAgo = localTrans->date.daysTo(Transaction::currentDay());
+			if (daysAgo > Transaction::maxDaysOld() / 2)
+				factOld -= 1.0 * daysAgo / double(Transaction::maxDaysOld() / 2);
 		}
-		Q_ASSERT(localDist < 18446744073709551615ULL);
-		double factOld = 2.0;
-		double daysAgo = localTrans->date.daysTo(Transaction::currentDay());
-		if (daysAgo > Transaction::maxDaysOld() / 2)
-			factOld -= 1.0 * daysAgo / double(Transaction::maxDaysOld() / 2);
+//		Q_ASSERT(localDist < 18446744073709551615ULL);
 		// if we get further away by approxSpacingPayment() / 2 days, we take the next target, or if last trans
 		if (trans.jDay() > approxSpacingPayment() / 2 + iTarg->jDay() || i == allTrans.count() - 1) {
-			if (localDist < Transaction::LIMIT_DIST_TRANS) {
+			if (localDist < Transaction::LIMIT_DIST_TRANS && localTrans) {
 				m_localStaticArgs.m_bundle.append(localTrans);
 				if (doLog) {
 					iTarg->dist(*localTrans, true);
@@ -81,12 +84,14 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 			else if (iTarg->date < Transaction::currentDay().addDays(-SLACK_FOR_LATE_TRANS)){
 				if (doLog) {
 					DBG() << "missed: ";
-					iTarg->dist(*localTrans, true);
+					if (localTrans)
+						iTarg->dist(*localTrans, true);
 				}
 				m_localStaticArgs.m_consecMonth = 0;
 				++m_localStaticArgs.m_consecMissed;
 				double transFit = 1.0 / (1 + localDist);
-				totalOneOverDistClosest += factOld * transFit;
+				if (localTrans)
+					totalOneOverDistClosest += factOld * transFit;
 			}
 
 			if (iTarg == &m_targetTrans.last() || (iTarg + 1)->date >= endDate)
@@ -112,6 +117,8 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 
 void FeatureMonthlyAmount::onJustApplied(TransactionBundle& allTrans, bool doLog = false)
 {
+	if (m_fitness <= 0.0)
+		return;
 	// tries to re-run this periodic and if it has a high vlaue, it is a sign that
 	// it is actually more frequent and should have a bad grade
 	auto temp = m_localStaticArgs;

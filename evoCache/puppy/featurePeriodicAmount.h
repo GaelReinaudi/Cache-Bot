@@ -98,7 +98,7 @@ protected:
 		FeaturePeriodicAmount::cleanArgs();
 		while (qAbs(m_localStaticArgs.m_kla) > 8.0)
 			m_localStaticArgs.m_kla /= 10.0;
-		m_localStaticArgs.m_dayOfMonth = qBound(-14, m_localStaticArgs.m_dayOfMonth, 31);
+		m_localStaticArgs.m_dayOfMonth = qBound(-14, m_localStaticArgs.m_dayOfMonth, 32);
 		if (m_localStaticArgs.m_dayOfMonth == 0)
 			++m_localStaticArgs.m_dayOfMonth;
 	}
