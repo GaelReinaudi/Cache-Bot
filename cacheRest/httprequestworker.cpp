@@ -311,10 +311,10 @@ void HttpRequestWorker::on_manager_finished(QNetworkReply *reply) {
 	DBG() << "response is" << strResponseJsonDoc;
 	if(reply->request().url() == QUrl(LoginRoute)) {
 		emit repliedLogin(response);
-		if(response == StringLoggedInReplySuccess) {
+		if(QString(response).contains(StringLoggedInReplySuccess)) {
 			emit loggedIn(true);
 		}
-		else if(response == StringLoggedInReplyFailure) {
+		else if(QString(response).contains(StringLoggedInReplyFailure)) {
 			emit loggedIn(false);
 		}
 		else {

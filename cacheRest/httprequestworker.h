@@ -22,8 +22,8 @@ static const QString BestBotRoute = server + "/cache-bot/bestBot";
 static const QString ExtraCashEC2Compute = "https://qvg5wdby95.execute-api.us-west-2.amazonaws.com/prod/extraCache002";
 static const QString EvoCacheEC2Compute = amazonServer + "/cache-bot/fullAnalysis";
 
-static const QString StringLoggedInReplySuccess = "Moved Temporarily. Redirecting to /loginSuccess";
-static const QString StringLoggedInReplyFailure = "Moved Temporarily. Redirecting to /loginFailure";
+static const QString StringLoggedInReplySuccess = "Redirecting to /loginSuccess";
+static const QString StringLoggedInReplyFailure = "Redirecting to /loginFailure";
 
 enum HttpRequestVarLayout {NOT_SET, ADDRESS, URL_ENCODED, MULTIPART, JSON};
 
