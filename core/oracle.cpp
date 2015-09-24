@@ -40,15 +40,23 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow() const
 		double avg = pOr->avgDaily();
 		if (avg > 0) {
 			summary.posSum += avg;
+			if (pOr->feature()->isPeriodic())
+				summary.salary += avg;
 			INFO() << ind <<  " +daily " << avg << "      " << pOr->feature()->getName();
 		}
 		else if (avg < 0) {
 			summary.negSum += avg;
+			if (pOr->feature()->isPeriodic())
+				summary.bill += avg;
 			INFO() << ind <<  " -daily " << avg << "      " << pOr->feature()->getName();
 		}
 		else {
 			summary.posSum += pOr->avgDailyPos();
 			summary.negSum += pOr->avgDailyNeg();
+			if (pOr->feature()->isPeriodic()) {
+				summary.salary += pOr->avgDailyPos();
+				summary.bill += pOr->avgDailyNeg();
+			}
 			DBG() << ind <<  " daily = " << avg << " " << pOr->feature()->getName()
 				  << " " << pOr->avgDailyPos()
 				  << " " << pOr->avgDailyNeg()

@@ -135,6 +135,7 @@ public:
 		return retObj;
 	}
 	bool isFeature() const override { return true; }
+	virtual int isPeriodic() const { return 0; }
 protected:
 	virtual FeatureArgs* localStaticArgs() = 0;
 	virtual void getArgs(Puppy::Context &ioContext) { Q_UNUSED(ioContext); }

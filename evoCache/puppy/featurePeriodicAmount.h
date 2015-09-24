@@ -74,7 +74,8 @@ public:
 	{ }
 	~FeaturePeriodicAmount() { }
 
-	virtual int approxSpacingPayment() = 0;
+	virtual int approxSpacingPayment() const = 0;
+	int isPeriodic() const override { return approxSpacingPayment(); }
 };
 
 class FeatureMonthlyAmount : public FeaturePeriodicAmount
@@ -90,7 +91,7 @@ protected:
 		: FeaturePeriodicAmount(featureName)
 	{ }
 protected:
-	int approxSpacingPayment() override {
+	int approxSpacingPayment() const override {
 		return 30;
 	}
 	void getArgs(Puppy::Context &ioContext) override;
@@ -139,7 +140,7 @@ public:
 	FeatureBiWeeklyAmount()
 		: FeatureMonthlyAmount("BiWeeklyAmount")
 	{ }
-	int approxSpacingPayment() override { return 15; } // +2d: gives some room for late payment
+	int approxSpacingPayment() const override { return 15; } // +2d: gives some room for late payment
 	virtual void cleanArgs() override {
 		FeatureMonthlyAmount::cleanArgs();
 		m_localStaticArgs.m_dayOfMonth2 = m_localStaticArgs.m_dayOfMonth + 15;
