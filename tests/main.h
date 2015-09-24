@@ -21,7 +21,7 @@ private slots:
 		QVERIFY(spyLogin.wait());
 		QCOMPARE(spyLogin.count(), 1); // make sure the signal was emitted exactly one time
 		QList<QVariant> arguments = spyLogin.takeFirst();
-		QCOMPARE(arguments.at(0).toString()
+		QENDSWITH(arguments.at(0).toString()
 				 , StringLoggedInReplyFailure);
 
 		CacheRest::Instance()->getUserIds();
@@ -39,7 +39,7 @@ private slots:
 		bool loggedIn = spyLogin.wait();
 		QList<QVariant> arguments = spyLogin.takeFirst();
 		QVERIFY(loggedIn);
-		QCOMPARE(arguments.at(0).toString()
+		QENDSWITH(arguments.at(0).toString()
 				 , StringLoggedInReplySuccess);
 	}
 

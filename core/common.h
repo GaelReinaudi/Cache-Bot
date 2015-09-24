@@ -9,6 +9,7 @@ static const int MAX_TRANSACTION_PER_ACCOUNT = 1024 * 8;
 static const int KLA_MULTIPLICATOR = 1;
 
 #define QSTARTSWITH(actual, expected) QCOMPARE(actual.left(QString(expected).length()), QString(expected))
+#define QENDSWITH(actual, expected) QCOMPARE(actual.right(QString(expected).length()), QString(expected))
 
 double CORESHARED_EXPORT kindaLog(double amount);
 double CORESHARED_EXPORT unKindaLog(double kindaLogAmount);
