@@ -122,6 +122,13 @@ void ExtraCashView::onBotInjected(Bot* pBot)
 	ui->costLive95SpinBox->setValue(CostRateMonthPercentileMetric<6, 95>::get(m_pExtraCache->user())->value(m_pbDate));
 	ui->costLive99SpinBox->setValue(CostRateMonthPercentileMetric<6, 99>::get(m_pExtraCache->user())->value(m_pbDate));
 
+	double t2z50 = Montecarlo<128>::get(m_pExtraCache->user())->value(Transaction::currentDay());
+	ui->spinT2z50->setValue(t2z50);
+	double t2z80 = Montecarlo<128>::get(m_pExtraCache->user())->t2zPerc(Transaction::currentDay(), 0.80);
+	ui->spinT2z80->setValue(t2z80);
+	double t2z20 = Montecarlo<128>::get(m_pExtraCache->user())->t2zPerc(Transaction::currentDay(), 0.20);
+	ui->spinT2z20->setValue(t2z20);
+
 	// transaction at the starting date of the playback
 	auto& real = m_pExtraCache->user()->allTrans();
 	qDebug() << "date" << m_pbDate;

@@ -220,6 +220,10 @@ public:
 			return reinterpret_cast<Montecarlo<Nrun>*>(pMet);
 		return new Montecarlo<Nrun>(pUser);
 	}
+	double t2zPerc(const QDate &date, double facPerc) {
+		double curBal = user()->balance(Account::Type::Checking);
+		return m_simulations[date].timeToDelta(-curBal, facPerc);
+	}
 
 protected:
 	double computeFor(const QDate& date, bool& isValid) override {
