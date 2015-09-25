@@ -5,6 +5,38 @@
 #include "transaction.h"
 class AccountFeature;
 
+static const int displayDayPast = 31;
+static const int displayDayFuture = 62;
+
+template<int Nrun>
+struct Simulation
+{
+private:
+	static const int Ntot = Nrun * (displayDayFuture + 1);
+	double values[Ntot];
+
+public:
+	double val(int run, int day) const {
+		return values[run * (displayDayFuture + 1) + day];
+	}
+	void setVal(int run, int day, double value) {
+		values[run * (displayDayFuture + 1) + day] = value;
+	}
+
+	int timeToDelta(double deltaBalance, double facPerc = 0.5) const {
+		for (int d = 0; d <= displayDayFuture; ++d) {
+			int ctBellow = 0;
+			for (int r = 0; r < Nrun; ++r) {
+				if (val(r, d) <= deltaBalance)
+					++ctBellow;
+			}
+			if (ctBellow >= Nrun * facPerc)
+				return d;
+		}
+		return 9999;
+	}
+};
+
 class CORESHARED_EXPORT Oracle
 {
 public:
@@ -79,6 +111,37 @@ public:
 	}
 	QVector<Transaction> revelation(QDate upToDate) override;
 	double avgDaily() const override;
+	template <int Nrun>
+	Simulation<Nrun> simu() {
+		Simulation<Nrun> s;
+		QMap<double, double> dat[Nrun];
+		for (int r = 0; r < Nrun; ++r) {
+			dat[r].clear();
+			double curBal = 0.0;
+			int t = 0;
+			dat[r].insert(t, curBal);
+			resetDate(Transaction::currentDay());
+			const QVector<Transaction>& rev = revelation(Transaction::currentDay().addDays(displayDayFuture));
+			for (const Transaction& tr : rev) {
+				double amnt = tr.amountDbl();
+				curBal += amnt;
+				t = Transaction::currentDay().daysTo(tr.date);
+				dat[r].insert(t, curBal);
+			}
+		}
+		for (double d = 0; d <= displayDayFuture; ++d) {
+			for (int r = 0; r < Nrun; ++r) {
+				auto it = dat[r].upperBound(d + 0.1) - 1;
+				if (it+1 != dat[r].begin() && it != dat[r].end()) {
+					double vi = *it;
+					s.setVal(r, d, vi);
+				}
+				else
+					s.setVal(r, d, 0.0);
+			}
+		}
+		return s;
+	}
 
 	struct Summary
 	{

@@ -73,7 +73,9 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 	double flowDif_2 = MetricDiff<2>::get(MetricSmoother<2>::get(OracleSummary::get(user())))->value(Transaction::currentDay());
 	double flowDif_3 = MetricDiff<3>::get(MetricSmoother<2>::get(OracleSummary::get(user())))->value(Transaction::currentDay());
 
+
 	bestBot->summarize();
+	double t2z = Montecarlo<128>::get(user())->value(Transaction::currentDay());
 	SuperOracle::Summary summary = OracleSummary::get(user())->summaries()[Transaction::currentDay()];
 
 	statObj.insert("oracles", summary.toJson());
@@ -93,6 +95,8 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 	flowObj.insert("dailyNeg", summary.negSum);
 	flowObj.insert("dailyBill", summary.bill);
 	flowObj.insert("dailySalary", summary.salary);
+
+	flowObj.insert("t2z", t2z);
 
 	// flag as kStable/kUp/kDown
 	QString changeFlag = "kStable";

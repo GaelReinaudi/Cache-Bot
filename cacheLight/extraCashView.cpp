@@ -6,7 +6,7 @@
 #include "oracle.h"
 #include "bot.h"
 
-static const int numRevelations = 8;
+static const int numRevelations = 128;
 static int alpha = 32;
 static bool breakDown = false;
 static int IND_GR_REVEL = -1;
@@ -14,9 +14,6 @@ static int IND_GR_BALANCE = -1;
 static int IND_GR_SLOPE = -1;
 static int IND_GR_PERCENTILE = -1;
 static int IND_GR_AVG = -1;
-
-const int displayDayPast = 31;//80;//60;
-const int displayDayFuture = 62;//180;
 
 double smallInc = 1e-3;
 

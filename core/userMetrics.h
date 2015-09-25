@@ -14,7 +14,7 @@ public:
 
 	User* user() const {return m_user; }
 
-private:
+protected:
 	User* m_user = 0;
 };
 
@@ -163,7 +163,6 @@ class OracleSummary : public UserMetric
 protected:
 	OracleSummary(User* pUser)
 		: UserMetric(Name(), pUser)
-		, m_pUser(pUser)
 	{
 	}
 	static QString Name() {
@@ -189,8 +188,8 @@ protected:
 		QDate oldCurrentDate = Transaction::currentDay();
 		// set computation date
 		Transaction::setCurrentDay(date);
-		m_pUser->reComputeBot();
-		SuperOracle::Summary summary = m_pUser->oracle()->computeAvgCashFlow();
+		m_user->reComputeBot();
+		SuperOracle::Summary summary = m_user->oracle()->computeAvgCashFlow();
 		m_summaries[date] = summary;
 
 		isValid = true;
@@ -199,8 +198,47 @@ protected:
 		return summary.flow();
 	}
 private:
-	User* m_pUser = 0;
 	QMap<QDate, SuperOracle::Summary> m_summaries;
+};
+
+template<int Nrun>
+class Montecarlo : public UserMetric
+{
+protected:
+	Montecarlo(User* pUser)
+		: UserMetric(Name(), pUser)
+	{
+	}
+	static QString Name() {
+		return QString("Montecarlo");
+	}
+
+public:
+	static Montecarlo<Nrun>* get(User* pUser) {
+		auto pMet = HistoMetric::get(Name());
+		if (pMet)
+			return reinterpret_cast<Montecarlo<Nrun>*>(pMet);
+		return new Montecarlo<Nrun>(pUser);
+	}
+
+protected:
+	double computeFor(const QDate& date, bool& isValid) override {
+		NOTICE() << "Montecarlo<"<<Nrun<<"> computeFor " << date.toString();
+		QDate oldCurrentDate = Transaction::currentDay();
+		// set computation date
+		Transaction::setCurrentDay(date);
+		m_user->reComputeBot();
+		m_simulations[date] = m_user->oracle()->simu<Nrun>();
+
+		isValid = true;
+		// back to where we were
+		Transaction::setCurrentDay(oldCurrentDate);
+
+		double curBal = user()->balance(Account::Type::Checking);
+		return m_simulations[date].timeToDelta(-curBal);
+	}
+private:
+	QMap<QDate, Simulation<Nrun> > m_simulations;
 };
 
 template <int overLastDays>

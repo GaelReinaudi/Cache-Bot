@@ -13,7 +13,7 @@ QVector<Transaction> SuperOracle::revelation(QDate upToDate)
 	std::stable_sort(ret.begin(), ret.end(), Transaction::earlierThan);
 
 	for (const Transaction& tr : ret) {
-		INFO() << "t =" << Transaction::currentDay().daysTo(tr.date) << "amnt =" << tr.amountDbl()
+		DBG() << "t =" << Transaction::currentDay().daysTo(tr.date) << "amnt =" << tr.amountDbl()
 			  << "    label = " << tr.name;
 	}
 
@@ -42,13 +42,13 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow() const
 			summary.posSum += avg;
 			if (pOr->feature()->isPeriodic())
 				summary.salary += avg;
-			INFO() << ind <<  " +daily " << avg << "      " << pOr->feature()->getName();
+			DBG() << ind <<  " +daily " << avg << "      " << pOr->feature()->getName();
 		}
 		else if (avg < 0) {
 			summary.negSum += avg;
 			if (pOr->feature()->isPeriodic())
 				summary.bill += avg;
-			INFO() << ind <<  " -daily " << avg << "      " << pOr->feature()->getName();
+			DBG() << ind <<  " -daily " << avg << "      " << pOr->feature()->getName();
 		}
 		else {
 			summary.posSum += pOr->avgDailyPos();

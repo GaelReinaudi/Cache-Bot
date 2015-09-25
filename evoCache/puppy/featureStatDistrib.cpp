@@ -88,7 +88,7 @@ QVector<Transaction> OracleStatDistrib::revelation(QDate upToDate)
 			if (randBool(prob)) {
 				Transaction randTr = m_args.m_bundle.randSmart();
 				randTr.date = curDate();
-				INFO() << QString("randTrans(%1) ").arg(prob) << randTr.amountDbl() << " " << randTr.date.toString() << " " << randTr.name;
+				DBG() << QString("randTrans(%1) ").arg(prob) << randTr.amountDbl() << " " << randTr.date.toString() << " " << randTr.name;
 				retVect.append(randTr);
 			}
 		}
