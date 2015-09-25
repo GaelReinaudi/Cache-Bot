@@ -114,7 +114,7 @@ void ExtraCashView::onBotInjected(Bot* pBot)
 	NOTICE() << "ExtraCashView::onBotInjected";
 	m_pbDate = Transaction::currentDay();
 	m_realBalance = m_pExtraCache->user()->balance(Account::Type::Checking);
-	m_pbBalance = m_realBalance;
+	m_pbBalance = BalanceMetric::get(m_pExtraCache->user())->value(m_pbDate);
 
 	ui->costLive50SpinBox->setValue(CostRateMonthPercentileMetric<6, 50>::get(m_pExtraCache->user())->value(m_pbDate));
 	ui->costLive75SpinBox->setValue(CostRateMonthPercentileMetric<6, 75>::get(m_pExtraCache->user())->value(m_pbDate));
@@ -129,19 +129,6 @@ void ExtraCashView::onBotInjected(Bot* pBot)
 	double t2z20 = Montecarlo<128>::get(m_pExtraCache->user())->t2zPerc(Transaction::currentDay(), 0.20);
 	ui->spinT2z20->setValue(t2z20);
 
-	// transaction at the starting date of the playback
-	auto& real = m_pExtraCache->user()->allTrans();
-	qDebug() << "date" << m_pbDate;
-
-	for (int i = 0; i < real.count(); ++i) {
-		// finds the index of the last transaction within the playback date
-		if (real.trans(i).date > m_pbDate) {
-			// incrementally finds out the balance at the playback date
-			if (!real.trans(i).isInternal()) {
-				m_pbBalance -= real.trans(i).amountDbl();
-			}
-		}
-	}
 	NOTICE() << "initial pb balance"<< m_pbBalance << " at" << m_pbDate.toString();
 
 	updateChart();

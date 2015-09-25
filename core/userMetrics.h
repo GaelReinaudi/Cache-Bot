@@ -22,13 +22,11 @@ template <int PastMonth, int Percentile>
 class CostRateMonthPercentileMetric : public UserMetric
 {
 protected:
-	CostRateMonthPercentileMetric(User* pUser)
-		: UserMetric(Name(), pUser)
+	CostRateMonthPercentileMetric(User* pUser) : UserMetric(Name(), pUser)
 	{
 		Q_ASSERT(Percentile >= 0 && Percentile <= 100);
 	}
-	CostRateMonthPercentileMetric(const QString& name, User* pUser)
-		: UserMetric(name, pUser)
+	CostRateMonthPercentileMetric(const QString& name, User* pUser) : UserMetric(name, pUser)
 	{
 		Q_ASSERT(Percentile >= 0 && Percentile <= 100);
 	}
@@ -90,8 +88,7 @@ template <int PastMonth, int Percentile>
 class MakeRateMonthPercentileMetric : public CostRateMonthPercentileMetric<PastMonth, Percentile>
 {
 protected:
-	MakeRateMonthPercentileMetric(User* pUser)
-		: CostRateMonthPercentileMetric<PastMonth, Percentile>(Name(), pUser)
+	MakeRateMonthPercentileMetric(User* pUser) : CostRateMonthPercentileMetric<PastMonth, Percentile>(Name(), pUser)
 	{
 	}
 
@@ -117,15 +114,11 @@ template <int InPercentile, int OutPercentile>
 class Flow01 : public UserMetric
 {
 protected:
-	Flow01(User* pUser)
-		: UserMetric(Name(), pUser)
+	Flow01(User* pUser) : UserMetric(Name(), pUser)
 	{
 		inMet =  MetricSmoother<7>::get(MakeRateMonthPercentileMetric<2, InPercentile>::get(user()));
 		outMet = MetricSmoother<7>::get(CostRateMonthPercentileMetric<2, OutPercentile>::get(user()));
 	}
-//	Flow01(const QString& name, User* pUser)
-//		: UserMetric(name, pUser)
-//	{ }
 	static QString Name() {
 		return QString("Flow01InP%1OutP%2").arg(InPercentile).arg(OutPercentile);
 	}
@@ -158,11 +151,49 @@ private:
 	HistoMetric* outMet;
 };
 
+class BalanceMetric : public UserMetric
+{
+protected:
+	BalanceMetric(User* pUser) : UserMetric(Name(), pUser)
+	{
+	}
+	static QString Name() {
+		return QString("BalanceMetric");
+	}
+
+public:
+	static BalanceMetric* get(User* pUser) {
+		auto pMet = HistoMetric::get(Name());
+		if (pMet)
+			return reinterpret_cast<BalanceMetric*>(pMet);
+		return new BalanceMetric(pUser);
+	}
+
+protected:
+	double computeFor(const QDate& date, bool& isValid) override {
+		double balance = user()->balance(Account::Type::Checking);
+		isValid = false;
+		// transaction at the starting date of the playback
+		auto& real = user()->allTrans();
+		for (int i = 0; i < real.count(); ++i) {
+			// finds the index of the last transaction within the playback date
+			if (real.trans(i).date > date) {
+				// incrementally finds out the balance at the playback date
+				if (!real.trans(i).isInternal()) {
+					balance -= real.trans(i).amountDbl();
+				}
+			}
+			else // if at least one transaction before that date
+				isValid = true;
+		}
+		return balance;
+	}
+};
+
 class OracleSummary : public UserMetric
 {
 protected:
-	OracleSummary(User* pUser)
-		: UserMetric(Name(), pUser)
+	OracleSummary(User* pUser) : UserMetric(Name(), pUser)
 	{
 	}
 	static QString Name() {
@@ -188,8 +219,8 @@ protected:
 		QDate oldCurrentDate = Transaction::currentDay();
 		// set computation date
 		Transaction::setCurrentDay(date);
-		m_user->reComputeBot();
-		SuperOracle::Summary summary = m_user->oracle()->computeAvgCashFlow();
+		user()->reComputeBot();
+		SuperOracle::Summary summary = user()->oracle()->computeAvgCashFlow();
 		m_summaries[date] = summary;
 
 		isValid = true;
@@ -205,8 +236,7 @@ template<int Nrun>
 class Montecarlo : public UserMetric
 {
 protected:
-	Montecarlo(User* pUser)
-		: UserMetric(Name(), pUser)
+	Montecarlo(User* pUser) : UserMetric(Name(), pUser)
 	{
 	}
 	static QString Name() {
@@ -221,7 +251,7 @@ public:
 		return new Montecarlo<Nrun>(pUser);
 	}
 	double t2zPerc(const QDate &date, double facPerc) {
-		double curBal = user()->balance(Account::Type::Checking);
+		double curBal = BalanceMetric::get(user())->value(date);
 		return m_simulations[date].timeToDelta(-curBal, facPerc);
 	}
 
@@ -231,14 +261,14 @@ protected:
 		QDate oldCurrentDate = Transaction::currentDay();
 		// set computation date
 		Transaction::setCurrentDay(date);
-		m_user->reComputeBot();
-		m_simulations[date] = m_user->oracle()->simu<Nrun>();
+		user()->reComputeBot();
+		m_simulations[date] = user()->oracle()->template simu<Nrun>();
 
 		isValid = true;
 		// back to where we were
 		Transaction::setCurrentDay(oldCurrentDate);
 
-		double curBal = user()->balance(Account::Type::Checking);
+		double curBal = BalanceMetric::get(user())->value(date);
 		return m_simulations[date].timeToDelta(-curBal);
 	}
 private:
