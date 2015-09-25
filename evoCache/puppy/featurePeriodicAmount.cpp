@@ -40,7 +40,7 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 
 	m_localStaticArgs.m_consecMonth = 0;
 	m_localStaticArgs.m_consecMonthBeforeMissed = 0;
-	m_localStaticArgs.m_consecMissed = 0;
+	m_localStaticArgs.m_consecMissed = 999;
 	if (m_localStaticArgs.m_dayOfMonth < -13 || m_localStaticArgs.m_dayOfMonth > 31)
 		return 0.0;
 	for (int i = 0; i < allTrans.count(); ++i) {
@@ -225,14 +225,14 @@ QVector<Transaction> OracleOneDayOfMonth::revelation(QDate upToDate)
 	QDate iniDate = Transaction::currentDay().addDays(-SLACK_FOR_LATE_TRANS);
 	static QVector<Transaction> targetTrans;
 	targetTrans.clear();
-	if (m_args.m_consecMissed <= 0)
+	if (FeaturePeriodicAmount::computeProba(m_args) > 0.0)
 	{
 		targetTrans = FeatureMonthlyAmount::BlankTransactionsForDayOfMonth(iniDate, upToDate, m_args.m_dayOfMonth, lambdaTrans);
 		if (m_args.m_dayOfMonth2) {
 			targetTrans += FeatureMonthlyAmount::BlankTransactionsForDayOfMonth(iniDate, upToDate, m_args.m_dayOfMonth2, lambdaTrans);
 		}
 		qSort(targetTrans.begin(), targetTrans.end(), Transaction::earlierThan);
-		// if we have the first transaction, don't predict ityy
+		// if we have the first transaction, don't predict it
 		if (m_args.m_consecMissed < 0) {
 			targetTrans.pop_front();
 		}
@@ -243,7 +243,7 @@ QVector<Transaction> OracleOneDayOfMonth::revelation(QDate upToDate)
 double OracleOneDayOfMonth::avgDaily() const
 {
 	double avgMonth = 0.0;
-	if (m_args.m_consecMissed <= 0)
+	if (FeaturePeriodicAmount::computeProba(m_args) > 0.0)
 	{
 		avgMonth = m_args.m_bundle.avgSmart();
 		if (m_args.m_dayOfMonth2) {

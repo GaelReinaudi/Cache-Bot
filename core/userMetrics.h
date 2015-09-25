@@ -171,7 +171,7 @@ public:
 
 protected:
 	double computeFor(const QDate& date, bool& isValid) override {
-		double balance = user()->balance(Account::Type::Checking);
+		double bal = user()->balance(Account::Type::Checking);
 		isValid = false;
 		// transaction at the starting date of the playback
 		auto& real = user()->allTrans();
@@ -180,13 +180,13 @@ protected:
 			if (real.trans(i).date > date) {
 				// incrementally finds out the balance at the playback date
 				if (!real.trans(i).isInternal()) {
-					balance -= real.trans(i).amountDbl();
+					bal -= real.trans(i).amountDbl();
 				}
 			}
 			else // if at least one transaction before that date
 				isValid = true;
 		}
-		return balance;
+		return bal;
 	}
 };
 

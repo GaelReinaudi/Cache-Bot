@@ -43,7 +43,7 @@ private:
 		// characteristics
 		int m_consecMonthBeforeMissed = 0;
 		int m_consecMonth = 0;
-		int m_consecMissed = 0;
+		int m_consecMissed = 999;
 		double m_fitRerun = 0;
 	} m_args;
 	QString description() const {
@@ -76,6 +76,17 @@ public:
 
 	virtual int approxSpacingPayment() const = 0;
 	int isPeriodic() const override { return approxSpacingPayment(); }
+	static double computeProba(OracleOneDayOfMonth::Args args) {
+		if (args.m_consecMissed > 0)
+			return 0.0;
+		// if one that seems new but none before
+		if (args.m_consecMonthBeforeMissed <= -args.m_consecMissed)
+			return 0.0;
+		double proba = 1.0;
+		proba *= qMax(1, args.m_consecMonthBeforeMissed);
+		proba /= 4 + 2 * args.m_consecMissed;
+		return proba;
+	}
 };
 
 class FeatureMonthlyAmount : public FeaturePeriodicAmount
@@ -120,10 +131,7 @@ protected:
 	}
 
 	double maxDailyProbability() const override {
-		double proba = 1.0;
-		proba *= qMax(1, m_localStaticArgs.m_consecMonthBeforeMissed);
-		proba /= 4 + 2 * m_localStaticArgs.m_consecMissed;
-		return proba;
+		return FeaturePeriodicAmount::computeProba(m_localStaticArgs);
 	}
 
 	virtual QVector<Transaction> targetTransactions(QDate iniDate, QDate lastDate);
