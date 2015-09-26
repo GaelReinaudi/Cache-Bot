@@ -44,9 +44,10 @@ void ACustomPlot::makeGraphs(HashedBundles& hashBundles) {
 			m_hashGraphs[h].append(pGraph);
 			pGraph->setLineStyle(QCPGraph::lsNone);
 			pGraph->setAdaptiveSampling(false);
-			int r = h % 225;
-			int g = (h >> 1) % 225;
-			int b = (h >> 2) % 225;
+			qint64 posH = qAbs(h);
+			int r = posH % 225;
+			int g = (posH >> 1) % 225;
+			int b = (posH >> 2) % 225;
 			pGraph->setPen(QPen(QColor(r,g,b,255)));
 			switch (1 << iAccType) {
 			case Account::Type::Checking:
@@ -101,7 +102,7 @@ void ACustomPlot::loadCompressedAmount(User* pUser)
 	for (int i = 0; i < allTrans.count(); ++i) {
 		const Transaction& tr = allTrans.trans(i);
 		double t = tr.time_t();
-		uint h = tr.nameHash.hash();
+		qint64 h = tr.nameHash.hash();
 		if (!tr.isInternal())
 			m_integral += tr.amountDbl();
 		graph(0)->addData(t, kindaLog(m_integral));
@@ -191,8 +192,8 @@ void AHashPlot::loadCompressedAmount(User *pUser)
 	auto& allTrans = pUser->allTrans();
 	for (int i = 0; i < allTrans.count(); ++i) {
 		const Transaction& tr = allTrans.trans(i);
-		uint h = tr.nameHash.hash();
-		uint d = tr.nameHash.manLength();
+		qint64 h = tr.nameHash.hash();
+		qint64 d = tr.nameHash.manLength();
 		if (!tr.noUse()) {
 			graph(0)->addData(tr.kla(), 0.0);
 			// code for featureAllOthers

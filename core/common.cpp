@@ -81,8 +81,8 @@ qint64 proximityHashString2(const QString &str) {
 		int n = c.toUpper().toLatin1() * 1;
 		// getting the index from symbol '!' == 21
 		n -= QChar('!').toLatin1();
-		if (n > 0 && n < 64) {
-			ret |= quint64(1) << n;
+		if (n > 0 && n < 63) {
+			ret |= qint64(1) << n;
 		}
 	}
 	return ret;

@@ -32,7 +32,7 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 
 	double totalOneOverDistClosest = 0.0;
 	double totalOneOverDistOthers = 0.0;
-	quint64 localDist = 18446744073709551615ULL;
+	qint64 localDist = Q_INT64_C(9223372036854775807);
 	const Transaction* localTrans = 0;
 	// the current target to compare to
 	Transaction* iTarg = &m_targetTrans[0];
@@ -45,7 +45,7 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 		return 0.0;
 	for (int i = 0; i < allTrans.count(); ++i) {
 		const Transaction& trans = allTrans.trans(i);
-		quint64 dist = iTarg->dist(trans);
+		qint64 dist = iTarg->dist(trans);
 		if (trans.noUse()) {
 			dist = 1<<20;
 		}
@@ -101,7 +101,7 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 			if (&trans != localTrans)
 				--i;
 			localTrans = 0;
-			localDist = quint64(-1);
+			localDist = Q_INT64_C(9223372036854775807);
 		}
 		totalOneOverDistOthers += factOld * 1.0 / (1 + dist);
 	}

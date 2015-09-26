@@ -176,8 +176,8 @@ void EvolutionSpinner::runEvolution() {
 			lPopulation.push_back(bestbundltree.at(i % bestbundltree.size()));
 		}
 		const auto superBestbundltree = superBestPreEvoTrees.values();
-		for (unsigned int j = 0; j <= NthReAddSuper; ++j) {
-			for(unsigned int i = j * superBestbundltree.size() / NthReAddSuper; i < superBestbundltree.size(); ++i) {
+		for (int j = 0; j <= NthReAddSuper; ++j) {
+			for(int i = j * superBestbundltree.size() / NthReAddSuper; i < superBestbundltree.size(); ++i) {
 				lPopulation.push_back(superBestbundltree.at(superBestbundltree.size()-1-i));
 			}
 		}
@@ -206,7 +206,7 @@ void EvolutionSpinner::runEvolution() {
 			veryBestTree.mValid = false;
 			if (m_context->currentGeneration % 32 == 0) {
 				lPopulation.push_back(veryBestTree);
-				for(unsigned int i = 0; i < superBestbundltree.size(); ++i) {
+				for(int i = 0; i < superBestbundltree.size(); ++i) {
 					lPopulation.push_back(superBestbundltree.at(i));
 //					NOTICE() << "-----------------" << i;
 //					summarize(lPopulation.back());

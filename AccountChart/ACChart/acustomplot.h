@@ -11,7 +11,7 @@ public:
 	ACustomPlot(QWidget *parent = 0);
 
 	virtual void loadCompressedAmount(User *pUser);
-	QList<uint> hashKeys() {
+	QList<qint64> hashKeys() {
 		return m_hashGraphs.keys();
 	}
 
@@ -28,7 +28,7 @@ public slots:
 
 protected:
 	double m_integral = 0.0;
-	QMap<uint, QList<QCPGraph*> > m_hashGraphs;
+	QMap<qint64, QList<QCPGraph*> > m_hashGraphs;
 	QStringList m_labels;
 	HashedBundles m_hashBund;
 };

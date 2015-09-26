@@ -13,6 +13,7 @@ void FeatureStatDistrib::getArgs(Puppy::Context &ioContext) {
 
 double FeatureStatDistrib::apply(TransactionBundle& allTrans, bool doLog)
 {
+	Q_UNUSED(doLog);
 	DBG() << "FeatureStatDistrib::apply";
 	// transaction to compare the hash with
 	Transaction modelTrans;
@@ -28,7 +29,7 @@ double FeatureStatDistrib::apply(TransactionBundle& allTrans, bool doLog)
 			continue;
 		if (tr.dimensionOfVoid)
 			continue;
-		quint64 dist = tr.distanceWeighted<1024*1024*1024, 1024*1024*1024, maxHashDist>(modelTrans);
+		qint64 dist = tr.distanceWeighted<1024*1024*1024, 1024*1024*1024, maxHashDist>(modelTrans);
 		if (passFilter(dist, tr)) {
 			m_localStaticArgs.m_bundle.append(&tr);
 		}

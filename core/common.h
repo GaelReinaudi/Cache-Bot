@@ -101,7 +101,7 @@ template<int Dim, typename U> qint64 FiniteVector<Dim, U>::MaxManLengthEver = 0;
 class NameHashVector1 : public FiniteVector<1, int>
 {
 public:
-	static quint64 fromString(const QString& str) {
+	static qint64 fromString(const QString& str) {
 		qint64 h = 0;
 		for (const QChar& c : str) {
 			int n = c.toUpper().toLatin1() * 1;
@@ -131,11 +131,11 @@ public:
 
 };
 
-class NameHashVector2 : public FiniteVector<1, quint64>
+class NameHashVector2 : public FiniteVector<1, qint64>
 {
 public:
-	static quint64 fromString(const QString& str) {
-		quint64 h = 0;
+	static qint64 fromString(const QString& str, double kla) {
+		qint64 h = 0;
 		for (const QChar& c : str) {
 			int n = c.toUpper().toLatin1();
 			if (c.isDigit())
@@ -146,22 +146,24 @@ public:
 				h |=  (1 << (n));
 			}
 		}
+		if (kla >= 0)
+			return h;
 		return h;
 	}
 
-	void setFromString(const QString& str) {
-		coord[0] = fromString(str);
+	void setFromString(const QString& str, double kla) {
+		coord[0] = fromString(str, kla);
 	}
 
-	void setFromHash(quint64 h) {
+	void setFromHash(qint64 h) {
 		coord[0] = h;
 	}
 
 	qint64 dist(const NameHashVector2& other) const {
-		quint64 h1 = coord[0];
-		quint64 h2 = other.coord[0];
+		qint64 h1 = qAbs(coord[0]);
+		qint64 h2 = qAbs(other.coord[0]);
 		// tries to make differences of short labels look more important
-		quint64 allBits = numBits(h1 | h2);
+		int allBits = numBits(h1 | h2);
 		if (allBits <= 6)
 			return numBits(h1 ^ h2) * (7 - allBits);
 		// the number of bits that are different
@@ -177,8 +179,8 @@ public:
 	}
 
 private:
-	int numBits(quint64 n) const {
-		quint64 x = n;
+	int numBits(qint64 n) const {
+		uint64_t x = qAbs(n);
 		const uint64_t m1  = 0x5555555555555555; //binary: 0101...
 		const uint64_t m2  = 0x3333333333333333; //binary: 00110011..
 		const uint64_t m4  = 0x0f0f0f0f0f0f0f0f; //binary:  4 zeros,  4 ones ...

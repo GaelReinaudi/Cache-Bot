@@ -25,8 +25,8 @@ void Transaction::read(const QJsonObject &json) {
 	name.remove("Online").remove("Banking").remove("Confirmation");
 	name.remove("Image");
 	name = name.trimmed();
-	nameHash.setFromString(name);
 	setAmount(-json["amount"].toDouble(ok));
+	nameHash.setFromString(name, m_kla);
 	date = QDate::fromString(json["date"].toString().left(10), "yyyy-MM-dd");
 	QJsonArray npcArrayOld = json["category"].toArray();
 	for (int npcIndex = 0; npcIndex < npcArrayOld.size(); ++npcIndex) {
@@ -74,7 +74,8 @@ Transaction* StaticTransactionArray::appendNew(QJsonObject jsonTrans, Account *p
 	name.remove("Image");
 	name = name.trimmed();
 	QDate date = QDate::fromString(jsonTrans["date"].toString().left(10), "yyyy-MM-dd");
-	qint64 hash = NameHashVector::fromString(name);
+	double kla = -jsonTrans["amount"].toDouble();
+	qint64 hash = NameHashVector::fromString(name, kla);
 	for (const QString& nono : pInAcc->excludeNameTransContain()) {
 		if (name.contains(nono, Qt::CaseInsensitive)) {
 			WARN() << "not Adding transaction because it looks like an internal transfer based on name containing"

@@ -30,7 +30,7 @@ public:
 	{
 	}
 protected:
-	bool passFilter(quint64 dist, const Transaction& trans) const override {
+	bool passFilter(qint64 dist, const Transaction& trans) const override {
 		Q_UNUSED(dist);
 		if (m_localStaticArgs.m_kla < 0)
 			return trans.kla() <= m_localStaticArgs.m_kla + 0.2

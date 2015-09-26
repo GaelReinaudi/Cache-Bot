@@ -35,7 +35,7 @@ public:
 		WARN() << "creating instance FeatureLabelDistrib";
 	}
 protected:
-	bool passFilter(quint64 dist, const Transaction& trans) const override {
+	bool passFilter(qint64 dist, const Transaction& trans) const override {
 //		WARN() << "effect " << double(trans.effect128);
 		return dist < Transaction::LIMIT_DIST_TRANS
 				&& trans.kla() < 0

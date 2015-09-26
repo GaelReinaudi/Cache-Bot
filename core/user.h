@@ -41,7 +41,7 @@ public:
 			return *m_hashBundles[filterHash];
 		return m_allTransBundle;
 	}
-	QMap<uint, TransactionBundle*>& hashBundles() {
+	QMap<qint64, TransactionBundle*>& hashBundles() {
 		return m_hashBundles;
 	}
 	TransactionBundle& allTrans() {

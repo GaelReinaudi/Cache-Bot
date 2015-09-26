@@ -72,7 +72,7 @@ protected:
 		return pNewOr;
 	}
 
-	virtual bool passFilter(quint64 dist, const Transaction& trans) const = 0;
+	virtual bool passFilter(qint64 dist, const Transaction& trans) const = 0;
 	virtual int minTransactionForBundle() const = 0;
 	void computeNextDayProba();
 	double maxDailyProbability() const override {

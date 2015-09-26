@@ -4,6 +4,7 @@ static const int THRESHOLD_EFFECT128 = 30;
 
 double FeatureOutlier::apply(TransactionBundle& allTrans, bool doLog)
 {
+	Q_UNUSED(doLog);
 	m_localStaticArgs.m_bundle.clear();
 	m_localStaticArgs.m_effect = 0;
 	m_localStaticArgs.m_amount = 0;
