@@ -5,18 +5,18 @@
 
 const double THRESHOLD_PROBA_BILL = 0.1;
 
-#define POP_SIZE_DEFAULT 15//75//0
+#define POP_SIZE_DEFAULT 100//75//0
 #define NBR_GEN_DEFAULT 30
 #define NBR_PART_TOURNAMENT_DEFAULT 3
 #define MAX_DEPTH_DEFAULT 6
 #define MIN_INIT_DEPTH_DEFAULT 3
 #define MAX_INIT_DEPTH_DEFAULT 5
 #define INIT_GROW_PROBA_DEFAULT 0.15f
-#define CROSSOVER_PROBA_DEFAULT 0.8f
+#define CROSSOVER_PROBA_DEFAULT 0.18f
 #define CROSSOVER_DISTRIB_PROBA_DEFAULT 0.9f
-#define MUT_STD_PROBA_DEFAULT 0.5f
+#define MUT_STD_PROBA_DEFAULT 0.05f
 #define MUT_MAX_REGEN_DEPTH_DEFAULT 5
-#define MUT_SWAP_PROBA_DEFAULT 0.8535f
+#define MUT_SWAP_PROBA_DEFAULT 0.05f
 #define MUT_SWAP_DISTRIB_PROBA_DEFAULT 0.5f
 
 using namespace Puppy;
@@ -92,7 +92,7 @@ void EvolutionSpinner::runEvolution() {
 		// Evolve population for the given number of generations
 		INFO() << "Starting evolution " << newBestFitness;
 
-		for(m_context->currentGeneration = 1; m_context->currentGeneration <=lNbrGen; ++m_context->currentGeneration ) {
+		for(m_context->currentGeneration = 1; m_context->currentGeneration <= 2*lNbrGen; ++m_context->currentGeneration ) {
 //			while(!m_doSpin)  {
 //				QThread::msleep(100);
 //			}
@@ -157,12 +157,12 @@ void EvolutionSpinner::runEvolution() {
 	}
 
 	// run again with full features
+	m_context->filterHashIndex = -1;
 	if (Transaction::onlyLoadHashes.isEmpty())
 		m_context->lim_NUM_FEATURE = BotContext::MAX_NUM_FEATURES;
 	else
 		m_context->lim_NUM_FEATURE = qMin(Transaction::onlyLoadHashes.size(), int(BotContext::MAX_NUM_FEATURES));
 
-	m_context->filterHashIndex = -1;
 	Tree veryBestTree;
 	// Initialize population.
 	std::vector<Tree> lPopulation(0);
@@ -181,6 +181,7 @@ void EvolutionSpinner::runEvolution() {
 				lPopulation.push_back(superBestbundltree.at(superBestbundltree.size()-1-i));
 			}
 		}
+		makeSuperTreeMixtures(lPopulation, *m_context);
 		evaluateSymbReg(lPopulation, *m_context);
 		calculateStats(lPopulation, 0);
 
@@ -196,9 +197,10 @@ void EvolutionSpinner::runEvolution() {
 			auto result = std::minmax_element(lPopulation.begin(), lPopulation.end());
 			Tree bestTree = lPopulation[result.second - lPopulation.begin()];
 
-			if (bestTree.mFitness > veryBestTree.mFitness)
+			if (bestTree.mFitness > veryBestTree.mFitness) {
 				veryBestTree = bestTree;
-			finalBotObject = summarize(bestTree);
+				finalBotObject = summarize(veryBestTree);
+			}
 
 			if (afterReinjection > NthReAddSuper)
 				applySelectionTournament(lPopulation, *m_context, lNbrPartTournament);
@@ -234,6 +236,23 @@ void EvolutionSpinner::runEvolution() {
 	finalBotObject["_git"] = QString(GIT_VERSION);
 	qDebug() << "Exiting evolution. Features with positive fitness:" << finalBotObject["features"].toArray().count();
 	emit finishedEvolution(finalBotObject);
+}
+
+void EvolutionSpinner::makeSuperTreeMixtures(std::vector<Tree>& ioPopulation,
+											   Context& ioContext)
+{
+	for(unsigned int i=0; i < ioPopulation.size(); ++i) {
+		Tree& treeToComplete = ioPopulation[i];
+		for (int f = treeToComplete.lim_NUM_FEATURE; f < ioContext.lim_NUM_FEATURE; ++f) {
+			Tree copyRandTreeLimited = ioPopulation[qrand() % ioPopulation.size()];
+			int limitedIndex = qrand() % copyRandTreeLimited.lim_NUM_FEATURE;
+			std::vector<unsigned int> lStack1;
+			treeToComplete.setStackToNode(treeToComplete.getIndexOfFeature(f), lStack1);
+			std::vector<unsigned int> lStack2;
+			copyRandTreeLimited.setStackToNode(copyRandTreeLimited.getIndexOfFeature(limitedIndex), lStack1);
+			Puppy::exchangeSubTrees(treeToComplete, f, lStack1, copyRandTreeLimited, limitedIndex, lStack2);
+		}
+	}
 }
 
 double EvolutionSpinner::evaluateSymbReg(std::vector<Tree>& ioPopulation,
