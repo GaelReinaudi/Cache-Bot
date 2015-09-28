@@ -40,6 +40,6 @@ void CORESHARED_EXPORT logger::setupSpdLog(QString logFileName)
 	}
 	catch (const spdlog::spdlog_ex& ex)
 	{
-		std::cout << "Log failed: " << ex.what() << endl;
+		std::cout << "Log failed: " << ex.what() << std::endl;
 	}
 }

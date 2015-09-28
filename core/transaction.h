@@ -85,7 +85,7 @@ public:
 		d |= (1<<20) * qint64((amount() > 0 && other.amount() < 0) || (amount() < 0 && other.amount() > 0));
 		if(log) {
 			DBG() << "dist " << d
-				<< QString(" = %1 x day(%2)").arg(double(LIMIT_DIST_TRANS)/mD).arg(absInt(jDay() - other.jDay()))
+				<< QString(" = %1 x day(%2)").arg(double(LIMIT_DIST_TRANS)/mD).arg(qAbs(jDay() - other.jDay()))
 				<< QString(" = %1 x kla(%2)").arg(double(LIMIT_DIST_TRANS)/mA).arg(qAbs(kla() - other.kla()))
 				<< QString(" = %1 x hash(%2)").arg(double(LIMIT_DIST_TRANS)/mH).arg(nameHash.dist(other.nameHash));
 		}
