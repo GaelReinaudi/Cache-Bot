@@ -139,6 +139,7 @@ public:
 	// 0.0 to 1.0 while generation is being evaluated
 	double generationProgress = 0.0;
 	bool isPostTreatment = false;
+	int lim_NUM_FEATURE = 1;
 };
 
 }

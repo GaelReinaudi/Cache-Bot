@@ -102,7 +102,7 @@ qint64 NameHashVector2::fromString(const QString &str, double kla) {
 	}
 	if (kla >= 0)
 		return h;
-	return h ^ Q_INT64_C(30);
+	return h ^ (Q_INT64_C(1) << 29);
 }
 
 qint64 NameHashVector2::dist(const NameHashVector2 &other) const {

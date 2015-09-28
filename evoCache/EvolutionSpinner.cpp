@@ -158,9 +158,9 @@ void EvolutionSpinner::runEvolution() {
 
 	// run again with full features
 	if (Transaction::onlyLoadHashes.isEmpty())
-		BotContext::LIMIT_NUM_FEATURES = BotContext::MAX_NUM_FEATURES;
+		m_context->lim_NUM_FEATURE = BotContext::MAX_NUM_FEATURES;
 	else
-		BotContext::LIMIT_NUM_FEATURES = qMin(Transaction::onlyLoadHashes.size(), int(BotContext::MAX_NUM_FEATURES));
+		m_context->lim_NUM_FEATURE = qMin(Transaction::onlyLoadHashes.size(), int(BotContext::MAX_NUM_FEATURES));
 
 	m_context->filterHashIndex = -1;
 	Tree veryBestTree;

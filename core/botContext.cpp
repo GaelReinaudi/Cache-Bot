@@ -38,6 +38,12 @@ BotContext::BotContext(User *pUser)
 	insert(new Puppy::TokenT<double>("4", 4.0));
 	insert(new Puppy::TokenT<double>("5", 5.0));
 	insert(new Puppy::TokenT<double>("10", 10.0));
+	insert(new Puppy::TokenT<double>("-1", -1.0));
+	insert(new Puppy::TokenT<double>("-2", -2.0));
+	insert(new Puppy::TokenT<double>("-3", -3.0));
+	insert(new Puppy::TokenT<double>("-4", -4.0));
+	insert(new Puppy::TokenT<double>("-5", -5.0));
+	insert(new Puppy::TokenT<double>("-10", -10.0));
 	for (int i = 0; i < pUser->hashBundles().count(); ++i) {
 		int h = pUser->hashBundles().keys()[i];
 		if (pUser->hashBundles()[h]->count() > 1)
@@ -51,8 +57,7 @@ BotContext::BotContext(User *pUser)
 	insert(new FeatureBiWeeklyAmount());
 	insert(new FeatureMonthlyAmount());
 //	insert(new FeatureLabelDistrib());
-	insert(new FeatureOutlier());
-//	insert(new FeatureAllOthers());
+//	insert(new FeatureOutlier());
 	insert(new FeaturePriceWindow());
 }
 

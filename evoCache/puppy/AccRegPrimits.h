@@ -196,7 +196,7 @@ public:
 		double& lResult = *(double*)outDatum;
 		lResult = 0.0;
 		double lArgi = 0.0;
-		for(unsigned int i = 0; i < BotContext::LIMIT_NUM_FEATURES; ++i) {
+		for(unsigned int i = 0; i < ioContext.lim_NUM_FEATURE; ++i) {
 			getArgument(i, &lArgi, ioContext);
 			lResult += lArgi;
 		}
