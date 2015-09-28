@@ -37,7 +37,7 @@ public:
 
 public:
 	TransactionBundle& transBundle(int filterHash) {
-		if (filterHash >= 0)
+		if (filterHash != -1)
 			return *m_hashBundles[filterHash];
 		return m_allTransBundle;
 	}
