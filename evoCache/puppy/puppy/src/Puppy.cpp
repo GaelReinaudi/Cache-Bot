@@ -210,7 +210,7 @@ bool Puppy::mateTrees(Puppy::Tree& ioTree1,
 		bool lNode1IsTerminal = true;
 		if(ioTree1.size() > 1)
 			lNode1IsTerminal = (ioContext.mRandom.rollUniform() >= inDistribProba);
-		unsigned int limitIndex1 = ioTree1.getIndexOfFeature(ioTree1.lim_NUM_FEATURE) - 1;
+		unsigned int limitIndex1 = ioTree1.getIndexOfFeature(ioContext.lim_NUM_FEATURE) - 1;
 		unsigned int lChoosenNode1 = ioContext.mRandom.rollInteger(DEPTH_OF_FEATURES, limitIndex1);
 		while(lChoosenNode1 == 0 || (ioTree1[lChoosenNode1].mPrimitive->getNumberArguments() == 0) != lNode1IsTerminal) {
 			lChoosenNode1 = ioContext.mRandom.rollInteger(DEPTH_OF_FEATURES, limitIndex1);
@@ -219,7 +219,7 @@ bool Puppy::mateTrees(Puppy::Tree& ioTree1,
 		bool lNode2IsTerminal = true;
 		if(ioTree2.size() > 1)
 			lNode2IsTerminal = (ioContext.mRandom.rollUniform() >= inDistribProba);
-		unsigned int limitIndex2 = ioTree2.getIndexOfFeature(ioTree2.lim_NUM_FEATURE) - 1;
+		unsigned int limitIndex2 = ioTree2.getIndexOfFeature(ioContext.lim_NUM_FEATURE) - 1;
 		unsigned int lChoosenNode2 = ioContext.mRandom.rollInteger(DEPTH_OF_FEATURES, limitIndex2);
 		while(lChoosenNode2 == 0 || (ioTree2[lChoosenNode2].mPrimitive->getNumberArguments() == 0) != lNode2IsTerminal) {
 			lChoosenNode2 = ioContext.mRandom.rollInteger(DEPTH_OF_FEATURES, limitIndex2);
@@ -487,7 +487,7 @@ void Puppy::mutateStandard(Puppy::Tree& ioTree,
 	//unsigned int lMutIndex = ioContext.mRandom(ioTree.size());
 	// mutate after the root.
 	// and up to lim_NUM_FEATURE
-	unsigned int limitIndex = ioTree.getIndexOfFeature(ioTree.lim_NUM_FEATURE) - 1;
+	unsigned int limitIndex = ioTree.getIndexOfFeature(ioContext.lim_NUM_FEATURE) - 1;
 	unsigned int lMutIndex = ioContext.mRandom.rollInteger(DEPTH_OF_FEATURES, limitIndex);
 	Tree lNewTree;
 	lNewTree.insert(lNewTree.end(), ioTree.begin(), ioTree.begin()+lMutIndex);
@@ -553,7 +553,7 @@ void Puppy::mutateSwap(Puppy::Tree& ioTree,
 					   float inDistribProba)
 {
 	assert(ioTree.size() > 0);
-	unsigned int limitIndex = ioTree.getIndexOfFeature(ioTree.lim_NUM_FEATURE) - 1;
+	unsigned int limitIndex = ioTree.getIndexOfFeature(ioContext.lim_NUM_FEATURE) - 1;
 	unsigned int lMutIndex = ioContext.mRandom.rollInteger(DEPTH_OF_FEATURES, limitIndex);
 	if(ioTree.size() > 1) {
 		bool lType = (ioContext.mRandom.rollUniform() < inDistribProba);
