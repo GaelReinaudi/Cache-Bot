@@ -5,7 +5,7 @@
 
 const double THRESHOLD_PROBA_BILL = 0.1;
 
-#define POP_SIZE_DEFAULT 100//75//0
+#define POP_SIZE_DEFAULT 32//75//0
 #define NBR_GEN_DEFAULT 30
 #define NBR_PART_TOURNAMENT_DEFAULT 3
 #define MAX_DEPTH_DEFAULT 6
@@ -14,9 +14,9 @@ const double THRESHOLD_PROBA_BILL = 0.1;
 #define INIT_GROW_PROBA_DEFAULT 0.15f
 #define CROSSOVER_PROBA_DEFAULT 0.18f
 #define CROSSOVER_DISTRIB_PROBA_DEFAULT 0.9f
-#define MUT_STD_PROBA_DEFAULT 0.05f
+#define MUT_STD_PROBA_DEFAULT 0.5f
 #define MUT_MAX_REGEN_DEPTH_DEFAULT 5
-#define MUT_SWAP_PROBA_DEFAULT 0.05f
+#define MUT_SWAP_PROBA_DEFAULT 0.5f
 #define MUT_SWAP_DISTRIB_PROBA_DEFAULT 0.5f
 
 using namespace Puppy;
@@ -169,7 +169,7 @@ void EvolutionSpinner::runEvolution() {
 	initializePopulation(lPopulation, *m_context, lInitGrowProba, lMinInitDepth, lMaxInitDepth);
 	NOTICE() << "bestPreEvoTrees.count " << bestPreEvoTrees.count();
 	NOTICE() << "superBestPreEvoTrees.count " << superBestPreEvoTrees.count();
-	const int NthReAddSuper = 8;
+	const int NthReAddSuper = 4;
 	if(bestPreEvoTrees.count()) {
 		const auto bestbundltree = bestPreEvoTrees.values();
 		for(unsigned int i = 0; i < lPopSize; ++i) {
@@ -202,17 +202,22 @@ void EvolutionSpinner::runEvolution() {
 				finalBotObject = summarize(veryBestTree);
 			}
 
-			if (afterReinjection > NthReAddSuper)
+//			if (afterReinjection > NthReAddSuper)
 				applySelectionTournament(lPopulation, *m_context, lNbrPartTournament);
 
 			veryBestTree.mValid = false;
 			if (m_context->currentGeneration % 32 == 0) {
 				lPopulation.push_back(veryBestTree);
+				std::vector<Tree> superTreesFeatures;
 				for(int i = 0; i < superBestbundltree.size(); ++i) {
-					lPopulation.push_back(superBestbundltree.at(i));
+					superTreesFeatures.push_back(superBestbundltree.at(i));
 //					NOTICE() << "-----------------" << i;
 //					summarize(lPopulation.back());
 				}
+				makeSuperTreeMixtures(superTreesFeatures, *m_context);
+				for (int i = 0; i < superTreesFeatures.size(); ++i)
+					lPopulation.push_back(superTreesFeatures[i]);
+
 				afterReinjection = 0;
 			}
 
@@ -246,12 +251,15 @@ void EvolutionSpinner::makeSuperTreeMixtures(std::vector<Tree>& ioPopulation,
 		for (int f = treeToComplete.lim_NUM_FEATURE; f < ioContext.lim_NUM_FEATURE; ++f) {
 			Tree copyRandTreeLimited = ioPopulation[qrand() % ioPopulation.size()];
 			int limitedIndex = qrand() % copyRandTreeLimited.lim_NUM_FEATURE;
+			uint fi = treeToComplete.getIndexOfFeature(f);
+			uint li = copyRandTreeLimited.getIndexOfFeature(limitedIndex);
 			std::vector<unsigned int> lStack1;
-			treeToComplete.setStackToNode(treeToComplete.getIndexOfFeature(f), lStack1);
+			treeToComplete.setStackToNode(fi, lStack1);
 			std::vector<unsigned int> lStack2;
-			copyRandTreeLimited.setStackToNode(copyRandTreeLimited.getIndexOfFeature(limitedIndex), lStack1);
-			Puppy::exchangeSubTrees(treeToComplete, f, lStack1, copyRandTreeLimited, limitedIndex, lStack2);
+			copyRandTreeLimited.setStackToNode(li, lStack2);
+			Puppy::exchangeSubTrees(treeToComplete, fi, lStack1, copyRandTreeLimited, li, lStack2);
 		}
+		treeToComplete.mValid = false;
 	}
 }
 
