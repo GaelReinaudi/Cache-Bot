@@ -14,6 +14,7 @@ MetricViewer::MetricViewer(QString userID)
 	, ui(new Ui::MetricViewer)
 {
 	ui->setupUi(this);
+	setWindowTitle(QString("..")+userID.right(5));
 
 	m_pConnector = new CacheAccountConnector(userID);
 	connect(m_pConnector, SIGNAL(injected(User*)), this, SLOT(onUserInjected(User*)));

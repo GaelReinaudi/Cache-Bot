@@ -124,10 +124,19 @@ private slots:
 //			CacheRest::Instance()->evoCacheEC2Computation(userId);
 //		}
 //	}
+//	void localRunAllEvoCacheView() {
+//		for (const QString& userId : m_userIds) {
+//			QString program = "./evoCacheView.exe";
+//			QStringList arguments;
+//			arguments << userId;
+//			QProcess *myProcess = new QProcess(0);
+//			myProcess->start(program, arguments);
+//		}
+//	}
 
 	void allUsersExtraCashComputations() {
 		for (const QString& userId : m_userIds) {
-//			qDebug() << "user " << userId;
+			//qDebug() << "user " << userId;
 			CacheRest::Instance()->extraCashEC2Computation(userId);
 			QSignalSpy spyExtraCashComputation(CacheRest::Instance()->worker, SIGNAL(repliedExtraCashEC2Computation(QString)));
 			QVERIFY(spyExtraCashComputation.wait(20000));

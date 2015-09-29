@@ -11,6 +11,7 @@ UserViewer::UserViewer(QString userID, QVector<int> onlyLoadHashes)
 	, ui(new Ui::UserViewer)
 {
 	ui->setupUi(this);
+	setWindowTitle(QString("..")+userID.right(5));
 	Transaction::onlyLoadHashes = onlyLoadHashes;
 
 	m_pConnector = new CacheAccountConnector(userID);

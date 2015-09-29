@@ -10,6 +10,7 @@ EvoCacheView::EvoCacheView(QString userID, QVector<int> onlyLoadHashes)
 {
 	ui->setupUi(this);
 	ui->amPlot->hide();
+	setWindowTitle(QString("..")+userID.right(5));
 
 	Evolver* pEvolver = new Evolver(userID);
 //	pEvolver->flags &= ~CacheAccountConnector::SendBot;

@@ -22,6 +22,7 @@ ExtraCashView::ExtraCashView(QString userID, QWidget *parent) :
 	ui(new Ui::ExtraCashView)
 {
 	ui->setupUi(this);
+	setWindowTitle(QString("..")+userID.right(5));
 
 	m_pExtraCache = new ExtraCache(userID);
 	m_pExtraCache->flags = CacheAccountConnector::None;

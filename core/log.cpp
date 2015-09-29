@@ -37,7 +37,7 @@ void CORESHARED_EXPORT logger::setupSpdLog(QString logFileName)
 		s_pLog->m_fileLogger->set_pattern("[%l] %v");
 		s_pLog->m_fileLogger->warn() << "********** NEW SESSION ********** "
 									 << QDateTime::currentDateTime().toString("HH:mm:ss.zzz")
-									 << "    GIT_VERSION: " << QString(GIT_VERSION);
+									 << "    GIT_VERSION: " << QString(GIT_VERSION) << "    ";
 	}
 	catch (const spdlog::spdlog_ex& ex)
 	{
