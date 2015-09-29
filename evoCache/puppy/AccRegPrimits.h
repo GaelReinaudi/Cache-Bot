@@ -196,9 +196,11 @@ public:
 		double& lResult = *(double*)outDatum;
 		lResult = 0.0;
 		double lArgi = 0.0;
-		for(unsigned int i = 0; i < ioContext.lim_NUM_FEATURE; ++i) {
+		ioContext.mTree->fitness.clear();
+		for(int i = 0; i < ioContext.lim_NUM_FEATURE; ++i) {
 			getArgument(i, &lArgi, ioContext);
 			lResult += lArgi;
+			ioContext.mTree->fitness.push_back(lArgi);
 		}
 	}
 	double apply(TransactionBundle&, bool) override { return 0.0; }

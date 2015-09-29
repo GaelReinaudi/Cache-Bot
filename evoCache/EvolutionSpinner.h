@@ -32,6 +32,7 @@ public slots:
 
 protected:
 	void makeSuperTreeMixtures(std::vector<Puppy::Tree> &ioPopulation, Puppy::Context &ioContext);
+	void replaceFitness0WithSuperMixture(std::vector<Puppy::Tree>& ioPopulation, const QList<Puppy::Tree> &popFeatures, Puppy::Context &ioContext);
 	double evaluateSymbReg(std::vector<Puppy::Tree> &ioPopulation, Puppy::Context &ioContext);
 	QJsonObject summarize(Puppy::Tree &tree);
 
