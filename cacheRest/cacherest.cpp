@@ -8,6 +8,7 @@ CacheRest::CacheRest(QObject *parent)
 	: QObject(parent)
 {
 	qDebug() << "creating CacheRest instance...............................";
+	qDebug() << "GIT_VERSION" << QString(GIT_VERSION);
 	worker = new HttpRequestWorker(this);
 //	worker = new OfflineHttpRequestWorker(this);
 }

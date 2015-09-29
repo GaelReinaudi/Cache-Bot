@@ -127,14 +127,14 @@ private slots:
 
 	void allUsersExtraCashComputations() {
 		for (const QString& userId : m_userIds) {
-			qDebug() << "user " << userId;
+//			qDebug() << "user " << userId;
 			CacheRest::Instance()->extraCashEC2Computation(userId);
 			QSignalSpy spyExtraCashComputation(CacheRest::Instance()->worker, SIGNAL(repliedExtraCashEC2Computation(QString)));
 			QVERIFY(spyExtraCashComputation.wait(20000));
 			QList<QVariant> arguments = spyExtraCashComputation.takeFirst();
 			QString extraCashReply = arguments.at(0).toString();
-			qDebug() << "extraCashReply " << extraCashReply.left(128);
 			QVERIFY(!extraCashReply.isEmpty());
+			qDebug() << "extraCashReply:" << endl << extraCashReply.left(256) << endl;
 		}
 	}
 
