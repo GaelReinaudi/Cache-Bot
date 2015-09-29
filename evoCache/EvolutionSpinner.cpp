@@ -249,10 +249,12 @@ void EvolutionSpinner::runEvolution() {
 void EvolutionSpinner::makeSuperTreeMixtures(std::vector<Tree>& ioPopulation,
 											   Context& ioContext)
 {
+	static int jF = 0;
 	for(unsigned int i=0; i < ioPopulation.size(); ++i) {
 		Tree& treeToComplete = ioPopulation[i];
 		for (int f = treeToComplete.lim_NUM_FEATURE; f < ioContext.lim_NUM_FEATURE; ++f) {
-			Tree copyRandTreeLimited = ioPopulation[qrand() % ioPopulation.size()];
+			Tree copyRandTreeLimited = ioPopulation[jF % ioPopulation.size()];
+			++jF;
 			int limitedIndex = qrand() % copyRandTreeLimited.lim_NUM_FEATURE;
 			uint fi = treeToComplete.getIndexOfFeature(f);
 			uint li = copyRandTreeLimited.getIndexOfFeature(limitedIndex);
