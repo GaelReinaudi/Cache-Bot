@@ -189,6 +189,7 @@ void EvolutionSpinner::runEvolution() {
 		NOTICE() << "Starting evolution";
 		// 0 after a reinjection of features
 		int afterReinjection = 0;
+		std::vector<Tree> bestGenTree;
 		for(m_context->currentGeneration = 1; m_context->currentGeneration <=10*lNbrGen; ++m_context->currentGeneration ) {
 			if(!m_doSpin)  {
 				break;
@@ -196,6 +197,7 @@ void EvolutionSpinner::runEvolution() {
 			INFO() << "Generation " << m_context->currentGeneration  << " pop " << lPopulation.size();
 			auto result = std::minmax_element(lPopulation.begin(), lPopulation.end());
 			Tree bestTree = lPopulation[result.second - lPopulation.begin()];
+			bestGenTree.push_back(bestTree);
 
 			if (bestTree.mFitness > veryBestTree.mFitness) {
 				veryBestTree = bestTree;
@@ -208,24 +210,25 @@ void EvolutionSpinner::runEvolution() {
 			veryBestTree.mValid = false;
 			if (m_context->currentGeneration % 32 == 0) {
 				lPopulation.push_back(veryBestTree);
-				std::vector<Tree> superTreesFeatures;
-				for(int i = 0; i < superBestbundltree.size(); ++i) {
-					superTreesFeatures.push_back(superBestbundltree.at(i));
-//					NOTICE() << "-----------------" << i;
-//					summarize(lPopulation.back());
-				}
-				makeSuperTreeMixtures(superTreesFeatures, *m_context);
-				for (int i = 0; i < superTreesFeatures.size(); ++i)
-					lPopulation.push_back(superTreesFeatures[i]);
+//				std::vector<Tree> superTreesFeatures;
+//				for(int i = 0; i < superBestbundltree.size(); ++i) {
+//					superTreesFeatures.push_back(superBestbundltree.at(i));
+//				}
+//				makeSuperTreeMixtures(superTreesFeatures, *m_context);
+//				for (uint i = 0; i < superTreesFeatures.size(); ++i)
+//					lPopulation.push_back(superTreesFeatures[i]);
+//				for (uint i = 0; i < bestGenTree.size(); ++i)
+//					lPopulation.push_back(bestGenTree[i]);
+				replaceFitness0WithSuperMixture(lPopulation, superBestbundltree, *m_context);
 
 				afterReinjection = 0;
 			}
 
 			applyCrossover(lPopulation, *m_context, lCrossoverProba, lCrossDistribProba, lMaxDepth);
 
-			if (afterReinjection > NthReAddSuper)
+//			if (afterReinjection > NthReAddSuper)
 				applyMutationStandard(lPopulation, *m_context, lMutStdProba, lMutMaxRegenDepth, lMaxDepth);
-			if (afterReinjection > NthReAddSuper)
+//			if (afterReinjection > NthReAddSuper)
 				applyMutationSwap(lPopulation, *m_context, lMutSwapProba, lMutSwapDistribProba);
 
 
@@ -258,6 +261,30 @@ void EvolutionSpinner::makeSuperTreeMixtures(std::vector<Tree>& ioPopulation,
 			std::vector<unsigned int> lStack2;
 			copyRandTreeLimited.setStackToNode(li, lStack2);
 			Puppy::exchangeSubTrees(treeToComplete, fi, lStack1, copyRandTreeLimited, li, lStack2);
+		}
+		treeToComplete.mValid = false;
+	}
+}
+
+void EvolutionSpinner::replaceFitness0WithSuperMixture(std::vector<Tree>& ioPopulation, const QList<Tree>& popFeatures,
+											   Context& ioContext)
+{
+	static int jF = 0;
+	for(unsigned int i=0; i < ioPopulation.size(); ++i) {
+		Tree& treeToComplete = ioPopulation[i];
+		for (int f = 0; f < ioContext.lim_NUM_FEATURE; ++f) {
+			if (treeToComplete.fitness.size() < f || treeToComplete.fitness[f] > 0)
+				continue;
+			Tree copyTreeLimited = popFeatures[jF % popFeatures.size()];
+			++jF;
+			int jFIndex = qrand() % copyTreeLimited.lim_NUM_FEATURE;
+			uint fi = treeToComplete.getIndexOfFeature(f);
+			uint li = copyTreeLimited.getIndexOfFeature(jFIndex);
+			std::vector<unsigned int> lStack1;
+			treeToComplete.setStackToNode(fi, lStack1);
+			std::vector<unsigned int> lStack2;
+			copyTreeLimited.setStackToNode(li, lStack2);
+			Puppy::exchangeSubTrees(treeToComplete, fi, lStack1, copyTreeLimited, li, lStack2);
 		}
 		treeToComplete.mValid = false;
 	}

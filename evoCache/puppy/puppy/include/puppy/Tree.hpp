@@ -109,6 +109,7 @@ public:
 	float mFitness;  //!< Fitness value of the GP tree
 	bool  mValid;    //!< Flag indicating whether the fitness is valid.
 	int lim_NUM_FEATURE = 1;
+	std::vector<double> fitness;
 
 	QString toStr() const;
 };
