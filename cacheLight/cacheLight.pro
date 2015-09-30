@@ -19,7 +19,7 @@ SOURCES += \
     extraCashView.cpp
 
 HEADERS  += \
-	$$PWD/../extraCache/extraCache.h \
+	$$PWD/../extraCash/extraCache.h \
 	$$PWD/../AccountChart/qcustomplot/qcustomplot.h \
     extraCashView.h
 
