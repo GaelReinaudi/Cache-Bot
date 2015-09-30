@@ -20,7 +20,7 @@ static const QString SendNewBotRoute = server + "/cache-bot/newBot";
 static const QString BestBotRoute = server + "/cache-bot/bestBot";
 
 static const QString ExtraCashEC2Compute = "https://qvg5wdby95.execute-api.us-west-2.amazonaws.com/prod/extraCache002";
-static const QString EvoCacheEC2Compute = amazonServer + "/cache-bot/fullAnalysis";
+static const QString EvoCacheEC2Compute = amazonServer + "/cache-bot/evo";
 
 static const QString StringLoggedInReplySuccess = "Redirecting to /loginSuccess";
 static const QString StringLoggedInReplyFailure = "Redirecting to /loginFailure";
