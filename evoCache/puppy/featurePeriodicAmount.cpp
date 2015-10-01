@@ -41,6 +41,7 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 	m_localStaticArgs.m_consecMonth = 0;
 	m_localStaticArgs.m_consecMonthBeforeMissed = 0;
 	m_localStaticArgs.m_consecMissed = 999;
+	m_localStaticArgs.m_prevMissed = 0;
 	if (m_localStaticArgs.m_dayOfMonth < -13 || m_localStaticArgs.m_dayOfMonth > 31)
 		return 0.0;
 	for (int i = 0; i < allTrans.count(); ++i) {
@@ -74,6 +75,7 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 				}
 				++m_localStaticArgs.m_consecMonthBeforeMissed;
 				++m_localStaticArgs.m_consecMonth;
+				m_localStaticArgs.m_prevMissed = m_localStaticArgs.m_consecMissed;
 				m_localStaticArgs.m_consecMissed = 0;
 				// if transaction is in advance
 				if (iTarg->date >= Transaction::currentDay().addDays(-SLACK_FOR_LATE_TRANS))
@@ -110,7 +112,6 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 	// only sum that add up to > $N
 	if (qAbs(m_localStaticArgs.m_bundle.sumDollar()) > 1) {
 		tempFitness = totalOneOverDistClosest - totalOneOverDistOthers;
-		tempFitness *= 1.75 * (double(m_localStaticArgs.m_consecMonthBeforeMissed) - 1.5);
 	}
 	return tempFitness;
 }
@@ -136,7 +137,12 @@ void FeatureMonthlyAmount::onJustApplied(TransactionBundle& allTrans, bool doLog
 	m_localStaticArgs.m_fitRerun = rerun;
 	cleanArgs();
 
+	if (m_localStaticArgs.m_prevMissed >= -1+m_localStaticArgs.m_consecMonthBeforeMissed) {
+		m_fitness = 0.0;
+		return;
+	}
 	// recompute fitness
+	m_fitness *= 1.75 * (double(m_localStaticArgs.m_consecMonthBeforeMissed) - 1.5);
 	m_fitness -= 3 * qMax(0.0, rerun);
 //	m_fitness *= 2.0;
 //	if (qAbs(m_localStaticArgs.m_kla) > 2)
