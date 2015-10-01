@@ -6,8 +6,6 @@
 
 class ExtraCache : public CacheAccountConnector
 {
-	//Q_OBJECT
-
 public:
 	ExtraCache(QString userID);
 	virtual ~ExtraCache() {};
@@ -16,7 +14,6 @@ public:
 	double slushBaseStart() const { return m_slushFundStartsAt; }
 	double minSlope() const { return m_minSlope; }
 	int futDayMinSlope() const { return m_futDayMinSlopeCollision; }
-
 
 protected:
 	void onUserInjected(User* pUser) override;

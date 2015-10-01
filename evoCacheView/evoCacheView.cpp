@@ -45,6 +45,7 @@ void EvoCacheView::onUserInjected(User* pUser)
 	connect(pUser->botContext(), &BotContext::needsReplot, this, &EvoCacheView::replotCharts, Qt::BlockingQueuedConnection);
 	connect(pUser->botContext(), &BotContext::needsReplot, this, &EvoCacheView::clearList);
 	connect(pUser->botContext(), &BotContext::newSummarizedTree, this, &EvoCacheView::onNewSummarizedTree, Qt::BlockingQueuedConnection);
+	connect(pUser->botContext(), &BotContext::computedGeneration, ui->spinGen, &QSpinBox::setValue);
 }
 
 void EvoCacheView::clearMasks()

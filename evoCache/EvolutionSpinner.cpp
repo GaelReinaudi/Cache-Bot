@@ -76,6 +76,7 @@ void EvolutionSpinner::runEvolution() {
 		if (m_context->m_pUser->hashBundles()[h]->count() < 2)
 			continue;
 		m_context->filterHashIndex = j;
+		m_context->currentGeneration = 0;
 		// Initialize population.
 		std::vector<Tree> lPopulation(5 * lPopSize);
 		NOTICE() << "Initializing population for hash " << h;
@@ -122,6 +123,7 @@ void EvolutionSpinner::runEvolution() {
 				bestTree = lPopulation[result.second - lPopulation.begin()];
 			}
 		}
+		--m_context->currentGeneration;
 		bestTree.mValid = false;
 //		summarize(bestTree);
 		lPopulation.push_back(bestTree);
@@ -182,6 +184,7 @@ void EvolutionSpinner::runEvolution() {
 			}
 		}
 		makeSuperTreeMixtures(lPopulation, *m_context);
+		m_context->currentGeneration = 0;
 		evaluateSymbReg(lPopulation, *m_context);
 		calculateStats(lPopulation, 0);
 
@@ -298,6 +301,7 @@ void EvolutionSpinner::replaceFitness0WithSuperMixture(std::vector<Tree>& ioPopu
 double EvolutionSpinner::evaluateSymbReg(std::vector<Tree>& ioPopulation,
 											   Context& ioContext)
 {
+	emit m_context->computedGeneration(ioContext.currentGeneration);
 	double bestFitness = -1e6;
 	double ratioPop = 1.0 / double(ioPopulation.size());
 	for(unsigned int i=0; i<ioPopulation.size(); ++i) {

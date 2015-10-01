@@ -23,6 +23,7 @@ signals:
 	void summarizingTree();
 	void needsReplot();
 	void newSummarizedTree(QJsonObject);
+	void computedGeneration(int gen);
 
 private:
 //	Puppy::Context m_context;
