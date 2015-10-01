@@ -81,7 +81,7 @@ public:
 		d += LIMIT_DIST_TRANS * (qAbs(kla() - other.kla()) * 1024) / mA;
 		d += LIMIT_DIST_TRANS * nameHash.dist(other.nameHash) / mH;
 		d |= (1<<20) * qint64(qAbs(dimensionOfVoid - other.dimensionOfVoid));
-		d |= (1<<20) * qint64(isInternal() || other.isInternal());
+//		d |= (1<<20) * qint64(isInternal() || other.isInternal());
 		d |= (1<<20) * qint64((amount() > 0 && other.amount() < 0) || (amount() < 0 && other.amount() > 0));
 		if(log) {
 			DBG() << "dist " << d
