@@ -51,7 +51,7 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 			dist = 1<<20;
 		}
 		double factOld = 2.0;
-		if (dist < localDist && trans.jDay() <= approxSpacingPayment() / 2 + iTarg->jDay()) {
+		if (dist < localDist && trans.jDay() <= approxSpacingPayment() / 3 + iTarg->jDay()) {
 			localDist = dist;
 			localTrans = &trans;
 			double daysAgo = localTrans->date.daysTo(Transaction::currentDay());
