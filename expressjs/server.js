@@ -12,7 +12,7 @@ app.get('/cache-bot/fullAnalysis/:user_id', function(req, res) {
     console.log('POST to /cache-bot/fullAnalysis/:user_id')
 
     var response = "thx, running fullAnalysis for user: " + req.params.user_id;
-    res.status(200).send(response)
+    res.status(200).send(response);
     var runFull = child_process.execFile(
         '../../expressjs/fullAnalysis.sh', [req.params.user_id], {
             cwd: '/home/ubuntu/Cache-Bot/bin/release',
@@ -29,7 +29,7 @@ app.get('/cache-bot/evo/:user_id', function(req, res) {
     console.log('POST to /cache-bot/evo/:user_id')
 
     var response = "thx, running evo for user: " + req.params.user_id;
-    res.status(200).send(response)
+    res.status(200).send(response);
     var runFull = child_process.execFile(
         '../../expressjs/evo.sh', [req.params.user_id], {
             cwd: '/home/ubuntu/Cache-Bot/bin/release',
@@ -55,7 +55,7 @@ app.get('/cache-bot/extraCash/:user_id', function(req, res) {
             console.log(stderr);
             var response = "ran extraCache for user: " + req.params.user_id+'\n'
             + stdout + '\n' + stderr;
-            res.status(200).send(response)
+            res.status(200).send(response);
         }
     );
 });
@@ -64,7 +64,7 @@ app.post('/cache-bot/fullAnalysis', function(req, res) {
     console.log('POST to /cache-bot/fullAnalysis  body:'+ req.body.user_id);
 
     var response = "thx, running fullAnalysis for user: " + req.params.user_id;
-    res.status(200).send(response)
+    res.status(200).send(response);
     var runFull = child_process.execFile(
         '../../expressjs/fullAnalysis.sh', [req.body.user_id], {
             cwd: '/home/ubuntu/Cache-Bot/bin/release',
@@ -81,7 +81,7 @@ app.post('/cache-bot/evo', function(req, res) {
     console.log('POST to /cache-bot/evo  body:'+ req.body.user_id);
 
     var response = "thx, running evo for user: " + req.params.user_id;
-    res.status(200).send(response)
+    res.status(200).send(response);
     var runFull = child_process.execFile(
         '../../expressjs/evo.sh', [req.body.user_id], {
             cwd: '/home/ubuntu/Cache-Bot/bin/release',
@@ -107,7 +107,7 @@ app.post('/cache-bot/extraCash', function(req, res) {
             console.log(stderr);
             var response = "ran extraCache for user: " + req.body.user_id+'\n'
             + stdout + '\n' + stderr;
-            res.status(200).send(response)
+            res.status(200).send(response);
         }
     );
 });
