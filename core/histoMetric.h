@@ -14,7 +14,6 @@ protected:
 		, m_name(name)
 	{
 		s_AllMetrics.insert(name, this);
-		qDebug() << "making HistoMetric:" << m_name;
 		NOTICE() << "making HistoMetric:" << m_name;
 		}
 	virtual ~HistoMetric() {
@@ -29,7 +28,6 @@ public:
 		if (s_AllMetrics.contains(withName)) {
 			return s_AllMetrics.value(withName, 0);
 		}
-		qDebug() << "HistoMetric::get() couldn't find" << withName;
 		NOTICE() << "HistoMetric::get() couldn't find" << withName;
 		return 0;
 	}
