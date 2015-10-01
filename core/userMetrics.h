@@ -249,7 +249,7 @@ public:
 			return reinterpret_cast<Montecarlo<Nrun>*>(pMet);
 		return new Montecarlo<Nrun>(pUser);
 	}
-	double t2zPerc(const QDate &date, double facPerc) {
+	double d2zPerc(const QDate &date, double facPerc) {
 		double curBal = BalanceMetric::get(user())->value(date);
 		return m_simulations[date].timeToDelta(-curBal, facPerc);
 	}

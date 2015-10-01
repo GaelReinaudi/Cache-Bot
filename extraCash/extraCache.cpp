@@ -76,8 +76,8 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 
 	bestBot->summarize();
 	double d2z50 = Montecarlo<128>::get(user())->value(Transaction::currentDay());
-	double d2z20 = Montecarlo<128>::get(user())->t2zPerc(Transaction::currentDay(), 0.20);
-	double d2z80 = Montecarlo<128>::get(user())->t2zPerc(Transaction::currentDay(), 0.80);
+	double d2z20 = Montecarlo<128>::get(user())->d2zPerc(Transaction::currentDay(), 0.20);
+	double d2z80 = Montecarlo<128>::get(user())->d2zPerc(Transaction::currentDay(), 0.80);
 	SuperOracle::Summary summary = OracleSummary::get(user())->summaries()[Transaction::currentDay()];
 
 	statObj.insert("oracles", summary.toJson());

@@ -203,6 +203,9 @@ void EvolutionSpinner::runEvolution() {
 				veryBestTree = bestTree;
 				finalBotObject = summarize(veryBestTree);
 			}
+			else {
+				emit m_context->newSummarizedTree(finalBotObject);
+			}
 
 //			if (afterReinjection > NthReAddSuper)
 				applySelectionTournament(lPopulation, *m_context, lNbrPartTournament);

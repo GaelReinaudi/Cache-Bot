@@ -351,7 +351,7 @@
         <item row="12" column="0">
          <widget class="QLabel" name="costLive99Label_3">
           <property name="text">
-           <string>t2z 50%</string>
+           <string>d2z 50%</string>
           </property>
          </widget>
         </item>
@@ -383,14 +383,14 @@
         <item row="13" column="0">
          <widget class="QLabel" name="costLive99Label_4">
           <property name="text">
-           <string>t2z 80%</string>
+           <string>d2z 80%</string>
           </property>
          </widget>
         </item>
         <item row="11" column="0">
          <widget class="QLabel" name="costLive99Label_5">
           <property name="text">
-           <string>t2z 20%</string>
+           <string>d2z 20%</string>
           </property>
          </widget>
         </item>
