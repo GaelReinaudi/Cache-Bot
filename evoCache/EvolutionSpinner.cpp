@@ -275,7 +275,7 @@ void EvolutionSpinner::replaceFitness0WithSuperMixture(std::vector<Tree>& ioPopu
 	for(unsigned int i=0; i < ioPopulation.size(); ++i) {
 		Tree& treeToComplete = ioPopulation[i];
 		for (int f = 0; f < ioContext.lim_NUM_FEATURE; ++f) {
-			if (treeToComplete.fitness.size() < f || treeToComplete.fitness[f] > 0)
+			if (treeToComplete.fitness.size() < uint(f) || treeToComplete.fitness[f] > 0)
 				continue;
 			Tree copyTreeLimited = popFeatures[jF % popFeatures.size()];
 			++jF;

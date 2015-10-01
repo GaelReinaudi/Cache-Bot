@@ -128,7 +128,7 @@ void FeatureMonthlyAmount::onJustApplied(TransactionBundle& allTrans, bool doLog
 	cleanArgs();
 	double rerun = apply(allTrans, false);
 	if (doLog) {
-		INFO() << "fitness " << m_fitness << "- 2x " << rerun;
+		DBG() << "fitness " << m_fitness << "- 2x " << rerun;
 	}
 	// restore member variables
 	m_localStaticArgs = temp;

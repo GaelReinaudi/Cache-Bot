@@ -30,7 +30,7 @@ public:
 	bool isInternal() const { return flags & Transaction::Flag::Internal; }
 	bool isFuture() const { return date > Transaction::currentDay(); }
 	bool isToOld() const { return date < Transaction::currentDay().addDays(-Transaction::maxDaysOld()); }
-	bool noUse() const { return isFuture() || isToOld() || isInternal(); }
+	bool noUse() const;
 	int type() const;
 
 	//! json in

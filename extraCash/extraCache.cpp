@@ -75,7 +75,9 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 
 
 	bestBot->summarize();
-	double t2z = Montecarlo<128>::get(user())->value(Transaction::currentDay());
+	double d2z50 = Montecarlo<128>::get(user())->value(Transaction::currentDay());
+	double d2z20 = Montecarlo<128>::get(user())->t2zPerc(Transaction::currentDay(), 0.20);
+	double d2z80 = Montecarlo<128>::get(user())->t2zPerc(Transaction::currentDay(), 0.80);
 	SuperOracle::Summary summary = OracleSummary::get(user())->summaries()[Transaction::currentDay()];
 
 	statObj.insert("oracles", summary.toJson());
@@ -96,7 +98,9 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 	flowObj.insert("dailyBill", summary.bill);
 	flowObj.insert("dailySalary", summary.salary);
 
-	flowObj.insert("t2z", t2z);
+	flowObj.insert("d2z50", d2z50);
+	flowObj.insert("d2z20", d2z20);
+	flowObj.insert("d2z80", d2z80);
 
 	// flag as kStable/kUp/kDown
 	QString changeFlag = "kStable";

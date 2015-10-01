@@ -10,6 +10,11 @@ int Transaction::s_maxDaysOld = 5 * 31;
 QDate Transaction::onlyAfterDate = Transaction::currentDay().addMonths(-6);
 int Transaction::onlyAccountType = Account::Type::Saving | Account::Type::Checking | Account::Type::Credit;
 
+bool Transaction::noUse() const
+{
+	return isFuture() || isToOld() || isInternal();
+}
+
 int Transaction::type() const {
 	return account->type() + 16 * (flags & Internal);
 }
