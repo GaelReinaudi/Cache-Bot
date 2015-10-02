@@ -3,7 +3,7 @@
 #include "cacherest.h"
 
 
-Evolver::Evolver(QString userID, QString onlyAccount)
+Evolver::Evolver(QString userID)
 	: CacheAccountConnector(userID)
 {
 	init();

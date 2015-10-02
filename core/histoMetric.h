@@ -32,6 +32,9 @@ public:
 		return 0;
 	}
 	QString name() const { return m_name; }
+	static void clearAll() {
+		return s_AllMetrics.clear();
+	}
 
 public:
 	double value(const QDate& date) {

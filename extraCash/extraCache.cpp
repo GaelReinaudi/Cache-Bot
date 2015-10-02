@@ -8,8 +8,8 @@
 
 static const double SLOPE_MULTIPLICATION_EXTRA_TODAY = 0.5;
 
-ExtraCache::ExtraCache(QString userID)
-	: CacheAccountConnector(userID)
+ExtraCache::ExtraCache(QString userID, QJsonObject jsonArgs)
+	: CacheAccountConnector(userID, jsonArgs)
 {
 }
 

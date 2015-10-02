@@ -2,11 +2,14 @@
 #include "account.h"
 #include "cacherest.h"
 
-CacheAccountConnector::CacheAccountConnector(QString userID)
+CacheAccountConnector::CacheAccountConnector(QString userID, QJsonObject jsonArgs)
 	: QObject()
 	, m_userId(userID)
+	, m_jsonArgs(jsonArgs)
 {
 	CREATE_LOGGER(userID);
+
+	NOTICE() << "jsonArgs: " << QString(QJsonDocument(m_jsonArgs).toJson(QJsonDocument::Compact));
 
 	// login as cache-bot
 	CacheRest::Instance()->login();

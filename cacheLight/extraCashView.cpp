@@ -17,14 +17,14 @@ static int IND_GR_AVG = -1;
 
 double smallInc = 1e-3;
 
-ExtraCashView::ExtraCashView(QString userID, QWidget *parent) :
-	QMainWindow(parent),
+ExtraCashView::ExtraCashView(QString userID, QJsonObject jsonArgs) :
+	QMainWindow(),
 	ui(new Ui::ExtraCashView)
 {
 	ui->setupUi(this);
 	setWindowTitle(QString("..")+userID.right(5));
 
-	m_pExtraCache = new ExtraCache(userID);
+	m_pExtraCache = new ExtraCache(userID, jsonArgs);
 	m_pExtraCache->flags = CacheAccountConnector::None;
 
 //	ui->plot->xAxis->setVisible(false);
@@ -137,6 +137,8 @@ void ExtraCashView::onBotInjected(Bot* pBot)
 
 void ExtraCashView::onHypotheTrans(int transAmount)
 {
+	// clears all the cached results
+	HistoMetric::clearAll();
 	m_pExtraCache->user()->setHypotheTrans(transAmount);
 	m_pExtraCache->user()->reInjectBot();
 }

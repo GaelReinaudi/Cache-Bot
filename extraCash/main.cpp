@@ -9,7 +9,13 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 	QString userID = argv[1];
-	ExtraCache w(userID);
+	QString jsonStr;
+	if(argc > 2) {
+		jsonStr = QString(argv[2]);
+	}
+	QJsonDocument jsonDoc(QJsonDocument::fromJson(jsonStr.toUtf8()));
+	const QJsonObject& jsonObj = jsonDoc.object();
+	ExtraCache w(userID, jsonObj);
 
 	return a.exec();
 }

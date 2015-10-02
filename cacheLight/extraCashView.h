@@ -20,7 +20,7 @@ class ExtraCashView : public QMainWindow
 	Q_OBJECT
 
 public:
-	explicit ExtraCashView(QString userID, QWidget *parent = 0);
+	explicit ExtraCashView(QString userID, QJsonObject jsonArgs);
 	~ExtraCashView();
 	void keyPressEvent(QKeyEvent *event);
 

@@ -11,7 +11,7 @@ class CACHERESTSHARED_EXPORT CacheAccountConnector : public QObject
 	Q_OBJECT
 
 public:
-	CacheAccountConnector(QString userID);
+	CacheAccountConnector(QString userID, QJsonObject jsonArgs = QJsonObject());
 	~CacheAccountConnector();
 
 	QString userID() const { return m_userId; }
@@ -31,6 +31,7 @@ signals:
 
 private:
 	QString m_userId;
+	QJsonObject m_jsonArgs;
 	User* m_user;
 
 public:
