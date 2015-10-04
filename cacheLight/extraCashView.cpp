@@ -27,8 +27,6 @@ ExtraCashView::ExtraCashView(QString userID, QJsonObject jsonArgs) :
 	m_pExtraCache = new ExtraCache(userID, jsonArgs);
 	m_pExtraCache->flags = CacheAccountConnector::None;
 
-//	ui->plot->xAxis->setVisible(false);
-//	ui->plot->yAxis->setVisible(false);
 	ui->plot->yAxis2->setVisible(true);
 	ui->plot->yAxis->setSubTickCount(10);
 	ui->plot->yAxis2->setRange(-100.0, 100);
@@ -95,18 +93,23 @@ ExtraCashView::ExtraCashView(QString userID, QJsonObject jsonArgs) :
 	pBars->setBrush(QColor(255, 131, 0, 50));
 
 	connect(ui->plot, SIGNAL(mouseWheel(QWheelEvent*)), this, SLOT(onWheelEvent(QWheelEvent*)));
-	connect(ui->spinHypotheTrans, SIGNAL(valueChanged(int)), this, SLOT(onHypotheTrans(int)));
 	ui->spinDaysOld->setValue(Transaction::maxDaysOld());
 	connect(ui->spinDaysOld, SIGNAL(valueChanged(int)), this, SLOT(onDaysOldSpin(int)));
 	ui->spinAgo->setValue(Transaction::currentDay().daysTo(QDate::currentDate()));
 	connect(ui->spinAgo, SIGNAL(valueChanged(int)), this, SLOT(onAgo()));
 
+	connect(m_pExtraCache, SIGNAL(injected(User*)), this, SLOT(onUserInjected(User*)));
 	connect(m_pExtraCache, SIGNAL(botInjected(Bot*)), this, SLOT(onBotInjected(Bot*)));
 }
 
 ExtraCashView::~ExtraCashView()
 {
 	delete ui;
+}
+
+void ExtraCashView::onUserInjected(User* pUser)
+{
+	connect(ui->spinHypotheTrans, SIGNAL(valueChanged(int)), pUser, SLOT(setHypotheTrans(int)));
 }
 
 void ExtraCashView::onBotInjected(Bot* pBot)
@@ -133,14 +136,6 @@ void ExtraCashView::onBotInjected(Bot* pBot)
 	NOTICE() << "initial pb balance"<< m_pbBalance << " at" << m_pbDate.toString();
 
 	updateChart();
-}
-
-void ExtraCashView::onHypotheTrans(int transAmount)
-{
-	// clears all the cached results
-	HistoMetric::clearAll();
-	m_pExtraCache->user()->setHypotheTrans(transAmount);
-	m_pExtraCache->user()->reInjectBot();
 }
 
 void ExtraCashView::onDaysOldSpin(int val)

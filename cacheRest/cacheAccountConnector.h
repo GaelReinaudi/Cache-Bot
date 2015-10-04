@@ -16,6 +16,7 @@ public:
 
 	QString userID() const { return m_userId; }
 	User* user() const { return m_user; }
+	const QJsonObject& jsonArgs() const {  return m_jsonArgs; }
 
 protected slots:
 	virtual void onLoggedIn(bool didLogin);

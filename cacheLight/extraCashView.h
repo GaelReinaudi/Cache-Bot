@@ -26,12 +26,12 @@ public:
 
 	void makeBalancePlot();
 protected slots:
+	void onUserInjected(User* pUser);
 	void onBotInjected(Bot* pBot);
 	void updateChart();
 	void makeRevelationPlot();
 	void makePercentilePlot(double fracPerc);
 	void onWheelEvent(QWheelEvent*wEv);
-	void onHypotheTrans(int transAmount = 0);
 	void onDaysOldSpin(int val);
 	void onAgo();
 

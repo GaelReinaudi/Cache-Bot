@@ -9,7 +9,7 @@ CacheAccountConnector::CacheAccountConnector(QString userID, QJsonObject jsonArg
 {
 	CREATE_LOGGER(userID);
 
-	NOTICE() << "jsonArgs: " << QString(QJsonDocument(m_jsonArgs).toJson(QJsonDocument::Compact));
+	NOTICE() << "jsonArgs: " << QString(QJsonDocument(m_jsonArgs).toJson(/*QJsonDocument::Compact*/));
 
 	// login as cache-bot
 	CacheRest::Instance()->login();
