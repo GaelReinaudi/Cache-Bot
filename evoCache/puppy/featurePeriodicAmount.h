@@ -12,6 +12,7 @@ public:
 	QJsonObject toJson() const override {
 		QJsonObject ret = Oracle::toJson();
 		ret["approxAmnt"] = toSignifDigit_2(m_args.m_bundle.averageAmount());
+		ret["avgAmnt"] = m_args.m_bundle.averageAmount();
 		ret["day1"] = (m_args.m_dayOfMonth + 31) % 31;
 		ret["day2"] = (m_args.m_dayOfMonth2 + 31) % 31;
 		return ret;

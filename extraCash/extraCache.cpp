@@ -80,7 +80,7 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 	flowObj.insert("dif_2", flowDif_2);
 	flowObj.insert("dif_3", flowDif_3);
 
-	int calculated = 0;
+	static int calculated = 0;
 flowCalc:
 	++calculated;
 	bestBot->summarize();
