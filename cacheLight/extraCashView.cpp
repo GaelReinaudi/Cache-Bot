@@ -110,6 +110,7 @@ ExtraCashView::~ExtraCashView()
 void ExtraCashView::onUserInjected(User* pUser)
 {
 	connect(ui->spinHypotheTrans, SIGNAL(valueChanged(int)), pUser, SLOT(setHypotheTrans(int)));
+	connect(ui->spinHypotheTrans, SIGNAL(valueChanged(int)), pUser, SLOT(reInjectBot()));
 }
 
 void ExtraCashView::onBotInjected(Bot* pBot)

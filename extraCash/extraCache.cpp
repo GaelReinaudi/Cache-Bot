@@ -72,26 +72,29 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 	double flowDif_1 = MetricDiff<1>::get(MetricSmoother<2>::get(OracleSummary::get(user())))->value(Transaction::currentDay());
 	double flowDif_2 = MetricDiff<2>::get(MetricSmoother<2>::get(OracleSummary::get(user())))->value(Transaction::currentDay());
 	double flowDif_3 = MetricDiff<3>::get(MetricSmoother<2>::get(OracleSummary::get(user())))->value(Transaction::currentDay());
-
-
-	bestBot->summarize();
-	double d2z50 = Montecarlo<128>::get(user())->value(Transaction::currentDay());
-	double d2z20 = Montecarlo<128>::get(user())->d2zPerc(Transaction::currentDay(), 0.20);
-	double d2z80 = Montecarlo<128>::get(user())->d2zPerc(Transaction::currentDay(), 0.80);
-	SuperOracle::Summary summary = OracleSummary::get(user())->summaries()[Transaction::currentDay()];
-
-	statObj.insert("oracles", summary.toJson());
-
-	makeAdvice(statObj, 0.05);
-
 	QJsonObject flowObj;
-	flowObj.insert("rate", summary.flow());
 	flowObj.insert("ma_2", flowMA_2);
 	flowObj.insert("ma_3", flowMA_3);
 	flowObj.insert("ma_4", flowMA_4);
 	flowObj.insert("dif_1", flowDif_1);
 	flowObj.insert("dif_2", flowDif_2);
 	flowObj.insert("dif_3", flowDif_3);
+
+	int calculated = 0;
+flowCalc:
+	++calculated;
+	bestBot->summarize();
+	double d2z50 = Montecarlo<128>::get(user())->value(Transaction::currentDay());
+	double d2z20 = Montecarlo<128>::get(user())->d2zPerc(Transaction::currentDay(), 0.20);
+	double d2z80 = Montecarlo<128>::get(user())->d2zPerc(Transaction::currentDay(), 0.80);
+	double rate = OracleSummary::get(user())->value(Transaction::currentDay());
+	SuperOracle::Summary summary = OracleSummary::get(user())->summaries()[Transaction::currentDay()];
+
+	statObj.insert("oracles", summary.toJson());
+
+	makeAdvice(statObj, 0.05);
+
+	flowObj.insert("rate", rate);
 
 	flowObj.insert("dailyPos", summary.posSum);
 	flowObj.insert("dailyNeg", summary.negSum);
@@ -110,7 +113,13 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 		changeFlag = "kDown";
 	flowObj.insert("change", changeFlag);
 
-	statObj.insert("flow", flowObj);
+	statObj.insert(calculated == 1 ? "flow" : "askFlow", flowObj);
+	if (jsonArgs().contains("ask") && calculated < 2) {
+		user()->setHypotheTrans(jsonArgs()["ask"].toDouble());
+		flowObj = QJsonObject();
+		flowObj["ask"] = jsonArgs()["ask"].toDouble();
+		goto flowCalc;
+	}
 
 	// if critically low flow
 	if (summary.flow() <= -0.95) {
@@ -125,6 +134,8 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 //	statObj["_toUTC"] = QDateTime::currentDateTime().toUTC().toString();
 //	statObj["_toLocalTime"] = QDateTime::currentDateTime().toLocalTime().toString();
 //	statObj["_lastTransDate"] = user()->allTrans().count() == 0 ? "none" : user()->allTrans().last().date.toString();
+
+
 	if (flags & SendExtraCash) {
 		CacheRest::Instance()->sendExtraCash(user()->id(), 0.0, statObj);
 	}
