@@ -12,7 +12,7 @@ class Evolver : public CacheAccountConnector
 	Q_OBJECT
 
 public:
-	explicit Evolver(QString userID, QString onlyAccount = "");
+	explicit Evolver(QString userID);
 	~Evolver();
 
 	void init();

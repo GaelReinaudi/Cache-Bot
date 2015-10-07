@@ -7,7 +7,7 @@
 class ExtraCache : public CacheAccountConnector
 {
 public:
-	ExtraCache(QString userID);
+	ExtraCache(QString userID, QJsonObject jsonArgs);
 	virtual ~ExtraCache() {};
 
 	double slushNeed() const { return m_slushFundTypicalNeed; }

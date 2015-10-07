@@ -59,9 +59,12 @@ private:
 		if (m_args.m_dayOfMonth2)
 			desc += " & %3";
 		desc += " of the month.";
+		if (m_args.m_dayOfMonth2)
+			return desc.arg(qAbs(toSignifDigit_2(m_args.m_bundle.averageAmount())))
+					.arg(m_args.m_dayOfMonth)
+					.arg(m_args.m_dayOfMonth2);
 		return desc.arg(qAbs(toSignifDigit_2(m_args.m_bundle.averageAmount())))
-				.arg(m_args.m_dayOfMonth)
-				.arg(m_args.m_dayOfMonth2);
+				.arg(m_args.m_dayOfMonth);
 	}
 	friend class FeaturePeriodicAmount;
 	friend class FeatureMonthlyAmount;

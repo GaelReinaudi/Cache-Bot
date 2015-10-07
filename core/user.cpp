@@ -27,13 +27,19 @@ SuperOracle* User::oracle()
 	return m_mainOracle;
 }
 
-void User::setHypotheTrans(double amount) {
+bool User::setHypotheTrans(int amount) {
+//	if (qRound(m_hypotheTrans.amountDbl()) == amount)
+//		return false;
+	// clears all the cached results
+	HistoMetric::clearAll();
+
 	m_hypotheTrans.setAmount(amount);
 	m_hypotheTrans.date = Transaction::currentDay();
 	m_hypotheTrans.name += "Hypothetic Transaction, fucking take the red pill dude!";
 	m_hypotheTrans.nameHash.setFromString(m_hypotheTrans.name, m_hypotheTrans.kla());
 	if (&m_allTransBundle.last() != &m_hypotheTrans)
 		m_allTransBundle.append(&m_hypotheTrans);
+	return true;
 }
 
 void User::injectJsonData(QString jsonStr)

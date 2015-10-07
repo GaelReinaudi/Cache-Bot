@@ -83,9 +83,9 @@ public:
 	BotContext* makeBotContext();
 	SuperOracle* oracle();
 
-	void setHypotheTrans(double amount);
 
 public slots:
+	bool setHypotheTrans(int amount = 0);
 	void injectJsonData(QString jsonStr);
 	void injectJsonBot(QString jsonStr);
 	//! simulates a re-injection of the bot in order ot recalculate downstream slots

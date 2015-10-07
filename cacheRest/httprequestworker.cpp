@@ -321,6 +321,7 @@ void HttpRequestWorker::on_manager_finished(QNetworkReply *reply) {
 			qWarning() << "Warning: Not connecting normally !!!!!!!!!!";
 			ERR() << "Warning: Not connecting normally !!!!!!!!!!";
 			qApp->exit(0);
+			return;
 		}
 	}
 	else if(reply->request().url() == QUrl(IdsRoute)) {
