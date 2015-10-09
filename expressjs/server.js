@@ -61,13 +61,13 @@ app.get('/cache-bot/evo/:user_id', function(req, res) {
 });
 
 app.post('/cache-bot/evo', function(req, res) {
-    jsonStr = JSON.stringify(req.body);
+    jsonStr = "'"+JSON.stringify(req.body)+"'";
     console.log('POST to /cache-bot/evo  body: '+ jsonStr);
 
     var response = "thx, running evo for user: " + req.params.user_id;
     res.status(200).send(response);
     var runFull = child_process.execFile(
-        '../../expressjs/evo.sh', [req.body.user_id, "'"+jsonStr+"'"], {
+        '../../expressjs/evo.sh', [req.body.user_id, jsonStr], {
             cwd: '/home/ubuntu/Cache-Bot/bin/release',
             timeout: 1200000 },
         function(err, stdout, stderr) {
@@ -97,8 +97,8 @@ app.get('/cache-bot/extraCash/:user_id', function(req, res) {
 });
 
 app.post('/cache-bot/extraCash', function(req, res) {
-    jsonStr = JSON.stringify(req.body);
-    console.log('POST to /cache-bot/extraCash  body: '+ "'"+jsonStr+"'");
+    jsonStr = "'"+JSON.stringify(req.body)+"'";
+    console.log('POST to /cache-bot/extraCash  body: '+ jsonStr);
 
     var runExtra = child_process.execFile(
         '../../expressjs/extraCash.sh', [req.body.user_id, jsonStr], {
