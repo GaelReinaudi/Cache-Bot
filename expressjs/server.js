@@ -64,10 +64,10 @@ app.post('/cache-bot/evo', function(req, res) {
     jsonStr = "'"+JSON.stringify(req.body)+"'";
     console.log('POST to /cache-bot/evo  body: '+ jsonStr);
 
-    var response = "thx, running evo for user: " + req.params.user_id;
+    var response = "thx, running evo for user: " + req.body.user_id;
     res.status(200).send(response);
     var runFull = child_process.execFile(
-        '../../expressjs/evo.sh', [req.body.user_id, jsonStr], {
+        '../../expressjs/evo.sh', [jsonStr], {
             cwd: '/home/ubuntu/Cache-Bot/bin/release',
             timeout: 1200000 },
         function(err, stdout, stderr) {
