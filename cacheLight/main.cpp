@@ -4,19 +4,15 @@
 int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
-	QString jsonFileOrUser = "../../data/adelineGaelTransactions.json";
-	if(argc > 1) {
-		jsonFileOrUser = argv[1];
+	if(argc < 2) {
+		qDebug() << "needs an argument";
+		return 0;
 	}
-	QString jsonStr;
-	if(argc > 2) {
-		jsonStr = QString(argv[2]);
-	}
-//	qDebug() << "jsonStr: " << jsonStr;
+	QString jsonStr = QString(argv[1]);
 	QJsonDocument jsonDoc(QJsonDocument::fromJson(jsonStr.toUtf8()));
 	const QJsonObject& jsonObj = jsonDoc.object();
-//	qDebug() << "jsonArgs: " << QString(QJsonDocument(jsonObj).toJson(QJsonDocument::Compact));
-	ExtraCashView w(jsonFileOrUser, jsonObj);
+	qDebug() << jsonStr << jsonObj;
+	ExtraCashView w(jsonObj["user_id"].toString().trimmed(), jsonObj);
 	w.show();
 
 	return a.exec();

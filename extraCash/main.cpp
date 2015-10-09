@@ -8,14 +8,11 @@ int main(int argc, char *argv[])
 		qDebug() << "needs an argument";
 		return 0;
 	}
-	QString userID = argv[1];
-	QString jsonStr;
-	if(argc > 2) {
-		jsonStr = QString(argv[2]);
-	}
+	QString jsonStr = QString(argv[1]).remove("'");
 	QJsonDocument jsonDoc(QJsonDocument::fromJson(jsonStr.toUtf8()));
 	const QJsonObject& jsonObj = jsonDoc.object();
-	ExtraCache w(userID, jsonObj);
+	qDebug() << endl << jsonStr << endl << jsonObj;
+	ExtraCache w(jsonObj["user_id"].toString().trimmed(), jsonObj);
 
 	return a.exec();
 }
