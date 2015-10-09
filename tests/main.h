@@ -71,7 +71,7 @@ private slots:
 		QCOMPARE(spyNoUserData.count(), 1);
 		QList<QVariant> arguments = spyNoUserData.takeFirst();
 		QSTARTSWITH(arguments.at(0).toString()
-					, "{\"error\":{\"message\":\"Cast to ObjectId failed");
+					, "{\"error\":{\"stack\"");
 	}
 
 	void userNoBank() {
