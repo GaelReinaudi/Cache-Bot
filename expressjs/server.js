@@ -101,7 +101,7 @@ app.post('/cache-bot/extraCash', function(req, res) {
     console.log('POST to /cache-bot/extraCash  body: '+ jsonStr);
 
     var runExtra = child_process.execFile(
-        '../../expressjs/extraCash.sh', [req.body.user_id, jsonStr], {
+        '../../expressjs/extraCash.sh', [jsonStr], {
             cwd: '/home/ubuntu/Cache-Bot/bin/release',
             timeout: 30000 },
         function(err, stdout, stderr) {
