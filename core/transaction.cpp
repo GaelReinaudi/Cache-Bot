@@ -250,9 +250,9 @@ double TransactionBundle::daysToNextSmart() const
 	}
 	// if time since last is getting larger than when we should have seen one, we take it as a new point
 	double daysToEnd = last().date.daysTo(Transaction::currentDay());
-	if (daysToEnd > daysToNext) {
+	if (1.25 * daysToEnd > daysToNext) {
 		daysToNext *= (1.0 - EMA_FACTOR);
-		daysToNext += daysToEnd * EMA_FACTOR;
+		daysToNext += 1.25 * daysToEnd * EMA_FACTOR;
 	}
 	DBG() << "daysToEnd " << daysToEnd << " final daysTo " << daysToNext;
 	return daysToNext;
