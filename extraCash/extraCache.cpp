@@ -80,9 +80,9 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 	flowObj.insert("dif_2", flowDif_2);
 	flowObj.insert("dif_3", flowDif_3);
 
-	static int calculated = 0;
+	static int numCalc = 0;
 flowCalc:
-	++calculated;
+	++numCalc;
 	bestBot->summarize();
 	double d2z50 = Montecarlo<128>::get(user())->value(Transaction::currentDay());
 	double d2z20 = Montecarlo<128>::get(user())->d2zPerc(Transaction::currentDay(), 0.20);
@@ -113,8 +113,22 @@ flowCalc:
 		changeFlag = "kDown";
 	flowObj.insert("change", changeFlag);
 
-	statObj.insert(calculated == 1 ? "flow" : "askFlow", flowObj);
-	if (jsonArgs().contains("ask") && calculated < 2) {
+	// let's get the index of the oracle that absorbed the hypothetic transaction
+	if (numCalc == 2) {
+		int indOracleHypo = -1;
+		for (int i = 0; i < summary.summaryPerOracle.count(); ++i) {
+			for (const QJsonValueRef& t : summary.summaryPerOracle[i]["trans"].toArray()) {
+				//WARN() <<"aaaaaaaaaaaaaaa"<<i<<" "<< t.toString();
+				if (t.toString().contains("hypothetic")) {
+					indOracleHypo = i;
+					break;
+				}
+			}
+		}
+		flowObj["indOracleHypotheTrans"] = indOracleHypo;
+	}
+	statObj.insert(numCalc == 1 ? "flow" : "askFlow", flowObj);
+	if (jsonArgs().contains("ask") && numCalc < 2) {
 		user()->setHypotheTrans(jsonArgs()["ask"].toDouble());
 		flowObj = QJsonObject();
 		flowObj["ask"] = jsonArgs()["ask"].toDouble();

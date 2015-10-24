@@ -35,8 +35,9 @@ bool User::setHypotheTrans(int amount) {
 
 	m_hypotheTrans.setAmount(amount);
 	m_hypotheTrans.date = Transaction::currentDay();
-	m_hypotheTrans.name += "Hypothetic Transaction, fucking take the red pill dude!";
+	m_hypotheTrans.name += "hypothetic transaction, fucking take the red pill dude!";
 	m_hypotheTrans.nameHash.setFromString(m_hypotheTrans.name, m_hypotheTrans.kla());
+	m_hypotheTrans.id = m_hypotheTrans.name;
 	if (&m_allTransBundle.last() != &m_hypotheTrans)
 		m_allTransBundle.append(&m_hypotheTrans);
 	return true;
