@@ -47,7 +47,7 @@ void Account::loadJsonData(QJsonObject json)
 	if (m_type == Type::Unknown) {
 		ERR() << "Unknown account type. metaName: " << metaName << " . type: " << type;
 	}
-	m_balance = json["balance"].toObject()["available"].toDouble();
+	m_balance = json["balance"].toObject()["current"].toDouble();
 }
 
 bool Account::loadPlaidJson(QString jsonFile) {

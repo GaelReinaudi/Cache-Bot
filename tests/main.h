@@ -144,6 +144,7 @@ private slots:
 			QString extraCashReply = arguments.at(0).toString();
 			QVERIFY(!extraCashReply.isEmpty());
 			qDebug() << "extraCashReply:" << endl << extraCashReply.left(256) << endl;
+			break;
 		}
 	}
 

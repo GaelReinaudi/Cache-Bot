@@ -30,7 +30,7 @@ double SuperOracle::avgDaily() const
 	return avg;
 }
 
-SuperOracle::Summary SuperOracle::computeAvgCashFlow() const
+SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries) const
 {
 	DBG() << "SuperOracle::avgCashFlow";
 	SuperOracle::Summary summary;
@@ -63,7 +63,8 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow() const
 					 ;
 		}
 		summary.dailyPerOracle.append(avg);
-		summary.summaryPerOracle.append(pOr->toJson());
+		if (includeOracleSummaries)
+			summary.summaryPerOracle.append(pOr->toJson());
 	}
 	if (summary.posSum == 0.0) {
 		WARN() << "SuperOracle::avgCashFlow posAvg == 0.0 ";
