@@ -9,10 +9,11 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 	QString jsonStr = QString(argv[1]).remove("'");
+
 	QJsonDocument jsonDoc(QJsonDocument::fromJson(jsonStr.toUtf8()));
 	const QJsonObject& jsonObj = jsonDoc.object();
 	qDebug() << endl << jsonStr << endl << jsonObj;
-	Evolver w(jsonObj["user_id"].toString().trimmed());
+	Evolver w(jsonObj["user_id"].toString().trimmed(), jsonObj);
 
 	return a.exec();
 }

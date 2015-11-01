@@ -4,7 +4,7 @@
 #include "evolver.h"
 #include "botContext.h"
 
-EvoCacheView::EvoCacheView(QString userID, QVector<int> onlyLoadHashes)
+EvoCacheView::EvoCacheView(QString userID, QJsonObject jsonArgs)
 	: QMainWindow()
 	, ui(new Ui::EvoCacheView)
 {
@@ -12,9 +12,12 @@ EvoCacheView::EvoCacheView(QString userID, QVector<int> onlyLoadHashes)
 	ui->amPlot->hide();
 	setWindowTitle(QString("..")+userID.right(5));
 
-	Evolver* pEvolver = new Evolver(userID);
+	Evolver* pEvolver = new Evolver(userID, jsonArgs);
 //	pEvolver->flags &= ~CacheAccountConnector::SendBot;
-	Transaction::onlyLoadHashes = onlyLoadHashes;
+	QJsonArray onlyH = jsonArgs["onlyHashes"].toArray();
+	for (int i = 0; i < onlyH.count(); ++i) {
+		Transaction::onlyLoadHashes.append(onlyH[i].toInt());
+	}
 
 	connect(pEvolver, SIGNAL(injected(User*)), this, SLOT(onUserInjected(User*)));
 	connect(ui->startButton, SIGNAL(clicked(bool)), pEvolver, SIGNAL(startStopEvolution(bool)), Qt::DirectConnection);

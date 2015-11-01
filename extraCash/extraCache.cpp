@@ -151,6 +151,7 @@ flowCalc:
 
 
 	if (flags & SendExtraCash) {
+		statObj.insert("_inArgs", jsonArgs());
 		CacheRest::Instance()->sendExtraCash(user()->id(), 0.0, statObj);
 	}
 	else
