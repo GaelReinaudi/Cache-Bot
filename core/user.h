@@ -5,10 +5,10 @@
 #include "common.h"
 #include "transaction.h"
 #include "account.h"
+#include "oracle.h"
 class Bot;
 class BotContext;
 class Fund;
-class SuperOracle;
 
 typedef QMap<int, double> SparkLine;
 
@@ -82,7 +82,8 @@ public:
 
 	BotContext* makeBotContext();
 	SuperOracle* oracle();
-
+	SuperOracle::Summary smallSummary();
+	bool littleIncome();
 
 public slots:
 	bool setHypotheTrans(int amount = 0);

@@ -90,11 +90,13 @@ void Puppy::Tree::interpret(void* outResult, Puppy::Context& ioContext)
 	// reset all flags
 	ioContext.flags = 0;
 
+	double& output = *(double*)outResult;
+
 	assert(size() > 0);
 	ioContext.mTree = this;
 	ioContext.mCallStack.push_back(0);
 	if(isValidTree()) {
-		front().mPrimitive->execute(outResult, ioContext);
+		front().mPrimitive->execute(&output, ioContext);
 		ioContext.mTree = 0;
 		double lame = 0;
 //		if (ioContext.filterHashIndex < 0) {
@@ -107,6 +109,10 @@ void Puppy::Tree::interpret(void* outResult, Puppy::Context& ioContext)
 			postTree->front().mPrimitive->execute(&lame, ioContext);
 			ioContext.mTree = 0;
 			ioContext.isPostTreatment = false;
+			if (ioContext.m_pUser->littleIncome()) {
+				WARN() << "little income: fitness /= 2";
+				output /= 2;
+			}
 		}
 	}
 	else {

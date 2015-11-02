@@ -27,8 +27,21 @@ SuperOracle* User::oracle()
 	return m_mainOracle;
 }
 
+SuperOracle::Summary User::smallSummary()
+{
+	return oracle()->computeAvgCashFlow(false);
+}
+
+bool  User::littleIncome()
+{
+	SuperOracle::Summary s = smallSummary();
+	if (s.posSum < -s.negSum * 0.25)
+		return true;
+	return false;
+}
+
 bool User::setHypotheTrans(int amount) {
-//	if (qRound(m_hypotheTrans.amountDbl()) == amount)
+	//	if (qRound(m_hypotheTrans.amountDbl()) == amount)
 //		return false;
 	// clears all the cached results
 	HistoMetric::clearAll();

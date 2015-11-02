@@ -255,7 +255,7 @@ public:
 			return effect;
 		}
 	};
-	Summary computeAvgCashFlow() const;
+	Summary computeAvgCashFlow(bool includeOracleSummaries = true) const;
 
 private:
 	QVector<QSharedPointer<Oracle> > m_subOracles;
