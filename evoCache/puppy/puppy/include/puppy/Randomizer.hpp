@@ -113,8 +113,10 @@ inline double Puppy::Randomizer::rollUniform(double inLow, double inUp)
  */
 inline void Puppy::Randomizer::seed(unsigned long inSeed)
 {
-  if(inSeed == 0) std::srand((unsigned int)std::time(NULL));
-  else std::srand(inSeed);
+  if(inSeed == 0)
+	  std::srand((unsigned int)std::time(NULL));
+  else
+	  std::srand(inSeed);
 }
 
 

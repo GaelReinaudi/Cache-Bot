@@ -4,7 +4,7 @@
 #include "common.h"
 #include "puppy/Puppy.hpp"
 
-#define CONTEXT_SEED_DEFAULT 1
+#define CONTEXT_SEED_DEFAULT 123456789
 
 class CORESHARED_EXPORT BotContext : public DBobj, public Puppy::Context
 {
