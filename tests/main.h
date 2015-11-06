@@ -82,7 +82,7 @@ private slots:
 		QList<QVariant> arguments = spyUserData.takeFirst();
 		//qDebug() << arguments.at(0).toString();
 		QSTARTSWITH(arguments.at(0).toString()
-					, "{\"error\":\"Error: user has no banks.\"");
+					, "{\"error\":\"Error: no banks found for");
 	}
 
 	void getUseraData() {
@@ -93,7 +93,7 @@ private slots:
 		QList<QVariant> arguments = spyUserData.takeFirst();
 		m_userData = arguments.at(0).toString();
 		QSTARTSWITH(m_userData
-					, "{\"user\":");
+					, "{\"transact");
 	}
 
 	void injectData() {
@@ -134,18 +134,18 @@ private slots:
 //		}
 //	}
 
-	void allUsersExtraCashComputations() {
-		for (const QString& userId : m_userIds) {
-			//qDebug() << "user " << userId;
-			CacheRest::Instance()->extraCashEC2Computation(userId);
-			QSignalSpy spyExtraCashComputation(CacheRest::Instance()->worker, SIGNAL(repliedExtraCashEC2Computation(QString)));
-			QVERIFY(spyExtraCashComputation.wait(20000));
-			QList<QVariant> arguments = spyExtraCashComputation.takeFirst();
-			QString extraCashReply = arguments.at(0).toString();
-			QVERIFY(!extraCashReply.isEmpty());
-			qDebug() << "extraCashReply:" << endl << extraCashReply.left(256) << endl;
-			break;
-		}
+	void randUsersExtraCashComputations() {
+		// test a random user
+		qsrand(QTime::currentTime().msecsSinceStartOfDay());
+		QString randUser = m_userIds[qrand() % m_userIds.count()];
+		qDebug() << "randUser " << randUser;
+		CacheRest::Instance()->extraCashEC2Computation(randUser);
+		QSignalSpy spyExtraCashComputation(CacheRest::Instance()->worker, SIGNAL(repliedExtraCashEC2Computation(QString)));
+		QVERIFY(spyExtraCashComputation.wait(20000));
+		QList<QVariant> arguments = spyExtraCashComputation.takeFirst();
+		QString extraCashReply = arguments.at(0).toString();
+		QVERIFY(!extraCashReply.isEmpty());
+		qDebug() << "extraCashReply:" << endl << extraCashReply.left(256) << endl;
 	}
 
 private:

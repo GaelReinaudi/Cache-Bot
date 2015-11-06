@@ -196,9 +196,6 @@ void EvolutionSpinner::runEvolution() {
 		int afterReinjection = 0;
 		std::vector<Tree> bestGenTree;
 		for(m_context->currentGeneration = 1; m_context->currentGeneration <= lNbrGen; ++m_context->currentGeneration ) {
-			if(!m_doSpin)  {
-				break;
-			}
 			INFO() << "Generation " << m_context->currentGeneration  << " pop " << lPopulation.size();
 			auto result = std::minmax_element(lPopulation.begin(), lPopulation.end());
 			Tree bestTree = lPopulation[result.second - lPopulation.begin()];
@@ -210,6 +207,9 @@ void EvolutionSpinner::runEvolution() {
 			}
 			else {
 				emit m_context->newSummarizedTree(finalBotObject);
+			}
+			if(!m_doSpin)  {
+				break;
 			}
 
 //			if (afterReinjection > NthReAddSuper)
