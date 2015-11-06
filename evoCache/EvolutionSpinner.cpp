@@ -6,8 +6,9 @@
 const double THRESHOLD_PROBA_BILL = 0.1;
 
 #define POP_SIZE_DEFAULT 100//75//0
-#define PRE_GEN_DEFAULT 100
-#define NBR_GEN_DEFAULT 1000
+#define NBR_GEN_DEFAULT 10000
+#define POP_SIZE_DEFAULT_PRE 300
+#define NBR_GEN_DEFAULT_PRE 50
 #define NBR_PART_TOURNAMENT_DEFAULT 3
 #define MAX_DEPTH_DEFAULT 6
 #define MIN_INIT_DEPTH_DEFAULT 3
@@ -79,7 +80,7 @@ void EvolutionSpinner::runEvolution() {
 		m_context->filterHashIndex = j;
 		m_context->currentGeneration = 0;
 		// Initialize population.
-		std::vector<Tree> lPopulation(5 * lPopSize);
+		std::vector<Tree> lPopulation(POP_SIZE_DEFAULT_PRE);
 		NOTICE() << "Initializing population for hash " << h;
 		initializePopulation(lPopulation, *m_context, lInitGrowProba, lMinInitDepth, lMaxInitDepth);
 		double bestFitness = evaluateSymbReg(lPopulation, *m_context);
@@ -94,7 +95,7 @@ void EvolutionSpinner::runEvolution() {
 		// Evolve population for the given number of generations
 		INFO() << "Starting evolution " << newBestFitness;
 
-		for(m_context->currentGeneration = 1; m_context->currentGeneration <= PRE_GEN_DEFAULT; ++m_context->currentGeneration ) {
+		for(m_context->currentGeneration = 1; m_context->currentGeneration <= NBR_GEN_DEFAULT_PRE; ++m_context->currentGeneration ) {
 //			while(!m_doSpin)  {
 //				QThread::msleep(100);
 //			}
@@ -194,7 +195,7 @@ void EvolutionSpinner::runEvolution() {
 		// 0 after a reinjection of features
 		int afterReinjection = 0;
 		std::vector<Tree> bestGenTree;
-		for(m_context->currentGeneration = 1; m_context->currentGeneration <=10*lNbrGen; ++m_context->currentGeneration ) {
+		for(m_context->currentGeneration = 1; m_context->currentGeneration <= lNbrGen; ++m_context->currentGeneration ) {
 			if(!m_doSpin)  {
 				break;
 			}
