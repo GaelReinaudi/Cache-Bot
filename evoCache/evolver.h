@@ -23,6 +23,9 @@ protected:
 
 protected slots:
 	void onFinishedEvolution(QJsonObject finalBotObject = QJsonObject());
+	void timeOut() {
+		emit startStopEvolution(false);
+	}
 
 signals:
 	void initialized(bool);

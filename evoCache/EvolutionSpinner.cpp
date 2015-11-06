@@ -5,8 +5,9 @@
 
 const double THRESHOLD_PROBA_BILL = 0.1;
 
-#define POP_SIZE_DEFAULT 32//75//0
-#define NBR_GEN_DEFAULT 30
+#define POP_SIZE_DEFAULT 100//75//0
+#define PRE_GEN_DEFAULT 100
+#define NBR_GEN_DEFAULT 1000
 #define NBR_PART_TOURNAMENT_DEFAULT 3
 #define MAX_DEPTH_DEFAULT 6
 #define MIN_INIT_DEPTH_DEFAULT 3
@@ -93,7 +94,7 @@ void EvolutionSpinner::runEvolution() {
 		// Evolve population for the given number of generations
 		INFO() << "Starting evolution " << newBestFitness;
 
-		for(m_context->currentGeneration = 1; m_context->currentGeneration <= 2*lNbrGen; ++m_context->currentGeneration ) {
+		for(m_context->currentGeneration = 1; m_context->currentGeneration <= PRE_GEN_DEFAULT; ++m_context->currentGeneration ) {
 //			while(!m_doSpin)  {
 //				QThread::msleep(100);
 //			}
