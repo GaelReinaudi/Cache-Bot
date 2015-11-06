@@ -204,8 +204,8 @@ void EvolutionSpinner::runEvolution() {
 			if (bestTree.mFitness > veryBestTree.mFitness) {
 				veryBestTree = bestTree;
 				finalBotObject = summarize(veryBestTree);
-			}
-			else {
+//			}
+//			else {
 				emit m_context->newSummarizedTree(finalBotObject);
 			}
 			if(!m_doSpin)  {

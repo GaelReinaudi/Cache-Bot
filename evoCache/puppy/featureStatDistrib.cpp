@@ -43,7 +43,7 @@ double FeatureStatDistrib::apply(TransactionBundle& allTrans, bool doLog)
 
 	computeNextDayProba();
 
-	double tempFitness = 10.0;
+	double tempFitness = 50.0;
 	tempFitness *= m_localStaticArgs.m_dayProba;
 	return tempFitness;
 }
