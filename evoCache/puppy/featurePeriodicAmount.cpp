@@ -142,8 +142,10 @@ void FeatureMonthlyAmount::onJustApplied(TransactionBundle& allTrans, bool doLog
 		return;
 	}
 	// recompute fitness
-	m_fitness *= 1.75 * (double(m_localStaticArgs.m_consecMonthBeforeMissed) - 1.5);
 	m_fitness -= 3 * qMax(0.0, rerun);
+	m_fitness *= 1.75 * (double(m_localStaticArgs.m_consecMonthBeforeMissed) - 1.5);
+	if (m_localStaticArgs.m_consecMissed == 0 && m_localStaticArgs.m_consecMonthBeforeMissed == 2)
+		m_fitness *= 5;
 //	m_fitness *= 2.0;
 //	if (qAbs(m_localStaticArgs.m_kla) > 2)
 //		m_fitness *= qAbs(m_localStaticArgs.m_kla);
