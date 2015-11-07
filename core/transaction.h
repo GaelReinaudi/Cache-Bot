@@ -111,6 +111,9 @@ public:
 	static int maxDaysOld() {
 		return s_maxDaysOld;
 	}
+	static int maxDaysOldAllTransatcion() {
+		return s_maxDaysOldAllTransatcion;
+	}
 	static void setMaxDaysOld(const int value) {
 		s_maxDaysOld = value;
 	}
@@ -118,6 +121,7 @@ public:
 
 private:
 	static int s_maxDaysOld;
+	static int s_maxDaysOldAllTransatcion;
 	static QDate s_currentDay;
 	static QDateTime s_actualCurrentDayTime;
 public:

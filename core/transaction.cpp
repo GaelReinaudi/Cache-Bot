@@ -7,6 +7,7 @@ QDate Transaction::s_currentDay = Transaction::s_actualCurrentDayTime.date();//.
 
 QVector<int> Transaction::onlyLoadHashes = QVector<int>();
 int Transaction::s_maxDaysOld = 5 * 31;
+int Transaction::s_maxDaysOldAllTransatcion = 30;
 QDate Transaction::onlyAfterDate = Transaction::currentDay().addMonths(-6);
 int Transaction::onlyAccountType = Account::Type::Saving | Account::Type::Checking | Account::Type::Credit;
 
@@ -37,6 +38,7 @@ void Transaction::read(const QJsonObject &json) {
 	for (int npcIndex = 0; npcIndex < npcArrayOld.size(); ++npcIndex) {
 		categories.append(npcArrayOld[npcIndex].toString());
 	}
+	s_maxDaysOldAllTransatcion = qMax(s_maxDaysOldAllTransatcion, int(date.daysTo(Transaction::currentDay())));
 
 	// logs all in the LOG.
 	auto out = INFO();
@@ -230,7 +232,7 @@ double TransactionBundle::klaAverage() const {
 
 double TransactionBundle::daysToNextSmart() const
 {
-	double daysToNext = double(Transaction::maxDaysOld()) / count();
+	double daysToNext = double(Transaction::maxDaysOldAllTransatcion()) / count();
 	double EMA_FACTOR = 0.5;
 
 	for (int i = 1; i < count(); ++i) {
@@ -255,5 +257,6 @@ double TransactionBundle::daysToNextSmart() const
 		daysToNext += 1.25 * daysToEnd * EMA_FACTOR;
 	}
 	DBG() << "daysToEnd " << daysToEnd << " final daysTo " << daysToNext;
+
 	return daysToNext;
 }

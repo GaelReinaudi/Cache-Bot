@@ -35,7 +35,7 @@ double FeatureStatDistrib::apply(TransactionBundle& allTrans, bool doLog)
 		}
 	}
 	int numBund = m_localStaticArgs.m_bundle.count();
-	if (numBund <= minTransactionForBundle()) {
+	if (numBund < minTransactionForBundle()) {
 		m_localStaticArgs.m_bundle.clear();
 		m_localStaticArgs.m_dayProba = 0.0;
 		return 0.0;

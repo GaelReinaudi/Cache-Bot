@@ -110,6 +110,7 @@ void User::injectJsonData(QString jsonStr)
 		Account* pInAcc = getAccountByPlaidId(acPlaidId);
 		m_allTransactions.appendNew(jsonTrans, pInAcc);
 	}
+	INFO() << "maxDaysOldAllTransatcion " << Transaction::maxDaysOldAllTransatcion();
 	m_allTransactions.sort();
 
 	//////// complete Accounts with transaction pointers in bundles
