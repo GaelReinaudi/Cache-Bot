@@ -83,7 +83,7 @@ public:
 	BotContext* makeBotContext();
 	SuperOracle* oracle();
 	SuperOracle::Summary smallSummary();
-	bool littleIncome();
+	double littleIncome();
 
 public slots:
 	bool setHypotheTrans(int amount = 0);

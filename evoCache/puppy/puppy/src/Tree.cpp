@@ -102,16 +102,15 @@ void Puppy::Tree::interpret(void* outResult, Puppy::Context& ioContext)
 //		if (ioContext.filterHashIndex < 0) {
 //			ioContext.getPrimitiveByName("FeatureAllOthers")->execute(&lame, ioContext);
 //		}
-		if (ioContext.m_summaryJsonObj && ioContext.filterHashIndex < 0) {
-			Tree* postTree = Bot::instancePostTreatmentBot(ioContext);
-			ioContext.mTree = postTree;
-			ioContext.isPostTreatment = true;
-			postTree->front().mPrimitive->execute(&lame, ioContext);
-			ioContext.mTree = 0;
-			ioContext.isPostTreatment = false;
-			if (ioContext.m_pUser->littleIncome()) {
-				WARN() << "little income: fitness /= 2";
-				output /= 2;
+		if (ioContext.filterHashIndex < 0) {
+			if (1||ioContext.m_summaryJsonObj) {
+				Tree* postTree = Bot::instancePostTreatmentBot(ioContext);
+				ioContext.mTree = postTree;
+				ioContext.isPostTreatment = true;
+				postTree->front().mPrimitive->execute(&lame, ioContext);
+				ioContext.mTree = 0;
+				ioContext.isPostTreatment = false;
+				output *= ioContext.m_pUser->littleIncome();
 			}
 		}
 	}

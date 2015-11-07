@@ -32,12 +32,18 @@ SuperOracle::Summary User::smallSummary()
 	return oracle()->computeAvgCashFlow(false);
 }
 
-bool  User::littleIncome()
+double  User::littleIncome()
 {
 	SuperOracle::Summary s = smallSummary();
-	if (s.posSum < -s.negSum * 0.25)
-		return true;
-	return false;
+	double flow = s.flow();
+	if (s.posSum == 0)
+		return 0.01;
+	if (flow < -0.0 * s.posSum) {
+		double fac = 0.5;
+		WARN() << "little income: fac " << fac;
+		return fac;
+	}
+	return 1.0;
 }
 
 bool User::setHypotheTrans(int amount) {
@@ -69,11 +75,11 @@ void User::injectJsonData(QString jsonStr)
 		fileout << jsonDoc.toJson(QJsonDocument::Indented);
 	}
 
-	//////// "user"
-	QJsonObject jsonUser = jsonObj["user"].toObject();
-	m_email = jsonUser["local"].toObject()["email"].toString();
-	qDebug() << "user" << jsonUser["_id"].toString() << ":" << jsonUser["local"].toObject()["email"].toString();
-	Q_ASSERT_X(jsonUser["_id"].toString() == id(), "injectJsonData", jsonUser["_id"].toString().toUtf8() + " != " + id().toUtf8());
+//	//////// "user"
+//	QJsonObject jsonUser = jsonObj["user"].toObject();
+//	m_email = jsonUser["local"].toObject()["email"].toString();
+//	qDebug() << "user" << jsonUser["_id"].toString() << ":" << jsonUser["local"].toObject()["email"].toString();
+//	Q_ASSERT_X(jsonUser["_id"].toString() == id(), "injectJsonData", jsonUser["_id"].toString().toUtf8() + " != " + id().toUtf8());
 
 	//////// "banks"
 	QJsonArray jsonBankArray = jsonObj["banks"].toArray();
