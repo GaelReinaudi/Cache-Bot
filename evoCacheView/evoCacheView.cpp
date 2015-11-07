@@ -23,7 +23,11 @@ EvoCacheView::EvoCacheView(QString userID, QJsonObject jsonArgs)
 	connect(ui->startButton, SIGNAL(clicked(bool)), pEvolver, SIGNAL(startStopEvolution(bool)), Qt::DirectConnection);
 
 	m_plotFitness = new QCustomPlot(ui->leftWidget);
+	m_plotFitness->axisRect()->setupFullAxesBox();
 	m_plotFitness->addGraph();
+	m_plotFitness->addGraph(m_plotFitness->xAxis, m_plotFitness->yAxis2);
+	m_plotFitness->graph(1)->setPen(QPen(Qt::red));
+	m_plotFitness->yAxis2->setTickLabels(true);
 	ui->leftWidget->layout()->addWidget(m_plotFitness);
 }
 
@@ -100,6 +104,7 @@ void EvoCacheView::onNewSummarizedTree(QJsonObject jsonObj)
 	static double i = 0;
 	++i;
 	m_plotFitness->graph(0)->addData(i, jsonObj["fit"].toDouble());
+	m_plotFitness->graph(1)->addData(i, jsonObj["flow"].toDouble());
 	m_plotFitness->rescaleAxes();
 	m_plotFitness->replot();
 }

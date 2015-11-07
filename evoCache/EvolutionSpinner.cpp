@@ -204,8 +204,8 @@ void EvolutionSpinner::runEvolution() {
 			if (bestTree.mFitness > veryBestTree.mFitness) {
 				veryBestTree = bestTree;
 				finalBotObject = summarize(veryBestTree);
-//			}
-//			else {
+			}
+			else {
 				emit m_context->newSummarizedTree(finalBotObject);
 			}
 			if(!m_doSpin)  {
@@ -327,11 +327,13 @@ QJsonObject EvolutionSpinner::summarize(Tree& tree)
 	emit m_context->summarizingTree();
 	tree.mValid = false;
 	m_context->m_summaryJsonObj = &jsonObj;
+	m_context->m_pUser->oracle()->clearSubOracles();
 	double fit;
 	tree.interpret(&fit, *m_context);
 	m_context->m_summaryJsonObj = 0;
 
 	jsonObj.insert("fit", fit);
+	jsonObj.insert("flow", m_context->m_pUser->smallSummary().flow());
 
 	DBG() << "tree (" << fit << "): " << tree.toStr();
 	INFO() << "----" << jsonObj;

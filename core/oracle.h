@@ -154,7 +154,7 @@ public:
 		QJsonArray toJson() {
 //			QJsonObject jsSum;
 			QJsonArray allSum;
-			for (int i = 0; i < dailyPerOracle.count(); ++i) {
+			for (int i = 0; i < summaryPerOracle.count(); ++i) {
 				allSum.append(summaryPerOracle[i]);
 			}
 //			jsSum.insert("oracles", allSum);
