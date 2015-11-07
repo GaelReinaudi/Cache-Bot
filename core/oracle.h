@@ -102,7 +102,7 @@ public:
 		}
 	}
 	void clearSubOracles() {
-		NOTICE() << "clearSubOracles";
+		//NOTICE() << "clearSubOracles";
 		m_subOracles.clear();
 	}
 	void addSubOracle(QSharedPointer<Oracle> pOr) {

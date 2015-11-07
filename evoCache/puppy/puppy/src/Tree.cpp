@@ -95,6 +95,7 @@ void Puppy::Tree::interpret(void* outResult, Puppy::Context& ioContext)
 	assert(size() > 0);
 	ioContext.mTree = this;
 	ioContext.mCallStack.push_back(0);
+	ioContext.m_pUser->oracle()->clearSubOracles();
 	if(isValidTree()) {
 		front().mPrimitive->execute(&output, ioContext);
 		ioContext.mTree = 0;

@@ -38,8 +38,8 @@ double  User::littleIncome()
 	double flow = s.flow();
 	if (s.posSum == 0)
 		return 0.01;
-	if (flow < -0.0 * s.posSum) {
-		double fac = 0.5;
+	if (flow < -0.0) {
+		double fac = qSqrt(qMax(0.0, flow + 1.0));
 		WARN() << "little income: fac " << fac;
 		return fac;
 	}

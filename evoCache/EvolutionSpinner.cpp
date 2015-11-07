@@ -201,6 +201,7 @@ void EvolutionSpinner::runEvolution() {
 			Tree bestTree = lPopulation[result.second - lPopulation.begin()];
 			bestGenTree.push_back(bestTree);
 
+			//qDebug() << bestTree.mFitness << veryBestTree.mFitness << finalBotObject["flow"];
 			if (bestTree.mFitness > veryBestTree.mFitness) {
 				veryBestTree = bestTree;
 				finalBotObject = summarize(veryBestTree);
@@ -208,7 +209,9 @@ void EvolutionSpinner::runEvolution() {
 			else {
 				emit m_context->newSummarizedTree(finalBotObject);
 			}
+			//qDebug() << bestTree.mFitness << veryBestTree.mFitness << finalBotObject["flow"];
 			if(!m_doSpin)  {
+				//qDebug() << bestTree.mFitness << veryBestTree.mFitness << finalBotObject["flow"];
 				break;
 			}
 
@@ -251,6 +254,7 @@ void EvolutionSpinner::runEvolution() {
 
 	finalBotObject["_git"] = QString(GIT_VERSION);
 	qDebug() << "Exiting evolution. Features with positive fitness:" << finalBotObject["features"].toArray().count();
+	qDebug() << finalBotObject["fit"] << finalBotObject["flow"];
 	emit finishedEvolution(finalBotObject);
 }
 
@@ -327,7 +331,6 @@ QJsonObject EvolutionSpinner::summarize(Tree& tree)
 	emit m_context->summarizingTree();
 	tree.mValid = false;
 	m_context->m_summaryJsonObj = &jsonObj;
-	m_context->m_pUser->oracle()->clearSubOracles();
 	double fit;
 	tree.interpret(&fit, *m_context);
 	m_context->m_summaryJsonObj = 0;
