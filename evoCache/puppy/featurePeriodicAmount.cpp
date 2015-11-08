@@ -1,6 +1,6 @@
 #include "featurePeriodicAmount.h"
 
-static const int SLACK_FOR_LATE_TRANS = 2;
+static const int SLACK_FOR_LATE_TRANS = 4;
 
 void FeatureMonthlyAmount::getArgs(Puppy::Context &ioContext) {
 	double a = 0;
