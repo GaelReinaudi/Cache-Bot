@@ -1,10 +1,13 @@
 # CacheBot README.md
+## Currently super important
+### Yes/no buying decisions
+#### Describe here how cache-bot currently determines $--/day total costs for price windows.
+#### Decide what changes (if any) need to be made to the $--/day model so that it satisfies the requirements:
+#### Determine formula for how much has been saved for at any time.
 ## Conversation flows
 ### Prompts
 Prompts are notifications sent by Cache, that may or may not include a question (preferably yes/no)
 #### Income prompts
-
-### Yes/no buying decisions
 ### Advice
 #### Types
 ##### Price windows
