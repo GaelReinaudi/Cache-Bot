@@ -218,7 +218,6 @@ public:
 		return ret;
 	}
 	double averageAmount(std::function<double(const Transaction&)> weight = [](const Transaction&){ return 1.0; }) const;
-	double emaAmount(const double facNew) const;
 	double avgSmart() const;
 	double daysToNextSmart() const;
 	Transaction randSmart() const;

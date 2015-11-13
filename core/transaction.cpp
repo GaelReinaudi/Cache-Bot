@@ -164,19 +164,6 @@ double TransactionBundle::averageAmount(std::function<double (const Transaction 
 	return totW ? avgW / totW : 0.0;
 }
 
-double TransactionBundle::emaAmount(const double facNew) const
-{
-	if (m_vector.count() == 0)
-		return 0.0;
-	double ret = m_vector.first()->amountDbl();
-	for (int i = 1; i < m_vector.count(); ++i) {
-		const Transaction* t = m_vector.at(i);
-		ret *= (1.0 - facNew);
-		ret += facNew * t->amountDbl();
-	}
-	return ret;
-}
-
 auto lam = [](const Transaction& tr){
 	double daysOld = tr.date.daysTo(Transaction::currentDay());
 	double totSpan = Transaction::maxDaysOld();
@@ -238,7 +225,7 @@ double TransactionBundle::klaAverage() const {
 
 double TransactionBundle::daysToNextSmart() const
 {
-	double daysToNext = double(Transaction::maxDaysOldAllTransatcion()) / count();
+	double daysToNext = double(Transaction::maxDaysOldAllTransatcion()) / qMax(1, count());
 	double EMA_FACTOR = 0.5;
 
 	for (int i = 1; i < count(); ++i) {
@@ -257,12 +244,12 @@ double TransactionBundle::daysToNextSmart() const
 		DBG() << "daysTo_ " << i << ": " << daysTo_i << " daysToNext: " << oldD2N << " -> " << daysToNext;
 	}
 	// if time since last is getting larger than when we should have seen one, we take it as a new point
-	double daysToEnd = last().date.daysTo(Transaction::currentDay());
-	if (1.25 * daysToEnd > daysToNext) {
+	double daysToPres = last().date.daysTo(Transaction::currentDay());
+	if (1.25 * daysToPres > daysToNext) {
 		daysToNext *= (1.0 - EMA_FACTOR);
-		daysToNext += 1.25 * daysToEnd * EMA_FACTOR;
+		daysToNext += 1.25 * daysToPres * EMA_FACTOR;
 	}
-	DBG() << "daysToEnd " << daysToEnd << " final daysTo " << daysToNext;
+	DBG() << "daysToPres " << daysToPres << " final daysTo " << daysToNext;
 
 	return daysToNext;
 }

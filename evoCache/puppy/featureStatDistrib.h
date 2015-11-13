@@ -14,6 +14,17 @@ public:
 		ret["approxAmnt"] = toSignifDigit_2(m_args.m_bundle.averageAmount());
 		ret["avgAmnt"] = m_args.m_bundle.averageAmount();
 		ret["dayOccur"] = m_args.m_dayProba;
+		double daysToNext = -1.0;
+		double lastAgo = -1.0;
+		double savedFor = -1.0;
+		if (m_args.m_bundle.count()) {
+			daysToNext = m_args.m_bundle.daysToNextSmart();
+			lastAgo = m_args.m_bundle.last().date.daysTo(Transaction::currentDay());
+			savedFor = lastAgo / daysToNext;
+		}
+		ret["daysToNext"] = daysToNext;
+		ret["lastAgo"] = lastAgo;
+		ret["savedFor"] = savedFor;
 		QJsonArray transIds;
 		for (int i = 0; i < m_args.m_bundle.count(); ++i) {
 			const Transaction& tr = m_args.m_bundle.trans(i);
