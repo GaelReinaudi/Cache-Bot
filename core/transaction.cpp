@@ -33,7 +33,10 @@ void Transaction::read(const QJsonObject &json) {
 	name = name.trimmed();
 	setAmount(-json["amount"].toDouble(ok));
 	nameHash.setFromString(name, m_kla);
-	date = QDate::fromString(json["date"].toString().left(10), "yyyy-MM-dd");
+	QString dateToUse = "date";
+	if (json.contains("pending_date"))
+		dateToUse = "pending_date";
+	date = QDate::fromString(json[dateToUse].toString().left(10), "yyyy-MM-dd");
 	QJsonArray npcArrayOld = json["category"].toArray();
 	for (int npcIndex = 0; npcIndex < npcArrayOld.size(); ++npcIndex) {
 		categories.append(npcArrayOld[npcIndex].toString());
@@ -80,7 +83,10 @@ Transaction* StaticTransactionArray::appendNew(QJsonObject jsonTrans, Account *p
 	name.remove("Online").remove("Banking").remove("Confirmation");
 	name.remove("Image");
 	name = name.trimmed();
-	QDate date = QDate::fromString(jsonTrans["date"].toString().left(10), "yyyy-MM-dd");
+	QString dateToUse = "date";
+	if (jsonTrans.contains("pending_date"))
+		dateToUse = "pending_date";
+	QDate date = QDate::fromString(jsonTrans[dateToUse].toString().left(10), "yyyy-MM-dd");
 	double kla = -jsonTrans["amount"].toDouble();
 	qint64 hash = NameHashVector::fromString(name, kla);
 	for (const QString& nono : pInAcc->excludeNameTransContain()) {
