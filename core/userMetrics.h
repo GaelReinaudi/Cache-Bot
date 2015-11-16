@@ -14,7 +14,7 @@ public:
 
 	User* user() const {return m_user; }
 
-private:
+protected:
 	User* m_user = 0;
 };
 
@@ -22,13 +22,11 @@ template <int PastMonth, int Percentile>
 class CostRateMonthPercentileMetric : public UserMetric
 {
 protected:
-	CostRateMonthPercentileMetric(User* pUser)
-		: UserMetric(Name(), pUser)
+	CostRateMonthPercentileMetric(User* pUser) : UserMetric(Name(), pUser)
 	{
 		Q_ASSERT(Percentile >= 0 && Percentile <= 100);
 	}
-	CostRateMonthPercentileMetric(const QString& name, User* pUser)
-		: UserMetric(name, pUser)
+	CostRateMonthPercentileMetric(const QString& name, User* pUser) : UserMetric(name, pUser)
 	{
 		Q_ASSERT(Percentile >= 0 && Percentile <= 100);
 	}
@@ -90,8 +88,7 @@ template <int PastMonth, int Percentile>
 class MakeRateMonthPercentileMetric : public CostRateMonthPercentileMetric<PastMonth, Percentile>
 {
 protected:
-	MakeRateMonthPercentileMetric(User* pUser)
-		: CostRateMonthPercentileMetric<PastMonth, Percentile>(Name(), pUser)
+	MakeRateMonthPercentileMetric(User* pUser) : CostRateMonthPercentileMetric<PastMonth, Percentile>(Name(), pUser)
 	{
 	}
 
@@ -117,15 +114,11 @@ template <int InPercentile, int OutPercentile>
 class Flow01 : public UserMetric
 {
 protected:
-	Flow01(User* pUser)
-		: UserMetric(Name(), pUser)
+	Flow01(User* pUser) : UserMetric(Name(), pUser)
 	{
 		inMet =  MetricSmoother<7>::get(MakeRateMonthPercentileMetric<2, InPercentile>::get(user()));
 		outMet = MetricSmoother<7>::get(CostRateMonthPercentileMetric<2, OutPercentile>::get(user()));
 	}
-//	Flow01(const QString& name, User* pUser)
-//		: UserMetric(name, pUser)
-//	{ }
 	static QString Name() {
 		return QString("Flow01InP%1OutP%2").arg(InPercentile).arg(OutPercentile);
 	}
@@ -158,12 +151,48 @@ private:
 	HistoMetric* outMet;
 };
 
+class BalanceMetric : public UserMetric
+{
+protected:
+	BalanceMetric(User* pUser) : UserMetric(Name(), pUser)
+	{
+	}
+	static QString Name() {
+		return QString("BalanceMetric");
+	}
+
+public:
+	static BalanceMetric* get(User* pUser) {
+		auto pMet = HistoMetric::get(Name());
+		if (pMet)
+			return reinterpret_cast<BalanceMetric*>(pMet);
+		return new BalanceMetric(pUser);
+	}
+
+protected:
+	double computeFor(const QDate& date, bool& isValid) override {
+		double bal = user()->balance(Account::Type::Checking);
+		isValid = false;
+		// transaction at the starting date of the playback
+		auto& real = user()->allTrans();
+		for (int i = 0; i < real.count(); ++i) {
+			// finds the index of the last transaction within the playback date
+			if (real.trans(i).date > date) {
+				// incrementally finds out the balance at the playback date
+//				if (!real.trans(i).isInternal())
+					bal -= real.trans(i).amountDbl();
+			}
+			else // if at least one transaction before that date
+				isValid = true;
+		}
+		return bal;
+	}
+};
+
 class OracleSummary : public UserMetric
 {
 protected:
-	OracleSummary(User* pUser)
-		: UserMetric(Name(), pUser)
-		, m_pUser(pUser)
+	OracleSummary(User* pUser) : UserMetric(Name(), pUser)
 	{
 	}
 	static QString Name() {
@@ -189,8 +218,8 @@ protected:
 		QDate oldCurrentDate = Transaction::currentDay();
 		// set computation date
 		Transaction::setCurrentDay(date);
-		m_pUser->reInjectBot();
-		SuperOracle::Summary summary = m_pUser->oracle()->computeAvgCashFlow();
+		user()->reComputeBot();
+		SuperOracle::Summary summary = user()->oracle()->computeAvgCashFlow();
 		m_summaries[date] = summary;
 
 		isValid = true;
@@ -199,8 +228,50 @@ protected:
 		return summary.flow();
 	}
 private:
-	User* m_pUser = 0;
 	QMap<QDate, SuperOracle::Summary> m_summaries;
+};
+
+template<int Nrun>
+class Montecarlo : public UserMetric
+{
+protected:
+	Montecarlo(User* pUser) : UserMetric(Name(), pUser)
+	{
+	}
+	static QString Name() {
+		return QString("Montecarlo");
+	}
+
+public:
+	static Montecarlo<Nrun>* get(User* pUser) {
+		auto pMet = HistoMetric::get(Name());
+		if (pMet)
+			return reinterpret_cast<Montecarlo<Nrun>*>(pMet);
+		return new Montecarlo<Nrun>(pUser);
+	}
+	double d2zPerc(const QDate &date, double facPerc) {
+		double curBal = BalanceMetric::get(user())->value(date);
+		return m_simulations[date].timeToDelta(-curBal, facPerc);
+	}
+
+protected:
+	double computeFor(const QDate& date, bool& isValid) override {
+		NOTICE() << "Montecarlo<"<<Nrun<<"> computeFor " << date.toString();
+		QDate oldCurrentDate = Transaction::currentDay();
+		// set computation date
+		Transaction::setCurrentDay(date);
+		user()->reComputeBot();
+		m_simulations[date] = user()->oracle()->template simu<Nrun>();
+
+		isValid = true;
+		// back to where we were
+		Transaction::setCurrentDay(oldCurrentDate);
+
+		double curBal = BalanceMetric::get(user())->value(date);
+		return m_simulations[date].timeToDelta(-curBal);
+	}
+private:
+	QMap<QDate, Simulation<Nrun> > m_simulations;
 };
 
 template <int overLastDays>
@@ -231,11 +302,13 @@ public:
 protected:
 	double computeFor(const QDate& date, bool& isValid) override {
 		NOTICE() << "OracleTrend<" << overLastDays << ">computeFor " << date.toString();
-		if (m_avgSummaries.contains(date)) {
-			return m_avgSummaries[date].flow();
+		if (m_effectSummaries.contains(date)) {
+			return m_effectSummaries[date].flow();
 		}
 
 		QDate dateAgo = date.addDays(-overLastDays);
+		summaryMet->value(dateAgo);
+		summaryMet->value(date);
 		isValid = summaryMet->isValid(date) && summaryMet->isValid(dateAgo);
 		if (!isValid) {
 			WARN() << "summaryMet not valid";
@@ -245,26 +318,21 @@ protected:
 		SuperOracle::Summary sumarAgo = summaryMet->summaries()[dateAgo];
 
 		// compute average
-		m_avgSummaries[date] = (sumarEnd + sumarAgo) * 0.5;
-		m_difSummaries[date] = sumarEnd - sumarAgo;
-		m_effectSummaries[date] = m_avgSummaries[date].effectOf(m_difSummaries[date]);
+		m_effectSummaries[date] = sumarAgo.effectOf(sumarEnd, overLastDays);
 
 		for (int i = 0; i < m_effectSummaries[date].dailyPerOracle.count(); ++i) {
 			double effect = m_effectSummaries[date].dailyPerOracle[i];
 			if (qAbs(effect) > 0.001) {
 				INFO() << i
 					   << " effect: " << effect
-					   << " prop " << effect / m_avgSummaries[date].dailyPerOracle[i]
 							 ;
 			}
 		}
 
-		return m_avgSummaries[date].flow();
+		return m_effectSummaries[date].flow();
 	}
 private:
 	OracleSummary* summaryMet;
-	QMap<QDate, SuperOracle::Summary> m_avgSummaries;
-	QMap<QDate, SuperOracle::Summary> m_difSummaries;
 	QMap<QDate, SuperOracle::Summary> m_effectSummaries;
 };
 

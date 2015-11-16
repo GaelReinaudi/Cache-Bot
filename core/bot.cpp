@@ -41,7 +41,7 @@ void Bot::init(BotContext *context)
 {
 	NOTICE() << "Bot::init" << m_botStrings.join(" ");
 	m_context = context;
-	BotContext::LIMIT_NUM_FEATURES = BotContext::MAX_NUM_FEATURES;
+	m_context->lim_NUM_FEATURE = BotContext::MAX_NUM_FEATURES;
 	Puppy::initializeTree(m_puppyTree, *m_context, m_botStrings);
 	NOTICE() << "-->" << m_puppyTree.toStr();
 }
@@ -61,7 +61,6 @@ QJsonObject Bot::summarize()
 	m_puppyTree.mValid = false;
 	emit m_context->summarizingTree();
 	m_context->m_summaryJsonObj = &jsonObj;
-	m_context->m_pUser->oracle()->clearSubOracles();
 	double fit = evaluate();
 	m_context->m_summaryJsonObj = 0;
 
@@ -111,22 +110,24 @@ Puppy::Tree* Bot::instancePostTreatmentBot(Puppy::Context& ioContext)
 
 	QStringList treeNodeList;
 	treeNodeList += "ROOT";
-	double klaArg = -4.5;
-	double ratio = 0.95 / 1.04;
+	double klaArg = -6;
+	double inc = 0.2 + 0.2;
 	for (uint i = 0; i < BotContext::MAX_NUM_FEATURES; ++i) {
-		if (qAbs(klaArg) < 0.5) {
-			klaArg = 4.5;
-			ratio = 0.85 / 1.14;
-//			treeNodeList += "0";
-//			continue;
-		}
 		treeNodeList += "PriceWindow";
 		treeNodeList += "0";
-		QString klaStr = QString::number(klaArg);
+		double amntBill2 = toBillDigits_2(unKindaLog(klaArg));
+		QString klaStr = QString::number(kindaLog(amntBill2));
 		ioContext.getPrimitiveByName(klaStr);
 		treeNodeList += klaStr;
 		treeNodeList += "0";
-		klaArg *= ratio;
+		klaArg += inc;
+
+		if (klaArg <= inc/2 && inc < 0)
+			klaArg = inc = 0;
+		if (klaArg >= -inc/2 && inc > 0) {
+			klaArg = 8;
+			inc = -(0.4 + 0.4);
+		}
 	}
 
 	WARN() << "Making postTreatmentBot: " << treeNodeList.join(' ');

@@ -4,7 +4,7 @@
 #include "common.h"
 #include "transaction.h"
 
-typedef QMap<uint, TransactionBundle*> HashedBundles;
+typedef QMap<qint64, TransactionBundle*> HashedBundles;
 
 class CORESHARED_EXPORT Account : public DBobj
 {

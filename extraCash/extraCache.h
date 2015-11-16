@@ -6,10 +6,8 @@
 
 class ExtraCache : public CacheAccountConnector
 {
-	//Q_OBJECT
-
 public:
-	ExtraCache(QString userID);
+	ExtraCache(QString userID, QJsonObject jsonArgs);
 	virtual ~ExtraCache() {};
 
 	double slushNeed() const { return m_slushFundTypicalNeed; }
@@ -17,13 +15,11 @@ public:
 	double minSlope() const { return m_minSlope; }
 	int futDayMinSlope() const { return m_futDayMinSlopeCollision; }
 
-
 protected:
 	void onUserInjected(User* pUser) override;
 	void onBotInjected(Bot *bestBot) override;
 	void onRepliedSendExtraCache(QString strData) override;
-
-private:
+	void makeAdvice(QJsonObject& jsonToInject, double thresholdScore) const;
 
 private:
 	QDate m_date;

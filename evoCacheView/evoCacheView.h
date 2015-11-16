@@ -18,7 +18,7 @@ class EvoCacheView : public QMainWindow
 	Q_OBJECT
 
 public:
-	explicit EvoCacheView(QString userID, QVector<int> onlyLoadHashes = QVector<int>());
+	explicit EvoCacheView(QString userID, QJsonObject jsonArgs);
 	~EvoCacheView();
 
 public slots:

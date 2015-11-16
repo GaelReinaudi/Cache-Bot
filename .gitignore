@@ -1,6 +1,7 @@
 /build*
 *.DS_Store
 *.user
+*.rc
 /Makefile
 bin
 /*/debug/
@@ -10,3 +11,4 @@ bin
 /*/Makefile
 /*/ui_*
 *.log
+jarfile

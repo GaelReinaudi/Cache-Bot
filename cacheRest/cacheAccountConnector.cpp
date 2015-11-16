@@ -2,11 +2,14 @@
 #include "account.h"
 #include "cacherest.h"
 
-CacheAccountConnector::CacheAccountConnector(QString userID)
+CacheAccountConnector::CacheAccountConnector(QString userID, QJsonObject jsonArgs)
 	: QObject()
 	, m_userId(userID)
+	, m_jsonArgs(jsonArgs)
 {
 	CREATE_LOGGER(userID);
+
+	NOTICE() << "jsonArgs: " << QString(QJsonDocument(m_jsonArgs).toJson(/*QJsonDocument::Compact*/));
 
 	// login as cache-bot
 	CacheRest::Instance()->login();
@@ -40,11 +43,11 @@ void CacheAccountConnector::onUserInjected(User* pUser)
 	NOTICE() << "CacheAccountConnector has injected user: " << pUser->email();
 
 	double checkingBal = user()->balance(Account::Type::Checking);
-	NOTICE() << "checkingBal " << checkingBal << " (Un/Ch/Sa/Cr"
-			 << user()->balance(Account::Type::Unknown)
-			 << user()->balance(Account::Type::Checking)
-			 << user()->balance(Account::Type::Saving)
-			 << user()->balance(Account::Type::Credit)
+	NOTICE() << "checkingBal " << checkingBal << " (Un/Ch/Sa/Cr "
+			 << user()->balance(Account::Type::Unknown) << " "
+			 << user()->balance(Account::Type::Checking) << " "
+			 << user()->balance(Account::Type::Saving) << " "
+			 << user()->balance(Account::Type::Credit) << " "
 			 << " )";
 }
 

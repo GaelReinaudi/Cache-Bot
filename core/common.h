@@ -9,9 +9,12 @@ static const int MAX_TRANSACTION_PER_ACCOUNT = 1024 * 8;
 static const int KLA_MULTIPLICATOR = 1;
 
 #define QSTARTSWITH(actual, expected) QCOMPARE(actual.left(QString(expected).length()), QString(expected))
+#define QENDSWITH(actual, expected) QCOMPARE(actual.right(QString(expected).length()), QString(expected))
 
 double CORESHARED_EXPORT kindaLog(double amount);
 double CORESHARED_EXPORT unKindaLog(double kindaLogAmount);
+double toSignifDigit_2(double val);
+double toBillDigits_2(double val);
 qint64 CORESHARED_EXPORT proximityHashString(const QString& str);
 qint64 CORESHARED_EXPORT proximityHashString2(const QString& str);
 
@@ -90,7 +93,7 @@ public:
 
 	static qint64 MaxManLengthEver;
 
-public:
+protected:
 	U coord[Dim];
 };
 template<int Dim, typename U> qint64 FiniteVector<Dim, U>::MaxManLengthEver = 0;
@@ -98,7 +101,7 @@ template<int Dim, typename U> qint64 FiniteVector<Dim, U>::MaxManLengthEver = 0;
 class NameHashVector1 : public FiniteVector<1, int>
 {
 public:
-	static quint64 fromString(const QString& str) {
+	static qint64 fromString(const QString& str) {
 		qint64 h = 0;
 		for (const QChar& c : str) {
 			int n = c.toUpper().toLatin1() * 1;
@@ -128,67 +131,32 @@ public:
 
 };
 
-class NameHashVector2 : public FiniteVector<1, quint64>
+class CORESHARED_EXPORT NameHashVector2
 {
 public:
-	static quint64 fromString(const QString& str) {
-		quint64 h = 0;
-		for (const QChar& c : str) {
-			int n = c.toUpper().toLatin1();
-			if (c.isDigit())
-				continue;
-			n -= QChar(' ').toLatin1();
-			if(n >= 0 && n < 64) {
-				// flips the ith bit
-				h |=  (1 << (n));
-			}
-		}
-		return h;
-	}
+	static qint64 fromString(const QString& str, double kla);
 
-	void setFromString(const QString& str) {
-		coord[0] = fromString(str);
+	void setFromString(const QString& str, double kla) {
+		m_h = fromString(str, kla);
 	}
-
-	void setFromHash(quint64 h) {
-		coord[0] = h;
+	void setFromHash(qint64 h) {
+		m_h = h;
 	}
-
-	qint64 dist(const NameHashVector2& other) const {
-		quint64 h1 = coord[0];
-		quint64 h2 = other.coord[0];
-		// tries to make differences of short labels look more important
-		quint64 allBits = numBits(h1 | h2);
-		if (allBits <= 6)
-			return numBits(h1 ^ h2) * (7 - allBits);
-		// the number of bits that are different
-		return numBits(h1 ^ h2);
-	}
-
 	qint64 hash() const {
-		return coord[0];
+		return m_h;
 	}
+
+	qint64 dist(const NameHashVector2& other) const;
 
 	qint64 manLength() const {
 		return numBits(hash());
 	}
 
 private:
-	int numBits(quint64 n) const {
-		quint64 x = n;
-		const uint64_t m1  = 0x5555555555555555; //binary: 0101...
-		const uint64_t m2  = 0x3333333333333333; //binary: 00110011..
-		const uint64_t m4  = 0x0f0f0f0f0f0f0f0f; //binary:  4 zeros,  4 ones ...
-		x -= (x >> 1) & m1;             //put count of each 2 bits into those 2 bits
-		x = (x & m2) + ((x >> 2) & m2); //put count of each 4 bits into those 4 bits
-		x = (x + (x >> 4)) & m4;        //put count of each 8 bits into those 8 bits
-		x += x >>  8;  //put count of each 16 bits into their lowest 8 bits
-		x += x >> 16;  //put count of each 32 bits into their lowest 8 bits
-		x += x >> 32;  //put count of each 64 bits into their lowest 8 bits
-		x &= 0x7f;
-		Q_ASSERT(int(x) == QString::number(n, 2).count("1"));
-		return x;
-	}
+	int numBits(qint64 n) const;
+
+private:
+	qint64 m_h = 0;
 };
 
 #endif // COMMON_H

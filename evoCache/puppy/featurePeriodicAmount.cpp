@@ -1,6 +1,6 @@
 #include "featurePeriodicAmount.h"
 
-static const int SLACK_FOR_LATE_TRANS = 2;
+static const int SLACK_FOR_LATE_TRANS = 4;
 
 void FeatureMonthlyAmount::getArgs(Puppy::Context &ioContext) {
 	double a = 0;
@@ -10,6 +10,7 @@ void FeatureMonthlyAmount::getArgs(Puppy::Context &ioContext) {
 	getArgument(++ind, &a, ioContext);
 	m_localStaticArgs.m_kla = a;
 	getArgument(++ind, &a, ioContext);
+	a = qBound(-1000.0, a, 1000.0);
 	m_localStaticArgs.m_dayOfMonth = a;
 }
 
@@ -23,15 +24,15 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 		WARN() << "MonthlyAmount(0 TARGET): day "<<m_localStaticArgs.m_dayOfMonth<<" kla "<< m_localStaticArgs.m_kla;
 	}
 	else if (doLog) {
-		NOTICE() << getName().c_str() << " " << m_targetTrans.count()
-			<<" TARGET: day " << m_localStaticArgs.m_dayOfMonth
-			<<" kla"<< m_localStaticArgs.m_kla << "=" << m_targetTrans.first().amountDbl()
-			<< " h=" << m_targetTrans.first().nameHash.hash();
+//		NOTICE() << getName().c_str() << " " << m_targetTrans.count()
+//			<<" TARGET: day " << m_localStaticArgs.m_dayOfMonth
+//			<<" kla"<< m_localStaticArgs.m_kla << "=" << m_targetTrans.first().amountDbl()
+//			<< " h=" << m_targetTrans.first().nameHash.hash();
 	}
 
 	double totalOneOverDistClosest = 0.0;
 	double totalOneOverDistOthers = 0.0;
-	quint64 localDist = 18446744073709551615ULL;
+	qint64 localDist = Q_INT64_C(9223372036854775807);
 	const Transaction* localTrans = 0;
 	// the current target to compare to
 	Transaction* iTarg = &m_targetTrans[0];
@@ -39,25 +40,28 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 
 	m_localStaticArgs.m_consecMonth = 0;
 	m_localStaticArgs.m_consecMonthBeforeMissed = 0;
-	m_localStaticArgs.m_consecMissed = 0;
+	m_localStaticArgs.m_consecMissed = 999;
+	m_localStaticArgs.m_prevMissed = 0;
+	if (m_localStaticArgs.m_dayOfMonth < -13 || m_localStaticArgs.m_dayOfMonth > 31)
+		return 0.0;
 	for (int i = 0; i < allTrans.count(); ++i) {
 		const Transaction& trans = allTrans.trans(i);
-		quint64 dist = iTarg->dist(trans);
+		qint64 dist = iTarg->dist(trans);
 		if (trans.noUse()) {
 			dist = 1<<20;
 		}
-		if (dist < localDist) {
+		double factOld = 2.0;
+		if (dist < localDist && trans.jDay() <= approxSpacingPayment() / 3 + iTarg->jDay()) {
 			localDist = dist;
 			localTrans = &trans;
+			double daysAgo = localTrans->date.daysTo(Transaction::currentDay());
+			if (daysAgo > Transaction::maxDaysOld() / 2)
+				factOld -= 1.0 * daysAgo / double(Transaction::maxDaysOld() / 2);
 		}
-		Q_ASSERT(localDist < 18446744073709551615ULL);
-		double factOld = 2.0;
-		double daysAgo = localTrans->date.daysTo(QDate::currentDate());
-		if (daysAgo > Transaction::maxDaysOld() / 2)
-			factOld -= 1.0 * daysAgo / double(Transaction::maxDaysOld() / 2);
+//		Q_ASSERT(localDist < 18446744073709551615ULL);
 		// if we get further away by approxSpacingPayment() / 2 days, we take the next target, or if last trans
 		if (trans.jDay() > approxSpacingPayment() / 2 + iTarg->jDay() || i == allTrans.count() - 1) {
-			if (localDist < Transaction::LIMIT_DIST_TRANS) {
+			if (localDist < Transaction::LIMIT_DIST_TRANS && localTrans) {
 				m_localStaticArgs.m_bundle.append(localTrans);
 				if (doLog) {
 					iTarg->dist(*localTrans, true);
@@ -71,6 +75,7 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 				}
 				++m_localStaticArgs.m_consecMonthBeforeMissed;
 				++m_localStaticArgs.m_consecMonth;
+				m_localStaticArgs.m_prevMissed = m_localStaticArgs.m_consecMissed;
 				m_localStaticArgs.m_consecMissed = 0;
 				// if transaction is in advance
 				if (iTarg->date >= Transaction::currentDay().addDays(-SLACK_FOR_LATE_TRANS))
@@ -81,12 +86,14 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 			else if (iTarg->date < Transaction::currentDay().addDays(-SLACK_FOR_LATE_TRANS)){
 				if (doLog) {
 					DBG() << "missed: ";
-					iTarg->dist(*localTrans, true);
+					if (localTrans)
+						iTarg->dist(*localTrans, true);
 				}
 				m_localStaticArgs.m_consecMonth = 0;
 				++m_localStaticArgs.m_consecMissed;
 				double transFit = 1.0 / (1 + localDist);
-				totalOneOverDistClosest += factOld * transFit;
+				if (localTrans)
+					totalOneOverDistClosest += factOld * transFit;
 			}
 
 			if (iTarg == &m_targetTrans.last() || (iTarg + 1)->date >= endDate)
@@ -96,7 +103,7 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 			if (&trans != localTrans)
 				--i;
 			localTrans = 0;
-			localDist = quint64(-1);
+			localDist = Q_INT64_C(9223372036854775807);
 		}
 		totalOneOverDistOthers += factOld * 1.0 / (1 + dist);
 	}
@@ -105,13 +112,14 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 	// only sum that add up to > $N
 	if (qAbs(m_localStaticArgs.m_bundle.sumDollar()) > 1) {
 		tempFitness = totalOneOverDistClosest - totalOneOverDistOthers;
-		tempFitness *= 1.75 * (double(m_localStaticArgs.m_consecMonthBeforeMissed) - 1.5);
 	}
 	return tempFitness;
 }
 
 void FeatureMonthlyAmount::onJustApplied(TransactionBundle& allTrans, bool doLog = false)
 {
+	if (m_fitness <= 0.0)
+		return;
 	// tries to re-run this periodic and if it has a high vlaue, it is a sign that
 	// it is actually more frequent and should have a bad grade
 	auto temp = m_localStaticArgs;
@@ -121,7 +129,7 @@ void FeatureMonthlyAmount::onJustApplied(TransactionBundle& allTrans, bool doLog
 	cleanArgs();
 	double rerun = apply(allTrans, false);
 	if (doLog) {
-		INFO() << "fitness " << m_fitness << "- 2x " << rerun;
+		DBG() << "fitness " << m_fitness << "- 2x " << rerun;
 	}
 	// restore member variables
 	m_localStaticArgs = temp;
@@ -129,11 +137,18 @@ void FeatureMonthlyAmount::onJustApplied(TransactionBundle& allTrans, bool doLog
 	m_localStaticArgs.m_fitRerun = rerun;
 	cleanArgs();
 
+	if (m_localStaticArgs.m_prevMissed >= -1+m_localStaticArgs.m_consecMonthBeforeMissed) {
+		m_fitness = 0.0;
+		return;
+	}
 	// recompute fitness
-	m_fitness -= 2 * qMax(0.0, rerun);
+	m_fitness -= 3 * qMax(0.0, rerun);
+	m_fitness *= 1.75 * (double(m_localStaticArgs.m_consecMonthBeforeMissed) - 1.5);
+	if (m_localStaticArgs.m_consecMissed == 0 && m_localStaticArgs.m_consecMonthBeforeMissed == 2)
+		m_fitness *= 5;
 //	m_fitness *= 2.0;
-	if (qAbs(m_localStaticArgs.m_kla) > 3)
-		m_fitness *= 5.0;
+//	if (qAbs(m_localStaticArgs.m_kla) > 2)
+//		m_fitness *= qAbs(m_localStaticArgs.m_kla);
 }
 
 void FeatureMonthlyAmount::emitGraphics(Puppy::Context& ioContext) const
@@ -210,22 +225,22 @@ QVector<Transaction> OracleOneDayOfMonth::revelation(QDate upToDate)
 	auto lambdaTrans = [this](){
 		Transaction tr = m_args.m_bundle.randSmart();
 		tr.flags |= Transaction::Predicted;
-		INFO() << QString("dayOfMonth %1/%2 ").arg(m_args.m_dayOfMonth).arg(m_args.m_dayOfMonth2)
+		DBG() << QString("dayOfMonth %1/%2 ").arg(m_args.m_dayOfMonth).arg(m_args.m_dayOfMonth2)
 			  << tr.amountDbl() << " " << tr.date.toString() << " " << tr.name;
 		return tr;
 	};
-	INFO() << "OracleOneDayOfMonth::revelation. bundle = " << m_args.m_bundle.count();
+	DBG() << "OracleOneDayOfMonth::revelation. bundle = " << m_args.m_bundle.count();
 	QDate iniDate = Transaction::currentDay().addDays(-SLACK_FOR_LATE_TRANS);
 	static QVector<Transaction> targetTrans;
 	targetTrans.clear();
-	if (m_args.m_consecMissed <= 0)
+	if (FeaturePeriodicAmount::computeProba(m_args) > 0.0)
 	{
 		targetTrans = FeatureMonthlyAmount::BlankTransactionsForDayOfMonth(iniDate, upToDate, m_args.m_dayOfMonth, lambdaTrans);
 		if (m_args.m_dayOfMonth2) {
 			targetTrans += FeatureMonthlyAmount::BlankTransactionsForDayOfMonth(iniDate, upToDate, m_args.m_dayOfMonth2, lambdaTrans);
 		}
 		qSort(targetTrans.begin(), targetTrans.end(), Transaction::earlierThan);
-		// if we have the first transaction, don't predict ityy
+		// if we have the first transaction, don't predict it
 		if (m_args.m_consecMissed < 0) {
 			targetTrans.pop_front();
 		}
@@ -236,7 +251,7 @@ QVector<Transaction> OracleOneDayOfMonth::revelation(QDate upToDate)
 double OracleOneDayOfMonth::avgDaily() const
 {
 	double avgMonth = 0.0;
-	if (m_args.m_consecMissed <= 0)
+	if (FeaturePeriodicAmount::computeProba(m_args) > 0.0)
 	{
 		avgMonth = m_args.m_bundle.avgSmart();
 		if (m_args.m_dayOfMonth2) {

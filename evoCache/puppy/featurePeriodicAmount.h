@@ -9,6 +9,14 @@ public:
 	OracleOneDayOfMonth(AccountFeature* pCreatingFeature)
 		: Oracle(pCreatingFeature)
 	{}
+	QJsonObject toJson() const override {
+		QJsonObject ret = Oracle::toJson();
+		ret["approxAmnt"] = toSignifDigit_2(m_args.m_bundle.averageAmount());
+		ret["avgAmnt"] = m_args.m_bundle.averageAmount();
+		ret["day1"] = (m_args.m_dayOfMonth + 31) % 31;
+		ret["day2"] = (m_args.m_dayOfMonth2 + 31) % 31;
+		return ret;
+	}
 
 protected:
 	QVector<Transaction> revelation(QDate upToDate) override;
@@ -17,7 +25,7 @@ protected:
 private:
 	struct Args : public FeatureArgs
 	{
-		void intoJson(QJsonObject& o_retObj) {
+		void intoJson(QJsonObject& o_retObj) const override {
 			FeatureArgs::intoJson(o_retObj);
 			o_retObj.insert("dayOfMonth", m_dayOfMonth);
 			o_retObj.insert("consecutive", m_consecMonthBeforeMissed);
@@ -26,6 +34,7 @@ private:
 			o_retObj.insert("numBund", m_bundle.count());
 			o_retObj.insert("fitRerun", m_fitRerun);
 			o_retObj.insert("amnt", unKindaLog(double(m_kla)));
+			o_retObj.insert("amntS", m_bundle.avgSmart());
 			o_retObj.insert("kla", m_kla);
 			o_retObj.insert("hash", m_hash);
 		}
@@ -36,7 +45,8 @@ private:
 		// characteristics
 		int m_consecMonthBeforeMissed = 0;
 		int m_consecMonth = 0;
-		int m_consecMissed = 0;
+		int m_consecMissed = 999;
+		int m_prevMissed = 0;
 		double m_fitRerun = 0;
 	} m_args;
 	QString description() const {
@@ -50,9 +60,12 @@ private:
 		if (m_args.m_dayOfMonth2)
 			desc += " & %3";
 		desc += " of the month.";
-		return desc.arg(unKindaLog(qAbs(m_args.m_kla)), 0, 'f', 2)
-				.arg(m_args.m_dayOfMonth)
-				.arg(m_args.m_dayOfMonth2);
+		if (m_args.m_dayOfMonth2)
+			return desc.arg(qAbs(toSignifDigit_2(m_args.m_bundle.averageAmount())))
+					.arg(m_args.m_dayOfMonth)
+					.arg(m_args.m_dayOfMonth2);
+		return desc.arg(qAbs(toSignifDigit_2(m_args.m_bundle.averageAmount())))
+				.arg(m_args.m_dayOfMonth);
 	}
 	friend class FeaturePeriodicAmount;
 	friend class FeatureMonthlyAmount;
@@ -67,7 +80,19 @@ public:
 	{ }
 	~FeaturePeriodicAmount() { }
 
-	virtual int approxSpacingPayment() = 0;
+	virtual int approxSpacingPayment() const = 0;
+	int isPeriodic() const override { return approxSpacingPayment(); }
+	static double computeProba(OracleOneDayOfMonth::Args args) {
+		if (args.m_consecMissed > 0)
+			return 0.0;
+		// if one that seems new but none before
+		if (args.m_consecMonthBeforeMissed <= -args.m_consecMissed)
+			return 0.0;
+		double proba = 1.0;
+		proba *= qMax(1, args.m_consecMonthBeforeMissed);
+		proba /= 4 + 2 * args.m_consecMissed;
+		return proba;
+	}
 };
 
 class FeatureMonthlyAmount : public FeaturePeriodicAmount
@@ -83,7 +108,7 @@ protected:
 		: FeaturePeriodicAmount(featureName)
 	{ }
 protected:
-	int approxSpacingPayment() override {
+	int approxSpacingPayment() const override {
 		return 30;
 	}
 	void getArgs(Puppy::Context &ioContext) override;
@@ -91,7 +116,7 @@ protected:
 		FeaturePeriodicAmount::cleanArgs();
 		while (qAbs(m_localStaticArgs.m_kla) > 8.0)
 			m_localStaticArgs.m_kla /= 10.0;
-		m_localStaticArgs.m_dayOfMonth = qBound(-14, m_localStaticArgs.m_dayOfMonth, 31);
+		m_localStaticArgs.m_dayOfMonth = qBound(-14, m_localStaticArgs.m_dayOfMonth, 32);
 		if (m_localStaticArgs.m_dayOfMonth == 0)
 			++m_localStaticArgs.m_dayOfMonth;
 	}
@@ -112,10 +137,7 @@ protected:
 	}
 
 	double maxDailyProbability() const override {
-		double proba = 1.0;
-		proba *= qMax(1, m_localStaticArgs.m_consecMonthBeforeMissed);
-		proba /= 4 + 2 * m_localStaticArgs.m_consecMissed;
-		return proba;
+		return FeaturePeriodicAmount::computeProba(m_localStaticArgs);
 	}
 
 	virtual QVector<Transaction> targetTransactions(QDate iniDate, QDate lastDate);
@@ -132,7 +154,7 @@ public:
 	FeatureBiWeeklyAmount()
 		: FeatureMonthlyAmount("BiWeeklyAmount")
 	{ }
-	int approxSpacingPayment() override { return 15; } // +2d: gives some room for late payment
+	int approxSpacingPayment() const override { return 15; } // +2d: gives some room for late payment
 	virtual void cleanArgs() override {
 		FeatureMonthlyAmount::cleanArgs();
 		m_localStaticArgs.m_dayOfMonth2 = m_localStaticArgs.m_dayOfMonth + 15;

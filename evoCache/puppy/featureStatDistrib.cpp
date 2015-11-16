@@ -13,6 +13,7 @@ void FeatureStatDistrib::getArgs(Puppy::Context &ioContext) {
 
 double FeatureStatDistrib::apply(TransactionBundle& allTrans, bool doLog)
 {
+	Q_UNUSED(doLog);
 	DBG() << "FeatureStatDistrib::apply";
 	// transaction to compare the hash with
 	Transaction modelTrans;
@@ -28,13 +29,13 @@ double FeatureStatDistrib::apply(TransactionBundle& allTrans, bool doLog)
 			continue;
 		if (tr.dimensionOfVoid)
 			continue;
-		quint64 dist = tr.distanceWeighted<1024*1024*1024, 1024*1024*1024, maxHashDist>(modelTrans);
+		qint64 dist = tr.distanceWeighted<1024*1024*1024, 1024*1024*1024, maxHashDist>(modelTrans);
 		if (passFilter(dist, tr)) {
 			m_localStaticArgs.m_bundle.append(&tr);
 		}
 	}
 	int numBund = m_localStaticArgs.m_bundle.count();
-	if (numBund <= minTransactionForBundle()) {
+	if (numBund < minTransactionForBundle()) {
 		m_localStaticArgs.m_bundle.clear();
 		m_localStaticArgs.m_dayProba = 0.0;
 		return 0.0;
@@ -42,7 +43,7 @@ double FeatureStatDistrib::apply(TransactionBundle& allTrans, bool doLog)
 
 	computeNextDayProba();
 
-	double tempFitness = 10.0;
+	double tempFitness = 30.0;
 	tempFitness *= m_localStaticArgs.m_dayProba;
 	return tempFitness;
 }
@@ -75,7 +76,7 @@ void FeatureStatDistrib::computeNextDayProba()
 
 QVector<Transaction> OracleStatDistrib::revelation(QDate upToDate)
 {
-	INFO() << "OracleStatDistrib::revelation proba = " << m_args.m_dayProba << " bundle = " << m_args.m_bundle.count();
+	DBG() << "OracleStatDistrib::revelation proba = " << m_args.m_dayProba << " bundle = " << m_args.m_bundle.count();
 	static QVector<Transaction> retVect;
 	retVect.clear();
 	if (m_args.m_bundle.count() == 0)
@@ -88,7 +89,7 @@ QVector<Transaction> OracleStatDistrib::revelation(QDate upToDate)
 			if (randBool(prob)) {
 				Transaction randTr = m_args.m_bundle.randSmart();
 				randTr.date = curDate();
-				INFO() << QString("randTrans(%1) ").arg(prob) << randTr.amountDbl() << " " << randTr.date.toString() << " " << randTr.name;
+				DBG() << QString("randTrans(%1) ").arg(prob) << randTr.amountDbl() << " " << randTr.date.toString() << " " << randTr.name;
 				retVect.append(randTr);
 			}
 		}

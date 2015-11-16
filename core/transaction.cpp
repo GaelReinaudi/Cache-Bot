@@ -1,12 +1,20 @@
 #include "transaction.h"
 #include "account.h"
 
-QDate Transaction::s_currentDay = QDate::currentDate();//.addDays(-25);//.addMonths(-2);
+int hoursOffsetToHack_issue_9 = -5;
+QDateTime Transaction::s_actualCurrentDayTime = QDateTime::currentDateTime().addSecs(hoursOffsetToHack_issue_9 * 3600);
+QDate Transaction::s_currentDay = Transaction::s_actualCurrentDayTime.date().addDays(-1);//.addMonths(-2);
 
 QVector<int> Transaction::onlyLoadHashes = QVector<int>();
-int Transaction::s_maxDaysOld = 4 * 31;
+int Transaction::s_maxDaysOld = 5 * 31;
+int Transaction::s_maxDaysOldAllTransatcion = 30;
 QDate Transaction::onlyAfterDate = Transaction::currentDay().addMonths(-6);
 int Transaction::onlyAccountType = Account::Type::Saving | Account::Type::Checking | Account::Type::Credit;
+
+bool Transaction::noUse() const
+{
+	return isFuture() || isToOld() || isInternal();
+}
 
 int Transaction::type() const {
 	return account->type() + 16 * (flags & Internal);
@@ -15,22 +23,32 @@ int Transaction::type() const {
 void Transaction::read(const QJsonObject &json) {
 	bool ok = false;
 	QString accountStr = json["plaid_account"].toString();
+	id = json["_id"].toString();
 	name = json["name"].toString();
-	name.remove("FROM").remove("TO");//.remove("ACCT");
-	nameHash.setFromString(name);
+	name.remove("FROM").remove("TO");
+	name.remove("from").remove("to");
+	name.remove("CHK").remove("SAV");
+	name.remove("Online").remove("Banking").remove("Confirmation");
+	name.remove("Image");
+	name = name.trimmed();
 	setAmount(-json["amount"].toDouble(ok));
-	date = QDate::fromString(json["date"].toString().left(10), "yyyy-MM-dd");
+	nameHash.setFromString(name, m_kla);
+	QString dateToUse = "date";
+	if (json.contains("pending_date"))
+		dateToUse = "pending_date";
+	date = QDate::fromString(json[dateToUse].toString().left(10), "yyyy-MM-dd");
 	QJsonArray npcArrayOld = json["category"].toArray();
 	for (int npcIndex = 0; npcIndex < npcArrayOld.size(); ++npcIndex) {
 		categories.append(npcArrayOld[npcIndex].toString());
 	}
+	s_maxDaysOldAllTransatcion = qMax(s_maxDaysOldAllTransatcion, int(date.daysTo(Transaction::currentDay())));
 
 	// logs all in the LOG.
 	auto out = INFO();
 //	out.setFieldWidth(8);
 //	out.setPadChar(' ');
 //	out.setFieldAlignment(QTextStream::AlignRight);
-	out << "Transaction::read() " << amountDbl() << "   " << date.toString("MM/dd")
+	out << "Transaction::read("<<id<<") " << amountDbl() << "   " << date.toString("MM/dd")
 		  << "   " << name;
 	out << "   [";
 	for (QString& s : categories) {
@@ -59,9 +77,18 @@ qint64 Transaction::dist(const Transaction &other, bool log) const {
 
 Transaction* StaticTransactionArray::appendNew(QJsonObject jsonTrans, Account *pInAcc) {
 	QString name = jsonTrans["name"].toString();
-	name.remove("FROM").remove("TO");//.remove("ACCT");
-	QDate date = QDate::fromString(jsonTrans["date"].toString().left(10), "yyyy-MM-dd");
-	qint64 hash = NameHashVector::fromString(name);
+	name.remove("FROM").remove("TO");
+	name.remove("from").remove("to");
+	name.remove("CHK").remove("SAV");
+	name.remove("Online").remove("Banking").remove("Confirmation");
+	name.remove("Image");
+	name = name.trimmed();
+	QString dateToUse = "date";
+	if (jsonTrans.contains("pending_date"))
+		dateToUse = "pending_date";
+	QDate date = QDate::fromString(jsonTrans[dateToUse].toString().left(10), "yyyy-MM-dd");
+	double kla = -jsonTrans["amount"].toDouble();
+	qint64 hash = NameHashVector::fromString(name, kla);
 	for (const QString& nono : pInAcc->excludeNameTransContain()) {
 		if (name.contains(nono, Qt::CaseInsensitive)) {
 			WARN() << "not Adding transaction because it looks like an internal transfer based on name containing"
@@ -128,6 +155,8 @@ double TransactionBundle::averageAmount(std::function<double (const Transaction 
 	double totW = 0.0;
 	double avgW = 0.0;
 	for (const Transaction* tr : m_vector) {
+		if (tr->noUse())
+			continue;
 		double w = weight(*tr);
 		totW += w;
 		avgW += w * tr->amountDbl();
@@ -135,23 +164,10 @@ double TransactionBundle::averageAmount(std::function<double (const Transaction 
 	return totW ? avgW / totW : 0.0;
 }
 
-double TransactionBundle::emaAmount(const double facNew) const
-{
-	if (m_vector.count() == 0)
-		return 0.0;
-	double ret = m_vector.first()->amountDbl();
-	for (int i = 1; i < m_vector.count(); ++i) {
-		const Transaction* t = m_vector.at(i);
-		ret *= (1.0 - facNew);
-		ret += facNew * t->amountDbl();
-	}
-	return ret;
-}
-
 auto lam = [](const Transaction& tr){
 	double daysOld = tr.date.daysTo(Transaction::currentDay());
 	double totSpan = Transaction::maxDaysOld();
-	double thresh = totSpan / 2;
+	double thresh = totSpan * 2 / 3;
 	if (daysOld <= thresh)
 		return 1.0;
 	else if (daysOld <= totSpan)
@@ -209,7 +225,7 @@ double TransactionBundle::klaAverage() const {
 
 double TransactionBundle::daysToNextSmart() const
 {
-	double daysToNext = double(Transaction::maxDaysOld()) / count();
+	double daysToNext = double(Transaction::maxDaysOldAllTransatcion()) / qMax(1, count());
 	double EMA_FACTOR = 0.5;
 
 	for (int i = 1; i < count(); ++i) {
@@ -228,11 +244,12 @@ double TransactionBundle::daysToNextSmart() const
 		DBG() << "daysTo_ " << i << ": " << daysTo_i << " daysToNext: " << oldD2N << " -> " << daysToNext;
 	}
 	// if time since last is getting larger than when we should have seen one, we take it as a new point
-	double daysToEnd = last().date.daysTo(Transaction::currentDay());
-	if (daysToEnd > daysToNext) {
+	double daysToPres = last().date.daysTo(Transaction::currentDay());
+	if (1.25 * daysToPres > daysToNext) {
 		daysToNext *= (1.0 - EMA_FACTOR);
-		daysToNext += daysToEnd * EMA_FACTOR;
+		daysToNext += 1.25 * daysToPres * EMA_FACTOR;
 	}
-	DBG() << "daysToEnd " << daysToEnd << " final daysTo " << daysToNext;
+	DBG() << "daysToPres " << daysToPres << " final daysTo " << daysToNext;
+
 	return daysToNext;
 }

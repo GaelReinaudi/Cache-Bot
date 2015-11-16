@@ -90,23 +90,29 @@ void Puppy::Tree::interpret(void* outResult, Puppy::Context& ioContext)
 	// reset all flags
 	ioContext.flags = 0;
 
+	double& output = *(double*)outResult;
+
 	assert(size() > 0);
 	ioContext.mTree = this;
 	ioContext.mCallStack.push_back(0);
+	ioContext.m_pUser->oracle()->clearSubOracles();
 	if(isValidTree()) {
-		front().mPrimitive->execute(outResult, ioContext);
+		front().mPrimitive->execute(&output, ioContext);
 		ioContext.mTree = 0;
 		double lame = 0;
 //		if (ioContext.filterHashIndex < 0) {
 //			ioContext.getPrimitiveByName("FeatureAllOthers")->execute(&lame, ioContext);
 //		}
-		if (ioContext.m_summaryJsonObj && ioContext.filterHashIndex < 0) {
-			Tree* postTree = Bot::instancePostTreatmentBot(ioContext);
-			ioContext.mTree = postTree;
-			ioContext.isPostTreatment = true;
-			postTree->front().mPrimitive->execute(&lame, ioContext);
-			ioContext.mTree = 0;
-			ioContext.isPostTreatment = false;
+		if (ioContext.filterHashIndex < 0) {
+			if (1||ioContext.m_summaryJsonObj) {
+				Tree* postTree = Bot::instancePostTreatmentBot(ioContext);
+				ioContext.mTree = postTree;
+				ioContext.isPostTreatment = true;
+				postTree->front().mPrimitive->execute(&lame, ioContext);
+				ioContext.mTree = 0;
+				ioContext.isPostTreatment = false;
+				output *= ioContext.m_pUser->littleIncome();
+			}
 		}
 	}
 	else {

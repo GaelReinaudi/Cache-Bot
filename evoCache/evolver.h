@@ -12,7 +12,7 @@ class Evolver : public CacheAccountConnector
 	Q_OBJECT
 
 public:
-	explicit Evolver(QString userID);
+	explicit Evolver(QString userID, QJsonObject jsonArgs);
 	~Evolver();
 
 	void init();
@@ -23,6 +23,9 @@ protected:
 
 protected slots:
 	void onFinishedEvolution(QJsonObject finalBotObject = QJsonObject());
+	void timeOut() {
+		emit startStopEvolution(false);
+	}
 
 signals:
 	void initialized(bool);

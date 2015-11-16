@@ -6,7 +6,7 @@
 #include "oracle.h"
 #include "bot.h"
 
-static const int numRevelations = 8;
+static const int numRevelations = 128;
 static int alpha = 32;
 static bool breakDown = false;
 static int IND_GR_REVEL = -1;
@@ -15,22 +15,18 @@ static int IND_GR_SLOPE = -1;
 static int IND_GR_PERCENTILE = -1;
 static int IND_GR_AVG = -1;
 
-const int displayDayPast = 31;//80;//60;
-const int displayDayFuture = 62;//180;
-
 double smallInc = 1e-3;
 
-ExtraCashView::ExtraCashView(QString userID, QWidget *parent) :
-	QMainWindow(parent),
+ExtraCashView::ExtraCashView(QString userID, QJsonObject jsonArgs) :
+	QMainWindow(),
 	ui(new Ui::ExtraCashView)
 {
 	ui->setupUi(this);
+	setWindowTitle(QString("..")+userID.right(5));
 
-	m_pExtraCache = new ExtraCache(userID);
+	m_pExtraCache = new ExtraCache(userID, jsonArgs);
 	m_pExtraCache->flags = CacheAccountConnector::None;
 
-//	ui->plot->xAxis->setVisible(false);
-//	ui->plot->yAxis->setVisible(false);
 	ui->plot->yAxis2->setVisible(true);
 	ui->plot->yAxis->setSubTickCount(10);
 	ui->plot->yAxis2->setRange(-100.0, 100);
@@ -97,12 +93,12 @@ ExtraCashView::ExtraCashView(QString userID, QWidget *parent) :
 	pBars->setBrush(QColor(255, 131, 0, 50));
 
 	connect(ui->plot, SIGNAL(mouseWheel(QWheelEvent*)), this, SLOT(onWheelEvent(QWheelEvent*)));
-	connect(ui->spinHypotheTrans, SIGNAL(valueChanged(int)), this, SLOT(onHypotheTrans(int)));
 	ui->spinDaysOld->setValue(Transaction::maxDaysOld());
 	connect(ui->spinDaysOld, SIGNAL(valueChanged(int)), this, SLOT(onDaysOldSpin(int)));
 	ui->spinAgo->setValue(Transaction::currentDay().daysTo(QDate::currentDate()));
 	connect(ui->spinAgo, SIGNAL(valueChanged(int)), this, SLOT(onAgo()));
 
+	connect(m_pExtraCache, SIGNAL(injected(User*)), this, SLOT(onUserInjected(User*)));
 	connect(m_pExtraCache, SIGNAL(botInjected(Bot*)), this, SLOT(onBotInjected(Bot*)));
 }
 
@@ -111,13 +107,19 @@ ExtraCashView::~ExtraCashView()
 	delete ui;
 }
 
+void ExtraCashView::onUserInjected(User* pUser)
+{
+	connect(ui->spinHypotheTrans, SIGNAL(valueChanged(int)), pUser, SLOT(setHypotheTrans(int)));
+	connect(ui->spinHypotheTrans, SIGNAL(valueChanged(int)), pUser, SLOT(reInjectBot()));
+}
+
 void ExtraCashView::onBotInjected(Bot* pBot)
 {
 	Q_UNUSED(pBot);
 	NOTICE() << "ExtraCashView::onBotInjected";
 	m_pbDate = Transaction::currentDay();
 	m_realBalance = m_pExtraCache->user()->balance(Account::Type::Checking);
-	m_pbBalance = m_realBalance;
+	m_pbBalance = BalanceMetric::get(m_pExtraCache->user())->value(m_pbDate);
 
 	ui->costLive50SpinBox->setValue(CostRateMonthPercentileMetric<6, 50>::get(m_pExtraCache->user())->value(m_pbDate));
 	ui->costLive75SpinBox->setValue(CostRateMonthPercentileMetric<6, 75>::get(m_pExtraCache->user())->value(m_pbDate));
@@ -125,28 +127,16 @@ void ExtraCashView::onBotInjected(Bot* pBot)
 	ui->costLive95SpinBox->setValue(CostRateMonthPercentileMetric<6, 95>::get(m_pExtraCache->user())->value(m_pbDate));
 	ui->costLive99SpinBox->setValue(CostRateMonthPercentileMetric<6, 99>::get(m_pExtraCache->user())->value(m_pbDate));
 
-	// transaction at the starting date of the playback
-	auto& real = m_pExtraCache->user()->allTrans();
-	qDebug() << "date" << m_pbDate;
+	double d2z50 = Montecarlo<128>::get(m_pExtraCache->user())->value(Transaction::currentDay());
+	ui->spinT2z50->setValue(d2z50);
+	double d2z80 = Montecarlo<128>::get(m_pExtraCache->user())->d2zPerc(Transaction::currentDay(), 0.80);
+	ui->spinT2z80->setValue(d2z80);
+	double d2z20 = Montecarlo<128>::get(m_pExtraCache->user())->d2zPerc(Transaction::currentDay(), 0.20);
+	ui->spinT2z20->setValue(d2z20);
 
-	for (int i = 0; i < real.count(); ++i) {
-		// finds the index of the last transaction within the playback date
-		if (real.trans(i).date > m_pbDate) {
-			// incrementally finds out the balance at the playback date
-			if (!real.trans(i).isInternal()) {
-				m_pbBalance -= real.trans(i).amountDbl();
-			}
-		}
-	}
 	NOTICE() << "initial pb balance"<< m_pbBalance << " at" << m_pbDate.toString();
 
 	updateChart();
-}
-
-void ExtraCashView::onHypotheTrans(int transAmount)
-{
-	m_pExtraCache->user()->setHypotheTrans(transAmount);
-	m_pExtraCache->user()->reInjectBot();
 }
 
 void ExtraCashView::onDaysOldSpin(int val)
@@ -242,7 +232,7 @@ void ExtraCashView::makeRevelationPlot()
 		double t = -0.01; // to be the first point, slightly on the left
 		pGr->addData(t, curBal);
 		m_pExtraCache->user()->oracle()->resetDate(m_pbDate);
-		const QVector<Transaction> rev = m_pExtraCache->user()->oracle()->revelation(m_pbDate.addDays(displayDayFuture));
+		const QVector<Transaction>& rev = m_pExtraCache->user()->oracle()->revelation(m_pbDate.addDays(displayDayFuture));
 		double epsilon = 0.0000001;
 		double manyEspilon = epsilon;
 		for (const Transaction& tr : rev) {

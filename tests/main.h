@@ -21,7 +21,7 @@ private slots:
 		QVERIFY(spyLogin.wait());
 		QCOMPARE(spyLogin.count(), 1); // make sure the signal was emitted exactly one time
 		QList<QVariant> arguments = spyLogin.takeFirst();
-		QCOMPARE(arguments.at(0).toString()
+		QENDSWITH(arguments.at(0).toString()
 				 , StringLoggedInReplyFailure);
 
 		CacheRest::Instance()->getUserIds();
@@ -39,7 +39,7 @@ private slots:
 		bool loggedIn = spyLogin.wait();
 		QList<QVariant> arguments = spyLogin.takeFirst();
 		QVERIFY(loggedIn);
-		QCOMPARE(arguments.at(0).toString()
+		QENDSWITH(arguments.at(0).toString()
 				 , StringLoggedInReplySuccess);
 	}
 
@@ -71,7 +71,7 @@ private slots:
 		QCOMPARE(spyNoUserData.count(), 1);
 		QList<QVariant> arguments = spyNoUserData.takeFirst();
 		QSTARTSWITH(arguments.at(0).toString()
-					, "{\"error\":{\"message\":\"Cast to ObjectId failed");
+					, "{\"error\":{\"stack\"");
 	}
 
 	void userNoBank() {
@@ -82,7 +82,7 @@ private slots:
 		QList<QVariant> arguments = spyUserData.takeFirst();
 		//qDebug() << arguments.at(0).toString();
 		QSTARTSWITH(arguments.at(0).toString()
-					, "{\"error\":\"Error: user has no banks.\"");
+					, "{\"error\":\"Error: no banks found for");
 	}
 
 	void getUseraData() {
@@ -93,7 +93,7 @@ private slots:
 		QList<QVariant> arguments = spyUserData.takeFirst();
 		m_userData = arguments.at(0).toString();
 		QSTARTSWITH(m_userData
-					, "{\"user\":");
+					, "{\"transact");
 	}
 
 	void injectData() {
@@ -119,15 +119,33 @@ private slots:
 		QVERIFY(bestBotJson.contains("features\":"));
 	}
 
-	void allUsersExtraCashComputations() {
-		for (const QString& userId : m_userIds) {
-			CacheRest::Instance()->extraCashEC2Computation(userId);
-			QSignalSpy spyExtraCashComputation(CacheRest::Instance()->worker, SIGNAL(repliedExtraCashEC2Computation(QString)));
-			QVERIFY(spyExtraCashComputation.wait(10000));
-			QList<QVariant> arguments = spyExtraCashComputation.takeFirst();
-			QString bestBotJson = arguments.at(0).toString();
-			QVERIFY(!bestBotJson.isEmpty());
-		}
+//	void allUsersEvoCacheComputations() {
+//		for (const QString& userId : m_userIds) {
+//			CacheRest::Instance()->evoCacheEC2Computation(userId);
+//		}
+//	}
+//	void localRunAllEvoCacheView() {
+//		for (const QString& userId : m_userIds) {
+//			QString program = "./evoCacheView.exe";
+//			QStringList arguments;
+//			arguments << userId;
+//			QProcess *myProcess = new QProcess(0);
+//			myProcess->start(program, arguments);
+//		}
+//	}
+
+	void randUsersExtraCashComputations() {
+		// test a random user
+		qsrand(QTime::currentTime().msecsSinceStartOfDay());
+		QString randUser = "5628072e3058bd1100882125";m_userIds[qrand() % m_userIds.count()];
+		qDebug() << "randUser " << randUser;
+		CacheRest::Instance()->extraCashEC2Computation(randUser);
+		QSignalSpy spyExtraCashComputation(CacheRest::Instance()->worker, SIGNAL(repliedExtraCashEC2Computation(QString)));
+		QVERIFY(spyExtraCashComputation.wait(20000));
+		QList<QVariant> arguments = spyExtraCashComputation.takeFirst();
+		QString extraCashReply = arguments.at(0).toString();
+		QVERIFY(!extraCashReply.isEmpty());
+		qDebug() << "extraCashReply:" << endl << extraCashReply.left(256) << endl;
 	}
 
 private:

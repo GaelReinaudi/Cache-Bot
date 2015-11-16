@@ -13,7 +13,7 @@ QVector<Transaction> SuperOracle::revelation(QDate upToDate)
 	std::stable_sort(ret.begin(), ret.end(), Transaction::earlierThan);
 
 	for (const Transaction& tr : ret) {
-		INFO() << "t =" << QDate::currentDate().daysTo(tr.date) << "amnt =" << tr.amountDbl()
+		DBG() << "t =" << Transaction::currentDay().daysTo(tr.date) << "amnt =" << tr.amountDbl()
 			  << "    label = " << tr.name;
 	}
 
@@ -30,7 +30,7 @@ double SuperOracle::avgDaily() const
 	return avg;
 }
 
-SuperOracle::Summary SuperOracle::computeAvgCashFlow() const
+SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries) const
 {
 	DBG() << "SuperOracle::avgCashFlow";
 	SuperOracle::Summary summary;
@@ -40,22 +40,31 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow() const
 		double avg = pOr->avgDaily();
 		if (avg > 0) {
 			summary.posSum += avg;
+			if (pOr->feature()->isPeriodic())
+				summary.salary += avg;
 			INFO() << ind <<  " +daily " << avg << "      " << pOr->feature()->getName();
 		}
 		else if (avg < 0) {
 			summary.negSum += avg;
+			if (pOr->feature()->isPeriodic())
+				summary.bill += avg;
 			INFO() << ind <<  " -daily " << avg << "      " << pOr->feature()->getName();
 		}
 		else {
 			summary.posSum += pOr->avgDailyPos();
 			summary.negSum += pOr->avgDailyNeg();
-			DBG() << ind <<  " daily = " << avg << " " << pOr->feature()->getName()
+			if (pOr->feature()->isPeriodic()) {
+				summary.salary += pOr->avgDailyPos();
+				summary.bill += pOr->avgDailyNeg();
+			}
+			INFO() << ind <<  " 0daily = " << avg << " " << pOr->feature()->getName()
 				  << " " << pOr->avgDailyPos()
 				  << " " << pOr->avgDailyNeg()
 					 ;
 		}
 		summary.dailyPerOracle.append(avg);
-		summary.summaryPerOracle.append(pOr->toJson());
+		if (includeOracleSummaries)
+			summary.summaryPerOracle.append(pOr->toJson());
 	}
 	if (summary.posSum == 0.0) {
 		WARN() << "SuperOracle::avgCashFlow posAvg == 0.0 ";
@@ -72,6 +81,8 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow() const
 
 QJsonObject Oracle::toJson() const {
 	QJsonObject ret;
+	ret["postTreat"] = isPostTreatment;
+	ret["type"] = QString::fromStdString(feature()->getName());
 	ret["descr"] = description();
 	return ret;
 }

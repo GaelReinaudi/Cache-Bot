@@ -27,13 +27,39 @@ SuperOracle* User::oracle()
 	return m_mainOracle;
 }
 
-void User::setHypotheTrans(double amount) {
+SuperOracle::Summary User::smallSummary()
+{
+	return oracle()->computeAvgCashFlow(false);
+}
+
+double  User::littleIncome()
+{
+	SuperOracle::Summary s = smallSummary();
+	double flow = s.flow();
+	if (s.posSum == 0)
+		return 0.01;
+	if (flow < -0.0) {
+		double fac = qSqrt(qMax(0.0, flow + 1.0));
+		WARN() << "little income: fac " << fac;
+		return fac;
+	}
+	return 1.0;
+}
+
+bool User::setHypotheTrans(int amount) {
+	//	if (qRound(m_hypotheTrans.amountDbl()) == amount)
+//		return false;
+	// clears all the cached results
+	HistoMetric::clearAll();
+
 	m_hypotheTrans.setAmount(amount);
 	m_hypotheTrans.date = Transaction::currentDay();
-	m_hypotheTrans.name += "Hypothetic Transaction, fucking take the red pill dude!";
-	m_hypotheTrans.nameHash.setFromString(m_hypotheTrans.name);
+	m_hypotheTrans.name += "hypothetic transaction, fucking take the red pill dude!";
+	m_hypotheTrans.nameHash.setFromString(m_hypotheTrans.name, m_hypotheTrans.kla());
+	m_hypotheTrans.id = m_hypotheTrans.name;
 	if (&m_allTransBundle.last() != &m_hypotheTrans)
 		m_allTransBundle.append(&m_hypotheTrans);
+	return true;
 }
 
 void User::injectJsonData(QString jsonStr)
@@ -49,11 +75,11 @@ void User::injectJsonData(QString jsonStr)
 		fileout << jsonDoc.toJson(QJsonDocument::Indented);
 	}
 
-	//////// "user"
-	QJsonObject jsonUser = jsonObj["user"].toObject();
-	m_email = jsonUser["local"].toObject()["email"].toString();
-	qDebug() << "user" << jsonUser["_id"].toString() << ":" << jsonUser["local"].toObject()["email"].toString();
-	Q_ASSERT_X(jsonUser["_id"].toString() == id(), "injectJsonData", jsonUser["_id"].toString().toUtf8() + " != " + id().toUtf8());
+//	//////// "user"
+//	QJsonObject jsonUser = jsonObj["user"].toObject();
+//	m_email = jsonUser["local"].toObject()["email"].toString();
+//	qDebug() << "user" << jsonUser["_id"].toString() << ":" << jsonUser["local"].toObject()["email"].toString();
+//	Q_ASSERT_X(jsonUser["_id"].toString() == id(), "injectJsonData", jsonUser["_id"].toString().toUtf8() + " != " + id().toUtf8());
 
 	//////// "banks"
 	QJsonArray jsonBankArray = jsonObj["banks"].toArray();
@@ -84,6 +110,7 @@ void User::injectJsonData(QString jsonStr)
 		Account* pInAcc = getAccountByPlaidId(acPlaidId);
 		m_allTransactions.appendNew(jsonTrans, pInAcc);
 	}
+	INFO() << "maxDaysOldAllTransatcion " << Transaction::maxDaysOldAllTransatcion();
 	m_allTransactions.sort();
 
 	//////// complete Accounts with transaction pointers in bundles
@@ -185,17 +212,8 @@ void User::injectJsonBot(QString jsonStr)
 	emit botInjected(m_bestBot);
 }
 
-QJsonObject User::trendSummary(int nDays) const
+void User::reComputeBot()
 {
-	QJsonObject trends;
-
-	QDate endDate = Transaction::currentDay();
-//	m_bestBot->summarize();
-	Transaction::setCurrentDay(endDate.addDays(-nDays));
-//	m_bestBot->summarize();
-	Transaction::setCurrentDay(endDate);
-
-	return trends;
+	m_bestBot->summarize();
 }
-
 

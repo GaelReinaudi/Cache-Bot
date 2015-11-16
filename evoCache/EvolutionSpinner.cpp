@@ -5,18 +5,20 @@
 
 const double THRESHOLD_PROBA_BILL = 0.1;
 
-#define POP_SIZE_DEFAULT 15//75//0
-#define NBR_GEN_DEFAULT 30
+#define POP_SIZE_DEFAULT 100//75//0
+#define NBR_GEN_DEFAULT 10000
+#define POP_SIZE_DEFAULT_PRE 300
+#define NBR_GEN_DEFAULT_PRE 50
 #define NBR_PART_TOURNAMENT_DEFAULT 3
 #define MAX_DEPTH_DEFAULT 6
 #define MIN_INIT_DEPTH_DEFAULT 3
 #define MAX_INIT_DEPTH_DEFAULT 5
 #define INIT_GROW_PROBA_DEFAULT 0.15f
-#define CROSSOVER_PROBA_DEFAULT 0.8f
+#define CROSSOVER_PROBA_DEFAULT 0.18f
 #define CROSSOVER_DISTRIB_PROBA_DEFAULT 0.9f
 #define MUT_STD_PROBA_DEFAULT 0.5f
 #define MUT_MAX_REGEN_DEPTH_DEFAULT 5
-#define MUT_SWAP_PROBA_DEFAULT 0.8535f
+#define MUT_SWAP_PROBA_DEFAULT 0.5f
 #define MUT_SWAP_DISTRIB_PROBA_DEFAULT 0.5f
 
 using namespace Puppy;
@@ -76,8 +78,9 @@ void EvolutionSpinner::runEvolution() {
 		if (m_context->m_pUser->hashBundles()[h]->count() < 2)
 			continue;
 		m_context->filterHashIndex = j;
+		m_context->currentGeneration = 0;
 		// Initialize population.
-		std::vector<Tree> lPopulation(lPopSize);
+		std::vector<Tree> lPopulation(POP_SIZE_DEFAULT_PRE);
 		NOTICE() << "Initializing population for hash " << h;
 		initializePopulation(lPopulation, *m_context, lInitGrowProba, lMinInitDepth, lMaxInitDepth);
 		double bestFitness = evaluateSymbReg(lPopulation, *m_context);
@@ -92,7 +95,7 @@ void EvolutionSpinner::runEvolution() {
 		// Evolve population for the given number of generations
 		INFO() << "Starting evolution " << newBestFitness;
 
-		for(m_context->currentGeneration = 1; m_context->currentGeneration <=lNbrGen; ++m_context->currentGeneration ) {
+		for(m_context->currentGeneration = 1; m_context->currentGeneration <= NBR_GEN_DEFAULT_PRE; ++m_context->currentGeneration ) {
 //			while(!m_doSpin)  {
 //				QThread::msleep(100);
 //			}
@@ -122,6 +125,7 @@ void EvolutionSpinner::runEvolution() {
 				bestTree = lPopulation[result.second - lPopulation.begin()];
 			}
 		}
+		--m_context->currentGeneration;
 		bestTree.mValid = false;
 //		summarize(bestTree);
 		lPopulation.push_back(bestTree);
@@ -142,9 +146,9 @@ void EvolutionSpinner::runEvolution() {
 			(*lBestIndividual).mValid = false;
 			bestPreEvoTrees.insertMulti(fitness, *lBestIndividual);
 		}
-		if(fitness > 1.0 || superBestPreEvoTrees.isEmpty()) {
+		if(fitness > 1.0) {
 			(*lBestIndividual).mValid = false;
-			superBestPreEvoTrees.insertMulti(fitness, *lBestIndividual);
+			superBestPreEvoTrees.insertMulti(fitness, Tree(*lBestIndividual));
 		}
 	}
 
@@ -157,66 +161,153 @@ void EvolutionSpinner::runEvolution() {
 	}
 
 	// run again with full features
-	if (Transaction::onlyLoadHashes.isEmpty())
-		BotContext::LIMIT_NUM_FEATURES = BotContext::MAX_NUM_FEATURES;
-	else
-		BotContext::LIMIT_NUM_FEATURES = qMin(Transaction::onlyLoadHashes.size(), int(BotContext::MAX_NUM_FEATURES));
-
 	m_context->filterHashIndex = -1;
+	if (Transaction::onlyLoadHashes.isEmpty())
+		m_context->lim_NUM_FEATURE = BotContext::MAX_NUM_FEATURES;
+	else
+		m_context->lim_NUM_FEATURE = qMin(Transaction::onlyLoadHashes.size(), int(BotContext::MAX_NUM_FEATURES));
+
 	Tree veryBestTree;
 	// Initialize population.
 	std::vector<Tree> lPopulation(0);
 	initializePopulation(lPopulation, *m_context, lInitGrowProba, lMinInitDepth, lMaxInitDepth);
 	NOTICE() << "bestPreEvoTrees.count " << bestPreEvoTrees.count();
 	NOTICE() << "superBestPreEvoTrees.count " << superBestPreEvoTrees.count();
+	const int NthReAddSuper = 4;
 	if(bestPreEvoTrees.count()) {
-		auto bestbundltree = bestPreEvoTrees.values();
+		const auto bestbundltree = bestPreEvoTrees.values();
 		for(unsigned int i = 0; i < lPopSize; ++i) {
-			lPopulation.push_back(bestbundltree.at(bestbundltree.size() - 1 - i % bestbundltree.size()));
+			lPopulation.push_back(bestbundltree.at(i % bestbundltree.size()));
 		}
-		bestbundltree = superBestPreEvoTrees.values();
-		for(unsigned int i = 0; i < 5*bestbundltree.size(); ++i) {
-			lPopulation.push_back(bestbundltree.at(bestbundltree.size() - 1 - i % bestbundltree.size()));
+		const auto superBestbundltree = superBestPreEvoTrees.values();
+		for (int j = 0; j <= NthReAddSuper; ++j) {
+			for(int i = j * superBestbundltree.size() / NthReAddSuper; i < superBestbundltree.size(); ++i) {
+				lPopulation.push_back(superBestbundltree.at(superBestbundltree.size()-1-i));
+			}
 		}
+		makeSuperTreeMixtures(lPopulation, *m_context);
+		m_context->currentGeneration = 0;
 		evaluateSymbReg(lPopulation, *m_context);
 		calculateStats(lPopulation, 0);
 
 		// Evolve population for the given number of generations
 		NOTICE() << "Starting evolution";
-		for(m_context->currentGeneration = 1; m_context->currentGeneration <=10*lNbrGen; ++m_context->currentGeneration ) {
-			if(!m_doSpin)  {
-				break;
-			}
+		// 0 after a reinjection of features
+		int afterReinjection = 0;
+		std::vector<Tree> bestGenTree;
+		for(m_context->currentGeneration = 1; m_context->currentGeneration <= lNbrGen; ++m_context->currentGeneration ) {
 			INFO() << "Generation " << m_context->currentGeneration  << " pop " << lPopulation.size();
 			auto result = std::minmax_element(lPopulation.begin(), lPopulation.end());
 			Tree bestTree = lPopulation[result.second - lPopulation.begin()];
+			bestGenTree.push_back(bestTree);
 
-			if (bestTree.mFitness > veryBestTree.mFitness)
+			//qDebug() << bestTree.mFitness << veryBestTree.mFitness << finalBotObject["flow"];
+			if (bestTree.mFitness > veryBestTree.mFitness) {
 				veryBestTree = bestTree;
-			finalBotObject = summarize(bestTree);
+				finalBotObject = summarize(veryBestTree);
+			}
+			else {
+				emit m_context->newSummarizedTree(finalBotObject);
+			}
+			//qDebug() << bestTree.mFitness << veryBestTree.mFitness << finalBotObject["flow"];
+			if(!m_doSpin)  {
+				//qDebug() << bestTree.mFitness << veryBestTree.mFitness << finalBotObject["flow"];
+				break;
+			}
 
-			applySelectionTournament(lPopulation, *m_context, lNbrPartTournament);
+//			if (afterReinjection > NthReAddSuper)
+				applySelectionTournament(lPopulation, *m_context, lNbrPartTournament);
+
+			veryBestTree.mValid = false;
+			if (m_context->currentGeneration % 32 == 0) {
+				lPopulation.push_back(veryBestTree);
+//				std::vector<Tree> superTreesFeatures;
+//				for(int i = 0; i < superBestbundltree.size(); ++i) {
+//					superTreesFeatures.push_back(superBestbundltree.at(i));
+//				}
+//				makeSuperTreeMixtures(superTreesFeatures, *m_context);
+//				for (uint i = 0; i < superTreesFeatures.size(); ++i)
+//					lPopulation.push_back(superTreesFeatures[i]);
+//				for (uint i = 0; i < bestGenTree.size(); ++i)
+//					lPopulation.push_back(bestGenTree[i]);
+				replaceFitness0WithSuperMixture(lPopulation, superBestbundltree, *m_context);
+
+				afterReinjection = 0;
+			}
+
 			applyCrossover(lPopulation, *m_context, lCrossoverProba, lCrossDistribProba, lMaxDepth);
-			applyMutationStandard(lPopulation, *m_context, lMutStdProba, lMutMaxRegenDepth, lMaxDepth);
-			applyMutationSwap(lPopulation, *m_context, lMutSwapProba, lMutSwapDistribProba);
 
-			bestTree.mValid = false;
-//			lPopulation.push_back(bestTree);
+//			if (afterReinjection > NthReAddSuper)
+				applyMutationStandard(lPopulation, *m_context, lMutStdProba, lMutMaxRegenDepth, lMaxDepth);
+//			if (afterReinjection > NthReAddSuper)
+				applyMutationSwap(lPopulation, *m_context, lMutSwapProba, lMutSwapDistribProba);
+
 
 			evaluateSymbReg(lPopulation, *m_context);
 			calculateStats(lPopulation, m_context->currentGeneration );
+			++afterReinjection;
 		}
 		NOTICE() << "End of evolution";
 	}
 
 	m_doSpin = false;
+
+	finalBotObject["_git"] = QString(GIT_VERSION);
 	qDebug() << "Exiting evolution. Features with positive fitness:" << finalBotObject["features"].toArray().count();
+	qDebug() << finalBotObject["fit"] << finalBotObject["flow"];
 	emit finishedEvolution(finalBotObject);
+}
+
+void EvolutionSpinner::makeSuperTreeMixtures(std::vector<Tree>& ioPopulation,
+											   Context& ioContext)
+{
+	static int jF = 0;
+	for(unsigned int i=0; i < ioPopulation.size(); ++i) {
+		Tree& treeToComplete = ioPopulation[i];
+		for (int f = treeToComplete.lim_NUM_FEATURE; f < ioContext.lim_NUM_FEATURE; ++f) {
+			Tree copyRandTreeLimited = ioPopulation[jF % ioPopulation.size()];
+			++jF;
+			int limitedIndex = qrand() % copyRandTreeLimited.lim_NUM_FEATURE;
+			uint fi = treeToComplete.getIndexOfFeature(f);
+			uint li = copyRandTreeLimited.getIndexOfFeature(limitedIndex);
+			std::vector<unsigned int> lStack1;
+			treeToComplete.setStackToNode(fi, lStack1);
+			std::vector<unsigned int> lStack2;
+			copyRandTreeLimited.setStackToNode(li, lStack2);
+			Puppy::exchangeSubTrees(treeToComplete, fi, lStack1, copyRandTreeLimited, li, lStack2);
+		}
+		treeToComplete.mValid = false;
+	}
+}
+
+void EvolutionSpinner::replaceFitness0WithSuperMixture(std::vector<Tree>& ioPopulation, const QList<Tree>& popFeatures,
+											   Context& ioContext)
+{
+	static int jF = 0;
+	for(unsigned int i=0; i < ioPopulation.size(); ++i) {
+		Tree& treeToComplete = ioPopulation[i];
+		for (int f = 0; f < ioContext.lim_NUM_FEATURE; ++f) {
+			if (treeToComplete.fitness.size() < uint(f) || treeToComplete.fitness[f] > 0)
+				continue;
+			Tree copyTreeLimited = popFeatures[jF % popFeatures.size()];
+			++jF;
+			int jFIndex = qrand() % copyTreeLimited.lim_NUM_FEATURE;
+			uint fi = treeToComplete.getIndexOfFeature(f);
+			uint li = copyTreeLimited.getIndexOfFeature(jFIndex);
+			std::vector<unsigned int> lStack1;
+			treeToComplete.setStackToNode(fi, lStack1);
+			std::vector<unsigned int> lStack2;
+			copyTreeLimited.setStackToNode(li, lStack2);
+			Puppy::exchangeSubTrees(treeToComplete, fi, lStack1, copyTreeLimited, li, lStack2);
+		}
+		treeToComplete.mValid = false;
+	}
 }
 
 double EvolutionSpinner::evaluateSymbReg(std::vector<Tree>& ioPopulation,
 											   Context& ioContext)
 {
+	emit m_context->computedGeneration(ioContext.currentGeneration);
 	double bestFitness = -1e6;
 	double ratioPop = 1.0 / double(ioPopulation.size());
 	for(unsigned int i=0; i<ioPopulation.size(); ++i) {
@@ -245,6 +336,7 @@ QJsonObject EvolutionSpinner::summarize(Tree& tree)
 	m_context->m_summaryJsonObj = 0;
 
 	jsonObj.insert("fit", fit);
+	jsonObj.insert("flow", m_context->m_pUser->smallSummary().flow());
 
 	DBG() << "tree (" << fit << "): " << tree.toStr();
 	INFO() << "----" << jsonObj;

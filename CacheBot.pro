@@ -16,9 +16,9 @@ SUBDIRS = \
 	
 cacheRest.depends = core
 evoCache.depends = cacheRest,core
-evoCacheView.depends = cacheRest,core
-cacheLight.depends = cacheRest,core
+evoCacheView.depends = cacheRest,core,evoCache
 tests.depends = cacheRest,core
-extraCash.depends = cacheRest,core
-userViewer.depends = cacheRest,core
-metricViewer.depends = cacheRest,core
+extraCash.depends = cacheRest,core,evoCache
+cacheLight.depends = cacheRest,core,extraCash
+userViewer.depends = cacheRest,core,evoCache
+metricViewer.depends = cacheRest,core,evoCache,extraCash

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 3.2.0, 2015-09-06T00:34:15. -->
+<!-- Written by QtCreator 3.2.0, 2015-10-02T14:04:39. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -63,7 +63,7 @@
    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">qt.53.win32_mingw482_kit</value>
    <value type="int" key="ProjectExplorer.Target.ActiveBuildConfiguration">1</value>
    <value type="int" key="ProjectExplorer.Target.ActiveDeployConfiguration">0</value>
-   <value type="int" key="ProjectExplorer.Target.ActiveRunConfiguration">16</value>
+   <value type="int" key="ProjectExplorer.Target.ActiveRunConfiguration">13</value>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.0">
     <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">F:/NewFolder/Cache-Bot</value>
     <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
@@ -485,7 +485,7 @@
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">userViewer</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">userView test</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:F:/NewFolder/Cache-Bot/userViewer/userViewer.pro</value>
-    <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.CommandLineArguments">55e915842b7acf110099e791 </value>
+    <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.CommandLineArguments">560eb533e2f36711003a6aa8</value>
     <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.ProFile">userViewer/userViewer.pro</value>
     <value type="bool" key="Qt4ProjectManager.Qt4RunConfiguration.UseDyldImageSuffix">false</value>
     <value type="bool" key="Qt4ProjectManager.Qt4RunConfiguration.UseTerminal">false</value>
@@ -537,7 +537,7 @@
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">evoCacheView</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">evo Ade</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:F:/NewFolder/Cache-Bot/evoCacheView/evoCacheView.pro</value>
-    <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.CommandLineArguments">55e915842b7acf110099e791 </value>
+    <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.CommandLineArguments">560b0be7d81bcc110025ac0b</value>
     <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.ProFile">evoCacheView/evoCacheView.pro</value>
     <value type="bool" key="Qt4ProjectManager.Qt4RunConfiguration.UseDyldImageSuffix">false</value>
     <value type="bool" key="Qt4ProjectManager.Qt4RunConfiguration.UseTerminal">false</value>
@@ -589,7 +589,7 @@
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">cacheLight</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">cache Ade</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:F:/NewFolder/Cache-Bot/cacheLight/cacheLight.pro</value>
-    <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.CommandLineArguments">55e915842b7acf110099e791</value>
+    <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.CommandLineArguments">560b0be7d81bcc110025ac0b</value>
     <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.ProFile">cacheLight/cacheLight.pro</value>
     <value type="bool" key="Qt4ProjectManager.Qt4RunConfiguration.UseDyldImageSuffix">false</value>
     <value type="bool" key="Qt4ProjectManager.Qt4RunConfiguration.UseTerminal">false</value>
@@ -693,7 +693,7 @@
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">extraCash</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">extraCash test</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:F:/NewFolder/Cache-Bot/extraCash/extraCash.pro</value>
-    <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.CommandLineArguments">55e915842b7acf110099e791 </value>
+    <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.CommandLineArguments">556cf9b475914c03007d5358 </value>
     <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.ProFile">extraCash/extraCash.pro</value>
     <value type="bool" key="Qt4ProjectManager.Qt4RunConfiguration.UseDyldImageSuffix">false</value>
     <value type="bool" key="Qt4ProjectManager.Qt4RunConfiguration.UseTerminal">false</value>

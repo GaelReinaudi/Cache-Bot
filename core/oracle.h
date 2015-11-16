@@ -5,6 +5,38 @@
 #include "transaction.h"
 class AccountFeature;
 
+static const int displayDayPast = 31;
+static const int displayDayFuture = 62;
+
+template<int Nrun>
+struct Simulation
+{
+private:
+	static const int Ntot = Nrun * (displayDayFuture + 1);
+	double values[Ntot];
+
+public:
+	double val(int run, int day) const {
+		return values[run * (displayDayFuture + 1) + day];
+	}
+	void setVal(int run, int day, double value) {
+		values[run * (displayDayFuture + 1) + day] = value;
+	}
+
+	int timeToDelta(double deltaBalance, double facPerc = 0.5) const {
+		for (int d = 0; d <= displayDayFuture; ++d) {
+			int ctBellow = 0;
+			for (int r = 0; r < Nrun; ++r) {
+				if (val(r, d) <= deltaBalance)
+					++ctBellow;
+			}
+			if (ctBellow >= Nrun * facPerc)
+				return d;
+		}
+		return 9999;
+	}
+};
+
 class CORESHARED_EXPORT Oracle
 {
 public:
@@ -27,6 +59,7 @@ public:
 	}
 
 	virtual QVector<Transaction> revelation(QDate upToDate) = 0;
+	virtual QJsonObject toJson() const;
 	virtual QString description() const { return "????"; }
 	virtual double avgDaily() const = 0;
 	virtual double avgDailyPos() const {
@@ -41,8 +74,8 @@ public:
 	AccountFeature* feature() const {
 		return m_feature;
 	}
-	QJsonObject toJson() const;
 
+	bool isPostTreatment = false;
 private:
 	QDate m_iniDate;
 	QDate m_curDate;
@@ -69,7 +102,7 @@ public:
 		}
 	}
 	void clearSubOracles() {
-		NOTICE() << "clearSubOracles";
+		//NOTICE() << "clearSubOracles";
 		m_subOracles.clear();
 	}
 	void addSubOracle(QSharedPointer<Oracle> pOr) {
@@ -78,26 +111,54 @@ public:
 	}
 	QVector<Transaction> revelation(QDate upToDate) override;
 	double avgDaily() const override;
+	template <int Nrun>
+	Simulation<Nrun> simu() {
+		Simulation<Nrun> s;
+		QMap<double, double> dat[Nrun];
+		for (int r = 0; r < Nrun; ++r) {
+			dat[r].clear();
+			double curBal = 0.0;
+			int t = 0;
+			dat[r].insert(t, curBal);
+			resetDate(Transaction::currentDay());
+			const QVector<Transaction>& rev = revelation(Transaction::currentDay().addDays(displayDayFuture));
+			for (const Transaction& tr : rev) {
+				double amnt = tr.amountDbl();
+				curBal += amnt;
+				t = Transaction::currentDay().daysTo(tr.date);
+				dat[r].insert(t, curBal);
+			}
+		}
+		for (double d = 0; d <= displayDayFuture; ++d) {
+			for (int r = 0; r < Nrun; ++r) {
+				auto it = dat[r].upperBound(d + 0.1) - 1;
+				if (it+1 != dat[r].begin() && it != dat[r].end()) {
+					double vi = *it;
+					s.setVal(r, d, vi);
+				}
+				else
+					s.setVal(r, d, 0.0);
+			}
+		}
+		return s;
+	}
 
 	struct Summary
 	{
-//	private:
 		double posSum = 0.0;
 		double negSum = 0.0;
+		double bill = 0.0;
+		double salary = 0.0;
 		QVector<double> dailyPerOracle;
 		QVector<QJsonObject> summaryPerOracle;
-//	public:
-		QJsonObject toJson() {
-			QJsonObject jsSum;
-			QJsonArray allVal;
+		QJsonArray toJson() {
+//			QJsonObject jsSum;
 			QJsonArray allSum;
-			for (int i = 0; i < dailyPerOracle.count(); ++i) {
-				allVal.append(dailyPerOracle[i]);
+			for (int i = 0; i < summaryPerOracle.count(); ++i) {
 				allSum.append(summaryPerOracle[i]);
 			}
-			jsSum.insert("contribs", allVal);
-			jsSum.insert("oracles", allSum);
-			return jsSum;
+//			jsSum.insert("oracles", allSum);
+			return allSum;
 		}
 		double flow() const {
 			if (posSum == 0.0) {
@@ -141,45 +202,60 @@ public:
 			}
 			return mul;
 		}
-		Summary effectOf(const Summary& deltaSummary) const {
-			Q_ASSERT(dailyPerOracle.count() == deltaSummary.dailyPerOracle.count());
-			Summary eff(*this);
-			for (int i = 0; i < eff.dailyPerOracle.count(); ++i) {
-				double slope = eff.dailyPerOracle[i] > 0 ? posPartialDif() : negPartialDif();
-				eff.dailyPerOracle[i] = slope * deltaSummary.dailyPerOracle[i];
-				// try to make an advice
-				QString advice = "";
+		Summary effectOf(const Summary& endSummary, int overDays) const {
+			Q_ASSERT(dailyPerOracle.count() == endSummary.dailyPerOracle.count());
+			// *this is the starting Summary, ie the N days ago Summary
+			// effect is constructed from the avg in order to save memory
+			Summary effect = (*this + endSummary) * 0.5;
+			Summary delta = endSummary - *this;
+			double posSlope = effect.posPartialDif();
+			double negSlope = effect.negPartialDif();
+			for (int i = 0; i < effect.dailyPerOracle.count(); ++i) {
+				double iAvgValFlow = effect.dailyPerOracle[i];
+				double iSlope = iAvgValFlow > 0 ? posSlope : negSlope;
+				effect.dailyPerOracle[i] = iSlope * delta.dailyPerOracle[i];
+				// try to make a fact
+				QString fact = "";
+				QString factStr = "";
 				// negative effect from an outcome
-				if (eff.dailyPerOracle[i] < -0.05) {
-					if (dailyPerOracle[i] < 0) {
-						advice += "Careful with ";
+				if (effect.dailyPerOracle[i] < -0.01) {
+					if (iAvgValFlow < 0) {
+						fact += "?-";
+						factStr += "?Spending increased ";
 					}
 				// negative effect from an income
 					if (dailyPerOracle[i] > 0) {
-						advice += "I Was expecting ";
+						fact += "?+";
+						factStr += "?Income decreased ";
 					}
 				}
 				// positive effect from an outcome
-				else if (eff.dailyPerOracle[i] > 0.05) {
+				else if (effect.dailyPerOracle[i] > 0.01) {
 					if (dailyPerOracle[i] < 0) {
-						advice += "Good job with ";
+						fact += "!-";
+						factStr += "!Spending decreased ";
 					}
 				// positive effect from an income
 					if (dailyPerOracle[i] > 0) {
-						advice += "Nice! ";
+						fact += "!+";
+						factStr += "!Income increased ";
 					}
 				}
 				else
 					continue;
-				advice += eff.summaryPerOracle[i]["descr"].toString();
-				eff.summaryPerOracle[i]["advice"] = advice;
-				eff.summaryPerOracle[i]["effect"] = eff.dailyPerOracle[i];
+				effect.summaryPerOracle[i]["factStr"] = factStr;
+				effect.summaryPerOracle[i]["dailyOld"] = this->dailyPerOracle[i];
+				effect.summaryPerOracle[i]["dailyNew"] = endSummary.dailyPerOracle[i];
+				effect.summaryPerOracle[i]["dailyDif"] = delta.dailyPerOracle[i];
+				effect.summaryPerOracle[i]["flowEffect"] = effect.dailyPerOracle[i];
+				effect.summaryPerOracle[i]["overDays"] = overDays;
+				effect.summaryPerOracle[i]["score"] = delta.dailyPerOracle[i] / overDays;
 			}
 
-			return eff;
+			return effect;
 		}
 	};
-	Summary computeAvgCashFlow() const;
+	Summary computeAvgCashFlow(bool includeOracleSummaries = true) const;
 
 private:
 	QVector<QSharedPointer<Oracle> > m_subOracles;

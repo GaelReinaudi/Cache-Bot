@@ -14,6 +14,7 @@ MetricViewer::MetricViewer(QString userID)
 	, ui(new Ui::MetricViewer)
 {
 	ui->setupUi(this);
+	setWindowTitle(QString("..")+userID.right(5));
 
 	m_pConnector = new CacheAccountConnector(userID);
 	connect(m_pConnector, SIGNAL(injected(User*)), this, SLOT(onUserInjected(User*)));
@@ -51,7 +52,7 @@ bool MetricViewer::plotAllMetrics()
 		ui->acPlot->addGraph()->setPen(QPen(color));
 	}
 
-	QDate day  = QDate::currentDate();
+	QDate day  = Transaction::currentDay();
 	QDate downToDate = day.addDays(-daysToPlot);
 	while (day >= downToDate) {
 		qDebug() << day;

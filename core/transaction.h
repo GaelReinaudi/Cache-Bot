@@ -15,6 +15,7 @@ private:
 		double m_kla = 0; // Mult * kindaLog(amount)
 public:
 	Account* account = 0;
+	QString id; // "YARROW HOTEL GRILL" or "STRIKE TECHNOLOG"
 	QString name; // "YARROW HOTEL GRILL" or "STRIKE TECHNOLOG"
 	QDate date; // "2015-01-28"
 	QStringList categories; // ["Food and Drink", "Restaurants"] or ["Transfer", "Payroll"]
@@ -29,7 +30,7 @@ public:
 	bool isInternal() const { return flags & Transaction::Flag::Internal; }
 	bool isFuture() const { return date > Transaction::currentDay(); }
 	bool isToOld() const { return date < Transaction::currentDay().addDays(-Transaction::maxDaysOld()); }
-	bool noUse() const { return isFuture() || isToOld() || isInternal(); }
+	bool noUse() const;
 	int type() const;
 
 	//! json in
@@ -80,11 +81,11 @@ public:
 		d += LIMIT_DIST_TRANS * (qAbs(kla() - other.kla()) * 1024) / mA;
 		d += LIMIT_DIST_TRANS * nameHash.dist(other.nameHash) / mH;
 		d |= (1<<20) * qint64(qAbs(dimensionOfVoid - other.dimensionOfVoid));
-		d |= (1<<20) * qint64(isInternal() || other.isInternal());
+//		d |= (1<<20) * qint64(isInternal() || other.isInternal());
 		d |= (1<<20) * qint64((amount() > 0 && other.amount() < 0) || (amount() < 0 && other.amount() > 0));
 		if(log) {
 			DBG() << "dist " << d
-				<< QString(" = %1 x day(%2)").arg(double(LIMIT_DIST_TRANS)/mD).arg(absInt(jDay() - other.jDay()))
+				<< QString(" = %1 x day(%2)").arg(double(LIMIT_DIST_TRANS)/mD).arg(qAbs(jDay() - other.jDay()))
 				<< QString(" = %1 x kla(%2)").arg(double(LIMIT_DIST_TRANS)/mA).arg(qAbs(kla() - other.kla()))
 				<< QString(" = %1 x hash(%2)").arg(double(LIMIT_DIST_TRANS)/mH).arg(nameHash.dist(other.nameHash));
 		}
@@ -100,12 +101,18 @@ public:
 	static QDate currentDay() {
 		return s_currentDay;
 	}
+	static QDateTime actualCurrentDayTime() {
+		return s_actualCurrentDayTime;
+	}
 	static void setCurrentDay(const QDate &value) {
 		s_currentDay = value;
 	}
 	//! returns the maximum month to consider a transaction for
 	static int maxDaysOld() {
 		return s_maxDaysOld;
+	}
+	static int maxDaysOldAllTransatcion() {
+		return s_maxDaysOldAllTransatcion;
 	}
 	static void setMaxDaysOld(const int value) {
 		s_maxDaysOld = value;
@@ -114,7 +121,9 @@ public:
 
 private:
 	static int s_maxDaysOld;
+	static int s_maxDaysOldAllTransatcion;
 	static QDate s_currentDay;
+	static QDateTime s_actualCurrentDayTime;
 public:
 	static QVector<int> onlyLoadHashes;
 	static QDate onlyAfterDate;
@@ -209,7 +218,6 @@ public:
 		return ret;
 	}
 	double averageAmount(std::function<double(const Transaction&)> weight = [](const Transaction&){ return 1.0; }) const;
-	double emaAmount(const double facNew) const;
 	double avgSmart() const;
 	double daysToNextSmart() const;
 	Transaction randSmart() const;

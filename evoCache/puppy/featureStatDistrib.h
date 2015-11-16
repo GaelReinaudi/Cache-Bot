@@ -9,6 +9,30 @@ public:
 	OracleStatDistrib(AccountFeature* pCreatingFeature)
 		: Oracle(pCreatingFeature)
 	{}
+	QJsonObject toJson() const override {
+		QJsonObject ret = Oracle::toJson();
+		ret["approxAmnt"] = toSignifDigit_2(m_args.m_bundle.averageAmount());
+		ret["avgAmnt"] = m_args.m_bundle.averageAmount();
+		ret["dayOccur"] = m_args.m_dayProba;
+		double daysToNext = -1.0;
+		double lastAgo = -1.0;
+		double savedFor = -1.0;
+		if (m_args.m_bundle.count()) {
+			daysToNext = m_args.m_bundle.daysToNextSmart();
+			lastAgo = m_args.m_bundle.last().date.daysTo(Transaction::currentDay());
+			savedFor = lastAgo / daysToNext;
+		}
+		ret["daysToNext"] = daysToNext;
+		ret["lastAgo"] = lastAgo;
+		ret["savedFor"] = savedFor;
+		QJsonArray transIds;
+		for (int i = 0; i < m_args.m_bundle.count(); ++i) {
+			const Transaction& tr = m_args.m_bundle.trans(i);
+			transIds.append(tr.id);
+		}
+		ret["trans"] = transIds;
+		return ret;
+	}
 
 protected:
 	QVector<Transaction> revelation(QDate upToDate) override;
@@ -17,10 +41,9 @@ protected:
 protected:
 	struct Args : public FeatureArgs
 	{
-		void intoJson(QJsonObject& o_retObj) {
+		void intoJson(QJsonObject& o_retObj) const override {
 			FeatureArgs::intoJson(o_retObj);
 			o_retObj.insert("hash", m_hash);
-			o_retObj.insert("effect", m_effect);
 			o_retObj.insert("kla", m_kla);
 			o_retObj.insert("proba", m_dayProba);
 			o_retObj.insert("avgAmn", m_bundle.averageAmount());
@@ -61,7 +84,7 @@ protected:
 		return pNewOr;
 	}
 
-	virtual bool passFilter(quint64 dist, const Transaction& trans) const = 0;
+	virtual bool passFilter(qint64 dist, const Transaction& trans) const = 0;
 	virtual int minTransactionForBundle() const = 0;
 	void computeNextDayProba();
 	double maxDailyProbability() const override {

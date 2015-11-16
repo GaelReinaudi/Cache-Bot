@@ -27,7 +27,7 @@ protected:
 private:
 	struct Args : public FeatureArgs
 	{
-		void intoJson(QJsonObject& o_retObj) {
+		void intoJson(QJsonObject& o_retObj) const override {
 			FeatureArgs::intoJson(o_retObj);
 			o_retObj.insert("days", m_daysBundle);
 			o_retObj.insert("proba", m_dayProba);

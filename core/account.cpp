@@ -47,14 +47,14 @@ void Account::loadJsonData(QJsonObject json)
 	if (m_type == Type::Unknown) {
 		ERR() << "Unknown account type. metaName: " << metaName << " . type: " << type;
 	}
-	m_balance = json["balance"].toObject()["available"].toDouble();
+	m_balance = json["balance"].toObject()["current"].toDouble();
 }
 
 bool Account::loadPlaidJson(QString jsonFile) {
 	m_jsonFilePath = jsonFile;
 	QFile loadFile(m_jsonFilePath);
 	if (!loadFile.open(QIODevice::ReadOnly)) {
-		qWarning(QString("Couldn't open file %1").arg(QFileInfo(loadFile).absoluteFilePath()).toUtf8());
+		WARN() << "Couldn't open file " << QFileInfo(loadFile).absoluteFilePath();
 		return false;
 	}
 	QByteArray jsonData = loadFile.readAll();
@@ -72,7 +72,7 @@ bool Account::toJson(QVector<Transaction> transactions, QString category)
 	QFile loadFile(m_jsonFilePath);
 	QByteArray saveData;
 	if (!loadFile.open(QIODevice::ReadOnly)) {
-		qWarning(QString("Couldn't open file %1").arg(QFileInfo(loadFile).absoluteFilePath()).toUtf8());
+		WARN() << "Couldn't open file " << QFileInfo(loadFile).absoluteFilePath();
 		//return false;
 	}
 	else {
@@ -92,7 +92,7 @@ bool Account::toJson(QVector<Transaction> transactions, QString category)
 
 	QFile writeFile(m_jsonFilePath + ".out");
 	if (!writeFile.open(QIODevice::WriteOnly)) {
-		qWarning(QString("Couldn't open file %1").arg(QFileInfo(writeFile).absoluteFilePath()).toUtf8());
+		WARN() << "Couldn't open file " << QFileInfo(writeFile).absoluteFilePath();
 		return false;
 	}
 	QJsonDocument saveDoc(json);

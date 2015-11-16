@@ -36,10 +36,11 @@ void CORESHARED_EXPORT logger::setupSpdLog(QString logFileName)
 #endif
 		s_pLog->m_fileLogger->set_pattern("[%l] %v");
 		s_pLog->m_fileLogger->warn() << "********** NEW SESSION ********** "
-									 << QDateTime::currentDateTime().toString("HH:mm:ss.zzz");
+									 << QDateTime::currentDateTime().toString("HH:mm:ss.zzz")
+									 << "    GIT_VERSION: " << QString(GIT_VERSION) << "    ";
 	}
 	catch (const spdlog::spdlog_ex& ex)
 	{
-		std::cout << "Log failed: " << ex.what() << endl;
+		std::cout << "Log failed: " << ex.what() << std::endl;
 	}
 }

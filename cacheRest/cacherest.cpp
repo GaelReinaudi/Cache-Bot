@@ -2,19 +2,22 @@
 
 CacheRest* CacheRest::pThisStatic = nullptr;
 
-#define SEND_TO_CACHEBOT_INSTEAD
+//#define SEND_TO_CACHEBOT_INSTEAD
 
 CacheRest::CacheRest(QObject *parent)
 	: QObject(parent)
 {
 	qDebug() << "creating CacheRest instance...............................";
+	qDebug() << "GIT_VERSION" << QString(GIT_VERSION);
 	worker = new HttpRequestWorker(this);
+//	worker = new OfflineHttpRequestWorker(this);
 }
 
 void CacheRest::login(QString username, QString password) {
 	HttpRequestInput httpRequest(LoginRoute, "POST");
 	httpRequest.add_var("email", username);
 	httpRequest.add_var("password", password);
+	qDebug() << "loging in";
 	worker->execute(&httpRequest);
 }
 
@@ -27,6 +30,7 @@ void CacheRest::getUserIds()
 void CacheRest::getUserData(QString userId, User *pUserToInject /*= 0*/)
 {
 	HttpRequestInput httpRequest(UserDataRoute + QString("/%1").arg(userId), "POST");
+	qDebug() << "getUserData";
 	worker->execute(&httpRequest);
 	if (pUserToInject) {
 		QObject::connect(worker, SIGNAL(repliedUserData(QString)), pUserToInject, SLOT(injectJsonData(QString)));
@@ -71,6 +75,7 @@ void CacheRest::getBestBot(QString userId, User *pUserToInject /*= 0*/)
 	userId = "55518f01574600030092a822";
 #endif
 	HttpRequestInput httpRequest(BestBotRoute + QString("/%1").arg(userId), "POST");
+	qDebug() << "getBestBot";
 	worker->execute(&httpRequest);
 	if (pUserToInject) {
 		QObject::connect(worker, SIGNAL(repliedBestBot(QString)), pUserToInject, SLOT(injectJsonBot(QString)));
@@ -80,6 +85,15 @@ void CacheRest::getBestBot(QString userId, User *pUserToInject /*= 0*/)
 void CacheRest::extraCashEC2Computation(QString userId)
 {
 	HttpRequestInput httpRequest(ExtraCashEC2Compute, "POST");
+	QJsonObject jsonUserID;
+	jsonUserID.insert("user_id", userId);
+	httpRequest.add_json(jsonUserID);
+	worker->execute(&httpRequest);
+}
+
+void CacheRest::evoCacheEC2Computation(QString userId)
+{
+	HttpRequestInput httpRequest(EvoCacheEC2Compute, "POST");
 	QJsonObject jsonUserID;
 	jsonUserID.insert("user_id", userId);
 	httpRequest.add_json(jsonUserID);

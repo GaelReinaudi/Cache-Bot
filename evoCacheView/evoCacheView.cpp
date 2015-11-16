@@ -4,22 +4,30 @@
 #include "evolver.h"
 #include "botContext.h"
 
-EvoCacheView::EvoCacheView(QString userID, QVector<int> onlyLoadHashes)
+EvoCacheView::EvoCacheView(QString userID, QJsonObject jsonArgs)
 	: QMainWindow()
 	, ui(new Ui::EvoCacheView)
 {
 	ui->setupUi(this);
 	ui->amPlot->hide();
+	setWindowTitle(QString("..")+userID.right(5));
 
-	Evolver* pEvolver = new Evolver(userID);
+	Evolver* pEvolver = new Evolver(userID, jsonArgs);
 //	pEvolver->flags &= ~CacheAccountConnector::SendBot;
-	Transaction::onlyLoadHashes = onlyLoadHashes;
+	QJsonArray onlyH = jsonArgs["onlyHashes"].toArray();
+	for (int i = 0; i < onlyH.count(); ++i) {
+		Transaction::onlyLoadHashes.append(onlyH[i].toInt());
+	}
 
 	connect(pEvolver, SIGNAL(injected(User*)), this, SLOT(onUserInjected(User*)));
 	connect(ui->startButton, SIGNAL(clicked(bool)), pEvolver, SIGNAL(startStopEvolution(bool)), Qt::DirectConnection);
 
 	m_plotFitness = new QCustomPlot(ui->leftWidget);
+	m_plotFitness->axisRect()->setupFullAxesBox();
 	m_plotFitness->addGraph();
+	m_plotFitness->addGraph(m_plotFitness->xAxis, m_plotFitness->yAxis2);
+	m_plotFitness->graph(1)->setPen(QPen(Qt::red));
+	m_plotFitness->yAxis2->setTickLabels(true);
 	ui->leftWidget->layout()->addWidget(m_plotFitness);
 }
 
@@ -44,6 +52,7 @@ void EvoCacheView::onUserInjected(User* pUser)
 	connect(pUser->botContext(), &BotContext::needsReplot, this, &EvoCacheView::replotCharts, Qt::BlockingQueuedConnection);
 	connect(pUser->botContext(), &BotContext::needsReplot, this, &EvoCacheView::clearList);
 	connect(pUser->botContext(), &BotContext::newSummarizedTree, this, &EvoCacheView::onNewSummarizedTree, Qt::BlockingQueuedConnection);
+	connect(pUser->botContext(), &BotContext::computedGeneration, ui->spinGen, &QSpinBox::setValue);
 }
 
 void EvoCacheView::clearMasks()
@@ -95,6 +104,7 @@ void EvoCacheView::onNewSummarizedTree(QJsonObject jsonObj)
 	static double i = 0;
 	++i;
 	m_plotFitness->graph(0)->addData(i, jsonObj["fit"].toDouble());
+	m_plotFitness->graph(1)->addData(i, jsonObj["flow"].toDouble());
 	m_plotFitness->rescaleAxes();
 	m_plotFitness->replot();
 }

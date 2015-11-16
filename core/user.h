@@ -5,10 +5,10 @@
 #include "common.h"
 #include "transaction.h"
 #include "account.h"
+#include "oracle.h"
 class Bot;
 class BotContext;
 class Fund;
-class SuperOracle;
 
 typedef QMap<int, double> SparkLine;
 
@@ -37,11 +37,11 @@ public:
 
 public:
 	TransactionBundle& transBundle(int filterHash) {
-		if (filterHash >= 0)
+		if (filterHash != -1)
 			return *m_hashBundles[filterHash];
 		return m_allTransBundle;
 	}
-	QMap<uint, TransactionBundle*>& hashBundles() {
+	QMap<qint64, TransactionBundle*>& hashBundles() {
 		return m_hashBundles;
 	}
 	TransactionBundle& allTrans() {
@@ -82,16 +82,16 @@ public:
 
 	BotContext* makeBotContext();
 	SuperOracle* oracle();
-
-	void setHypotheTrans(double amount);
-
-	QJsonObject trendSummary(int nDays) const;
+	SuperOracle::Summary smallSummary();
+	double littleIncome();
 
 public slots:
+	bool setHypotheTrans(int amount = 0);
 	void injectJsonData(QString jsonStr);
 	void injectJsonBot(QString jsonStr);
 	//! simulates a re-injection of the bot in order ot recalculate downstream slots
 	void reInjectBot() { emit botInjected(m_bestBot); }
+	void reComputeBot();
 
 protected:
 	Bank* getBankByToken(QString bankTok) const {

@@ -14,7 +14,6 @@ protected:
 		, m_name(name)
 	{
 		s_AllMetrics.insert(name, this);
-		qDebug() << "making HistoMetric:" << m_name;
 		NOTICE() << "making HistoMetric:" << m_name;
 		}
 	virtual ~HistoMetric() {
@@ -29,11 +28,13 @@ public:
 		if (s_AllMetrics.contains(withName)) {
 			return s_AllMetrics.value(withName, 0);
 		}
-		qDebug() << "HistoMetric::get() couldn't find" << withName;
 		NOTICE() << "HistoMetric::get() couldn't find" << withName;
 		return 0;
 	}
 	QString name() const { return m_name; }
+	static void clearAll() {
+		return s_AllMetrics.clear();
+	}
 
 public:
 	double value(const QDate& date) {
@@ -102,6 +103,39 @@ protected:
 		}
 		avg /= DayPast;
 		return avg;
+	}
+
+private:
+
+	HistoMetric* m_pMetric = 0;
+};
+
+template <int DayPast>
+class MetricDiff : public HistoMetric
+{
+public:
+	MetricDiff(HistoMetric* pMetric)
+		: HistoMetric(Name(pMetric), pMetric)
+		, m_pMetric(pMetric)
+	{
+	}
+	static QString Name(HistoMetric* pMetric) {
+		return QString("Diff%1_%2").arg(DayPast).arg(pMetric->name());
+	}
+	static MetricDiff<DayPast>* get(HistoMetric* pMetric) {
+		auto pMet = HistoMetric::get(Name(pMetric));
+		if (pMet)
+			return reinterpret_cast<MetricDiff<DayPast>*>(pMet);
+		return new MetricDiff<DayPast>(pMetric);
+	}
+protected:
+	double computeFor(const QDate& date, bool& isValid) override {
+		isValid = m_pMetric->isValid(date);
+		double dif = m_pMetric->value(date);
+		QDate ad = date.addDays(-DayPast);
+		isValid &= m_pMetric->isValid(ad);
+		dif -= m_pMetric->value(ad);
+		return dif;
 	}
 
 private:

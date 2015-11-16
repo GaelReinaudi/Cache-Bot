@@ -103,7 +103,7 @@ public:
 
 struct FeatureArgs
 {
-	void intoJson(QJsonObject& o_retObj) {
+	virtual void intoJson(QJsonObject& o_retObj) const {
 		o_retObj.insert("zlabels", QJsonArray::fromStringList(m_bundle.uniqueNames()));
 	}
 	TransactionBundle m_bundle;
@@ -135,6 +135,7 @@ public:
 		return retObj;
 	}
 	bool isFeature() const override { return true; }
+	virtual int isPeriodic() const { return 0; }
 protected:
 	virtual FeatureArgs* localStaticArgs() = 0;
 	virtual void getArgs(Puppy::Context &ioContext) { Q_UNUSED(ioContext); }
@@ -195,9 +196,11 @@ public:
 		double& lResult = *(double*)outDatum;
 		lResult = 0.0;
 		double lArgi = 0.0;
-		for(unsigned int i = 0; i < BotContext::LIMIT_NUM_FEATURES; ++i) {
+		ioContext.mTree->fitness.clear();
+		for(int i = 0; i < ioContext.lim_NUM_FEATURE; ++i) {
 			getArgument(i, &lArgi, ioContext);
 			lResult += lArgi;
+			ioContext.mTree->fitness.push_back(lArgi);
 		}
 	}
 	double apply(TransactionBundle&, bool) override { return 0.0; }

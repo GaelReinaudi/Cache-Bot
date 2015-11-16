@@ -98,23 +98,18 @@ public:
 		return isValid;
 	}
 
-	std::vector<unsigned int> getFeatureStack(unsigned int indFeature, Context& ioContext) {
-		Q_UNUSED(ioContext);
-		std::vector<unsigned int> ret;
-		unsigned int i = 0;
-		ret.push_back(i);
-		unsigned int lNbArgs=(*this)[i].mPrimitive->getNumberArguments();
-		assert(indFeature < lNbArgs);
-		unsigned int lChildIndex = i + 1;
+	unsigned int getIndexOfFeature(unsigned int indFeature) {
+		unsigned int lChildIndex = 1;
 		for(unsigned int j=0; j<indFeature; ++j) {
 			lChildIndex += (*this)[lChildIndex].mSubTreeSize;
 		}
-		ret.push_back(lChildIndex);
-		return ret;
+		return lChildIndex;
 	}
 
 	float mFitness;  //!< Fitness value of the GP tree
 	bool  mValid;    //!< Flag indicating whether the fitness is valid.
+	int lim_NUM_FEATURE = 1;
+	std::vector<double> fitness;
 
 	QString toStr() const;
 };
