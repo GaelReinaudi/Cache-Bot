@@ -137,11 +137,11 @@ private slots:
 	void randUsersExtraCashComputations() {
 		// test a random user
 		qsrand(QTime::currentTime().msecsSinceStartOfDay());
-		QString randUser = "5628072e3058bd1100882125";m_userIds[qrand() % m_userIds.count()];
+		QString randUser = "5628072e3058bd1100882125";//m_userIds[qrand() % m_userIds.count()];
 		qDebug() << "randUser " << randUser;
 		CacheRest::Instance()->extraCashEC2Computation(randUser);
 		QSignalSpy spyExtraCashComputation(CacheRest::Instance()->worker, SIGNAL(repliedExtraCashEC2Computation(QString)));
-		QVERIFY(spyExtraCashComputation.wait(20000));
+		QVERIFY(spyExtraCashComputation.wait(30000));
 		QList<QVariant> arguments = spyExtraCashComputation.takeFirst();
 		QString extraCashReply = arguments.at(0).toString();
 		QVERIFY(!extraCashReply.isEmpty());
