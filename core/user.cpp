@@ -5,8 +5,9 @@
 #include "userMetrics.h"
 #include "oracle.h"
 
-User::User(QString userId, QObject *parent)
-	:DBobj(userId, parent)
+User::User(QString userId, QJsonObject jsonArgs)
+	: DBobj(userId, 0)
+	, m_jsonArgs(jsonArgs)
 {
 	//makes the oracle
 	oracle();

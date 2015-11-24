@@ -56,7 +56,9 @@ BotContext::BotContext(User *pUser)
 	insert(new CacheBotRootPrimitive());
 	insert(new FeatureBiWeeklyAmount());
 	insert(new FeatureMonthlyAmount());
-//	insert(new FeatureLabelDistrib());
+	if (pUser->jsonArgs().contains("LabelDistrib")) {
+		insert(new FeatureLabelDistrib());
+	}
 //	insert(new FeatureOutlier());
 	insert(new FeaturePriceWindow());
 }

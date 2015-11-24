@@ -32,7 +32,7 @@ class CORESHARED_EXPORT User : public DBobj
 	Q_OBJECT
 
 public:
-	User(QString userId, QObject* parent = 0);
+	User(QString userId, QJsonObject jsonArgs = QJsonObject());
 	~User();
 
 public:
@@ -79,7 +79,9 @@ public:
 	BotContext *botContext() const{
 		return m_botContext;
 	}
-
+	const QJsonObject& jsonArgs() const {
+		return m_jsonArgs;
+	}
 	BotContext* makeBotContext();
 	SuperOracle* oracle();
 	SuperOracle::Summary smallSummary();
@@ -139,6 +141,7 @@ private:
 	QString m_email;
 	SuperOracle* m_mainOracle = 0;
 	Transaction m_hypotheTrans;
+	QJsonObject m_jsonArgs;
 };
 
 #endif // USER_H

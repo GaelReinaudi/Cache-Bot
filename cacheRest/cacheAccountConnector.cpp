@@ -24,7 +24,7 @@ CacheAccountConnector::~CacheAccountConnector()
 void CacheAccountConnector::onLoggedIn(bool didLogin)
 {
 	if(didLogin) {
-		m_user = new User(userID());
+		m_user = new User(userID(), m_jsonArgs);
 		CacheRest::Instance()->getUserData(userID(), m_user);
 		connect(m_user, SIGNAL(injected(User*)), this, SLOT(onUserInjected(User*)));
 		connect(m_user, SIGNAL(injected(User*)), this, SIGNAL(injected(User*)));

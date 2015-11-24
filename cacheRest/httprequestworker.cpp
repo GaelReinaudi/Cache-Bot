@@ -339,8 +339,12 @@ void HttpRequestWorker::on_manager_finished(QNetworkReply *reply) {
 	else if(reply->request().url().toString().startsWith(BestBotRoute)) {
 		emit repliedBestBot(response);
 	}
-	else if(reply->request().url().toString().startsWith(ExtraCashEC2Compute)) {
-		emit repliedExtraCashEC2Computation(response);
+	else if(reply->request().url().toString().contains("execute-api.us-west-2.amazonaws")) {
+		QString replyText = QString(response).trimmed();
+		NOTICE() << "***";
+		NOTICE() << replyText;
+		NOTICE() << "***";
+		emit repliedExtraCashEC2Computation(replyText);
 	}
 }
 
