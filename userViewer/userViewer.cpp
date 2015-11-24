@@ -106,8 +106,16 @@ void UserViewer::replotCharts()
 void UserViewer::onNewSummarizedTree(QJsonObject jsonObj)
 {
 	ui->listBills->clear();
+	// sort per tot amount
+	QList<QJsonObject> listObj;
 	for (const auto f : jsonObj["features"].toArray()) {
-		ui->listBills->addItem(QString(QJsonDocument(f.toObject()).toJson()));
+		listObj.append(f.toObject());
+	}
+	std::sort(listObj.begin(), listObj.end(), [](const QJsonObject& a, const QJsonObject& b){
+		return qAbs(a["amntTot"].toDouble()) > qAbs(b["amntTot"].toDouble());
+	});
+	for (const auto f : listObj) {
+		ui->listBills->addItem(QString(QJsonDocument(f).toJson()));
 	}
 }
 

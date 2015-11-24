@@ -48,7 +48,7 @@ protected:
 			o_retObj.insert("proba", m_dayProba);
 			o_retObj.insert("avgAmn", m_bundle.averageAmount());
 			o_retObj.insert("avgSmt", m_bundle.avgSmart());
-			o_retObj.insert("tot$", m_bundle.sumDollar());
+			o_retObj.insert("amntTot", m_bundle.sumDollar());
 			o_retObj.insert("numBund", m_bundle.count());
 		}
 		int m_hash = 0;

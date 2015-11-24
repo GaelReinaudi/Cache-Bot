@@ -96,10 +96,17 @@ void EvoCacheView::clearList()
 void EvoCacheView::onNewSummarizedTree(QJsonObject jsonObj)
 {
 	ui->listBills->clear();
-	for (const auto f : jsonObj["features"].toArray()) {
-		QJsonObject fobj = f.toObject();
-		fobj.remove("args");
-		ui->listBills->addItem(QString(QJsonDocument(fobj).toJson()));
+	// sort per tot amount
+	QList<QJsonObject> listObj;
+	for (auto f : jsonObj["features"].toArray()) {
+		listObj.append(f.toObject());
+		f.remove("args");
+	}
+	std::sort(listObj.begin(), listObj.end(), [](const QJsonObject& a, const QJsonObject& b){
+		return qAbs(a["amntTot"].toDouble()) > qAbs(b["amntTot"].toDouble());
+	});
+	for (const auto f : listObj) {
+		ui->listBills->addItem(QString(QJsonDocument(f).toJson()));
 	}
 	static double i = 0;
 	++i;

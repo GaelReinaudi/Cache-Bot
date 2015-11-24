@@ -17,7 +17,7 @@ so that it only stretches the average when a transaction was expected by that ti
 
 #### Determine formula for how much has been saved for at any time.
 - I am going to try to return the following in the json oracle:
-"percentSaved" = daysToPres / daysToNext = "time from last such trans to present" / "time we expect(ed) this trans should come within".
+"savedFor" = daysToPres / daysToNext = "time from last such trans to present" / "time we expect(ed) this trans should come within".
 Indeed, this whole PriceWindow expects something to happen every other "daysToNext". So 1 day after the last transaction, 
 we have actually saved for 1/daysToNext, 2 days after we have saved for 2/daysToNext, and daysToNext days after, we have saved for 100%.
 After that, we have saved for 110%, 120%, etc...
