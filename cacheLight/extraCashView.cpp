@@ -119,6 +119,7 @@ void ExtraCashView::onBotInjected(Bot* pBot)
 	NOTICE() << "ExtraCashView::onBotInjected";
 	m_pbDate = Transaction::currentDay();
 	m_realBalance = m_pExtraCache->user()->balance(Account::Type::Checking);
+	m_realBalance -= m_pExtraCache->user()->balance(Account::Type::Credit);
 	m_pbBalance = BalanceMetric::get(m_pExtraCache->user())->value(m_pbDate);
 
 	ui->costLive50SpinBox->setValue(CostRateMonthPercentileMetric<6, 50>::get(m_pExtraCache->user())->value(m_pbDate));

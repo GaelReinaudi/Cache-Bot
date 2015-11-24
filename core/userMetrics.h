@@ -172,6 +172,7 @@ public:
 protected:
 	double computeFor(const QDate& date, bool& isValid) override {
 		double bal = user()->balance(Account::Type::Checking);
+		bal -= user()->balance(Account::Type::Credit);
 		isValid = false;
 		// transaction at the starting date of the playback
 		auto& real = user()->allTrans();
