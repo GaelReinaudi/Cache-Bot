@@ -112,7 +112,7 @@ void UserViewer::onNewSummarizedTree(QJsonObject jsonObj)
 		listObj.append(f.toObject());
 	}
 	std::sort(listObj.begin(), listObj.end(), [](const QJsonObject& a, const QJsonObject& b){
-		return qAbs(a["amntTot"].toDouble()) > qAbs(b["amntTot"].toDouble());
+		return qAbs(a["_total"].toDouble()) > qAbs(b["_total"].toDouble());
 	});
 	for (const auto f : listObj) {
 		ui->listBills->addItem(QString(QJsonDocument(f).toJson()));

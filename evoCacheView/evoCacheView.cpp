@@ -100,10 +100,10 @@ void EvoCacheView::onNewSummarizedTree(QJsonObject jsonObj)
 	QList<QJsonObject> listObj;
 	for (auto f : jsonObj["features"].toArray()) {
 		listObj.append(f.toObject());
-		f.remove("args");
+		listObj.last().remove("args");
 	}
 	std::sort(listObj.begin(), listObj.end(), [](const QJsonObject& a, const QJsonObject& b){
-		return qAbs(a["amntTot"].toDouble()) > qAbs(b["amntTot"].toDouble());
+		return qAbs(a["_total"].toDouble()) > qAbs(b["_total"].toDouble());
 	});
 	for (const auto f : listObj) {
 		ui->listBills->addItem(QString(QJsonDocument(f).toJson()));
