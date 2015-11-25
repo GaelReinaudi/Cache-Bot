@@ -38,10 +38,10 @@ A transaction should also only be classified within one - either a habit or a pr
 
 ### Habits vs. PriceWindows are useful for askFlow
 
-Habits are important for answering askFlow questions. Take my $20 BART pass, which I purchase every 3 days, as an example. Hours before purchasing another pass, I might ask Cache about a $20 expense that isn't BART, and it will say yes, that Cache has saved for a $20 expense. Most likely it has saved for the BART pass, and most likely I won't realize this. That is because I'm not really aware of BART passes until I try to enter BART and realize it needs to be filled. So I'll have been incorrectly advised, and my spending by the end of the day might be higher than I was advised to believe it would be. If Cache-Bot has correctly identified the BART pass as a habit, it can offer a richer answer to my askFlow question, e.g.:
+Habits are important for answering askFlow questions. Take my $20 BART pass, which I purchase every 3 days, as an example. Hours before purchasing another pass, I might ask Cache about a $20 expense that isn't BART, and it will say yes, that Cache has saved for a $20 expense. Most likely it has saved for the BART pass, and most likely I won't realize this. That is because I'm not really aware of BART passes until I try to enter BART and realize it needs to be filled. So I'll have been advised about a single $20 today, when in reality I made 2. If Cache-Bot has correctly identified the BART pass as a habit, it can offer a richer answer to my askFlow question, e.g.:
 >If it's BART-CLIPPER, I've saved for it. Otherwise, a $20 expense today would increase your spending by $x/day for a couple days.
 
-I think this would be a pretty amazing feature. :)
+This could become complicated on the UX side, if a user has multiple habits intersecting with an askFlow price, such as $20. Regardless of what we communicate to the user, distinguishing between habits and nonhabits will be useful in guessing a best answer for a user.
 
 ## Conversation flows
 ### Prompts
