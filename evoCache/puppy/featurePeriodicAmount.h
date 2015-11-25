@@ -35,7 +35,7 @@ private:
 			o_retObj.insert("numBund", m_bundle.count());
 			o_retObj.insert("fitRerun", m_fitRerun);
 			o_retObj.insert("amnt", unKindaLog(double(m_kla)));
-			o_retObj.insert("amntS", m_bundle.avgSmart());
+			o_retObj.insert("avgSmt", m_bundle.avgSmart());
 			o_retObj.insert("kla", m_kla);
 			o_retObj.insert("hash", m_hash);
 		}

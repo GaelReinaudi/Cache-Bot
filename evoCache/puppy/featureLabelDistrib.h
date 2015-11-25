@@ -32,17 +32,17 @@ public:
 	FeatureLabelDistrib()
 		: FeatureStatDistrib("LabelDistrib")
 	{
-		WARN() << "creating instance FeatureLabelDistrib";
+		//WARN() << "creating instance FeatureLabelDistrib";
 	}
 protected:
 	bool passFilter(qint64 dist, const Transaction& trans) const override {
 //		WARN() << "effect " << double(trans.effect128);
-		return dist < Transaction::LIMIT_DIST_TRANS
+		return dist < Transaction::LIMIT_DIST_TRANS / 4
 				&& trans.kla() < 0
 				&& double(trans.kla()) <=  1.0 + m_localStaticArgs.m_kla / EFFECT_RANGE_WIDTH_RATIO
 				&& double(trans.kla()) >= -1.0 + m_localStaticArgs.m_kla * EFFECT_RANGE_WIDTH_RATIO;
 	}
-	int minTransactionForBundle() const override { return 16; }
+	int minTransactionForBundle() const override { return 8; }
 	Oracle* makeNewOracle() override {
 		OracleLabelDistrib* pNewOr = new OracleLabelDistrib(this);
 		pNewOr->m_args = m_localStaticArgs;

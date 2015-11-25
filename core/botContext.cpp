@@ -54,12 +54,15 @@ BotContext::BotContext(User *pUser)
 		}
 	}
 	insert(new CacheBotRootPrimitive());
-	insert(new FeatureBiWeeklyAmount());
-	insert(new FeatureMonthlyAmount());
 	if (pUser->jsonArgs().contains("LabelDistrib")) {
 		insert(new FeatureLabelDistrib());
+		if (pUser->jsonArgs()["LabelDistrib"].toString().trimmed() == "only") {
+			return;
+		}
 	}
-//	insert(new FeatureOutlier());
+	insert(new FeatureBiWeeklyAmount());
+	insert(new FeatureMonthlyAmount());
 	insert(new FeaturePriceWindow());
+//	insert(new FeatureOutlier());
 }
 
