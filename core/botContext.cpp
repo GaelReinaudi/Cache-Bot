@@ -54,11 +54,11 @@ BotContext::BotContext(User *pUser)
 		}
 	}
 	insert(new CacheBotRootPrimitive());
-	if (pUser->jsonArgs().contains("LabelDistrib")) {
+	if (pUser->jsonArgs()["LabelDistrib"].toString().trimmed() != "disabled") {
 		insert(new FeatureLabelDistrib());
-		if (pUser->jsonArgs()["LabelDistrib"].toString().trimmed() == "only") {
-			return;
-		}
+	}
+	if (pUser->jsonArgs()["LabelDistrib"].toString().trimmed() == "only") {
+		return;
 	}
 	insert(new FeatureBiWeeklyAmount());
 	insert(new FeatureMonthlyAmount());
