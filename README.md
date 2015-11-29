@@ -1,5 +1,15 @@
 # CacheBot README.md
-## Currently super important
+
+## Outstanding conceptual problems
+### Soft boundaries between price windows
+### Rolling average spikes (possible solution: amortizing _bundles_ of transactions)
+The problem: Our rolling average definition of the likely date of the next expense within a priceWindow or habit (for now, let's just call both a habit) can result in surges in the daily cost of that habit, when there is a flurry of expenses within that range in close succession. This is a problem because: The benefit of amortizing purchases is that it makes your budget _steerable_: that it adjusts on the margin, and allows you to make decisions on the margin. If your daily costs spike well above your income, it can be easy to lose a sense of insight or meaningfulness of the number. Just like with your account balances, if it zigzags all over the place in short time scales, it's no longer an intelligible metric for your financial health.
+
+I don't claim that I know what is the right UX, but what I've been doing manually for many years: When I have a flurry of similar expenses within a couple of days, I tend to amortize them all over the same period (say, 1 month), and so each's contribution to my daily costs is linear. Essentially, this is like amortizing the bundle as a single thing. So a possible solution is to _amortize_ the bundle, as a single thing.
+
+CacheBot would then be looking for these spikes of expenses as one kind of "habit", and would amortize a spike of expenses over a period of time, such as the time between these kinds of spikes. Just a thought.
+
+## Determine fraction of an anticipated expense that has been saved for
 ### Yes/no buying decisions
 #### Describe here how cache-bot currently determines $--/day total costs for price windows.
 - in a bundle, there are transactions, at given dates. What I consider is the space between transactions,
