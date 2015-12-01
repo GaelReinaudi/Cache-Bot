@@ -37,9 +37,17 @@ double  User::littleIncome()
 {
 	SuperOracle::Summary s = smallSummary();
 	double flow = s.flow();
+	double flowFix = s.flowFix();
 	if (s.posSum == 0)
 		return 0.01;
-	if (flow < -0.0) {
+	if (s.salary <= 10)
+		return 0.01;
+	if (flowFix < 0.0) {
+		double fac = qSqrt(qMax(0.0, flowFix + 1.0));
+		WARN() << "little fixed income: fac " << fac;
+		return fac;
+	}
+	if (flow < 0.0) {
 		double fac = qSqrt(qMax(0.0, flow + 1.0));
 		WARN() << "little income: fac " << fac;
 		return fac;
