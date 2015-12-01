@@ -42,8 +42,8 @@ double  User::littleIncome()
 		return 0.01;
 	if (s.salary <= 10)
 		return 0.01;
-	if (flowFix < 0.0) {
-		double fac = qSqrt(qMax(0.0, flowFix + 1.0));
+	if (flowFix < -2.0) {
+		double fac = qSqrt(qMax(0.0, flowFix + 3.0));
 		WARN() << "little fixed income: fac " << fac;
 		return fac;
 	}
