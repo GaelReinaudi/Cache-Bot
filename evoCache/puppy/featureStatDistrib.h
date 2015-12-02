@@ -20,6 +20,8 @@ public:
 		if (m_args.m_bundle.count()) {
 			daysToNext = m_args.m_bundle.daysToNextSmart();
 			lastAgo = m_args.m_bundle.last().date.daysTo(Transaction::currentDay());
+			double fracAvg = m_args.m_bundle.last().amountDbl() / m_args.m_bundle.avgSmart();
+			lastAgo -= daysToNext * (fracAvg - 1.0);
 			savedFor = lastAgo / daysToNext;
 		}
 		ret["daysToNext"] = daysToNext;
