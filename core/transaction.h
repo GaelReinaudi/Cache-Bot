@@ -118,12 +118,14 @@ public:
 		s_maxDaysOld = value;
 	}
 
+	static Transaction s_hypotheTrans;
 
 private:
 	static int s_maxDaysOld;
 	static int s_maxDaysOldAllTransatcion;
 	static QDate s_currentDay;
 	static QDateTime s_actualCurrentDayTime;
+
 public:
 	static QVector<int> onlyLoadHashes;
 	static QDate onlyAfterDate;
@@ -180,26 +182,14 @@ public:
 		return *m_vector.at(index);
 	}
 	const Transaction& last() const {
+		if (m_vector.last() == &Transaction::s_hypotheTrans && m_vector.count() > 1) {
+			return *m_vector[m_vector.count() - 2];
+		}
 		return *m_vector.last();
 	}
 	int count() const {
 		return m_vector.count();
 	}
-//	QString averageName() const {
-//		QVector<uint> sum(64, 0);
-//		int tot = m_vector.count();
-//		for (int i = 0; i < tot; ++i) {
-//			const Transaction* t = m_vector.at(i);
-//			for (int c = 0; c < qMin(63, t->name.length()); ++c) {
-//				sum[c] += t->name[c].toLatin1();
-//			}
-//		}
-//		char charL[64];
-//		for (int c = 0; c < 63; ++c) {
-//			charL[c] = sum[c] / tot;
-//		}
-//		return QString::fromLatin1(charL);
-//	}
 	QStringList uniqueNames() const {
 		QStringList ret;
 		for (int i = 0; i < m_vector.count(); ++i) {

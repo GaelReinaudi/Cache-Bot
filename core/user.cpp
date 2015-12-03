@@ -56,18 +56,18 @@ double  User::littleIncome()
 }
 
 bool User::setHypotheTrans(int amount) {
-	//	if (qRound(m_hypotheTrans.amountDbl()) == amount)
+	//	if (qRound(Transaction::s_hypotheTrans.amountDbl()) == amount)
 //		return false;
 	// clears all the cached results
 	HistoMetric::clearAll();
 
-	m_hypotheTrans.setAmount(amount);
-	m_hypotheTrans.date = Transaction::currentDay();
-	m_hypotheTrans.name += "hypothetic transaction, fucking take the red pill dude!";
-	m_hypotheTrans.nameHash.setFromString(m_hypotheTrans.name, m_hypotheTrans.kla());
-	m_hypotheTrans.id = m_hypotheTrans.name;
-	if (&m_allTransBundle.last() != &m_hypotheTrans)
-		m_allTransBundle.append(&m_hypotheTrans);
+	Transaction::s_hypotheTrans.setAmount(amount);
+	Transaction::s_hypotheTrans.date = Transaction::currentDay();
+	Transaction::s_hypotheTrans.name += "hypothetic transaction, fucking take the red pill dude!";
+	Transaction::s_hypotheTrans.nameHash.setFromString(Transaction::s_hypotheTrans.name, Transaction::s_hypotheTrans.kla());
+	Transaction::s_hypotheTrans.id = Transaction::s_hypotheTrans.name;
+	if (&m_allTransBundle.last() != &Transaction::s_hypotheTrans)
+		m_allTransBundle.append(&Transaction::s_hypotheTrans);
 	return true;
 }
 
