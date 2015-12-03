@@ -52,7 +52,7 @@ public:
 			// reset the dimensionOfVoid
 			m_allTransactions.trans(i).dimensionOfVoid = 0;
 		}
-		m_hypotheTrans.dimensionOfVoid = 0;
+		Transaction::s_hypotheTrans.dimensionOfVoid = 0;
 	}
 
 	double balance(int flagType) const {
@@ -63,7 +63,7 @@ public:
 			}
 		}
 		if (flagType & Account::Type::Checking) {
-			bal += m_hypotheTrans.amountDbl();
+			bal += Transaction::s_hypotheTrans.amountDbl();
 		}
 		return bal;
 	}
@@ -140,7 +140,6 @@ private:
 	Fund* m_extraCacheFund = 0;
 	QString m_email;
 	SuperOracle* m_mainOracle = 0;
-	Transaction m_hypotheTrans;
 	QJsonObject m_jsonArgs;
 };
 
