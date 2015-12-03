@@ -74,3 +74,8 @@ Prompts are notifications sent by Cache, that may or may not include a question 
     , overDays   : Number (e.g. 7 for a trend7)
 }
 ```
+## Running Cache-Bot on Mac
+
+- Open individual projects (e.g. userViewer.pro) and add the custom deploy step:
+	- Command: `cp`
+	- Arguments: `../bin/debug/*.dylib ../bin/debug/userViewer.app/Contents/MacOS/`
