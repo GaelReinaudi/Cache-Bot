@@ -62,7 +62,7 @@ BotContext::BotContext(User *pUser)
 	}
 	insert(new FeatureBiWeeklyAmount());
 	insert(new FeatureMonthlyAmount());
-	if (pUser->jsonArgs()["PriceWindow"].toString().trimmed() != "disabled") {
+	if (pUser->jsonArgs()["PriceWindow"].toString().trimmed() == "enabled") {
 		insert(new FeaturePriceWindow());
 	}
 //	insert(new FeaturePriceWindow());
