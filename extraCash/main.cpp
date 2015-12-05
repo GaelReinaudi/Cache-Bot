@@ -12,6 +12,7 @@ int main(int argc, char *argv[])
 	QJsonDocument jsonDoc(QJsonDocument::fromJson(jsonStr.toUtf8()));
 	const QJsonObject& jsonObj = jsonDoc.object();
 	qDebug() << endl << jsonStr << endl << jsonObj;
+	jsonObj["PriceWindow"] = "enabled";
 	ExtraCache w(jsonObj["user_id"].toString().trimmed(), jsonObj);
 
 	return a.exec();
