@@ -10,9 +10,9 @@ int main(int argc, char *argv[])
 	}
 	QString jsonStr = QString(argv[1]).remove("'");
 	QJsonDocument jsonDoc(QJsonDocument::fromJson(jsonStr.toUtf8()));
-	const QJsonObject& jsonObj = jsonDoc.object();
+	QJsonObject jsonObj = jsonDoc.object();
 	qDebug() << endl << jsonStr << endl << jsonObj;
-	jsonObj["PriceWindow"] = "enabled";
+	jsonObj.insert("PriceWindow", "enabled");
 	ExtraCache w(jsonObj["user_id"].toString().trimmed(), jsonObj);
 
 	return a.exec();
