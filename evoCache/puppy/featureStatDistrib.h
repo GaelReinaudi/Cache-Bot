@@ -78,7 +78,7 @@ protected:
 		return retObj;
 	}
 	void isolateBundledTransactions(bool isPostTreatment = false) override;
-	double apply(TransactionBundle& allTrans, bool doLog = false) override;
+	double apply(TransactionBundle& allTrans, bool isPostTreat, bool doLog) override;
 	void emitGraphics(Puppy::Context& ioContext) const override;
 	Oracle* makeNewOracle() override {
 		OracleStatDistrib* pNewOr = new OracleStatDistrib(this);

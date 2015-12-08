@@ -71,7 +71,7 @@ protected:
 		ioContext.flags |= Puppy::Context::AllOthers;
 		return false;
 	}
-	double apply(TransactionBundle& allTrans, bool doLog = false) override;
+	double apply(TransactionBundle& allTrans, bool isPostTreat, bool doLog) override;
 	Oracle* makeNewOracle() override {
 		OracleFilteredRest* pNewOr = new OracleFilteredRest(this);
 		pNewOr->m_args = m_localStaticArgs;

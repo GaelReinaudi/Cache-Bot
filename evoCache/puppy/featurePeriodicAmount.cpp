@@ -14,7 +14,7 @@ void FeatureMonthlyAmount::getArgs(Puppy::Context &ioContext) {
 	m_localStaticArgs.m_dayOfMonth = a;
 }
 
-double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
+double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool isPostTreat, bool doLog)
 {
 	QDate iniDate = Transaction::currentDay().addDays(-Transaction::maxDaysOld());
 	QDate endDate = Transaction::currentDay().addDays(approxSpacingPayment() / 2);
@@ -116,7 +116,7 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool doLog)
 	return tempFitness;
 }
 
-void FeatureMonthlyAmount::onJustApplied(TransactionBundle& allTrans, bool doLog = false)
+void FeatureMonthlyAmount::onJustApplied(TransactionBundle& allTrans, bool doLog)
 {
 	if (m_fitness <= 0.0)
 		return;
@@ -127,7 +127,7 @@ void FeatureMonthlyAmount::onJustApplied(TransactionBundle& allTrans, bool doLog
 	m_localStaticArgs.m_dayOfMonth += approxSpacingPayment() / 2;
 	m_localStaticArgs.m_dayOfMonth %= 31;
 	cleanArgs();
-	double rerun = apply(allTrans, false);
+	double rerun = apply(allTrans, false, false);
 	if (doLog) {
 		DBG() << "fitness " << m_fitness << "- 2x " << rerun;
 	}

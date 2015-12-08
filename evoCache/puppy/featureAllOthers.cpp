@@ -1,6 +1,6 @@
 #include "featureAllOthers.h"
 
-double FeatureAllOthers::apply(TransactionBundle& allTrans, bool doLog)
+double FeatureAllOthers::apply(TransactionBundle& allTrans, bool isPostTreat, bool doLog)
 {
 	Q_UNUSED(doLog);
 	m_localStaticArgs.m_bundle.clear();

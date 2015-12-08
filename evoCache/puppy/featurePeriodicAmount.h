@@ -34,7 +34,7 @@ private:
 			o_retObj.insert("_total", m_bundle.sumDollar());
 			o_retObj.insert("numBund", m_bundle.count());
 			o_retObj.insert("fitRerun", m_fitRerun);
-			o_retObj.insert("amnt", unKindaLog(double(m_kla)));
+			o_retObj.insert("argAmnt", unKindaLog(double(m_kla)));
 			o_retObj.insert("avgSmt", m_bundle.avgSmart());
 			o_retObj.insert("kla", m_kla);
 			o_retObj.insert("hash", m_hash);
@@ -128,7 +128,7 @@ protected:
 		return retObj;
 	}
 
-	double apply(TransactionBundle& allTrans, bool doLog = false) override;
+	double apply(TransactionBundle& allTrans, bool isPostTreat, bool doLog) override;
 	void onJustApplied(TransactionBundle &allTrans, bool doLog) override;
 	void emitGraphics(Puppy::Context& ioContext) const override;
 	Oracle* makeNewOracle() override {

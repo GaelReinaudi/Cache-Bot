@@ -11,7 +11,7 @@ void FeatureStatDistrib::getArgs(Puppy::Context &ioContext) {
 	m_localStaticArgs.m_effect = a;
 }
 
-double FeatureStatDistrib::apply(TransactionBundle& allTrans, bool doLog)
+double FeatureStatDistrib::apply(TransactionBundle& allTrans, bool isPostTreat, bool doLog)
 {
 	Q_UNUSED(doLog);
 	DBG() << "FeatureStatDistrib::apply";
@@ -35,7 +35,7 @@ double FeatureStatDistrib::apply(TransactionBundle& allTrans, bool doLog)
 		}
 	}
 	int numBund = m_localStaticArgs.m_bundle.count();
-	if (numBund < minTransactionForBundle()) {
+	if (numBund < 1 || (!isPostTreat && numBund < minTransactionForBundle())) {
 		m_localStaticArgs.m_bundle.clear();
 		m_localStaticArgs.m_dayProba = 0.0;
 		return 0.0;
