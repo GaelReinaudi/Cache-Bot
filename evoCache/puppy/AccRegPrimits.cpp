@@ -69,7 +69,7 @@ void AccountFeature::execute(void *outDatum, Puppy::Context &ioContext)
 	// will be ALL the transactions if m_filterHash < 0
 	TransactionBundle& allTrans = ioContext.m_pUser->transBundle(m_filterHash);
 
-	output = apply(allTrans, ioContext.m_summaryJsonObj);
+	output = apply(allTrans, ioContext.isPostTreatment, ioContext.m_summaryJsonObj);
 	m_fitness = output;
 
 	isolateBundledTransactions(ioContext.isPostTreatment);

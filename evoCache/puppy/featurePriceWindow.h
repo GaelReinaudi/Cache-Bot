@@ -39,7 +39,7 @@ protected:
 			return trans.kla() <= m_localStaticArgs.m_kla + 0.4
 					&& trans.kla() >= m_localStaticArgs.m_kla - 0.4;
 	}
-	int minTransactionForBundle() const override { return 1; }
+	int minTransactionForBundle() const override { return 4; }
 
 	Oracle* makeNewOracle() override {
 		OraclePriceWindow* pNewOr = new OraclePriceWindow(this);

@@ -165,7 +165,7 @@ protected:
 	}
 	virtual void cleanArgs() {}
 	virtual bool cannotExecute(Puppy::Context& ioContext) const { Q_UNUSED(ioContext); return false; }
-	virtual double apply(TransactionBundle& allTrans, bool doLog = false) = 0;
+	virtual double apply(TransactionBundle& allTrans, bool isPostTreat, bool doLog) = 0;
 	virtual void isolateBundledTransactions(bool isPostTreatment = false);
 	virtual void onJustApplied(TransactionBundle&, bool) {}
 	virtual void emitGraphics(Puppy::Context&) const { }
@@ -203,7 +203,7 @@ public:
 			ioContext.mTree->fitness.push_back(lArgi);
 		}
 	}
-	double apply(TransactionBundle&, bool) override { return 0.0; }
+	double apply(TransactionBundle&, bool, bool) override { return 0.0; }
 protected:
 	FeatureArgs* localStaticArgs() override { return 0; }
 

@@ -62,7 +62,14 @@ BotContext::BotContext(User *pUser)
 	}
 	insert(new FeatureBiWeeklyAmount());
 	insert(new FeatureMonthlyAmount());
-	insert(new FeaturePriceWindow());
+	if (pUser->jsonArgs()["PriceWindow"].toString().trimmed() == "enabled") {
+		WARN() << "Enabling PriceWindow " << QString(QJsonDocument(pUser->jsonArgs()).toJson());
+		insert(new FeaturePriceWindow());
+	}
+	else {
+		WARN() << "Disabling PriceWindow "  << QString(QJsonDocument(pUser->jsonArgs()).toJson());
+	}
+//	insert(new FeaturePriceWindow());
 //	insert(new FeatureOutlier());
 }
 

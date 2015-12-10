@@ -42,7 +42,7 @@ protected:
 				&& double(trans.kla()) <=  1.0 + m_localStaticArgs.m_kla / EFFECT_RANGE_WIDTH_RATIO
 				&& double(trans.kla()) >= -1.0 + m_localStaticArgs.m_kla * EFFECT_RANGE_WIDTH_RATIO;
 	}
-	int minTransactionForBundle() const override { return 8; }
+	int minTransactionForBundle() const override { return 16; }
 	Oracle* makeNewOracle() override {
 		OracleLabelDistrib* pNewOr = new OracleLabelDistrib(this);
 		pNewOr->m_args = m_localStaticArgs;

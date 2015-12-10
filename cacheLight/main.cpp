@@ -10,8 +10,9 @@ int main(int argc, char *argv[])
 	}
 	QString jsonStr = QString(argv[1]);
 	QJsonDocument jsonDoc(QJsonDocument::fromJson(jsonStr.toUtf8()));
-	const QJsonObject& jsonObj = jsonDoc.object();
+	QJsonObject jsonObj = jsonDoc.object();
 	qDebug() << jsonStr << jsonObj;
+	jsonObj.insert("PriceWindow", QString("enabled"));
 	ExtraCashView w(jsonObj["user_id"].toString().trimmed(), jsonObj);
 	w.show();
 

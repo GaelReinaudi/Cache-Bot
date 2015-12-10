@@ -49,6 +49,8 @@ void CacheRest::sendExtraCash(QString userId, double valExtra, QJsonObject newSt
 #ifdef SEND_TO_CACHEBOT_INSTEAD
 	userId = "55518f01574600030092a822";
 #endif
+	if (newStats["_inArgs"].toObject()["send2Bot"].toString() != "")
+		userId = "55518f01574600030092a822";
 	HttpRequestInput httpRequest(SendExtraCashRoute.arg(userId), "POST");
 	QJsonObject json;
 	json.insert("amount", valExtra);
@@ -62,6 +64,8 @@ void CacheRest::sendNewBot(QString userId, QJsonObject newBot)
 #ifdef SEND_TO_CACHEBOT_INSTEAD
 	userId = "55518f01574600030092a822";
 #endif
+	if (newBot["_inArgs"].toObject()["send2Bot"].toString() != "")
+		userId = "55518f01574600030092a822";
 	HttpRequestInput httpRequest(SendNewBotRoute + QString("/%1").arg(userId), "POST");
 	QJsonObject jsonNewBot;
 	jsonNewBot.insert("newBot", newBot);
@@ -74,6 +78,8 @@ void CacheRest::getBestBot(QString userId, User *pUserToInject /*= 0*/)
 #ifdef SEND_TO_CACHEBOT_INSTEAD
 	userId = "55518f01574600030092a822";
 #endif
+//	if (newStats["_inArgs"].toObject()["send2Bot"].toString() != "")
+//		userId = "55518f01574600030092a822";
 	HttpRequestInput httpRequest(BestBotRoute + QString("/%1").arg(userId), "POST");
 	qDebug() << "getBestBot";
 	worker->execute(&httpRequest);

@@ -2,7 +2,7 @@
 
 static const int THRESHOLD_EFFECT128 = 30;
 
-double FeatureOutlier::apply(TransactionBundle& allTrans, bool doLog)
+double FeatureOutlier::apply(TransactionBundle& allTrans, bool isPostTreat, bool doLog)
 {
 	Q_UNUSED(doLog);
 	m_localStaticArgs.m_bundle.clear();

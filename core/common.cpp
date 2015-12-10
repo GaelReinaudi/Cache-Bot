@@ -92,7 +92,7 @@ qint64 NameHashVector2::fromString(const QString &str, double kla) {
 	qint64 h = 0;
 	for (const QChar& c : str) {
 		int n = c.toUpper().toLatin1();
-		if (c.isDigit())
+		if (c.isDigit() || c == QChar('#') || c == QChar(' '))
 			continue;
 		n -= QChar('@').toLatin1();
 		if(n >= 0 && n < 25) {

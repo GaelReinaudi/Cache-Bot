@@ -50,7 +50,7 @@ protected:
 	}
 
 protected:
-	double apply(TransactionBundle& allTrans, bool doLog = false) override;
+	double apply(TransactionBundle& allTrans, bool isPostTreat, bool doLog) override;
 	void emitGraphics(Puppy::Context& ioContext) const override;
 	Oracle* makeNewOracle() {
 		OracleOutlier* pNewOr = new OracleOutlier(this);

@@ -11,8 +11,8 @@ public:
 	{}
     QJsonObject toJson() const override {
         QJsonObject ret = Oracle::toJson();
-		ret["approxAmnt"] = toSignifDigit_2(m_args.m_bundle.averageAmount());
-		ret["avgAmnt"] = m_args.m_bundle.averageAmount();
+		ret["approxAmnt"] = toSignifDigit_2(m_args.m_bundle.avgSmart());
+		ret["avgAmnt"] = m_args.m_bundle.avgSmart();
 		ret["day1"] = (m_args.m_dayOfMonth + 31) % 31;
 		ret["day2"] = (m_args.m_dayOfMonth2 + 31) % 31;
         ret["cons-missed"] = m_args.m_consecMissed;
@@ -42,7 +42,7 @@ private:
 			o_retObj.insert("_total", m_bundle.sumDollar());
 			o_retObj.insert("numBund", m_bundle.count());
 			o_retObj.insert("fitRerun", m_fitRerun);
-			o_retObj.insert("amnt", unKindaLog(double(m_kla)));
+			o_retObj.insert("featArgAmnt", unKindaLog(double(m_kla)));
 			o_retObj.insert("avgSmt", m_bundle.avgSmart());
 			o_retObj.insert("kla", m_kla);
 			o_retObj.insert("hash", m_hash);
@@ -136,7 +136,7 @@ protected:
 		return retObj;
 	}
 
-	double apply(TransactionBundle& allTrans, bool doLog = false) override;
+	double apply(TransactionBundle& allTrans, bool isPostTreat, bool doLog) override;
 	void onJustApplied(TransactionBundle &allTrans, bool doLog) override;
 	void emitGraphics(Puppy::Context& ioContext) const override;
 	Oracle* makeNewOracle() override {
