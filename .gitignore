@@ -12,3 +12,5 @@ bin
 /*/ui_*
 *.log
 jarfile
+
+evoCache/evoCache.pro.user*

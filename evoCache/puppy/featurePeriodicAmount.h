@@ -16,6 +16,14 @@ public:
 		ret["day1"] = (m_args.m_dayOfMonth + 31) % 31;
 		ret["day2"] = (m_args.m_dayOfMonth2 + 31) % 31;
         ret["cons-missed"] = m_args.m_consecMissed;
+
+        QJsonArray transIds;
+        for (int i = 0; i < m_args.m_bundle.count(); ++i) {
+            const Transaction& tr = m_args.m_bundle.trans(i);
+            transIds.append(tr.id);
+        }
+        ret["trans"] = transIds;
+
 		return ret;
 	}
 
