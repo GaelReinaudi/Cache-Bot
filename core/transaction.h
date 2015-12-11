@@ -32,11 +32,18 @@ public:
 	bool isToOld() const { return date < Transaction::currentDay().addDays(-Transaction::maxDaysOld()); }
 	bool noUse() const;
 	int type() const;
+	enum UserInputFlag { NoUserFlag = 0x0, NoRecur = 0x1};
+	int userFlag = Flag::None;
+	void loadUserFlags(const QJsonObject &json) {
+		for (const QJsonValue& jv : json["userInput"].toArray()) {
+			if (jv.toString() == "noRecur") {
+				userFlag |= NoRecur;
+			}
+		}
+	}
 
 	//! json in
 	void read(const QJsonObject &json);
-	//! json out
-	void write(QJsonObject &json) const;
 
 	double time_t() const {
 		static const qint64 day0 = QDateTime::fromTime_t(0).date().toJulianDay();

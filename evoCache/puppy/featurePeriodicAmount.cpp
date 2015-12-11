@@ -47,7 +47,7 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool isPostTreat
 	for (int i = 0; i < allTrans.count(); ++i) {
 		const Transaction& trans = allTrans.trans(i);
 		qint64 dist = iTarg->dist(trans);
-		if (trans.noUse()) {
+		if (trans.noUse() || (trans.userFlag & Transaction::NoRecur)) {
 			dist = 1<<20;
 		}
 		double factOld = 2.0;

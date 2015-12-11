@@ -43,6 +43,7 @@ void Transaction::read(const QJsonObject &json) {
 		categories.append(npcArrayOld[npcIndex].toString());
 	}
 	s_maxDaysOldAllTransatcion = qMax(s_maxDaysOldAllTransatcion, int(date.daysTo(Transaction::currentDay())));
+	loadUserFlags(json);
 
 	// logs all in the LOG.
 	auto out = INFO();
@@ -58,13 +59,6 @@ void Transaction::read(const QJsonObject &json) {
 	out << " ]"
 		<< " account .." << accountStr.right(4)
 		   ;
-}
-
-void Transaction::write(QJsonObject &json) const {
-	json["name"] = name;
-	json["hash"] = nameHash.hash();
-	json["amount"] = -amountDbl();
-	json["date"] = date.toString("yyyy-MM-dd");
 }
 
 qint64 Transaction::dist(const Transaction &other, bool log) const {

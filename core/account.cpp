@@ -81,13 +81,13 @@ bool Account::toJson(QVector<Transaction> transactions, QString category)
 	QJsonDocument loadDoc(QJsonDocument::fromJson(saveData));
 	QJsonObject json = loadDoc.object();
 
-	QJsonArray transArray;
-	for (int i = 0; i < transactions.count(); ++i) {
-		QJsonObject obj;
-		transactions[i].write(obj);
-		transArray.append(obj);
-	}
-	json[category] = transArray;
+//	QJsonArray transArray;
+//	for (int i = 0; i < transactions.count(); ++i) {
+//		QJsonObject obj;
+//		transactions[i].write(obj);
+//		transArray.append(obj);
+//	}
+//	json[category] = transArray;
 	qDebug() << transactions.count();
 
 	QFile writeFile(m_jsonFilePath + ".out");
