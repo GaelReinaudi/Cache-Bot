@@ -8,6 +8,7 @@
 
 unsigned int BotContext::LIMIT_NUM_FEATURES = 1;
 unsigned int BotContext::TARGET_TRANS_FUTUR_DAYS = 100;
+QJsonObject BotContext::JSON_ARGS;
 
 BotContext::BotContext(User *pUser)
 	: DBobj(pUser)
@@ -54,22 +55,20 @@ BotContext::BotContext(User *pUser)
 		}
 	}
 	insert(new CacheBotRootPrimitive());
-	if (pUser->jsonArgs()["LabelDistrib"].toString().trimmed() != "disabled") {
+	if (BotContext::JSON_ARGS["LabelDistrib"].toString().trimmed() != "disabled") {
 		insert(new FeatureLabelDistrib());
 	}
-	if (pUser->jsonArgs()["LabelDistrib"].toString().trimmed() == "only") {
+	if (BotContext::JSON_ARGS["LabelDistrib"].toString().trimmed() == "only") {
 		return;
 	}
 	insert(new FeatureBiWeeklyAmount());
 	insert(new FeatureMonthlyAmount());
-	if (pUser->jsonArgs()["PriceWindow"].toString().trimmed() == "enabled") {
-		WARN() << "Enabling PriceWindow " << QString(QJsonDocument(pUser->jsonArgs()).toJson());
-		insert(new FeaturePriceWindow());
+
+	if (BotContext::JSON_ARGS["PriceWindow"].toString().trimmed() == "enabled") {
+		WARN() << "Enabling PriceWindow during evo" << QString(QJsonDocument(BotContext::JSON_ARGS).toJson());
 	}
-	else {
-		WARN() << "Disabling PriceWindow "  << QString(QJsonDocument(pUser->jsonArgs()).toJson());
-	}
-//	insert(new FeaturePriceWindow());
+	insert(new FeaturePriceWindow());
+
 //	insert(new FeatureOutlier());
 }
 

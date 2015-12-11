@@ -7,8 +7,8 @@
 
 User::User(QString userId, QJsonObject jsonArgs)
 	: DBobj(userId, 0)
-	, m_jsonArgs(jsonArgs)
 {
+	BotContext::JSON_ARGS = jsonArgs;
 	//makes the oracle
 	oracle();
 }

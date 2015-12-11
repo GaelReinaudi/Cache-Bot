@@ -79,9 +79,6 @@ public:
 	BotContext *botContext() const{
 		return m_botContext;
 	}
-	const QJsonObject& jsonArgs() const {
-		return m_jsonArgs;
-	}
 	BotContext* makeBotContext();
 	SuperOracle* oracle();
 	SuperOracle::Summary smallSummary();
@@ -140,7 +137,6 @@ private:
 	Fund* m_extraCacheFund = 0;
 	QString m_email;
 	SuperOracle* m_mainOracle = 0;
-	QJsonObject m_jsonArgs;
 };
 
 #endif // USER_H

@@ -17,6 +17,7 @@ public:
 	static const unsigned int MAX_NUM_FEATURES = 32;
 	static unsigned int LIMIT_NUM_FEATURES;
 	static unsigned int TARGET_TRANS_FUTUR_DAYS;
+	static QJsonObject JSON_ARGS;
 
 signals:
 	void matchedTransaction(double t, double amount, int flag = 0);

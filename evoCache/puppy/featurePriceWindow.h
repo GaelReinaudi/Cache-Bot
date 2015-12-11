@@ -46,6 +46,11 @@ protected:
 		pNewOr->m_args = m_localStaticArgs;
 		return pNewOr;
 	}
+	void onJustApplied(TransactionBundle &allTrans, bool doLog) override {
+		if (BotContext::JSON_ARGS["PriceWindow"].toString().trimmed() != "enabled") {
+			m_fitness -= 100.0;
+		}
+	}
 };
 
 #endif // FEATUREPRICEWINDOW_H
