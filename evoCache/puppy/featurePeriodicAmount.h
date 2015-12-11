@@ -15,7 +15,7 @@ public:
 		ret["avgAmnt"] = m_args.m_bundle.avgSmart();
 		ret["day1"] = (m_args.m_dayOfMonth + 31) % 31;
 		ret["day2"] = (m_args.m_dayOfMonth2 + 31) % 31;
-        ret["cons-missed"] = m_args.m_consecMissed;
+        ret["consMissed"] = m_args.m_consecMissed;
 
         QJsonArray transIds;
         for (int i = 0; i < m_args.m_bundle.count(); ++i) {
@@ -38,7 +38,7 @@ private:
 			FeatureArgs::intoJson(o_retObj);
 			o_retObj.insert("dayOfMonth", m_dayOfMonth);
 			o_retObj.insert("consecutive", m_consecMonthBeforeMissed);
-			o_retObj.insert("cons-missed", m_consecMissed);
+            o_retObj.insert("consMissed", m_consecMissed);
 			o_retObj.insert("_total", m_bundle.sumDollar());
 			o_retObj.insert("numBund", m_bundle.count());
 			o_retObj.insert("fitRerun", m_fitRerun);
