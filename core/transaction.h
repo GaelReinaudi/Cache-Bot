@@ -44,7 +44,12 @@ public:
 
 	//! json in
 	void read(const QJsonObject &json);
-
+//	void write(QJsonObject &json) const {
+//		json["name"] = name;
+//		json["hash"] = nameHash.hash();
+//		json["amount"] = -amountDbl();
+//		json["date"] = date.toString("yyyy-MM-dd");
+//	}
 	double time_t() const {
 		static const qint64 day0 = QDateTime::fromTime_t(0).date().toJulianDay();
 		return (3600.0 * 24.0) * (double(date.toJulianDay() - day0));
