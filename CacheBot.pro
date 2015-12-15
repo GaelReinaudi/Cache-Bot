@@ -8,18 +8,23 @@ SUBDIRS = \
 	cacheRest \
 	tests \
 	evoCache \
+	extraCash
+
+macx | win32 {
+SUBDIRS += \
 	evoCacheView \
 	cacheLight \
-	extraCash \
 	userViewer \
 	metricViewer \
-    spinner
-	
-cacheRest.depends = core
-evoCache.depends = cacheRest,core
+	spinner
+
 evoCacheView.depends = cacheRest,core,evoCache
-tests.depends = cacheRest,core
-extraCash.depends = cacheRest,core,evoCache
 cacheLight.depends = cacheRest,core,extraCash
 userViewer.depends = cacheRest,core,evoCache
 metricViewer.depends = cacheRest,core,evoCache,extraCash
+}
+
+cacheRest.depends = core
+tests.depends = cacheRest,core
+evoCache.depends = cacheRest,core
+extraCash.depends = cacheRest,core,evoCache
