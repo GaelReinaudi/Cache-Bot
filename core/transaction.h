@@ -34,13 +34,7 @@ public:
 	int type() const;
 	enum UserInputFlag { NoUserFlag = 0x0, NoRecur = 0x1};
 	int userFlag = Flag::None;
-	void loadUserFlags(const QJsonObject &json) {
-		for (const QJsonValue& jv : json["userInput"].toArray()) {
-			if (jv.toString() == "noRecur") {
-				userFlag |= NoRecur;
-			}
-		}
-	}
+	void loadUserFlags(const QJsonObject &json);
 
 	//! json in
 	void read(const QJsonObject &json);

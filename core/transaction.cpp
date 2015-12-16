@@ -1,5 +1,6 @@
 #include "transaction.h"
 #include "account.h"
+#include "botContext.h"
 
 int hoursOffsetToHack_issue_9 = -5;
 QDateTime Transaction::s_actualCurrentDayTime = QDateTime::currentDateTime().addSecs(hoursOffsetToHack_issue_9 * 3600);
@@ -19,6 +20,29 @@ bool Transaction::noUse() const
 
 int Transaction::type() const {
 	return account->type() + 16 * (flags & Internal);
+}
+
+void Transaction::loadUserFlags(const QJsonObject &json) {
+	static QStringList ignore; static bool notAlready = true;
+	if (notAlready) {
+		notAlready = false;
+		for (const auto & v : BotContext::JSON_ARGS["userInputIgnore"].toArray()) {
+			ignore.append(v.toString());
+			WARN() << "userInputIgnore flag: " << v.toString();
+		}
+	}
+	for (const QJsonValue& jv : json["userInput"].toArray()) {
+		QString flag = jv.toString();
+		INFO() << "userInput flag:" << flag;
+		if (flag.startsWith("noRecur")) {
+			if (ignore.contains("noRecurPos") && amount() > 0) {
+				WARN() << "ignoring flag:" << flag;
+			}
+			else {
+				userFlag |= NoRecur;
+			}
+		}
+	}
 }
 
 void Transaction::read(const QJsonObject &json) {
