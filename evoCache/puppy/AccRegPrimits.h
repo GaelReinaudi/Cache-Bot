@@ -105,6 +105,7 @@ struct FeatureArgs
 {
 	virtual void intoJson(QJsonObject& o_retObj) const {
 		o_retObj.insert("zlabels", QJsonArray::fromStringList(m_bundle.uniqueNames()));
+		o_retObj.insert("zcategories", QJsonArray::fromStringList(m_bundle.uniqueCategories()));
 	}
 	TransactionBundle m_bundle;
 };
