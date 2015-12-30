@@ -5,6 +5,7 @@
 #include "featurePeriodicAmount.h"
 #include "featurePriceWindow.h"
 #include "featureLabelDistrib.h"
+#include "featureCategory.h"
 
 unsigned int BotContext::LIMIT_NUM_FEATURES = 1;
 unsigned int BotContext::TARGET_TRANS_FUTUR_DAYS = 100;
@@ -55,6 +56,12 @@ BotContext::BotContext(User *pUser)
 		}
 	}
 	insert(new CacheBotRootPrimitive());
+	if (BotContext::JSON_ARGS["Category"].toString().trimmed() == "enabled") {
+		insert(new FeatureCategory());
+	}
+	if (BotContext::JSON_ARGS["Category"].toString().trimmed() == "only") {
+		return;
+	}
 	if (BotContext::JSON_ARGS["LabelDistrib"].toString().trimmed() != "disabled") {
 		insert(new FeatureLabelDistrib());
 	}

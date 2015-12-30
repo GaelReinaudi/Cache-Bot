@@ -11,6 +11,13 @@ void FeatureStatDistrib::getArgs(Puppy::Context &ioContext) {
 	m_localStaticArgs.m_effect = a;
 }
 
+qint64 FeatureStatDistrib::distCalc(const Transaction& tr, const Transaction& modelTrans) const
+{
+	static const int maxHashDist = 4;
+	qint64 dist = tr.distanceWeighted<1024*1024*1024, 1024*1024*1024, maxHashDist>(modelTrans);
+	return dist;
+}
+
 double FeatureStatDistrib::apply(TransactionBundle& allTrans, bool isPostTreat, bool doLog)
 {
 	Q_UNUSED(doLog);
@@ -18,9 +25,9 @@ double FeatureStatDistrib::apply(TransactionBundle& allTrans, bool isPostTreat, 
 	// transaction to compare the hash with
 	Transaction modelTrans;
 	modelTrans.nameHash.setFromHash(m_localStaticArgs.m_hash);
+	modelTrans.categoryHash.setFromHash(m_localStaticArgs.m_hash);
 //	modelTrans.setAmount(-1.0); // only negative prices will have a usable distance
 	modelTrans.date = Transaction::currentDay();
-	const int maxHashDist = 4;
 
 	m_localStaticArgs.m_bundle.clear();
 	for (int i = 0; i < allTrans.count(); ++i) {
@@ -29,7 +36,7 @@ double FeatureStatDistrib::apply(TransactionBundle& allTrans, bool isPostTreat, 
 			continue;
 		if (tr.dimensionOfVoid)
 			continue;
-		qint64 dist = tr.distanceWeighted<1024*1024*1024, 1024*1024*1024, maxHashDist>(modelTrans);
+		qint64 dist = distCalc(tr, modelTrans);
 		if (passFilter(dist, tr)) {
 			m_localStaticArgs.m_bundle.append(&tr);
 		}

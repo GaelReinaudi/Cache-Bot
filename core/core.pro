@@ -26,7 +26,8 @@ SOURCES += \
 	$$PWD/../evoCache/puppy/featurePeriodicAmount.cpp \
 	$$PWD/../evoCache/puppy/featureOutlier.cpp \
 	$$PWD/../evoCache/puppy/featurePriceWindow.cpp \
-	$$PWD/../evoCache/puppy/featureLabelDistrib.cpp
+	$$PWD/../evoCache/puppy/featureLabelDistrib.cpp \
+	$$PWD/../evoCache/puppy/featureCategory.cpp
 
 
 HEADERS += \

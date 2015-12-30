@@ -92,6 +92,7 @@ protected:
 	double maxDailyProbability() const override {
 		return m_localStaticArgs.m_dayProba;
 	}
+	virtual qint64 distCalc(const Transaction& tr, const Transaction &modelTrans) const;
 
 protected:
 	FeatureArgs* localStaticArgs() override { return &m_localStaticArgs; }
