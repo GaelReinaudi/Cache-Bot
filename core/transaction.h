@@ -206,6 +206,17 @@ public:
 		}
 		return ret;
 	}
+	QStringList uniqueCategories() const {
+		QStringList ret;
+		for (int i = 0; i < m_vector.count(); ++i) {
+			const Transaction* t = m_vector.at(i);
+			for (const QString& strCat : t->categories) {
+				if (!ret.contains(strCat))
+					ret.append(strCat);
+			}
+		}
+		return ret;
+	}
 	double sumDollar() const {
 		double ret = 0.0;
 		for (int i = 0; i < m_vector.count(); ++i) {

@@ -121,6 +121,14 @@ private:
 			if (!m_hashBundles.contains(h))
 				m_hashBundles[h] = new TransactionBundle();
 			m_hashBundles[h]->append(&t);
+
+			// categories too
+			h = t.categoryHash.hash();
+			if (!m_hashBundles.contains(h))
+				m_hashBundles[h] = new TransactionBundle();
+			m_hashBundles[h]->append(&t);
+
+			// all of them
 			m_allTransBundle.append(&t);
 		}
 		//qDebug() << m_hashBundles.count() << m_hashBundles.keys().first() << m_hashBundles.keys().last();
