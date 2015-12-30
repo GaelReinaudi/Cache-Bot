@@ -124,7 +124,7 @@ private:
 
 			// categories too
 			h = t.categoryHash.hash();
-			if (!m_hashBundles.contains(h))
+			if (h && !m_hashBundles.contains(h))
 				m_hashBundles[h] = new TransactionBundle();
 			m_hashBundles[h]->append(&t);
 

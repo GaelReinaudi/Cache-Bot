@@ -213,6 +213,7 @@ public:
 			for (const QString& strCat : t->categories) {
 				if (!ret.contains(strCat))
 					ret.append(strCat);
+				break;
 			}
 		}
 		return ret;

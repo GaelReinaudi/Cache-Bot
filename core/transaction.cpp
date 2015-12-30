@@ -58,7 +58,7 @@ void Transaction::read(const QJsonObject &json) {
 	name = name.trimmed();
 	setAmount(-json["amount"].toDouble(ok));
 	nameHash.setFromString(name, m_kla);
-	categoryHash.setFromHash(json["category_id"].toString().toLongLong());
+	categoryHash.setFromHash(json["category_id"].toString().toLongLong() * (m_kla<0?-1:1));
 	QString dateToUse = "date";
 	if (json.contains("pending_date"))
 		dateToUse = "pending_date";
