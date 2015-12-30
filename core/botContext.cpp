@@ -60,6 +60,7 @@ BotContext::BotContext(User *pUser)
 		insert(new FeatureCategory());
 	}
 	if (BotContext::JSON_ARGS["Category"].toString().trimmed() == "only") {
+		insert(new FeatureCategory());
 		return;
 	}
 	if (BotContext::JSON_ARGS["LabelDistrib"].toString().trimmed() != "disabled") {
