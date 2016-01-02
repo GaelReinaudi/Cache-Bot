@@ -14,7 +14,11 @@ UserViewer::UserViewer(QString userID, QVector<int> onlyLoadHashes)
 	setWindowTitle(QString("..")+userID.right(5));
 	Transaction::onlyLoadHashes = onlyLoadHashes;
 
-	m_pConnector = new CacheAccountConnector(userID);
+	QJsonObject jsonObj;
+	jsonObj.insert("PriceWindow", QString("enabled"));
+	jsonObj.insert("Category", QString("enabled"));
+
+	m_pConnector = new CacheAccountConnector(userID, jsonObj);
 	connect(m_pConnector, SIGNAL(injected(User*)), this, SLOT(onUserInjected(User*)));
 	connect(m_pConnector, SIGNAL(botInjected(Bot*)), this, SLOT(onBotInjected(Bot*)));
 	connect(ui->spinAgo, SIGNAL(valueChanged(int)), this, SLOT(onAgo()));

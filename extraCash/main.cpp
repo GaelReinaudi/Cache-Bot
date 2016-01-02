@@ -13,6 +13,7 @@ int main(int argc, char *argv[])
 	QJsonObject jsonObj = jsonDoc.object();
 	qDebug() << endl << jsonStr << endl << jsonObj;
 	jsonObj.insert("PriceWindow", QString("enabled"));
+	jsonObj.insert("Category", QString("enabled"));
 	ExtraCache w(jsonObj["user_id"].toString().trimmed(), jsonObj);
 
 	return a.exec();
