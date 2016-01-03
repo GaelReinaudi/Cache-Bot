@@ -97,12 +97,12 @@ qint64 Transaction::dist(const Transaction &other, bool log) const {
 }
 
 Transaction* StaticTransactionArray::appendNew(QJsonObject jsonTrans, Account *pInAcc) {
-	QString name = jsonTrans["name"].toString();
+	QString name = jsonTrans["name"].toString().toUpper();
 	name.remove("FROM").remove("TO");
-	name.remove("from").remove("to");
 	name.remove("CHK").remove("SAV");
-	name.remove("Online").remove("Banking").remove("Confirmation");
-	name.remove("Image");
+	name.remove("ACCT");
+	name.remove("ONLINE").remove("BANKING").remove("CONFIRMATION");
+	name.remove("IMAGE");
 	name = name.trimmed();
 	QString dateToUse = "date";
 	if (jsonTrans.contains("pending_date"))
