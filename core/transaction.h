@@ -29,7 +29,7 @@ public:
 	enum Flag { None = 0x0, Predicted = 0x1, CameTrue = 0x2 , Internal = 0x4 };
 	int flags = Flag::None;
 	bool isInternal() const { return flags & Transaction::Flag::Internal; }
-	bool isFuture() const { return date > Transaction::currentDay(); }
+	bool isFuture() const { return Transaction::currentDay().daysTo(date) > 2; }
 	bool isToOld() const { return date < Transaction::currentDay().addDays(-Transaction::maxDaysOld()); }
 	bool noUse() const;
 	int type() const;

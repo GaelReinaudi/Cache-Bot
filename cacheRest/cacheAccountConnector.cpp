@@ -9,6 +9,7 @@ CacheAccountConnector::CacheAccountConnector(QString userID, QJsonObject jsonArg
 {
 	CREATE_LOGGER(userID);
 
+	NOTICE() << "Transaction::currentDay()" << Transaction::currentDay().toString();
 	NOTICE() << "jsonArgs: " << QString(QJsonDocument(m_jsonArgs).toJson(/*QJsonDocument::Compact*/));
 
 	// login as cache-bot
