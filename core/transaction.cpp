@@ -49,12 +49,12 @@ void Transaction::read(const QJsonObject &json) {
 	bool ok = false;
 	QString accountStr = json["plaid_account"].toString();
 	id = json["_id"].toString();
-	name = json["name"].toString();
+	name = json["name"].toString().toUpper();
 	name.remove("FROM").remove("TO");
-	name.remove("from").remove("to");
 	name.remove("CHK").remove("SAV");
-	name.remove("Online").remove("Banking").remove("Confirmation");
-	name.remove("Image");
+	name.remove("ACCT");
+	name.remove("ONLINE").remove("BANKING").remove("CONFIRMATION");
+	name.remove("IMAGE");
 	name = name.trimmed();
 	setAmount(-json["amount"].toDouble(ok));
 	nameHash.setFromString(name, m_kla);
