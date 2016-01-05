@@ -9,6 +9,15 @@ CacheAccountConnector::CacheAccountConnector(QString userID, QJsonObject jsonArg
 {
 	CREATE_LOGGER(userID);
 
+	QJsonArray onlyH = jsonArgs["onlyHashes"].toArray();
+	for (int i = 0; i < onlyH.count(); ++i) {
+		Transaction::onlyLoadHashes.append(onlyH[i].toInt());
+	}
+	QJsonArray onlyC = jsonArgs["category"].toArray();
+	for (int i = 0; i < onlyC.count(); ++i) {
+		Transaction::onlyCategory.append(onlyC[i].toInt());
+	}
+
 	NOTICE() << "Transaction::currentDay()" << Transaction::currentDay().toString();
 	NOTICE() << "jsonArgs: " << QString(QJsonDocument(m_jsonArgs).toJson(/*QJsonDocument::Compact*/));
 

@@ -15,11 +15,6 @@ UserViewer::UserViewer(QString userID, QJsonObject jsonArgs)
 
 	m_pConnector = new CacheAccountConnector(userID, jsonArgs);
 
-	QJsonArray onlyH = jsonArgs["onlyHashes"].toArray();
-	for (int i = 0; i < onlyH.count(); ++i) {
-		Transaction::onlyLoadHashes.append(onlyH[i].toInt());
-	}
-
 	connect(m_pConnector, SIGNAL(injected(User*)), this, SLOT(onUserInjected(User*)));
 	connect(m_pConnector, SIGNAL(botInjected(Bot*)), this, SLOT(onBotInjected(Bot*)));
 	connect(ui->spinAgo, SIGNAL(valueChanged(int)), this, SLOT(onAgo()));

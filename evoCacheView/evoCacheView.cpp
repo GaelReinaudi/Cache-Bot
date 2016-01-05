@@ -14,10 +14,6 @@ EvoCacheView::EvoCacheView(QString userID, QJsonObject jsonArgs)
 
 	Evolver* pEvolver = new Evolver(userID, jsonArgs);
 //	pEvolver->flags &= ~CacheAccountConnector::SendBot;
-	QJsonArray onlyH = jsonArgs["onlyHashes"].toArray();
-	for (int i = 0; i < onlyH.count(); ++i) {
-		Transaction::onlyLoadHashes.append(onlyH[i].toInt());
-	}
 
 	connect(pEvolver, SIGNAL(injected(User*)), this, SLOT(onUserInjected(User*)));
 	connect(ui->startButton, SIGNAL(clicked(bool)), pEvolver, SIGNAL(startStopEvolution(bool)), Qt::DirectConnection);

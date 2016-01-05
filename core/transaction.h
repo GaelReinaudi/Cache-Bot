@@ -135,6 +135,7 @@ private:
 
 public:
 	static QVector<int> onlyLoadHashes;
+	static QVector<int> onlyCategory;
 	static QDate onlyAfterDate;
 	static int onlyAccountType;
 };

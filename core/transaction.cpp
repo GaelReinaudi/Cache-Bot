@@ -8,6 +8,7 @@ QDate Transaction::s_currentDay = Transaction::s_actualCurrentDayTime.date().add
 Transaction Transaction::s_hypotheTrans;
 
 QVector<int> Transaction::onlyLoadHashes = QVector<int>();
+QVector<int> Transaction::onlyCategory = QVector<int>();
 int Transaction::s_maxDaysOld = 5 * 31;
 int Transaction::s_maxDaysOldAllTransatcion = 30;
 QDate Transaction::onlyAfterDate = Transaction::currentDay().addMonths(-6);
@@ -110,6 +111,7 @@ Transaction* StaticTransactionArray::appendNew(QJsonObject jsonTrans, Account *p
 	QDate date = QDate::fromString(jsonTrans[dateToUse].toString().left(10), "yyyy-MM-dd");
 	double kla = -jsonTrans["amount"].toDouble();
 	qint64 hash = NameHashVector::fromString(name, kla);
+	qint64 hashCat = jsonTrans["category_id"].toString().toLongLong();
 	for (const QString& nono : pInAcc->excludeNameTransContain()) {
 		if (name.contains(nono, Qt::CaseInsensitive)) {
 			WARN() << "not Adding transaction because it looks like an internal transfer based on name containing"
@@ -120,6 +122,11 @@ Transaction* StaticTransactionArray::appendNew(QJsonObject jsonTrans, Account *p
 	if (!Transaction::onlyLoadHashes.isEmpty() && !Transaction::onlyLoadHashes.contains(hash)) {
 		DBG() << "not Adding transaction because Transaction::onlyLoadHashes doesn't contain "
 			  << hash;
+		return 0;
+	}
+	if (!Transaction::onlyCategory.isEmpty() && !Transaction::onlyCategory.contains(hashCat)) {
+		DBG() << "not Adding transaction because Transaction::onlyCategory doesn't contain "
+			  << hashCat;
 		return 0;
 	}
 	if (date < Transaction::onlyAfterDate) {
@@ -155,11 +162,11 @@ void StaticTransactionArray::stampAllTransactionEffect()
 		if (trans(i).isInternal())
 			continue;
 		int amnt128 = 128 * trans(i).amountDbl();
-		if (amnt128 > 0) {
+		if (amnt128 > 0 && totPos) {
 			trans(i).effect128 = amnt128 / totPos;
 			++effectCount[trans(i).effect128];
 		}
-		if (amnt128 < 0) {
+		if (amnt128 < 0 && totNeg) {
 			trans(i).effect128 = amnt128 / totNeg;
 			++effectCount[-trans(i).effect128];
 		}
