@@ -6,19 +6,20 @@
 #include "cacherest.h"
 #include "cacheAccountConnector.h"
 
-UserViewer::UserViewer(QString userID, QVector<int> onlyLoadHashes)
+UserViewer::UserViewer(QString userID, QJsonObject jsonArgs)
 	: QMainWindow()
 	, ui(new Ui::UserViewer)
 {
 	ui->setupUi(this);
 	setWindowTitle(QString("..")+userID.right(5));
-	Transaction::onlyLoadHashes = onlyLoadHashes;
 
-	QJsonObject jsonObj;
-	jsonObj.insert("PriceWindow", QString("enabled"));
-	jsonObj.insert("Category", QString("enabled"));
+	m_pConnector = new CacheAccountConnector(userID, jsonArgs);
 
-	m_pConnector = new CacheAccountConnector(userID, jsonObj);
+	QJsonArray onlyH = jsonArgs["onlyHashes"].toArray();
+	for (int i = 0; i < onlyH.count(); ++i) {
+		Transaction::onlyLoadHashes.append(onlyH[i].toInt());
+	}
+
 	connect(m_pConnector, SIGNAL(injected(User*)), this, SLOT(onUserInjected(User*)));
 	connect(m_pConnector, SIGNAL(botInjected(Bot*)), this, SLOT(onBotInjected(Bot*)));
 	connect(ui->spinAgo, SIGNAL(valueChanged(int)), this, SLOT(onAgo()));
