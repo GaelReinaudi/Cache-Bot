@@ -1,6 +1,6 @@
 {
 	"Food" : ["Dining", "Grocery"]
 	, "Grocery" : ["19047000"]
-	, "Dining" : ["1300[.{6}]"]
+	, "Dining" : ["1300.{6}"]
 	, "Transit" : ["2201.{6}"]
 }
