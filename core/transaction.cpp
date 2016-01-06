@@ -9,6 +9,8 @@ Transaction Transaction::s_hypotheTrans;
 
 QVector<int> Transaction::onlyLoadHashes = QVector<int>();
 QVector<int> Transaction::onlyPlaidCat = QVector<int>();
+QVector<QRegExp> Transaction::rootCatRegExp;
+QMap< QString, QVector<QRegExp> > Transaction::subCatRegExp;
 int Transaction::s_maxDaysOld = 5 * 31;
 int Transaction::s_maxDaysOldAllTransatcion = 30;
 QDate Transaction::onlyAfterDate = Transaction::currentDay().addMonths(-6);
@@ -97,6 +99,35 @@ qint64 Transaction::dist(const Transaction &other, bool log) const {
 	return distanceWeighted<16, 512, 2>(other, log);
 }
 
+void Transaction::makeCatRegExps(QJsonObject &json, QString strVal, QString keyCat)
+{
+	bool isRoot = keyCat == "";
+	if (!json.contains(strVal)) {
+		QRegExp r(strVal);
+		rootCatRegExp.append(r);
+		if (!json.contains(keyCat))
+			return;
+		subCatRegExp[keyCat].append(r);
+	}
+	for (QJsonValue v : json[strVal].toArray()) {
+		QString s = v.toString();
+		QString subCat = isRoot ? s : keyCat;
+		Transaction::makeCatRegExps(json, s, subCat);
+	}
+	if (isRoot) {
+		NOTICE() << "root regExp:";
+		for (const QRegExp& r : rootCatRegExp) {
+			INFO() << r.pattern();
+		}
+		for (const auto& s : subCatRegExp.keys()) {
+			NOTICE() << "subCat " << s << " regExp:";
+			for (const QRegExp& r : subCatRegExp[s]) {
+				INFO() << r.pattern();
+			}
+		}
+	}
+}
+
 Transaction* StaticTransactionArray::appendNew(QJsonObject jsonTrans, Account *pInAcc) {
 	QString name = jsonTrans["name"].toString().toUpper();
 	name.remove("FROM").remove("TO");
@@ -128,6 +159,18 @@ Transaction* StaticTransactionArray::appendNew(QJsonObject jsonTrans, Account *p
 		DBG() << "not Adding transaction because Transaction::onlyCategory doesn't contain "
 			  << hashCat;
 		return 0;
+	}
+	if (!Transaction::rootCatRegExp.isEmpty()) {
+		QString strHashCat = QString("%1").arg(hashCat, 8, 10, QChar('0'));
+		bool match = false;
+		for (const QRegExp& r : Transaction::rootCatRegExp) {
+			match |= r.exactMatch(strHashCat);
+		}
+		if (!match) {
+			DBG() << "not Adding transaction because matching nothing in Transaction::rootCatRegExp "
+				  << strHashCat;
+			return 0;
+		}
 	}
 	if (date < Transaction::onlyAfterDate) {
 		DBG() << "not Adding transaction because Transaction::onlyAfterDate ";

@@ -28,13 +28,16 @@ CacheAccountConnector::CacheAccountConnector(QString userID, QJsonObject jsonArg
 	INFO() << "jsonCacheCat\n" << QString(QJsonDocument(jsonCacheCat).toJson());
 
 	QString argCat = jsonArgs["category"].toString();
-	WARN() << "category: " << argCat;
+	NOTICE() << "category: " << argCat;
 	QStringList subCats;
 	for (QJsonValue it : jsonCacheCat[argCat].toArray()) {
 		subCats += it.toString();
 	}
-	WARN() << "subCats: " << subCats.join(", ");
-
+	INFO() << "subCats: " << subCats.join(", ");
+	// loading only the main category transaction
+	if (!argCat.isEmpty()) {
+		Transaction::makeCatRegExps(jsonCacheCat, argCat);
+	}
 
 
 	NOTICE() << "Transaction::currentDay()" << Transaction::currentDay().toString();
