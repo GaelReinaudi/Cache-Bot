@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 	QJsonObject jsonObj = jsonDoc.object();
 	qDebug() << endl << jsonStr << endl << jsonObj;
 	jsonObj.insert("PriceWindow", QString("enabled"));
-	jsonObj.insert("Category", QString("enabled"));
+	jsonObj.insert("CatDistrib", QString("enabled"));
 	UserViewer w(jsonObj["user_id"].toString().trimmed(), jsonObj);
 	w.show();
 

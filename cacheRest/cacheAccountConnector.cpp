@@ -13,10 +13,29 @@ CacheAccountConnector::CacheAccountConnector(QString userID, QJsonObject jsonArg
 	for (int i = 0; i < onlyH.count(); ++i) {
 		Transaction::onlyLoadHashes.append(onlyH[i].toInt());
 	}
-	QJsonArray onlyC = jsonArgs["category"].toArray();
+
+	QJsonArray onlyC = jsonArgs["plaidCat"].toArray();
 	for (int i = 0; i < onlyC.count(); ++i) {
-		Transaction::onlyCategory.append(onlyC[i].toInt());
+		Transaction::onlyPlaidCat.append(onlyC[i].toInt());
 	}
+
+
+	// Cache categories
+	QFile fileCacheCat("../../cache_categories.json");
+	fileCacheCat.open(QFile::ReadOnly);
+	QString strCat = fileCacheCat.readAll();
+	QJsonObject jsonCacheCat = QJsonDocument::fromJson(strCat.toUtf8()).object();
+	INFO() << "jsonCacheCat\n" << QString(QJsonDocument(jsonCacheCat).toJson());
+
+	QString argCat = jsonArgs["category"].toString();
+	NOTICE() << "category: " << argCat;
+	QStringList subCats;
+	for (QJsonValue it : jsonCacheCat[argCat].toArray()) {
+		subCats += it.toString();
+	}
+	INFO() << "subCats: " << subCats.join(", ");
+
+
 
 	NOTICE() << "Transaction::currentDay()" << Transaction::currentDay().toString();
 	NOTICE() << "jsonArgs: " << QString(QJsonDocument(m_jsonArgs).toJson(/*QJsonDocument::Compact*/));

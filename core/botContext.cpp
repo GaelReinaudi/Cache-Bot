@@ -56,10 +56,10 @@ BotContext::BotContext(User *pUser)
 		}
 	}
 	insert(new CacheBotRootPrimitive());
-	if (BotContext::JSON_ARGS["Category"].toString().trimmed() == "enabled") {
+	if (BotContext::JSON_ARGS["CatDistrib"].toString().trimmed() == "enabled") {
 		insert(new FeatureCategory());
 	}
-	if (BotContext::JSON_ARGS["Category"].toString().trimmed() == "only") {
+	if (BotContext::JSON_ARGS["CatDistrib"].toString().trimmed() == "only") {
 		insert(new FeatureCategory());
 		return;
 	}

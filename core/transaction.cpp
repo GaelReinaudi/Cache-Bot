@@ -8,7 +8,7 @@ QDate Transaction::s_currentDay = Transaction::s_actualCurrentDayTime.date().add
 Transaction Transaction::s_hypotheTrans;
 
 QVector<int> Transaction::onlyLoadHashes = QVector<int>();
-QVector<int> Transaction::onlyCategory = QVector<int>();
+QVector<int> Transaction::onlyPlaidCat = QVector<int>();
 int Transaction::s_maxDaysOld = 5 * 31;
 int Transaction::s_maxDaysOldAllTransatcion = 30;
 QDate Transaction::onlyAfterDate = Transaction::currentDay().addMonths(-6);
@@ -124,7 +124,7 @@ Transaction* StaticTransactionArray::appendNew(QJsonObject jsonTrans, Account *p
 			  << hash;
 		return 0;
 	}
-	if (!Transaction::onlyCategory.isEmpty() && !Transaction::onlyCategory.contains(hashCat)) {
+	if (!Transaction::onlyPlaidCat.isEmpty() && !Transaction::onlyPlaidCat.contains(hashCat)) {
 		DBG() << "not Adding transaction because Transaction::onlyCategory doesn't contain "
 			  << hashCat;
 		return 0;
