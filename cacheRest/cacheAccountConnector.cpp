@@ -28,12 +28,12 @@ CacheAccountConnector::CacheAccountConnector(QString userID, QJsonObject jsonArg
 	INFO() << "jsonCacheCat\n" << QString(QJsonDocument(jsonCacheCat).toJson());
 
 	QString argCat = jsonArgs["category"].toString();
-	NOTICE() << "category: " << argCat;
+	WARN() << "category: " << argCat;
 	QStringList subCats;
 	for (QJsonValue it : jsonCacheCat[argCat].toArray()) {
 		subCats += it.toString();
 	}
-	INFO() << "subCats: " << subCats.join(", ");
+	WARN() << "subCats: " << subCats.join(", ");
 
 
 
