@@ -28,7 +28,7 @@ class CORESHARED_EXPORT FeatureCategory : public FeatureStatDistrib
 {
 public:
 	FeatureCategory()
-		: FeatureStatDistrib("Category")
+		: FeatureStatDistrib("CatDistrib")
 	{
 	}
 protected:

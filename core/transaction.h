@@ -4,6 +4,7 @@
 #include "core_global.h"
 #include "common.h"
 #include <array>
+#include <QRegExp>
 class Account;
 
 typedef NameHashVector2 NameHashVector;
@@ -124,6 +125,7 @@ public:
 	static void setMaxDaysOld(const int value) {
 		s_maxDaysOld = value;
 	}
+	static void makeCatRegExps(QJsonObject& json, QString strVal, QString keyCat = "");
 
 	static Transaction s_hypotheTrans;
 
@@ -135,6 +137,9 @@ private:
 
 public:
 	static QVector<int> onlyLoadHashes;
+	static QVector<int> onlyPlaidCat;
+	static QVector<QRegExp> rootCatRegExp;
+	static QMap< QString, QVector<QRegExp> > subCatRegExp;
 	static QDate onlyAfterDate;
 	static int onlyAccountType;
 };

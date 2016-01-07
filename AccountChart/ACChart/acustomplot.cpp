@@ -37,8 +37,10 @@ void ACustomPlot::makeGraphs(HashedBundles& hashBundles) {
 	for (const auto& h : hashBundles.keys()) {
 		TransactionBundle* bundle = hashBundles[h];
 		m_hashBund[h] = bundle;
-		m_labels.append(//bundle->averageName() + "    " +
-						"last: " + bundle->last().name + "   uniques: " + bundle->uniqueNames().join(" | "));
+//		WARN() << h << " " << bundle->count();
+		m_labels.append(
+					"last: " + bundle->last().name
+					+ "   uniques: " + bundle->uniqueNames().join(" | "));
 		for (int iAccType = 0; iAccType <= 3; ++iAccType) {
 			QCPGraph* pGraph = addGraph();
 			m_hashGraphs[h].append(pGraph);
@@ -103,6 +105,30 @@ void ACustomPlot::loadCompressedAmount(User* pUser)
 		const Transaction& tr = allTrans.trans(i);
 		double t = tr.time_t();
 		qint64 h = tr.nameHash.hash();
+		if (!tr.isInternal())
+			m_integral += tr.amountDbl();
+		graph(0)->addData(t, kindaLog(m_integral));
+		QCPGraph* pGraph = 0;
+		switch (tr.type()) {
+		case Account::Type::Checking:
+			pGraph = m_hashGraphs[h].at(0);
+			break;
+		case Account::Type::Saving:
+			pGraph = m_hashGraphs[h].at(1);
+			break;
+		case Account::Type::Credit:
+			pGraph = m_hashGraphs[h].at(2);
+			break;
+		default:
+			pGraph = m_hashGraphs[h].at(3);
+			DBG() << "tr.type() =" << tr.type();
+		}
+		pGraph->addData(t, tr.kla());
+	}
+	for (int i = 0; i < allTrans.count(); ++i) {
+		const Transaction& tr = allTrans.trans(i);
+		double t = tr.time_t();
+		qint64 h = tr.categoryHash.hash();
 		if (!tr.isInternal())
 			m_integral += tr.amountDbl();
 		graph(0)->addData(t, kindaLog(m_integral));

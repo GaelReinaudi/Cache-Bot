@@ -2,8 +2,9 @@
 "Other" : *Everything else minus what's below*
 */
 {
+	"Other" : ["000000000"],
 	"Food" : ["Dining", "Grocery"]
 	, "Grocery" : ["19047000"]
-	, "Dining" : ["1300[.{6}]"]
-	, "Transit" : ["2201.{6}"]
+	, "Dining" : ["1300.{4}"]
+	, "Transit" : ["2201.{4}"]
 }

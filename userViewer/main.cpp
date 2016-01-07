@@ -4,15 +4,17 @@
 int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
-	QString jsonFileOrUser = "../../data/adelineGaelTransactions.json";
-	QVector<int> onlyLoadHashes;
-	if(argc > 1) {
-		jsonFileOrUser = argv[1];
-		for (int i = 2; i < argc; ++i) {
-			onlyLoadHashes.append(QString(argv[i]).toInt());
-		}
+	if(argc < 2) {
+		qDebug() << "needs an argument";
+		return 0;
 	}
-	UserViewer w(jsonFileOrUser, onlyLoadHashes);
+	QString jsonStr = QString(argv[1]).remove("'");
+	QJsonDocument jsonDoc(QJsonDocument::fromJson(jsonStr.toUtf8()));
+	QJsonObject jsonObj = jsonDoc.object();
+	qDebug() << endl << jsonStr << endl << jsonObj;
+	jsonObj.insert("PriceWindow", QString("enabled"));
+	jsonObj.insert("CatDistrib", QString("enabled"));
+	UserViewer w(jsonObj["user_id"].toString().trimmed(), jsonObj);
 	w.show();
 
 	return a.exec();

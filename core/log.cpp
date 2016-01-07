@@ -1,6 +1,7 @@
 #include "core_global.h"
 #include "log.h"
 #include <QJsonDocument>
+#include <QFileInfo>
 
 CORESHARED_EXPORT logger* logger::s_pLog = 0;
 
@@ -29,13 +30,15 @@ void CORESHARED_EXPORT logger::setupSpdLog(QString logFileName)
 		s_pLog->m_fileLogger = spdlog::stdout_logger_mt("console");
 		s_pLog->m_fileLogger->set_level(spdlog::level::warn);
 #else
+		QFile::remove(QFileInfo(logFileName+".log").absoluteFilePath());
 //		s_pLog->m_fileLogger = spdlog::daily_logger_mt("file_logger", "myfilename");
 		s_pLog->m_fileLogger = spdlog::create<spdlog::sinks::rotating_file_sink_mt>("file", logFileName.toStdString(), "log", 1024 * 1024 * 20, 1, true);
 //		s_pLog->m_fileLogger = spdlog::create<spdlog::sinks::simple_file_sink_mt>("simplefile", logFileName.toStdString() + ".log", true);
 		s_pLog->m_fileLogger->set_level(spdlog::level::info);
 #endif
 		s_pLog->m_fileLogger->set_pattern("[%l] %v");
-		s_pLog->m_fileLogger->warn() << "********** NEW SESSION ********** "
+		s_pLog->m_fileLogger->warn() << "********** NEW SESSION ********** \n"
+									 << logFileName << "\n"
 									 << QDateTime::currentDateTime().toString("HH:mm:ss.zzz")
 									 << "    GIT_VERSION: " << QString(GIT_VERSION) << "    ";
 	}
