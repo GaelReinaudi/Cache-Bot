@@ -152,12 +152,10 @@ public:
 		QVector<double> dailyPerOracle;
 		QVector<QJsonObject> summaryPerOracle;
 		QJsonArray toJson() {
-//			QJsonObject jsSum;
 			QJsonArray allSum;
 			for (int i = 0; i < summaryPerOracle.count(); ++i) {
 				allSum.append(summaryPerOracle[i]);
 			}
-//			jsSum.insert("oracles", allSum);
 			return allSum;
 		}
 		double flow() const {

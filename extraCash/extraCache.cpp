@@ -48,26 +48,8 @@ void ExtraCache::onUserInjected(User* pUser)
 	CacheRest::Instance()->getBestBot(userID(), user());
 }
 
-void ExtraCache::onBotInjected(Bot* bestBot)
+double ExtraCache::calcSummary(Bot* bestBot, QJsonObject& statObj)
 {
-	NOTICE() << "ExtraCache::onBotInjected";
-//	bestBot->summarize();
-
-	QJsonObject statObj;// = bestBot->postTreatment();
-
-	QJsonObject trendObjects;
-	OracleTrend<1>::get(user())->value(Transaction::currentDay());
-	SuperOracle::Summary effectsummary = OracleTrend<1>::get(user())->effectSummaries()[Transaction::currentDay()];
-	trendObjects.insert("01", effectsummary.toJson());
-	OracleTrend<7>::get(user())->value(Transaction::currentDay());
-	effectsummary = OracleTrend<7>::get(user())->effectSummaries()[Transaction::currentDay()];
-	trendObjects.insert("07", effectsummary.toJson());
-	OracleTrend<30>::get(user())->value(Transaction::currentDay());
-	effectsummary = OracleTrend<30>::get(user())->effectSummaries()[Transaction::currentDay()];
-	trendObjects.insert("30", effectsummary.toJson());
-
-	statObj.insert("trends", trendObjects);
-
 	double flowMA_2 = MetricSmoother<2>::get(OracleSummary::get(user()))->value(Transaction::currentDay());
 	double flowMA_3 = MetricSmoother<3>::get(OracleSummary::get(user()))->value(Transaction::currentDay());
 	double flowMA_4 = MetricSmoother<4>::get(OracleSummary::get(user()))->value(Transaction::currentDay());
@@ -83,7 +65,7 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 	flowObj.insert("dif_2", flowDif_2);
 	flowObj.insert("dif_3", flowDif_3);
 
-	static int numCalc = 0;
+	int numCalc = 0;
 flowCalc:
 	++numCalc;
 	bestBot->summarize();
@@ -94,8 +76,6 @@ flowCalc:
 	SuperOracle::Summary summary = OracleSummary::get(user())->summaries()[Transaction::currentDay()];
 
 	statObj.insert("oracles", summary.toJson());
-
-	makeAdvice(statObj, 0.05);
 
 	flowObj.insert("rate", rate);
 
@@ -121,7 +101,6 @@ flowCalc:
 		int indOracleHypo = -1;
 		for (int i = 0; i < summary.summaryPerOracle.count(); ++i) {
 			for (const QJsonValueRef& t : summary.summaryPerOracle[i]["trans"].toArray()) {
-				//WARN() <<"aaaaaaaaaaaaaaa"<<i<<" "<< t.toString();
 				if (t.toString().contains("hypothetic")) {
 					indOracleHypo = i;
 					break;
@@ -138,20 +117,49 @@ flowCalc:
 		goto flowCalc;
 	}
 
+	return summary.flow();
+}
+
+void ExtraCache::onBotInjected(Bot* bestBot)
+{
+	NOTICE() << "ExtraCache::onBotInjected";
+//	bestBot->summarize();
+
+	QJsonObject statObj;// = bestBot->postTreatment();
+
+	QJsonObject trendObjects;
+	OracleTrend<1>::get(user())->value(Transaction::currentDay());
+	SuperOracle::Summary effectsummary = OracleTrend<1>::get(user())->effectSummaries()[Transaction::currentDay()];
+	trendObjects.insert("01", effectsummary.toJson());
+	OracleTrend<7>::get(user())->value(Transaction::currentDay());
+	effectsummary = OracleTrend<7>::get(user())->effectSummaries()[Transaction::currentDay()];
+	trendObjects.insert("07", effectsummary.toJson());
+	OracleTrend<30>::get(user())->value(Transaction::currentDay());
+	effectsummary = OracleTrend<30>::get(user())->effectSummaries()[Transaction::currentDay()];
+	trendObjects.insert("30", effectsummary.toJson());
+
+	statObj.insert("trends", trendObjects);
+
+	double flowRate = calcSummary(bestBot, statObj);
+
+	makeAdvice(statObj, 0.05);
+
+//	QJsonObject categoryObject;
+//	for (QString topCat : {"Food", "Transit", "Other"}) {
+//		WARN() << "topCat: " << topCat;
+//		QJsonObject jsonBranch;
+//		calcSummary(bestBot, jsonBranch);
+//		categoryObject.insert(topCat, jsonBranch);
+//	}
+//	statObj.insert("categories", categoryObject);
+
 	// if critically low flow
-	if (summary.flow() <= -0.95) {
-		WARN() << "Cache flow critically low: " << summary.flow();
+	if (flowRate <= -0.95) {
+		WARN() << "Cache flow critically low: " << flowRate;
 	}
 
 	statObj["_git"] = QString(GIT_VERSION);
 	statObj["_currentDay"] = Transaction::currentDay().toString();
-//	statObj["_actualCurrentDayTimeUTC"] = Transaction::actualCurrentDayTime().toUTC().toString();
-//	statObj["_actualCurrentDayTime"] = Transaction::actualCurrentDayTime().toString();
-//	statObj["_currentDateTime"] = QDateTime::currentDateTime().toString();
-//	statObj["_toUTC"] = QDateTime::currentDateTime().toUTC().toString();
-//	statObj["_toLocalTime"] = QDateTime::currentDateTime().toLocalTime().toString();
-//	statObj["_lastTransDate"] = user()->allTrans().count() == 0 ? "none" : user()->allTrans().last().date.toString();
-
 
 	if (flags & SendExtraCash) {
 		statObj.insert("_inArgs", jsonArgs());
