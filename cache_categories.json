@@ -2,9 +2,12 @@
 "Other" : *Everything else minus what's below*
 */
 {
-	"Other" : ["000000000"],
+	"Other" : ["000000000"], /*Fix this*/
 	"Food" : ["Dining", "Grocery"]
-	, "Grocery" : ["19047000"]
-	, "Dining" : ["1300.{4}"]
+	, "Grocery" : ["19047000" /*Supermarkets & groceries*/, "19025.{3}" /*Food & beverage store*/]
+	, "Dining" : ["1300.{4}" /*Food & drink*/]
 	, "Transit" : ["2201.{4}"]
+	, "Public" : ["22014000" /*Public transportation services*/, "22015000" /*Rail*/, "22016000" /*Taxi*/, "2200.{4}" /*Car services (& Ride share)*/, "22004000" /*Bus stations*/]
+	, "Personal" : ["22005000" /*Car & truck rentals*/, "22009000" /*Gas stations*/, "22013000" /*Parking*/, "22017000" /*Tolls & fees*/]
+	, "Travel" : ["22001000" /*Airline & aviation services*/, "22002000" /*Airports*/]
 }
