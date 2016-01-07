@@ -1,3 +1,6 @@
+/*
+"Other" : *Everything else minus what's below*
+*/
 {
 	"Food" : ["Dining", "Grocery"]
 	, "Grocery" : ["19047000"]
