@@ -144,6 +144,7 @@ void ExtraCache::makeCategoryTreeSummary(Bot* bestBot, QStringList cats, QJsonOb
 		WARN() << "magic applied to " << nT << " trans";
 
 		QJsonObject jsonBranch;
+		HistoMetric::clearAll();
 		calcSummary(bestBot, jsonBranch);
 		categoryObject.insert(strCat, jsonBranch);
 	}
@@ -152,6 +153,7 @@ void ExtraCache::makeCategoryTreeSummary(Bot* bestBot, QStringList cats, QJsonOb
 		Transaction::s_magicFilter = 0;
 		WARN() << "topCat: " << "Other" << " s_magicFilter " << Transaction::s_magicFilter;
 		QJsonObject jsonBranch;
+		HistoMetric::clearAll();
 		calcSummary(bestBot, jsonBranch);
 		categoryObject.insert("Other", jsonBranch);
 	}
