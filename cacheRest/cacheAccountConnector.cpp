@@ -19,24 +19,12 @@ CacheAccountConnector::CacheAccountConnector(QString userID, QJsonObject jsonArg
 		Transaction::onlyPlaidCat.append(onlyC[i].toInt());
 	}
 
-
-	// Cache categories
-	QFile fileCacheCat("../../cache_categories.json");
-	fileCacheCat.open(QFile::ReadOnly);
-	QString strCat = fileCacheCat.readAll();
-	QJsonObject jsonCacheCat = QJsonDocument::fromJson(strCat.toUtf8()).object();
-	INFO() << "jsonCacheCat\n" << QString(QJsonDocument(jsonCacheCat).toJson());
-
 	QString argCat = jsonArgs["category"].toString();
 	NOTICE() << "category: " << argCat;
-	QStringList subCats;
-	for (QJsonValue it : jsonCacheCat[argCat].toArray()) {
-		subCats += it.toString();
-	}
-	INFO() << "subCats: " << subCats.join(", ");
+
 	// loading only the main category transaction
 	if (!argCat.isEmpty()) {
-		Transaction::makeCatRegExps(jsonCacheCat, argCat);
+		Transaction::makeCatRegExps(argCat);
 	}
 
 

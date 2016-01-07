@@ -6,6 +6,7 @@ int hoursOffsetToHack_issue_9 = -5;
 QDateTime Transaction::s_actualCurrentDayTime = QDateTime::currentDateTime().addSecs(hoursOffsetToHack_issue_9 * 3600);
 QDate Transaction::s_currentDay = Transaction::s_actualCurrentDayTime.date().addDays(-1);//.addMonths(-2);
 Transaction Transaction::s_hypotheTrans;
+int Transaction::s_magicFilter = 0;
 
 QVector<int> Transaction::onlyLoadHashes = QVector<int>();
 QVector<int> Transaction::onlyPlaidCat = QVector<int>();
@@ -18,7 +19,7 @@ int Transaction::onlyAccountType = Account::Type::Saving | Account::Type::Checki
 
 bool Transaction::noUse() const
 {
-	return isFuture() || isToOld() || isInternal();
+	return (magic != Transaction::s_magicFilter) || isFuture() || isToOld() || isInternal();
 }
 
 int Transaction::type() const {
@@ -99,20 +100,44 @@ qint64 Transaction::dist(const Transaction &other, bool log) const {
 	return distanceWeighted<16, 512, 2>(other, log);
 }
 
-void Transaction::makeCatRegExps(QJsonObject &json, QString strVal, QString keyCat)
+void Transaction::makeCatRegExps(QString strVal, QString keyCat)
 {
+	// load file once
+	static QJsonObject jsonCacheCat;
+	if (jsonCacheCat.isEmpty()) {
+		// Cache categories
+		QFile fileCacheCat("../../cache_categories.json");
+		fileCacheCat.open(QFile::ReadOnly);
+		QString strCat = fileCacheCat.readAll();
+		QRegExp rx("/[*].*[*]/");
+		rx.setMinimal(true);
+		strCat.remove(rx);
+		DBG() << strCat;
+		jsonCacheCat = QJsonDocument::fromJson(strCat.toUtf8()).object();
+		DBG() << "jsonCacheCat\n" << QString(QJsonDocument(jsonCacheCat).toJson());
+	}
+
 	bool isRoot = keyCat == "";
-	if (!json.contains(strVal)) {
+	if (isRoot) {
+		rootCatRegExp.clear();
+		subCatRegExp.clear();
+		QStringList subCats;
+		for (QJsonValue it : jsonCacheCat[keyCat].toArray()) {
+			subCats += it.toString();
+		}
+		INFO() << "subCats: " << subCats.join(", ");
+	}
+	if (!jsonCacheCat.contains(strVal)) {
 		QRegExp r(strVal);
 		rootCatRegExp.append(r);
-		if (!json.contains(keyCat))
+		if (!jsonCacheCat.contains(keyCat))
 			return;
 		subCatRegExp[keyCat].append(r);
 	}
-	for (QJsonValue v : json[strVal].toArray()) {
+	for (QJsonValue v : jsonCacheCat[strVal].toArray()) {
 		QString s = v.toString();
 		QString subCat = isRoot ? s : keyCat;
-		Transaction::makeCatRegExps(json, s, subCat);
+		Transaction::makeCatRegExps(s, subCat);
 	}
 	if (isRoot) {
 		NOTICE() << "root regExp:";

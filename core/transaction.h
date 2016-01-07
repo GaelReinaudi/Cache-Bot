@@ -25,6 +25,9 @@ public:
 //	int indexHash = -1;
 	// used to make the distance arbitrary far from anything
 	mutable int dimensionOfVoid = 0;
+	// used to filter things based on a global magicFilter
+	mutable int magic = 0;
+	static int s_magicFilter;
 	char effect128 = 0;
 
 	enum Flag { None = 0x0, Predicted = 0x1, CameTrue = 0x2 , Internal = 0x4 };
@@ -125,7 +128,7 @@ public:
 	static void setMaxDaysOld(const int value) {
 		s_maxDaysOld = value;
 	}
-	static void makeCatRegExps(QJsonObject& json, QString strVal, QString keyCat = "");
+	static void makeCatRegExps(QString strVal, QString keyCat = "");
 
 	static Transaction s_hypotheTrans;
 
