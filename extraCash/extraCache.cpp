@@ -120,6 +120,19 @@ flowCalc:
 	return summary.flow();
 }
 
+void ExtraCache::makeCategoryTreeSummary(Bot* bestBot, QJsonObject& statObj)
+{
+	QJsonObject categoryObject;
+	for (QString topCat : {"Food", "Transit", "Other"}) {
+		WARN() << "topCat: " << topCat;
+		Transaction::makeCatRegExps(topCat);
+		QJsonObject jsonBranch;
+		calcSummary(bestBot, jsonBranch);
+		categoryObject.insert(topCat, jsonBranch);
+	}
+	statObj.insert("categories", categoryObject);
+}
+
 void ExtraCache::onBotInjected(Bot* bestBot)
 {
 	NOTICE() << "ExtraCache::onBotInjected";
@@ -144,14 +157,7 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 
 	makeAdvice(statObj, 0.05);
 
-//	QJsonObject categoryObject;
-//	for (QString topCat : {"Food", "Transit", "Other"}) {
-//		WARN() << "topCat: " << topCat;
-//		QJsonObject jsonBranch;
-//		calcSummary(bestBot, jsonBranch);
-//		categoryObject.insert(topCat, jsonBranch);
-//	}
-//	statObj.insert("categories", categoryObject);
+	makeCategoryTreeSummary(bestBot, statObj);
 
 	// if critically low flow
 	if (flowRate <= -0.95) {

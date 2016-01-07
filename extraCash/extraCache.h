@@ -19,6 +19,8 @@ public:
 
 	double calcSummary(Bot* bestBot, QJsonObject &statObj);
 
+	void makeCategoryTreeSummary(Bot* bestBot, QJsonObject &statObj);
+
 protected:
 	void onUserInjected(User* pUser) override;
 	void onBotInjected(Bot *bestBot) override;
