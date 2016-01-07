@@ -120,15 +120,40 @@ flowCalc:
 	return summary.flow();
 }
 
-void ExtraCache::makeCategoryTreeSummary(Bot* bestBot, QJsonObject& statObj)
+void ExtraCache::makeCategoryTreeSummary(Bot* bestBot, QStringList cats, QJsonObject& statObj, int level /*= 0*/)
 {
+	if (level == 0) {
+		Transaction::s_magicFilter = 0;
+		int nT = user()->setMagic(Transaction::s_magicFilter);
+		WARN() << "magic 0 applied to " << nT << " trans";
+	}
 	QJsonObject categoryObject;
-	for (QString topCat : {"Food", "Transit", "Other"}) {
-		WARN() << "topCat: " << topCat;
-		Transaction::makeCatRegExps(topCat);
+	for (const QString& strCat : cats) {
+		++Transaction::s_magicFilter;
+		WARN() << "topCat: " << strCat << " s_magicFilter " << Transaction::s_magicFilter;
+		Transaction::makeCatRegExps(strCat);
+
+		int nT = user()->setMagic(Transaction::s_magicFilter, [&](const NameHashVector& hashCat){
+			QString strHashCat = QString("%1").arg(qAbs(hashCat.hash()), 8, 10, QChar('0'));
+			for (const QRegExp& r : Transaction::rootCatRegExp) {
+				if (r.exactMatch(strHashCat))
+					return true;
+			}
+			return false;
+		});
+		WARN() << "magic applied to " << nT << " trans";
+
 		QJsonObject jsonBranch;
 		calcSummary(bestBot, jsonBranch);
-		categoryObject.insert(topCat, jsonBranch);
+		categoryObject.insert(strCat, jsonBranch);
+	}
+	// for "Other"
+	if (level == 0) {
+		Transaction::s_magicFilter = 0;
+		WARN() << "topCat: " << "Other" << " s_magicFilter " << Transaction::s_magicFilter;
+		QJsonObject jsonBranch;
+		calcSummary(bestBot, jsonBranch);
+		categoryObject.insert("Other", jsonBranch);
 	}
 	statObj.insert("categories", categoryObject);
 }
@@ -157,7 +182,8 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 
 	makeAdvice(statObj, 0.05);
 
-	makeCategoryTreeSummary(bestBot, statObj);
+	QStringList topCats = {"Food", "Transit"};
+	makeCategoryTreeSummary(bestBot, topCats, statObj);
 
 	// if critically low flow
 	if (flowRate <= -0.95) {

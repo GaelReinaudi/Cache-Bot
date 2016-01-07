@@ -15,11 +15,9 @@ public:
 	double minSlope() const { return m_minSlope; }
 	int futDayMinSlope() const { return m_futDayMinSlopeCollision; }
 
-	SuperOracle::Summary calcSummary(double flowDif_2, QJsonObject statObj, QJsonObject flowObj, Bot* bestBot);
-
 	double calcSummary(Bot* bestBot, QJsonObject &statObj);
 
-	void makeCategoryTreeSummary(Bot* bestBot, QJsonObject &statObj);
+	void makeCategoryTreeSummary(Bot* bestBot, QStringList cats, QJsonObject &statObj, int level = 0);
 
 protected:
 	void onUserInjected(User* pUser) override;

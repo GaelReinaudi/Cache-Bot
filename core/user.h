@@ -54,6 +54,18 @@ public:
 		}
 		Transaction::s_hypotheTrans.dimensionOfVoid = 0;
 	}
+	int setMagic(int m, std::function<bool (const NameHashVector&)> filter = [](const NameHashVector& catHash){ Q_UNUSED(catHash); return true;}) {
+		int nT = 0;
+		for(int i = 0; i < m_allTransactions.count(); ++i) {
+			Transaction& t = m_allTransactions.trans(i);
+			if (filter(t.categoryHash)) {
+				t.magic = m;
+				++nT;
+				continue;
+			}
+		}
+		return nT;
+	}
 
 	double balance(int flagType) const {
 		double bal = 0.0;
