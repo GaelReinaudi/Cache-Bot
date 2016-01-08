@@ -146,6 +146,28 @@ void ExtraCache::makeCategoryTreeSummary(Bot* bestBot, QStringList cats, QJsonOb
 		QJsonObject jsonBranch;
 		HistoMetric::clearAll();
 		calcSummary(bestBot, jsonBranch);
+		QJsonObject subCategoryObject;
+		for (const QString& subStr : Transaction::subCatRegExp.keys()) {
+			QVector<QRegExp>& regexList = Transaction::subCatRegExp[subStr];
+			++Transaction::s_magicFilter;
+			WARN() << "subCat: " << subStr << " s_magicFilter " << Transaction::s_magicFilter;
+
+			int nTT = user()->setMagic(Transaction::s_magicFilter, [&](const NameHashVector& hashCat){
+				QString strHashCat = QString("%1").arg(qAbs(hashCat.hash()), 8, 10, QChar('0'));
+				for (const QRegExp& r : regexList) {
+					if (r.exactMatch(strHashCat))
+						return true;
+				}
+				return false;
+			});
+			WARN() << "magic applied to " << nTT << " trans";
+
+			QJsonObject jsonSubBranch;
+			HistoMetric::clearAll();
+			calcSummary(bestBot, jsonSubBranch);
+			subCategoryObject.insert(subStr, jsonSubBranch);
+			jsonBranch.insert("categories", subCategoryObject);
+		}
 		categoryObject.insert(strCat, jsonBranch);
 	}
 	// for "Other"
