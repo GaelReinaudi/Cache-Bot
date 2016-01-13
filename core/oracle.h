@@ -160,7 +160,7 @@ public:
 		}
 		double flow() const {
 			if (posSum == 0.0) {
-				DBG(3 << "Summary::flow() posAvg == 0.0 ";
+				DBG(3) << "Summary::flow() posAvg == 0.0 ";
 				return 0.0;
 			}
 			return (posSum + negSum) / posSum;
