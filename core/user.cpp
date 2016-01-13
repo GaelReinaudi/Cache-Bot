@@ -49,7 +49,7 @@ double  User::littleIncome()
 	}
 	if (flow < 0.0) {
 		double fac = qSqrt(qMax(0.0, flow + 1.0));
-		WARN() << "little income: fac " << fac;
+		DBG(3) << "little income: fac " << fac;
 		return fac;
 	}
 	return 1.0;

@@ -67,7 +67,7 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 			summary.summaryPerOracle.append(pOr->toJson());
 	}
 	if (summary.posSum == 0.0) {
-		WARN() << "SuperOracle::avgCashFlow posAvg == 0.0 ";
+		DBG(3) << "SuperOracle::avgCashFlow posAvg == 0.0 ";
 		return summary;
 	}
 	NOTICE() << "SuperOracle::avgCashFlow " << summary.flow();

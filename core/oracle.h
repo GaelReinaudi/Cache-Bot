@@ -160,14 +160,14 @@ public:
 		}
 		double flow() const {
 			if (posSum == 0.0) {
-				WARN() << "Summary::flow() posAvg == 0.0 ";
+				DBG(3 << "Summary::flow() posAvg == 0.0 ";
 				return 0.0;
 			}
 			return (posSum + negSum) / posSum;
 		}
 		double flowFix() const {
 			if (salary == 0.0) {
-				WARN() << "Summary::flow() posAvg == 0.0 ";
+				DBG(3) << "Summary::flow() posAvg == 0.0 ";
 				return 0.0;
 			}
 			return (salary + bill) / salary;
