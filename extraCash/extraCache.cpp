@@ -48,7 +48,7 @@ void ExtraCache::onUserInjected(User* pUser)
 	CacheRest::Instance()->getBestBot(userID(), user());
 }
 
-double ExtraCache::calcSummary(Bot* bestBot, QJsonObject& statObj)
+double ExtraCache::calcSummary(Bot* bestBot, QJsonObject& statObj, int keepBest /*= -1*/)
 {
 	double flowMA_2 = MetricSmoother<2>::get(OracleSummary::get(user()))->value(Transaction::currentDay());
 	double flowMA_3 = MetricSmoother<3>::get(OracleSummary::get(user()))->value(Transaction::currentDay());
@@ -74,6 +74,10 @@ flowCalc:
 	double d2z80 = Montecarlo<128>::get(user())->d2zPerc(Transaction::currentDay(), 0.80);
 	double rate = OracleSummary::get(user())->value(Transaction::currentDay());
 	SuperOracle::Summary summary = OracleSummary::get(user())->summaries()[Transaction::currentDay()];
+
+	if (keepBest > 0) {
+//		summary.summaryPerOracle orderAndKeepBest(keepBest);
+	}
 
 	statObj.insert("oracles", summary.toJson());
 
