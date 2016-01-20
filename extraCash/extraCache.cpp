@@ -183,7 +183,40 @@ void ExtraCache::makeCategoryTreeSummary(Bot* bestBot, QStringList cats, QJsonOb
 		calcSummary(bestBot, jsonBranch);
 		categoryObject.insert("Other", jsonBranch);
 	}
+	categoryObject = orderCategoryTree(categoryObject);
 	statObj.insert("categories", categoryObject);
+}
+
+QJsonObject ExtraCache::orderCategoryTree(QJsonObject &catObj)
+{
+	QJsonObject newObj;
+	QMap<double, QString> costKeys;
+	for (const QString& k : catObj.keys()) {
+		double cost = catObj[k].toObject()["flow"].toObject()["dailyBill"].toDouble();
+		cost += catObj[k].toObject()["flow"].toObject()["dailyNeg"].toDouble();
+		costKeys.insertMulti(cost, k);
+	}
+	const int maxNumTop = 2;
+	int i = 0;
+	QJsonObject otherCatCat;
+	for (auto it = costKeys.cbegin(); it != costKeys.cend(); ++it) {
+		//WARN() << it.key() << " ggggggg " << it .value();
+		if (it.value() == "Other")
+			continue;
+		QJsonObject topCat = catObj[it.value()].toObject();
+		if (i < maxNumTop) {
+			topCat["rank"] = i;
+			++i;
+			newObj[it.value()] = topCat;
+		}
+		else {
+			otherCatCat[it.value()] = topCat;
+		}
+	}
+	QJsonObject otherCat = catObj["Other"].toObject();
+	otherCat["categories"] = otherCatCat;
+	newObj["Other"] = otherCat;
+	return newObj;
 }
 
 void ExtraCache::onBotInjected(Bot* bestBot)
@@ -210,7 +243,7 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 
 	makeAdvice(statObj, 0.05);
 
-	QStringList topCats = {"Food", "Transit"};
+	QStringList topCats = {"Food", "Transit", "Shops", "Recreation"};
 	makeCategoryTreeSummary(bestBot, topCats, statObj);
 
 	// if critically low flow

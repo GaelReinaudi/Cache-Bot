@@ -18,6 +18,7 @@ public:
 	double calcSummary(Bot* bestBot, QJsonObject &statObj, int keepBest = -1);
 
 	void makeCategoryTreeSummary(Bot* bestBot, QStringList cats, QJsonObject &statObj, int level = 0);
+	QJsonObject orderCategoryTree(QJsonObject &catObj);
 
 protected:
 	void onUserInjected(User* pUser) override;
