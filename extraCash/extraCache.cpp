@@ -196,7 +196,7 @@ QJsonObject ExtraCache::orderCategoryTree(QJsonObject &catObj)
 		cost += catObj[k].toObject()["flow"].toObject()["dailyNeg"].toDouble();
 		costKeys.insertMulti(cost, k);
 	}
-	const int maxNumTop = 2;
+	const int maxNumTop = 3;
 	int i = 0;
 	QJsonObject otherCatCat;
 	for (auto it = costKeys.cbegin(); it != costKeys.cend(); ++it) {
