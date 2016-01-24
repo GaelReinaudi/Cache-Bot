@@ -46,7 +46,7 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool isPostTreat
 		return 0.0;
 	for (int i = 0; i < allTrans.count(); ++i) {
 		const Transaction& trans = allTrans.trans(i);
-		qint64 dist = iTarg->dist(trans);
+		qint64 dist = distance(iTarg, &trans);
 		if (trans.noUse() || (trans.userFlag & Transaction::NoRecur)) {
 			dist = 1<<20;
 		}
@@ -259,4 +259,9 @@ double OracleOneDayOfMonth::avgDaily() const
 		}
 	}
 	return avgMonth * (12.0 / 365.25);
+}
+
+qint64 FeaturePeriodicAmount::distance(const Transaction *targ, const Transaction *trans)
+{
+	return targ->dist(*trans);
 }

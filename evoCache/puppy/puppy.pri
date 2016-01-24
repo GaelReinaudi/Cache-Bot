@@ -18,7 +18,8 @@ HEADERS  += \
 	$$PWD/AccRegPrimits.h \
     $$PWD/featureAllOthers.h \
     $$PWD/featureStatDistrib.h \
-    $$PWD/featurePeriodicAmount.h \
+	$$PWD/featurePeriodicAmount.h \
+	$$PWD/featureSalary.h \
 	$$PWD/featureOutlier.h \
 	$$PWD/featurePriceWindow.h \
 	$$PWD/featureLabelDistrib.h \

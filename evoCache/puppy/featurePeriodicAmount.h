@@ -102,6 +102,8 @@ public:
 		proba /= 4 + 2 * args.m_consecMissed;
 		return proba;
 	}
+protected:
+	virtual qint64 distance(const Transaction *targ, const Transaction *trans);
 };
 
 class FeatureMonthlyAmount : public FeaturePeriodicAmount
@@ -162,6 +164,10 @@ class FeatureBiWeeklyAmount : public FeatureMonthlyAmount
 public:
 	FeatureBiWeeklyAmount()
 		: FeatureMonthlyAmount("BiWeeklyAmount")
+	{ }
+protected:
+	FeatureBiWeeklyAmount(QString featureName)
+		: FeatureMonthlyAmount(featureName)
 	{ }
 	int approxSpacingPayment() const override { return 15; } // +2d: gives some room for late payment
 	virtual void cleanArgs() override {

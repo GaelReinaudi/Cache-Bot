@@ -3,6 +3,7 @@
 #include "featureAllOthers.h"
 #include "featureOutlier.h"
 #include "featurePeriodicAmount.h"
+#include "featureSalary.h"
 #include "featurePriceWindow.h"
 #include "featureLabelDistrib.h"
 #include "featureCategory.h"
@@ -71,6 +72,8 @@ BotContext::BotContext(User *pUser)
 	}
 	insert(new FeatureBiWeeklyAmount());
 	insert(new FeatureMonthlyAmount());
+	insert(new FeatureBiWeeklySalary());
+	insert(new FeatureMonthlySalary());
 
 	if (BotContext::JSON_ARGS["PriceWindow"].toString().trimmed() == "enabled") {
 		WARN() << "Enabling PriceWindow during evo" << QString(QJsonDocument(BotContext::JSON_ARGS).toJson());
