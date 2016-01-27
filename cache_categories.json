@@ -1,3 +1,4 @@
+s
 /*
 "Other" : *Everything else minus what's below*
 */
@@ -12,7 +13,7 @@
 	, "Shops" : ["Clothing", "Electronics", "19.{6}"]
 	, "Clothing" : ["19012.{3}"]
 	, "Electronics" : ["19013.{3}"]
-	, "Automotive" : ["1900.{4}"]
+	, "Automotive" : ["19005.{3}"]
 	, "Recreation" : ["Sport", "Parks", "17.{6}"]
 	, "Sport" : ["1700.{4}", "1701.{4}", "1702.{4}"]
 	, "Parks" : ["17027.{3}", "17048000"]
