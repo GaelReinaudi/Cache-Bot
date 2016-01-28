@@ -165,6 +165,10 @@ void User::injectJsonData(QString jsonStr)
 		Transaction* pT = &m_allTransactions.transArray()[i];
 		if (pT->isInternal())
 			continue;
+		if (pT->name.contains("Hello Digit", Qt::CaseInsensitive)) {
+			NOTICE() << "making Digit internal";
+			pT->flags |= Transaction::Flag::Internal;
+		}
 		if (qAbs(pT->categoryHash.hash()) == 16001000) {
 			NOTICE() << "making hash 16001000 internal";
 			pT->flags |= Transaction::Flag::Internal;
