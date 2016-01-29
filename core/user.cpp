@@ -160,6 +160,21 @@ void User::injectJsonData(QString jsonStr)
 			}
 		}
 	}
+	//////// "exclude Digit and plaid's label credit card payement
+	for (int i = 0; i < m_allTransactions.count(); ++i) {
+		Transaction* pT = &m_allTransactions.transArray()[i];
+		if (pT->isInternal())
+			continue;
+		if (pT->name.contains("Hello Digit", Qt::CaseInsensitive)) {
+			NOTICE() << "making Digit internal";
+			pT->flags |= Transaction::Flag::Internal;
+		}
+		if (qAbs(pT->categoryHash.hash()) == 16001000) {
+			NOTICE() << "making hash 16001000 internal";
+			pT->flags |= Transaction::Flag::Internal;
+		}
+	}
+
 	m_allTransactions.stampAllTransactionEffect();
 
 	//////// "funds"
