@@ -188,8 +188,13 @@ Transaction* StaticTransactionArray::appendNew(QJsonObject jsonTrans, Account *p
 	if (!Transaction::rootCatRegExp.isEmpty()) {
 		QString strHashCat = QString("%1").arg(hashCat, 8, 10, QChar('0'));
 		bool match = false;
-		for (const QRegExp& r : Transaction::rootCatRegExp) {
-			match |= r.exactMatch(strHashCat);
+		for (QRegExp r : Transaction::rootCatRegExp) {
+			if (r.pattern().startsWith("!")) {
+				r.setPattern(r.pattern().mid(1));
+				match &= !r.exactMatch(strHashCat);
+			}
+			else
+				match |= r.exactMatch(strHashCat);
 		}
 		if (!match) {
 			DBG() << "not Adding transaction because matching nothing in Transaction::rootCatRegExp "

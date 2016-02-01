@@ -139,11 +139,17 @@ void ExtraCache::makeCategoryTreeSummary(Bot* bestBot, QStringList cats, QJsonOb
 
 		int nT = user()->setMagic(Transaction::s_magicFilter, [&](const NameHashVector& hashCat){
 			QString strHashCat = QString("%1").arg(qAbs(hashCat.hash()), 8, 10, QChar('0'));
-			for (const QRegExp& r : Transaction::rootCatRegExp) {
-				if (r.exactMatch(strHashCat))
-					return true;
+			bool match = false;
+			for (QRegExp r : Transaction::rootCatRegExp) {
+				if (r.pattern().startsWith("!")) {
+					r.setPattern(r.pattern().mid(1));
+					match &= !r.exactMatch(strHashCat);
+					//WARN() << "r.setPattern: " << r.pattern() << " match " << match;
+				}
+				else
+					match |= r.exactMatch(strHashCat);
 			}
-			return false;
+			return match;
 		});
 		WARN() << "magic applied to " << nT << " trans";
 
@@ -158,11 +164,16 @@ void ExtraCache::makeCategoryTreeSummary(Bot* bestBot, QStringList cats, QJsonOb
 
 			int nTT = user()->setMagic(Transaction::s_magicFilter, [&](const NameHashVector& hashCat){
 				QString strHashCat = QString("%1").arg(qAbs(hashCat.hash()), 8, 10, QChar('0'));
-				for (const QRegExp& r : regexList) {
-					if (r.exactMatch(strHashCat))
-						return true;
+				bool match = false;
+				for (QRegExp r : regexList) {
+					if (r.pattern().startsWith("!")) {
+						r.setPattern(r.pattern().mid(1));
+						match &= !r.exactMatch(strHashCat);
+					}
+					else
+						match |= r.exactMatch(strHashCat);
 				}
-				return false;
+				return match;
 			});
 			WARN() << "magic applied to " << nTT << " trans";
 
