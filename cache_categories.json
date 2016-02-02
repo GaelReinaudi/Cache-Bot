@@ -2,7 +2,7 @@
 "Other" : *Everything else minus what's below*
 */
 {
-	"Food" : ["Dining", "Grocery", "Rent", "Mortgage"]
+	"Food" : ["Dining", "Grocery"]
 	, "Grocery" : ["19047000" /*Supermarkets & groceries*/, "19025.{3}" /*Food & beverage store*/]
 	, "Dining" : ["1300.{4}" /*Food & drink*/]
 	, "Transit" : ["Public", "Personal", "Travel"]

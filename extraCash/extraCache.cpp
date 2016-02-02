@@ -254,7 +254,7 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 
 	makeAdvice(statObj, 0.05);
 
-	QStringList topCats = {"Food", "Transit", "Shops", "Recreation"};
+    QStringList topCats = {"Food", "Transit", "Shops", "Recreation", "Rent", "Mortgage"};
 	makeCategoryTreeSummary(bestBot, topCats, statObj);
 
 	// if critically low flow
