@@ -226,6 +226,20 @@ public:
 		}
 		return ret;
 	}
+	qint64 mostCatId(double* pFrac = 0) const {
+		QMap<qint64, double> ret;
+		for (int i = 0; i < m_vector.count(); ++i) {
+			const Transaction* t = m_vector.at(i);
+			qint64 h = qAbs(t->categoryHash.hash());
+			if (h)
+				ret[h] += 1.0;
+		}
+		if (ret.count()) {
+			*pFrac = ret.last() / m_vector.count();
+			return ret.lastKey();
+		}
+		return 0;
+	}
 	double sumDollar() const {
 		double ret = 0.0;
 		for (int i = 0; i < m_vector.count(); ++i) {

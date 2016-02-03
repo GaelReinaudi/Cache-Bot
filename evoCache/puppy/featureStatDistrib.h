@@ -15,6 +15,9 @@ public:
 		ret["avgAmnt"] = m_args.m_bundle.averageAmount();
 		ret["dayOccur"] = m_args.m_dayProba;
 		ret["daily"] = m_args.m_bundle.averageAmount() * m_args.m_dayProba;
+		double fracCat = 0.0;
+		ret.insert("mostCatId", m_args.m_bundle.mostCatId(&fracCat));
+		ret.insert("mostCatFrac", fracCat);
 		double daysToNext = -1.0;
 		double lastAgo = -1.0;
 		double savedFor = -1.0;
