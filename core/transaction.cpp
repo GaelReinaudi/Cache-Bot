@@ -62,7 +62,12 @@ void Transaction::read(const QJsonObject &json) {
 	name = name.trimmed();
 	setAmount(-json["amount"].toDouble(ok));
 	nameHash.setFromString(name, m_kla);
-	categoryHash.setFromHash(json["category_id"].toString().toLongLong() * (m_kla<0?-1:1));
+	if (json.contains("cache_category_id")) {
+		categoryHash.setFromHash(json["cache_category_id"].toString().toLongLong() * (m_kla<0?-1:1));
+		NOTICE() << "using cache_category_id: " << categoryHash.hash();
+	}
+	else
+		categoryHash.setFromHash(json["category_id"].toString().toLongLong() * (m_kla<0?-1:1));
 	QString dateToUse = "date";
 	if (json.contains("pending_date"))
 		dateToUse = "pending_date";
