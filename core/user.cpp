@@ -33,7 +33,7 @@ SuperOracle::Summary User::smallSummary()
 	return oracle()->computeAvgCashFlow(false);
 }
 
-double  User::littleIncome()
+double User::littleIncome()
 {
 	SuperOracle::Summary s = smallSummary();
 	double flow = s.flow();
@@ -51,6 +51,24 @@ double  User::littleIncome()
 		double fac = qSqrt(qMax(0.0, flow + 1.0));
 		DBG(3) << "little income: fac " << fac;
 		return fac;
+	}
+	return 1.0;
+}
+
+double User::matchesDeclaredIncome()
+{
+	SuperOracle::Summary s = smallSummary();
+	double fixInc = s.salary;
+	if (declaredIncome) {
+		double match = qAbs(fixInc - declaredIncome) / declaredIncome;
+		match = 2.0 * qExp(-2.0 * match);
+		if (match >= 0.5) {
+			//NOTICE() << "declaredIncome matches: " << match;
+			return match;
+		}
+		else {
+			//NOTICE() << "not matches declaredIncome: " << declaredIncome << " fixInc:"<<fixInc<<" ";
+		}
 	}
 	return 1.0;
 }
@@ -84,11 +102,13 @@ void User::injectJsonData(QString jsonStr)
 		fileout << jsonDoc.toJson(QJsonDocument::Indented);
 	}
 
-//	//////// "user"
-//	QJsonObject jsonUser = jsonObj["user"].toObject();
-//	m_email = jsonUser["local"].toObject()["email"].toString();
-//	qDebug() << "user" << jsonUser["_id"].toString() << ":" << jsonUser["local"].toObject()["email"].toString();
-//	Q_ASSERT_X(jsonUser["_id"].toString() == id(), "injectJsonData", jsonUser["_id"].toString().toUtf8() + " != " + id().toUtf8());
+	//////// "user"
+	QJsonObject jsonUser = jsonObj["user"].toObject();
+	m_email = jsonUser["local"].toObject()["email"].toString();
+	declaredIncome = jsonUser["declaredMonthlyIncome"].toDouble() / (365.25 / 12.0);
+	NOTICE() << "declaredIncome: " << declaredIncome;
+	qDebug() << "user" << jsonUser["_id"].toString() << ":" << jsonUser["local"].toObject()["email"].toString();
+	Q_ASSERT_X(jsonUser["_id"].toString() == id(), "injectJsonData", jsonUser["_id"].toString().toUtf8() + " != " + id().toUtf8());
 
 	//////// "banks"
 	QJsonArray jsonBankArray = jsonObj["banks"].toArray();
