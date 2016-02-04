@@ -17,6 +17,9 @@ public:
 		ret["day2"] = (m_args.m_dayOfMonth2 + 31) % 31;
 		ret["daily"] = m_args.m_bundle.avgSmart() / (365.25 / (12.0 * (m_args.m_dayOfMonth2 != 0 ? 2.0 : 1.0)));
         ret["consMissed"] = m_args.m_consecMissed;
+		double fracCat = 0.0;
+		ret.insert("mostCatId", m_args.m_bundle.mostCatId(&fracCat));
+		ret.insert("mostCatFrac", fracCat);
 
         QJsonArray transIds;
         for (int i = 0; i < m_args.m_bundle.count(); ++i) {
