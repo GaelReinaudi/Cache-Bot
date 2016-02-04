@@ -112,6 +112,7 @@ void Puppy::Tree::interpret(void* outResult, Puppy::Context& ioContext)
 				ioContext.mTree = 0;
 				ioContext.isPostTreatment = false;
 				output *= ioContext.m_pUser->littleIncome();
+				output *= ioContext.m_pUser->matchesDeclaredIncome();
 			}
 		}
 	}
