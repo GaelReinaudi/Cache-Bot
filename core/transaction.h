@@ -227,16 +227,16 @@ public:
 		return ret;
 	}
 	qint64 mostCatId(double* pFrac = 0) const {
-		QMap<qint64, double> ret;
+		QMap<qint64, double> mapHashFrac;
 		for (int i = 0; i < m_vector.count(); ++i) {
 			const Transaction* t = m_vector.at(i);
 			qint64 h = qAbs(t->categoryHash.hash());
 			if (h)
-				ret[h] += 1.0;
+				mapHashFrac[h] += 1.0;
 		}
-		if (ret.count()) {
-			*pFrac = ret.last() / m_vector.count();
-			return ret.lastKey();
+		if (mapHashFrac.count()) {
+			*pFrac = mapHashFrac.last() / m_vector.count();
+			return mapHashFrac.lastKey();
 		}
 		return 0;
 	}
