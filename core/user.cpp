@@ -170,7 +170,7 @@ void User::injectJsonData(QString jsonStr)
 			pT->flags |= Transaction::Flag::Internal;
 		}
 		if (qAbs(pT->categoryHash.hash()) == 16001000) {
-			NOTICE() << "making hash 16001000 internal";
+			WARN() << "making hash 16001000 internal";
 			INFO() << pT->name << " " << pT->amountDbl() << " " << pT->date.toString();
 			pT->flags |= Transaction::Flag::Internal;
 		}

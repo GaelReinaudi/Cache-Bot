@@ -32,7 +32,7 @@ void CORESHARED_EXPORT logger::setupSpdLog(QString logFileName)
 #else
 		QFile::remove(QFileInfo(logFileName+".log").absoluteFilePath());
 //		s_pLog->m_fileLogger = spdlog::daily_logger_mt("file_logger", "myfilename");
-		s_pLog->m_fileLogger = spdlog::create<spdlog::sinks::rotating_file_sink_mt>("file", logFileName.toStdString(), "log", 1024 * 1024 * 20, 1, true);
+		s_pLog->m_fileLogger = spdlog::create<spdlog::sinks::rotating_file_sink_mt>("file", logFileName.toStdString(), "log", 1024 * 1024 * 128, 1, true);
 //		s_pLog->m_fileLogger = spdlog::create<spdlog::sinks::simple_file_sink_mt>("simplefile", logFileName.toStdString() + ".log", true);
 		s_pLog->m_fileLogger->set_level(spdlog::level::info);
 #endif

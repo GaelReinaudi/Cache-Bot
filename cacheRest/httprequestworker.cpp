@@ -273,7 +273,7 @@ QNetworkReply* HttpRequestWorker::execute(HttpRequestInput *input) {
 	else if (input->http_method == "POST") {
 		reply = manager->post(request, request_content);
 		INFO() << QString(QJsonDocument(input->jsonObject).toJson());
-		qDebug() << QJsonDocument(input->jsonObject).toJson();
+		qDebug() << QJsonDocument(input->jsonObject).toJson().left(1024);
 	}
 	else if (input->http_method == "PUT") {
 		reply = manager->put(request, request_content);
@@ -307,7 +307,7 @@ void HttpRequestWorker::on_manager_finished(QNetworkReply *reply) {
 	emit on_execution_finished(this);
 
 	QString strResponseJsonDoc = QString(QJsonDocument::fromJson(response).toJson());
-//	qDebug() << "response is" << strResponseJsonDoc.left(256);
+	qDebug() << "response is" << strResponseJsonDoc.left(256);
 	DBG() << "response is" << strResponseJsonDoc;
 	if(reply->request().url() == QUrl(LoginRoute)) {
 		emit repliedLogin(response);

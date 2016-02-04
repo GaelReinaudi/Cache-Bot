@@ -3,7 +3,7 @@
 
 QVector<Transaction> SuperOracle::revelation(QDate upToDate)
 {
-	NOTICE() << "SuperOracle::revelation from " << m_subOracles.count();
+	DBG(2) << "SuperOracle::revelation from " << m_subOracles.count();
 	QVector<Transaction> ret;
 	// naive adding up the revelations for now
 	for (auto pOr : m_subOracles) {
