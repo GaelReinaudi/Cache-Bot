@@ -82,7 +82,7 @@ void EvolutionSpinner::runEvolution() {
 		// Initialize population.
 		std::vector<Tree> lPopulation(POP_SIZE_DEFAULT_PRE);
 		NOTICE() << "Initializing population for hash " << h;
-		qDebug() << "Initializing population for hash " << h << QTime::currentTime();
+//		qDebug() << "Initializing population for hash " << h << QTime::currentTime();
 		initializePopulation(lPopulation, *m_context, lInitGrowProba, lMinInitDepth, lMaxInitDepth);
 		double bestFitness = evaluateSymbReg(lPopulation, *m_context);
 		double newBestFitness = bestFitness;
