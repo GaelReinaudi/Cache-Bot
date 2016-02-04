@@ -265,7 +265,7 @@ QNetworkReply* HttpRequestWorker::execute(HttpRequestInput *input) {
 	}
 
 	NOTICE() << "Sending to " << input->url_str;
-//	qDebug() << "Sending to" << input->url_str;
+	qDebug() << "Sending to" << input->url_str;
 	QNetworkReply* reply = 0;
 	if (input->http_method == "GET") {
 		reply = manager->get(request);
@@ -307,7 +307,7 @@ void HttpRequestWorker::on_manager_finished(QNetworkReply *reply) {
 	emit on_execution_finished(this);
 
 	QString strResponseJsonDoc = QString(QJsonDocument::fromJson(response).toJson());
-	qDebug() << "response is" << strResponseJsonDoc.left(256);
+//	qDebug() << "response is" << strResponseJsonDoc.left(256);
 	DBG() << "response is" << strResponseJsonDoc;
 	if(reply->request().url() == QUrl(LoginRoute)) {
 		emit repliedLogin(response);
