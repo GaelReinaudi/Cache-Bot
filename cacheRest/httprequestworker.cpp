@@ -265,7 +265,7 @@ QNetworkReply* HttpRequestWorker::execute(HttpRequestInput *input) {
 	}
 
 	NOTICE() << "Sending to " << input->url_str;
-	qDebug() << "Sending to" << input->url_str;
+//	qDebug() << "Sending to" << input->url_str;
 	QNetworkReply* reply = 0;
 	if (input->http_method == "GET") {
 		reply = manager->get(request);
