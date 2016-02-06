@@ -18,34 +18,45 @@ void Account::loadJsonData(QJsonObject json)
 	QString accountID = json["_id"].toString();
 	m_plaidId = json["plaid_id"].toString();
 	int accountLast4Digits = json["meta"].toObject()["number"].toInt();
-	QString accountName = json["meta"].toObject()["name"].toString();
+	QString accountMetaName = json["meta"].toObject()["name"].toString();
+	QString accountSubType = json["subtype"].toString();
 	QString accountType = json["type"].toString();
 	Q_ASSERT(!accountID.isEmpty());
-	NOTICE() << "read account:" << accountID << ": " << accountName
+	NOTICE() << "read account:" << accountID << ": " << accountMetaName
 			 << "(" << accountLast4Digits << "): " << accountType
 			 << ". plaid " << m_plaidId;
 
 	// quick and dirty account type
-	QString metaName = json["meta"].toObject()["name"].toString();
-	QString type = json["type"].toString();
-	if (metaName.contains("saving", Qt::CaseInsensitive)) {
+	if (accountMetaName.contains("saving", Qt::CaseInsensitive)) {
 		m_type = Type::Saving;
 		NOTICE() << "Saving";
 	}
-	if (metaName.contains("checking", Qt::CaseInsensitive)) {
+	if (accountMetaName.contains("checking", Qt::CaseInsensitive)) {
 		m_type = Type::Checking;
 		NOTICE() << "Checking";
 	}
-	if (metaName.contains("Ckg", Qt::CaseInsensitive)) {
+	if (accountMetaName.contains("Ckg", Qt::CaseInsensitive)) {
 		m_type = Type::Checking;
 		NOTICE() << "Checking";
 	}
-	if (type.contains("credit", Qt::CaseInsensitive)) {
+	if (accountMetaName.contains("credit", Qt::CaseInsensitive)) {
+		m_type = Type::Credit;
+		NOTICE() << "Credit";
+	}
+	if (accountSubType.contains("saving", Qt::CaseInsensitive)) {
+		m_type = Type::Saving;
+		NOTICE() << "Saving";
+	}
+	if (accountSubType.contains("checking", Qt::CaseInsensitive)) {
+		m_type = Type::Checking;
+		NOTICE() << "Checking";
+	}
+	if (accountSubType.contains("credit", Qt::CaseInsensitive)) {
 		m_type = Type::Credit;
 		NOTICE() << "Credit";
 	}
 	if (m_type == Type::Unknown) {
-		ERR() << "Unknown account type. metaName: " << metaName << " . type: " << type;
+		ERR() << "Unknown account type. metaName: " << accountMetaName << " . type: " << accountType << " . subtype: " << accountSubType;
 	}
 	m_balance = json["balance"].toObject()["current"].toDouble();
 }
