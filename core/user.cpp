@@ -189,7 +189,7 @@ void User::injectJsonData(QString jsonStr)
 			NOTICE() << "making Digit internal";
 			pT->flags |= Transaction::Flag::Internal;
 		}
-		if (qAbs(pT->categoryHash.hash()) == 16001000) {
+		if (qAbs(pT->categoryHash.hash()) == 16001000 && pT->date.daysTo(Transaction::currentDay()) < 5) {
 			WARN() << "making hash 16001000 internal";
 			INFO() << pT->name << " " << pT->amountDbl() << " " << pT->date.toString();
 			pT->flags |= Transaction::Flag::Internal;
