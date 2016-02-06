@@ -57,6 +57,7 @@ void Account::loadJsonData(QJsonObject json)
 	}
 	if (m_type == Type::Unknown) {
 		ERR() << "Unknown account type. metaName: " << accountMetaName << " . type: " << accountType << " . subtype: " << accountSubType;
+		m_type = Type::Checking;
 	}
 	m_balance = json["balance"].toObject()["current"].toDouble();
 }
