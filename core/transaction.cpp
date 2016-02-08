@@ -55,6 +55,7 @@ void Transaction::read(const QJsonObject &json) {
 	id = json["_id"].toString();
 	name = json["name"].toString().toUpper();
 	name.remove("FROM").remove("TO");
+	name.remove("XXXXX").remove("CKF ").remove(" LN").replace("HOMEFINANCE", " MTGE");
 	name.remove("CHK").remove("SAV");
 	name.remove("ACCT");
 	name.remove("ONLINE").remove("BANKING").remove("CONFIRMATION");
@@ -103,6 +104,9 @@ qint64 Transaction::dist(const Transaction &other, bool log) const {
 	 || (amount() < -100 && other.amount() < -100)) {
 		return distanceWeighted<16*2, 512*2, 2*2>(other, log);
 	}
+//	if ((amount() < -1000 && other.amount() < -1000)) {
+//		return distanceWeighted<16*2, 512*2, 2*2*1024*128>(other, log);
+//	}
 	return distanceWeighted<16, 512, 2>(other, log);
 }
 
@@ -162,6 +166,7 @@ void Transaction::makeCatRegExps(QString strVal, QString keyCat)
 Transaction* StaticTransactionArray::appendNew(QJsonObject jsonTrans, Account *pInAcc) {
 	QString name = jsonTrans["name"].toString().toUpper();
 	name.remove("FROM").remove("TO");
+	name.remove("XXXXX").remove("CKF ").remove(" LN").replace("HOMEFINANCE", " MTGE");
 	name.remove("CHK").remove("SAV");
 	name.remove("ACCT");
 	name.remove("ONLINE").remove("BANKING").remove("CONFIRMATION");
