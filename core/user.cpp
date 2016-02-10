@@ -203,15 +203,13 @@ void User::injectJsonData(QString jsonStr)
 		}
 		int dayOld = pT->date.daysTo(Transaction::currentDay());
 		if (qAbs(pT->categoryHash.hash()) == 16001000
-				&& dayOld < 5
-				|| dayOld > oldEnoughForTransfer) {
+				&& (dayOld < 5 || dayOld > oldEnoughForTransfer)) {
 			WARN() << "making hash 16001000 internal";
 			INFO() << pT->name << " " << pT->amountDbl() << " " << pT->date.toString();
 			pT->flags |= Transaction::Flag::Internal;
 		}
 		if (qAbs(pT->categoryHash.hash()) == 16000000
-				&& dayOld < 2
-				|| dayOld > oldEnoughForTransfer) {
+				&& (dayOld < 2 || dayOld > oldEnoughForTransfer)) {
 			WARN() << "making hash 16000000 internal";
 			INFO() << pT->name << " " << pT->amountDbl() << " " << pT->date.toString();
 			pT->flags |= Transaction::Flag::Internal;
