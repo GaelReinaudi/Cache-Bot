@@ -40,7 +40,7 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool isPostTreat
 
 	m_localStaticArgs.m_consecMonth = 0;
 	m_localStaticArgs.m_consecMonthBeforeMissed = 0;
-	m_localStaticArgs.m_consecMissed = 999;
+	m_localStaticArgs.m_consecMissed = 0;
 	m_localStaticArgs.m_prevMissed = 0;
 	if (m_localStaticArgs.m_dayOfMonth < -13 || m_localStaticArgs.m_dayOfMonth > 31)
 		return 0.0;

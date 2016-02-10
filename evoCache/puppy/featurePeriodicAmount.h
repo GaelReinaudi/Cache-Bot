@@ -58,7 +58,7 @@ private:
 		// characteristics
 		int m_consecMonthBeforeMissed = 0;
 		int m_consecMonth = 0;
-		int m_consecMissed = 999;
+		int m_consecMissed = 0;
 		int m_prevMissed = 0;
 		double m_fitRerun = 0;
 	} m_args;

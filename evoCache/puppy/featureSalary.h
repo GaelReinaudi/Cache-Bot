@@ -65,14 +65,14 @@ protected:
 			}
 			else {
 				ioContext.flags |= Puppy::Context::Housing1;
-				m_fitness *= -(m_localStaticArgs.m_kla);
+//				m_fitness *= -(m_localStaticArgs.m_kla);
 			}
 		}
-		//m_fitness *= 4;
+		m_fitness *= 4;
 	}
 protected:
 	qint64 distance(const Transaction *targ, const Transaction *trans) override {
-		// if both are positive
+		// if both are neg
 		if (targ->amount() <= -100 && trans->amount() <= -100) {
 			return targ->distanceWeighted<16*2, 512/2, 2*4>(*trans);
 		}
