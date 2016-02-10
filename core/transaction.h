@@ -24,7 +24,7 @@ public:
 	NameHashVector categoryHash;
 //	int indexHash = -1;
 	// used to make the distance arbitrary far from anything
-	mutable int dimensionOfVoid = 0;
+	mutable int dimOfVoid = 0;
 	// used to filter things based on a global magicFilter
 	mutable int magic = 0;
 	static int s_magicFilter;
@@ -36,6 +36,7 @@ public:
 	bool isFuture() const { return Transaction::currentDay().daysTo(date) > 2; }
 	bool isToOld() const { return date < Transaction::currentDay().addDays(-Transaction::maxDaysOld()); }
 	bool noUse() const;
+	bool isVoid() const;
 	int type() const;
 	enum UserInputFlag { NoUserFlag = 0x0, NoRecur = 0x1};
 	int userFlag = Flag::None;
@@ -81,8 +82,8 @@ public:
 		return date.toJulianDay();
 	}
 	void setDimensionOfVoid(int n = 1) const {
-		Q_ASSERT(dimensionOfVoid == 0);
-		dimensionOfVoid += n;
+		Q_ASSERT(dimOfVoid == 0);
+		dimOfVoid += n;
 	}
 
 	template <qint64 mD, qint64 mA, qint64 mH>
@@ -91,7 +92,7 @@ public:
 		d += LIMIT_DIST_TRANS * (qAbs(jDay() - other.jDay())) / mD;
 		d += LIMIT_DIST_TRANS * (qAbs(kla() - other.kla()) * 1024) / mA;
 		d += LIMIT_DIST_TRANS * nameHash.dist(other.nameHash) / mH;
-		d |= (1<<20) * qint64(qAbs(dimensionOfVoid - other.dimensionOfVoid));
+		d |= (1<<20) * qint64(qAbs(dimOfVoid - other.dimOfVoid));
 //		d |= (1<<20) * qint64(isInternal() || other.isInternal());
 		d |= (1<<20) * qint64((amount() > 0 && other.amount() < 0) || (amount() < 0 && other.amount() > 0));
 		if(log) {

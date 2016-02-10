@@ -74,6 +74,7 @@ BotContext::BotContext(User *pUser)
 	insert(new FeatureMonthlyAmount());
 	insert(new FeatureBiWeeklySalary());
 	insert(new FeatureMonthlySalary());
+	insert(new FeatureHousing());
 
 	if (BotContext::JSON_ARGS["PriceWindow"].toString().trimmed() == "enabled") {
 		WARN() << "Enabling PriceWindow during evo" << QString(QJsonDocument(BotContext::JSON_ARGS).toJson());

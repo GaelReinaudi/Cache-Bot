@@ -132,7 +132,7 @@ public:
 	QMap<double, QVector<Transaction> >* m_mapPredicted = 0;
 	User* m_pUser;
 	int filterHashIndex = -1;
-	enum {None = 0x0, AllOthers = 0x1};
+	enum {None = 0x0, AllOthers = 0x1, Housing1 = 0x02};
 	int flags = 0;
 	// the generation being evaluated, first = 1
 	unsigned int currentGeneration = 0;

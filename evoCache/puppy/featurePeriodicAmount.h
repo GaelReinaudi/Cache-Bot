@@ -143,7 +143,7 @@ protected:
 	}
 
 	double apply(TransactionBundle& allTrans, bool isPostTreat, bool doLog) override;
-	void onJustApplied(TransactionBundle &allTrans, bool doLog) override;
+	void onJustApplied(TransactionBundle &allTrans, Puppy::Context& ioContext) override;
 	void emitGraphics(Puppy::Context& ioContext) const override;
 	Oracle* makeNewOracle() override {
 		OracleOneDayOfMonth* pNewOr = new OracleOneDayOfMonth(this);

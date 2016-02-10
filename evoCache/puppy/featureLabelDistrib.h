@@ -64,9 +64,9 @@ protected:
 			}
 		}
 	}
-	void onJustApplied(TransactionBundle &allTrans, bool doLog) override {
+	void onJustApplied(TransactionBundle &allTrans, Puppy::Context& ioContext) override {
 		Q_UNUSED(allTrans);
-		Q_UNUSED(doLog);
+		Q_UNUSED(ioContext);
 		m_fitness *= 2 * localStaticArgs()->m_bundle.count();
 		m_fitness /= minTransactionForBundle();
 	}

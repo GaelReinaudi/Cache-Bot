@@ -23,7 +23,7 @@ double FeatureAllOthers::apply(TransactionBundle& allTrans, bool isPostTreat, bo
 			continue;
 		if (amnt > 0.0) {
 			++totPos;
-			if (tr.dimensionOfVoid) {
+			if (tr.dimOfVoid) {
 				++alreadyMatchedPos;
 				continue;
 			}
@@ -32,7 +32,7 @@ double FeatureAllOthers::apply(TransactionBundle& allTrans, bool isPostTreat, bo
 		}
 		if (amnt < 0.0) {
 			++totNeg;
-			if (tr.dimensionOfVoid) {
+			if (tr.dimOfVoid) {
 				++alreadyMatchedNeg;
 				continue;
 			}
