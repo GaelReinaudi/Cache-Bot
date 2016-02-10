@@ -106,6 +106,18 @@ void User::injectJsonData(QString jsonStr)
 	QJsonObject jsonUser = jsonObj["user"].toObject();
 	m_email = jsonUser["local"].toObject()["email"].toString();
 	declaredIncome = jsonUser["declaredMonthlyIncome"].toDouble() / (365.25 / 12.0);
+	QDate firstCommonTransDate = QDate::fromString(jsonUser["firstCommonTransDate"].toString().left(10), "yyyy-MM-dd");
+	int oldEnoughForTransfer = Transaction::onlyAfterDate.daysTo(Transaction::currentDay())-9;
+	if (Transaction::onlyAfterDate < firstCommonTransDate) {
+		int firstCommmonAgo = int(firstCommonTransDate.daysTo(Transaction::currentDay()));
+		if (firstCommmonAgo > 60) {
+			Transaction::onlyAfterDate = firstCommonTransDate;
+		}
+		if (firstCommmonAgo > 99) {
+			oldEnoughForTransfer = firstCommmonAgo - 9;
+//			Transaction::onlyAfterDate = firstCommonTransDate.addDays(9);
+		}
+	}
 	NOTICE() << "declaredIncome: " << declaredIncome;
 	qDebug() << "user" << jsonUser["_id"].toString() << ":" << jsonUser["local"].toObject()["email"].toString();
 	Q_ASSERT_X(jsonUser["_id"].toString() == id(), "injectJsonData", jsonUser["_id"].toString().toUtf8() + " != " + id().toUtf8());
@@ -160,8 +172,8 @@ void User::injectJsonData(QString jsonStr)
 			tP.setAmount(-tP.amountDbl());
 			for (int j = 0; j < m_allTransactions.count(); ++j) {
 				Transaction* pN = &m_allTransactions.transArray()[j];
-				// dist max 4 days, 2 parts of kla, and no hash sensitivity
-				qint64 d = tP.distanceWeighted<3, 2, 1024*1024*1024>(*pN);
+				// dist max 5 days, 2 parts of kla, and no hash sensitivity
+				qint64 d = tP.distanceWeighted<5, 2, 1024*1024*1024>(*pN);
 				if (d < Transaction::LIMIT_DIST_TRANS
 						&& pN->amount() < 0 && !pN->isInternal()
 						&& pT->account != pN->account) {
@@ -189,8 +201,18 @@ void User::injectJsonData(QString jsonStr)
 			NOTICE() << "making Digit internal";
 			pT->flags |= Transaction::Flag::Internal;
 		}
-		if (qAbs(pT->categoryHash.hash()) == 16001000 && pT->date.daysTo(Transaction::currentDay()) < 5) {
+		int dayOld = pT->date.daysTo(Transaction::currentDay());
+		if (qAbs(pT->categoryHash.hash()) == 16001000
+				&& dayOld < 5
+				|| dayOld > oldEnoughForTransfer) {
 			WARN() << "making hash 16001000 internal";
+			INFO() << pT->name << " " << pT->amountDbl() << " " << pT->date.toString();
+			pT->flags |= Transaction::Flag::Internal;
+		}
+		if (qAbs(pT->categoryHash.hash()) == 16000000
+				&& dayOld < 2
+				|| dayOld > oldEnoughForTransfer) {
+			WARN() << "making hash 16000000 internal";
 			INFO() << pT->name << " " << pT->amountDbl() << " " << pT->date.toString();
 			pT->flags |= Transaction::Flag::Internal;
 		}

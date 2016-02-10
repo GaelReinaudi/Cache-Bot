@@ -49,10 +49,10 @@ public:
 	}
 	void resetDimensionOfVoid() {
 		for(int i = 0; i < m_allTransactions.count(); ++i) {
-			// reset the dimensionOfVoid
-			m_allTransactions.trans(i).dimensionOfVoid = 0;
+			// reset the dimOfVoid
+			m_allTransactions.trans(i).dimOfVoid = 0;
 		}
-		Transaction::s_hypotheTrans.dimensionOfVoid = 0;
+		Transaction::s_hypotheTrans.dimOfVoid = 0;
 	}
 	int setMagic(int m, std::function<bool (const NameHashVector&)> filter = [](const NameHashVector& catHash){ Q_UNUSED(catHash); return true;}) {
 		int nT = 0;
@@ -158,6 +158,7 @@ private:
 	QString m_email;
 	SuperOracle* m_mainOracle = 0;
 	double declaredIncome = 0.0;
+	double declaredRent = 0.0;
 };
 
 #endif // USER_H

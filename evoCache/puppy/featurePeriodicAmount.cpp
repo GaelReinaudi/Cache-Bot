@@ -67,8 +67,8 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool isPostTreat
 					iTarg->dist(*localTrans, true);
 				}
 //				// isolate the transaction that were fitted to the target
-//				Q_ASSERT(localTrans->dimensionOfVoid == 0);
-//				localTrans->dimensionOfVoid++;
+//				Q_ASSERT(localTrans->dimOfVoid == 0);
+//				localTrans->dimOfVoid++;
 				iTarg->flags |= Transaction::CameTrue;
 				if(m_localStaticArgs.m_consecMonth == 0) {
 					m_localStaticArgs.m_consecMonthBeforeMissed = 0;
@@ -116,7 +116,7 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool isPostTreat
 	return tempFitness;
 }
 
-void FeatureMonthlyAmount::onJustApplied(TransactionBundle& allTrans, bool doLog)
+void FeatureMonthlyAmount::onJustApplied(TransactionBundle& allTrans, Puppy::Context &ioContext)
 {
 	if (m_fitness <= 0.0)
 		return;
@@ -128,7 +128,7 @@ void FeatureMonthlyAmount::onJustApplied(TransactionBundle& allTrans, bool doLog
 	m_localStaticArgs.m_dayOfMonth %= 31;
 	cleanArgs();
 	double rerun = apply(allTrans, false, false);
-	if (doLog) {
+	if (ioContext.m_summaryJsonObj) {
 		DBG() << "fitness " << m_fitness << "- 2x " << rerun;
 	}
 	// restore member variables

@@ -168,7 +168,7 @@ protected:
 	virtual bool cannotExecute(Puppy::Context& ioContext) const { Q_UNUSED(ioContext); return false; }
 	virtual double apply(TransactionBundle& allTrans, bool isPostTreat, bool doLog) = 0;
 	virtual void isolateBundledTransactions(bool isPostTreatment = false);
-	virtual void onJustApplied(TransactionBundle&, bool) {}
+	virtual void onJustApplied(TransactionBundle&, Puppy::Context&) {}
 	virtual void emitGraphics(Puppy::Context&) const { }
 	virtual Oracle* makeNewOracle() { return 0; }
 

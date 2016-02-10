@@ -22,6 +22,15 @@ bool Transaction::noUse() const
 	return (magic != Transaction::s_magicFilter) || isFuture() || isToOld() || isInternal();
 }
 
+bool Transaction::isVoid() const
+{
+	if (dimOfVoid) {
+		WARNI("this is in the void ", this->name, dimOfVoid);
+		return true;
+	}
+	return false;
+}
+
 int Transaction::type() const {
 	return account->type() + 16 * (flags & Internal);
 }
@@ -337,7 +346,7 @@ double TransactionBundle::klaAverage() const {
 
 double TransactionBundle::daysToNextSmart() const
 {
-	double daysToNext = double(Transaction::maxDaysOldAllTransatcion()) / qMax(1, count());
+	double daysToNext = double(Transaction::maxDaysOld()) / qMax(1, count());
 	double EMA_FACTOR = 0.5;
 
 	for (int i = 1; i < count(); ++i) {
