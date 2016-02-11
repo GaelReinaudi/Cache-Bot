@@ -196,6 +196,11 @@ void ExtraCache::makeCategoryTreeSummary(Bot* bestBot, QStringList cats, QJsonOb
 	}
 	categoryObject = orderCategoryTree(categoryObject);
 	statObj.insert("categories", categoryObject);
+	Transaction::s_magicFilter = 0;
+	int nT = user()->setMagic(Transaction::s_magicFilter);
+	WARN() << "eventually, magic 0 applied to " << nT << " trans";
+	HistoMetric::clearAll();
+//	calcSummary(bestBot, jsonSubBranch);
 }
 
 QJsonObject ExtraCache::orderCategoryTree(QJsonObject &catObj)
@@ -250,12 +255,13 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 
 	statObj.insert("trends", trendObjects);
 
-	double flowRate = calcSummary(bestBot, statObj);
-
 	makeAdvice(statObj, 0.05);
 
-    QStringList topCats = {"Food", "Transit", "Shops", "Recreation", "Rent", "Mortgage"};
+	HistoMetric::clearAll();
+	QStringList topCats = {"Food", "Transit", "Shops", "Recreation", "Rent", "Mortgage"};
 	makeCategoryTreeSummary(bestBot, topCats, statObj);
+
+	double flowRate = calcSummary(bestBot, statObj);
 
 	// if critically low flow
 	if (flowRate <= -0.95) {
