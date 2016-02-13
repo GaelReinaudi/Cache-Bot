@@ -40,6 +40,16 @@
         <property name="fieldGrowthPolicy">
          <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
         </property>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>ago</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
         <item row="1" column="1">
          <widget class="QSpinBox" name="spinAgo">
           <property name="prefix">
@@ -277,48 +287,6 @@
           </property>
          </widget>
         </item>
-        <item row="10" column="0">
-         <widget class="QLabel" name="costLive99Label_2">
-          <property name="text">
-           <string>avg cash flow</string>
-          </property>
-         </widget>
-        </item>
-        <item row="10" column="1">
-         <widget class="QDoubleSpinBox" name="spinAvgCashFlow">
-          <property name="readOnly">
-           <bool>false</bool>
-          </property>
-          <property name="buttonSymbols">
-           <enum>QAbstractSpinBox::NoButtons</enum>
-          </property>
-          <property name="prefix">
-           <string/>
-          </property>
-          <property name="suffix">
-           <string>%</string>
-          </property>
-          <property name="decimals">
-           <number>1</number>
-          </property>
-          <property name="minimum">
-           <double>-9999.000000000000000</double>
-          </property>
-          <property name="maximum">
-           <double>9999.000000000000000</double>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_4">
-          <property name="text">
-           <string>ago</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-         </widget>
-        </item>
         <item row="9" column="0">
          <widget class="QLabel" name="label">
           <property name="text">
@@ -348,15 +316,28 @@
           </property>
          </widget>
         </item>
+        <item row="10" column="1">
+         <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
         <item row="12" column="0">
-         <widget class="QLabel" name="costLive99Label_3">
+         <widget class="QLabel" name="costLive99Label_7">
           <property name="text">
-           <string>d2z 50%</string>
+           <string>dailyBill</string>
           </property>
          </widget>
         </item>
         <item row="12" column="1">
-         <widget class="QDoubleSpinBox" name="spinT2z50">
+         <widget class="QDoubleSpinBox" name="dailyBillSpin">
           <property name="readOnly">
            <bool>false</bool>
           </property>
@@ -367,10 +348,10 @@
            <string/>
           </property>
           <property name="suffix">
-           <string>  d</string>
+           <string>$/d</string>
           </property>
           <property name="decimals">
-           <number>0</number>
+           <number>1</number>
           </property>
           <property name="minimum">
            <double>-9999.000000000000000</double>
@@ -381,20 +362,109 @@
          </widget>
         </item>
         <item row="13" column="0">
-         <widget class="QLabel" name="costLive99Label_4">
+         <widget class="QLabel" name="costLive99Label_8">
           <property name="text">
-           <string>d2z 80%</string>
+           <string>dailyNeg</string>
           </property>
          </widget>
         </item>
-        <item row="11" column="0">
+        <item row="13" column="1">
+         <widget class="QDoubleSpinBox" name="dailyNegSpin">
+          <property name="readOnly">
+           <bool>false</bool>
+          </property>
+          <property name="buttonSymbols">
+           <enum>QAbstractSpinBox::NoButtons</enum>
+          </property>
+          <property name="prefix">
+           <string/>
+          </property>
+          <property name="suffix">
+           <string>$/d</string>
+          </property>
+          <property name="decimals">
+           <number>1</number>
+          </property>
+          <property name="minimum">
+           <double>-9999.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>9999.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="14" column="0">
+         <widget class="QLabel" name="costLive99Label_6">
+          <property name="text">
+           <string>dailyPos</string>
+          </property>
+         </widget>
+        </item>
+        <item row="14" column="1">
+         <widget class="QDoubleSpinBox" name="dailyPosSpin">
+          <property name="readOnly">
+           <bool>false</bool>
+          </property>
+          <property name="buttonSymbols">
+           <enum>QAbstractSpinBox::NoButtons</enum>
+          </property>
+          <property name="prefix">
+           <string/>
+          </property>
+          <property name="suffix">
+           <string>$/d</string>
+          </property>
+          <property name="decimals">
+           <number>1</number>
+          </property>
+          <property name="minimum">
+           <double>-9999.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>9999.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="15" column="0">
+         <widget class="QLabel" name="costLive99Label_9">
+          <property name="text">
+           <string>dailySal</string>
+          </property>
+         </widget>
+        </item>
+        <item row="15" column="1">
+         <widget class="QDoubleSpinBox" name="dailySalSpin">
+          <property name="readOnly">
+           <bool>false</bool>
+          </property>
+          <property name="buttonSymbols">
+           <enum>QAbstractSpinBox::NoButtons</enum>
+          </property>
+          <property name="prefix">
+           <string/>
+          </property>
+          <property name="suffix">
+           <string>$/d</string>
+          </property>
+          <property name="decimals">
+           <number>1</number>
+          </property>
+          <property name="minimum">
+           <double>-9999.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>9999.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="18" column="0">
          <widget class="QLabel" name="costLive99Label_5">
           <property name="text">
            <string>d2z 20%</string>
           </property>
          </widget>
         </item>
-        <item row="11" column="1">
+        <item row="18" column="1">
          <widget class="QDoubleSpinBox" name="spinT2z20">
           <property name="readOnly">
            <bool>false</bool>
@@ -419,7 +489,46 @@
           </property>
          </widget>
         </item>
-        <item row="13" column="1">
+        <item row="19" column="0">
+         <widget class="QLabel" name="costLive99Label_3">
+          <property name="text">
+           <string>d2z 50%</string>
+          </property>
+         </widget>
+        </item>
+        <item row="19" column="1">
+         <widget class="QDoubleSpinBox" name="spinT2z50">
+          <property name="readOnly">
+           <bool>false</bool>
+          </property>
+          <property name="buttonSymbols">
+           <enum>QAbstractSpinBox::NoButtons</enum>
+          </property>
+          <property name="prefix">
+           <string/>
+          </property>
+          <property name="suffix">
+           <string>  d</string>
+          </property>
+          <property name="decimals">
+           <number>0</number>
+          </property>
+          <property name="minimum">
+           <double>-9999.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>9999.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="20" column="0">
+         <widget class="QLabel" name="costLive99Label_4">
+          <property name="text">
+           <string>d2z 80%</string>
+          </property>
+         </widget>
+        </item>
+        <item row="20" column="1">
          <widget class="QDoubleSpinBox" name="spinT2z80">
           <property name="readOnly">
            <bool>false</bool>
@@ -444,6 +553,38 @@
           </property>
          </widget>
         </item>
+        <item row="11" column="0">
+         <widget class="QLabel" name="costLive99Label_2">
+          <property name="text">
+           <string>avg cash flow</string>
+          </property>
+         </widget>
+        </item>
+        <item row="11" column="1">
+         <widget class="QDoubleSpinBox" name="spinAvgCashFlow">
+          <property name="readOnly">
+           <bool>false</bool>
+          </property>
+          <property name="buttonSymbols">
+           <enum>QAbstractSpinBox::NoButtons</enum>
+          </property>
+          <property name="prefix">
+           <string/>
+          </property>
+          <property name="suffix">
+           <string>%</string>
+          </property>
+          <property name="decimals">
+           <number>1</number>
+          </property>
+          <property name="minimum">
+           <double>-9999.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>9999.000000000000000</double>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
      </layout>
@@ -453,6 +594,7 @@
       <property name="focusPolicy">
        <enum>Qt::StrongFocus</enum>
       </property>
+      <zorder></zorder>
      </widget>
     </item>
    </layout>

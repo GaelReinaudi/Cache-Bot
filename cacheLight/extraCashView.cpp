@@ -197,6 +197,10 @@ void ExtraCashView::updateChart()
 	SuperOracle::Summary summary = m_pExtraCache->user()->oracle()->computeAvgCashFlow();
 	double perCentFlow = summary.flow() * 100.0;
 	ui->spinAvgCashFlow->setValue(perCentFlow);
+	ui->dailyBillSpin->setValue(summary.bill);
+	ui->dailyNegSpin->setValue(summary.negSum);
+	ui->dailyPosSpin->setValue(summary.posSum);
+	ui->dailySalSpin->setValue(summary.salary);
 	pBars->addData(-daysAgo, perCentFlow);
 //	ui->plot->yAxis2->rescale();
 //	double minY1 = ui->plot->yAxis->range().lower;

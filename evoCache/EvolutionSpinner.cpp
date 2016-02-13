@@ -131,13 +131,13 @@ void EvolutionSpinner::runEvolution() {
 //		summarize(bestTree);
 		lPopulation.push_back(bestTree);
 		newBestFitness = evaluateSymbReg(lPopulation, *m_context);
-		calculateStats(lPopulation, lNbrGen);
+		calculateStats(lPopulation, NBR_GEN_DEFAULT_PRE);
 		INFO() << "End of evolution " << newBestFitness;
 
 		// Outputting best individual
 		std::vector<Tree>::iterator lBestIndividual =
 				std::max_element(lPopulation.begin(), lPopulation.end());
-		DBG() << "Best individual at generation " << lNbrGen << " is: "
+		DBG() << "Best individual at generation " << NBR_GEN_DEFAULT_PRE << " is: "
 			  << lBestIndividual->toStr();
 
 		QJsonObject jsonBest = summarize(*lBestIndividual);
