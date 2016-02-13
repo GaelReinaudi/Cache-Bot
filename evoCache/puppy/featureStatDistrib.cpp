@@ -34,7 +34,7 @@ double FeatureStatDistrib::apply(TransactionBundle& allTrans, bool isPostTreat, 
 		const Transaction& tr = allTrans.trans(i);
 		if (tr.noUse())
 			continue;
-		if (tr.dimOfVoid)
+		if (tr.isVoid())
 			continue;
 		qint64 dist = distCalc(tr, modelTrans);
 		if (passFilter(dist, tr)) {

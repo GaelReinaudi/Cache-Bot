@@ -67,8 +67,8 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool isPostTreat
 					iTarg->dist(*localTrans, true);
 				}
 //				// isolate the transaction that were fitted to the target
-//				Q_ASSERT(localTrans->dimOfVoid == 0);
-//				localTrans->dimOfVoid++;
+//				Q_ASSERT(localTrans->isVoid() == 0);
+//				localTrans->isVoid()++;
 				iTarg->flags |= Transaction::CameTrue;
 				if(m_localStaticArgs.m_consecMonth == 0) {
 					m_localStaticArgs.m_consecMonthBeforeMissed = 0;

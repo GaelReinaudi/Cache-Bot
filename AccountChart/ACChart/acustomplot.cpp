@@ -223,7 +223,7 @@ void AHashPlot::loadCompressedAmount(User *pUser)
 		if (!tr.noUse()) {
 			graph(0)->addData(tr.kla(), 0.0);
 			// code for featureAllOthers
-			if (tr.dimOfVoid == 2) {
+			if (tr.isVoid() == 2) {
 				graph(1)->addData(tr.kla(), 0.0);
 			}
 			QCPGraph* pGraph = 0;

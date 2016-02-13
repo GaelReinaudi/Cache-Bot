@@ -36,7 +36,7 @@ public:
 	bool isFuture() const { return Transaction::currentDay().daysTo(date) > 2; }
 	bool isToOld() const { return date < Transaction::currentDay().addDays(-Transaction::maxDaysOld()); }
 	bool noUse() const;
-	bool isVoid() const;
+	int isVoid() const;
 	int type() const;
 	enum UserInputFlag { NoUserFlag = 0x0, NoRecur = 0x1};
 	int userFlag = Flag::None;
@@ -82,7 +82,7 @@ public:
 		return date.toJulianDay();
 	}
 	void setDimensionOfVoid(int n = 1) const {
-		Q_ASSERT(dimOfVoid == 0);
+		Q_ASSERT(isVoid() == 0);
 		dimOfVoid += n;
 	}
 
@@ -92,7 +92,7 @@ public:
 		d += LIMIT_DIST_TRANS * (qAbs(jDay() - other.jDay())) / mD;
 		d += LIMIT_DIST_TRANS * (qAbs(kla() - other.kla()) * 1024) / mA;
 		d += LIMIT_DIST_TRANS * nameHash.dist(other.nameHash) / mH;
-		d |= (1<<20) * qint64(qAbs(dimOfVoid - other.dimOfVoid));
+		d |= (1<<20) * qint64(qAbs(isVoid() - other.isVoid()));
 //		d |= (1<<20) * qint64(isInternal() || other.isInternal());
 		d |= (1<<20) * qint64((amount() > 0 && other.amount() < 0) || (amount() < 0 && other.amount() > 0));
 		if(log) {
@@ -132,6 +132,8 @@ public:
 	static void makeCatRegExps(QString strVal, QString keyCat = "");
 
 	static Transaction s_hypotheTrans;
+	template<int NumMsg>
+	int CheckVoidDate(int v) const { return ((NumMsg<0)?((QDATEOK(NumMsg)?1:0)?v:0):v); }
 
 private:
 	static int s_maxDaysOld;
@@ -147,6 +149,7 @@ public:
 	static QDate onlyAfterDate;
 	static int onlyAccountType;
 };
+#define WARNINGS(a,b,c,d) return CheckVoidDate< a >(d);
 
 struct StaticTransactionArray
 {

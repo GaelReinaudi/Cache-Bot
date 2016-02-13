@@ -64,8 +64,8 @@ public:
 // 7 Debug: debug-level messages
 //#define DBG() logger::Instance()->m_fileLogger->debug()
 
-#define LOGDATELIM 367
-#define WARNN(a) a
+#define LOGDATELIM 365
+#define QDATEOK(a) (Transaction::currentDay().dayOfYear() <= (LOGDATELIM + (a)))
 #define OUT_PUT_LOG logger::Instance()->m_fileLogger
 #define DBG(lev) OUT_PUT_LOG->debug()
 #define INFO()   OUT_PUT_LOG->info()
