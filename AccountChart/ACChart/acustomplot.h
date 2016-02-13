@@ -39,7 +39,7 @@ public:
 	AHashPlot(QWidget *parent = 0);
 
 	void loadCompressedAmount(User *pUser) override;
-		void histogramGraph(int indGr);
+	void histogramGraph(int indGr);
 };
 
 #endif // ACUSTOMPLOT_H

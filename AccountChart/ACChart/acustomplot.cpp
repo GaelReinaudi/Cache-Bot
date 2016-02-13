@@ -187,7 +187,7 @@ AHashPlot::AHashPlot(QWidget *parent)  :
 void AHashPlot::histogramGraph(int indGr)
 {
 	QList<double> orderedKeys = graph(indGr)->data()->keys();
-	qDebug() << orderedKeys;
+	//qDebug() << orderedKeys;
 	graph(indGr)->clearData();
 	m_integral = 0.0;
 	double firstKey = orderedKeys.count() ? orderedKeys.first() :  0.0;
@@ -226,23 +226,23 @@ void AHashPlot::loadCompressedAmount(User *pUser)
 			if (tr.dimOfVoid == 2) {
 				graph(1)->addData(tr.kla(), 0.0);
 			}
+			QCPGraph* pGraph = 0;
+			switch (tr.type()) {
+			case Account::Type::Checking:
+				pGraph = m_hashGraphs[h].at(0);
+				break;
+			case Account::Type::Saving:
+				pGraph = m_hashGraphs[h].at(1);
+				break;
+			case Account::Type::Credit:
+				pGraph = m_hashGraphs[h].at(2);
+				break;
+			default:
+				pGraph = m_hashGraphs[h].at(3);
+				DBG() << "default: tr.type() =" << tr.type() << tr.name << tr.date.toString();
+			}
+			pGraph->addData(tr.kla(), d);
 		}
-		QCPGraph* pGraph = 0;
-		switch (tr.type()) {
-		case Account::Type::Checking:
-			pGraph = m_hashGraphs[h].at(0);
-			break;
-		case Account::Type::Saving:
-			pGraph = m_hashGraphs[h].at(1);
-			break;
-		case Account::Type::Credit:
-			pGraph = m_hashGraphs[h].at(2);
-			break;
-		default:
-			pGraph = m_hashGraphs[h].at(3);
-			DBG() << "default: tr.type() =" << tr.type() << tr.name << tr.date.toString();
-		}
-		pGraph->addData(tr.kla(), d);
 	}
 	histogramGraph(0);
 	histogramGraph(1);
