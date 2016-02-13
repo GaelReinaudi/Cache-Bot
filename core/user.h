@@ -49,7 +49,7 @@ public:
 	}
 	void resetDimensionOfVoid() {
 		for(int i = 0; i < m_allTransactions.count(); ++i) {
-			// reset the dimOfVoid
+			// reset the isVoid()
 			m_allTransactions.trans(i).dimOfVoid = 0;
 		}
 		Transaction::s_hypotheTrans.dimOfVoid = 0;

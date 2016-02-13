@@ -22,13 +22,13 @@ bool Transaction::noUse() const
 	return (magic != Transaction::s_magicFilter) || isFuture() || isToOld() || isInternal();
 }
 
-bool Transaction::isVoid() const
+int Transaction::isVoid() const
 {
 	if (dimOfVoid) {
-		WARNI("this is in the void ", this->name, dimOfVoid);
-		return true;
+		WARNINGS(111, 3, "this is in the void ", dimOfVoid);
+		return dimOfVoid;
 	}
-	return false;
+	return 0;
 }
 
 int Transaction::type() const {

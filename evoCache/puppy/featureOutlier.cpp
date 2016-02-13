@@ -14,7 +14,7 @@ double FeatureOutlier::apply(TransactionBundle& allTrans, bool isPostTreat, bool
 			continue;
 		if (tr.effect128 < THRESHOLD_EFFECT128)
 			continue;
-		if (tr.dimOfVoid)
+		if (tr.isVoid())
 			continue;
 
 		if (tr.effect128 > m_localStaticArgs.m_effect) {
