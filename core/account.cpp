@@ -67,6 +67,10 @@ void Account::loadJsonData(QJsonObject json)
 		m_type = Type::Credit;
 		NOTICE() << "Credit";
 	}
+	if (accountSubType.contains("moneymarket", Qt::CaseInsensitive)) {
+		m_type = Type::Saving;
+		NOTICE() << "Saving";
+	}
 	if (m_type == Type::Unknown) {
 		ERR() << "Unknown account type. metaName: " << accountMetaName << " . type: " << accountType << " . subtype: " << accountSubType;
 		m_type = Type::Checking;
