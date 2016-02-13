@@ -15,7 +15,7 @@ public:
 	double minSlope() const { return m_minSlope; }
 	int futDayMinSlope() const { return m_futDayMinSlopeCollision; }
 
-	double calcSummary(Bot* bestBot, QJsonObject &statObj, int keepBest = -1);
+	double calcSummary(Bot* bestBot, QJsonObject &statObj, int doAskThing = 0);
 
 	void makeCategoryTreeSummary(Bot* bestBot, QStringList cats, QJsonObject &statObj, int level = 0);
 	QJsonObject orderCategoryTree(QJsonObject &catObj);

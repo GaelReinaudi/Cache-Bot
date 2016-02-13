@@ -48,7 +48,7 @@ void ExtraCache::onUserInjected(User* pUser)
 	CacheRest::Instance()->getBestBot(userID(), user());
 }
 
-double ExtraCache::calcSummary(Bot* bestBot, QJsonObject& statObj, int keepBest /*= -1*/)
+double ExtraCache::calcSummary(Bot* bestBot, QJsonObject& statObj, int doAskThing /*= 0*/)
 {
 	double flowMA_2 = MetricSmoother<2>::get(OracleSummary::get(user()))->value(Transaction::currentDay());
 	double flowMA_3 = MetricSmoother<3>::get(OracleSummary::get(user()))->value(Transaction::currentDay());
@@ -74,10 +74,6 @@ flowCalc:
 	double d2z80 = Montecarlo<128>::get(user())->d2zPerc(Transaction::currentDay(), 0.80);
 	double rate = OracleSummary::get(user())->value(Transaction::currentDay());
 	SuperOracle::Summary summary = OracleSummary::get(user())->summaries()[Transaction::currentDay()];
-
-	if (keepBest > 0) {
-//		summary.summaryPerOracle orderAndKeepBest(keepBest);
-	}
 
 	statObj.insert("oracles", summary.toJson());
 
@@ -114,8 +110,10 @@ flowCalc:
 		flowObj["indOracleHypotheTrans"] = indOracleHypo;
 	}
 	statObj.insert(numCalc == 1 ? "flow" : "askFlow", flowObj);
-	if (jsonArgs().contains("ask") && numCalc < 2) {
+	if (doAskThing && jsonArgs().contains("ask") && numCalc < 2) {
 		user()->setHypotheTrans(jsonArgs()["ask"].toDouble());
+//		HistoMetric::clearAll();
+//		user()->reInjectBot();
 		flowObj = QJsonObject();
 		flowObj["ask"] = jsonArgs()["ask"].toDouble();
 		goto flowCalc;
@@ -261,7 +259,8 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 	QStringList topCats = {"Food", "Transit", "Shops", "Recreation", "Rent", "Mortgage"};
 	makeCategoryTreeSummary(bestBot, topCats, statObj);
 
-	double flowRate = calcSummary(bestBot, statObj);
+	HistoMetric::clearAll();
+	double flowRate = calcSummary(bestBot, statObj, true);
 
 	// if critically low flow
 	if (flowRate <= -0.95) {
