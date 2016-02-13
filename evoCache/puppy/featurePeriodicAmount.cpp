@@ -2,6 +2,30 @@
 
 static const int SLACK_FOR_LATE_TRANS = 4;
 
+QJsonObject OracleOneDayOfMonth::toJson() const {
+	QJsonObject ret = Oracle::toJson();
+	ret["approxAmnt"] = toSignifDigit_2(m_args.m_bundle.avgSmart());
+	ret["avgAmnt"] = m_args.m_bundle.avgSmart();
+	ret["day1"] = (m_args.m_dayOfMonth + 31) % 31;
+	ret["day2"] = (m_args.m_dayOfMonth2 + 31) % 31;
+	ret["daily"] = (FeaturePeriodicAmount::computeProba(m_args) <= 0.0)
+				   ? 0.0
+				   : m_args.m_bundle.avgSmart() / (365.25 / (12.0 * (m_args.m_dayOfMonth2 != 0 ? 2.0 : 1.0)));
+	ret["consMissed"] = m_args.m_consecMissed;
+	double fracCat = 0.0;
+	ret.insert("mostCatId", m_args.m_bundle.mostCatId(&fracCat));
+	ret.insert("mostCatFrac", fracCat);
+
+	QJsonArray transIds;
+	for (int i = 0; i < m_args.m_bundle.count(); ++i) {
+		const Transaction& tr = m_args.m_bundle.trans(i);
+		transIds.append(tr.id);
+	}
+	ret["trans"] = transIds;
+
+	return ret;
+}
+
 void FeatureMonthlyAmount::getArgs(Puppy::Context &ioContext) {
 	double a = 0;
 	int ind = -1;
