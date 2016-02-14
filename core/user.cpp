@@ -204,18 +204,25 @@ void User::injectJsonData(QString jsonStr)
 		int dayOld = pT->date.daysTo(Transaction::currentDay());
 		if (qAbs(pT->categoryHash.hash()) == 16001000
 				&& (dayOld < 5 || dayOld > oldEnoughForTransfer)) {
-			WARN() << "making hash 16001000 internal";
-			INFO() << pT->name << " " << pT->amountDbl() << " " << pT->date.toString();
+			WARN() << "making hash 16001000 internal: " << pT->name << " " << pT->amountDbl() << " " << pT->date.toString();
 			pT->flags |= Transaction::Flag::Internal;
 		}
 		if (qAbs(pT->categoryHash.hash()) == 16000000
 				&& (dayOld < 2 || dayOld > oldEnoughForTransfer)) {
-			WARN() << "making hash 16000000 internal";
-			INFO() << pT->name << " " << pT->amountDbl() << " " << pT->date.toString();
+			WARN() << "making hash 16000000 internal: " << pT->name << " " << pT->amountDbl() << " " << pT->date.toString();
 			pT->flags |= Transaction::Flag::Internal;
 		}
 	}
-
+	//////// mark as "return" in certain conditions
+	for (int i = 0; i < m_allTransactions.count(); ++i) {
+		Transaction* pT = &m_allTransactions.transArray()[i];
+		if (pT->isInternal())
+			continue;
+		if (pT->account->type() == Account::Type::Credit && pT->kla() > 0) {
+			pT->isReturn = true;
+			WARN() << "this look like a return: " << pT->name << " " << pT->amountDbl() << " " << pT->date.toString();
+		}
+	}
 	m_allTransactions.stampAllTransactionEffect();
 
 	//////// "funds"

@@ -38,9 +38,9 @@ protected:
 	bool passFilter(qint64 dist, const Transaction& trans) const override {
 //		WARN() << "effect " << double(trans.effect128);
 		return dist < Transaction::LIMIT_DIST_TRANS / 4
-				&& trans.kla() < 0
-				&& double(trans.kla()) <=  1.0 + m_localStaticArgs.m_kla / EFFECT_RANGE_WIDTH_RATIO
-				&& double(trans.kla()) >= -1.0 + m_localStaticArgs.m_kla * EFFECT_RANGE_WIDTH_RATIO;
+				&& trans.klaEff() < 0
+				&& double(trans.klaEff()) <=  1.0 + m_localStaticArgs.m_kla / EFFECT_RANGE_WIDTH_RATIO
+				&& double(trans.klaEff()) >= -1.0 + m_localStaticArgs.m_kla * EFFECT_RANGE_WIDTH_RATIO;
 	}
 	int minTransactionForBundle() const override { return 24; }
 	Oracle* makeNewOracle() override {

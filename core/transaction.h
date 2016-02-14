@@ -12,9 +12,10 @@ typedef NameHashVector2 NameHashVector;
 class CORESHARED_EXPORT Transaction// : public DBobj
 {
 private:
-		double m_amountDbl = 0.0;
-		double m_kla = 0; // Mult * kindaLog(amount)
+	double m_amountDbl = 0.0;
+	double m_kla = 0;
 public:
+	bool isReturn = false;
 	Account* account = 0;
 	QString id; // "YARROW HOTEL GRILL" or "STRIKE TECHNOLOG"
 	QString name; // "YARROW HOTEL GRILL" or "STRIKE TECHNOLOG"
@@ -44,12 +45,8 @@ public:
 
 	//! json in
 	void read(const QJsonObject &json);
-//	void write(QJsonObject &json) const {
-//		json["name"] = name;
-//		json["hash"] = nameHash.hash();
-//		json["amount"] = -amountDbl();
-//		json["date"] = date.toString("yyyy-MM-dd");
-//	}
+
+	static QString cleanName(const QString& inName);
 	double time_t() const {
 		static const qint64 day0 = QDateTime::fromTime_t(0).date().toJulianDay();
 		return (3600.0 * 24.0) * (double(date.toJulianDay() - day0));
@@ -71,6 +68,9 @@ public:
 	double kla() const{
 		return m_kla;
 	}
+	double klaEff() const{
+		return isReturn ? -m_kla : m_kla;
+	}
 	inline static bool earlierThan(const Transaction& first, const Transaction& second) {
 		return first.date < second.date;
 	}
@@ -90,15 +90,15 @@ public:
 	qint64 distanceWeighted(const Transaction& other, bool log = false) const {
 		qint64 d = 0;
 		d += LIMIT_DIST_TRANS * (qAbs(jDay() - other.jDay())) / mD;
-		d += LIMIT_DIST_TRANS * (qAbs(kla() - other.kla()) * 1024) / mA;
+		d += LIMIT_DIST_TRANS * (qAbs(klaEff() - other.klaEff()) * 1024) / mA;
 		d += LIMIT_DIST_TRANS * nameHash.dist(other.nameHash) / mH;
 		d |= (1<<20) * qint64(qAbs(isVoid() - other.isVoid()));
 //		d |= (1<<20) * qint64(isInternal() || other.isInternal());
-		d |= (1<<20) * qint64((amount() > 0 && other.amount() < 0) || (amount() < 0 && other.amount() > 0));
+		d |= (1<<20) * qint64(klaEff() * other.klaEff() < 0);
 		if(log) {
 			DBG() << "dist " << d
 				<< QString(" = %1 x day(%2)").arg(double(LIMIT_DIST_TRANS)/mD).arg(qAbs(jDay() - other.jDay()))
-				<< QString(" = %1 x kla(%2)").arg(double(LIMIT_DIST_TRANS)/mA).arg(qAbs(kla() - other.kla()))
+				<< QString(" = %1 x kla(%2)").arg(double(LIMIT_DIST_TRANS)/mA).arg(qAbs(klaEff() - other.klaEff()))
 				<< QString(" = %1 x hash(%2)").arg(double(LIMIT_DIST_TRANS)/mH).arg(nameHash.dist(other.nameHash));
 		}
 		return d;

@@ -58,18 +58,23 @@ void Transaction::loadUserFlags(const QJsonObject &json) {
 	}
 }
 
+QString Transaction::cleanName(const QString &inName)
+{
+	QString outName = inName.toUpper();
+	outName.remove(" FROM").remove(" TO");
+	outName.remove("XXXXX").remove("CKF ").remove(" LN").replace("HOMEFINANCE", " MTGE");
+	outName.remove("CHK").remove(" SAV");
+	outName.remove(" ACCT");
+	outName.remove(" ONLINE").remove(" BANKING").remove(" CONFIRMATION");
+	outName.remove(" IMAGE");
+	return outName.trimmed();
+}
+
 void Transaction::read(const QJsonObject &json) {
 	bool ok = false;
 	QString accountStr = json["plaid_account"].toString();
 	id = json["_id"].toString();
-	name = json["name"].toString().toUpper();
-	name.remove(" FROM").remove(" TO");
-	name.remove("XXXXX").remove("CKF ").remove(" LN").replace("HOMEFINANCE", " MTGE");
-	name.remove("CHK").remove(" SAV");
-	name.remove(" ACCT");
-	name.remove(" ONLINE").remove(" BANKING").remove(" CONFIRMATION");
-	name.remove(" IMAGE");
-	name = name.trimmed();
+	name = Transaction::cleanName(json["name"].toString());
 	setAmount(-json["amount"].toDouble(ok));
 	nameHash.setFromString(name, m_kla);
 	if (json.contains("cache_category_id")) {
@@ -109,11 +114,11 @@ void Transaction::read(const QJsonObject &json) {
 
 qint64 Transaction::dist(const Transaction &other, bool log) const {
 	// if both are positive, let's make them a lot closer
-	if ((amount() > 0 && other.amount() > 0)
-	 || (amount() < -100 && other.amount() < -100)) {
+	if ((klaEff() > 0 && other.klaEff() > 0)
+	 || (klaEff() < -2 && other.klaEff() < -2)) {
 		return distanceWeighted<16*2, 512*2, 2*2>(other, log);
 	}
-//	if ((amount() < -1000 && other.amount() < -1000)) {
+//	if ((klaEff() < -3 && other.klaEff() < -3)) {
 //		return distanceWeighted<16*2, 512*2, 2*2*1024*128>(other, log);
 //	}
 	return distanceWeighted<16, 512, 2>(other, log);
@@ -173,14 +178,7 @@ void Transaction::makeCatRegExps(QString strVal, QString keyCat)
 }
 
 Transaction* StaticTransactionArray::appendNew(QJsonObject jsonTrans, Account *pInAcc) {
-	QString name = jsonTrans["name"].toString().toUpper();
-	name.remove("FROM").remove("TO");
-	name.remove("XXXXX").remove("CKF ").remove(" LN").replace("HOMEFINANCE", " MTGE");
-	name.remove("CHK").remove("SAV");
-	name.remove("ACCT");
-	name.remove("ONLINE").remove("BANKING").remove("CONFIRMATION");
-	name.remove("IMAGE");
-	name = name.trimmed();
+	QString name = Transaction::cleanName(jsonTrans["name"].toString());
 	QString dateToUse = "date";
 	if (jsonTrans.contains("pending_date"))
 		dateToUse = "pending_date";
@@ -232,8 +230,8 @@ Transaction* StaticTransactionArray::appendNew(QJsonObject jsonTrans, Account *p
 		return 0;
 	}
 	Transaction* pNewTrans = &m_transArray[m_numTrans++];
-	pNewTrans->read(jsonTrans);
 	pNewTrans->account = pInAcc;
+	pNewTrans->read(jsonTrans);
 	return pNewTrans;
 }
 
