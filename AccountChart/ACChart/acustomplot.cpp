@@ -129,6 +129,8 @@ void ACustomPlot::loadCompressedAmount(User* pUser)
 		const Transaction& tr = allTrans.trans(i);
 		double t = tr.time_t();
 		qint64 h = tr.categoryHash.hash();
+		if (!m_hashGraphs.contains(h))
+			continue;
 		if (!tr.isInternal())
 			m_integral += tr.amountDbl();
 		graph(0)->addData(t, kindaLog(m_integral));
