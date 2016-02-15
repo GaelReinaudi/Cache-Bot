@@ -131,9 +131,6 @@ void ACustomPlot::loadCompressedAmount(User* pUser)
 		qint64 h = tr.categoryHash.hash();
 		if (!m_hashGraphs.contains(h))
 			continue;
-		if (!tr.isInternal())
-			m_integral += tr.amountDbl();
-		graph(0)->addData(t, kindaLog(m_integral));
 		QCPGraph* pGraph = 0;
 		switch (tr.type()) {
 		case Account::Type::Checking:
