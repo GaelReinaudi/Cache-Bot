@@ -102,8 +102,10 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool isPostTreat
 				m_localStaticArgs.m_prevMissed = m_localStaticArgs.m_consecMissed;
 				m_localStaticArgs.m_consecMissed = 0;
 				// if transaction is in advance
-				if (iTarg->date >= Transaction::currentDay().addDays(-SLACK_FOR_LATE_TRANS))
+				if (localTrans->date == Transaction::currentDay())
 					m_localStaticArgs.m_consecMissed = -1;
+				if (localTrans->date > Transaction::currentDay())
+					m_localStaticArgs.m_consecMissed = -2;
 				double transFit = 8.0 / (8 + localDist);
 				totalOneOverDistClosest += factOld * transFit;
 			}
@@ -263,9 +265,13 @@ QVector<Transaction> OracleOneDayOfMonth::revelation(QDate upToDate)
 		if (m_args.m_dayOfMonth2) {
 			targetTrans += FeatureMonthlyAmount::BlankTransactionsForDayOfMonth(iniDate, upToDate, m_args.m_dayOfMonth2, lambdaTrans);
 		}
+
 		qSort(targetTrans.begin(), targetTrans.end(), Transaction::earlierThan);
 		// if we have the first transaction, don't predict it
-		if (m_args.m_consecMissed < 0) {
+		if (m_args.m_consecMissed == -1) {
+			targetTrans.pop_front();
+		}
+		if (m_args.m_consecMissed == 0 && targetTrans.begin()->date <= Transaction::currentDay()) {
 			targetTrans.pop_front();
 		}
 	}
