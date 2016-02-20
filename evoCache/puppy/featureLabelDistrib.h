@@ -21,7 +21,7 @@ public:
 			desc += "purchases at ";
 		desc += m_args.m_bundle.last().name;
 		desc += ". Those happen ~ %1 times a month.";
-		return desc.arg(qRound(m_args.m_dayProba * 32));
+		return desc.arg(qRound(m_args.m_dayProba * 30));
 	}
 	friend class FeatureLabelDistrib;
 };

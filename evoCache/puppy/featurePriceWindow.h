@@ -17,7 +17,7 @@ public:
 		desc += "in the range ~%1";
 		desc += ". Those happen ~ %2 times a month.";
 		return desc.arg(qAbs(toSignifDigit_2(m_args.m_bundle.averageAmount())))
-				.arg(qRound(m_args.m_dayProba * 32));
+				.arg(qRound(m_args.m_dayProba * 30));
 	}
 	friend class FeaturePriceWindow;
 };
