@@ -344,31 +344,41 @@ double TransactionBundle::klaAverage() const {
 
 double TransactionBundle::daysToNextSmart() const
 {
-	double daysToNext = double(Transaction::maxDaysOld()) / qMax(1, count());
-	double EMA_FACTOR = 0.5;
+	double daysToNext = double(2 * Transaction::maxDaysOld()) / qMax(1, count());
+	static const double EMA_FACTOR = 0.25;
 
+	double daysTo_i = 0;//Transaction::maxDaysOld();
 	for (int i = 1; i < count(); ++i) {
-		double daysTo_i = trans(i - 1).date.daysTo(trans(i).date);
-		double oldD2N = daysToNext;
-		if (daysTo_i <= 0.0) {
-//			continue;
+		if (trans(i).isReturn) {
+			daysTo_i += trans(i - 1).date.daysTo(trans(i).date);
+			continue;
 		}
-		else if (daysToNext == 0.0) {
+		daysTo_i += trans(i - 1).date.daysTo(trans(i).date);
+		double oldD2N = daysToNext;
+		if (daysTo_i < 2) {
+			daysTo_i += 1;
+		}
+		if (daysToNext <= 0.0) {
+			WARN() << "daysToNext == 0.0";
 			daysToNext = daysTo_i;
 		}
-		else {
-			daysToNext *= (1.0 - EMA_FACTOR);
-			daysToNext += daysTo_i * EMA_FACTOR;
-		}
+		daysToNext *= (1.0 - EMA_FACTOR);
+		daysToNext += daysTo_i * EMA_FACTOR;
+
 		DBG() << "daysTo_ " << i << ": " << daysTo_i << " daysToNext: " << oldD2N << " -> " << daysToNext;
+		daysTo_i = 0;
 	}
 	// if time since last is getting larger than when we should have seen one, we take it as a new point
 	double daysToPres = last().date.daysTo(Transaction::currentDay());
-	if (1.25 * daysToPres > daysToNext) {
+	daysToPres *= 1.25;
+	if (daysToPres > daysToNext) {
 		daysToNext *= (1.0 - EMA_FACTOR);
-		daysToNext += 1.25 * daysToPres * EMA_FACTOR;
+		daysToNext += daysToPres * EMA_FACTOR;
 	}
 	DBG() << "daysToPres " << daysToPres << " final daysTo " << daysToNext;
 
+	if (avgSmart() < 0.0) {
+		daysToNext *= 1.05;
+	}
 	return daysToNext;
 }
