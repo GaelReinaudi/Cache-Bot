@@ -7,7 +7,9 @@ class FeatureMonthlySalary : public FeatureMonthlyAmount
 public:
 	FeatureMonthlySalary()
 		: FeatureMonthlyAmount("MonthlySalary")
-	{ }
+	{
+		m_localStaticArgs.m_maxMissesAllowed = 1;
+	}
 protected:
 	FeatureMonthlySalary(QString featureName)
 		: FeatureMonthlyAmount(featureName)
@@ -19,11 +21,21 @@ protected:
 	}
 protected:
 	qint64 distance(const Transaction *targ, const Transaction *trans) override {
-		// if both are positive
 		if (targ->amount() > 0 && trans->amount() > 0) {
-			return targ->distanceWeighted<16*2, 512/2, 2*4>(*trans);
+			// if trans bellow target, probably not this
+			if (targ->amount() > trans->amount() * 1.2)
+				return targ->distanceWeighted<16, 512/2, 2*4>(*trans);
+			else { // if above
+				return targ->distanceWeighted<16*2, 512/2, 2*4*16>(*trans);
+			}
 		}
 		return 1<<20;
+	}
+	Oracle* makeNewOracle() override {
+		OracleOneDayOfMonth* pNewOr = new OracleOneDayOfMonth(this);
+		pNewOr->m_args = m_localStaticArgs;
+//		pNewOr->m_args.m_maxMissesAllowed = 1;
+		return pNewOr;
 	}
 };
 

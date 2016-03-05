@@ -8,7 +8,7 @@ QJsonObject OracleOneDayOfMonth::toJson() const {
 	ret["avgAmnt"] = m_args.m_bundle.avgSmart();
 	ret["day1"] = (m_args.m_dayOfMonth + 31) % 31;
 	ret["day2"] = (m_args.m_dayOfMonth2 + 31) % 31;
-	ret["daily"] = (FeaturePeriodicAmount::computeProba(m_args) <= 0.0)
+	ret["daily"] = (m_args.computeProba() <= 0.0)
 				   ? 0.0
 				   : m_args.m_bundle.avgSmart() / (365.25 / (12.0 * (m_args.m_dayOfMonth2 != 0 ? 2.0 : 1.0)));
 	ret["consMissed"] = m_args.m_consecMissed;
@@ -259,7 +259,7 @@ QVector<Transaction> OracleOneDayOfMonth::revelation(QDate upToDate)
 	QDate iniDate = Transaction::currentDay().addDays(-SLACK_FOR_LATE_TRANS);
 	static QVector<Transaction> targetTrans;
 	targetTrans.clear();
-	if (FeaturePeriodicAmount::computeProba(m_args) > 0.0)
+	if (m_args.computeProba() > 0.0)
 	{
 		targetTrans = FeatureMonthlyAmount::BlankTransactionsForDayOfMonth(iniDate, upToDate, m_args.m_dayOfMonth, lambdaTrans);
 		if (m_args.m_dayOfMonth2) {
@@ -281,7 +281,7 @@ QVector<Transaction> OracleOneDayOfMonth::revelation(QDate upToDate)
 double OracleOneDayOfMonth::avgDaily() const
 {
 	double avgMonth = 0.0;
-	if (FeaturePeriodicAmount::computeProba(m_args) > 0.0)
+	if (m_args.computeProba() > 0.0)
 	{
 		avgMonth = m_args.m_bundle.avgSmart();
 		if (m_args.m_dayOfMonth2) {

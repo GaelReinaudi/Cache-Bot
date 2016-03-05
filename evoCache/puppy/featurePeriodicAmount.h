@@ -31,6 +31,17 @@ private:
 			o_retObj.insert("kla", m_kla);
 			o_retObj.insert("hash", m_hash);
 		}
+		virtual double computeProba() const {
+			if (m_consecMissed > m_maxMissesAllowed)
+				return 0.0;
+			// if one that seems new but none before
+			if (m_consecMonthBeforeMissed <= -m_consecMissed)
+				return 0.0;
+			double proba = 1.0;
+			proba *= qMax(1, m_consecMonthBeforeMissed);
+			proba /= 4 + 2 * m_consecMissed;
+			return proba;
+		}
 		int m_dayOfMonth = 0;
 		int m_dayOfMonth2 = 0;
 		double m_kla = 0;
@@ -41,6 +52,7 @@ private:
 		int m_consecMissed = 999;
 		int m_prevMissed = 0;
 		double m_fitRerun = 0;
+		int m_maxMissesAllowed = 0;
 	} m_args;
 	QString description() const {
 		QString desc;
@@ -63,6 +75,7 @@ private:
 	friend class FeaturePeriodicAmount;
 	friend class FeatureMonthlyAmount;
 	friend class FeatureBiWeeklyAmount;
+	friend class FeatureMonthlySalary;
 };
 
 class FeaturePeriodicAmount : public AccountFeature
@@ -75,17 +88,6 @@ public:
 
 	virtual int approxSpacingPayment() const = 0;
 	int isPeriodic() const override { return approxSpacingPayment(); }
-	static double computeProba(OracleOneDayOfMonth::Args args) {
-		if (args.m_consecMissed > 0)
-			return 0.0;
-		// if one that seems new but none before
-		if (args.m_consecMonthBeforeMissed <= -args.m_consecMissed)
-			return 0.0;
-		double proba = 1.0;
-		proba *= qMax(1, args.m_consecMonthBeforeMissed);
-		proba /= 4 + 2 * args.m_consecMissed;
-		return proba;
-	}
 protected:
 	virtual qint64 distance(const Transaction *targ, const Transaction *trans);
 };
@@ -132,7 +134,7 @@ protected:
 	}
 
 	double maxDailyProbability() const override {
-		return FeaturePeriodicAmount::computeProba(m_localStaticArgs);
+		return m_localStaticArgs.computeProba();
 	}
 
 	virtual QVector<Transaction> targetTransactions(QDate iniDate, QDate lastDate);
