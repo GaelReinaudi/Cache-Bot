@@ -9,6 +9,10 @@ CacheAccountConnector::CacheAccountConnector(QString userID, QJsonObject jsonArg
 {
 	CREATE_LOGGER(userID);
 
+	if (jsonArgs["NoSend"].toString() != "") {
+		flags &= ~CacheAccountConnector::SendExtraCash;
+	}
+
 	QJsonArray onlyH = jsonArgs["onlyHashes"].toArray();
 	for (int i = 0; i < onlyH.count(); ++i) {
 		Transaction::onlyLoadHashes.append(onlyH[i].toInt());

@@ -264,8 +264,8 @@ QNetworkReply* HttpRequestWorker::execute(HttpRequestInput *input) {
 		request.setHeader(QNetworkRequest::ContentLengthHeader, QString::number(m_jsonByte.size()));
 	}
 
-	NOTICE() << "Sending to " << input->url_str;
-	qDebug() << "Sending to" << input->url_str;
+	NOTICE() << "sending to " << input->url_str;
+	qDebug() << "sending to" << input->url_str;
 	QNetworkReply* reply = 0;
 	if (input->http_method == "GET") {
 		reply = manager->get(request);

@@ -274,8 +274,14 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 		statObj.insert("_inArgs", jsonArgs());
 		CacheRest::Instance()->sendExtraCash(user()->id(), 0.0, statObj);
 	}
-	else
+	else {
 		INFO() << QString(QJsonDocument(statObj).toJson());
+		QJsonDocument jsonDoc(statObj);
+		QFile sampleReturn("jsonExtra.json");
+		sampleReturn.open(QFile::WriteOnly | QFile::Truncate);
+		QTextStream fileout(&sampleReturn);
+		fileout << jsonDoc.toJson(QJsonDocument::Indented);
+	}
 }
 
 void ExtraCache::makeAdvice(QJsonObject &jsonToInject, double thresholdScore) const

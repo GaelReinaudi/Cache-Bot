@@ -81,6 +81,6 @@ BotContext::BotContext(User *pUser)
 	}
 	insert(new FeaturePriceWindow());
 
-	insert(new FeatureOutlier());
+//	insert(new FeatureOutlier());
 }
 
