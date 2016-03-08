@@ -280,7 +280,7 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 		QFile sampleReturn("jsonExtra.json");
 		sampleReturn.open(QFile::WriteOnly | QFile::Truncate);
 		QTextStream fileout(&sampleReturn);
-		fileout << jsonDoc.toJson(QJsonDocument::Indented);
+		fileout << "jsonDoc.toJson(QJsonDocument::Indented)";
 	}
 }
 
