@@ -281,6 +281,7 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 		sampleReturn.open(QFile::WriteOnly | QFile::Truncate);
 		QTextStream fileout(&sampleReturn);
 		fileout << jsonDoc.toJson(QJsonDocument::Indented);
+		qApp->exit(0);
 	}
 }
 
