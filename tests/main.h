@@ -54,6 +54,16 @@ private slots:
 					, "{\"user_ids\":[");
 		m_userIds = jsonString.mid(jsonString.indexOf(":")).split(QRegExp("\\W+"), QString::SkipEmptyParts);
 		qDebug() << "m_userIds" << m_userIds;
+		QFile file("jsonAllUserIds.json");
+		if (file.open(QFile::WriteOnly | QFile::Text)) {
+			QTextStream out(&file);
+			out << "{ids:[\n";
+			for (auto& s : m_userIds) {
+				out << s;
+				out << ",\n";
+			}
+			out << "]\n}";
+		}
 	}
 
 	void verifyChrisId() {
