@@ -57,9 +57,9 @@ private slots:
 		QFile file("jsonAllUserIds.json");
 		if (file.open(QFile::WriteOnly | QFile::Text)) {
 			QTextStream out(&file);
-			out << "{ids:[\n";
+			out << "{\"ids\":[\n";
 			for (auto& s : m_userIds) {
-				out << s;
+				out << "\"" << s << "\"";
 				out << ",\n";
 			}
 			out << "]\n}";
