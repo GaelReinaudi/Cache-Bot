@@ -72,6 +72,12 @@ private:
 		return desc.arg(qAbs(toSignifDigit_2(m_args.m_bundle.averageAmount())))
 				.arg(m_args.m_dayOfMonth);
 	}
+	void checkMightBeRent() {
+		if (User::declaredRent > 2 && -m_args.m_kla > kindaLog(User::declaredRent*30) - 0.2) {
+			m_args.m_maxMissesAllowed = 1;
+		}
+	}
+
 	friend class FeaturePeriodicAmount;
 	friend class FeatureMonthlyAmount;
 	friend class FeatureBiWeeklyAmount;
@@ -130,6 +136,7 @@ protected:
 	Oracle* makeNewOracle() override {
 		OracleOneDayOfMonth* pNewOr = new OracleOneDayOfMonth(this);
 		pNewOr->m_args = m_localStaticArgs;
+		pNewOr->checkMightBeRent();
 		return pNewOr;
 	}
 

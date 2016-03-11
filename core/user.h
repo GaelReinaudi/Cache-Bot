@@ -140,8 +140,9 @@ private:
 	Fund* m_extraCacheFund = 0;
 	QString m_email;
 	SuperOracle* m_mainOracle = 0;
-	double declaredIncome = 0.0;
-	double declaredRent = 0.0;
+public:
+	static double declaredIncome;
+	static double declaredRent;
 };
 
 #endif // USER_H

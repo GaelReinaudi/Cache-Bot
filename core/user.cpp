@@ -5,6 +5,9 @@
 #include "userMetrics.h"
 #include "oracle.h"
 
+double User::declaredIncome = 0.0;
+double User::declaredRent = 0.0;
+
 User::User(QString userId, QJsonObject jsonArgs)
 	: DBobj(userId, 0)
 {
@@ -106,6 +109,7 @@ void User::injectJsonData(QString jsonStr)
 	QJsonObject jsonUser = jsonObj["user"].toObject();
 	m_email = jsonUser["local"].toObject()["email"].toString();
 	declaredIncome = jsonUser["declaredMonthlyIncome"].toDouble() / (365.25 / 12.0);
+	declaredRent = jsonUser["declaredMonthlyRent"].toDouble() / (365.25 / 12.0);
 	QDate firstCommonTransDate = QDate::fromString(jsonUser["firstCommonTransDate"].toString().left(10), "yyyy-MM-dd");
 	int oldEnoughForTransfer = Transaction::onlyAfterDate.daysTo(Transaction::currentDay())-9;
 	if (Transaction::onlyAfterDate < firstCommonTransDate) {
