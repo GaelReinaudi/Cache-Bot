@@ -13,7 +13,8 @@ EvoCacheView::EvoCacheView(QString userID, QJsonObject jsonArgs)
 	setWindowTitle(QString("..")+userID.right(5));
 
 	Evolver* pEvolver = new Evolver(userID, jsonArgs);
-//	pEvolver->flags &= ~CacheAccountConnector::SendBot;
+	if (jsonArgs["notSend2Bot"].toString() != "")
+		pEvolver->flags &= ~CacheAccountConnector::SendBot;
 
 	connect(pEvolver, SIGNAL(injected(User*)), this, SLOT(onUserInjected(User*)));
 	connect(ui->startButton, SIGNAL(clicked(bool)), pEvolver, SIGNAL(startStopEvolution(bool)), Qt::DirectConnection);

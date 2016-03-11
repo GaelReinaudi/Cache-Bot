@@ -28,7 +28,7 @@ ExtraCashView::ExtraCashView(QString userID, QJsonObject jsonArgs) :
 	m_pExtraCache->flags = CacheAccountConnector::None;
 	if (jsonArgs["send2Bot"].toString() != "")
 		m_pExtraCache->flags = CacheAccountConnector::SendExtraCash;
-	m_pExtraCache->flags &= !CacheAccountConnector::AutoExit;
+	m_pExtraCache->flags &= ~CacheAccountConnector::AutoExit;
 
 	ui->plot->yAxis2->setVisible(true);
 	ui->plot->yAxis->setSubTickCount(10);
