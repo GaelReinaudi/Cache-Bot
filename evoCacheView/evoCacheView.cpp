@@ -13,7 +13,7 @@ EvoCacheView::EvoCacheView(QString userID, QJsonObject jsonArgs)
 	setWindowTitle(QString("..")+userID.right(5));
 
 	Evolver* pEvolver = new Evolver(userID, jsonArgs);
-	if (jsonArgs["notSend2Bot"].toString() != "")
+	if (jsonArgs["notSendBot"].toString() != "")
 		pEvolver->flags &= ~CacheAccountConnector::SendBot;
 
 	connect(pEvolver, SIGNAL(injected(User*)), this, SLOT(onUserInjected(User*)));
