@@ -76,6 +76,9 @@ private:
 		if (User::declaredRent > 2 && -m_args.m_kla > kindaLog(User::declaredRent*30) - 0.2) {
 			m_args.m_maxMissesAllowed = 1;
 		}
+		if (User::declaredRent == 0 && -m_args.m_kla > 2.3) {
+			m_args.m_maxMissesAllowed = 1;
+		}
 	}
 
 	friend class FeaturePeriodicAmount;
