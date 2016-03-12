@@ -56,6 +56,10 @@ void Transaction::loadUserFlags(const QJsonObject &json) {
 			}
 		}
 	}
+	if (json["sum_ids"].toArray().count()) {
+		WARN() << id << " IsMatchOff";
+		userFlag |= IsMatchOff;
+	}
 }
 
 QString Transaction::cleanName(const QString &inName)

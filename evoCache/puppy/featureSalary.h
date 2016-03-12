@@ -85,7 +85,7 @@ protected:
 protected:
 	qint64 distance(const Transaction *targ, const Transaction *trans) override {
 		// if both are neg
-		if (targ->amount() <= -100 && trans->amount() <= -100) {
+		if (targ->amount() <= -300 && trans->amount() <= -300) {
 			return targ->distanceWeighted<16*2, 512/2, 2*4>(*trans);
 		}
 		return 1<<20;

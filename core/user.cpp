@@ -50,7 +50,7 @@ double User::littleIncome()
 		DBG(3) << "little fixed income: fac " << fac;
 		return fac;
 	}
-	if (flow < 0.0) {
+	if (flow < -0.25) {
 		double fac = qSqrt(qMax(0.0, flow + 1.0));
 		DBG(3) << "little income: fac " << fac;
 		return fac;
@@ -180,7 +180,7 @@ void User::injectJsonData(QString jsonStr)
 				qint64 d = tP.distanceWeighted<5, 2, 1024*1024*1024>(*pN);
 				if (d < Transaction::LIMIT_DIST_TRANS
 						&& pN->amount() < 0 && !pN->isInternal()
-						&& pT->account != pN->account) {
+						&& (pT->account != pN->account || pN->userFlag & Transaction::UserInputFlag::IsMatchOff)) {
 					if (d < bestDist) {
 						bestDist = d;
 						pBestMatchN = pN;
