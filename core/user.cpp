@@ -260,7 +260,7 @@ void User::injectJsonData(QString jsonStr)
 BotContext* User::makeBotContext()
 {
 	if(m_botContext) {
-		WARN() << "remaking BotContext";
+		WARN() << "Remaking BotContext";
 		delete m_botContext;
 	}
 	m_botContext = new BotContext(this);
