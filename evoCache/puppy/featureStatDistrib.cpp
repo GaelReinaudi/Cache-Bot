@@ -79,6 +79,11 @@ void FeatureStatDistrib::computeNextDayProba()
 	m_localStaticArgs.m_dayProba = 1.0 / daysToNext;
 	// correction for proba not small
 	m_localStaticArgs.m_dayProba = m_localStaticArgs.m_dayProba / (1.0 + m_localStaticArgs.m_dayProba);
+
+	double avgDaily = m_localStaticArgs.m_bundle.avgSmart() * m_localStaticArgs.m_dayProba / (1 - m_localStaticArgs.m_dayProba);
+	if (User::declaredIncome && avgDaily > User::declaredIncome * 1.0) {
+		m_localStaticArgs.m_dayProba = 1.0 / Transaction::maxDaysOld();
+	}
 }
 
 QVector<Transaction> OracleStatDistrib::revelation(QDate upToDate)
