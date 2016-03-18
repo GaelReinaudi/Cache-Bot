@@ -7,6 +7,7 @@
 #include "featurePriceWindow.h"
 #include "featureLabelDistrib.h"
 #include "featureCategory.h"
+#include "featureCrossCurrent.h"
 
 unsigned int BotContext::LIMIT_NUM_FEATURES = 1;
 unsigned int BotContext::TARGET_TRANS_FUTUR_DAYS = 100;
@@ -75,6 +76,7 @@ BotContext::BotContext(User *pUser)
 	insert(new FeatureBiWeeklySalary());
 	insert(new FeatureMonthlySalary());
 	insert(new FeatureHousing());
+	insert(new FeatureCrossCurrent());
 
 	if (BotContext::JSON_ARGS["PriceWindow"].toString().trimmed() == "enabled") {
 		WARN() << "Enabling PriceWindow during evo" << QString(QJsonDocument(BotContext::JSON_ARGS).toJson());

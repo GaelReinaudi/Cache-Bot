@@ -23,4 +23,6 @@ HEADERS  += \
 	$$PWD/featureOutlier.h \
 	$$PWD/featurePriceWindow.h \
 	$$PWD/featureLabelDistrib.h \
-	$$PWD/featureCategory.h
+	$$PWD/featureCategory.h \
+	$$PWD/featureCrossCurrent.h \
+

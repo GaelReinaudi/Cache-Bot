@@ -33,6 +33,7 @@ private:
 		char m_effect = 0;
 	} m_args;
 	friend class FeatureOutlier;
+	friend class FeatureCrossCurrent;
 };
 
 class FeatureOutlier : public AccountFeature
@@ -41,6 +42,10 @@ public:
 	FeatureOutlier()
 		: AccountFeature(3, "FeatureOutlier")
 	{ }
+	FeatureOutlier(const QString& featureName)
+		: AccountFeature(3, featureName.toStdString())
+	{
+	}
 
 protected:
 	QJsonObject toJson(Puppy::Context& ioContext) override {

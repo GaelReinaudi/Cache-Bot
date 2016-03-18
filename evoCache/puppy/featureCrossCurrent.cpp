@@ -10,9 +10,9 @@ double FeatureCrossCurrent::apply(TransactionBundle& allTrans, bool isPostTreat,
 		const Transaction& tr = allTrans.trans(i);
 		if (tr.noUse())
 			continue;
-		double ref = kindaLog(qMax(User::declaredIncome, User::declaredRent) * 30);
+		double ref = 0.3 + kindaLog(qMax(0.0, User::declaredRent) * 30);
 		if (ref < 1.0)
-			ref = 3.5;
+			ref = 3.9;
 		if (-tr.kla() < ref)
 			continue;
 		if (tr.isVoid())
