@@ -48,7 +48,7 @@ protected:
 	}
 	void onJustApplied(TransactionBundle &allTrans, Puppy::Context& ioContext) override {
 		if (BotContext::JSON_ARGS["PriceWindow"].toString().trimmed() != "enabled") {
-			m_fitness -= 100.0;
+			m_fitness -= 123456789.0;
 		}
 	}
 };
