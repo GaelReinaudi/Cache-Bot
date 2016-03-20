@@ -163,10 +163,10 @@ void FeatureMonthlyAmount::onJustApplied(TransactionBundle& allTrans, Puppy::Con
 	m_localStaticArgs.m_fitRerun = rerun;
 	cleanArgs();
 
-//	if (m_localStaticArgs.m_prevMissed >= -1+m_localStaticArgs.m_consecMonthBeforeMissed) {
-//		m_fitness = 0.0;
-//		return;
-//	}
+	if (m_localStaticArgs.m_prevMissed >= /*-1+*/m_localStaticArgs.m_consecMonthBeforeMissed) {
+		m_fitness = 0.0;
+		return;
+	}
 	// recompute fitness
 	m_fitness -= 3 * qMax(0.0, rerun);
 	m_fitness *= 1.75 * (double(m_localStaticArgs.m_consecMonthBeforeMissed) - 1.5);
