@@ -45,12 +45,12 @@ double User::littleIncome()
 		return 0.01;
 	if (s.salary <= 10)
 		return 0.01;
-	if (flowFix < -2.0) {
-		double fac = qSqrt(qMax(0.0, flowFix + 3.0));
-		DBG(3) << "little fixed income: fac " << fac;
-		return fac;
-	}
-	if (flow < -0.25) {
+//	if (flowFix < -2.0) {
+//		double fac = qSqrt(qMax(0.0, flowFix + 3.0));
+//		DBG(3) << "little fixed income: fac " << fac;
+//		return fac;
+//	}
+	if (flow < -0.30) {
 		double fac = qSqrt(qMax(0.0, flow + 1.0));
 		DBG(3) << "little income: fac " << fac;
 		return fac;
