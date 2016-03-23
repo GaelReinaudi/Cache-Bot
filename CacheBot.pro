@@ -15,12 +15,14 @@ SUBDIRS += \
 	evoCacheView \
 	cacheLight \
 	userViewer \
-	metricViewer
+	metricViewer \
+	spinner
 
-evoCacheView.depends = cacheRest,core,evoCache
-cacheLight.depends = cacheRest,core,extraCash
-userViewer.depends = cacheRest,core,evoCache
+evoCacheView.depends = cacheRest,core,evoCache,extraCash
+cacheLight.depends = cacheRest,core,evoCache,extraCash
+userViewer.depends = cacheRest,core,evoCache,extraCash
 metricViewer.depends = cacheRest,core,evoCache,extraCash
+spinner.depends = evoCacheView,cacheLight,userViewer,metricViewer
 }
 
 cacheRest.depends = core

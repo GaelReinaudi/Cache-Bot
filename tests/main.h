@@ -51,13 +51,12 @@ private slots:
 		QList<QVariant> arguments = spyIds.takeFirst();
 		QString jsonString = arguments.at(0).toString();
 		QSTARTSWITH(jsonString
-					, "{\"user_ids\":[");
-		m_userIds = jsonString.mid(jsonString.indexOf(":")).split(QRegExp("\\W+"), QString::SkipEmptyParts);
+					, "{\"user_ids\":{");
+		QJsonObject jsobj = QJsonDocument::fromJson(jsonString.toUtf8()).object()["user_ids"].toObject();
+		m_userIds = jsobj.keys();//jsonString.mid(jsonString.indexOf(":")).split(QRegExp("\\W+"), QString::SkipEmptyParts);
 		qDebug() << "m_userIds" << m_userIds;
 		QFile file("jsonAllUserIds.json");
 
-		QJsonObject jsobj;
-		jsobj["ids"] = QJsonArray::fromStringList(m_userIds);
 		QJsonDocument jsonDoc(jsobj);
 		QFile sampleReturn("jsonAllUserIds.json");
 		sampleReturn.open(QFile::WriteOnly | QFile::Truncate);
