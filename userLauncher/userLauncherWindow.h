@@ -2,6 +2,7 @@
 #define SPINNERWINDOW_H
 
 #include <QMainWindow>
+#include <QJsonObject>
 
 namespace Ui {
 class SpinnerWindow;
@@ -17,6 +18,7 @@ public:
 
 private:
 	Ui::SpinnerWindow *ui;
+	QJsonObject m_UserIds;
 };
 
 #endif // SPINNERWINDOW_H
