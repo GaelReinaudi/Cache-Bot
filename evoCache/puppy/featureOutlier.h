@@ -15,9 +15,7 @@ protected:
 		Q_UNUSED(upToDate);
 		return QVector<Transaction>();
 	}
-	double avgDaily() const override {
-		return m_args.m_dayProba * m_args.m_amount;
-	}
+	double avgDaily() const override { return m_args.avgDaily(); }
 
 private:
 	struct Args : public FeatureArgs
@@ -27,6 +25,9 @@ private:
 			o_retObj.insert("proba", m_dayProba);
 			o_retObj.insert("amount", m_amount);
 			o_retObj.insert("eff128", m_effect);
+		}
+		double avgDaily() const override {
+			return 0.0;
 		}
 		double m_dayProba = 0.0;
 		double m_amount = 0.0;

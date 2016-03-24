@@ -14,7 +14,7 @@ public:
 		ret["approxAmnt"] = toSignifDigit_2(m_args.m_bundle.averageAmount());
 		ret["avgAmnt"] = m_args.m_bundle.averageAmount();
 		ret["dayOccur"] = m_args.m_dayProba;
-		ret["daily"] = m_args.m_bundle.averageAmount() * m_args.m_dayProba;
+		ret["daily"] = m_args.avgDaily();//m_args.m_bundle.averageAmount() * m_args.m_dayProba;
 		double fracCat = 0.0;
 		ret.insert("mostCatId", m_args.m_bundle.mostCatId(&fracCat));
 		ret.insert("mostCatFrac", fracCat);
@@ -42,7 +42,7 @@ public:
 
 protected:
 	QVector<Transaction> revelation(QDate upToDate) override;
-	double avgDaily() const override;
+	double avgDaily() const override { return m_args.avgDaily(); }
 
 protected:
 	struct Args : public FeatureArgs
@@ -56,6 +56,10 @@ protected:
 			o_retObj.insert("avgSmt", m_bundle.avgSmart());
 			o_retObj.insert("_total", m_bundle.sumDollar());
 			o_retObj.insert("numBund", m_bundle.count());
+		}
+		double avgDaily() const override
+		{
+			return m_bundle.avgSmart() * m_dayProba / (1 - m_dayProba);
 		}
 		int m_hash = 0;
 		double m_effect = 0;

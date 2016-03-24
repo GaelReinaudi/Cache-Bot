@@ -278,19 +278,6 @@ QVector<Transaction> OracleOneDayOfMonth::revelation(QDate upToDate)
 	return targetTrans;
 }
 
-double OracleOneDayOfMonth::avgDaily() const
-{
-	double avgMonth = 0.0;
-	if (m_args.computeProba() > 0.0)
-	{
-		avgMonth = m_args.m_bundle.avgSmart();
-		if (m_args.m_dayOfMonth2) {
-			avgMonth *= 2;
-		}
-	}
-	return avgMonth * (12.0 / 365.25);
-}
-
 qint64 FeaturePeriodicAmount::distance(const Transaction *targ, const Transaction *trans)
 {
 	return targ->dist(*trans);

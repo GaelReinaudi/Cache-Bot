@@ -110,7 +110,7 @@ public:
 		m_subOracles.append(pOr);
 	}
 	QVector<Transaction> revelation(QDate upToDate) override;
-	double avgDaily() const override;
+	double avgDaily() const;
 	template <int Nrun>
 	Simulation<Nrun> simu() {
 		Simulation<Nrun> s;

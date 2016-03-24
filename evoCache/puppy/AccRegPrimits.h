@@ -106,6 +106,16 @@ struct FeatureArgs
 	virtual void intoJson(QJsonObject& o_retObj) const {
 		o_retObj.insert("zlabels", QJsonArray::fromStringList(m_bundle.uniqueNames()));
 		o_retObj.insert("zcategories", QJsonArray::fromStringList(m_bundle.uniqueCategories()));
+		o_retObj.insert("_daily", avgDaily());
+	}
+	virtual double avgDaily() const = 0;
+	virtual double avgDailyPos() const {
+		double avg = avgDaily();
+		return avg >= 0 ? avg : 0.0;
+	}
+	virtual double avgDailyNeg() const {
+		double avg = avgDaily();
+		return avg <= 0 ? avg : 0.0;
 	}
 	TransactionBundle m_bundle;
 };

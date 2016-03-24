@@ -13,7 +13,7 @@ public:
 
 protected:
 	QVector<Transaction> revelation(QDate upToDate) override;
-	double avgDaily() const override;
+	double avgDaily() const override { return m_args.avgDaily(); }
 
 private:
 	struct Args : public FeatureArgs
@@ -41,6 +41,17 @@ private:
 			proba *= qMax(1, m_consecMonthBeforeMissed);
 			proba /= 4 + 2 * m_consecMissed;
 			return proba;
+		}
+		double avgDaily() const override {
+			double avgMonth = 0.0;
+			if (computeProba() > 0.0)
+			{
+				avgMonth = m_bundle.avgSmart();
+				if (m_dayOfMonth2) {
+					avgMonth *= 2;
+				}
+			}
+			return avgMonth * (12.0 / 365.25);
 		}
 		int m_dayOfMonth = 0;
 		int m_dayOfMonth2 = 0;

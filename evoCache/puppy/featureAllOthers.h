@@ -12,17 +12,17 @@ public:
 
 protected:
 	QVector<Transaction> revelation(QDate upToDate) override;
-	double avgDaily() const override;
-	double avgDailyPos() const override{
-		double avgAmnt = m_args.m_sumPos;
-		avgAmnt /= m_args.m_daysBundle;
-		return avgAmnt;
-	}
-	double avgDailyNeg() const override{
-		double avgAmnt = m_args.m_sumNeg;
-		avgAmnt /= m_args.m_daysBundle;
-		return avgAmnt;
-	}
+	double avgDaily() const override { return m_args.avgDaily(); }
+//	double avgDailyPos() const override{
+//		double avgAmnt = m_args.m_sumPos;
+//		avgAmnt /= m_args.m_daysBundle;
+//		return avgAmnt;
+//	}
+//	double avgDailyNeg() const override{
+//		double avgAmnt = m_args.m_sumNeg;
+//		avgAmnt /= m_args.m_daysBundle;
+//		return avgAmnt;
+//	}
 
 private:
 	struct Args : public FeatureArgs
@@ -37,6 +37,13 @@ private:
 			o_retObj.insert("sumNeg", m_sumNeg);
 			o_retObj.insert("numBund", m_bundle.count());
 		}
+		double avgDaily() const override
+		{
+			DBG() << m_dayProba << m_daysBundle
+					 << m_sumNeg << m_sumPos;
+			return 0.0;
+		}
+
 		double m_dayProba = 0.0;
 		double m_daysBundle = 0.0;
 		int m_numPos = 0;

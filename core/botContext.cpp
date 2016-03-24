@@ -65,10 +65,11 @@ BotContext::BotContext(User *pUser)
 		insert(new FeatureCategory());
 		return;
 	}
-	if (BotContext::JSON_ARGS["LabelDistrib"].toString().trimmed() != "disabled") {
+	if (BotContext::JSON_ARGS["LabelDistrib"].toString().trimmed() == "enabled") {
 		insert(new FeatureLabelDistrib());
 	}
 	if (BotContext::JSON_ARGS["LabelDistrib"].toString().trimmed() == "only") {
+		insert(new FeatureLabelDistrib());
 		return;
 	}
 	insert(new FeatureBiWeeklyAmount());
