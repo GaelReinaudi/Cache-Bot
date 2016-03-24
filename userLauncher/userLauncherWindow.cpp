@@ -17,9 +17,14 @@ SpinnerWindow::SpinnerWindow(QWidget *parent) :
 	QString jsonStr = file.readAll();
 	m_UserIds = QJsonDocument::fromJson(jsonStr.toUtf8()).object();
 
+	QMap<QString, QString> mapFirstName_Id;
 	for (const QString& k : m_UserIds.keys()) {
+		mapFirstName_Id.insert(m_UserIds[k].toObject()["firstName"].toString(), k);
+	}
+	for (const QString& f : mapFirstName_Id.keys()) {
+		QString k = mapFirstName_Id[f];
 		QListWidgetItem* item = new QListWidgetItem();
-		ui->listWidget->insertItem(0, item);
+		ui->listWidget->addItem(item);
 		item->setSizeHint(QSize(100, 25));
 		ui->listWidget->setItemWidget(item, new FlowWidget(k, m_UserIds[k].toObject()));
 	}

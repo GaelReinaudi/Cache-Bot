@@ -13,13 +13,22 @@ FlowWidget::FlowWidget(QString id, QJsonObject userObj, QWidget *parent) :
 	ui->firstName->setText(m_obj["firstName"].toString());
 	ui->lastName->setText(m_obj["lastName"].toString());
 
-	connect(ui->userViewButton, &QPushButton::clicked, [this, id](){
-		QString program = "userViewer.exe";
-		QStringList arguments;
-		arguments << QString("{\"user_id\":\"%1\"}").arg(id);
+	QStringList args;
+	args << QString("{\"user_id\":\"%1\"}").arg(id);
 
+	connect(ui->userViewButton, &QPushButton::clicked, [this, id, args](){
 		QProcess* myProcess = new QProcess(this);
-		myProcess->start(program, arguments);
+		myProcess->start("userViewer.exe", args);
+		qDebug() << myProcess->errorString();
+	});
+	connect(ui->evoButton, &QPushButton::clicked, [this, id, args](){
+		QProcess* myProcess = new QProcess(this);
+		myProcess->start("evoCacheView.exe", args);
+		qDebug() << myProcess->errorString();
+	});
+	connect(ui->cacheLightButton, &QPushButton::clicked, [this, id, args](){
+		QProcess* myProcess = new QProcess(this);
+		myProcess->start("cacheLight.exe", args);
 		qDebug() << myProcess->errorString();
 	});
 }
