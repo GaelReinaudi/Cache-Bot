@@ -60,11 +60,11 @@ void Transaction::loadUserFlags(const QJsonObject &json) {
 		WARN() << id << " IsMatchOff";
 		userFlag |= IsMatchOff;
 	}
-	if (json.contains("reimbursed")) {
+	if (json["reimbursed"].toBool()) {
 		WARN() << id << " Reimbursed";
 		userFlag |= Reimbursed;
 	}
-	if (json.contains("averageLonger")) {
+	if (json["averageLonger"].toBool()) {
 		WARN() << id << " AverageLonger";
 		userFlag |= AverageLonger;
 	}
