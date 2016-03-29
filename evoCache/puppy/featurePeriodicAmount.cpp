@@ -74,7 +74,7 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool isPostTreat
 		if (trans.noUse() || trans.userFlag & (Transaction::NoRecur | Transaction::Reimbursed)) {
 			dist = 1<<20;
 		}
-		double factOld = 2.5;
+		double factOld = 2.0;
 		if (dist < localDist && trans.jDay() <= approxSpacingPayment() / 3 + iTarg->jDay()) {
 			localDist = dist;
 			localTrans = &trans;
