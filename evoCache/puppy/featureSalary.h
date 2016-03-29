@@ -46,6 +46,10 @@ public:
 		: FeatureBiWeeklyAmount("BiWeeklySalary")
 	{ }
 protected:
+	FeatureBiWeeklySalary(QString featureName)
+		: FeatureBiWeeklyAmount(featureName)
+	{ }
+protected:
 	void onJustApplied(TransactionBundle &allTrans, Puppy::Context& ioContext) override {
 		FeatureBiWeeklyAmount::onJustApplied(allTrans, ioContext);
 		m_fitness *= 4;
@@ -57,6 +61,34 @@ protected:
 		}
 		return 1<<20;
 	}
+};
+
+class FeatureBiWeeklySalaryReally : public FeatureBiWeeklySalary
+{
+public:
+	FeatureBiWeeklySalaryReally()
+		: FeatureBiWeeklySalary("FeatureBiWeeklySalaryReally")
+	{ }
+	virtual void cleanArgs() override {
+		FeatureBiWeeklySalary::cleanArgs();
+		m_localStaticArgs.m_dayOfMonth = qAbs(m_localStaticArgs.m_dayOfMonth);
+		m_localStaticArgs.m_dayOfMonth %= 13;
+//		m_localStaticArgs.m_dayOfMonth = qBound(0, m_localStaticArgs.m_dayOfMonth2, 13);
+		m_localStaticArgs.m_dayOfMonth2 = m_localStaticArgs.m_dayOfMonth + 14;
+	}
+	QJsonObject toJson(Puppy::Context& ioContext) override {
+		QJsonObject retObj = FeatureBiWeeklySalary::toJson(ioContext);
+		retObj.insert("jdOffset", m_localStaticArgs.m_dayOfMonth);
+		return retObj;
+	}
+	Oracle* makeNewOracle() override {
+		OracleEveryOtherWeek* pNewOr = new OracleEveryOtherWeek(this);
+		pNewOr->m_args = m_localStaticArgs;
+		pNewOr->checkMightBeRent();
+		return pNewOr;
+	}
+	QVector<Transaction> targetTransactions(QDate iniDate, QDate lastDate) override;
+
 };
 
 class FeatureHousing : public FeatureMonthlyAmount

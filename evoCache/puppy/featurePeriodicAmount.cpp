@@ -71,14 +71,15 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool isPostTreat
 	for (int i = 0; i < allTrans.count(); ++i) {
 		const Transaction& trans = allTrans.trans(i);
 		qint64 dist = distance(iTarg, &trans);
-		if (trans.noUse() || (trans.userFlag & Transaction::NoRecur)) {
+		if (trans.noUse() || trans.userFlag & (Transaction::NoRecur | Transaction::Reimbursed)) {
 			dist = 1<<20;
 		}
-		double factOld = 2.0;
+		double factOld = 2.5;
 		if (dist < localDist && trans.jDay() <= approxSpacingPayment() / 3 + iTarg->jDay()) {
 			localDist = dist;
 			localTrans = &trans;
 			double daysAgo = localTrans->date.daysTo(Transaction::currentDay());
+//			factOld -= 0.5 * daysAgo / double(Transaction::maxDaysOld());
 			if (daysAgo > Transaction::maxDaysOld() / 2)
 				factOld -= 1.0 * daysAgo / double(Transaction::maxDaysOld() / 2);
 		}
@@ -218,6 +219,22 @@ QVector<Transaction> FeatureMonthlyAmount::BlankTransactionsForDayOfMonth(QDate 
 	return targetTrans;
 }
 
+QVector<Transaction> FeatureMonthlyAmount::BlankTransactionsForJdOffset(QDate iniDate, QDate lastDate, int jdOffset, std::function<Transaction ()> lambda)
+{
+	static QVector<Transaction> targetTrans;
+	targetTrans.clear();
+	int extraDay = (14 + jdOffset - iniDate.toJulianDay() % 14) % 14;
+	QDate currentDate = iniDate.addDays(extraDay);
+	while (currentDate <= lastDate) {
+		if (currentDate <= lastDate && currentDate >= iniDate) {
+			targetTrans.append(lambda());
+			targetTrans.last().date = currentDate;
+		}
+		currentDate = currentDate.addDays(14);
+	}
+	return targetTrans;
+}
+
 QVector<Transaction> FeatureMonthlyAmount::targetTransactions(QDate iniDate, QDate lastDate)
 {
 	static QVector<Transaction> targetTrans;
@@ -281,4 +298,34 @@ QVector<Transaction> OracleOneDayOfMonth::revelation(QDate upToDate)
 qint64 FeaturePeriodicAmount::distance(const Transaction *targ, const Transaction *trans)
 {
 	return targ->dist(*trans);
+}
+
+
+QVector<Transaction> OracleEveryOtherWeek::revelation(QDate upToDate)
+{
+	auto lambdaTrans = [this](){
+		Transaction tr = m_args.m_bundle.randSmart();
+		tr.flags |= Transaction::Predicted;
+		DBG() << QString("jdOffset %1 ").arg(m_args.m_dayOfMonth)
+			  << tr.amountDbl() << " " << tr.date.toString() << " " << tr.name;
+		return tr;
+	};
+	DBG() << "OracleEveryOtherWeek::revelation. bundle = " << m_args.m_bundle.count();
+	QDate iniDate = Transaction::currentDay().addDays(-SLACK_FOR_LATE_TRANS);
+	static QVector<Transaction> targetTrans;
+	targetTrans.clear();
+	if (m_args.computeProba() > 0.0)
+	{
+		targetTrans = FeatureMonthlyAmount::BlankTransactionsForJdOffset(iniDate, upToDate, m_args.m_dayOfMonth, lambdaTrans);
+
+		qSort(targetTrans.begin(), targetTrans.end(), Transaction::earlierThan);
+		// if we have the first transaction, don't predict it
+		if (m_args.m_consecMissed == -1) {
+			targetTrans.pop_front();
+		}
+		if (m_args.m_consecMissed == 0 && targetTrans.begin()->date <= Transaction::currentDay()) {
+			targetTrans.pop_front();
+		}
+	}
+	return targetTrans;
 }

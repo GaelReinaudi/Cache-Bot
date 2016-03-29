@@ -72,6 +72,7 @@ BotContext::BotContext(User *pUser)
 		insert(new FeatureLabelDistrib());
 		return;
 	}
+	insert(new FeatureBiWeeklySalaryReally());
 	insert(new FeatureBiWeeklyAmount());
 	insert(new FeatureMonthlyAmount());
 	insert(new FeatureBiWeeklySalary());
