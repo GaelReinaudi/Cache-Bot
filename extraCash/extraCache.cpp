@@ -242,18 +242,15 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 
 	QJsonObject trendObjects;
 	OracleTrend<1>::get(user())->value(Transaction::currentDay());
-	SuperOracle::Summary effectsummary = OracleTrend<1>::get(user())->effectSummaries()[Transaction::currentDay()];
-	trendObjects.insert("01", effectsummary.toJson());
+	SuperOracle::Summary trend01 = OracleTrend<1>::get(user())->effectSummaries()[Transaction::currentDay()];
 	OracleTrend<7>::get(user())->value(Transaction::currentDay());
-	effectsummary = OracleTrend<7>::get(user())->effectSummaries()[Transaction::currentDay()];
-	trendObjects.insert("07", effectsummary.toJson());
+	SuperOracle::Summary trend07 = OracleTrend<7>::get(user())->effectSummaries()[Transaction::currentDay()];
 	OracleTrend<30>::get(user())->value(Transaction::currentDay());
-	effectsummary = OracleTrend<30>::get(user())->effectSummaries()[Transaction::currentDay()];
-	trendObjects.insert("30", effectsummary.toJson());
+	SuperOracle::Summary trend30 = OracleTrend<30>::get(user())->effectSummaries()[Transaction::currentDay()];
 
-	statObj.insert("trends", trendObjects);
+//	statObj.insert("trends", trendObjects);
 
-	makeAdvice(statObj, 0.05);
+//	makeAdvice(statObj, 0.05);
 
 	HistoMetric::clearAll();
 	QStringList topCats = {"Food", "Transit", "Shops", "Recreation", "Rent", "Mortgage"};
@@ -261,6 +258,9 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 
 	HistoMetric::clearAll();
 	double flowRate = calcSummary(bestBot, statObj, true);
+
+	addTrend(statObj, "01", trend01);
+	addTrend(statObj, "07", trend07);
 
 	// if critically low flow
 	if (flowRate <= -0.95) {
@@ -321,6 +321,19 @@ void ExtraCache::makeAdvice(QJsonObject &jsonToInject, double thresholdScore) co
 		jsonAdvice.append(advice[i]);
 	}
 	jsonToInject.insert("advices", jsonAdvice);
+}
+
+void ExtraCache::addTrend(QJsonObject& jsonToInject, QString strTrend, SuperOracle::Summary trendSummary) const
+{
+	QJsonArray allOr;
+	for (int i = 0; i < trendSummary.summaryPerOracle.count(); ++i) {
+		QJsonObject obj = jsonToInject["oracles"].toArray()[i].toObject();
+		QJsonObject objTrend = obj["trend"].toObject();
+		objTrend[strTrend] = trendSummary.summaryPerOracle[i];
+		obj["trend"] = objTrend;
+		allOr.append(obj);
+	}
+	jsonToInject["oracles"] = allOr;
 }
 
 
