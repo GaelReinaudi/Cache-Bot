@@ -22,7 +22,7 @@ private:
 			FeatureArgs::intoJson(o_retObj);
 			o_retObj.insert("dayOfMonth", m_dayOfMonth);
 			o_retObj.insert("consecutive", m_consecMonthBeforeMissed);
-            o_retObj.insert("consMissed", m_consecMissed);
+			o_retObj.insert("consMissed", m_consecMissed);
 			o_retObj.insert("_total", m_bundle.sumDollar());
 			o_retObj.insert("numBund", m_bundle.count());
 			o_retObj.insert("fitRerun", m_fitRerun);
@@ -99,6 +99,18 @@ private:
 	friend class FeatureMonthlyAmount;
 	friend class FeatureBiWeeklyAmount;
 	friend class FeatureMonthlySalary;
+	friend class FeatureBiWeeklySalaryReally;
+	friend class OracleEveryOtherWeek;
+};
+
+class OracleEveryOtherWeek : public OracleOneDayOfMonth
+{
+public:
+	OracleEveryOtherWeek(AccountFeature* pCreatingFeature)
+		: OracleOneDayOfMonth(pCreatingFeature)
+	{}
+protected:
+	QVector<Transaction> revelation(QDate upToDate) override;
 };
 
 class FeaturePeriodicAmount : public AccountFeature
@@ -122,6 +134,7 @@ public:
 		: FeaturePeriodicAmount("MonthlyAmount")
 	{ }
 	static QVector<Transaction> BlankTransactionsForDayOfMonth(QDate iniDate, QDate lastDate, int dayOfMonth, std::function<Transaction(void)> lambda = [](){return Transaction();});
+	static QVector<Transaction> BlankTransactionsForJdOffset(QDate iniDate, QDate lastDate, int jdOffset, std::function<Transaction(void)> lambda = [](){return Transaction();});
 
 protected:
 	FeatureMonthlyAmount(QString featureName)
