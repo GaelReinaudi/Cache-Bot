@@ -45,7 +45,9 @@ public:
 	int type() const;
 	enum UserInputFlag { NoUserFlag = 0x0,
 						 NoRecur = 0x1,
-						 IsMatchOff = 0x8
+						 IsMatchOff = 0x8,
+						 Reimbursed = 0x10,
+						 AverageLonger = 0x12
 					   };
 	int userFlag = Flag::None;
 	void loadUserFlags(const QJsonObject &json);

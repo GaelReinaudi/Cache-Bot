@@ -32,7 +32,7 @@ double FeatureStatDistrib::apply(TransactionBundle& allTrans, bool isPostTreat, 
 	m_localStaticArgs.m_bundle.clear();
 	for (int i = 0; i < allTrans.count(); ++i) {
 		const Transaction& tr = allTrans.trans(i);
-		if (tr.noUse())
+		if (tr.noUse() || tr.userFlag & Transaction::Reimbursed)
 			continue;
 		if (tr.isVoid())
 			continue;

@@ -15,7 +15,7 @@ QMap< QString, QVector<QRegExp> > Transaction::subCatRegExp;
 int Transaction::s_maxDaysOld = 5 * 31;
 int Transaction::s_maxDaysOldAllTransatcion = 30;
 QDate Transaction::onlyAfterDate = Transaction::currentDay().addMonths(-6);
-int Transaction::onlyAccountType = Account::Type::Saving | Account::Type::Checking | Account::Type::Credit;
+int Transaction::onlyAccountType = Account::Type::Checking | Account::Type::Saving | Account::Type::Checking | Account::Type::Credit;
 
 bool Transaction::noUse() const
 {
@@ -59,6 +59,14 @@ void Transaction::loadUserFlags(const QJsonObject &json) {
 	if (json["sum_ids"].toArray().count()) {
 		WARN() << id << " IsMatchOff";
 		userFlag |= IsMatchOff;
+	}
+	if (json.contains("reimbursed")) {
+		WARN() << id << " Reimbursed";
+		userFlag |= Reimbursed;
+	}
+	if (json.contains("averageLonger")) {
+		WARN() << id << " AverageLonger";
+		userFlag |= AverageLonger;
 	}
 }
 

@@ -13,7 +13,7 @@ double FeatureCrossCurrent::apply(TransactionBundle& allTrans, bool isPostTreat,
 		double ref = 0.3 + kindaLog(qMax(0.0, User::declaredRent) * 30);
 		if (ref < 1.0)
 			ref = 3.9;
-		if (-tr.kla() < ref)
+		if (-tr.kla() < ref || tr.userFlag & Transaction::UserInputFlag::Reimbursed)
 			continue;
 		if (tr.isVoid())
 			continue;
