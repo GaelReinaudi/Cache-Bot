@@ -77,10 +77,11 @@ void EvolutionSpinner::runEvolution() {
 		int h = m_context->m_pUser->hashBundles().keys()[j];
 		if (m_context->m_pUser->hashBundles()[h]->count() < 2)
 			continue;
+		double klaHash = qAbs(m_context->m_pUser->hashBundles()[h]->klaAverage());
 		m_context->filterHashIndex = j;
 		m_context->currentGeneration = 0;
 		// Initialize population.
-		std::vector<Tree> lPopulation(POP_SIZE_DEFAULT_PRE);
+		std::vector<Tree> lPopulation(POP_SIZE_DEFAULT_PRE * qMax(1.0, klaHash * 0.5));
 		NOTICE() << "Initializing population for hash " << h;
 //		qDebug() << "Initializing population for hash " << h << QTime::currentTime();
 		initializePopulation(lPopulation, *m_context, lInitGrowProba, lMinInitDepth, lMaxInitDepth);
@@ -96,7 +97,7 @@ void EvolutionSpinner::runEvolution() {
 		// Evolve population for the given number of generations
 		INFO() << "Starting evolution " << newBestFitness;
 
-		for(m_context->currentGeneration = 1; m_context->currentGeneration <= NBR_GEN_DEFAULT_PRE; ++m_context->currentGeneration ) {
+		for(m_context->currentGeneration = 1; m_context->currentGeneration <= NBR_GEN_DEFAULT_PRE * qMax(1.0, klaHash); ++m_context->currentGeneration ) {
 //			while(!m_doSpin)  {
 //				QThread::msleep(100);
 //			}

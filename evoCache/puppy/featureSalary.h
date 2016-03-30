@@ -112,7 +112,8 @@ protected:
 //				m_fitness *= -(m_localStaticArgs.m_kla);
 			}
 		}
-		m_fitness *= 4;
+		m_fitness *= 8;
+		m_fitness *= 1 - qAbs(kindaLog(User::declaredRent*30) + m_localStaticArgs.m_bundle.klaAverage());
 	}
 protected:
 	qint64 distance(const Transaction *targ, const Transaction *trans) override {
