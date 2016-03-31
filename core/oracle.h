@@ -143,7 +143,7 @@ public:
 		return s;
 	}
 
-	struct Summary
+	struct CORESHARED_EXPORT Summary
 	{
 		double posSum = 0.0;
 		double negSum = 0.0;
@@ -207,58 +207,7 @@ public:
 			}
 			return mul;
 		}
-		Summary effectOf(const Summary& endSummary, int overDays) const {
-			Q_ASSERT(dailyPerOracle.count() == endSummary.dailyPerOracle.count());
-			// *this is the starting Summary, ie the N days ago Summary
-			// effect is constructed from the avg in order to save memory
-			Summary effect = (*this + endSummary) * 0.5;
-			Summary delta = endSummary - *this;
-			double posSlope = effect.posPartialDif();
-			double negSlope = effect.negPartialDif();
-			for (int i = 0; i < effect.dailyPerOracle.count(); ++i) {
-				double iAvgValFlow = effect.dailyPerOracle[i];
-				double iSlope = iAvgValFlow > 0 ? posSlope : negSlope;
-				effect.dailyPerOracle[i] = iSlope * delta.dailyPerOracle[i];
-				// try to make a fact
-				QString fact = "";
-				QString factStr = "";
-				// negative effect from an outcome
-				if (effect.dailyPerOracle[i] < -0.01) {
-					if (iAvgValFlow < 0) {
-						fact += "?-";
-						factStr += "?Spending increased ";
-					}
-				// negative effect from an income
-					if (dailyPerOracle[i] > 0) {
-						fact += "?+";
-						factStr += "?Income decreased ";
-					}
-				}
-				// positive effect from an outcome
-				else if (effect.dailyPerOracle[i] > 0.01) {
-					if (dailyPerOracle[i] < 0) {
-						fact += "!-";
-						factStr += "!Spending decreased ";
-					}
-				// positive effect from an income
-					if (dailyPerOracle[i] > 0) {
-						fact += "!+";
-						factStr += "!Income increased ";
-					}
-				}
-				else
-					continue;
-				effect.summaryPerOracle[i]["factStr"] = factStr;
-				effect.summaryPerOracle[i]["dailyOld"] = this->dailyPerOracle[i];
-				effect.summaryPerOracle[i]["dailyNew"] = endSummary.dailyPerOracle[i];
-				effect.summaryPerOracle[i]["dailyDif"] = delta.dailyPerOracle[i];
-				effect.summaryPerOracle[i]["flowEffect"] = effect.dailyPerOracle[i];
-				effect.summaryPerOracle[i]["overDays"] = overDays;
-				effect.summaryPerOracle[i]["score"] = delta.dailyPerOracle[i] / overDays;
-			}
-
-			return effect;
-		}
+		Summary effectOf(const Summary& endSummary, int overDays) const;
 	};
 	Summary computeAvgCashFlow(bool includeOracleSummaries = true) const;
 

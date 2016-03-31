@@ -240,7 +240,7 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 
 	QJsonObject statObj;// = bestBot->postTreatment();
 
-	QJsonObject trendObjects;
+//	QJsonObject trendObjects;
 	OracleTrend<1>::get(user())->value(Transaction::currentDay());
 	SuperOracle::Summary trend01 = OracleTrend<1>::get(user())->effectSummaries()[Transaction::currentDay()];
 	OracleTrend<7>::get(user())->value(Transaction::currentDay());
