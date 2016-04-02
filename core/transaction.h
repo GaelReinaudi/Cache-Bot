@@ -38,7 +38,7 @@ public:
 			  };
 	int flags = Flag::None;
 	bool isInternal() const { return flags & Transaction::Flag::Internal; }
-	bool isFuture() const { return Transaction::currentDay().daysTo(date) > 2; }
+	bool isFuture() const { return Transaction::currentDay().daysTo(date) > 0; }
 	bool isToOld() const { return date < Transaction::currentDay().addDays(-Transaction::maxDaysOld()); }
 	bool noUse() const;
 	int isVoid() const;
@@ -147,8 +147,9 @@ public:
 private:
 	static int s_maxDaysOld;
 	static int s_maxDaysOldAllTransatcion;
-	static QDate s_currentDay;
 	static QDateTime s_actualCurrentDayTime;
+	static QDate s_currentDay;
+	static QDate s_actualCurrentDay;
 
 public:
 	static QVector<int> onlyLoadHashes;

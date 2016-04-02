@@ -4,6 +4,7 @@
 
 int hoursOffsetToHack_issue_9 = -5;
 QDateTime Transaction::s_actualCurrentDayTime = QDateTime::currentDateTime().addSecs(hoursOffsetToHack_issue_9 * 3600);
+QDate Transaction::s_actualCurrentDay = s_actualCurrentDayTime.date();
 QDate Transaction::s_currentDay = Transaction::s_actualCurrentDayTime.date().addDays(-1);//.addMonths(-2);
 Transaction Transaction::s_hypotheTrans;
 int Transaction::s_magicFilter = 0;
