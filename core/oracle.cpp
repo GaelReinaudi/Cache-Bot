@@ -146,8 +146,8 @@ SuperOracle::Summary SuperOracle::Summary::effectOf(const SuperOracle::Summary &
 				factStr += "!Income increased ";
 			}
 		}
-		else
-			continue;
+//		else
+//			continue;
 		effect.summaryPerOracle[i]["factStr"] = factStr;
 		effect.summaryPerOracle[i]["dailyOld"] = this->dailyPerOracle[i];
 		effect.summaryPerOracle[i]["dailyNew"] = endSummary.dailyPerOracle[i];
