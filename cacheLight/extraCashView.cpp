@@ -125,18 +125,32 @@ void ExtraCashView::onBotInjected(Bot* pBot)
 	m_realBalance -= m_pExtraCache->user()->balance(Account::Type::Credit);
 	m_pbBalance = BalanceMetric::get(m_pExtraCache->user())->value(m_pbDate);
 
-	ui->costLive50SpinBox->setValue(CostRateMonthPercentileMetric<6, 50>::get(m_pExtraCache->user())->value(m_pbDate));
-	ui->costLive75SpinBox->setValue(CostRateMonthPercentileMetric<6, 75>::get(m_pExtraCache->user())->value(m_pbDate));
-	ui->costLive90SpinBox->setValue(CostRateMonthPercentileMetric<6, 90>::get(m_pExtraCache->user())->value(m_pbDate));
-	ui->costLive95SpinBox->setValue(CostRateMonthPercentileMetric<6, 95>::get(m_pExtraCache->user())->value(m_pbDate));
-	ui->costLive99SpinBox->setValue(CostRateMonthPercentileMetric<6, 99>::get(m_pExtraCache->user())->value(m_pbDate));
-
+	HistoMetric::clearAll();
 	double d2z50 = Montecarlo<128>::get(m_pExtraCache->user())->value(Transaction::currentDay());
 	ui->spinT2z50->setValue(d2z50);
 	double d2z80 = Montecarlo<128>::get(m_pExtraCache->user())->d2zPerc(Transaction::currentDay(), 0.80);
 	ui->spinT2z80->setValue(d2z80);
 	double d2z20 = Montecarlo<128>::get(m_pExtraCache->user())->d2zPerc(Transaction::currentDay(), 0.20);
 	ui->spinT2z20->setValue(d2z20);
+
+	double valMin50 = 0.0;
+	double valMin20 = 0.0;
+	double valMin80 = 0.0;
+	double d2M50 = Montecarlo<128>::get(m_pExtraCache->user())->d2MinPerc(Transaction::currentDay(), 0.50, &valMin50);
+	double d2M20 = Montecarlo<128>::get(m_pExtraCache->user())->d2MinPerc(Transaction::currentDay(), 0.20, &valMin20);
+	double d2M80 = Montecarlo<128>::get(m_pExtraCache->user())->d2MinPerc(Transaction::currentDay(), 0.80, &valMin80);
+	ui->spinT2min50->setValue(d2M50);
+	ui->spinvalMin50->setValue(valMin50);
+	ui->spinT2min20->setValue(d2M20);
+	ui->spinvalMin20->setValue(valMin20);
+	ui->spinT2min80->setValue(d2M80);
+	ui->spinvalMin80->setValue(valMin80);
+
+	ui->costLive50SpinBox->setValue(CostRateMonthPercentileMetric<6, 50>::get(m_pExtraCache->user())->value(m_pbDate));
+	ui->costLive75SpinBox->setValue(CostRateMonthPercentileMetric<6, 75>::get(m_pExtraCache->user())->value(m_pbDate));
+	ui->costLive90SpinBox->setValue(CostRateMonthPercentileMetric<6, 90>::get(m_pExtraCache->user())->value(m_pbDate));
+	ui->costLive95SpinBox->setValue(CostRateMonthPercentileMetric<6, 95>::get(m_pExtraCache->user())->value(m_pbDate));
+	ui->costLive99SpinBox->setValue(CostRateMonthPercentileMetric<6, 99>::get(m_pExtraCache->user())->value(m_pbDate));
 
 	NOTICE() << "initial pb balance"<< m_pbBalance << " at" << m_pbDate.toString();
 

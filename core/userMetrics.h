@@ -254,6 +254,23 @@ public:
 		double curBal = BalanceMetric::get(user())->value(date);
 		return m_simulations[date].timeToDelta(-curBal, facPerc);
 	}
+	double d2MinPerc(const QDate &date, double facPerc, double* val) {
+		SuperOracle::Summary summary = OracleSummary::get(user())->summaries()[date];
+		*val = 0.0;
+		double rate = 5 * qAbs(summary.negSum);
+		double prevDay = 0;
+		for (int dMin = 1; dMin <= displayDayFuture; ++dMin) {
+			double deltaToDay = m_simulations[date].valPerc(dMin, facPerc);
+			double deltaDay = deltaToDay - prevDay;
+			if (deltaDay > rate) {
+				(*val) = prevDay;
+				NOTICE() << "d2MinPerc " << date.toString() << " " << facPerc << " " << rate << " " << (dMin - 1) << " " << *val;
+				return dMin - 1;
+			}
+			prevDay = deltaToDay;
+		}
+		return 9999;
+	}
 
 protected:
 	double computeFor(const QDate& date, bool& isValid) override {

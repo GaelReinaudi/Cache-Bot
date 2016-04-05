@@ -26,6 +26,11 @@ FlowWidget::FlowWidget(QString id, QJsonObject userObj, QWidget *parent) :
 		myProcess->start("evoCacheView.exe", args);
 		qDebug() << myProcess->errorString();
 	});
+	connect(ui->flowButton, &QPushButton::clicked, [this, id, args](){
+		QProcess* myProcess = new QProcess(this);
+		myProcess->start("extraCash.exe", args);
+		qDebug() << myProcess->errorString();
+	});
 	connect(ui->cacheLightButton, &QPushButton::clicked, [this, id, args](){
 		QProcess* myProcess = new QProcess(this);
 		myProcess->start("cacheLight.exe", args);

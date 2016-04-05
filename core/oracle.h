@@ -23,6 +23,18 @@ public:
 		values[run * (displayDayFuture + 1) + day] = value;
 	}
 
+	QVector<double> valsDay(int d) const {
+		QVector<double> allY;
+		for (int r = 0; r < Nrun; ++r) {
+			allY.append(val(r, d));
+		}
+		qSort(allY);
+		return allY;
+	}
+	double valPerc(int d, double fracPerc) const {
+		double vAtPerc = valsDay(d)[qRound(displayDayFuture * fracPerc)];
+		return vAtPerc;
+	}
 	int timeToDelta(double deltaBalance, double facPerc = 0.5) const {
 		for (int d = 0; d <= displayDayFuture; ++d) {
 			int ctBellow = 0;

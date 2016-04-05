@@ -43,7 +43,7 @@ void ExtraCache::onUserInjected(User* pUser)
 //		extraTotal += c.amount;
 //	}
 	m_slushFundStartsAt = extraTotal;
-	NOTICE() << "extraTotal" << m_slushFundStartsAt;
+	NOTICE() << "extraTotal" << m_slushFundStartsAt << " curDay " << Transaction::currentDay().toString();
 
 	CacheRest::Instance()->getBestBot(userID(), user());
 }
@@ -57,7 +57,7 @@ double ExtraCache::calcSummary(Bot* bestBot, QJsonObject& statObj, int doAskThin
 	double flowDif_1 = MetricDiff<1>::get(MetricSmoother<2>::get(OracleSummary::get(user())))->value(Transaction::currentDay());
 	double flowDif_2 = MetricDiff<2>::get(MetricSmoother<2>::get(OracleSummary::get(user())))->value(Transaction::currentDay());
 	double flowDif_3 = MetricDiff<3>::get(MetricSmoother<2>::get(OracleSummary::get(user())))->value(Transaction::currentDay());
-	QJsonObject flowObj;
+	QJsonObject flowObj = statObj["flow"].toObject();
 	flowObj.insert("ma_2", flowMA_2);
 	flowObj.insert("ma_3", flowMA_3);
 	flowObj.insert("ma_4", flowMA_4);
@@ -69,9 +69,6 @@ double ExtraCache::calcSummary(Bot* bestBot, QJsonObject& statObj, int doAskThin
 flowCalc:
 	++numCalc;
 	bestBot->summarize();
-	double d2z50 = Montecarlo<128>::get(user())->value(Transaction::currentDay());
-	double d2z20 = Montecarlo<128>::get(user())->d2zPerc(Transaction::currentDay(), 0.20);
-	double d2z80 = Montecarlo<128>::get(user())->d2zPerc(Transaction::currentDay(), 0.80);
 	double rate = OracleSummary::get(user())->value(Transaction::currentDay());
 	SuperOracle::Summary summary = OracleSummary::get(user())->summaries()[Transaction::currentDay()];
 
@@ -83,10 +80,6 @@ flowCalc:
 	flowObj.insert("dailyNeg", summary.negSum);
 	flowObj.insert("dailyBill", summary.bill);
 	flowObj.insert("dailySalary", summary.salary);
-
-	flowObj.insert("d2z50", d2z50);
-	flowObj.insert("d2z20", d2z20);
-	flowObj.insert("d2z80", d2z80);
 
 	// flag as kStable/kUp/kDown
 	QString changeFlag = "kStable";
@@ -258,6 +251,33 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 
 	HistoMetric::clearAll();
 	double flowRate = calcSummary(bestBot, statObj, true);
+
+	//	bestBot->summarize();
+	HistoMetric::clearAll();
+	bestBot->summarize();
+	double rate = OracleSummary::get(user())->value(Transaction::currentDay());
+	SuperOracle::Summary summary = OracleSummary::get(user())->summaries()[Transaction::currentDay()];
+	Montecarlo<128>::get(user())->value(Transaction::currentDay());
+	double d2z50 = Montecarlo<128>::get(user())->d2zPerc(Transaction::currentDay(), 0.50);
+	double d2z20 = Montecarlo<128>::get(user())->d2zPerc(Transaction::currentDay(), 0.20);
+	double d2z80 = Montecarlo<128>::get(user())->d2zPerc(Transaction::currentDay(), 0.80);
+	double valMin50 = 0.0;
+	double valMin20 = 0.0;
+	double valMin80 = 0.0;
+	double d2M50 = Montecarlo<128>::get(user())->d2MinPerc(Transaction::currentDay(), 0.50, &valMin50);
+	double d2M20 = Montecarlo<128>::get(user())->d2MinPerc(Transaction::currentDay(), 0.20, &valMin20);
+	double d2M80 = Montecarlo<128>::get(user())->d2MinPerc(Transaction::currentDay(), 0.80, &valMin80);
+	QJsonObject flowObj = statObj["flow"].toObject();
+	flowObj.insert("d2z50", d2z50);
+	flowObj.insert("d2z20", d2z20);
+	flowObj.insert("d2z80", d2z80);
+	flowObj.insert("d2Min50", d2M50);
+	flowObj.insert("d2Min20", d2M20);
+	flowObj.insert("d2Min80", d2M80);
+	flowObj.insert("d2Min50Amnt", valMin50);
+	flowObj.insert("d2Min20Amnt", valMin20);
+	flowObj.insert("d2Min80Amnt", valMin80);
+	statObj["flow"] = flowObj;
 
 	addTrend(statObj, "01", trend01);
 	addTrend(statObj, "07", trend07);

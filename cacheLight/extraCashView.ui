@@ -329,6 +329,38 @@
           </property>
          </spacer>
         </item>
+        <item row="11" column="0">
+         <widget class="QLabel" name="costLive99Label_2">
+          <property name="text">
+           <string>avg cash flow</string>
+          </property>
+         </widget>
+        </item>
+        <item row="11" column="1">
+         <widget class="QDoubleSpinBox" name="spinAvgCashFlow">
+          <property name="readOnly">
+           <bool>false</bool>
+          </property>
+          <property name="buttonSymbols">
+           <enum>QAbstractSpinBox::NoButtons</enum>
+          </property>
+          <property name="prefix">
+           <string/>
+          </property>
+          <property name="suffix">
+           <string>%</string>
+          </property>
+          <property name="decimals">
+           <number>1</number>
+          </property>
+          <property name="minimum">
+           <double>-9999.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>9999.000000000000000</double>
+          </property>
+         </widget>
+        </item>
         <item row="12" column="0">
          <widget class="QLabel" name="costLive99Label_7">
           <property name="text">
@@ -553,15 +585,8 @@
           </property>
          </widget>
         </item>
-        <item row="11" column="0">
-         <widget class="QLabel" name="costLive99Label_2">
-          <property name="text">
-           <string>avg cash flow</string>
-          </property>
-         </widget>
-        </item>
-        <item row="11" column="1">
-         <widget class="QDoubleSpinBox" name="spinAvgCashFlow">
+        <item row="22" column="0">
+         <widget class="QDoubleSpinBox" name="spinT2min20">
           <property name="readOnly">
            <bool>false</bool>
           </property>
@@ -572,10 +597,135 @@
            <string/>
           </property>
           <property name="suffix">
-           <string>%</string>
+           <string>  d</string>
           </property>
           <property name="decimals">
-           <number>1</number>
+           <number>0</number>
+          </property>
+          <property name="minimum">
+           <double>-9999.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>9999.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="22" column="1">
+         <widget class="QDoubleSpinBox" name="spinvalMin20">
+          <property name="readOnly">
+           <bool>false</bool>
+          </property>
+          <property name="buttonSymbols">
+           <enum>QAbstractSpinBox::NoButtons</enum>
+          </property>
+          <property name="prefix">
+           <string>$ </string>
+          </property>
+          <property name="suffix">
+           <string/>
+          </property>
+          <property name="decimals">
+           <number>0</number>
+          </property>
+          <property name="minimum">
+           <double>-9999.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>9999.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="23" column="0">
+         <widget class="QDoubleSpinBox" name="spinT2min50">
+          <property name="readOnly">
+           <bool>false</bool>
+          </property>
+          <property name="buttonSymbols">
+           <enum>QAbstractSpinBox::NoButtons</enum>
+          </property>
+          <property name="prefix">
+           <string/>
+          </property>
+          <property name="suffix">
+           <string>  d</string>
+          </property>
+          <property name="decimals">
+           <number>0</number>
+          </property>
+          <property name="minimum">
+           <double>-9999.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>9999.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="23" column="1">
+         <widget class="QDoubleSpinBox" name="spinvalMin50">
+          <property name="readOnly">
+           <bool>false</bool>
+          </property>
+          <property name="buttonSymbols">
+           <enum>QAbstractSpinBox::NoButtons</enum>
+          </property>
+          <property name="prefix">
+           <string>$ </string>
+          </property>
+          <property name="suffix">
+           <string/>
+          </property>
+          <property name="decimals">
+           <number>0</number>
+          </property>
+          <property name="minimum">
+           <double>-9999.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>9999.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="24" column="0">
+         <widget class="QDoubleSpinBox" name="spinT2min80">
+          <property name="readOnly">
+           <bool>false</bool>
+          </property>
+          <property name="buttonSymbols">
+           <enum>QAbstractSpinBox::NoButtons</enum>
+          </property>
+          <property name="prefix">
+           <string/>
+          </property>
+          <property name="suffix">
+           <string>  d</string>
+          </property>
+          <property name="decimals">
+           <number>0</number>
+          </property>
+          <property name="minimum">
+           <double>-9999.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>9999.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="24" column="1">
+         <widget class="QDoubleSpinBox" name="spinvalMin80">
+          <property name="readOnly">
+           <bool>false</bool>
+          </property>
+          <property name="buttonSymbols">
+           <enum>QAbstractSpinBox::NoButtons</enum>
+          </property>
+          <property name="prefix">
+           <string>$ </string>
+          </property>
+          <property name="suffix">
+           <string/>
+          </property>
+          <property name="decimals">
+           <number>0</number>
           </property>
           <property name="minimum">
            <double>-9999.000000000000000</double>
@@ -594,7 +744,6 @@
       <property name="focusPolicy">
        <enum>Qt::StrongFocus</enum>
       </property>
-      <zorder></zorder>
      </widget>
     </item>
    </layout>

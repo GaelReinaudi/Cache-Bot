@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>342</width>
+    <width>406</width>
     <height>25</height>
    </rect>
   </property>
@@ -47,6 +47,13 @@
     <widget class="QPushButton" name="evoButton">
      <property name="text">
       <string>evo</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="flowButton">
+     <property name="text">
+      <string>flow</string>
      </property>
     </widget>
    </item>
