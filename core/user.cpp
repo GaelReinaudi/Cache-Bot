@@ -50,7 +50,7 @@ double User::littleIncome()
 //		DBG(3) << "little fixed income: fac " << fac;
 //		return fac;
 //	}
-	if (flow < -0.30) {
+	if (flow < -0.40) {
 		double fac = qSqrt(qMax(0.0, flow + 1.0));
 		DBG(3) << "little income: fac " << fac;
 		return fac;
