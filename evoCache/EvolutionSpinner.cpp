@@ -73,6 +73,8 @@ void EvolutionSpinner::runEvolution() {
 	QMap<double, Tree> bestPreEvoTrees;
 	QMap<double, Tree> superBestPreEvoTrees;
 	QJsonObject finalBotObject;
+	m_context->lim_NUM_FEATURE = 1;
+
 	for (int j = 0; j < m_context->m_pUser->hashBundles().count(); ++j) {
 		int h = m_context->m_pUser->hashBundles().keys()[j];
 		if (m_context->m_pUser->hashBundles()[h]->count() < 2)
@@ -188,6 +190,10 @@ void EvolutionSpinner::runEvolution() {
 			}
 		}
 		makeSuperTreeMixtures(lPopulation, *m_context);
+
+		// inject the previous best bot that we got from the database
+		lPopulation.push_back(m_context->m_pUser->m_bestBot->puppyTree());
+
 		m_context->currentGeneration = 0;
 		evaluateSymbReg(lPopulation, *m_context);
 		calculateStats(lPopulation, 0);

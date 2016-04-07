@@ -19,6 +19,7 @@ public:
 
 protected:
 	void onUserInjected(User* pUser) override;
+	void onBotInjected(Bot* bestBot) override;
 	void onRepliedSendNewBot(QString strData) override;
 
 protected slots:

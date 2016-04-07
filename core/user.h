@@ -135,12 +135,12 @@ private:
 	StaticTransactionArray m_allTransactions;
 	HashedBundles m_hashBundles;
 	TransactionBundle m_allTransBundle;
-	Bot* m_bestBot = 0;
 	BotContext* m_botContext = 0;
 	Fund* m_extraCacheFund = 0;
 	QString m_email;
 	SuperOracle* m_mainOracle = 0;
 public:
+	Bot* m_bestBot = 0;
 	static double declaredIncome;
 	static double declaredRent;
 };

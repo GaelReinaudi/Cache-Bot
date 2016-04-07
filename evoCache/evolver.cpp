@@ -35,6 +35,11 @@ void Evolver::onUserInjected(User* pUser)
 	CacheAccountConnector::onUserInjected(pUser);
 
 	Q_ASSERT(pUser == user());
+	CacheRest::Instance()->getBestBot(userID(), user());
+}
+
+void Evolver::onBotInjected(Bot* bestBot)
+{
 	m_evoSpinner->init(user());
 }
 

@@ -20,6 +20,7 @@ public:
 	QJsonObject summarize();
 	QJsonObject postTreatment();
 	User* user() const;
+	Puppy::Tree puppyTree() const { return m_puppyTree; }
 
 	static Puppy::Tree* instancePostTreatmentBot(Puppy::Context& ioContext);
 
