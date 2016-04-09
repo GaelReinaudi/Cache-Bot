@@ -59,7 +59,7 @@ protected:
 		}
 		double avgDaily(int limDayProba = 0) const override
 		{
-			if (limDayProba && m_dayProba / (1 - m_dayProba) < 1)
+			if (limDayProba && m_dayProba / (1 - m_dayProba) < 1.0 / limDayProba)
 				return 0;
 			return m_bundle.avgSmart() * m_dayProba / (1 - m_dayProba);
 		}
