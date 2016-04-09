@@ -78,6 +78,12 @@ flowCalc:
 
 	flowObj.insert("dailyPos", summary.posSum);
 	flowObj.insert("dailyNeg", summary.negSum);
+	flowObj.insert("dailyPos45", summary.posSum45);
+	flowObj.insert("dailyNeg45", summary.negSum45);
+	flowObj.insert("dailyPos60", summary.posSum60);
+	flowObj.insert("dailyNeg60", summary.negSum60);
+	flowObj.insert("dailyPos90", summary.posSum90);
+	flowObj.insert("dailyNeg90", summary.negSum90);
 	flowObj.insert("dailyBill", summary.bill);
 	flowObj.insert("dailySalary", summary.salary);
 

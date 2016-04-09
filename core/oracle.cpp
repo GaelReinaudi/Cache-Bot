@@ -20,12 +20,12 @@ QVector<Transaction> SuperOracle::revelation(QDate upToDate)
 	return ret;
 }
 
-double SuperOracle::avgDaily() const
+double SuperOracle::avgDaily(int limDayProba) const
 {
 	NOTICE() << "SuperOracle::avgDaily";
 	double avg = 0.0;
 	for (auto pOr : m_subOracles) {
-		avg += pOr->avgDaily();
+		avg += pOr->avgDaily(limDayProba);
 	}
 	return avg;
 }
@@ -38,30 +38,39 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 	for (auto pOr : m_subOracles) {
 		++ind;
 		double avg = pOr->avgDaily();
+		double avg45 = pOr->avgDaily(45);
+		double avg60 = pOr->avgDaily(60);
+		double avg90 = pOr->avgDaily(90);
 		if (avg > 0) {
 			summary.posSum += avg;
+			summary.posSum45 += avg45;
+			summary.posSum60 += avg60;
+			summary.posSum90 += avg90;
 			if (pOr->feature()->isPeriodic())
 				summary.salary += avg;
 			DBG(2) << ind <<  " +daily " << avg << "      " << pOr->feature()->getName();
 		}
 		else if (avg < 0) {
 			summary.negSum += avg;
+			summary.negSum45 += avg45;
+			summary.negSum60 += avg60;
+			summary.negSum90 += avg90;
 			if (pOr->feature()->isPeriodic())
 				summary.bill += avg;
 			DBG(2) << ind <<  " -daily " << avg << "      " << pOr->feature()->getName();
 		}
-		else {
-			summary.posSum += pOr->avgDailyPos();
-			summary.negSum += pOr->avgDailyNeg();
-			if (pOr->feature()->isPeriodic()) {
-				summary.salary += pOr->avgDailyPos();
-				summary.bill += pOr->avgDailyNeg();
-			}
-			DBG(2) << ind <<  " 0daily = " << avg << " " << pOr->feature()->getName()
-				  << " " << pOr->avgDailyPos()
-				  << " " << pOr->avgDailyNeg()
-					 ;
-		}
+//		else {
+//			summary.posSum += pOr->avgDailyPos();
+//			summary.negSum += pOr->avgDailyNeg();
+//			if (pOr->feature()->isPeriodic()) {
+//				summary.salary += pOr->avgDailyPos();
+//				summary.bill += pOr->avgDailyNeg();
+//			}
+//			DBG(2) << ind <<  " 0daily = " << avg << " " << pOr->feature()->getName()
+//				  << " " << pOr->avgDailyPos()
+//				  << " " << pOr->avgDailyNeg()
+//					 ;
+//		}
 		summary.dailyPerOracle.append(avg);
 		if (includeOracleSummaries)
 			summary.summaryPerOracle.append(pOr->toJson());

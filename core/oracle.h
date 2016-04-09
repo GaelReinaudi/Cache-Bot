@@ -73,13 +73,13 @@ public:
 	virtual QVector<Transaction> revelation(QDate upToDate) = 0;
 	virtual QJsonObject toJson() const;
 	virtual QString description() const { return "????"; }
-	virtual double avgDaily() const = 0;
-	virtual double avgDailyPos() const {
-		double avg = avgDaily();
+	virtual double avgDaily(int limDayProba = 0) const = 0;
+	virtual double avgDailyPos(int limDayProba) const {
+		double avg = avgDaily(limDayProba);
 		return avg >= 0 ? avg : 0.0;
 	}
-	virtual double avgDailyNeg() const {
-		double avg = avgDaily();
+	virtual double avgDailyNeg(int limDayProba) const {
+		double avg = avgDaily(limDayProba);
 		return avg <= 0 ? avg : 0.0;
 	}
 
@@ -122,7 +122,7 @@ public:
 		m_subOracles.append(pOr);
 	}
 	QVector<Transaction> revelation(QDate upToDate) override;
-	double avgDaily() const;
+	double avgDaily(int limDayProba = 0) const;
 	template <int Nrun>
 	Simulation<Nrun> simu() {
 		Simulation<Nrun> s;
@@ -159,6 +159,12 @@ public:
 	{
 		double posSum = 0.0;
 		double negSum = 0.0;
+		double posSum45 = 0.0;
+		double negSum45 = 0.0;
+		double posSum60 = 0.0;
+		double negSum60 = 0.0;
+		double posSum90 = 0.0;
+		double negSum90 = 0.0;
 		double bill = 0.0;
 		double salary = 0.0;
 		QVector<double> dailyPerOracle;

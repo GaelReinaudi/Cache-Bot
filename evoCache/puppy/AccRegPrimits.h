@@ -108,13 +108,13 @@ struct FeatureArgs
 		o_retObj.insert("zcategories", QJsonArray::fromStringList(m_bundle.uniqueCategories()));
 		o_retObj.insert("_daily", avgDaily());
 	}
-	virtual double avgDaily() const = 0;
-	virtual double avgDailyPos() const {
-		double avg = avgDaily();
+	virtual double avgDaily(int limDayProba = 0) const = 0;
+	virtual double avgDailyPos(int limDayProba) const {
+		double avg = avgDaily(limDayProba);
 		return avg >= 0 ? avg : 0.0;
 	}
-	virtual double avgDailyNeg() const {
-		double avg = avgDaily();
+	virtual double avgDailyNeg(int limDayProba) const {
+		double avg = avgDaily(limDayProba);
 		return avg <= 0 ? avg : 0.0;
 	}
 	TransactionBundle m_bundle;

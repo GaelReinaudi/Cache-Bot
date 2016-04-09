@@ -42,7 +42,7 @@ public:
 
 protected:
 	QVector<Transaction> revelation(QDate upToDate) override;
-	double avgDaily() const override { return m_args.avgDaily(); }
+	double avgDaily(int limDayProba = 0) const override { return m_args.avgDaily(limDayProba); }
 
 protected:
 	struct Args : public FeatureArgs
@@ -57,8 +57,10 @@ protected:
 			o_retObj.insert("_total", m_bundle.sumDollar());
 			o_retObj.insert("numBund", m_bundle.count());
 		}
-		double avgDaily() const override
+		double avgDaily(int limDayProba = 0) const override
 		{
+			if (limDayProba && m_dayProba / (1 - m_dayProba) < 1)
+				return 0;
 			return m_bundle.avgSmart() * m_dayProba / (1 - m_dayProba);
 		}
 		int m_hash = 0;
