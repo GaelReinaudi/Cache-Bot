@@ -5,7 +5,9 @@ static const int SLACK_FOR_LATE_TRANS = 4;
 QJsonObject OracleOneDayOfMonth::toJson() const {
 	QJsonObject ret = Oracle::toJson();
 	ret["approxAmnt"] = toSignifDigit_2(m_args.m_bundle.avgSmart());
-	ret["avgAmnt"] = m_args.m_bundle.avgSmart();
+	double avg = m_args.m_bundle.avgSmart();
+	ret["avgAmnt"] = avg;
+	ret["stdDevAmnt"] = m_args.m_bundle.stdDevAmountSmart(avg);
 	ret["day1"] = (m_args.m_dayOfMonth + 31) % 31;
 	ret["day2"] = (m_args.m_dayOfMonth2 + 31) % 31;
 	ret["daily"] = (m_args.computeProba() <= 0.0)

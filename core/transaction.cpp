@@ -296,6 +296,22 @@ double TransactionBundle::averageAmount(std::function<double (const Transaction 
 	return totW ? avgW / totW : 0.0;
 }
 
+double TransactionBundle::stdDevAmount(double avg, std::function<double (const Transaction &)> weight) const
+{
+	double totW = 0.0;
+	double varW = 0.0;
+	for (const Transaction* tr : m_vector) {
+		if (tr->noUse())
+			continue;
+		double w = weight(*tr);
+		totW += w;
+		double err = (tr->amountDbl() - avg);
+		err *= err;
+		varW += w * err;
+	}
+	return totW ? qSqrt(varW / totW) : 0.0;
+}
+
 auto lam = [](const Transaction& tr){
 	double daysOld = tr.date.daysTo(Transaction::currentDay());
 	double totSpan = Transaction::maxDaysOld();
@@ -311,6 +327,11 @@ auto lam = [](const Transaction& tr){
 double TransactionBundle::avgSmart() const
 {
 	return averageAmount(lam);
+}
+
+double TransactionBundle::stdDevAmountSmart(double avg) const
+{
+	return stdDevAmount(avg, lam);
 }
 
 Transaction TransactionBundle::randSmart() const
