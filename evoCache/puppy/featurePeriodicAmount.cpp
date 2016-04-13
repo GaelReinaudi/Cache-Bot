@@ -167,7 +167,7 @@ void FeatureMonthlyAmount::onJustApplied(TransactionBundle& allTrans, Puppy::Con
 	cleanArgs();
 
 	if (m_localStaticArgs.m_prevMissed >= m_localStaticArgs.m_consecMonthBeforeMissed) {
-		m_fitness = -1234.0;
+		m_fitness = -1.0;
 		return;
 	}
 	// recompute fitness

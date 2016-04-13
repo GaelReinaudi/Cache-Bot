@@ -182,7 +182,7 @@ protected:
 	virtual void emitGraphics(Puppy::Context&) const { }
 	virtual Oracle* makeNewOracle() { return 0; }
 
-	virtual double maxDailyProbability() const { return m_fitness; }
+	virtual double maxDailyProbability() const { return qMax(0.0, m_fitness); }
 
 protected:
 	double m_fitness = 0.0;

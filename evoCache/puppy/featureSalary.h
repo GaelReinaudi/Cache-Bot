@@ -104,7 +104,7 @@ protected:
 protected:
 	void onJustApplied(TransactionBundle &allTrans, Puppy::Context& ioContext) override {
 		FeatureMonthlyAmount::onJustApplied(allTrans, ioContext);
-		if (m_fitness) {
+		if (m_fitness > 0) {
 			if (ioContext.flags & Puppy::Context::Housing1) {
 			}
 			else {
@@ -112,6 +112,8 @@ protected:
 //				m_fitness *= -(m_localStaticArgs.m_kla);
 			}
 		}
+		else
+			return;
 		m_fitness *= 8;
 		m_fitness *= 1 - qAbs(kindaLog(User::declaredRent*30) + m_localStaticArgs.m_bundle.klaAverage());
 	}
