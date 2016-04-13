@@ -58,10 +58,12 @@ void Evolver::onRepliedSendNewBot(QString strData)
 	CacheAccountConnector::onRepliedSendNewBot(strData);
 
 	qDebug() << strData;
-	if (strData.contains("\"error\""))
+	static int maxTry = 10;
+	if (strData.contains("\"error\"") && maxTry > 0)
 	{
+		--maxTry;
 		ERR() << "Can't send Bot: " << strData;
-		ERR() << "Trying again by loging in again until it works";
+		ERR() << "Trying again (" << maxTry << ") by loging in again until it works";
 		disconnect(CacheRest::Instance()->worker, SIGNAL(loggedIn(bool)));
 		connect(CacheRest::Instance()->worker, SIGNAL(loggedIn(bool)), this, SLOT(onFinishedEvolution()));
 		CacheRest::Instance()->login();
