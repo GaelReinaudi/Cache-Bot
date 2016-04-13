@@ -46,7 +46,7 @@ protected:
 		pNewOr->m_args = m_localStaticArgs;
 		return pNewOr;
 	}
-	void onJustApplied(TransactionBundle &allTrans, Puppy::Context& ioContext) override {
+	void onJustApplied(TransactionBundle& allTrans, Puppy::Context& ioContext) override {
 		if (BotContext::JSON_ARGS["PriceWindow"].toString().trimmed() != "enabled") {
 			m_fitness -= 123456789.0;
 		}
