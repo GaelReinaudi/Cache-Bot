@@ -26,7 +26,7 @@ bool Transaction::noUse() const
 int Transaction::isVoid() const
 {
 	if (dimOfVoid) {
-		WARNINGS(111, 3, "this is in the void ", dimOfVoid);
+//		WARNINGS(111, 3, "this is in the void ", dimOfVoid);
 		return dimOfVoid;
 	}
 	return 0;
