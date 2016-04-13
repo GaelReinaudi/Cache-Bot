@@ -166,8 +166,8 @@ void FeatureMonthlyAmount::onJustApplied(TransactionBundle& allTrans, Puppy::Con
 	m_localStaticArgs.m_fitRerun = rerun;
 	cleanArgs();
 
-	if (m_localStaticArgs.m_prevMissed >= /*-1+*/m_localStaticArgs.m_consecMonthBeforeMissed) {
-		m_fitness = 0.0;
+	if (m_localStaticArgs.m_prevMissed >= m_localStaticArgs.m_consecMonthBeforeMissed) {
+		m_fitness = -1234.0;
 		return;
 	}
 	// recompute fitness
@@ -286,6 +286,9 @@ QVector<Transaction> OracleOneDayOfMonth::revelation(QDate upToDate)
 		}
 
 		qSort(targetTrans.begin(), targetTrans.end(), Transaction::earlierThan);
+//		if (targetTrans.first().date <= Transaction::currentDay()) {
+//			targetTrans.first().date = Transaction::currentDay().addDays(1);
+//		}
 		// if we have the first transaction, don't predict it
 		if (m_args.m_consecMissed == -1) {
 			targetTrans.pop_front();

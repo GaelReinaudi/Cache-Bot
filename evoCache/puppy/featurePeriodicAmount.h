@@ -23,6 +23,7 @@ private:
 			o_retObj.insert("dayOfMonth", m_dayOfMonth);
 			o_retObj.insert("consecutive", m_consecMonthBeforeMissed);
 			o_retObj.insert("consMissed", m_consecMissed);
+			o_retObj.insert("consPrevMissed", m_prevMissed);
 			o_retObj.insert("_total", m_bundle.sumDollar());
 			o_retObj.insert("numBund", m_bundle.count());
 			o_retObj.insert("fitRerun", m_fitRerun);
@@ -32,7 +33,12 @@ private:
 			o_retObj.insert("hash", m_hash);
 		}
 		virtual double computeProba() const {
-			if (m_consecMissed > m_maxMissesAllowed)
+			if (m_prevMissed >= m_consecMonthBeforeMissed)
+				return 0.0;
+			int often = 0;
+			if (m_consecMonthBeforeMissed > 2 * m_consecMissed)
+				often = 1;
+			if (m_consecMissed > m_maxMissesAllowed + often)
 				return 0.0;
 			// if one that seems new but none before
 			if (m_consecMonthBeforeMissed <= -m_consecMissed)
