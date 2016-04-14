@@ -107,6 +107,13 @@ struct FeatureArgs
 		o_retObj.insert("zlabels", QJsonArray::fromStringList(m_bundle.uniqueNames()));
 		o_retObj.insert("zcategories", QJsonArray::fromStringList(m_bundle.uniqueCategories()));
 		o_retObj.insert("_daily", avgDaily());
+		o_retObj.insert("numBund", m_bundle.count());
+		double avg = m_bundle.avgSmart();
+		o_retObj["avgAmnt"] = avg;
+		o_retObj["stdDevAmnt"] = m_bundle.stdDevAmountSmart(avg);
+		double avgD2N = m_bundle.averageD2N();
+		o_retObj["avgD2N"] = avgD2N;
+		o_retObj["stdDevD2N"] = m_bundle.stdDevD2N(avgD2N);
 	}
 	virtual double avgDaily(int limDayProba = 0) const = 0;
 	virtual double avgDailyPos(int limDayProba) const {
@@ -134,6 +141,8 @@ public:
 		retObj.insert("numArgs", int(getNumberArguments()));
 		retObj.insert("fitness", m_fitness);
 		retObj.insert("billProba", m_billProba);
+//		retObj.insert("numBund", localStaticArgs()->m_bundle.count());
+		localStaticArgs()->intoJson(retObj);
 		QJsonArray argList;
 		if (ioContext.mTree) {
 			for (unsigned int i = 0; i < getNumberArguments(); ++i) {

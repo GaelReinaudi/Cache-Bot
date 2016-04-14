@@ -25,7 +25,7 @@ private:
 			o_retObj.insert("consMissed", m_consecMissed);
 			o_retObj.insert("consPrevMissed", m_prevMissed);
 			o_retObj.insert("_total", m_bundle.sumDollar());
-			o_retObj.insert("numBund", m_bundle.count());
+//			o_retObj.insert("numBund", m_bundle.count());
 			o_retObj.insert("fitRerun", m_fitRerun);
 			o_retObj.insert("featArgAmnt", unKindaLog(double(m_kla)));
 			o_retObj.insert("avgSmt", m_bundle.avgSmart());

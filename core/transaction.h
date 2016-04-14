@@ -268,7 +268,9 @@ public:
 		return ret;
 	}
 	double averageAmount(std::function<double(const Transaction&)> weight = [](const Transaction&){ return 1.0; }) const;
+	double averageD2N(std::function<double(const Transaction&)> weight = [](const Transaction&){ return 1.0; }) const;
 	double stdDevAmount(double avg, std::function<double(const Transaction&)> weight = [](const Transaction&){ return 1.0; }) const;
+	double stdDevD2N(double avg, std::function<double(const Transaction&)> weight = [](const Transaction&){ return 1.0; }) const;
 	double avgSmart() const;
 	double stdDevAmountSmart(double avg) const;
 	double daysToNextSmart() const;

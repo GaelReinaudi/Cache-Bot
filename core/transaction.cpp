@@ -296,6 +296,24 @@ double TransactionBundle::averageAmount(std::function<double (const Transaction 
 	return totW ? avgW / totW : 0.0;
 }
 
+double TransactionBundle::averageD2N(std::function<double (const Transaction &)> weight) const
+{
+	if (m_vector.count() < 2)
+		return 0;
+	double totW = 0.0;
+	double avgW = 0.0;
+	int im1 = 0;
+	for (int i = 1; i < m_vector.count(); ++i) {
+		if (m_vector[i]->noUse())
+			continue;
+		double w = weight(*m_vector[i]);
+		totW += w;
+		avgW += w * m_vector[im1]->date.daysTo(m_vector[i]->date);
+		im1 = i;
+	}
+	return totW ? avgW / totW : 0.0;
+}
+
 double TransactionBundle::stdDevAmount(double avg, std::function<double (const Transaction &)> weight) const
 {
 	double totW = 0.0;
@@ -310,6 +328,26 @@ double TransactionBundle::stdDevAmount(double avg, std::function<double (const T
 		varW += w * err;
 	}
 	return totW ? qSqrt(varW / totW) : 0.0;
+}
+
+double TransactionBundle::stdDevD2N(double avg, std::function<double (const Transaction &)> weight) const
+{
+	if (m_vector.count() < 2)
+		return 0;
+	double totW = 0.0;
+	double avgW = 0.0;
+	int im1 = 0;
+	for (int i = 1; i < m_vector.count(); ++i) {
+		if (m_vector[i]->noUse())
+			continue;
+		double w = weight(*m_vector[i]);
+		totW += w;
+		double err = (m_vector[im1]->date.daysTo(m_vector[i]->date) - avg);
+		err *= err;
+		avgW += w * err;
+		im1 = i;
+	}
+	return totW ? avgW / totW : 0.0;
 }
 
 auto lam = [](const Transaction& tr){

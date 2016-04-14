@@ -35,7 +35,6 @@ private:
 			o_retObj.insert("numNeg", m_numNeg);
 			o_retObj.insert("sumPos", m_sumPos);
 			o_retObj.insert("sumNeg", m_sumNeg);
-			o_retObj.insert("numBund", m_bundle.count());
 		}
 		double avgDaily(int limDayProba = 0) const override
 		{
