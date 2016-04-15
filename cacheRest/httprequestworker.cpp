@@ -330,6 +330,9 @@ void HttpRequestWorker::on_manager_finished(QNetworkReply *reply) {
 	else if(reply->request().url().toString().startsWith(UserDataRoute)) {
 		emit repliedUserData(response);
 	}
+	else if(reply->request().url().toString().startsWith(FakeSignupRoute)) {
+		emit repliedFakeSignup(response);
+	}
 	else if(reply->request().url().toString().endsWith(SendExtraCashRoute.split("/").last())) {
 		emit repliedSendExtraCache(response);
 	}

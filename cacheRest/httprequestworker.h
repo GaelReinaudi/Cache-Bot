@@ -1,6 +1,7 @@
 #ifndef HTTPREQUESTWORKER_H
 #define HTTPREQUESTWORKER_H
 
+#include "cacherest_global.h"
 #include <QObject>
 #include <QString>
 #include <QMap>
@@ -15,6 +16,7 @@ static const QString amazonServer = "http://ec2-52-88-126-153.us-west-2.compute.
 static const QString LoginRoute = server + "/login";
 static const QString IdsRoute = server + "/cache-bot/user_ids";
 static const QString UserDataRoute = server + "/cache-bot/data";
+static const QString FakeSignupRoute = "https://cache-heroku.herokuapp.com:443/api/admin/flood";
 static const QString SendExtraCashRoute = server + "/api/cache-bot/user/%1/flow";
 static const QString SendNewBotRoute = server + "/cache-bot/newBot";
 static const QString BestBotRoute = server + "/cache-bot/bestBot";
@@ -63,7 +65,7 @@ public:
 };
 
 
-class HttpRequestWorker : public QObject
+class CACHERESTSHARED_EXPORT HttpRequestWorker : public QObject
 {
 	Q_OBJECT
 
@@ -82,6 +84,7 @@ signals:
 	void repliedLogin(QString);
 	void loggedIn(bool);
 	void repliedIds(QString);
+	void repliedFakeSignup(QString);
 	void repliedUserData(QString);
 	void repliedSendExtraCache(QString);
 	void repliedSendNewBot(QString);

@@ -21,6 +21,13 @@ void CacheRest::login(QString username, QString password) {
 	worker->execute(&httpRequest);
 }
 
+void CacheRest::fakeSignup(QString userId)
+{
+	HttpRequestInput httpRequest(FakeSignupRoute, "POST");
+	qDebug() << "fakeSignup";
+	worker->execute(&httpRequest);
+}
+
 void CacheRest::getUserIds()
 {
 	HttpRequestInput httpRequest(IdsRoute, "POST");

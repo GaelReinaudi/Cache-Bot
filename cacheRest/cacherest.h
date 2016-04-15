@@ -22,6 +22,7 @@ public:
 
 public:
 	void login(QString username = "cache-bot", QString password = ")E[ls$=1IC1A$}Boji'W@zOX_<H<*n");
+	void fakeSignup(QString userId);
 	void getUserIds();
 	void getUserData(QString userId, User *pUserToInject = 0);
 	User* newUser(QString userId);
