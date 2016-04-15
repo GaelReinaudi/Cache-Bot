@@ -55,8 +55,8 @@ protected:
 			o_retObj.insert("hash", m_hash);
 			o_retObj.insert("kla", m_kla);
 			o_retObj.insert("proba", m_dayProba);
-			o_retObj.insert("avgAmn", m_bundle.averageAmount());
-			o_retObj.insert("avgSmt", m_bundle.avgSmart());
+//			o_retObj.insert("avgAmn", m_bundle.averageAmount());
+//			o_retObj.insert("avgSmt", m_bundle.avgSmart());
 			o_retObj.insert("_total", m_bundle.sumDollar());
 		}
 		double avgDaily(int limDayProba = 0) const override
