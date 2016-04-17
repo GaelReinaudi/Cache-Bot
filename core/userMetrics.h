@@ -271,6 +271,13 @@ public:
 		}
 		return 9999;
 	}
+	double d2EndMonthPerc(double facPerc, double* val) {
+		QDate today = QDate::currentDate();
+		QDate endMonth = QDate(today.year(), today.month(), 1).addMonths(1).addDays(-1);
+		int d2EndMonth = today.daysTo(endMonth);
+		*val = m_simulations[Transaction::currentDay()].valPerc(1+d2EndMonth, facPerc);
+		return d2EndMonth;
+	}
 
 protected:
 	double computeFor(const QDate& date, bool& isValid) override {

@@ -287,9 +287,19 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 	flowObj.insert("d2Min20Amnt", valMin20);
 	flowObj.insert("d2Min80Amnt", valMin80);
 	flowObj.insert("d2Min50Delta1Month", d2Min50Delta1Month);
+
 	double montheDelta = BalanceMetric::get(user())->value(Transaction::currentDay());
 	montheDelta -= BalanceMetric::get(user())->value(Transaction::currentDay().addDays(-Transaction::currentDay().day()));
 	flowObj.insert("monthDelta", montheDelta);
+	double endMonthAmnt = 0.0;
+	double d2EndMonth = Montecarlo<128>::get(user())->d2EndMonthPerc(0.5, &endMonthAmnt);
+	double endMonthDelta1Month = endMonthAmnt;
+	endMonthDelta1Month += BalanceMetric::get(user())->value(Transaction::currentDay());
+	endMonthDelta1Month -= BalanceMetric::get(user())->value(Transaction::currentDay().addDays(d2EndMonth).addMonths(-1));
+	flowObj.insert("endMonthAmnt", endMonthAmnt);
+	flowObj.insert("d2EndMonth", d2EndMonth);
+	flowObj.insert("endMonthDelta1Month", endMonthDelta1Month);
+
 	statObj["flow"] = flowObj;
 
 	addTrend(statObj, "01", trend01);
