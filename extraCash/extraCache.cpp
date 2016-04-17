@@ -273,6 +273,9 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 	double d2M50 = Montecarlo<128>::get(user())->d2MinPerc(Transaction::currentDay(), 0.50, &valMin50);
 	double d2M20 = Montecarlo<128>::get(user())->d2MinPerc(Transaction::currentDay(), 0.20, &valMin20);
 	double d2M80 = Montecarlo<128>::get(user())->d2MinPerc(Transaction::currentDay(), 0.80, &valMin80);
+	double d2Min50Delta1Month = valMin50;
+	d2Min50Delta1Month += BalanceMetric::get(user())->value(Transaction::currentDay());
+	d2Min50Delta1Month -= BalanceMetric::get(user())->value(Transaction::currentDay().addDays(d2M50).addMonths(-1));
 	QJsonObject flowObj = statObj["flow"].toObject();
 	flowObj.insert("d2z50", d2z50);
 	flowObj.insert("d2z20", d2z20);
@@ -283,6 +286,10 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 	flowObj.insert("d2Min50Amnt", valMin50);
 	flowObj.insert("d2Min20Amnt", valMin20);
 	flowObj.insert("d2Min80Amnt", valMin80);
+	flowObj.insert("d2Min50Delta1Month", d2Min50Delta1Month);
+	double montheDelta = BalanceMetric::get(user())->value(Transaction::currentDay());
+	montheDelta -= BalanceMetric::get(user())->value(Transaction::currentDay().addDays(-Transaction::currentDay().day()));
+	flowObj.insert("monthDelta", montheDelta);
 	statObj["flow"] = flowObj;
 
 	addTrend(statObj, "01", trend01);
