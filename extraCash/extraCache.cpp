@@ -288,6 +288,12 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 	flowObj.insert("d2Min80Amnt", valMin80);
 	flowObj.insert("d2Min50Delta1Month", d2Min50Delta1Month);
 
+	QJsonArray simuVal;
+	QJsonArray simuDev;
+	Montecarlo<128>::get(user())->simuValDev(Transaction::currentDay(), simuVal, simuDev);
+	flowObj.insert("simuVal", simuVal);
+	flowObj.insert("simuDev", simuDev);
+
 	double montheDelta = BalanceMetric::get(user())->value(Transaction::currentDay());
 	montheDelta -= BalanceMetric::get(user())->value(Transaction::currentDay().addDays(-Transaction::currentDay().day()));
 	flowObj.insert("monthDelta", montheDelta);

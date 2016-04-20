@@ -278,6 +278,26 @@ public:
 		*val = m_simulations[Transaction::currentDay()].valPerc(1+d2EndMonth, facPerc);
 		return d2EndMonth;
 	}
+	double simuValDev(const QDate &date, QJsonArray& simuVal, QJsonArray& simuDev) {
+		Simulation<Nrun>& sim =  m_simulations[date];
+		for (int i = 0; i < displayDayFuture; ++i) {
+			const QVector<double>& vals = sim.valsDay(i);
+			double med = vals[Nrun / 2];
+			double avg = 0;
+			for (const double& v : vals) {
+				avg += v;
+			}
+			avg /= Nrun;
+			double var = 0;
+			for (const double& v : vals) {
+				double d = v - med;
+				var += d * d;
+			}
+			var /= Nrun;
+			simuVal.append(med);
+			simuDev.append(qSqrt(var));
+		}
+	}
 
 protected:
 	double computeFor(const QDate& date, bool& isValid) override {

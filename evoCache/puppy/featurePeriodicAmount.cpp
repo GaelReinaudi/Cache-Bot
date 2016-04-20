@@ -15,7 +15,8 @@ QJsonObject OracleOneDayOfMonth::toJson() const {
 	ret["day1"] = (m_args.m_dayOfMonth + 31) % 31;
 	ret["day2"] = (m_args.m_dayOfMonth2 + 31) % 31;
 	const auto& rev = const_cast<OracleOneDayOfMonth* const>(this)->revelation(QDate::currentDate().addDays(40));
-	ret["nextDate"] = rev.count() ? rev.first().date.toString("yyyy-MM-dd") : "";
+	if (rev.count())
+		ret["nextDate"] = rev.first().date.toString("yyyy-MM-dd");
 	ret["daily"] = (m_args.computeProba() <= 0.0)
 				   ? 0.0
 				   : m_args.m_bundle.avgSmart() / (365.25 / (12.0 * (m_args.m_dayOfMonth2 != 0 ? 2.0 : 1.0)));
