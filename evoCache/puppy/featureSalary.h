@@ -17,7 +17,7 @@ protected:
 protected:
 	void onJustApplied(TransactionBundle &allTrans, Puppy::Context& ioContext) override {
 		FeatureMonthlyAmount::onJustApplied(allTrans, ioContext);
-		m_fitness *= 4;
+		m_fitness *= 1 + m_localStaticArgs.m_bundle.flagsCount(Transaction::UserInputFlag::yesIncome);
 	}
 protected:
 	qint64 distance(const Transaction *targ, const Transaction *trans) override {
@@ -25,6 +25,8 @@ protected:
 			// if trans bellow target, probably not this
 			if (targ->amount() > trans->amount() * 1.2)
 				return targ->distanceWeighted<16, 512/2, 2*4>(*trans);
+			else if (trans->userFlag & Transaction::UserInputFlag::yesIncome)
+				return targ->distanceWeighted<16*2*2, 512, 4*4*16>(*trans);
 			else { // if above
 				return targ->distanceWeighted<16*2, 512/2, 2*4*16>(*trans);
 			}
@@ -52,12 +54,18 @@ protected:
 protected:
 	void onJustApplied(TransactionBundle &allTrans, Puppy::Context& ioContext) override {
 		FeatureBiWeeklyAmount::onJustApplied(allTrans, ioContext);
-		m_fitness *= 4;
+		m_fitness *= 1 + m_localStaticArgs.m_bundle.flagsCount(Transaction::UserInputFlag::yesIncome);
 	}
 	qint64 distance(const Transaction *targ, const Transaction *trans) override {
-		// if both are positive
 		if (targ->amount() > 0 && trans->amount() > 0) {
-			return targ->distanceWeighted<16*2, 512/2, 2*4>(*trans);
+			// if trans bellow target, probably not this
+			if (targ->amount() > trans->amount() * 1.2)
+				return targ->distanceWeighted<16, 512/2, 2*4>(*trans);
+			else if (trans->userFlag & Transaction::UserInputFlag::yesIncome)
+				return targ->distanceWeighted<16*2*2, 512, 4*4*16>(*trans);
+			else { // if above
+				return targ->distanceWeighted<16*2, 512/2, 2*4*16>(*trans);
+			}
 		}
 		return 1<<20;
 	}
