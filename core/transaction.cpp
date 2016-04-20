@@ -56,6 +56,10 @@ void Transaction::loadUserFlags(const QJsonObject &json) {
 				userFlag |= NoRecur;
 			}
 		}
+		if (flag == "yesIncome") {
+			WARN() << id << " yesIncome";
+			userFlag |= yesIncome;
+		}
 	}
 	if (json["sum_ids"].toArray().count()) {
 		WARN() << id << " IsMatchOff";

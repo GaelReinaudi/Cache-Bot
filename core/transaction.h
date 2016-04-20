@@ -45,9 +45,10 @@ public:
 	int type() const;
 	enum UserInputFlag { NoUserFlag = 0x0,
 						 NoRecur = 0x1,
+						 yesIncome = 0x2,
 						 IsMatchOff = 0x8,
 						 Reimbursed = 0x10,
-						 AverageLonger = 0x12
+						 AverageLonger = 0x20
 					   };
 	int userFlag = Flag::None;
 	void loadUserFlags(const QJsonObject &json);
@@ -237,6 +238,20 @@ public:
 					ret.append(strCat);
 				break;
 			}
+		}
+		return ret;
+	}
+	int flagsOR() const {
+		int ret = 0;
+		for (int i = 0; i < m_vector.count(); ++i) {
+			ret |= m_vector.at(i)->userFlag;
+		}
+		return ret;
+	}
+	int flagsCount(int flagAND) const {
+		int ret = 0;
+		for (int i = 0; i < m_vector.count(); ++i) {
+			ret += !!(m_vector.at(i)->userFlag & flagAND);
 		}
 		return ret;
 	}
