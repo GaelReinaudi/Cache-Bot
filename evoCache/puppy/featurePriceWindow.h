@@ -29,6 +29,11 @@ public:
 		: FeatureStatDistrib("PriceWindow")
 	{
 	}
+	FeaturePriceWindow(const QString& featureName)
+		: FeatureStatDistrib(featureName)
+	{
+	}
+
 protected:
 	bool passFilter(qint64 dist, const Transaction& trans) const override {
 		Q_UNUSED(dist);
@@ -50,6 +55,30 @@ protected:
 		if (BotContext::JSON_ARGS["PriceWindow"].toString().trimmed() != "enabled") {
 			m_fitness -= 123456789.0;
 		}
+	}
+};
+
+class FeatureSalaryWindow : public FeaturePriceWindow
+{
+public:
+	FeatureSalaryWindow()
+		: FeaturePriceWindow("SalaryWindow")
+	{
+	}
+protected:
+	bool passFilter(qint64 dist, const Transaction& trans) const override {
+		Q_UNUSED(dist);
+		bool ok = FeaturePriceWindow::passFilter(dist, trans);
+		ok &= trans.userFlag & Transaction::UserInputFlag::yesIncome;
+		return ok;
+	}
+	int minTransactionForBundle() const override { return 2; }
+	void onJustApplied(TransactionBundle& allTrans, Puppy::Context& ioContext) override {
+		if (m_localStaticArgs.m_bundle.flagsCount(Transaction::UserInputFlag::yesIncome) < 4) {
+			m_fitness -= 123456789.0;
+		}
+		else
+			m_fitness *= 4;
 	}
 };
 
