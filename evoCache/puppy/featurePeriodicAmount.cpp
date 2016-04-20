@@ -14,6 +14,8 @@ QJsonObject OracleOneDayOfMonth::toJson() const {
 //	ret["stdDevD2N"] = m_args.m_bundle.stdDevD2N(avgD2N);
 	ret["day1"] = (m_args.m_dayOfMonth + 31) % 31;
 	ret["day2"] = (m_args.m_dayOfMonth2 + 31) % 31;
+	const auto& rev = const_cast<OracleOneDayOfMonth* const>(this)->revelation(QDate::currentDate().addDays(40));
+	ret["nextDate"] = rev.count() ? rev.first().date.toString("yyyy-MM-dd") : "";
 	ret["daily"] = (m_args.computeProba() <= 0.0)
 				   ? 0.0
 				   : m_args.m_bundle.avgSmart() / (365.25 / (12.0 * (m_args.m_dayOfMonth2 != 0 ? 2.0 : 1.0)));
@@ -52,6 +54,7 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool isPostTreat
 	m_targetTrans = targetTransactions(iniDate, endDate);
 	if (m_targetTrans.count() == 0) {
 		WARN() << "MonthlyAmount(0 TARGET): day "<<m_localStaticArgs.m_dayOfMonth<<" kla "<< m_localStaticArgs.m_kla;
+		return 0;
 	}
 	else if (doLog) {
 //		NOTICE() << getName().c_str() << " " << m_targetTrans.count()
@@ -310,6 +313,8 @@ QVector<Transaction> OracleOneDayOfMonth::revelation(QDate upToDate)
 
 qint64 FeaturePeriodicAmount::distance(const Transaction *targ, const Transaction *trans)
 {
+//	if (trans->userFlag & Transaction::UserInputFlag::yesIncome)
+//		return 1<<20;
 	return targ->dist(*trans);
 }
 
