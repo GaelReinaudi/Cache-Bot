@@ -121,8 +121,7 @@ void ExtraCashView::onBotInjected(Bot* pBot)
 	Q_UNUSED(pBot);
 	NOTICE() << "ExtraCashView::onBotInjected";
 	m_pbDate = Transaction::currentDay();
-	m_realBalance = m_pExtraCache->user()->balance(Account::Type::Checking);
-	m_realBalance -= m_pExtraCache->user()->balance(Account::Type::Credit);
+	m_realBalance = BalanceMetric::get(m_pExtraCache->user())->value(QDate::currentDate());
 	m_pbBalance = BalanceMetric::get(m_pExtraCache->user())->value(m_pbDate);
 
 	HistoMetric::clearAll();
