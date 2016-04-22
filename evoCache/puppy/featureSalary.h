@@ -25,8 +25,8 @@ protected:
 			// if trans bellow target, probably not this
 			if (targ->amount() > trans->amount() * 1.2)
 				return targ->distanceWeighted<16, 512/2, 2*4>(*trans);
-			else if (trans->userFlag & Transaction::UserInputFlag::yesIncome)
-				return targ->distanceWeighted<16*2*2, 512, 4*4*16>(*trans);
+//			else if (trans->userFlag & Transaction::UserInputFlag::yesIncome)
+//				return targ->distanceWeighted<16*2*2, 512, 4*4*16>(*trans);
 			else { // if above
 				return targ->distanceWeighted<16*2, 512/2, 2*4*16>(*trans);
 			}
@@ -61,8 +61,8 @@ protected:
 			// if trans bellow target, probably not this
 			if (targ->amount() > trans->amount() * 1.2)
 				return targ->distanceWeighted<16, 512/2, 2*4>(*trans);
-			else if (trans->userFlag & Transaction::UserInputFlag::yesIncome)
-				return targ->distanceWeighted<16*2*2, 512, 4*4*16>(*trans);
+//			else if (trans->userFlag & Transaction::UserInputFlag::yesIncome)
+//				return targ->distanceWeighted<16*2*2, 512, 4*4*16>(*trans);
 			else { // if above
 				return targ->distanceWeighted<16*2, 512/2, 2*4*16>(*trans);
 			}
