@@ -15,7 +15,7 @@ Account::Account(QJsonObject jsonAcc, QObject *parent)
 
 void Account::loadJsonData(QJsonObject json)
 {
-	QString accountID = json["_id"].toString();
+	accountID = json["_id"].toString();
 	m_plaidId = json["plaid_id"].toString();
 	int accountLast4Digits = json["meta"].toObject()["number"].toInt();
 	QString accountMetaName = json["meta"].toObject()["name"].toString();

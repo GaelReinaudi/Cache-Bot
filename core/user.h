@@ -83,6 +83,9 @@ public:
 	Fund *extraCacheFund() const {
 		return m_extraCacheFund;
 	}
+	QVector<Account *> accounts() const {
+		return m_accounts;
+	}
 
 	QString email() const{
 		return m_email;

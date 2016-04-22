@@ -239,6 +239,15 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 
 	QJsonObject statObj;// = bestBot->postTreatment();
 
+	QJsonArray accounts;
+	for (const auto a : user()->accounts()) {
+		QJsonObject theAc;
+		theAc["_id"] = a->accountID;
+		theAc["type"] = a->type();
+		accounts.append(theAc);
+	}
+	statObj["accounts"] = accounts;
+
 //	QJsonObject trendObjects;
 	OracleTrend<1>::get(user())->value(Transaction::currentDay());
 	SuperOracle::Summary trend01 = OracleTrend<1>::get(user())->effectSummaries()[Transaction::currentDay()];

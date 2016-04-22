@@ -39,6 +39,7 @@ public:
 
 	Type type() const{ return m_type; }
 
+	QString accountID;
 private:
 	QString m_plaidId;
 	QString m_jsonFilePath = "predicted";
