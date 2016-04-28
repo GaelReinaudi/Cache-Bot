@@ -20,6 +20,12 @@ protected:
 		m_fitness *= 1 + m_localStaticArgs.m_bundle.flagsCount(Transaction::UserInputFlag::yesIncome);
 	}
 protected:
+	bool passFilter(qint64 dist, const Transaction& trans) const override {
+		Q_UNUSED(dist);
+		bool ok = FeatureMonthlyAmount::passFilter(dist, trans);
+		ok &= !(trans.userFlag & Transaction::UserInputFlag::noIncome);
+		return ok;
+	}
 	qint64 distance(const Transaction *targ, const Transaction *trans) override {
 		if (targ->amount() > 0 && trans->amount() > 0) {
 			// if trans bellow target, probably not this
@@ -52,6 +58,12 @@ protected:
 		: FeatureBiWeeklyAmount(featureName)
 	{ }
 protected:
+	bool passFilter(qint64 dist, const Transaction& trans) const override {
+		Q_UNUSED(dist);
+		bool ok = FeatureBiWeeklyAmount::passFilter(dist, trans);
+		ok &= !(trans.userFlag & Transaction::UserInputFlag::noIncome);
+		return ok;
+	}
 	void onJustApplied(TransactionBundle &allTrans, Puppy::Context& ioContext) override {
 		FeatureBiWeeklyAmount::onJustApplied(allTrans, ioContext);
 		m_fitness *= 1 + m_localStaticArgs.m_bundle.flagsCount(Transaction::UserInputFlag::yesIncome);
@@ -64,7 +76,7 @@ protected:
 //			else if (trans->userFlag & Transaction::UserInputFlag::yesIncome)
 //				return targ->distanceWeighted<16*2*2, 512, 4*4*16>(*trans);
 			else { // if above
-				return targ->distanceWeighted<16*2, 512/2, 2*4*16>(*trans);
+				return targ->distanceWeighted<16*2, 512/2, 2*4>(*trans);
 			}
 		}
 		return 1<<20;
@@ -126,6 +138,12 @@ protected:
 		m_fitness *= 1 - qAbs(kindaLog(User::declaredRent*30) + m_localStaticArgs.m_bundle.klaAverage());
 	}
 protected:
+	bool passFilter(qint64 dist, const Transaction& trans) const override {
+		Q_UNUSED(dist);
+		bool ok = FeatureMonthlyAmount::passFilter(dist, trans);
+		ok &= !(trans.userFlag & Transaction::UserInputFlag::noHousing);
+		return ok;
+	}
 	qint64 distance(const Transaction *targ, const Transaction *trans) override {
 		// if both are neg
 		if (targ->amount() <= -300 && trans->amount() <= -300) {

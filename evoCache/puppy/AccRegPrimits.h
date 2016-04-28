@@ -184,6 +184,10 @@ protected:
 		}
 	}
 	virtual void cleanArgs() {}
+	virtual bool passFilter(qint64 dist, const Transaction& trans) const {
+		Q_UNUSED(dist);Q_UNUSED(trans);
+		return true;
+	}
 	virtual bool cannotExecute(Puppy::Context& ioContext) const { Q_UNUSED(ioContext); return false; }
 	virtual double apply(TransactionBundle& allTrans, bool isPostTreat, bool doLog) = 0;
 	virtual void isolateBundledTransactions(bool isPostTreatment = false);

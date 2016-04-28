@@ -168,6 +168,12 @@ protected:
 		return retObj;
 	}
 
+	bool passFilter(qint64 dist, const Transaction& trans) const override {
+		Q_UNUSED(dist);
+		bool ok = true;
+		ok &= !(trans.userFlag & (Transaction::noRecur | Transaction::Reimbursed));
+		return ok;
+	}
 	double apply(TransactionBundle& allTrans, bool isPostTreat, bool doLog) override;
 	void onJustApplied(TransactionBundle &allTrans, Puppy::Context& ioContext) override;
 	void emitGraphics(Puppy::Context& ioContext) const override;

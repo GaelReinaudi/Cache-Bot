@@ -44,11 +44,16 @@ public:
 	int isVoid() const;
 	int type() const;
 	enum UserInputFlag { NoUserFlag = 0x0,
-						 NoRecur = 0x1,
-						 yesIncome = 0x2,
-						 IsMatchOff = 0x8,
-						 Reimbursed = 0x10,
-						 AverageLonger = 0x20
+						 yesRecur = 0x1,
+						 noRecur = 0x2,
+						 yesIncome = 0x4,
+						 noIncome = 0x8,
+						 yesHousing = 0x10,
+						 noHousing = 0x20,
+						 aaaaaaaaa = 0x40,
+						 IsMatchOff = 0x80,
+						 Reimbursed = 0x100,
+						 AverageLonger = 0x200
 					   };
 	int userFlag = Flag::None;
 	void loadUserFlags(const QJsonObject &json);

@@ -81,7 +81,7 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool isPostTreat
 	for (int i = 0; i < allTrans.count(); ++i) {
 		const Transaction& trans = allTrans.trans(i);
 		qint64 dist = distance(iTarg, &trans);
-		if (trans.noUse() || trans.userFlag & (Transaction::NoRecur | Transaction::Reimbursed)) {
+		if (trans.noUse() || !passFilter(dist, trans)) {
 			dist = 1<<20;
 		}
 		double factOld = 2.0;

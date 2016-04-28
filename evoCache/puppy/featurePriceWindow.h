@@ -69,7 +69,7 @@ protected:
 	bool passFilter(qint64 dist, const Transaction& trans) const override {
 		Q_UNUSED(dist);
 		bool ok = FeaturePriceWindow::passFilter(dist, trans);
-		ok &= trans.userFlag & Transaction::UserInputFlag::yesIncome;
+		ok &= !(trans.userFlag & Transaction::UserInputFlag::noIncome);
 		return ok;
 	}
 	int minTransactionForBundle() const override { return 2; }

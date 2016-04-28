@@ -53,12 +53,32 @@ void Transaction::loadUserFlags(const QJsonObject &json) {
 				WARN() << "ignoring flag:" << flag;
 			}
 			else {
-				userFlag |= NoRecur;
+				WARN() << id << " NoRecur";
+				userFlag |= noRecur;
 			}
 		}
-		if (flag == "yesIncome") {
+		else if (flag.startsWith("yesRecur")) {
+			WARN() << id << " yesRecur";
+			userFlag |= yesRecur;
+		}
+		else if (flag == "yesIncome") {
 			WARN() << id << " yesIncome";
 			userFlag |= yesIncome;
+		}
+		else if (flag == "noIncome") {
+			WARN() << id << " noIncome";
+			userFlag |= noIncome;
+		}
+		else if (flag == "yesHousing") {
+			WARN() << id << " yesHousing";
+			userFlag |= yesHousing;
+		}
+		else if (flag == "noHousing") {
+			WARN() << id << " noHousing";
+			userFlag |= noHousing;
+		}
+		else {
+			ERR() << id << " unknown flag " << flag;
 		}
 	}
 	if (json["sum_ids"].toArray().count()) {
