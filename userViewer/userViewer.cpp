@@ -35,7 +35,7 @@ User *UserViewer::user() const
 
 void UserViewer::onAgo()
 {
-	Transaction::setCurrentDay(QDate::currentDate().addDays(-ui->spinAgo->value()));
+	Transaction::setCurrentDay(Transaction::actualCurrentDay().addDays(-ui->spinAgo->value()));
 	ui->dateEdit->setDate(Transaction::currentDay());
 	user()->reInjectBot();
 }

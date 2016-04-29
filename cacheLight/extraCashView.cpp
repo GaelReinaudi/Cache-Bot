@@ -98,7 +98,7 @@ ExtraCashView::ExtraCashView(QString userID, QJsonObject jsonArgs) :
 	connect(ui->plot, SIGNAL(mouseWheel(QWheelEvent*)), this, SLOT(onWheelEvent(QWheelEvent*)));
 	ui->spinDaysOld->setValue(Transaction::maxDaysOld());
 	connect(ui->spinDaysOld, SIGNAL(valueChanged(int)), this, SLOT(onDaysOldSpin(int)));
-	ui->spinAgo->setValue(Transaction::currentDay().daysTo(QDate::currentDate()));
+	ui->spinAgo->setValue(Transaction::currentDay().daysTo(Transaction::actualCurrentDay()));
 	connect(ui->spinAgo, SIGNAL(valueChanged(int)), this, SLOT(onAgo()));
 
 	connect(m_pExtraCache, SIGNAL(injected(User*)), this, SLOT(onUserInjected(User*)));
@@ -121,7 +121,7 @@ void ExtraCashView::onBotInjected(Bot* pBot)
 	Q_UNUSED(pBot);
 	NOTICE() << "ExtraCashView::onBotInjected";
 	m_pbDate = Transaction::currentDay();
-	m_realBalance = BalanceMetric::get(m_pExtraCache->user())->value(QDate::currentDate());
+	m_realBalance = BalanceMetric::get(m_pExtraCache->user())->value(Transaction::actualCurrentDay());
 	m_pbBalance = BalanceMetric::get(m_pExtraCache->user())->value(m_pbDate);
 
 	HistoMetric::clearAll();
@@ -164,7 +164,7 @@ void ExtraCashView::onDaysOldSpin(int val)
 
 void ExtraCashView::onAgo()
 {
-	Transaction::setCurrentDay(QDate::currentDate().addDays(-ui->spinAgo->value()));
+	Transaction::setCurrentDay(Transaction::actualCurrentDay().addDays(-ui->spinAgo->value()));
 	m_pExtraCache->user()->reInjectBot();
 }
 
@@ -186,13 +186,13 @@ void ExtraCashView::onWheelEvent(QWheelEvent * wEv)
 	else {
 		Transaction::setCurrentDay(Transaction::currentDay().addDays(-step));
 	}
-	ui->spinAgo->setValue(Transaction::currentDay().daysTo(QDate::currentDate()));
+	ui->spinAgo->setValue(Transaction::currentDay().daysTo(Transaction::actualCurrentDay()));
 //	m_pExtraCache->user()->reInjectBot();
 }
 
 void ExtraCashView::updateChart()
 {
-	double daysAgo = Transaction::currentDay().daysTo(QDate::currentDate());
+	double daysAgo = Transaction::currentDay().daysTo(Transaction::actualCurrentDay());
 
 	makeBalancePlot();
 	makeRevelationPlot();
@@ -227,7 +227,7 @@ void ExtraCashView::updateChart()
 
 void ExtraCashView::makeBalancePlot()
 {
-	double x = Transaction::currentDay().daysTo(QDate::currentDate());
+	double x = Transaction::currentDay().daysTo(Transaction::actualCurrentDay());
 	ui->plot->graph(IND_GR_BALANCE)->clearData();
 	ui->plot->graph(IND_GR_BALANCE)->addData(x, m_realBalance);
 	ui->spinBox->setValue(m_pbBalance);

@@ -128,8 +128,8 @@ public:
 	static QDate currentDay() {
 		return s_currentDay;
 	}
-	static QDateTime actualCurrentDayTime() {
-		return s_actualCurrentDayTime;
+	static QDate actualCurrentDay() {
+		return s_actualCurrentDay;
 	}
 	static void setCurrentDay(const QDate &value) {
 		s_currentDay = value;
