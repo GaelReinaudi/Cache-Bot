@@ -2,7 +2,7 @@
 #include "account.h"
 #include "botContext.h"
 
-int hoursOffsetToHack_issue_9 = -5;
+int hoursOffsetToHack_issue_9 = -7;
 QDateTime Transaction::s_actualCurrentDayTime = QDateTime::currentDateTime().addSecs(hoursOffsetToHack_issue_9 * 3600);
 QDate Transaction::s_actualCurrentDay = s_actualCurrentDayTime.date();
 QDate Transaction::s_currentDay = Transaction::s_actualCurrentDayTime.date();//.addDays(-1);//.addMonths(-2);

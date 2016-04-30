@@ -9,6 +9,10 @@ CacheAccountConnector::CacheAccountConnector(QString userID, QJsonObject jsonArg
 {
 	CREATE_LOGGER(userID);
 
+	WARN() << "Transaction::actualCurrentDay()" << Transaction::actualCurrentDay().toString();
+	WARN() << "Transaction::currentDay()" << Transaction::currentDay().toString();
+	WARN() << "jsonArgs: " << QString(QJsonDocument(m_jsonArgs).toJson(/*QJsonDocument::Compact*/));
+
 	if (jsonArgs["NoSend"].toString() != "") {
 		flags &= ~CacheAccountConnector::SendExtraCash;
 	}
@@ -30,10 +34,6 @@ CacheAccountConnector::CacheAccountConnector(QString userID, QJsonObject jsonArg
 	if (!argCat.isEmpty()) {
 		Transaction::makeCatRegExps(argCat);
 	}
-
-
-	NOTICE() << "Transaction::currentDay()" << Transaction::currentDay().toString();
-	NOTICE() << "jsonArgs: " << QString(QJsonDocument(m_jsonArgs).toJson(/*QJsonDocument::Compact*/));
 
 	// login as cache-bot
 	CacheRest::Instance()->login();
