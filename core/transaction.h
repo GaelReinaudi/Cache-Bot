@@ -131,6 +131,9 @@ public:
 	static QDate actualCurrentDay() {
 		return s_actualCurrentDay;
 	}
+	static QDateTime actualCurrentDayTime() {
+		return s_actualCurrentDayTime;
+	}
 	static void setCurrentDay(const QDate &value) {
 		s_currentDay = value;
 	}

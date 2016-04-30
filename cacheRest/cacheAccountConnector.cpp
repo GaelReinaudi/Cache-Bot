@@ -9,6 +9,7 @@ CacheAccountConnector::CacheAccountConnector(QString userID, QJsonObject jsonArg
 {
 	CREATE_LOGGER(userID);
 
+	WARN() << "Transaction::actualCurrentDayTime()" << Transaction::actualCurrentDayTime().toString();
 	WARN() << "Transaction::actualCurrentDay()" << Transaction::actualCurrentDay().toString();
 	WARN() << "Transaction::currentDay()" << Transaction::currentDay().toString();
 	WARN() << "jsonArgs: " << QString(QJsonDocument(m_jsonArgs).toJson(/*QJsonDocument::Compact*/));
