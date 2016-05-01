@@ -75,6 +75,7 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool isPostTreat
 	m_localStaticArgs.m_consecMonth = 0;
 	m_localStaticArgs.m_consecMonthBeforeMissed = 0;
 	m_localStaticArgs.m_consecMissed = 999;
+	m_localStaticArgs.m_lastDateMatched = QDate();
 	m_localStaticArgs.m_prevMissed = 0;
 	if (m_localStaticArgs.m_dayOfMonth < -13 || m_localStaticArgs.m_dayOfMonth > 31)
 		return 0.0;
@@ -112,6 +113,7 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool isPostTreat
 				++m_localStaticArgs.m_consecMonth;
 				m_localStaticArgs.m_prevMissed = m_localStaticArgs.m_consecMissed;
 				m_localStaticArgs.m_consecMissed = 0;
+				m_localStaticArgs.m_lastDateMatched = trans.date;
 				// if transaction is in advance
 				if (localTrans->date == Transaction::currentDay())
 					m_localStaticArgs.m_consecMissed = -1;
@@ -287,9 +289,13 @@ QVector<Transaction> OracleOneDayOfMonth::revelation(QDate upToDate)
 		return tr;
 	};
 	DBG() << "OracleOneDayOfMonth::revelation. bundle = " << m_args.m_bundle.count();
-	QDate iniDate = Transaction::currentDay().addDays(-SLACK_FOR_LATE_TRANS);
 	static QVector<Transaction> targetTrans;
 	targetTrans.clear();
+	if (!m_args.m_lastDateMatched.isValid())
+		return targetTrans;
+	QDate iniDate = m_args.m_lastDateMatched.addDays(SLACK_FOR_LATE_TRANS);
+//	if (iniDate < Transaction::currentDay())
+//		iniDate = Transaction::currentDay().addDays(SLACK_FOR_LATE_TRANS);
 	if (m_args.computeProba() > 0.0)
 	{
 		targetTrans = FeatureMonthlyAmount::BlankTransactionsForDayOfMonth(iniDate, upToDate, m_args.m_dayOfMonth, lambdaTrans);
@@ -301,11 +307,14 @@ QVector<Transaction> OracleOneDayOfMonth::revelation(QDate upToDate)
 //		if (targetTrans.first().date <= Transaction::currentDay()) {
 //			targetTrans.first().date = Transaction::currentDay().addDays(1);
 //		}
-		// if we have the first transaction, don't predict it
-		if (m_args.m_consecMissed == -1) {
-			targetTrans.pop_front();
-		}
-		if (m_args.m_consecMissed == 0 && targetTrans.begin()->date <= Transaction::currentDay()) {
+//		// if we have the first transaction, don't predict it
+//		if (m_args.m_consecMissed == -1) {
+//			targetTrans.pop_front();
+//		}
+//		if (m_args.m_consecMissed == 0 && targetTrans.begin()->date <= Transaction::currentDay()) {
+//			targetTrans.pop_front();
+//		}
+		while (targetTrans.first().date < Transaction::currentDay()) {
 			targetTrans.pop_front();
 		}
 	}
@@ -330,19 +339,26 @@ QVector<Transaction> OracleEveryOtherWeek::revelation(QDate upToDate)
 		return tr;
 	};
 	DBG() << "OracleEveryOtherWeek::revelation. bundle = " << m_args.m_bundle.count();
-	QDate iniDate = Transaction::currentDay().addDays(-SLACK_FOR_LATE_TRANS);
 	static QVector<Transaction> targetTrans;
 	targetTrans.clear();
+	if (!m_args.m_lastDateMatched.isValid())
+		return targetTrans;
+	QDate iniDate = m_args.m_lastDateMatched.addDays(SLACK_FOR_LATE_TRANS);
+//	if (iniDate < Transaction::currentDay())
+//		iniDate = Transaction::currentDay().addDays(SLACK_FOR_LATE_TRANS);
 	if (m_args.computeProba() > 0.0)
 	{
 		targetTrans = FeatureMonthlyAmount::BlankTransactionsForJdOffset(iniDate, upToDate, m_args.m_dayOfMonth, lambdaTrans);
 
 		qSort(targetTrans.begin(), targetTrans.end(), Transaction::earlierThan);
-		// if we have the first transaction, don't predict it
-		if (m_args.m_consecMissed == -1) {
-			targetTrans.pop_front();
-		}
-		if (m_args.m_consecMissed == 0 && targetTrans.begin()->date <= Transaction::currentDay()) {
+//		// if we have the first transaction, don't predict it
+//		if (m_args.m_consecMissed == -1) {
+//			targetTrans.pop_front();
+//		}
+//		else if (m_args.m_consecMissed == 0 && qAbs(m_args.m_lastDateMatched.daysTo(Transaction::actualCurrentDay())) <= SLACK_FOR_LATE_TRANS) {
+//			targetTrans.pop_front();
+//		}
+		while (targetTrans.first().date < Transaction::currentDay()) {
 			targetTrans.pop_front();
 		}
 	}

@@ -23,6 +23,7 @@ private:
 			o_retObj.insert("dayOfMonth", m_dayOfMonth);
 			o_retObj.insert("consecutive", m_consecMonthBeforeMissed);
 			o_retObj.insert("consMissed", m_consecMissed);
+			o_retObj.insert("lastDateMatched", m_lastDateMatched.toString("yyyy-MM-dd"));
 			o_retObj.insert("consPrevMissed", m_prevMissed);
 			o_retObj.insert("_total", m_bundle.sumDollar());
 //			o_retObj.insert("numBund", m_bundle.count());
@@ -69,6 +70,7 @@ private:
 		int m_consecMonthBeforeMissed = 0;
 		int m_consecMonth = 0;
 		int m_consecMissed = 999;
+		QDate m_lastDateMatched;
 		int m_prevMissed = 0;
 		double m_fitRerun = 0;
 		int m_maxMissesAllowed = 0;
