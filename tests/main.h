@@ -96,7 +96,7 @@ private slots:
 	void getUseraData() {
 		CacheRest::Instance()->getUserData(TEST_USER_ID_3);
 		QSignalSpy spyUserData(CacheRest::Instance()->worker, SIGNAL(repliedUserData(QString)));
-		QVERIFY(spyUserData.wait(10000));
+		QVERIFY(spyUserData.wait(30000));
 		QCOMPARE(spyUserData.count(), 1);
 		QList<QVariant> arguments = spyUserData.takeFirst();
 		m_userData = arguments.at(0).toString();
