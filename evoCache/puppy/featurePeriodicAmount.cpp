@@ -308,7 +308,7 @@ QVector<Transaction> OracleOneDayOfMonth::revelation(QDate upToDate)
 //		if (m_args.m_consecMissed == 0 && targetTrans.begin()->date <= Transaction::currentDay()) {
 //			targetTrans.pop_front();
 //		}
-		while (targetTrans.first().date < Transaction::currentDay()) {
+		while (targetTrans.first().date < Transaction::currentDay().addDays(-SLACK_FOR_LATE_TRANS)) {
 			targetTrans.pop_front();
 		}
 	}
