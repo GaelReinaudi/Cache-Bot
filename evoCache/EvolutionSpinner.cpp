@@ -192,7 +192,7 @@ void EvolutionSpinner::runEvolution() {
 		makeSuperTreeMixtures(lPopulation, *m_context);
 
 		// inject the previous best bot that we got from the database
-		lPopulation.push_back(m_context->m_pUser->m_bestBot->puppyTree());
+//		lPopulation.push_back(m_context->m_pUser->m_bestBot->puppyTree());
 
 		m_context->currentGeneration = 0;
 		evaluateSymbReg(lPopulation, *m_context);
