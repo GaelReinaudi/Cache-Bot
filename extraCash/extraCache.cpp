@@ -302,6 +302,7 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 	Montecarlo<128>::get(user())->simuValDev(Transaction::currentDay(), simuVal, simuDev);
 	flowObj.insert("simuVal", simuVal);
 	flowObj.insert("simuDev", simuDev);
+	flowObj.insert("weekDetail", summary.weekDetails);
 
 	double montheDelta = BalanceMetric::get(user())->value(Transaction::currentDay());
 	montheDelta -= BalanceMetric::get(user())->value(Transaction::currentDay().addDays(-Transaction::currentDay().day()));

@@ -169,6 +169,7 @@ public:
 		double salary = 0.0;
 		QVector<double> dailyPerOracle;
 		QVector<QJsonObject> summaryPerOracle;
+		QJsonObject weekDetails;
 		QJsonArray toJson() {
 			QJsonArray allSum;
 			for (int i = 0; i < summaryPerOracle.count(); ++i) {

@@ -35,6 +35,7 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 {
 	DBG() << "SuperOracle::avgCashFlow";
 	SuperOracle::Summary summary;
+
 	int ind = -1;
 	for (auto pOr : m_subOracles) {
 		++ind;
@@ -60,22 +61,50 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 				summary.bill += avg;
 			DBG(2) << ind <<  " -daily " << avg << "      " << pOr->feature()->getName();
 		}
-//		else {
-//			summary.posSum += pOr->avgDailyPos();
-//			summary.negSum += pOr->avgDailyNeg();
-//			if (pOr->feature()->isPeriodic()) {
-//				summary.salary += pOr->avgDailyPos();
-//				summary.bill += pOr->avgDailyNeg();
-//			}
-//			DBG(2) << ind <<  " 0daily = " << avg << " " << pOr->feature()->getName()
-//				  << " " << pOr->avgDailyPos()
-//				  << " " << pOr->avgDailyNeg()
-//					 ;
-//		}
 		summary.dailyPerOracle.append(avg);
 		if (includeOracleSummaries)
 			summary.summaryPerOracle.append(pOr->toJson());
 	}
+
+	// week summary
+	int daysToSunday = 7 - Transaction::currentDay().dayOfWeek();
+	summary.weekDetails["daysToSunday"] = daysToSunday;
+	QJsonArray largePeriodic;
+	double negSumNonPeriodic = 0.0;
+	int index = -1;
+	for (QSharedPointer<Oracle> pOr : m_subOracles) {
+		++index;
+		double avg = pOr->avgDaily();
+		if (avg >= 0)
+			continue;
+		if (pOr->feature()->isPeriodic()) {
+			if (qAbs(avg) < 0.04 * qAbs(summary.negSum)) {
+				negSumNonPeriodic += avg;
+				continue;
+			}
+			QJsonObject orj = pOr->toJson();
+			QDate nextDate = QDate::fromString(orj["nextDate"].toString(), "yyyy-MM-dd");
+			int inD = Transaction::currentDay().daysTo(nextDate);
+			if (inD > 0 && inD <= daysToSunday) {
+				QJsonObject perij;
+				perij["avg"] = avg;
+				perij["inD"] = inD;
+				perij["descr"] = pOr->description();
+				perij["indOracle"] = index;
+				perij["nextDate"] = nextDate.toString();
+//				perij["oracleJson"] = orj;
+				largePeriodic.append(perij);
+			}
+		}
+		else {
+			negSumNonPeriodic += avg;
+			continue;
+		}
+	}
+	summary.weekDetails["largePeriodic"] = largePeriodic;
+	summary.weekDetails["negSumAll"] = summary.negSum;
+	summary.weekDetails["negSumNonPeriodic"] = negSumNonPeriodic;
+
 	if (summary.posSum == 0.0) {
 		DBG(3) << "SuperOracle::avgCashFlow posAvg == 0.0 ";
 		return summary;
