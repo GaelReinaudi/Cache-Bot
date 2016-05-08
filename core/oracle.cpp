@@ -94,7 +94,7 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 				perij["descr"] = pOr->description();
 				perij["indOracle"] = index;
 				perij["nextDate"] = nextDate.toString();
-//				perij["oracleJson"] = orj;
+				perij["oracleJson"] = orj;
 				largePeriodic.append(perij);
 			}
 		}
