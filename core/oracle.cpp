@@ -68,6 +68,8 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 
 	// week summary
 	int daysToSunday = 7 - Transaction::currentDay().dayOfWeek();
+	if (daysToSunday == 0)
+		daysToSunday += 7;
 	summary.weekDetails["daysToSunday"] = daysToSunday;
 	QJsonArray largePeriodic;
 	double negSumNonPeriodic = 0.0;
