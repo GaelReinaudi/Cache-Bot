@@ -1,6 +1,20 @@
 #include "oracle.h"
 #include "AccRegPrimits.h"
 
+QJsonArray revSortedJsonArray(const QString& varName, QList<QJsonObject>& list)
+{
+	QJsonArray ret;
+	if (list.count()) {
+		std::sort(list.begin(), list.end(), [varName](const QJsonObject& a, const QJsonObject& b){
+			return qAbs(a[varName].toDouble()) > qAbs(b[varName].toDouble());
+		});
+	}
+	for (const auto& obj : list) {
+		ret.append(obj);
+	}
+	return ret;
+}
+
 QVector<Transaction> SuperOracle::revelation(QDate upToDate)
 {
 	DBG(2) << "SuperOracle::revelation from " << m_subOracles.count();
@@ -71,8 +85,9 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 	if (daysToSunday == 0)
 		daysToSunday += 7;
 	summary.weekDetails["daysToSunday"] = daysToSunday;
-	QJsonArray largePeriodic;
-	QJsonArray probables;
+	QList<QJsonObject> largePeriodic;
+	QList<QJsonObject> probables;
+	QList<QJsonObject> infrequents;
 	double negSumOthers = 0.0;
 	int index = -1;
 	for (QSharedPointer<Oracle> pOr : m_subOracles) {
@@ -106,14 +121,17 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 			}
 			QJsonObject orj = pOr->toJson();
 			double dayProba = orj["dayProba"].toDouble();
+			QJsonObject perij;
+			perij["avg"] = avg;
+			perij["descr"] = pOr->description();
+			perij["indOracle"] = index;
+			perij["dayProba"] = dayProba;
+			perij["oracleJson"] = orj;
 			if (dayProba * daysToSunday > 1.5) {
-				QJsonObject perij;
-				perij["avg"] = avg;
-				perij["descr"] = pOr->description();
-				perij["indOracle"] = index;
-				perij["dayProba"] = dayProba;
-				perij["oracleJson"] = orj;
 				probables.append(perij);
+			}
+			else {
+				infrequents.append(perij);
 			}
 		}
 		else {
@@ -121,8 +139,10 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 			continue;
 		}
 	}
-	summary.weekDetails["largePeriodic"] = largePeriodic;
-	summary.weekDetails["probables"] = probables;
+
+	summary.weekDetails["largePeriodic"] = revSortedJsonArray("avg", largePeriodic);
+	summary.weekDetails["probables"] = revSortedJsonArray("avg", probables);
+	summary.weekDetails["infrequents"] = revSortedJsonArray("avg", infrequents);
 	summary.weekDetails["negSumAll"] = summary.negSum;
 	summary.weekDetails["negSumOthers"] = negSumOthers;
 
