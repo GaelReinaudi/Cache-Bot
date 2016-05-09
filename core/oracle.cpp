@@ -111,6 +111,7 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 				perij["avg"] = avg;
 				perij["descr"] = pOr->description();
 				perij["indOracle"] = index;
+				perij["dayOccur"] = dayOccur;
 				perij["oracleJson"] = orj;
 				probables.append(perij);
 			}
