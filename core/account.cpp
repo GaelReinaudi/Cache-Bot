@@ -71,7 +71,7 @@ void Account::loadJsonData(QJsonObject json)
 		m_type = Type::Saving;
 		NOTICE() << "Saving";
 	}
-	if (accountSubType.contains("SAFE DEPOSIT BOX", Qt::CaseInsensitive)) {
+	if (accountMetaName.contains("SAFE DEPOSIT BOX", Qt::CaseInsensitive)) {
 		m_type = Type::Saving;
 		NOTICE() << "Saving";
 	}
