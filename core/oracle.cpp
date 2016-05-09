@@ -106,7 +106,7 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 			}
 			QJsonObject orj = pOr->toJson();
 			double dayOccur = orj["dayOccur"].toDouble();
-			if (dayOccur > 0.2) {
+			if (dayOccur * daysToSunday > 1.5) {
 				QJsonObject perij;
 				perij["avg"] = avg;
 				perij["descr"] = pOr->description();
