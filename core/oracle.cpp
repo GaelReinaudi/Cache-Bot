@@ -72,7 +72,8 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 		daysToSunday += 7;
 	summary.weekDetails["daysToSunday"] = daysToSunday;
 	QJsonArray largePeriodic;
-	double negSumNonPeriodic = 0.0;
+	QJsonArray probables;
+	double negSumOthers = 0.0;
 	int index = -1;
 	for (QSharedPointer<Oracle> pOr : m_subOracles) {
 		++index;
@@ -81,7 +82,7 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 			continue;
 		if (pOr->feature()->isPeriodic()) {
 			if (qAbs(avg) < 0.04 * qAbs(summary.negSum)) {
-				negSumNonPeriodic += avg;
+				negSumOthers += avg;
 				continue;
 			}
 			QJsonObject orj = pOr->toJson();
@@ -98,14 +99,31 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 				largePeriodic.append(perij);
 			}
 		}
+		if (true) {
+			if (qAbs(avg) < 0.04 * qAbs(summary.negSum)) {
+				negSumOthers += avg;
+				continue;
+			}
+			QJsonObject orj = pOr->toJson();
+			double dayOccur = orj["dayOccur"].toDouble();
+			if (dayOccur > 0.2) {
+				QJsonObject perij;
+				perij["avg"] = avg;
+				perij["descr"] = pOr->description();
+				perij["indOracle"] = index;
+				perij["oracleJson"] = orj;
+				probables.append(perij);
+			}
+		}
 		else {
-			negSumNonPeriodic += avg;
+			negSumOthers += avg;
 			continue;
 		}
 	}
 	summary.weekDetails["largePeriodic"] = largePeriodic;
+	summary.weekDetails["probables"] = probables;
 	summary.weekDetails["negSumAll"] = summary.negSum;
-	summary.weekDetails["negSumNonPeriodic"] = negSumNonPeriodic;
+	summary.weekDetails["negSumOthers"] = negSumOthers;
 
 	if (summary.posSum == 0.0) {
 		DBG(3) << "SuperOracle::avgCashFlow posAvg == 0.0 ";
