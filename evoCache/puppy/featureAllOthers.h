@@ -50,6 +50,8 @@ private:
 		int m_sumPos = 0;
 		int m_sumNeg = 0;
 	} m_args;
+	FeatureArgs* args() override { return &m_args; }
+
 	friend class FeatureAllOthers;
 };
 

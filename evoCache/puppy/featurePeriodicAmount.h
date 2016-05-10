@@ -75,6 +75,8 @@ private:
 		double m_fitRerun = 0;
 		int m_maxMissesAllowed = 0;
 	} m_args;
+	FeatureArgs* args() override { return &m_args; }
+
 	QString description() const {
 		QString desc;
 		if (m_args.m_kla > 0)

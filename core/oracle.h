@@ -4,6 +4,7 @@
 #include "common.h"
 #include "transaction.h"
 class AccountFeature;
+class FeatureArgs;
 
 static const int displayDayPast = 31;
 static const int displayDayFuture = 62;
@@ -86,6 +87,7 @@ public:
 	AccountFeature* feature() const {
 		return m_feature;
 	}
+	virtual FeatureArgs* args() = 0;
 
 	bool isPostTreatment = false;
 private:
@@ -229,6 +231,7 @@ public:
 		Summary effectOf(const Summary& endSummary, int overDays) const;
 	};
 	Summary computeAvgCashFlow(bool includeOracleSummaries = true) const;
+	FeatureArgs* args() override { return 0; }
 
 private:
 	QVector<QSharedPointer<Oracle> > m_subOracles;

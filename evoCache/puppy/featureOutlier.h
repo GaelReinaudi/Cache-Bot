@@ -33,6 +33,8 @@ private:
 		double m_amount = 0.0;
 		char m_effect = 0;
 	} m_args;
+	FeatureArgs* args() override { return &m_args; }
+
 	friend class FeatureOutlier;
 	friend class FeatureCrossCurrent;
 };
