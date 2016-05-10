@@ -197,10 +197,12 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 	summary.weekDetails["_totNotYesRecur"] = totNotYesRecur;
 	summary.weekDetails["_dailyFrequent"] = dailyFrequent;
 	summary.weekDetails["_dailyInfrequent"] = dailyInfrequent;
+	summary.weekDetails["_totInfrequent"] = dailyInfrequent * daysToSunday;
 	summary.weekDetails["approxTotYesRecur"] = toSignifDigit_2(totYesRecur);
 	summary.weekDetails["approxTotNotYesRecur"] = toSignifDigit_2(totNotYesRecur);
 	summary.weekDetails["approxDailyFrequent"] = toSignifDigit_2(dailyFrequent);
 	summary.weekDetails["approxDailyInfrequent"] = toSignifDigit_2(dailyInfrequent);
+	summary.weekDetails["approxTotInfrequent"] = toSignifDigit_2(dailyInfrequent * daysToSunday);
 
 	if (summary.posSum == 0.0) {
 		DBG(3) << "SuperOracle::avgCashFlow posAvg == 0.0 ";
