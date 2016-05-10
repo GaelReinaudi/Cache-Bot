@@ -102,7 +102,7 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 			QDate nextDate = QDate::fromString(orj["nextDate"].toString(), "yyyy-MM-dd");
 			int inD = Transaction::currentDay().daysTo(nextDate);
 			if (inD > 0 && inD <= daysToSunday) {
-				if (pOr->args()->m_bundle.flagsOR() && Transaction::UserInputFlag::yesRecur) {
+				if (pOr->args()->m_bundle.flagsOR() & Transaction::UserInputFlag::yesRecur) {
 					continue;
 				}
 				else {
