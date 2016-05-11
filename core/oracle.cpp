@@ -80,6 +80,7 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 			summary.summaryPerOracle.append(pOr->toJson());
 	}
 
+	if (includeOracleSummaries) {
 	// week summary
 	int daysToSunday = 7 - Transaction::currentDay().dayOfWeek();
 	if (daysToSunday == 0)
@@ -203,6 +204,7 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 	summary.weekDetails["approxDailyFrequent"] = toSignifDigit_2(dailyFrequent);
 	summary.weekDetails["approxDailyInfrequent"] = toSignifDigit_2(dailyInfrequent);
 	summary.weekDetails["approxTotInfrequent"] = toSignifDigit_2(dailyInfrequent * daysToSunday);
+	}
 
 	if (summary.posSum == 0.0) {
 		DBG(3) << "SuperOracle::avgCashFlow posAvg == 0.0 ";
