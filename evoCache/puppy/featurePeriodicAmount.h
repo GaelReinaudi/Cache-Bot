@@ -137,6 +137,7 @@ public:
 	int isPeriodic() const override { return approxSpacingPayment(); }
 protected:
 	virtual qint64 distance(const Transaction *targ, const Transaction *trans);
+	virtual int onMissedTarget(Transaction *targ);
 };
 
 class FeatureMonthlyAmount : public FeaturePeriodicAmount

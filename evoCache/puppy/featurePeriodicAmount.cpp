@@ -58,10 +58,11 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool isPostTreat
 //			<< " h=" << m_targetTrans.first().nameHash.hash();
 	}
 
+initialize:
 	double totalOneOverDistClosest = 0.0;
 	double totalOneOverDistOthers = 0.0;
-	qint64 localDist = Q_INT64_C(9223372036854775807);
-	const Transaction* localTrans = 0;
+	qint64 minDist = Q_INT64_C(9223372036854775807);
+	const Transaction* closest = 0;
 	// the current target to compare to
 	Transaction* iTarg = &m_targetTrans[0];
 	m_localStaticArgs.m_bundle.clear();
@@ -80,10 +81,10 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool isPostTreat
 			dist = 1<<20;
 		}
 		double factOld = 2.0;
-		if (dist < localDist && trans.jDay() <= approxSpacingPayment() / 3 + iTarg->jDay()) {
-			localDist = dist;
-			localTrans = &trans;
-			double daysAgo = localTrans->date.daysTo(Transaction::currentDay());
+		if (dist < minDist && trans.jDay() <= approxSpacingPayment() / 3 + iTarg->jDay()) {
+			minDist = dist;
+			closest = &trans;
+			double daysAgo = closest->date.daysTo(Transaction::currentDay());
 //			factOld -= 0.5 * daysAgo / double(Transaction::maxDaysOld());
 			if (daysAgo > Transaction::maxDaysOld() / 2)
 				factOld -= 1.0 * daysAgo / double(Transaction::maxDaysOld() / 2);
@@ -91,10 +92,10 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool isPostTreat
 //		Q_ASSERT(localDist < 18446744073709551615ULL);
 		// if we get further away by approxSpacingPayment() / 2 days, we take the next target, or if last trans
 		if (trans.jDay() > approxSpacingPayment() / 2 + iTarg->jDay() || i == allTrans.count() - 1) {
-			if (localDist < Transaction::LIMIT_DIST_TRANS && localTrans) {
-				m_localStaticArgs.m_bundle.append(localTrans);
+			if (minDist < Transaction::LIMIT_DIST_TRANS && closest) {
+				m_localStaticArgs.m_bundle.append(closest);
 				if (doLog) {
-					iTarg->dist(*localTrans, true);
+					iTarg->dist(*closest, true);
 				}
 //				// isolate the transaction that were fitted to the target
 //				Q_ASSERT(localTrans->isVoid() == 0);
@@ -109,23 +110,26 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool isPostTreat
 				m_localStaticArgs.m_consecMissed = 0;
 				m_localStaticArgs.m_lastDateMatched = trans.date;
 				// if transaction is in advance
-				if (localTrans->date == Transaction::currentDay())
+				if (closest->date == Transaction::currentDay())
 					m_localStaticArgs.m_consecMissed = -1;
-				if (localTrans->date > Transaction::currentDay())
+				if (closest->date > Transaction::currentDay())
 					m_localStaticArgs.m_consecMissed = -2;
-				double transFit = 8.0 / (8 + localDist);
+				double transFit = 8.0 / (8 + minDist);
 				totalOneOverDistClosest += factOld * transFit;
 			}
 			else if (iTarg->date < Transaction::currentDay().addDays(-SLACK_FOR_LATE_TRANS)){
 				if (doLog) {
 					DBG() << "missed: ";
-					if (localTrans)
-						iTarg->dist(*localTrans, true);
+					if (closest)
+						iTarg->dist(*closest, true);
+				}
+				if (onMissedTarget(iTarg)) {
+					goto initialize;
 				}
 				m_localStaticArgs.m_consecMonth = 0;
 				++m_localStaticArgs.m_consecMissed;
-				double transFit = 1.0 / (1 + localDist);
-				if (localTrans)
+				double transFit = 1.0 / (1 + minDist);
+				if (closest)
 					totalOneOverDistClosest += factOld * transFit;
 			}
 
@@ -133,10 +137,10 @@ double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool isPostTreat
 				break;
 			++iTarg;
 			// keep this last trans in the pool if it was not just added
-			if (&trans != localTrans)
+			if (&trans != closest)
 				--i;
-			localTrans = 0;
-			localDist = Q_INT64_C(9223372036854775807);
+			closest = 0;
+			minDist = Q_INT64_C(9223372036854775807);
 		}
 		totalOneOverDistOthers += factOld * 1.0 / (1 + dist);
 	}
@@ -320,6 +324,11 @@ qint64 FeaturePeriodicAmount::distance(const Transaction *targ, const Transactio
 //	if (trans->userFlag & Transaction::UserInputFlag::yesIncome)
 //		return 1<<20;
 	return targ->dist(*trans);
+}
+
+int FeaturePeriodicAmount::onMissedTarget(Transaction *targ)
+{
+	return 0;
 }
 
 
