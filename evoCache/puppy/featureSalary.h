@@ -155,7 +155,7 @@ protected:
 	int onMissedTarget(Transaction *targ) override {
 		if (targ->flags & Transaction::MovedLate)
 			return 0;
-		QDate newDate = targ->date.addDays(approxSpacingPayment() / 2);
+		QDate newDate = targ->date.addDays(approxSpacingPayment() / 1);
 		if (newDate > Transaction::currentDay())
 			return 0;
 		targ->date = newDate;
