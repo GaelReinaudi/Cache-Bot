@@ -292,6 +292,8 @@ void EvolutionSpinner::makeSuperTreeMixtures(std::vector<Tree>& ioPopulation,
 void EvolutionSpinner::replaceFitness0WithSuperMixture(std::vector<Tree>& ioPopulation, const QList<Tree>& popFeatures,
 											   Context& ioContext)
 {
+	if (!popFeatures.count())
+		return;
 	static int jF = 0;
 	for(unsigned int i=0; i < ioPopulation.size(); ++i) {
 		Tree& treeToComplete = ioPopulation[i];
