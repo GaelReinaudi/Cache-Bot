@@ -34,7 +34,8 @@ public:
 	enum Flag { None = 0x0,
 				Predicted = 0x1,
 				CameTrue = 0x2,
-				Internal = 0x4
+				Internal = 0x4,
+				MovedLate = 0x8
 			  };
 	int flags = Flag::None;
 	bool isInternal() const { return flags & Transaction::Flag::Internal; }

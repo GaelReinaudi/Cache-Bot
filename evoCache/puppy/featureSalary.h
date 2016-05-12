@@ -134,7 +134,7 @@ protected:
 		}
 		else
 			return;
-		m_fitness *= 8;
+		m_fitness *= 8 * !!(localStaticArgs()->m_bundle.flagsOR() & (Transaction::UserInputFlag::yesRecur | Transaction::UserInputFlag::yesHousing));
 		m_fitness *= 1 - qAbs(kindaLog(User::declaredRent*30) + m_localStaticArgs.m_bundle.klaAverage());
 	}
 protected:
@@ -147,9 +147,20 @@ protected:
 	qint64 distance(const Transaction *targ, const Transaction *trans) override {
 		// if both are neg
 		if (targ->amount() <= -300 && trans->amount() <= -300) {
+//			if (qAbs(targ->date.daysTo(Transaction::currentDay()))
 			return targ->distanceWeighted<16*2, 512/2, 2*4>(*trans);
 		}
 		return 1<<20;
+	}
+	int onMissedTarget(Transaction *targ) override {
+		if (targ->flags & Transaction::MovedLate)
+			return 0;
+		QDate newDate = targ->date.addDays(approxSpacingPayment() / 2);
+		if (newDate > Transaction::currentDay())
+			return 0;
+		targ->date = newDate;
+		targ->flags |= Transaction::MovedLate;
+		return 1;
 	}
 };
 
