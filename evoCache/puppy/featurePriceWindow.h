@@ -28,21 +28,34 @@ public:
 	FeaturePriceWindow()
 		: FeatureStatDistrib("PriceWindow")
 	{
+		if (!s_priceWindowDivisionKLA.count())
+			initDivisions();
 	}
 	FeaturePriceWindow(const QString& featureName)
 		: FeatureStatDistrib(featureName)
 	{
+		if (!s_priceWindowDivisionKLA.count())
+			initDivisions();
 	}
 
 protected:
+	void getArgs(Puppy::Context &ioContext) override {
+		FeatureStatDistrib::getArgs(ioContext);
+		m_localStaticArgs.m_klaFrom = -99;
+		m_localStaticArgs.m_klaTo = 99;
+		for (int i = 0; i < s_priceWindowDivisionKLA.count(); ++i) {
+			if (m_localStaticArgs.m_kla >= s_priceWindowDivisionKLA[i]) {
+				m_localStaticArgs.m_klaFrom = s_priceWindowDivisionKLA[i];
+			}
+			if (m_localStaticArgs.m_kla < s_priceWindowDivisionKLA[i]) {
+				m_localStaticArgs.m_klaTo = s_priceWindowDivisionKLA[i];
+			}
+		}
+	}
 	bool passFilter(qint64 dist, const Transaction& trans) const override {
 		Q_UNUSED(dist);
-		if (m_localStaticArgs.m_kla < 0)
-			return trans.klaEff() <= m_localStaticArgs.m_kla + 0.2
-					&& trans.klaEff() >= m_localStaticArgs.m_kla - 0.2;
-		else
-			return trans.klaEff() <= m_localStaticArgs.m_kla + 0.4
-					&& trans.klaEff() >= m_localStaticArgs.m_kla - 0.4;
+		return trans.klaEff() <= m_localStaticArgs.m_klaTo
+				&& trans.klaEff() >= m_localStaticArgs.m_klaFrom;
 	}
 	int minTransactionForBundle() const override { return 9999+4; }
 
@@ -52,10 +65,33 @@ protected:
 		return pNewOr;
 	}
 	void onJustApplied(TransactionBundle& allTrans, Puppy::Context& ioContext) override {
-		if (BotContext::JSON_ARGS["PriceWindow"].toString().trimmed() != "enabled") {
-			m_fitness -= 123456789.0;
-		}
+//		if (BotContext::JSON_ARGS["PriceWindow"].toString().trimmed() != "enabled") {
+//			m_fitness -= 123456789.0;
+//		}
 	}
+	static void initDivisions() {
+		s_priceWindowDivisionKLA.clear();
+		s_priceWindowDivisionKLA = { -6.2,-5.8,-5.4,-5.0,4.6
+									,-4.2,-3.8,-3.4,-3.0,2.6
+									,-2.2,-1.8,-1.4,-1.0
+									,0.8,1.6,2.4,3.2,4.0
+									,4.8,5.6,6.4,7.2,8.0,9.0
+								   };
+//		double klaArg = -6;
+//		double inc = 0.2 + 0.2;
+//		for (uint i = 0; i < BotContext::MAX_NUM_FEATURES; ++i) {
+//			double amntBill2 = toBillDigits_2(unKindaLog(klaArg));
+//			klaArg += inc;
+//			if (klaArg <= inc/2 && inc < 0)
+//				klaArg = inc = 0;
+//			if (klaArg >= -inc/2 && inc > 0) {
+//				klaArg = 8;
+//				inc = -(0.4 + 0.4);
+//			}
+//		}
+	}
+public:
+	static QVector<double> s_priceWindowDivisionKLA;
 };
 
 class FeatureSalaryWindow : public FeaturePriceWindow

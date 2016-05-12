@@ -3,6 +3,7 @@
 #include "botContext.h"
 #include "userMetrics.h"
 #include "oracle.h"
+#include "featurePriceWindow.h"
 
 Puppy::Tree* Bot::s_postTreatmentBot = 0;
 
@@ -110,24 +111,27 @@ Puppy::Tree* Bot::instancePostTreatmentBot(Puppy::Context& ioContext)
 
 	QStringList treeNodeList;
 	treeNodeList += "ROOT";
-	double klaArg = -6;
-	double inc = 0.2 + 0.2;
-	for (uint i = 0; i < BotContext::MAX_NUM_FEATURES; ++i) {
+//	double klaArg = -6;
+//	double inc = 0.2 + 0.2;
+	QVector<double> div = FeaturePriceWindow::s_priceWindowDivisionKLA;
+	for (uint i = 1; i < div.count(); ++i) {
 		treeNodeList += "PriceWindow";
 		treeNodeList += "0";
-		double amntBill2 = toBillDigits_2(unKindaLog(klaArg));
-		QString klaStr = QString::number(kindaLog(amntBill2));
+//		double amntBill2 = toBillDigits_2(unKindaLog(klaArg));
+//		QString klaStr = QString::number(kindaLog(amntBill2));
+		double amntBill2 = 0.5 * (div[i - 1] + div[i]);
+		QString klaStr = QString::number(amntBill2);
 		ioContext.getPrimitiveByName(klaStr);
 		treeNodeList += klaStr;
 		treeNodeList += "0";
-		klaArg += inc;
+//		klaArg += inc;
 
-		if (klaArg <= inc/2 && inc < 0)
-			klaArg = inc = 0;
-		if (klaArg >= -inc/2 && inc > 0) {
-			klaArg = 8;
-			inc = -(0.4 + 0.4);
-		}
+//		if (klaArg <= inc/2 && inc < 0)
+//			klaArg = inc = 0;
+//		if (klaArg >= -inc/2 && inc > 0) {
+//			klaArg = 8;
+//			inc = -(0.4 + 0.4);
+//		}
 	}
 
 	WARN() << "Making postTreatmentBot: " << treeNodeList.join(' ');

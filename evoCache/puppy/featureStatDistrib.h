@@ -69,6 +69,8 @@ protected:
 		double m_effect = 0;
 		double m_kla = 0;
 		double m_dayProba = 0.0;
+		double m_klaFrom = 0.0;
+		double m_klaTo = 0.0;
 	} m_args;
 	FeatureArgs* args() override { return &m_args; }
 	friend class FeatureStatDistrib;
