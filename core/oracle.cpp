@@ -102,7 +102,7 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 		if (pOr->feature()->isPeriodic()) {
 			QDate nextDate = QDate::fromString(orj["nextDate"].toString(), "yyyy-MM-dd");
 			int inD = Transaction::currentDay().daysTo(nextDate);
-			if (inD > 0 && inD <= daysToSunday) {
+			if (inD >= 0 && inD <= daysToSunday) {
 				if (pOr->args()->m_bundle.flagsOR() & Transaction::UserInputFlag::yesRecur) {
 					continue;
 				}
@@ -114,7 +114,7 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 		}
 		double dayProba = orj["dayProba"].toDouble();
 		double perDay = dayProba / (1 - dayProba);
-		if (perDay * daysToSunday > perWeekTresh) {
+		if (perDay * 7 > perWeekTresh) {
 			threshAmountFrequent = qMin (threshAmountFrequent, avgAmount);
 			dailyFrequent += daily;
 		}
@@ -145,7 +145,7 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 		if (pOr->feature()->isPeriodic()) {
 			QDate nextDate = QDate::fromString(orj["nextDate"].toString(), "yyyy-MM-dd");
 			int inD = Transaction::currentDay().daysTo(nextDate);
-			if (inD > 0 && inD <= daysToSunday) {
+			if (inD >= 0 && inD <= daysToSunday) {
 				QJsonObject perij;
 				perij["daily"] = daily;
 				perij["inD"] = inD;
@@ -176,7 +176,7 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 			perij["indOracle"] = index;
 			perij["dayProba"] = dayProba;
 			perij["oracleJson"] = orj;
-			if (perDay * daysToSunday > perWeekTresh || qAbs(avgAmount) < qAbs(threshAmountFrequent)) {
+			if (perDay * 7 > perWeekTresh || qAbs(avgAmount) < qAbs(threshAmountFrequent)) {
 				frequentList.append(perij);
 				dailyFrequent += daily;
 			}
