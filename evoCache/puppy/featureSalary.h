@@ -155,8 +155,10 @@ protected:
 	int onMissedTarget(Transaction *targ, const Transaction *last) override {
 		if (targ->flags & Transaction::MovedLate)
 			return 0;
-//		if (last && !(last->userFlag & Transaction::UserInputFlag::yesNext))
-//			return 0;
+		if (last && !(last->userFlag & Transaction::UserInputFlag::yesNext))
+			return 0;
+		if (last && (last->userFlag & Transaction::UserInputFlag::noNext))
+			return 0;
 		QDate newDate = targ->date.addDays(approxSpacingPayment() * 2 / 3);
 		if (newDate > Transaction::currentDay())
 			return 0;
