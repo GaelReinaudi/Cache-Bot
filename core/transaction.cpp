@@ -77,6 +77,18 @@ void Transaction::loadUserFlags(const QJsonObject &json) {
 			WARN() << id << " noHousing";
 			userFlag |= noHousing;
 		}
+		else if (flag == "yesNext") {
+			WARN() << id << " yesNext";
+			userFlag |= yesNext;
+		}
+		else if (flag == "noNext") {
+			WARN() << id << " noNext";
+			userFlag |= noNext;
+		}
+		else if (flag == "yesMissed") {
+			WARN() << id << " yesMissed";
+			userFlag |= yesMissed;
+		}
 		else {
 			ERR() << id << " unknown flag " << flag;
 		}

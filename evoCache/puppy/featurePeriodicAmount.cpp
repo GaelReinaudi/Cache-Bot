@@ -63,6 +63,8 @@ initialize:
 	double totalOneOverDistOthers = 0.0;
 	qint64 minDist = Q_INT64_C(9223372036854775807);
 	const Transaction* closest = 0;
+	const Transaction* pLastMatchedTrans = 0;
+	int iLastMatchedTransaction = -1;
 	// the current target to compare to
 	Transaction* iTarg = &m_targetTrans[0];
 	m_localStaticArgs.m_bundle.clear();
@@ -77,7 +79,7 @@ initialize:
 	for (int i = 0; i < allTrans.count(); ++i) {
 		const Transaction& trans = allTrans.trans(i);
 		qint64 dist = distance(iTarg, &trans);
-		if (trans.noUse() || !passFilter(dist, trans)) {
+		if (trans.noUse() || !passFilter(dist, trans) || &trans == pLastMatchedTrans) {
 			dist = 1<<20;
 		}
 		double factOld = 2.0;
@@ -93,7 +95,6 @@ initialize:
 		// if we get further away by approxSpacingPayment() / 2 days, we take the next target, or if last trans
 		if (trans.jDay() > approxSpacingPayment() / 2 + iTarg->jDay() || i == allTrans.count() - 1) {
 			if (minDist < Transaction::LIMIT_DIST_TRANS && closest) {
-				m_localStaticArgs.m_bundle.append(closest);
 				if (doLog) {
 					iTarg->dist(*closest, true);
 				}
@@ -116,6 +117,16 @@ initialize:
 					m_localStaticArgs.m_consecMissed = -2;
 				double transFit = 8.0 / (8 + minDist);
 				totalOneOverDistClosest += factOld * transFit;
+
+				if ((iTarg->flags & Transaction::MovedLate) && iLastMatchedTransaction >= 0) {
+					WARN() << "swap(i, iLastMatchedTransaction) = (" << i << "," << iLastMatchedTransaction << ")";
+					qSwap(i, iLastMatchedTransaction);
+					++i;
+				}
+				else
+					iLastMatchedTransaction = i;
+				m_localStaticArgs.m_bundle.append(closest);
+				pLastMatchedTrans = closest;
 			}
 			else if (iTarg->date < Transaction::currentDay().addDays(-SLACK_FOR_LATE_TRANS)){
 				if (doLog) {
@@ -123,7 +134,7 @@ initialize:
 					if (closest)
 						iTarg->dist(*closest, true);
 				}
-				if (onMissedTarget(iTarg)) {
+				if (onMissedTarget(iTarg, pLastMatchedTrans)) {
 					goto initialize;
 				}
 				m_localStaticArgs.m_consecMonth = 0;
@@ -326,7 +337,7 @@ qint64 FeaturePeriodicAmount::distance(const Transaction *targ, const Transactio
 	return targ->dist(*trans);
 }
 
-int FeaturePeriodicAmount::onMissedTarget(Transaction *targ)
+int FeaturePeriodicAmount::onMissedTarget(Transaction *targ, const Transaction *last)
 {
 	return 0;
 }

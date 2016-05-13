@@ -54,7 +54,10 @@ public:
 						 aaaaaaaaa = 0x40,
 						 IsMatchOff = 0x80,
 						 Reimbursed = 0x100,
-						 AverageLonger = 0x200
+						 AverageLonger = 0x200,
+						 yesNext = 0x400,
+						 noNext = 0x800,
+						 yesMissed = 0x1000
 					   };
 	int userFlag = Flag::None;
 	void loadUserFlags(const QJsonObject &json);
