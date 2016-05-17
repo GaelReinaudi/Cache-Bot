@@ -4,6 +4,7 @@
 #include <QJsonDocument>
 #include <QPushButton>
 #include "flowWidget.h"
+#include <QDebug>
 
 SpinnerWindow::SpinnerWindow(QWidget *parent) :
 	QMainWindow(parent),
@@ -22,7 +23,10 @@ SpinnerWindow::SpinnerWindow(QWidget *parent) :
 		mapFirstName_Id.insert(m_UserIds[k].toObject()["firstName"].toString(), k);
 	}
 	for (const QString& f : mapFirstName_Id.keys()) {
-		QString k = mapFirstName_Id[f];
+		QString k = mapFirstName_Id[f].trimmed();
+		if (k == "55518f01574600030092a822")
+			continue;
+		qDebug() << k;
 		QListWidgetItem* item = new QListWidgetItem();
 		ui->listWidget->addItem(item);
 		item->setSizeHint(QSize(100, 25));

@@ -215,6 +215,11 @@ void ExtraCashView::updateChart()
 	ui->dailyNegSpin->setValue(summary.negSum);
 	ui->dailyPosSpin->setValue(summary.posSum);
 	ui->dailySalSpin->setValue(summary.salary);
+
+	ui->freq->setValue(summary.weekDetails["_dailyFrequent"].toDouble());
+	ui->infreq->setValue(summary.weekDetails["_dailyInfrequent"].toDouble());
+	ui->thresh->setValue(summary.weekDetails["_threshAmountFrequent"].toDouble());
+
 	pBars->addData(-daysAgo, perCentFlow);
 //	ui->plot->yAxis2->rescale();
 //	double minY1 = ui->plot->yAxis->range().lower;

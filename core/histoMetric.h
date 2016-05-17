@@ -33,6 +33,7 @@ public:
 	}
 	QString name() const { return m_name; }
 	static void clearAll() {
+		WARN() << "HistoMetric::clearAll";
 		return s_AllMetrics.clear();
 	}
 

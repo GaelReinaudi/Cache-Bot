@@ -113,6 +113,9 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 			continue;
 		}
 		double dayProba = orj["dayProba"].toDouble();
+		if (!dayProba) {
+			ERR() << "dayProba == 0";
+		}
 		double perDay = dayProba / (1 - dayProba);
 		if (perDay * 7 > perWeekTresh) {
 			threshAmountFrequent = qMin (threshAmountFrequent, avgAmount);
@@ -129,7 +132,6 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 	QList<QJsonObject> yesRecurList;
 	QList<QJsonObject> frequentList;
 	QList<QJsonObject> infrequentList;
-	double negSumOthers = 0.0;
 	double totYesRecur = 0.0;
 	double totNotYesRecur = 0.0;
 	dailyFrequent = 0.0;

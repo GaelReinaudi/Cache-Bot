@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1015</width>
-    <height>596</height>
+    <height>669</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -735,6 +735,102 @@
           </property>
          </widget>
         </item>
+        <item row="25" column="0">
+         <widget class="QLabel" name="costLive99Label_10">
+          <property name="text">
+           <string>freq</string>
+          </property>
+         </widget>
+        </item>
+        <item row="26" column="0">
+         <widget class="QLabel" name="costLive99Label_11">
+          <property name="text">
+           <string>infreq</string>
+          </property>
+         </widget>
+        </item>
+        <item row="27" column="0">
+         <widget class="QLabel" name="costLive99Label_12">
+          <property name="text">
+           <string>thresh</string>
+          </property>
+         </widget>
+        </item>
+        <item row="25" column="1">
+         <widget class="QDoubleSpinBox" name="freq">
+          <property name="readOnly">
+           <bool>false</bool>
+          </property>
+          <property name="buttonSymbols">
+           <enum>QAbstractSpinBox::NoButtons</enum>
+          </property>
+          <property name="prefix">
+           <string/>
+          </property>
+          <property name="suffix">
+           <string>$/d</string>
+          </property>
+          <property name="decimals">
+           <number>1</number>
+          </property>
+          <property name="minimum">
+           <double>-9999.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>9999.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="26" column="1">
+         <widget class="QDoubleSpinBox" name="infreq">
+          <property name="readOnly">
+           <bool>false</bool>
+          </property>
+          <property name="buttonSymbols">
+           <enum>QAbstractSpinBox::NoButtons</enum>
+          </property>
+          <property name="prefix">
+           <string/>
+          </property>
+          <property name="suffix">
+           <string>$/d</string>
+          </property>
+          <property name="decimals">
+           <number>1</number>
+          </property>
+          <property name="minimum">
+           <double>-9999.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>9999.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="27" column="1">
+         <widget class="QDoubleSpinBox" name="thresh">
+          <property name="readOnly">
+           <bool>false</bool>
+          </property>
+          <property name="buttonSymbols">
+           <enum>QAbstractSpinBox::NoButtons</enum>
+          </property>
+          <property name="prefix">
+           <string/>
+          </property>
+          <property name="suffix">
+           <string>$/d</string>
+          </property>
+          <property name="decimals">
+           <number>1</number>
+          </property>
+          <property name="minimum">
+           <double>-9999.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>9999.000000000000000</double>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
      </layout>
@@ -754,7 +850,7 @@
      <x>0</x>
      <y>0</y>
      <width>1015</width>
-     <height>21</height>
+     <height>20</height>
     </rect>
    </property>
   </widget>

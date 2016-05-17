@@ -142,6 +142,7 @@ private:
 	Fund* m_extraCacheFund = 0;
 	QString m_email;
 	SuperOracle* m_mainOracle = 0;
+	QJsonObject jsonInFlow;
 public:
 	Bot* m_bestBot = 0;
 	static double declaredIncome;

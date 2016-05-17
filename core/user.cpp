@@ -126,6 +126,9 @@ void User::injectJsonData(QString jsonStr)
 	qDebug() << "user" << jsonUser["_id"].toString() << ":" << jsonUser["local"].toObject()["email"].toString();
 	Q_ASSERT_X(jsonUser["_id"].toString() == id(), "injectJsonData", jsonUser["_id"].toString().toUtf8() + " != " + id().toUtf8());
 
+	//////// "flow"
+	jsonInFlow = jsonObj["flow"].toObject();
+
 	//////// "banks"
 	QJsonArray jsonBankArray = jsonObj["banks"].toArray();
 	qDebug() << jsonBankArray.size() << "banks";
