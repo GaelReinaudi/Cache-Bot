@@ -59,10 +59,10 @@ protected:
 			ERR() << "m_localStaticArgs.m_klaTo " << m_localStaticArgs.m_klaTo;
 		}
 		if (qAbs(m_localStaticArgs.m_kla - m_localStaticArgs.m_klaTo) > 1){
-			ERR() << m_localStaticArgs.m_kla <<" "<< m_localStaticArgs.m_klaTo;
+			ERR() << m_localStaticArgs.m_kla <<" ! "<< m_localStaticArgs.m_klaTo;
 		}
 		if (qAbs(m_localStaticArgs.m_kla - m_localStaticArgs.m_klaFrom) > 1){
-			ERR() << m_localStaticArgs.m_kla <<" "<< m_localStaticArgs.m_klaFrom;
+			ERR() << m_localStaticArgs.m_kla <<" ! "<< m_localStaticArgs.m_klaFrom;
 		}
 	}
 	bool passFilter(qint64 dist, const Transaction& trans) const override {
