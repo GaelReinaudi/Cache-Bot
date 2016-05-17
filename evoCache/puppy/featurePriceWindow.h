@@ -48,21 +48,21 @@ protected:
 			if (m_localStaticArgs.m_kla >= s_priceWindowDivisionKLA[i]) {
 				m_localStaticArgs.m_klaFrom = s_priceWindowDivisionKLA[i];
 			}
-			if (m_localStaticArgs.m_kla < s_priceWindowDivisionKLA[num - i]) {
-				m_localStaticArgs.m_klaTo = s_priceWindowDivisionKLA[num - i];
+			if (m_localStaticArgs.m_kla < s_priceWindowDivisionKLA[num - i - 1]) {
+				m_localStaticArgs.m_klaTo = s_priceWindowDivisionKLA[num - i - 1];
 			}
 		}
-		if (m_localStaticArgs.m_klaFrom < -10){
-			ERR() << "m_localStaticArgs.m_klaFrom " << m_localStaticArgs.m_klaFrom;
+		if (m_localStaticArgs.m_klaFrom < -10 && m_localStaticArgs.m_klaTo > s_priceWindowDivisionKLA[0]){
+			ERR() << "kla " << m_localStaticArgs.m_kla << " klaFrom " << m_localStaticArgs.m_klaFrom << " klaTo " << m_localStaticArgs.m_klaTo;
 		}
-		if (m_localStaticArgs.m_klaTo > 10){
-			ERR() << "m_localStaticArgs.m_klaTo " << m_localStaticArgs.m_klaTo;
+		if (m_localStaticArgs.m_klaTo > 10 && m_localStaticArgs.m_klaFrom < s_priceWindowDivisionKLA[num - 1]){
+			ERR() << "kla " << m_localStaticArgs.m_kla << " klaFrom " << m_localStaticArgs.m_klaFrom << " klaTo " << m_localStaticArgs.m_klaTo;
 		}
-		if (qAbs(m_localStaticArgs.m_kla - m_localStaticArgs.m_klaTo) > 1){
-			ERR() << m_localStaticArgs.m_kla <<" ! "<< m_localStaticArgs.m_klaTo;
-		}
-		if (qAbs(m_localStaticArgs.m_kla - m_localStaticArgs.m_klaFrom) > 1){
+		if (qAbs(m_localStaticArgs.m_kla) < 6 && qAbs(m_localStaticArgs.m_kla - m_localStaticArgs.m_klaFrom) > 2){
 			ERR() << m_localStaticArgs.m_kla <<" ! "<< m_localStaticArgs.m_klaFrom;
+		}
+		if (qAbs(m_localStaticArgs.m_kla) < 6 && qAbs(m_localStaticArgs.m_kla - m_localStaticArgs.m_klaTo) > 2){
+			ERR() << m_localStaticArgs.m_kla <<" ! "<< m_localStaticArgs.m_klaTo;
 		}
 	}
 	bool passFilter(qint64 dist, const Transaction& trans) const override {
