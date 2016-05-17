@@ -41,8 +41,8 @@ public:
 protected:
 	void getArgs(Puppy::Context &ioContext) override {
 		FeatureStatDistrib::getArgs(ioContext);
-		m_localStaticArgs.m_klaFrom = -99;
-		m_localStaticArgs.m_klaTo = 99;
+		m_localStaticArgs.m_klaFrom = -999;
+		m_localStaticArgs.m_klaTo = 999;
 		int num = s_priceWindowDivisionKLA.count();
 		for (int i = 0; i < num; ++i) {
 			if (m_localStaticArgs.m_kla >= s_priceWindowDivisionKLA[i]) {
