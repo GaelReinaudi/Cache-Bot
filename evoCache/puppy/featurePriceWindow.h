@@ -43,13 +43,26 @@ protected:
 		FeatureStatDistrib::getArgs(ioContext);
 		m_localStaticArgs.m_klaFrom = -99;
 		m_localStaticArgs.m_klaTo = 99;
-		for (int i = 0; i < s_priceWindowDivisionKLA.count(); ++i) {
+		int num = s_priceWindowDivisionKLA.count();
+		for (int i = 0; i < num; ++i) {
 			if (m_localStaticArgs.m_kla >= s_priceWindowDivisionKLA[i]) {
 				m_localStaticArgs.m_klaFrom = s_priceWindowDivisionKLA[i];
 			}
-			if (m_localStaticArgs.m_kla < s_priceWindowDivisionKLA[i]) {
-				m_localStaticArgs.m_klaTo = s_priceWindowDivisionKLA[i];
+			if (m_localStaticArgs.m_kla < s_priceWindowDivisionKLA[num - i]) {
+				m_localStaticArgs.m_klaTo = s_priceWindowDivisionKLA[num - i];
 			}
+		}
+		if (m_localStaticArgs.m_klaFrom < -10){
+			ERR() << "m_localStaticArgs.m_klaFrom " << m_localStaticArgs.m_klaFrom;
+		}
+		if (m_localStaticArgs.m_klaTo > 10){
+			ERR() << "m_localStaticArgs.m_klaTo " << m_localStaticArgs.m_klaTo;
+		}
+		if (qAbs(m_localStaticArgs.m_kla - m_localStaticArgs.m_klaTo) > 1){
+			ERR() << m_localStaticArgs.m_kla <<" "<< m_localStaticArgs.m_klaTo;
+		}
+		if (qAbs(m_localStaticArgs.m_kla - m_localStaticArgs.m_klaFrom) > 1){
+			ERR() << m_localStaticArgs.m_kla <<" "<< m_localStaticArgs.m_klaFrom;
 		}
 	}
 	bool passFilter(qint64 dist, const Transaction& trans) const override {
@@ -71,8 +84,8 @@ protected:
 	}
 	static void initDivisions() {
 		s_priceWindowDivisionKLA.clear();
-		s_priceWindowDivisionKLA = { -6.2,-5.8,-5.4,-5.0,4.6
-									,-4.2,-3.8,-3.4,-3.0,2.6
+		s_priceWindowDivisionKLA = { -6.2,-5.8,-5.4,-5.0,-4.6
+									,-4.2,-3.8,-3.4,-3.0,-2.6
 									,-2.2,-1.8,-1.4,-1.0
 									,0.8,1.6,2.4,3.2,4.0
 									,4.8,5.6,6.4,7.2,8.0,9.0
