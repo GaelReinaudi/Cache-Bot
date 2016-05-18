@@ -87,7 +87,7 @@ class FeatureBiWeeklySalaryReally : public FeatureBiWeeklySalary
 {
 public:
 	FeatureBiWeeklySalaryReally()
-		: FeatureBiWeeklySalary("FeatureBiWeeklySalaryReally")
+		: FeatureBiWeeklySalary("BiWeeklySalaryReally")
 	{ }
 	virtual void cleanArgs() override {
 		FeatureBiWeeklySalary::cleanArgs();
