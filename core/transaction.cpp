@@ -17,6 +17,7 @@ int Transaction::s_maxDaysOld = 5 * 31;
 int Transaction::s_maxDaysOldAllTransatcion = 30;
 QDate Transaction::onlyAfterDate = Transaction::currentDay().addMonths(-6);
 int Transaction::onlyAccountType = Account::Type::Checking | Account::Type::Saving | Account::Type::Checking | Account::Type::Credit;
+int Transaction::s_daysWithoutCreateDate = 0;
 
 bool Transaction::noUse() const
 {
@@ -144,12 +145,16 @@ void Transaction::read(const QJsonObject &json) {
 	s_maxDaysOldAllTransatcion = qMax(s_maxDaysOldAllTransatcion, int(date.daysTo(Transaction::currentDay())));
 	loadUserFlags(json);
 
+	QDate createdDate = QDateTime::fromString(json["createdAt"].toString(), Qt::ISODate).addSecs(hoursOffsetToHack_issue_9 * 3600).date();
+	if (createdDate.isValid())
+		s_daysWithoutCreateDate = qMin(s_daysWithoutCreateDate, int(createdDate.daysTo(Transaction::actualCurrentDay())));
+
 	// logs all in the LOG.
 	auto out = INFO();
 //	out.setFieldWidth(8);
 //	out.setPadChar(' ');
 //	out.setFieldAlignment(QTextStream::AlignRight);
-	out << "Transaction::read("<<id<<") " << amountDbl() << "   " << date.toString("MM/dd")
+	out << "Transaction::read("<<id<<") " << amountDbl() << "   " << date.toString("MM/dd") << "  created " << createdDate.toString("MM/dd")
 		  << "   " << name;
 	out << "   [";
 	out << categoryHash.hash();

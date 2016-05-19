@@ -161,6 +161,12 @@ void User::injectJsonData(QString jsonStr)
 	INFO() << "maxDaysOldAllTransatcion " << Transaction::maxDaysOldAllTransatcion();
 	m_allTransactions.sort();
 
+	WARN() << "daysWithoutCreateDate " << Transaction::daysWithoutCreateDate();
+	if (Transaction::daysWithoutCreateDate() > 0) {
+		WARN() << "setting current day to " << Transaction::daysWithoutCreateDate() << " days ago";
+		Transaction::setCurrentDay(Transaction::actualCurrentDay().addDays(-Transaction::daysWithoutCreateDate()));
+	}
+
 	//////// complete Accounts with transaction pointers in bundles
 	for (int i = 0; i < m_allTransactions.count(); ++i) {
 		Transaction* pT = &m_allTransactions.transArray()[i];
