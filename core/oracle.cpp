@@ -100,10 +100,11 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 		double avgAmount = orj["avgAmnt"].toDouble();
 		if (pOr->feature()->isPeriodic()) {
 			double fitness = orj["fitness"].toDouble();
+			double consec = orj["consecutive"].toDouble();
 			QDate nextDate = QDate::fromString(orj["nextDate"].toString(), "yyyy-MM-dd");
 			int inD = Transaction::currentDay().daysTo(nextDate);
 			if (inD >= 0 && inD <= daysToSunday) {
-				if (fitness >= 15) {
+				if (fitness >= 15 and consec > 2) {
 					Transaction t = pOr->args()->m_bundle.randSmart();
 					QJsonObject bill;
 					bill["id"] = t.id;
@@ -111,6 +112,7 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 					bill["amount"] = t.amountDbl();
 					bill["date"] = orj["nextDate"];
 					bill["fitness"] = fitness;
+					bill["consec"] = consec;
 					weekBills.append(bill);
 				}
 				if (pOr->args()->m_bundle.flagsOR() & Transaction::UserInputFlag::yesRecur) {
