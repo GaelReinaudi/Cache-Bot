@@ -114,6 +114,7 @@ struct FeatureArgs
 		double avgD2N = m_bundle.averageD2N();
 		o_retObj["avgD2N"] = avgD2N;
 		o_retObj["stdDevD2N"] = m_bundle.stdDevD2N(avgD2N);
+		o_retObj.insert("fitness", m_fitness);
 	}
 	virtual double avgDaily(int limDayProba = 0) const = 0;
 	virtual double avgDailyPos(int limDayProba) const {
@@ -124,7 +125,9 @@ struct FeatureArgs
 		double avg = avgDaily(limDayProba);
 		return avg <= 0 ? avg : 0.0;
 	}
+	virtual double computeProba() const { return 0; }
 	TransactionBundle m_bundle;
+	double m_fitness = 0.0;
 };
 
 class AccountFeature : public Puppy::Primitive
@@ -139,7 +142,6 @@ public:
 		QJsonObject retObj;
 		retObj.insert("name", QString::fromStdString(getName()));
 		retObj.insert("numArgs", int(getNumberArguments()));
-		retObj.insert("fitness", m_fitness);
 		retObj.insert("billProba", m_billProba);
 //		retObj.insert("numBund", localStaticArgs()->m_bundle.count());
 		localStaticArgs()->intoJson(retObj);
@@ -156,8 +158,10 @@ public:
 	}
 	bool isFeature() const override { return true; }
 	virtual int isPeriodic() const { return 0; }
+
 protected:
 	virtual FeatureArgs* localStaticArgs() = 0;
+	const FeatureArgs* localStaticArgs() const { return localStaticArgs(); }
 	virtual void getArgs(Puppy::Context &ioContext) { Q_UNUSED(ioContext); }
 	virtual void onGeneration(int nGen, double progressGeneration, Puppy::Context &ioContext) {
 		Q_UNUSED(progressGeneration);
@@ -195,10 +199,9 @@ protected:
 	virtual void emitGraphics(Puppy::Context&) const { }
 	virtual Oracle* makeNewOracle() { return 0; }
 
-	virtual double maxDailyProbability() const { return qMax(0.0, m_fitness); }
+	virtual double maxDailyProbability() const { return qMax(0.0, localStaticArgs()->m_fitness); }
 
 protected:
-	double m_fitness = 0.0;
 private:
 	// if any, the hash to filter the transaction on
 	int m_filterHash = -1;

@@ -33,7 +33,7 @@ private:
 			o_retObj.insert("kla", m_kla);
 			o_retObj.insert("hash", m_hash);
 		}
-		virtual double computeProba() const {
+		double computeProba() const override {
 			if (m_bundle.count() < 2)
 				return 0.0;
 			if (m_prevMissed >= m_consecMonthBeforeMissed)

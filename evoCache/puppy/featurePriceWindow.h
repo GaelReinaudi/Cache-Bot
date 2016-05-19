@@ -79,7 +79,7 @@ protected:
 	}
 	void onJustApplied(TransactionBundle& allTrans, Puppy::Context& ioContext) override {
 //		if (BotContext::JSON_ARGS["PriceWindow"].toString().trimmed() != "enabled") {
-//			m_fitness -= 123456789.0;
+//			localStaticArgs()->m_fitness -= 123456789.0;
 //		}
 	}
 	static void initDivisions() {
@@ -124,10 +124,10 @@ protected:
 	int minTransactionForBundle() const override { return 2; }
 	void onJustApplied(TransactionBundle& allTrans, Puppy::Context& ioContext) override {
 		if (m_localStaticArgs.m_bundle.flagsCount(Transaction::UserInputFlag::yesIncome) < 4) {
-			m_fitness -= 123456789.0;
+			localStaticArgs()->m_fitness -= 123456789.0;
 		}
 		else
-			m_fitness *= 4;
+			localStaticArgs()->m_fitness *= 4;
 	}
 };
 

@@ -17,7 +17,7 @@ protected:
 protected:
 	void onJustApplied(TransactionBundle &allTrans, Puppy::Context& ioContext) override {
 		FeatureMonthlyAmount::onJustApplied(allTrans, ioContext);
-		m_fitness *= 1 + m_localStaticArgs.m_bundle.flagsCount(Transaction::UserInputFlag::yesIncome);
+		localStaticArgs()->m_fitness *= 1 + m_localStaticArgs.m_bundle.flagsCount(Transaction::UserInputFlag::yesIncome);
 	}
 protected:
 	bool passFilter(qint64 dist, const Transaction& trans) const override {
@@ -66,7 +66,7 @@ protected:
 	}
 	void onJustApplied(TransactionBundle &allTrans, Puppy::Context& ioContext) override {
 		FeatureBiWeeklyAmount::onJustApplied(allTrans, ioContext);
-		m_fitness *= 1 + m_localStaticArgs.m_bundle.flagsCount(Transaction::UserInputFlag::yesIncome);
+		localStaticArgs()->m_fitness *= 1 + m_localStaticArgs.m_bundle.flagsCount(Transaction::UserInputFlag::yesIncome);
 	}
 	qint64 distance(const Transaction *targ, const Transaction *trans) override {
 		if (targ->amount() > 0 && trans->amount() > 0) {
@@ -124,18 +124,18 @@ protected:
 protected:
 	void onJustApplied(TransactionBundle &allTrans, Puppy::Context& ioContext) override {
 		FeatureMonthlyAmount::onJustApplied(allTrans, ioContext);
-		if (m_fitness > 0) {
+		if (localStaticArgs()->m_fitness > 0) {
 			if (ioContext.flags & Puppy::Context::Housing1) {
 			}
 			else {
 				ioContext.flags |= Puppy::Context::Housing1;
-//				m_fitness *= -(m_localStaticArgs.m_kla);
+//				localStaticArgs()->m_fitness *= -(m_localStaticArgs.m_kla);
 			}
 		}
 		else
 			return;
-		m_fitness *= 8 * !!(localStaticArgs()->m_bundle.flagsOR() & (Transaction::UserInputFlag::yesRecur | Transaction::UserInputFlag::yesHousing));
-		m_fitness *= 1 - qAbs(kindaLog(User::declaredRent*30) + m_localStaticArgs.m_bundle.klaAverage());
+		localStaticArgs()->m_fitness *= 8 * !!(localStaticArgs()->m_bundle.flagsOR() & (Transaction::UserInputFlag::yesRecur | Transaction::UserInputFlag::yesHousing));
+		localStaticArgs()->m_fitness *= 1 - qAbs(kindaLog(User::declaredRent*30) + m_localStaticArgs.m_bundle.klaAverage());
 	}
 protected:
 	bool passFilter(qint64 dist, const Transaction& trans) const override {

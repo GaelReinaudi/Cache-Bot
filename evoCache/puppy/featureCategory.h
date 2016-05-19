@@ -55,8 +55,8 @@ protected:
 	void onJustApplied(TransactionBundle &allTrans, Puppy::Context& ioContext) override {
 		Q_UNUSED(allTrans);
 		Q_UNUSED(ioContext);
-		m_fitness *= 2 * localStaticArgs()->m_bundle.count();
-		m_fitness /= minTransactionForBundle();
+		localStaticArgs()->m_fitness *= 2 * localStaticArgs()->m_bundle.count();
+		localStaticArgs()->m_fitness /= minTransactionForBundle();
 	}
 	void emitGraphics(Puppy::Context& ioContext) const override {
 		if (ioContext.isPostTreatment)

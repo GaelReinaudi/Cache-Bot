@@ -88,8 +88,7 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 	summary.weekDetails["daysToSunday"] = daysToSunday;
 	double dailyFrequent = 0.0;
 	double dailyInfrequent = 0.0;
-	QJsonObject frequent;
-	QJsonObject infrequent;
+	QJsonArray weekBills;
 	double threshAmountFrequent = 0.0;
 
 	static const double perWeekTresh = 1.5;
@@ -100,9 +99,20 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 		QJsonObject orj = pOr->toJson();
 		double avgAmount = orj["avgAmnt"].toDouble();
 		if (pOr->feature()->isPeriodic()) {
+			double fitness = orj["fitness"].toDouble();
 			QDate nextDate = QDate::fromString(orj["nextDate"].toString(), "yyyy-MM-dd");
 			int inD = Transaction::currentDay().daysTo(nextDate);
 			if (inD >= 0 && inD <= daysToSunday) {
+				if (fitness >= 15) {
+					Transaction t = pOr->args()->m_bundle.randSmart();
+					QJsonObject bill;
+					bill["id"] = t.id;
+					bill["name"] = t.name;
+					bill["amount"] = t.amountDbl();
+					bill["date"] = orj["nextDate"];
+					bill["fitness"] = fitness;
+					weekBills.append(bill);
+				}
 				if (pOr->args()->m_bundle.flagsOR() & Transaction::UserInputFlag::yesRecur) {
 					continue;
 				}
@@ -125,6 +135,7 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 			dailyInfrequent += daily;
 		}
 	}
+	summary.weekDetails["weekBills"] = weekBills;
 	summary.weekDetails["_1stPass_dailyFrequent"] = dailyFrequent;
 	summary.weekDetails["_1stPass_dailyInfrequent"] = dailyInfrequent;
 	summary.weekDetails["_threshAmountFrequent"] = threshAmountFrequent;

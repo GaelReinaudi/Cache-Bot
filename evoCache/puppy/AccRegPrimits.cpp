@@ -57,7 +57,7 @@ Puppy::Primitive::tryReplaceArgumentNode(unsigned int inN, std::string primName,
 void AccountFeature::execute(void *outDatum, Puppy::Context &ioContext)
 {
 	double& output = *(double*)outDatum;
-	m_fitness = output = 0.0;
+	localStaticArgs()->m_fitness = output = 0.0;
 	if (cannotExecute(ioContext))
 		return;
 
@@ -70,12 +70,12 @@ void AccountFeature::execute(void *outDatum, Puppy::Context &ioContext)
 	TransactionBundle& allTrans = ioContext.m_pUser->transBundle(m_filterHash);
 
 	output = apply(allTrans, ioContext.isPostTreatment, ioContext.m_summaryJsonObj);
-	m_fitness = output;
+	localStaticArgs()->m_fitness = output;
 
 	isolateBundledTransactions(ioContext.isPostTreatment);
 
 	onJustApplied(allTrans, ioContext);
-	output = m_fitness;
+	output = localStaticArgs()->m_fitness;
 
 	m_billProba = maxDailyProbability();
 

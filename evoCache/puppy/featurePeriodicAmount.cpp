@@ -166,7 +166,7 @@ initialize:
 
 void FeatureMonthlyAmount::onJustApplied(TransactionBundle& allTrans, Puppy::Context &ioContext)
 {
-	if (m_fitness <= 0.0)
+	if (localStaticArgs()->m_fitness <= 0.0)
 		return;
 	// tries to re-run this periodic and if it has a high vlaue, it is a sign that
 	// it is actually more frequent and should have a bad grade
@@ -177,7 +177,7 @@ void FeatureMonthlyAmount::onJustApplied(TransactionBundle& allTrans, Puppy::Con
 	cleanArgs();
 	double rerun = apply(allTrans, false, false);
 	if (ioContext.m_summaryJsonObj) {
-		DBG() << "fitness " << m_fitness << "- 2x " << rerun;
+		DBG() << "fitness " << localStaticArgs()->m_fitness << "- 2x " << rerun;
 	}
 	// restore member variables
 	m_localStaticArgs = temp;
@@ -186,21 +186,21 @@ void FeatureMonthlyAmount::onJustApplied(TransactionBundle& allTrans, Puppy::Con
 	cleanArgs();
 
 	if (m_localStaticArgs.m_bundle.count() < 2) {
-		m_fitness = -2.0;
+		localStaticArgs()->m_fitness = -2.0;
 		return;
 	}
 	if (m_localStaticArgs.m_prevMissed >= m_localStaticArgs.m_consecMonthBeforeMissed) {
-		m_fitness = -10.0;
+		localStaticArgs()->m_fitness = -10.0;
 		return;
 	}
 	// recompute fitness
-	m_fitness -= 3 * qMax(0.0, rerun);
-	m_fitness *= 1.75 * (double(m_localStaticArgs.m_consecMonthBeforeMissed) - 1.5);
+	localStaticArgs()->m_fitness -= 3 * qMax(0.0, rerun);
+	localStaticArgs()->m_fitness *= 1.75 * (double(m_localStaticArgs.m_consecMonthBeforeMissed) - 1.5);
 	if (m_localStaticArgs.m_consecMissed == 0 && m_localStaticArgs.m_consecMonthBeforeMissed == 2)
-		m_fitness *= 5;
-//	m_fitness *= 2.0;
+		localStaticArgs()->m_fitness *= 5;
+//	localStaticArgs()->m_fitness *= 2.0;
 	if (qAbs(m_localStaticArgs.m_kla) > 2)
-		m_fitness *= qAbs(m_localStaticArgs.m_bundle.klaAverage());
+		localStaticArgs()->m_fitness *= qAbs(m_localStaticArgs.m_bundle.klaAverage());
 }
 
 void FeatureMonthlyAmount::emitGraphics(Puppy::Context& ioContext) const
