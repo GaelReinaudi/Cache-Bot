@@ -269,6 +269,10 @@ QVector<Transaction> FeatureMonthlyAmount::targetTransactions(QDate iniDate, QDa
 		tr.setKLA(m_localStaticArgs.m_kla);
 		tr.nameHash.setFromHash(m_localStaticArgs.m_hash);
 		tr.flags |= Transaction::Predicted;
+		if (tr.date.dayOfWeek() == 6)
+			tr.date = tr.date.addDays(-1);
+		if (tr.date.dayOfWeek() == 7)
+			tr.date = tr.date.addDays(-2);
 	}
 	return targetTrans;
 }
@@ -284,6 +288,10 @@ QVector<Transaction> FeatureBiWeeklyAmount::targetTransactions(QDate iniDate, QD
 		tr.setKLA(m_localStaticArgs.m_kla);
 		tr.nameHash.setFromHash(m_localStaticArgs.m_hash);
 		tr.flags |= Transaction::Predicted;
+		if (tr.date.dayOfWeek() == 6)
+			tr.date = tr.date.addDays(-1);
+		if (tr.date.dayOfWeek() == 7)
+			tr.date = tr.date.addDays(-2);
 	}
 	return targetTrans;
 }
