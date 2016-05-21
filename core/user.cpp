@@ -163,8 +163,8 @@ void User::injectJsonData(QString jsonStr)
 
 	WARN() << "daysWithoutCreateDate " << Transaction::daysWithoutCreateDate();
 	if (Transaction::daysWithoutCreateDate() > 0) {
-		WARN() << "setting current day to " << Transaction::daysWithoutCreateDate() << " days ago";
-		Transaction::setCurrentDay(Transaction::actualCurrentDay().addDays(-Transaction::daysWithoutCreateDate()));
+//		WARN() << "setting current day to " << Transaction::daysWithoutCreateDate() << " days ago";
+//		Transaction::setCurrentDay(Transaction::actualCurrentDay().addDays(-Transaction::daysWithoutCreateDate()));
 	}
 
 	//////// complete Accounts with transaction pointers in bundles
