@@ -319,6 +319,12 @@ QVector<Transaction> OracleOneDayOfMonth::revelation(QDate upToDate)
 		if (m_args.m_dayOfMonth2) {
 			targetTrans += FeatureMonthlyAmount::BlankTransactionsForDayOfMonth(iniDate, upToDate, m_args.m_dayOfMonth2, lambdaTrans);
 		}
+		for (Transaction& tr : targetTrans) {
+			if (tr.date.dayOfWeek() == 6)
+				tr.date = tr.date.addDays(-1);
+			if (tr.date.dayOfWeek() == 7)
+				tr.date = tr.date.addDays(-2);
+		}
 
 		qSort(targetTrans.begin(), targetTrans.end(), Transaction::earlierThan);
 //		if (targetTrans.first().date <= Transaction::currentDay()) {
