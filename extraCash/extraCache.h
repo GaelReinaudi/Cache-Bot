@@ -26,6 +26,7 @@ protected:
 	void onRepliedSendExtraCache(QString strData) override;
 	void makeAdvice(QJsonObject& jsonToInject, double thresholdScore) const;
 	void addTrend(QJsonObject& jsonToInject, QString strTrend, SuperOracle::Summary) const;
+	void askQuestion(QJsonObject &jsonToInject) const;
 
 private:
 	QDate m_date;

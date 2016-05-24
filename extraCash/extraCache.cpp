@@ -321,6 +321,8 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 	addTrend(statObj, "01", trend01);
 	addTrend(statObj, "07", trend07);
 
+//	askQuestion(statObj);
+
 	// if critically low flow
 	if (flowRate <= -0.95) {
 		WARN() << "Cache flow critically low: " << flowRate;
@@ -397,6 +399,25 @@ void ExtraCache::addTrend(QJsonObject& jsonToInject, QString strTrend, SuperOrac
 	jsonToInject["oracles"] = allOr;
 }
 
+void ExtraCache::askQuestion(QJsonObject& jsonToInject) const
+{
+	QJsonArray allOr = jsonToInject["oracles"].toArray();
+	double badestEffect = 0.0;
+	int indexEffect = -1;
+	for (int i = 0; i < allOr.count(); ++i) {
+		QJsonObject orObj = allOr[i].toObject();
+		QJsonObject trObj = orObj["trend"].toObject();
+		for (const QString& k : trObj.keys()) {
+			double eff = trObj[k].toObject()["flowEffect"].toDouble();
+			if (eff < badestEffect) {
+				badestEffect = eff;
+				indexEffect = i;
+			}
+		}
+	}
+
+	jsonToInject["question"] = "q";
+}
 
 void ExtraCache::onRepliedSendExtraCache(QString strData)
 {
