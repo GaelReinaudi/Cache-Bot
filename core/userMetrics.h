@@ -297,6 +297,7 @@ public:
 			simuVal.append(med);
 			simuDev.append(qSqrt(var));
 		}
+		return 0;
 	}
 
 protected:
