@@ -189,7 +189,7 @@ protected:
 		return pNewOr;
 	}
 
-	double maxDailyProbability() const override {
+	double maxDailyProbability() override {
 		return m_localStaticArgs.computeProba();
 	}
 

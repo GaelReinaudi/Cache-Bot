@@ -86,7 +86,7 @@ protected:
 		return pNewOr;
 	}
 
-	double maxDailyProbability() const override {
+	double maxDailyProbability() override {
 		return 1000000000.0;
 	}
 

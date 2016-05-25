@@ -161,7 +161,6 @@ public:
 
 protected:
 	virtual FeatureArgs* localStaticArgs() = 0;
-	const FeatureArgs* localStaticArgs() const { return localStaticArgs(); }
 	virtual void getArgs(Puppy::Context &ioContext) { Q_UNUSED(ioContext); }
 	virtual void onGeneration(int nGen, double progressGeneration, Puppy::Context &ioContext) {
 		Q_UNUSED(progressGeneration);
@@ -199,7 +198,7 @@ protected:
 	virtual void emitGraphics(Puppy::Context&) const { }
 	virtual Oracle* makeNewOracle() { return 0; }
 
-	virtual double maxDailyProbability() const { return qMax(0.0, localStaticArgs()->m_fitness); }
+	virtual double maxDailyProbability() { return qMax(0.0, localStaticArgs()->m_fitness); }
 
 protected:
 private:

@@ -103,7 +103,7 @@ protected:
 
 	virtual int minTransactionForBundle() const = 0;
 	void computeNextDayProba();
-	double maxDailyProbability() const override {
+	double maxDailyProbability() override {
 		return m_localStaticArgs.m_dayProba;
 	}
 	virtual qint64 distCalc(const Transaction& tr, const Transaction &modelTrans) const;
