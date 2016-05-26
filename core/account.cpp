@@ -75,9 +75,25 @@ void Account::loadJsonData(QJsonObject json)
 		m_type = Type::Saving;
 		NOTICE() << "Saving";
 	}
+	if (accountSubType.contains("brokerage", Qt::CaseInsensitive)) {
+		m_type = Type::Saving;
+		NOTICE() << "Saving";
+	}
+	if (accountSubType.contains("mortgage", Qt::CaseInsensitive)) {
+		m_type = Type::Saving;
+		NOTICE() << "Saving";
+	}
+	if (accountSubType.contains("loan", Qt::CaseInsensitive)) {
+		m_type = Type::Saving;
+		NOTICE() << "Saving";
+	}
+	if (accountSubType.contains("rewards", Qt::CaseInsensitive)) {
+		m_type = Type::Saving;
+		NOTICE() << "Saving";
+	}
 	if (m_type == Type::Unknown) {
 		ERR() << "Unknown account type. metaName: " << accountMetaName << " . type: " << accountType << " . subtype: " << accountSubType;
-		m_type = Type::Checking;
+		m_type = Type::Saving;
 	}
 	m_balance = json["balance"].toObject()["current"].toDouble();
 }
