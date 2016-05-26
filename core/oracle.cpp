@@ -88,6 +88,8 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 	summary.weekDetails["daysToSunday"] = daysToSunday;
 	double dailyFrequent = 0.0;
 	double dailyInfrequent = 0.0;
+	double dailyNotSureBill = 0.0;
+	double totBills = 0.0;
 	QJsonArray weekBills;
 	double threshAmountFrequent = 0.0;
 
@@ -114,9 +116,12 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 					bill["fitness"] = fitness;
 					bill["consec"] = consec;
 					weekBills.append(bill);
+					totBills += avgAmount;
+				}
+				else {
+					dailyNotSureBill += daily;
 				}
 				if (pOr->args()->m_bundle.flagsOR() & Transaction::UserInputFlag::yesRecur) {
-					continue;
 				}
 				else {
 					dailyInfrequent += daily;
@@ -163,19 +168,19 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 			if (inD >= 0 && inD <= daysToSunday) {
 				QJsonObject perij;
 				perij["daily"] = daily;
+				perij["_tot"] = avgAmount;
 				perij["inD"] = inD;
 				perij["descr"] = pOr->description();
 				perij["indOracle"] = index;
 				perij["nextDate"] = nextDate.toString();
 				perij["oracleJson"] = orj;
-				if (pOr->args()->m_bundle.flagsOR() && Transaction::UserInputFlag::yesRecur) {
-					totYesRecur += avgAmount;
+				if (pOr->args()->m_bundle.flagsOR() & Transaction::UserInputFlag::yesRecur) {
+//					totYesRecur += avgAmount;
 					yesRecurList.append(perij);
-					continue;
 				}
 				else {
-					totNotYesRecur += avgAmount;
-					dailyInfrequent += daily;
+//					totNotYesRecur += avgAmount;
+//					dailyInfrequent += daily;
 					infrequentList.append(perij);
 				}
 			}
@@ -187,13 +192,14 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 			double perDay = dayProba / (1 - dayProba);
 			QJsonObject perij;
 			perij["daily"] = daily;
+			perij["_tot"] = daily * (daysToSunday);
 			perij["descr"] = pOr->description();
 			perij["indOracle"] = index;
 			perij["dayProba"] = dayProba;
 			perij["oracleJson"] = orj;
 			if (perDay * 7 > perWeekTresh || qAbs(avgAmount) < qAbs(threshAmountFrequent)) {
-				frequentList.append(perij);
 				dailyFrequent += daily;
+				frequentList.append(perij);
 			}
 			else {
 				dailyInfrequent += daily;
@@ -202,23 +208,28 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 		}
 	}
 
+//	++daysToSunday;
 
-	summary.weekDetails["yesRecurList"] = revSortedJsonArray("daily", yesRecurList);
-	summary.weekDetails["frequentList"] = revSortedJsonArray("daily", frequentList);
-	summary.weekDetails["infrequentList"] = revSortedJsonArray("daily", infrequentList);
-	summary.weekDetails["negSumAll"] = summary.negSum;
+	summary.weekDetails["yesRecurList"] = revSortedJsonArray("_tot", yesRecurList);
+	summary.weekDetails["frequentList"] = revSortedJsonArray("_tot", frequentList);
+	summary.weekDetails["infrequentList"] = revSortedJsonArray("_tot", infrequentList);
+//	summary.weekDetails["negSumAll"] = summary.negSum;
 //	summary.weekDetails["negSumOthers"] = negSumOthers;
 
-	summary.weekDetails["_totYesRecur"] = totYesRecur;
-	summary.weekDetails["_totNotYesRecur"] = totNotYesRecur;
+//	summary.weekDetails["_totYesRecur"] = totYesRecur;
+//	summary.weekDetails["_totNotYesRecur"] = totNotYesRecur;
 	summary.weekDetails["_dailyFrequent"] = dailyFrequent;
 	summary.weekDetails["_dailyInfrequent"] = dailyInfrequent;
-	summary.weekDetails["_totInfrequent"] = dailyInfrequent * daysToSunday;
+	summary.weekDetails["_dailyNotSureBill"] = dailyNotSureBill;
+	summary.weekDetails["_totBills"] = totBills;
+	summary.weekDetails["_totFrequent"] = dailyFrequent * daysToSunday;
+	summary.weekDetails["_totInfrequent"] = (dailyInfrequent + dailyNotSureBill) * daysToSunday;
 	summary.weekDetails["approxTotYesRecur"] = toSignifDigit_2(totYesRecur);
 	summary.weekDetails["approxTotNotYesRecur"] = toSignifDigit_2(totNotYesRecur);
 	summary.weekDetails["approxDailyFrequent"] = toSignifDigit_2(dailyFrequent);
 	summary.weekDetails["approxDailyInfrequent"] = toSignifDigit_2(dailyInfrequent);
-	summary.weekDetails["approxTotInfrequent"] = toSignifDigit_2(dailyInfrequent * daysToSunday);
+	summary.weekDetails["approxTotInfrequent"] = toSignifDigit_2((dailyInfrequent + dailyNotSureBill) * daysToSunday);
+	summary.weekDetails["approxTotBill"] = toSignifDigit_2(totBills);
 	}
 
 	if (summary.posSum == 0.0) {
