@@ -106,7 +106,7 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 			QDate nextDate = QDate::fromString(orj["nextDate"].toString(), "yyyy-MM-dd");
 			int inD = Transaction::currentDay().daysTo(nextDate);
 			if (inD >= 0 && inD <= daysToSunday) {
-				if (fitness >= 15 and consec > 2) {
+				if (fitness >= 15 and consec >= 2) {
 					Transaction t = pOr->args()->m_bundle.randSmart();
 					QJsonObject bill;
 					bill["id"] = t.id;
