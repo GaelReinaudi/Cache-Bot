@@ -416,7 +416,7 @@ void ExtraCache::askQuestion(QJsonObject& jsonToInject) const
 		}
 	}
 
-	jsonToInject["question"] = "q";
+//	jsonToInject["question"] = "q";
 }
 
 void ExtraCache::onRepliedSendExtraCache(QString strData)
