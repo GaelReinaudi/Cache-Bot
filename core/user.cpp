@@ -232,7 +232,7 @@ void User::injectJsonData(QString jsonStr)
 				User::balanceAdjust -= pT->amountDbl();
 		}
 	}
-	User::totalAdjustedBalance = balance(Account::Type::All) + User::balanceAdjust;
+	User::totalAdjustedBalance = balance(Account::Type::Checking & Account::Type::Saving) + User::balanceAdjust;
 	//////// mark as "return" in certain conditions
 	for (int i = 0; i < m_allTransactions.count(); ++i) {
 		Transaction* pT = &m_allTransactions.transArray()[i];

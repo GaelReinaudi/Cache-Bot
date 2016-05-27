@@ -33,7 +33,9 @@ public:
 		m_allTrans.append(pT);
 	}
 
-	double balance() const{
+	double balance() const {
+		if (m_type == Type::Credit)
+			return -m_balance;
 		return m_balance;
 	}
 

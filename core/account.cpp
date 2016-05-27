@@ -22,9 +22,6 @@ void Account::loadJsonData(QJsonObject json)
 	QString accountSubType = json["subtype"].toString();
 	QString accountType = json["type"].toString();
 	Q_ASSERT(!accountID.isEmpty());
-	NOTICE() << "read account:" << accountID << ": " << accountMetaName
-			 << "(" << accountLast4Digits << "): " << accountType
-			 << ". plaid " << m_plaidId;
 
 	// quick and dirty account type
 	if (accountMetaName.contains("saving", Qt::CaseInsensitive)) {
@@ -96,6 +93,9 @@ void Account::loadJsonData(QJsonObject json)
 		m_type = Type::Saving;
 	}
 	m_balance = json["balance"].toObject()["current"].toDouble();
+	NOTICE() << balance() << " read account:" << accountID << ": " << accountMetaName
+			 << "(" << accountLast4Digits << "): " << accountType
+			 << ". plaid " << m_plaidId;
 }
 
 bool Account::loadPlaidJson(QString jsonFile) {
