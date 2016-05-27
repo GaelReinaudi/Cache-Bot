@@ -319,10 +319,6 @@ void StaticTransactionArray::stampAllTransactionEffect()
 	qDebug() << "effectCount" << effectCount;
 }
 
-
-
-
-
 double TransactionBundle::averageAmount(std::function<double (const Transaction &)> weight) const
 {
 	double totW = 0.0;

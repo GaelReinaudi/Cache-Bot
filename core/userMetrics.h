@@ -280,7 +280,7 @@ public:
 	}
 	double simuValDev(const QDate &date, QJsonArray& simuVal, QJsonArray& simuDev) {
 		Simulation<Nrun>& sim =  m_simulations[date];
-		for (int i = 1; i < displayDayFuture; ++i) {
+		for (int i = 0; i < 16+0*displayDayFuture; ++i) {
 			const QVector<double>& vals = sim.valsDay(i);
 			double med = vals[Nrun / 2];
 			double avg = 0;

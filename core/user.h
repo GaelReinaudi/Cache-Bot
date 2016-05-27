@@ -147,6 +147,8 @@ public:
 	Bot* m_bestBot = 0;
 	static double declaredIncome;
 	static double declaredRent;
+	static double balanceAdjust;
+	static double totalAdjustedBalance;
 };
 
 #endif // USER_H

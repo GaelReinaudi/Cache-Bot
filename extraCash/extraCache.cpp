@@ -333,6 +333,8 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 	statObj["_actualCurrentDay"] = Transaction::actualCurrentDay().toString();
 	statObj["_currentDay"] = Transaction::currentDay().toString();
 	statObj["_daysWithoutCreateDate"] = Transaction::daysWithoutCreateDate();
+	statObj["_balanceAdjust"] = User::balanceAdjust;
+	statObj["_totalAdjustedBalance"] = User::totalAdjustedBalance;
 
 	if (flags & SendExtraCash) {
 		statObj.insert("_inArgs", jsonArgs());

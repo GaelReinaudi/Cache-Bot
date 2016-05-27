@@ -7,6 +7,8 @@
 
 double User::declaredIncome = 0.0;
 double User::declaredRent = 0.0;
+double User::balanceAdjust = 0.0;
+double User::totalAdjustedBalance = 0.0;
 
 User::User(QString userId, QJsonObject jsonArgs)
 	: DBobj(userId, 0)
@@ -214,18 +216,23 @@ void User::injectJsonData(QString jsonStr)
 			NOTICE() << "making Digit internal";
 			pT->flags |= Transaction::Flag::Internal;
 		}
-		int dayOld = pT->date.daysTo(Transaction::currentDay());
-		if (qAbs(pT->categoryHash.hash()) == 16001000
-				&& (dayOld < 2 || dayOld > oldEnoughForTransfer)) {
-			WARN() << "making hash 16001000 internal: " << pT->name << " " << pT->amountDbl() << " " << pT->date.toString();
-			pT->flags |= Transaction::Flag::Internal;
-		}
-		if (qAbs(pT->categoryHash.hash()) == 16000000
-				&& (dayOld < 2 || dayOld > oldEnoughForTransfer)) {
-			WARN() << "making hash 16000000 internal: " << pT->name << " " << pT->amountDbl() << " " << pT->date.toString();
-			pT->flags |= Transaction::Flag::Internal;
+		else {
+			int dayOld = pT->date.daysTo(Transaction::currentDay());
+			if (qAbs(pT->categoryHash.hash()) == 16001000
+					&& (dayOld < 2 || dayOld > oldEnoughForTransfer)) {
+				WARN() << "making hash 16001000 internal: " << pT->name << " " << pT->amountDbl() << " " << pT->date.toString();
+				pT->flags |= Transaction::Flag::Internal;
+			}
+			if (qAbs(pT->categoryHash.hash()) == 16000000
+					&& (dayOld < 2 || dayOld > oldEnoughForTransfer)) {
+				WARN() << "making hash 16000000 internal: " << pT->name << " " << pT->amountDbl() << " " << pT->date.toString();
+				pT->flags |= Transaction::Flag::Internal;
+			}
+			if (pT->isInternal())
+				User::balanceAdjust -= pT->amountDbl();
 		}
 	}
+	User::totalAdjustedBalance = balance(Account::Type::All) + User::balanceAdjust;
 	//////// mark as "return" in certain conditions
 	for (int i = 0; i < m_allTransactions.count(); ++i) {
 		Transaction* pT = &m_allTransactions.transArray()[i];
