@@ -329,6 +329,7 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 	}
 
 	statObj["_git"] = QString(GIT_VERSION);
+	statObj["_actualCurrentDayTime"] = Transaction::actualCurrentDayTime().toString();
 	statObj["_actualCurrentDay"] = Transaction::actualCurrentDay().toString();
 	statObj["_currentDay"] = Transaction::currentDay().toString();
 	statObj["_daysWithoutCreateDate"] = Transaction::daysWithoutCreateDate();
