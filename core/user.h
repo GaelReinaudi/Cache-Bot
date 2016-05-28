@@ -121,6 +121,7 @@ protected:
 			if(pA->plaidId() == plaidId)
 				return pA;
 		}
+		ERR() << "getAccountByPlaidId " << " no such account: " << plaidId;
 		return 0;
 	}
 

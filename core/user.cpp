@@ -158,7 +158,8 @@ void User::injectJsonData(QString jsonStr)
 		QJsonObject jsonTrans = jsonTransArray[iT].toObject();
 		QString acPlaidId = jsonTrans["plaid_account"].toString();
 		Account* pInAcc = getAccountByPlaidId(acPlaidId);
-		m_allTransactions.appendNew(jsonTrans, pInAcc);
+		if (pInAcc)
+			m_allTransactions.appendNew(jsonTrans, pInAcc);
 	}
 	INFO() << "maxDaysOldAllTransatcion " << Transaction::maxDaysOldAllTransatcion();
 	m_allTransactions.sort();
