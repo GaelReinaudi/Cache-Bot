@@ -83,15 +83,17 @@ void UserViewer::plotMask(double x, double y, int flag)
 	QCPItemRect* itRect = new QCPItemRect(ui->acPlot);
 	y = kindaLog(y);
 	bool isTarget = flag == 0;
-	itRect->topLeft->setCoords(QPointF(x - 4*3600*24, y + (10+6*isTarget)*0.01));
-	itRect->bottomRight->setCoords(QPointF(x + 4*3600*24, y - (10+6*isTarget)*0.01));
-	QColor colZone = isTarget ? QColor(239, 64, 53, 32) : QColor(0, 64, 253, 32);
+	itRect->topLeft->setCoords(QPointF(x - 3600*24, y + (10+6*isTarget)*0.01));
+	itRect->bottomRight->setCoords(QPointF(x + 3600*24, y - (10+6*isTarget)*0.01));
+	QColor colZone = flag == 0 ? QColor(239, 64, 53, 32) : QColor(0, 64, 253, 64);
 	if (flag & 2)
 		colZone = QColor(0, 253, 64, 32);
 	if (flag & 4)
 		colZone = QColor(255, 165, 0, 32);
 	if (flag & 8)
 		colZone = QColor(255, 69, 0, 64);
+	if (flag & 16)
+		colZone = QColor(0, 165, 0, 64);
 	itRect->setPen(QPen(QBrush(colZone), 3.0));
 	itRect->setBrush(QBrush(colZone));
 	itRect->setClipToAxisRect(false);

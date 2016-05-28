@@ -82,9 +82,7 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 
 	if (includeOracleSummaries) {
 	// week summary
-	int daysToSunday = 7 - Transaction::currentDay().dayOfWeek();
-	if (daysToSunday == 0)
-		daysToSunday += 7;
+	int daysToSunday = Transaction::daysToSunday();
 	summary.weekDetails["daysToSunday"] = daysToSunday;
 	double dailyFrequent = 0.0;
 	double dailyInfrequent = 0.0;

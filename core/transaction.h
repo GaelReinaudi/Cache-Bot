@@ -132,6 +132,12 @@ public:
 	static QDate currentDay() {
 		return s_currentDay;
 	}
+	static int daysToSunday() {
+		int d2S = 7 - Transaction::currentDay().dayOfWeek();
+		if (d2S == 0)
+			d2S += 7;
+		return d2S;
+	}
 	static QDate actualCurrentDay() {
 		return s_actualCurrentDay;
 	}
