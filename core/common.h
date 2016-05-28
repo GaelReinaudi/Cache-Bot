@@ -13,10 +13,12 @@ static const int KLA_MULTIPLICATOR = 1;
 
 double CORESHARED_EXPORT kindaLog(double amount);
 double CORESHARED_EXPORT unKindaLog(double kindaLogAmount);
-double toSignifDigit_2(double val);
-double toBillDigits_2(double val);
+double CORESHARED_EXPORT toSignifDigit_2(double val);
+double CORESHARED_EXPORT toBillDigits_2(double val);
 qint64 CORESHARED_EXPORT proximityHashString(const QString& str);
 qint64 CORESHARED_EXPORT proximityHashString2(const QString& str);
+double CORESHARED_EXPORT roundToBaseSystem(double v);
+double CORESHARED_EXPORT roundByBaseSystem(double v, double d);
 
 static inline qint64 absInt(const qint64& x) {
 	return qAbs(x);

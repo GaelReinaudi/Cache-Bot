@@ -131,3 +131,38 @@ int NameHashVector2::numBits(qint64 n) const {
 	Q_ASSERT(int(x) == QString::number(n, 2).count("1"));
 	return x;
 }
+
+QVector<double> _baseSystem = {50, 100, 250, 500, 750, 1000, 1500, 2000, 3000, 5000, 7500, 10000};
+
+double roundToBaseSystem(double v)
+{
+	int i = 0;
+	while (i < _baseSystem.count() && v/_baseSystem[i] > 1) {
+		i++;
+	}
+	double x = 0;
+	if (i == 0) {
+		x = _baseSystem[i];
+	}
+	else {
+		double left = v - _baseSystem[i - 1];
+		double right = _baseSystem[i] - v;
+		if (left < right) {
+			x = _baseSystem[i - 1];
+		}
+		else {
+			x = _baseSystem[i];
+		}
+	}
+	WARN() << v << " rounded to base system: " <<  x << " (" << i << ")";
+	return x;
+}
+
+double roundByBaseSystem(double v, double d)
+{
+	// normalizes dev to a clean number in the _baseSystems provided above
+	d = roundToBaseSystem(d);
+	// round this to the nearest dev
+	double x = qFloor(v / d) * d;
+	return x;
+}
