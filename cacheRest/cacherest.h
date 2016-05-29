@@ -29,6 +29,7 @@ public:
 	void sendExtraCash(QString userId, double valExtra, QJsonObject newStats);
 	void sendNewBot(QString userId, QJsonObject newBot);
 	void getBestBot(QString userId, User *pUserToInject = 0);
+	void hitUrl(QString url, QJsonObject args);
 
 	void extraCashEC2Computation(QString userId);
 	void evoCacheEC2Computation(QString userId);

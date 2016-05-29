@@ -8,7 +8,8 @@ SUBDIRS = \
 	cacheRest \
 	tests \
 	evoCache \
-	extraCash
+	extraCash \
+	urlHit
 
 macx | win32 {
 SUBDIRS += \
@@ -31,3 +32,4 @@ cacheRest.depends = core
 tests.depends = cacheRest,core
 evoCache.depends = cacheRest,core
 extraCash.depends = cacheRest,core,evoCache
+urlHit.depends = cacheRest

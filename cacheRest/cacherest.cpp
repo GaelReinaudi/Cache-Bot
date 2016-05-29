@@ -44,6 +44,14 @@ void CacheRest::getUserData(QString userId, User *pUserToInject /*= 0*/)
 	}
 }
 
+void CacheRest::hitUrl(QString url, QJsonObject args)
+{
+	HttpRequestInput httpRequest(url, "POST");
+	QJsonObject json;
+	httpRequest.add_json(args);
+	worker->execute(&httpRequest);
+}
+
 User *CacheRest::newUser(QString userId)
 {
 	User* pUser = new User(userId);

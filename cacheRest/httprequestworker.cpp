@@ -304,11 +304,11 @@ void HttpRequestWorker::on_manager_finished(QNetworkReply *reply) {
 
 	reply->deleteLater();
 
-	emit on_execution_finished(this);
 
 	QString strResponseJsonDoc = QString(QJsonDocument::fromJson(response).toJson());
 	qDebug() << "response is" << strResponseJsonDoc.left(256);
 	DBG() << "response is" << strResponseJsonDoc;
+	emit on_execution_finished(this);
 	if(reply->request().url() == QUrl(LoginRoute)) {
 		emit repliedLogin(response);
 		if(QString(response).contains(StringLoggedInReplySuccess)) {
