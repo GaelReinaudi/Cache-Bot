@@ -7,7 +7,8 @@ int main(int argc, char *argv[])
 {
 	QCoreApplication a(argc, argv);
 
-	CacheConnect con;
+	QString argStr = QString(argv[1]).remove("'");
+	CacheConnect con(argStr);
 
 	return a.exec();
 }

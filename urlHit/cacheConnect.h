@@ -8,10 +8,14 @@ class CacheConnect : public CacheAccountConnector
 {
 	Q_OBJECT
 public:
-	CacheConnect();
+	CacheConnect(QString url);
+
 protected slots:
 	void onLoggedIn(bool didLogin) override;
 	void onFinished(HttpRequestWorker *);
+
+private:
+	QString m_url;
 };
 
 #endif // CACHECONNECT_H
