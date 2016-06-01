@@ -88,7 +88,8 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 	double dailyInfrequent = 0.0;
 	double dailyNotSureBill = 0.0;
 	double totBills = 0.0;
-	QJsonArray weekBills;
+	QJsonArray billsUnpaid;
+	QJsonArray billsPaid;
 	double threshAmountFrequent = 0.0;
 
 	static const double perWeekTresh = 1.5;
@@ -108,12 +109,13 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 					Transaction t = pOr->args()->m_bundle.randSmart();
 					QJsonObject bill;
 					bill["id"] = t.id;
+					bill["inDay"] = inD;
 					bill["name"] = t.name;
 					bill["amount"] = t.amountDbl();
 					bill["date"] = orj["nextDate"];
 					bill["fitness"] = fitness;
 					bill["consec"] = consec;
-					weekBills.append(bill);
+					billsUnpaid.append(bill);
 					totBills += avgAmount;
 				}
 				else {
@@ -123,6 +125,22 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 				}
 				else {
 					dailyInfrequent += daily;
+				}
+			}
+			QDate lastDate = QDate::fromString(orj["lastDateMatched"].toString(), "yyyy-MM-dd");
+			int agoD = -Transaction::currentDay().daysTo(lastDate);
+			if (agoD >= 0 && agoD <= 7 - daysToSunday) {
+				if (fitness >= 15 and consec >= 2) {
+					Transaction t = pOr->args()->m_bundle.last();
+					QJsonObject bill;
+					bill["id"] = t.id;
+					bill["agoDay"] = agoD;
+					bill["name"] = t.name;
+					bill["amount"] = t.amountDbl();
+					bill["date"] = orj["lastDateMatched"];
+					bill["fitness"] = fitness;
+					bill["consec"] = consec;
+					billsPaid.append(bill);
 				}
 			}
 			continue;
@@ -140,7 +158,9 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 			dailyInfrequent += daily;
 		}
 	}
-	summary.weekDetails["weekBills"] = weekBills;
+	summary.weekDetails["weekBills"] = billsUnpaid;
+	summary.weekDetails["billsUnpaid"] = billsUnpaid;
+	summary.weekDetails["billsPaid"] = billsPaid;
 	summary.weekDetails["_1stPass_dailyFrequent"] = dailyFrequent;
 	summary.weekDetails["_1stPass_dailyInfrequent"] = dailyInfrequent;
 	summary.weekDetails["_threshAmountFrequent"] = threshAmountFrequent;
