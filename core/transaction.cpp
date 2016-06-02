@@ -283,6 +283,11 @@ Transaction* StaticTransactionArray::appendNew(QJsonObject jsonTrans, Account *p
 			  << QString("b%1").arg(QString::number(Transaction::onlyAccountType, 2));
 		return 0;
 	}
+	if (jsonTrans["pending"].toBool()) {
+		NOTICE() << "not Adding transaction because pending "
+			  << name << " " << kla << " " << date.toString();
+		return 0;
+	}
 	Transaction* pNewTrans = &m_transArray[m_numTrans++];
 	pNewTrans->account = pInAcc;
 	pNewTrans->read(jsonTrans);
