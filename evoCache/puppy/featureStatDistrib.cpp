@@ -1,14 +1,16 @@
 #include "featureStatDistrib.h"
 
-void FeatureStatDistrib::getArgs(Puppy::Context &ioContext) {
+int FeatureStatDistrib::getArgs(Puppy::Context &ioContext, int startAfter /*= -1*/)
+{
 	double a = 0;
-	int ind = -1;
-	getArgument(++ind, &a, ioContext);
+	startAfter = AccountFeature::getArgs(ioContext, startAfter);
+	getArgument(++startAfter, &a, ioContext);
 	m_localStaticArgs.m_hash = a;
-	getArgument(++ind, &a, ioContext);
+	getArgument(++startAfter, &a, ioContext);
 	m_localStaticArgs.m_kla = a;
-	getArgument(++ind, &a, ioContext);
+	getArgument(++startAfter, &a, ioContext);
 	m_localStaticArgs.m_effect = a;
+	return startAfter;
 }
 
 qint64 FeatureStatDistrib::distCalc(const Transaction& tr, const Transaction& modelTrans) const

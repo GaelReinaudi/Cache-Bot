@@ -36,11 +36,12 @@ public:
 	}
 protected:
 	bool passFilter(qint64 dist, const Transaction& trans) const override {
-//		WARN() << "effect " << double(trans.effect128);
-		return dist < Transaction::LIMIT_DIST_TRANS / 4
+		bool ok = FeatureStatDistrib::passFilter(dist, trans);
+		ok &= dist < Transaction::LIMIT_DIST_TRANS / 4
 				&& trans.klaEff() < 0
 				&& double(trans.klaEff()) <=  1.0 + m_localStaticArgs.m_kla / EFFECT_RANGE_WIDTH_RATIO
 				&& double(trans.klaEff()) >= -1.0 + m_localStaticArgs.m_kla * EFFECT_RANGE_WIDTH_RATIO;
+		return ok;
 	}
 	int minTransactionForBundle() const override { return 24; }
 	Oracle* makeNewOracle() override {

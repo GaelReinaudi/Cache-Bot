@@ -39,8 +39,8 @@ public:
 	}
 
 protected:
-	void getArgs(Puppy::Context &ioContext) override {
-		FeatureStatDistrib::getArgs(ioContext);
+	int getArgs(Puppy::Context &ioContext, int startAfter = -1) override {
+		startAfter = FeatureStatDistrib::getArgs(ioContext, startAfter);
 		m_localStaticArgs.m_klaFrom = -999;
 		m_localStaticArgs.m_klaTo = 999;
 		int num = s_priceWindowDivisionKLA.count();
@@ -64,11 +64,13 @@ protected:
 		if (qAbs(m_localStaticArgs.m_kla) < 6 && qAbs(m_localStaticArgs.m_kla - m_localStaticArgs.m_klaTo) > 2){
 			ERR() << m_localStaticArgs.m_kla <<" ! "<< m_localStaticArgs.m_klaTo;
 		}
+		return startAfter;
 	}
 	bool passFilter(qint64 dist, const Transaction& trans) const override {
-		Q_UNUSED(dist);
-		return trans.klaEff() <= m_localStaticArgs.m_klaTo
+		bool ok = FeatureStatDistrib::passFilter(dist, trans);
+		ok &= trans.klaEff() <= m_localStaticArgs.m_klaTo
 				&& trans.klaEff() >= m_localStaticArgs.m_klaFrom;
+		return ok;
 	}
 	int minTransactionForBundle() const override { return 9999+4; }
 

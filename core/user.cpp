@@ -247,6 +247,29 @@ void User::injectJsonData(QString jsonStr)
 			WARN() << "this look like a return: " << pT->name << " " << pT->amountDbl() << " " << pT->date.toString();
 		}
 	}
+	//////// flag as EO/EI/IO/II
+	for (int i = 0; i < m_allTransactions.count(); ++i) {
+		Transaction* pT = &m_allTransactions.transArray()[i];
+		if (pT->account->type() == Account::Type::Checking) {
+			if (pT->isInternal()) {
+				if (pT->amount() > 0)
+					pT->flags |= Transaction::Flag::II;
+				else
+					pT->flags |= Transaction::Flag::IO;
+			}
+			else {
+				if (pT->amount() > 0)
+					pT->flags |= Transaction::Flag::EI;
+				else
+					pT->flags |= Transaction::Flag::EO;
+			}
+		}
+		else {
+			if (!pT->isInternal()) {
+				pT->flags |= Transaction::Flag::EE;
+			}
+		}
+	}
 	m_allTransactions.stampAllTransactionEffect();
 
 	//////// "funds"

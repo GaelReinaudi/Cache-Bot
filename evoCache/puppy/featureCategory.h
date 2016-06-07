@@ -44,7 +44,9 @@ protected:
 	}
 
 	bool passFilter(qint64 dist, const Transaction& trans) const override {
-		return dist < Transaction::LIMIT_DIST_TRANS;
+		bool ok = FeatureStatDistrib::passFilter(dist, trans);
+		ok &= dist < Transaction::LIMIT_DIST_TRANS;
+		return ok;
 	}
 	int minTransactionForBundle() const override { return 24; }
 	Oracle* makeNewOracle() override {

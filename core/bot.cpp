@@ -117,6 +117,7 @@ Puppy::Tree* Bot::instancePostTreatmentBot(Puppy::Context& ioContext)
 	for (uint i = 1; i < div.count(); ++i) {
 		treeNodeList += "PriceWindow";
 		treeNodeList += "0";
+		treeNodeList += "0";
 //		double amntBill2 = toBillDigits_2(unKindaLog(klaArg));
 //		QString klaStr = QString::number(kindaLog(amntBill2));
 		double amntBill2 = 0.5 * (div[i - 1] + div[i]);

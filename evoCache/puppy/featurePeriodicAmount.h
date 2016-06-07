@@ -136,6 +136,11 @@ public:
 	virtual int approxSpacingPayment() const = 0;
 	int isPeriodic() const override { return approxSpacingPayment(); }
 protected:
+	bool passFilter(qint64 dist, const Transaction& trans) const override {
+		bool ok = AccountFeature::passFilter(dist, trans);
+		ok &= !(trans.userFlag & (Transaction::noRecur | Transaction::Reimbursed));
+		return ok;
+	}
 	virtual qint64 distance(const Transaction *targ, const Transaction *trans);
 	virtual int onMissedTarget(Transaction *targ, const Transaction *last);
 };
@@ -157,7 +162,7 @@ protected:
 	int approxSpacingPayment() const override {
 		return 30;
 	}
-	void getArgs(Puppy::Context &ioContext) override;
+	int getArgs(Puppy::Context &ioContext, int startAfter = -1) override;
 	void cleanArgs() override {
 		FeaturePeriodicAmount::cleanArgs();
 		while (qAbs(m_localStaticArgs.m_kla) > 8.0)
@@ -173,12 +178,6 @@ protected:
 		return retObj;
 	}
 
-	bool passFilter(qint64 dist, const Transaction& trans) const override {
-		Q_UNUSED(dist);
-		bool ok = true;
-		ok &= !(trans.userFlag & (Transaction::noRecur | Transaction::Reimbursed));
-		return ok;
-	}
 	double apply(TransactionBundle& allTrans, bool isPostTreat, bool doLog) override;
 	void onJustApplied(TransactionBundle &allTrans, Puppy::Context& ioContext) override;
 	void emitGraphics(Puppy::Context& ioContext) const override;

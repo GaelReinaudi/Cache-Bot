@@ -115,6 +115,7 @@ struct FeatureArgs
 		o_retObj["avgD2N"] = avgD2N;
 		o_retObj["stdDevD2N"] = m_bundle.stdDevD2N(avgD2N);
 		o_retObj.insert("fitness", m_fitness);
+		o_retObj.insert("filter", int(m_filterFlags));
 	}
 	virtual double avgDaily(int limDayProba = 0) const = 0;
 	virtual double avgDailyPos(int limDayProba) const {
@@ -128,13 +129,14 @@ struct FeatureArgs
 	virtual double computeProba() const { return 0; }
 	TransactionBundle m_bundle;
 	double m_fitness = 0.0;
+	unsigned int m_filterFlags = 0xffffffff;
 };
 
 class AccountFeature : public Puppy::Primitive
 {
 public:
 	AccountFeature(unsigned int inNumberArguments, std::string inName)
-		: Primitive(inNumberArguments, inName)
+		: Primitive(inNumberArguments+1, inName)
 	{}
 	virtual ~AccountFeature() {}
 	virtual void execute(void* outDatum, Puppy::Context& ioContext);
@@ -161,7 +163,40 @@ public:
 
 protected:
 	virtual FeatureArgs* localStaticArgs() = 0;
-	virtual void getArgs(Puppy::Context &ioContext) { Q_UNUSED(ioContext); }
+	virtual const FeatureArgs* constLocalStaticArgs() const { return const_cast<AccountFeature*>(this)->localStaticArgs(); };
+	virtual int getArgs(Puppy::Context &ioContext, int startAfter = -1) {
+		double a = 0;
+		getArgument(++startAfter, &a, ioContext);
+		localStaticArgs()->m_filterFlags = qRound(a);
+		return startAfter;
+	}
+	virtual void cleanArgs() {
+		unsigned int i = localStaticArgs()->m_filterFlags % 5;
+		switch (i) {
+		case 0:
+			localStaticArgs()->m_filterFlags = Transaction::Flag::EO;
+			break;
+		case 1:
+			localStaticArgs()->m_filterFlags = Transaction::Flag::IO;
+			break;
+		case 2:
+			localStaticArgs()->m_filterFlags = Transaction::Flag::EI;
+			break;
+		case 3:
+			localStaticArgs()->m_filterFlags = Transaction::Flag::II;
+			break;
+		case 4:
+			localStaticArgs()->m_filterFlags = Transaction::Flag::EE;
+			break;
+		default:
+			localStaticArgs()->m_filterFlags = Transaction::Flag::None;
+			break;
+		}
+	}
+	virtual bool passFilter(qint64 dist, const Transaction& trans) const {
+		Q_UNUSED(dist);//Q_UNUSED(trans);
+		return trans.flags & constLocalStaticArgs()->m_filterFlags;
+	}
 	virtual void onGeneration(int nGen, double progressGeneration, Puppy::Context &ioContext) {
 		Q_UNUSED(progressGeneration);
 		if (nGen == 1) {
@@ -185,11 +220,6 @@ protected:
 				m_filterHash = -1;
 			}
 		}
-	}
-	virtual void cleanArgs() {}
-	virtual bool passFilter(qint64 dist, const Transaction& trans) const {
-		Q_UNUSED(dist);Q_UNUSED(trans);
-		return true;
 	}
 	virtual bool cannotExecute(Puppy::Context& ioContext) const { Q_UNUSED(ioContext); return false; }
 	virtual double apply(TransactionBundle& allTrans, bool isPostTreat, bool doLog) = 0;

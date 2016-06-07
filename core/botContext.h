@@ -14,7 +14,7 @@ public:
 	BotContext (User* pUser);
 
 public:
-	static const unsigned int MAX_NUM_FEATURES = 32;
+	static const unsigned int MAX_NUM_FEATURES = 24;
 	static unsigned int LIMIT_NUM_FEATURES;
 	static unsigned int TARGET_TRANS_FUTUR_DAYS;
 	static QJsonObject JSON_ARGS;

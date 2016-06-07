@@ -86,7 +86,7 @@ public:
 	~FeatureStatDistrib() {}
 
 protected:
-	void getArgs(Puppy::Context &ioContext) override;
+	int getArgs(Puppy::Context &ioContext, int startAfter = -1) override;
 	QJsonObject toJson(Puppy::Context& ioContext) override {
 		QJsonObject retObj = AccountFeature::toJson(ioContext);
 		m_localStaticArgs.intoJson(retObj);

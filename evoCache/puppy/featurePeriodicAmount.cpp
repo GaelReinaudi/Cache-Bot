@@ -29,16 +29,17 @@ QJsonObject OracleOneDayOfMonth::toJson() const {
 	return ret;
 }
 
-void FeatureMonthlyAmount::getArgs(Puppy::Context &ioContext) {
+int FeatureMonthlyAmount::getArgs(Puppy::Context &ioContext, int startAfter /*= -1*/) {
 	double a = 0;
-	int ind = -1;
-	getArgument(++ind, &a, ioContext);
+	startAfter = FeaturePeriodicAmount::getArgs(ioContext, startAfter);
+	getArgument(++startAfter, &a, ioContext);
 	m_localStaticArgs.m_hash = a;
-	getArgument(++ind, &a, ioContext);
+	getArgument(++startAfter, &a, ioContext);
 	m_localStaticArgs.m_kla = a;
-	getArgument(++ind, &a, ioContext);
+	getArgument(++startAfter, &a, ioContext);
 	a = qBound(-1000.0, a, 1000.0);
 	m_localStaticArgs.m_dayOfMonth = a;
+	return startAfter;
 }
 
 double FeatureMonthlyAmount::apply(TransactionBundle& allTrans, bool isPostTreat, bool doLog)
