@@ -149,6 +149,12 @@ void Transaction::read(const QJsonObject &json) {
 	if (createdDate.isValid())
 		s_daysWithoutCreateDate = qMin(s_daysWithoutCreateDate, int(createdDate.daysTo(Transaction::actualCurrentDay())));
 
+	if (json["pending"].toBool()) {
+		flags |= Transaction::Flag::Pending;
+//		User::balanceAdjust += amountDbl();
+//		NOTICE() << "transaction pending "
+//			  << name << " " << amountDbl() << " " << date.toString() << " balanceAdjust = " << User::balanceAdjust;
+	}
 	// logs all in the LOG.
 	auto out = INFO();
 //	out.setFieldWidth(8);

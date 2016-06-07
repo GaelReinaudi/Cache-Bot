@@ -35,7 +35,8 @@ public:
 				Predicted = 0x1,
 				CameTrue = 0x2,
 				Internal = 0x4,
-				MovedLate = 0x8
+				Pending = 0x8,
+				MovedLate = 0x10
 			  };
 	int flags = Flag::None;
 	bool isInternal() const { return flags & Transaction::Flag::Internal; }

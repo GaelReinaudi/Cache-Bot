@@ -229,8 +229,11 @@ void User::injectJsonData(QString jsonStr)
 				WARN() << "making hash 16000000 internal: " << pT->name << " " << pT->amountDbl() << " " << pT->date.toString();
 				pT->flags |= Transaction::Flag::Internal;
 			}
-			if (pT->isInternal())
+			if (pT->isInternal()) {
 				User::balanceAdjust -= pT->amountDbl();
+				NOTICE() << "transaction 1600**** "
+					  << pT->name << " " << pT->amountDbl() << " " << pT->date.toString() << " balanceAdjust = " << User::balanceAdjust;
+			}
 		}
 	}
 	User::totalAdjustedBalance = balance(Account::Type::All) + User::balanceAdjust;
