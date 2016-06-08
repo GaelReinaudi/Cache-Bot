@@ -269,6 +269,7 @@ void User::injectJsonData(QString jsonStr)
 				pT->flags |= Transaction::Flag::EE;
 			}
 		}
+		WARN() << "flag: " << pT->flags << " " << pT->name << " " << pT->amountDbl() << " " << pT->date.toString();
 	}
 	m_allTransactions.stampAllTransactionEffect();
 
@@ -354,5 +355,34 @@ void User::makeHashBundles() {
 		m_allTransBundle.append(&t);
 	}
 	//qDebug() << m_hashBundles.count() << m_hashBundles.keys().first() << m_hashBundles.keys().last();
+}
+
+TransactionBundle& User::makeFlagBundle(int filterHash, int flags)
+{
+	HashedBundles& hashBund = m_flagHashBundles[flags];
+	TransactionBundle& allBund = m_flagTransBundle[flags];
+	for (int i = 0; i < m_allTransactions.count(); ++i) {
+		Transaction& t = m_allTransactions.trans(i);
+		qint64 h = t.nameHash.hash();
+		if (!hashBund.contains(h))
+			hashBund[h] = new TransactionBundle();
+		if (t.flags == flags)
+			hashBund[h]->append(&t);
+
+		// categories too
+		h = t.categoryHash.hash();
+		if (!hashBund.contains(h))
+			hashBund[h] = new TransactionBundle();
+		if (t.flags == flags)
+			hashBund[h]->append(&t);
+
+		// all of them
+		if (t.flags == flags)
+			allBund.append(&t);
+	}
+	WARN() << "making flagBundle: flags=" << flags << " count = " << allBund.count();
+	if (filterHash != -1)
+		return *hashBund[filterHash];
+	return allBund;
 }
 

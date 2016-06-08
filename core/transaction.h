@@ -37,11 +37,11 @@ public:
 				Internal = 0x4,
 				Pending = 0x8,
 				MovedLate = 0x10,
-				EO = 0x100,
-				IO = 0x200,
-				EI = 0x400,
-				II = 0x800,
-				EE = 0x1000
+				EO = 0x400,
+				IO = 0x800,
+				EI = 0x1000,
+				II = 0x2000,
+				EE = 0x4000
 			  };
 	int flags = Flag::None;
 	bool isInternal() const { return flags & Transaction::Flag::Internal; }

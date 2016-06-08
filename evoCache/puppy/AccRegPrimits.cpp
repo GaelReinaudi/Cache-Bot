@@ -67,7 +67,8 @@ void AccountFeature::execute(void *outDatum, Puppy::Context &ioContext)
 	cleanArgs();
 
 	// will be ALL the transactions if m_filterHash < 0
-	TransactionBundle& allTrans = ioContext.m_pUser->transBundle(m_filterHash);
+//	TransactionBundle& allTrans = ioContext.m_pUser->transBundle(m_filterHash);
+	TransactionBundle& allTrans = ioContext.m_pUser->transFlagBundle(m_filterHash, localStaticArgs()->m_filterFlags);
 
 	output = apply(allTrans, ioContext.isPostTreatment, ioContext.m_summaryJsonObj);
 	localStaticArgs()->m_fitness = output;

@@ -41,6 +41,16 @@ public:
 			return *m_hashBundles[filterHash];
 		return m_allTransBundle;
 	}
+	TransactionBundle& transFlagBundle(int filterHash, int flags) {
+		if (flags == Transaction::Flag::None)
+			return transBundle(filterHash);
+		if (m_flagHashBundles.contains(flags)) {
+			if (filterHash != -1)
+				return *m_flagHashBundles[flags][filterHash];
+			return m_flagTransBundle[flags];
+		}
+		return makeFlagBundle(filterHash, flags);
+	}
 	QMap<qint64, TransactionBundle*>& hashBundles() {
 		return m_hashBundles;
 	}
@@ -132,6 +142,7 @@ signals:
 private:
 	//! makes a bundle for each hash value
 	void makeHashBundles();
+	TransactionBundle& makeFlagBundle(int filterHash, int flags);
 
 private:
 	QVector<Bank*> m_banks;
@@ -139,6 +150,8 @@ private:
 	StaticTransactionArray m_allTransactions;
 	HashedBundles m_hashBundles;
 	TransactionBundle m_allTransBundle;
+	QMap<int, HashedBundles> m_flagHashBundles;
+	QMap<int, TransactionBundle> m_flagTransBundle;
 	BotContext* m_botContext = 0;
 	Fund* m_extraCacheFund = 0;
 	QString m_email;
