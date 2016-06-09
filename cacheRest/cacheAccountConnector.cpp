@@ -51,6 +51,7 @@ void CacheAccountConnector::onLoggedIn(bool didLogin)
 	if(didLogin) {
 		m_user = new User(userID(), m_jsonArgs);
 		CacheRest::Instance()->getUserData(userID(), m_user);
+		CacheRest::Instance()->m_overrideCallBackUrl = m_jsonArgs["callback_url"].toString();
 		connect(m_user, SIGNAL(injected(User*)), this, SLOT(onUserInjected(User*)));
 		connect(m_user, SIGNAL(injected(User*)), this, SIGNAL(injected(User*)));
 		connect(m_user, SIGNAL(botInjected(Bot*)), this, SLOT(onBotInjected(Bot*)));
