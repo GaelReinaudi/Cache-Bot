@@ -66,7 +66,12 @@ void CacheRest::sendExtraCash(QString userId, double valExtra, QJsonObject newSt
 #endif
 	if (newStats["_inArgs"].toObject()["send2Bot"].toString() != "")
 		userId = "55518f01574600030092a822";
-	HttpRequestInput httpRequest(SendExtraCashRoute.arg(userId), "POST");
+	QString url = SendExtraCashRoute.arg(userId);
+	if (!m_overrideCallBackUrl.isEmpty()) {
+		url = m_overrideCallBackUrl;
+		WARN() << "using override on url: " << url;
+	}
+	HttpRequestInput httpRequest(url, "POST");
 	QJsonObject json;
 	json.insert("amount", valExtra);
 	newStats.insert("extraCash", json);
@@ -81,7 +86,12 @@ void CacheRest::sendNewBot(QString userId, QJsonObject newBot)
 #endif
 	if (newBot["_inArgs"].toObject()["send2Bot"].toString() != "")
 		userId = "55518f01574600030092a822";
-	HttpRequestInput httpRequest(SendNewBotRoute + QString("/%1").arg(userId), "POST");
+	QString url = SendNewBotRoute + QString("/%1").arg(userId);
+	if (!m_overrideCallBackUrl.isEmpty()) {
+		url = m_overrideCallBackUrl;
+		WARN() << "using override on url: " << url;
+	}
+	HttpRequestInput httpRequest(url, "POST");
 	QJsonObject jsonNewBot;
 	jsonNewBot.insert("newBot", newBot);
 	httpRequest.add_json(jsonNewBot);

@@ -36,6 +36,7 @@ public:
 
 public:
 	HttpRequestWorker *worker = 0;
+	QString m_overrideCallBackUrl;
 private:
 	static CacheRest* pThisStatic;
 };
