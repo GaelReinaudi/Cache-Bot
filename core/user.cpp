@@ -359,6 +359,7 @@ void User::makeHashBundles() {
 
 TransactionBundle& User::makeFlagBundle(int filterHash, int flags)
 {
+	WARN() << "filterHash=" << filterHash << ". making flagBundle: flags=" << flags;
 	HashedBundles& hashBund = m_flagHashBundles[flags];
 	TransactionBundle& allBund = m_flagTransBundle[flags];
 	for (int i = 0; i < m_allTransactions.count(); ++i) {
@@ -380,7 +381,7 @@ TransactionBundle& User::makeFlagBundle(int filterHash, int flags)
 		if (t.flags == flags)
 			allBund.append(&t);
 	}
-	WARN() << "making flagBundle: flags=" << flags << " count = " << allBund.count();
+	WARN() << "flags=" << flags << " count = " << allBund.count();
 	if (filterHash != -1)
 		return *hashBund[filterHash];
 	return allBund;

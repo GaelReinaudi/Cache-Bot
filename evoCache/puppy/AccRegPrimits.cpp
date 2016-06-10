@@ -68,7 +68,11 @@ void AccountFeature::execute(void *outDatum, Puppy::Context &ioContext)
 
 	// will be ALL the transactions if m_filterHash < 0
 //	TransactionBundle& allTrans = ioContext.m_pUser->transBundle(m_filterHash);
-	TransactionBundle& allTrans = ioContext.m_pUser->transFlagBundle(m_filterHash, localStaticArgs()->m_filterFlags);
+	int flag = localStaticArgs()->m_filterFlags;
+	TransactionBundle& allTrans = ioContext.m_pUser->transFlagBundle(m_filterHash, flag);
+	if (allTrans.count() == 0) {
+		return;
+	}
 
 	output = apply(allTrans, ioContext.isPostTreatment, ioContext.m_summaryJsonObj);
 	localStaticArgs()->m_fitness = output;
@@ -93,6 +97,30 @@ void AccountFeature::execute(void *outDatum, Puppy::Context &ioContext)
 		pNewOr->isPostTreatment = ioContext.isPostTreatment;
 		QSharedPointer<Oracle> newOracle(pNewOr);
 		ioContext.m_pUser->oracle()->addSubOracle(newOracle);
+}
+
+void AccountFeature::cleanArgs() {
+	unsigned int i = m_filterFlagIndex % 5;
+	switch (i) {
+	case 0:
+		localStaticArgs()->m_filterFlags = Transaction::Flag::EO;
+		break;
+	case 3:
+		localStaticArgs()->m_filterFlags = Transaction::Flag::IO;
+		break;
+	case 2:
+		localStaticArgs()->m_filterFlags = Transaction::Flag::EI;
+		break;
+	case 1:
+		localStaticArgs()->m_filterFlags = Transaction::Flag::II;
+		break;
+	case 4:
+		localStaticArgs()->m_filterFlags = Transaction::Flag::EE;
+		break;
+	default:
+		localStaticArgs()->m_filterFlags = Transaction::Flag::None;
+		break;
+	}
 }
 
 void AccountFeature::isolateBundledTransactions(bool isPostTreatment /*= false*/)

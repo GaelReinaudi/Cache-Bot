@@ -115,7 +115,7 @@ struct FeatureArgs
 		o_retObj["avgD2N"] = avgD2N;
 		o_retObj["stdDevD2N"] = m_bundle.stdDevD2N(avgD2N);
 		o_retObj.insert("fitness", m_fitness);
-		o_retObj.insert("filter", int(m_filterFlags));
+		o_retObj.insert("_filter", int(m_filterFlags));
 	}
 	virtual double avgDaily(int limDayProba = 0) const = 0;
 	virtual double avgDailyPos(int limDayProba) const {
@@ -129,7 +129,7 @@ struct FeatureArgs
 	virtual double computeProba() const { return 0; }
 	TransactionBundle m_bundle;
 	double m_fitness = 0.0;
-	unsigned int m_filterFlags = 0xffffffff;
+	unsigned int m_filterFlags = 0;
 };
 
 class AccountFeature : public Puppy::Primitive
@@ -167,35 +167,13 @@ protected:
 	virtual int getArgs(Puppy::Context &ioContext, int startAfter = -1) {
 		double a = 0;
 		getArgument(++startAfter, &a, ioContext);
-		localStaticArgs()->m_filterFlags = qRound(a);
+		m_filterFlagIndex = qRound(a);
 		return startAfter;
 	}
-	virtual void cleanArgs() {
-		unsigned int i = localStaticArgs()->m_filterFlags % 5;
-		switch (i) {
-		case 0:
-			localStaticArgs()->m_filterFlags = Transaction::Flag::EO;
-			break;
-		case 1:
-			localStaticArgs()->m_filterFlags = Transaction::Flag::IO;
-			break;
-		case 2:
-			localStaticArgs()->m_filterFlags = Transaction::Flag::EI;
-			break;
-		case 3:
-			localStaticArgs()->m_filterFlags = Transaction::Flag::II;
-			break;
-		case 4:
-			localStaticArgs()->m_filterFlags = Transaction::Flag::EE;
-			break;
-		default:
-			localStaticArgs()->m_filterFlags = Transaction::Flag::None;
-			break;
-		}
-	}
+	virtual void cleanArgs();
 	virtual bool passFilter(qint64 dist, const Transaction& trans) const {
 		Q_UNUSED(dist);//Q_UNUSED(trans);
-		return trans.flags & constLocalStaticArgs()->m_filterFlags;
+		return true;//trans.flags & constLocalStaticArgs()->m_filterFlags;
 	}
 	virtual void onGeneration(int nGen, double progressGeneration, Puppy::Context &ioContext) {
 		Q_UNUSED(progressGeneration);
@@ -233,6 +211,7 @@ protected:
 protected:
 private:
 	// if any, the hash to filter the transaction on
+	int m_filterFlagIndex = 0;
 	int m_filterHash = -1;
 	double m_billProba = 0.0;
 };
