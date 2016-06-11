@@ -209,7 +209,7 @@ void User::injectJsonData(QString jsonStr)
 						pT->checkPOV |= Transaction::CheckingPOV::ToOtherAcc;
 				}
 				else if (pBestMatchN->account->type() == Account::Type::Checking && pT->account->type() != Account::Type::Checking) {
-					if (pT->amount() > 0)
+					if (pBestMatchN->amount() > 0)
 						pBestMatchN->checkPOV |= Transaction::CheckingPOV::FromOtherAcc;
 					else
 						pBestMatchN->checkPOV |= Transaction::CheckingPOV::ToOtherAcc;

@@ -21,7 +21,10 @@ int Transaction::s_daysWithoutCreateDate = 0;
 
 bool Transaction::noUse() const
 {
-	return (magic != Transaction::s_magicFilter) || isFuture() || isToOld();// || isInternal();
+	return (magic != Transaction::s_magicFilter) || isFuture()
+			|| isToOld()
+			|| (flags & Flag::UnMatchedInternal)
+			;// || isInternal();
 }
 
 int Transaction::isVoid() const
