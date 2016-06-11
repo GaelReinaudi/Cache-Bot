@@ -202,6 +202,22 @@ void User::injectJsonData(QString jsonStr)
 			if (pT && pBestMatchN) {
 				pT->flags |= Transaction::Flag::Internal;
 				pBestMatchN->flags |= Transaction::Flag::Internal;
+				if (pT->account->type() == Account::Type::Checking && pBestMatchN->account->type() != Account::Type::Checking) {
+					if (pT->amount() > 0)
+						pT->checkPOV |= Transaction::CheckingPOV::FromOtherAcc;
+					else
+						pT->checkPOV |= Transaction::CheckingPOV::ToOtherAcc;
+				}
+				else if (pBestMatchN->account->type() == Account::Type::Checking && pT->account->type() != Account::Type::Checking) {
+					if (pT->amount() > 0)
+						pBestMatchN->checkPOV |= Transaction::CheckingPOV::FromOtherAcc;
+					else
+						pBestMatchN->checkPOV |= Transaction::CheckingPOV::ToOtherAcc;
+				}
+				else {// if (pT->account->type() != Account::Type::Checking && pBestMatchN->account->type() != Account::Type::Checking) {
+					pT->checkPOV |= Transaction::CheckingPOV::OtherToOther;
+					pBestMatchN->checkPOV |= Transaction::CheckingPOV::OtherToOther;
+				}
 				INFO() << "Matching internal transactions";
 				INFO() << pT->name << " " << pT->amountDbl() << " " << pT->date.toString();
 				INFO() << pBestMatchN->name << " " << pBestMatchN->amountDbl() << " " << pBestMatchN->date.toString();
@@ -215,19 +231,23 @@ void User::injectJsonData(QString jsonStr)
 			continue;
 		if (pT->name.contains("Hello Digit", Qt::CaseInsensitive)) {
 			NOTICE() << "making Digit internal";
-			pT->flags |= Transaction::Flag::Internal;
+//			pT->flags |= Transaction::Flag::Internal;
+			if (pT->amount() > 0)
+				pT->checkPOV |= Transaction::CheckingPOV::ToDigitLike;
+			else
+				pT->checkPOV |= Transaction::CheckingPOV::FromDigitLike;
 		}
 		else {
 			int dayOld = pT->date.daysTo(Transaction::currentDay());
 			if (qAbs(pT->categoryHash.hash()) == 16001000
 					&& (dayOld < 2 || dayOld > oldEnoughForTransfer)) {
 				WARN() << "making hash 16001000 internal: " << pT->name << " " << pT->amountDbl() << " " << pT->date.toString();
-				pT->flags |= Transaction::Flag::Internal;
+				pT->flags |= Transaction::Flag::UnMatchedInternal;
 			}
 			if (qAbs(pT->categoryHash.hash()) == 16000000
 					&& (dayOld < 2 || dayOld > oldEnoughForTransfer)) {
 				WARN() << "making hash 16000000 internal: " << pT->name << " " << pT->amountDbl() << " " << pT->date.toString();
-				pT->flags |= Transaction::Flag::Internal;
+				pT->flags |= Transaction::Flag::UnMatchedInternal;
 			}
 			if (pT->isInternal()) {
 				User::balanceAdjust -= pT->amountDbl();
@@ -250,26 +270,21 @@ void User::injectJsonData(QString jsonStr)
 	//////// flag as EO/EI/IO/II
 	for (int i = 0; i < m_allTransactions.count(); ++i) {
 		Transaction* pT = &m_allTransactions.transArray()[i];
-		if (pT->account->type() == Account::Type::Checking) {
-			if (pT->isInternal()) {
+		if (!pT->isInternal()) {
+			if (pT->account->type() == Account::Type::Checking) {
 				if (pT->amount() > 0)
-					pT->flags |= Transaction::Flag::II;
+					pT->checkPOV |= Transaction::CheckingPOV::FromExterior;
 				else
-					pT->flags |= Transaction::Flag::IO;
+					pT->checkPOV |= Transaction::CheckingPOV::ToExterior;
 			}
 			else {
 				if (pT->amount() > 0)
-					pT->flags |= Transaction::Flag::EI;
+					pT->checkPOV |= Transaction::CheckingPOV::OtherExterior;
 				else
-					pT->flags |= Transaction::Flag::EO;
+					pT->checkPOV |= Transaction::CheckingPOV::OtherExterior;
 			}
+			WARN() << "checkPOV: " << pT->checkPOV << " " << pT->name << " " << pT->amountDbl() << " " << pT->date.toString();
 		}
-		else {
-			if (!pT->isInternal()) {
-				pT->flags |= Transaction::Flag::EE;
-			}
-		}
-		WARN() << "flag: " << pT->flags << " " << pT->name << " " << pT->amountDbl() << " " << pT->date.toString();
 	}
 	m_allTransactions.stampAllTransactionEffect();
 
@@ -367,18 +382,18 @@ TransactionBundle& User::makeFlagBundle(int filterHash, int flags)
 		qint64 h = t.nameHash.hash();
 		if (!hashBund.contains(h))
 			hashBund[h] = new TransactionBundle();
-		if (t.flags == flags)
+		if (t.checkPOV == flags)
 			hashBund[h]->append(&t);
 
 		// categories too
 		h = t.categoryHash.hash();
 		if (!hashBund.contains(h))
 			hashBund[h] = new TransactionBundle();
-		if (t.flags == flags)
+		if (t.checkPOV == flags)
 			hashBund[h]->append(&t);
 
 		// all of them
-		if (t.flags == flags)
+		if (t.checkPOV == flags)
 			allBund.append(&t);
 	}
 	WARN() << "flags=" << flags << " count = " << allBund.count();

@@ -35,15 +35,24 @@ public:
 				Predicted = 0x1,
 				CameTrue = 0x2,
 				Internal = 0x4,
+				UnMatchedInternal = 0x4,
 				Pending = 0x8,
-				MovedLate = 0x10,
-				EO = 0x400,
-				IO = 0x800,
-				EI = 0x1000,
-				II = 0x2000,
-				EE = 0x4000
+				MovedLate = 0x10
 			  };
 	int flags = Flag::None;
+	enum CheckingPOV {
+		//FromChecking = 0x01,
+		FromOtherAcc = 0x02,
+		FromExterior = 0x04,
+		FromDigitLike = 0x08,
+		//ToChecking = 0x10,
+		ToOtherAcc = 0x20,
+		ToExterior = 0x40,
+		ToDigitLike = 0x80,
+		OtherToOther = 0x100,
+		OtherExterior = 0x200
+	};
+	int checkPOV = 0;
 	bool isInternal() const { return flags & Transaction::Flag::Internal; }
 	bool isFuture() const { return Transaction::currentDay().daysTo(date) > 0; }
 	bool isToOld() const { return date < Transaction::currentDay().addDays(-Transaction::maxDaysOld()); }

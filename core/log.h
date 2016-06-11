@@ -64,10 +64,14 @@ public:
 // 7 Debug: debug-level messages
 //#define DBG() logger::Instance()->m_fileLogger->debug()
 
+//#define COMMENT SLASH(/)
+//#define SLASH(s) /##s
+#define COMMENT
+
 #define LOGDATELIM 365
 #define QDATEOK(a) (Transaction::currentDay().dayOfYear() <= (LOGDATELIM + (a)))
 #define OUT_PUT_LOG logger::Instance()->m_fileLogger
-#define DBG(lev) OUT_PUT_LOG->debug()
+#define DBG(lev) COMMENT OUT_PUT_LOG->debug()
 #define INFO()   OUT_PUT_LOG->info()
 #define NOTICE() OUT_PUT_LOG->notice()
 #define WARN()   OUT_PUT_LOG->warn()

@@ -73,7 +73,11 @@ void AccountFeature::execute(void *outDatum, Puppy::Context &ioContext)
 	if (allTrans.count() == 0) {
 		return;
 	}
-
+#ifdef QT_DEBUG
+	for (int i = 0; i < allTrans.count(); ++i) {
+		Q_ASSERT(allTrans.trans(i).flags == flag);
+	}
+#endif
 	output = apply(allTrans, ioContext.isPostTreatment, ioContext.m_summaryJsonObj);
 	localStaticArgs()->m_fitness = output;
 
@@ -100,25 +104,34 @@ void AccountFeature::execute(void *outDatum, Puppy::Context &ioContext)
 }
 
 void AccountFeature::cleanArgs() {
-	unsigned int i = m_filterFlagIndex % 5;
+	unsigned int i = m_filterCheckingPovCase % 8;
 	switch (i) {
 	case 0:
-		localStaticArgs()->m_filterFlags = Transaction::Flag::EO;
-		break;
-	case 3:
-		localStaticArgs()->m_filterFlags = Transaction::Flag::IO;
-		break;
-	case 2:
-		localStaticArgs()->m_filterFlags = Transaction::Flag::EI;
+		localStaticArgs()->m_filterFlags = Transaction::CheckingPOV::FromOtherAcc;
 		break;
 	case 1:
-		localStaticArgs()->m_filterFlags = Transaction::Flag::II;
+		localStaticArgs()->m_filterFlags = Transaction::CheckingPOV::FromExterior;
+		break;
+	case 2:
+		localStaticArgs()->m_filterFlags = Transaction::CheckingPOV::FromDigitLike;
+		break;
+	case 3:
+		localStaticArgs()->m_filterFlags = Transaction::CheckingPOV::ToOtherAcc;
 		break;
 	case 4:
-		localStaticArgs()->m_filterFlags = Transaction::Flag::EE;
+		localStaticArgs()->m_filterFlags = Transaction::CheckingPOV::ToExterior;
+		break;
+	case 5:
+		localStaticArgs()->m_filterFlags = Transaction::CheckingPOV::ToDigitLike;
+		break;
+	case 6:
+		localStaticArgs()->m_filterFlags = Transaction::CheckingPOV::OtherToOther;
+		break;
+	case 7:
+		localStaticArgs()->m_filterFlags = Transaction::CheckingPOV::OtherExterior;
 		break;
 	default:
-		localStaticArgs()->m_filterFlags = Transaction::Flag::None;
+		localStaticArgs()->m_filterFlags = m_filterCheckingPovCase;
 		break;
 	}
 }
