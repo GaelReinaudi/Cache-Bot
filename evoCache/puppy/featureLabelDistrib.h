@@ -58,7 +58,7 @@ protected:
 				double effectForIndiv = 2.0+ 0* progressGeneration * 10.0;
 				QString nodeName = QString("%1").arg(effectForIndiv);
 				ioContext.getPrimitiveByName(nodeName);
-				bool ok = tryReplaceArgumentNode(2, nodeName.toStdString().c_str(), ioContext);
+				bool ok = tryReplaceArgumentNode(3, nodeName.toStdString().c_str(), ioContext);
 				if(!ok) {
 					ERR() << "Could not replace the node with " << nodeName;
 				}

@@ -167,7 +167,7 @@ protected:
 	virtual int getArgs(Puppy::Context &ioContext, int startAfter = -1) {
 		double a = 0;
 		getArgument(++startAfter, &a, ioContext);
-		m_filterFlagIndex = qRound(a);
+		m_filterCheckingPovCase = qAbs(qRound(a));
 		return startAfter;
 	}
 	virtual void cleanArgs();
@@ -183,13 +183,13 @@ protected:
 			if(filterHashIndex >= 0) {
 				m_filterHash = ioContext.m_pUser->hashBundles().keys()[filterHashIndex];
 				QString nodeName = QString("h%1").arg(m_filterHash);
-				bool ok = tryReplaceArgumentNode(0, nodeName.toStdString().c_str(), ioContext);
+				bool ok = tryReplaceArgumentNode(1, nodeName.toStdString().c_str(), ioContext);
 				if(!ok) {
 					ERR() << "Could not replace the node with " << nodeName;
 				}
 				nodeName = QString("%1").arg(ioContext.m_pUser->hashBundles()[m_filterHash]->klaAverage());
 				ioContext.getPrimitiveByName(nodeName);
-				ok = tryReplaceArgumentNode(1, nodeName.toStdString().c_str(), ioContext);
+				ok = tryReplaceArgumentNode(2, nodeName.toStdString().c_str(), ioContext);
 				if(!ok) {
 					ERR() << "Could not replace the node with " << nodeName;
 				}
@@ -211,7 +211,7 @@ protected:
 protected:
 private:
 	// if any, the hash to filter the transaction on
-	int m_filterFlagIndex = 0;
+	int m_filterCheckingPovCase = 0;
 	int m_filterHash = -1;
 	double m_billProba = 0.0;
 };
