@@ -42,7 +42,7 @@ public:
 		return m_allTransBundle;
 	}
 	TransactionBundle& transFlagBundle(int filterHash, int flags) {
-		if (flags == Transaction::Flag::None)
+		if (flags <= 0)
 			return transBundle(filterHash);
 		if (m_flagHashBundles.contains(flags)) {
 			if (filterHash != -1)

@@ -53,6 +53,7 @@ public:
 		OtherExterior = 0x200
 	};
 	int checkPOV = 0;
+	bool isNotChecking() const { return flags & (OtherToOther | OtherExterior); }
 	bool isInternal() const { return flags & Transaction::Flag::Internal; }
 	bool isFuture() const { return Transaction::currentDay().daysTo(date) > 0; }
 	bool isToOld() const { return date < Transaction::currentDay().addDays(-Transaction::maxDaysOld()); }

@@ -21,8 +21,12 @@ QVector<Transaction> SuperOracle::revelation(QDate upToDate)
 	QVector<Transaction> ret;
 	// naive adding up the revelations for now
 	for (auto pOr : m_subOracles) {
-		if (pOr->avgDaily(60))
+		if (pOr->args()->m_filterFlags & (Transaction::OtherExterior | Transaction::OtherToOther)) {
+			continue;
+		}
+		if (pOr->avgDaily(60)) {
 			ret += pOr->revelation(upToDate);
+		}
 	}
 	std::stable_sort(ret.begin(), ret.end(), Transaction::smallerAmountThan);
 	std::stable_sort(ret.begin(), ret.end(), Transaction::earlierThan);

@@ -68,7 +68,8 @@ void AccountFeature::execute(void *outDatum, Puppy::Context &ioContext)
 
 	// will be ALL the transactions if m_filterHash < 0
 //	TransactionBundle& allTrans = ioContext.m_pUser->transBundle(m_filterHash);
-	int flag = localStaticArgs()->m_filterFlags;
+	int checkingInvolved = ~(Transaction::OtherToOther | Transaction::OtherExterior);
+	int flag = ioContext.isPostTreatment ? checkingInvolved : localStaticArgs()->m_filterFlags;
 	TransactionBundle& allTrans = ioContext.m_pUser->transFlagBundle(m_filterHash, flag);
 	if (allTrans.count() == 0) {
 		return;

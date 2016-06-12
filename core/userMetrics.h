@@ -180,7 +180,7 @@ protected:
 			// finds the index of the last transaction within the playback date
 			if (real.trans(i).date > date) {
 				// incrementally finds out the balance at the playback date
-				if (!real.trans(i).isInternal())
+				if (!real.trans(i).isNotChecking())
 					bal -= real.trans(i).amountDbl();
 			}
 			else // if at least one transaction before that date

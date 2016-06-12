@@ -239,7 +239,7 @@ void ExtraCashView::makeBalancePlot()
 	double balanceThen = m_realBalance;
 	for (int i = m_pExtraCache->user()->allTrans().count() - 1; i >= 0; --i) {
 		const Transaction& tr = m_pExtraCache->user()->allTrans().trans(i);
-		if (tr.isInternal())
+		if (tr.isNotChecking())
 			continue;
 		double x = Transaction::currentDay().daysTo(tr.date);
 		ui->plot->graph(IND_GR_BALANCE)->addData(x, balanceThen);
