@@ -96,7 +96,7 @@ qint64 NameHashVector2::fromString(const QString &str, double kla) {
 			continue;
 		n -= QChar('@').toLatin1();
 		if(n >= 0 && n < 25) {
-			// flips the ith bit
+			// flips the nth bit
 			h |=  (Q_INT64_C(1) << n);
 		}
 	}

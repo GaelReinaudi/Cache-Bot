@@ -21,7 +21,7 @@ QVector<Transaction> SuperOracle::revelation(QDate upToDate)
 	QVector<Transaction> ret;
 	// naive adding up the revelations for now
 	for (auto pOr : m_subOracles) {
-		if (pOr->args()->m_filterFlags & (Transaction::OtherExterior | Transaction::OtherToOther)) {
+		if (pOr->args()->m_filterFlags & Transaction::NoChecking) {
 			continue;
 		}
 		if (pOr->avgDaily(60)) {

@@ -68,7 +68,7 @@ void AccountFeature::execute(void *outDatum, Puppy::Context &ioContext)
 
 	// will be ALL the transactions if m_filterHash < 0
 //	TransactionBundle& allTrans = ioContext.m_pUser->transBundle(m_filterHash);
-	int checkingInvolved = ~(Transaction::OtherToOther | Transaction::OtherExterior);
+	int checkingInvolved = Transaction::YesChecking;
 	int flag = ioContext.isPostTreatment ? checkingInvolved : localStaticArgs()->m_filterFlags;
 	TransactionBundle& allTrans = ioContext.m_pUser->transFlagBundle(m_filterHash, flag);
 	if (allTrans.count() == 0) {
@@ -105,7 +105,7 @@ void AccountFeature::execute(void *outDatum, Puppy::Context &ioContext)
 }
 
 void AccountFeature::cleanArgs() {
-	unsigned int i = m_filterCheckingPovCase % 8;
+	unsigned int i = m_filterCheckingPovCase % 10;
 	switch (i) {
 	case 0:
 		localStaticArgs()->m_filterFlags = Transaction::CheckingPOV::FromOtherAcc;
@@ -130,6 +130,12 @@ void AccountFeature::cleanArgs() {
 		break;
 	case 7:
 		localStaticArgs()->m_filterFlags = Transaction::CheckingPOV::OtherExterior;
+		break;
+	case 8:
+		localStaticArgs()->m_filterFlags = Transaction::CheckingPOV::OtherFromChecking;
+		break;
+	case 9:
+		localStaticArgs()->m_filterFlags = Transaction::CheckingPOV::OtherToChecking;
 		break;
 	default:
 		localStaticArgs()->m_filterFlags = m_filterCheckingPovCase;
