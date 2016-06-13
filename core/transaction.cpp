@@ -37,7 +37,7 @@ int Transaction::isVoid() const
 }
 
 int Transaction::type() const {
-	return account->type() + 16 * (flags & Internal);
+	return account->type();// + 16 * (flags & Internal);
 }
 
 void Transaction::loadUserFlags(const QJsonObject &json) {
@@ -114,12 +114,18 @@ void Transaction::loadUserFlags(const QJsonObject &json) {
 QString Transaction::cleanName(const QString &inName)
 {
 	QString outName = inName.toUpper();
-	outName.remove(" FROM").remove(" TO");
-	outName.remove("XXXXX").remove("CKF ").remove(" LN").replace("HOMEFINANCE", " MTGE");
-	outName.remove("CHK").remove(" SAV");
-	outName.remove(" ACCT");
-	outName.remove(" ONLINE").remove(" BANKING").remove(" CONFIRMATION");
-	outName.remove(" IMAGE");
+//	outName.remove(" FROM").remove(" TO");
+	outName.remove("XXXXX");
+	outName.remove("CKF ");
+	outName.remove(" LN");
+	outName.replace("HOMEFINANCE", " MTGE");
+//	outName.remove("CHK");
+	outName.remove(" SAV");
+//	outName.remove(" ACCT");
+//	outName.remove(" ONLINE");
+//	outName.remove(" BANKING");
+	outName.remove(" CONFIRMATION");
+//	outName.remove(" IMAGE");
 	return outName.trimmed();
 }
 

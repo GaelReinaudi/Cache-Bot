@@ -53,7 +53,7 @@ void ACustomPlot::makeGraphs(HashedBundles& hashBundles) {
 			pGraph->setPen(QPen(QColor(r,g,b,255)));
 			switch (1 << iAccType) {
 			case Account::Type::Checking:
-				pGraph->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 5.0));
+				pGraph->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCircle, 15.0));
 				break;
 			case Account::Type::Saving:
 				pGraph->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssSquare, 7.0));
@@ -105,7 +105,7 @@ void ACustomPlot::loadCompressedAmount(User* pUser)
 		const Transaction& tr = allTrans.trans(i);
 		double t = tr.time_t();
 		qint64 h = tr.nameHash.hash();
-		if (!tr.isInternal())
+		if (!tr.isNotChecking())
 			m_integral += tr.amountDbl();
 		graph(0)->addData(t, kindaLog(m_integral));
 		QCPGraph* pGraph = 0;
@@ -154,7 +154,7 @@ void ACustomPlot::loadCompressedAmount(User* pUser)
 	for (int i = 0; i < allTrans.count(); ++i) {
 		const Transaction& tr = allTrans.trans(i);
 		double t = tr.time_t();
-		if (!tr.isInternal())
+		if (!tr.isNotChecking())
 			m_integral += tr.amountDbl();
 		graph(0)->addData(t, kindaLog(m_integral));
 	}
