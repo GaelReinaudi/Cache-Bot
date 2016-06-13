@@ -47,7 +47,7 @@ void CacheRest::getUserData(QString userId, User *pUserToInject /*= 0*/)
 void CacheRest::hitUrl(QString url, QJsonObject args)
 {
 	HttpRequestInput httpRequest(url, "POST");
-	QJsonObject json;
+	args["_majorVersion"] = QString(GIT_VERSION).left(1);
 	httpRequest.add_json(args);
 	worker->execute(&httpRequest);
 }
@@ -76,6 +76,7 @@ void CacheRest::sendExtraCash(QString userId, double valExtra, QJsonObject newSt
 	json.insert("amount", valExtra);
 	newStats.insert("extraCash", json);
 	newStats["route"] = "flow";
+	newStats["_majorVersion"] = QString(GIT_VERSION).left(1);
 	httpRequest.add_json(newStats);
 	worker->execute(&httpRequest);
 }
