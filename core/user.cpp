@@ -203,16 +203,24 @@ void User::injectJsonData(QString jsonStr)
 				pT->flags |= Transaction::Flag::Internal;
 				pBestMatchN->flags |= Transaction::Flag::Internal;
 				if (pT->account->type() == Account::Type::Checking && pBestMatchN->account->type() != Account::Type::Checking) {
-					if (pT->amount() > 0)
+					if (pT->amount() > 0) {
 						pT->checkPOV |= Transaction::CheckingPOV::FromOtherAcc;
-					else
+						pBestMatchN->checkPOV |= Transaction::CheckingPOV::OtherToChecking;
+					}
+					else {
 						pT->checkPOV |= Transaction::CheckingPOV::ToOtherAcc;
+						pBestMatchN->checkPOV |= Transaction::CheckingPOV::OtherFromChecking;
+					}
 				}
 				else if (pBestMatchN->account->type() == Account::Type::Checking && pT->account->type() != Account::Type::Checking) {
-					if (pBestMatchN->amount() > 0)
+					if (pBestMatchN->amount() > 0) {
 						pBestMatchN->checkPOV |= Transaction::CheckingPOV::FromOtherAcc;
-					else
+						pT->checkPOV |= Transaction::CheckingPOV::OtherToChecking;
+					}
+					else {
 						pBestMatchN->checkPOV |= Transaction::CheckingPOV::ToOtherAcc;
+						pT->checkPOV |= Transaction::CheckingPOV::OtherFromChecking;
+					}
 				}
 				else {// if (pT->account->type() != Account::Type::Checking && pBestMatchN->account->type() != Account::Type::Checking) {
 					pT->checkPOV |= Transaction::CheckingPOV::OtherToOther;
@@ -382,21 +390,21 @@ TransactionBundle& User::makeFlagBundle(int filterHash, int flags)
 		qint64 h = t.nameHash.hash();
 		if (!hashBund.contains(h))
 			hashBund[h] = new TransactionBundle();
-		if (t.checkPOV == flags)
+		if (t.checkPOV & flags)
 			hashBund[h]->append(&t);
 
 		// categories too
 		h = t.categoryHash.hash();
 		if (!hashBund.contains(h))
 			hashBund[h] = new TransactionBundle();
-		if (t.checkPOV == flags)
+		if (t.checkPOV & flags)
 			hashBund[h]->append(&t);
 
 		// all of them
-		if (t.checkPOV == flags)
+		if (t.checkPOV & flags)
 			allBund.append(&t);
 	}
-	WARN() << "flags=" << flags << " count = " << allBund.count();
+	WARN() << "& flags=" << flags << " count = " << allBund.count();
 	if (filterHash != -1)
 		return *hashBund[filterHash];
 	return allBund;
