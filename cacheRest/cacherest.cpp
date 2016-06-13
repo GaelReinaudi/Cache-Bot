@@ -96,6 +96,7 @@ void CacheRest::sendNewBot(QString userId, QJsonObject newBot)
 	QJsonObject jsonNewBot;
 	jsonNewBot.insert("newBot", newBot);
 	jsonNewBot["route"] = "newBot";
+	jsonNewBot["_majorVersion"] = QString(GIT_VERSION).left(1);
 	httpRequest.add_json(jsonNewBot);
 	worker->execute(&httpRequest);
 }
@@ -109,6 +110,10 @@ void CacheRest::getBestBot(QString userId, User *pUserToInject /*= 0*/)
 //		userId = "55518f01574600030092a822";
 	HttpRequestInput httpRequest(BestBotRoute + QString("/%1").arg(userId), "POST");
 	qDebug() << "getBestBot";
+	QJsonObject json;
+	json["user_id"] = userId;
+	json["_majorVersion"] = QString(GIT_VERSION).left(1);
+	httpRequest.add_json(json);
 	worker->execute(&httpRequest);
 	if (pUserToInject) {
 		QObject::connect(worker, SIGNAL(repliedBestBot(QString)), pUserToInject, SLOT(injectJsonBot(QString)));
