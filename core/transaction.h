@@ -49,11 +49,18 @@ public:
 		ToOtherAcc = 0x20,
 		ToExterior = 0x40,
 		ToDigitLike = 0x80,
+
 		OtherToOther = 0x100,
-		OtherExterior = 0x200
+		OtherExterior = 0x200,
+
+		OtherToChecking = 0x400,
+		OtherFromChecking = 0x800,
+
+		NoChecking = OtherToOther | OtherExterior | OtherToChecking | OtherFromChecking,
+		YesChecking = ~NoChecking
 	};
 	int checkPOV = 0;
-	bool isNotChecking() const { return flags & (OtherToOther | OtherExterior); }
+	bool isNotChecking() const { return flags & NoChecking; }
 	bool isInternal() const { return flags & Transaction::Flag::Internal; }
 	bool isFuture() const { return Transaction::currentDay().daysTo(date) > 0; }
 	bool isToOld() const { return date < Transaction::currentDay().addDays(-Transaction::maxDaysOld()); }
