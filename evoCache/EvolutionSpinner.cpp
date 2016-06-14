@@ -302,7 +302,7 @@ void EvolutionSpinner::replaceFitness0WithSuperMixture(std::vector<Tree>& ioPopu
 				continue;
 			Tree copyTreeLimited = popFeatures[jF % popFeatures.size()];
 			++jF;
-			int jFIndex = qrand() % copyTreeLimited.lim_NUM_FEATURE;
+			int jFIndex = qrand() % BotContext::LIMIT_NUM_FEATURES;
 			uint fi = treeToComplete.getIndexOfFeature(f);
 			uint li = copyTreeLimited.getIndexOfFeature(jFIndex);
 			std::vector<unsigned int> lStack1;
