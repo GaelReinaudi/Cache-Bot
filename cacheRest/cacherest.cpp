@@ -75,7 +75,7 @@ void CacheRest::sendExtraCash(QString userId, double valExtra, QJsonObject newSt
 	QJsonObject json;
 	json.insert("amount", valExtra);
 	newStats.insert("extraCash", json);
-	newStats["route"] = "flow";
+	newStats["route"] = QString("flow");
 	newStats["_majorVersion"] = QString(GIT_VERSION).left(1);
 	httpRequest.add_json(newStats);
 	worker->execute(&httpRequest);
@@ -96,7 +96,7 @@ void CacheRest::sendNewBot(QString userId, QJsonObject newBot)
 	HttpRequestInput httpRequest(url, "POST");
 	QJsonObject jsonNewBot;
 	jsonNewBot.insert("newBot", newBot);
-	jsonNewBot["route"] = "newBot";
+	jsonNewBot["route"] = QString("newBot");
 	jsonNewBot["_majorVersion"] = QString(GIT_VERSION).left(1);
 	httpRequest.add_json(jsonNewBot);
 	worker->execute(&httpRequest);
