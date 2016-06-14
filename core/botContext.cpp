@@ -9,7 +9,7 @@
 #include "featureCategory.h"
 #include "featureCrossCurrent.h"
 
-unsigned int BotContext::LIMIT_NUM_FEATURES = 1;
+unsigned int BotContext::LIMIT_NUM_FEATURES = 2;
 unsigned int BotContext::TARGET_TRANS_FUTUR_DAYS = 100;
 QJsonObject BotContext::JSON_ARGS;
 

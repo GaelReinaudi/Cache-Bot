@@ -105,7 +105,7 @@ void AccountFeature::execute(void *outDatum, Puppy::Context &ioContext)
 }
 
 void AccountFeature::cleanArgs() {
-	unsigned int i = m_filterCheckingPovCase % 10;
+	unsigned int i = qAbs(m_filterCheckingPovCase) % 10;
 	switch (i) {
 	case 0:
 		localStaticArgs()->m_filterFlags = Transaction::CheckingPOV::FromOtherAcc;
@@ -138,7 +138,7 @@ void AccountFeature::cleanArgs() {
 		localStaticArgs()->m_filterFlags = Transaction::CheckingPOV::OtherToChecking;
 		break;
 	default:
-		localStaticArgs()->m_filterFlags = m_filterCheckingPovCase;
+		localStaticArgs()->m_filterFlags = -2222;
 		break;
 	}
 }

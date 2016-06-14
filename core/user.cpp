@@ -291,7 +291,7 @@ void User::injectJsonData(QString jsonStr)
 				else
 					pT->checkPOV |= Transaction::CheckingPOV::OtherExterior;
 			}
-			WARN() << "checkPOV: " << pT->checkPOV << " " << pT->name << " " << pT->amountDbl() << " " << pT->date.toString();
+//			WARN() << "checkPOV: " << pT->checkPOV << " " << pT->name << " " << pT->amountDbl() << " " << pT->date.toString();
 		}
 	}
 	m_allTransactions.stampAllTransactionEffect();

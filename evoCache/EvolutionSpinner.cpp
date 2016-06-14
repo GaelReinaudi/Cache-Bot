@@ -73,7 +73,7 @@ void EvolutionSpinner::runEvolution() {
 	QMap<double, Tree> bestPreEvoTrees;
 	QMap<double, Tree> superBestPreEvoTrees;
 	QJsonObject finalBotObject;
-	m_context->lim_NUM_FEATURE = 1;
+	m_context->lim_NUM_FEATURE = BotContext::LIMIT_NUM_FEATURES;
 
 	for (int j = 0; j < m_context->m_pUser->hashBundles().count(); ++j) {
 		int h = m_context->m_pUser->hashBundles().keys()[j];
@@ -169,7 +169,7 @@ void EvolutionSpinner::runEvolution() {
 	if (Transaction::onlyLoadHashes.isEmpty())
 		m_context->lim_NUM_FEATURE = BotContext::MAX_NUM_FEATURES;
 	else
-		m_context->lim_NUM_FEATURE = qMin(Transaction::onlyLoadHashes.size(), int(BotContext::MAX_NUM_FEATURES));
+		m_context->lim_NUM_FEATURE = qMin(2 * Transaction::onlyLoadHashes.size(), int(BotContext::MAX_NUM_FEATURES));
 
 	Tree veryBestTree;
 	// Initialize population.
@@ -273,10 +273,10 @@ void EvolutionSpinner::makeSuperTreeMixtures(std::vector<Tree>& ioPopulation,
 	static int jF = 0;
 	for(unsigned int i=0; i < ioPopulation.size(); ++i) {
 		Tree& treeToComplete = ioPopulation[i];
-		for (int f = treeToComplete.lim_NUM_FEATURE; f < ioContext.lim_NUM_FEATURE; ++f) {
+		for (int f = BotContext::LIMIT_NUM_FEATURES; f < ioContext.lim_NUM_FEATURE; ++f) {
 			Tree copyRandTreeLimited = ioPopulation[jF % ioPopulation.size()];
 			++jF;
-			int limitedIndex = qrand() % copyRandTreeLimited.lim_NUM_FEATURE;
+			int limitedIndex = qrand() % BotContext::LIMIT_NUM_FEATURES;
 			uint fi = treeToComplete.getIndexOfFeature(f);
 			uint li = copyRandTreeLimited.getIndexOfFeature(limitedIndex);
 			std::vector<unsigned int> lStack1;

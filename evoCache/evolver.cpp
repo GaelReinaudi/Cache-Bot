@@ -8,7 +8,11 @@ Evolver::Evolver(QString userID, QJsonObject jsonArgs)
 {
 	init();
 	connect(this, SIGNAL(startStopEvolution(bool)), m_evoSpinner, SLOT(startStopEvolution(bool)), Qt::DirectConnection);
-	QTimer::singleShot(1000 * (4 * 60 + 30), this, SLOT(timeOut()));
+	int ms = 1000 * (4 * 60 + 30);
+#ifdef Q_OS_WIN
+	ms *= 2;
+#endif
+	QTimer::singleShot(ms, this, SLOT(timeOut()));
 }
 
 Evolver::~Evolver()
