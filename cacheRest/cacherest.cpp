@@ -14,7 +14,13 @@ CacheRest::CacheRest(QObject *parent)
 }
 
 void CacheRest::login(QString username, QString password) {
-	HttpRequestInput httpRequest(LoginRoute, "POST");
+	QString url = LoginRoute;
+	if (!m_overrideCallBackUrl.isEmpty()) {
+		url = m_overrideCallBackUrl;
+		WARN() << "using override on url: " << url;
+	}
+	url += "#login";
+	HttpRequestInput httpRequest(url, "POST");
 	httpRequest.add_var("email", username);
 	httpRequest.add_var("password", password);
 	qDebug() << "loging in";
@@ -30,13 +36,25 @@ void CacheRest::fakeSignup(QString userId)
 
 void CacheRest::getUserIds()
 {
-	HttpRequestInput httpRequest(IdsRoute, "POST");
+	QString url = IdsRoute;
+	if (!m_overrideCallBackUrl.isEmpty()) {
+		url = m_overrideCallBackUrl;
+		WARN() << "using override on url: " << url;
+	}
+	url += "#user_ids";
+	HttpRequestInput httpRequest(url, "POST");
 	worker->execute(&httpRequest);
 }
 
 void CacheRest::getUserData(QString userId, User *pUserToInject /*= 0*/)
 {
-	HttpRequestInput httpRequest(UserDataRoute + QString("/%1").arg(userId), "POST");
+	QString url = UserDataRoute;
+	if (!m_overrideCallBackUrl.isEmpty()) {
+		url = m_overrideCallBackUrl;
+		WARN() << "using override on url: " << url;
+	}
+	url += "#data";
+	HttpRequestInput httpRequest(url + QString("/%1").arg(userId), "POST");
 	qDebug() << "getUserData";
 	worker->execute(&httpRequest);
 	if (pUserToInject) {
@@ -71,6 +89,7 @@ void CacheRest::sendExtraCash(QString userId, double valExtra, QJsonObject newSt
 		url = m_overrideCallBackUrl;
 		WARN() << "using override on url: " << url;
 	}
+	url += "#flow";
 	HttpRequestInput httpRequest(url, "POST");
 	QJsonObject json;
 	json.insert("amount", valExtra);
@@ -93,6 +112,7 @@ void CacheRest::sendNewBot(QString userId, QJsonObject newBot)
 		url = m_overrideCallBackUrl;
 		WARN() << "using override on url: " << url;
 	}
+	url += "#newBot";
 	HttpRequestInput httpRequest(url, "POST");
 	QJsonObject jsonNewBot;
 	jsonNewBot.insert("newBot", newBot);
@@ -107,9 +127,13 @@ void CacheRest::getBestBot(QString userId, User *pUserToInject /*= 0*/)
 #ifdef SEND_TO_CACHEBOT_INSTEAD
 	userId = "55518f01574600030092a822";
 #endif
-//	if (newStats["_inArgs"].toObject()["send2Bot"].toString() != "")
-//		userId = "55518f01574600030092a822";
-	HttpRequestInput httpRequest(BestBotRoute + QString("/%1").arg(userId), "POST");
+	QString url = BestBotRoute + QString("/%1").arg(userId);
+	if (!m_overrideCallBackUrl.isEmpty()) {
+		url = m_overrideCallBackUrl;
+		WARN() << "using override on url: " << url;
+	}
+	url += "#bestBot";
+	HttpRequestInput httpRequest(url, "POST");
 	qDebug() << "getBestBot";
 	QJsonObject json;
 	json["user_id"] = userId;
