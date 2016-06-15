@@ -309,7 +309,7 @@ void HttpRequestWorker::on_manager_finished(QNetworkReply *reply) {
 	qDebug() << "response is" << strResponseJsonDoc.left(256);
 	DBG() << "response is" << strResponseJsonDoc;
 	emit on_execution_finished(this);
-	if(reply->request().url() == QUrl(LoginRoute)) {
+	if(reply->request().url().toString().endsWith("#login")) {
 		emit repliedLogin(response);
 		if(QString(response).contains(StringLoggedInReplySuccess)) {
 			emit loggedIn(true);
@@ -324,22 +324,22 @@ void HttpRequestWorker::on_manager_finished(QNetworkReply *reply) {
 			return;
 		}
 	}
-	else if(reply->request().url() == QUrl(IdsRoute)) {
+	else if(reply->request().url().toString().endsWith("#user_ids")) {
 		emit repliedIds(response);
 	}
-	else if(reply->request().url().toString().startsWith(UserDataRoute)) {
+	else if(reply->request().url().toString().endsWith("#data")) {
 		emit repliedUserData(response);
 	}
 	else if(reply->request().url().toString().startsWith(FakeSignupRoute)) {
 		emit repliedFakeSignup(response);
 	}
-	else if(reply->request().url().toString().endsWith(SendExtraCashRoute.split("/").last())) {
+	else if(reply->request().url().toString().endsWith("#flow")) {
 		emit repliedSendExtraCache(response);
 	}
-	else if(reply->request().url().toString().startsWith(SendNewBotRoute)) {
+	else if(reply->request().url().toString().endsWith("#newBot")) {
 		emit repliedSendNewBot(response);
 	}
-	else if(reply->request().url().toString().startsWith(BestBotRoute)) {
+	else if(reply->request().url().toString().endsWith("#bestBot")) {
 		emit repliedBestBot(response);
 	}
 	else if(reply->request().url().toString().contains("execute-api.us-west-2.amazonaws")) {
@@ -355,7 +355,7 @@ void HttpRequestWorker::on_manager_finished(QNetworkReply *reply) {
 
 void OfflineHttpRequestWorker::on_manager_finished(QNetworkReply *reply)
 {
-	if(reply->request().url() == QUrl(LoginRoute)) {
+	if(reply->request().url().toString().endsWith("#login")) {
 		emit loggedIn(true);
 	}
 	else if(reply->request().url().toString().startsWith(UserDataRoute)) {
@@ -368,10 +368,10 @@ void OfflineHttpRequestWorker::on_manager_finished(QNetworkReply *reply)
 		response = fileReply.readAll();
 		emit repliedUserData(response);
 	}
-	else if(reply->request().url().toString().endsWith(SendExtraCashRoute.split("/").last())) {
+	else if(reply->request().url().toString().endsWith("#flow")) {
 		emit repliedSendExtraCache("");
 	}
-	else if(reply->request().url().toString().startsWith(SendNewBotRoute)) {
+	else if(reply->request().url().toString().endsWith("#newBot")) {
 		emit repliedSendNewBot("");
 	}
 	else if(reply->request().url().toString().startsWith(BestBotRoute)) {
