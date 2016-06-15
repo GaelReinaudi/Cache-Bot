@@ -48,13 +48,13 @@ void CacheRest::getUserIds()
 
 void CacheRest::getUserData(QString userId, User *pUserToInject /*= 0*/)
 {
-	QString url = UserDataRoute;
+	QString url = UserDataRoute + QString("/%1").arg(userId);
 	if (!m_overrideCallBackUrl.isEmpty()) {
 		url = m_overrideCallBackUrl;
 		WARN() << "using override on url: " << url;
 	}
 	url += "#data";
-	HttpRequestInput httpRequest(url + QString("/%1").arg(userId), "POST");
+	HttpRequestInput httpRequest(url, "POST");
 	qDebug() << "getUserData";
 	worker->execute(&httpRequest);
 	if (pUserToInject) {
