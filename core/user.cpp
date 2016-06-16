@@ -290,7 +290,10 @@ BotContext* User::makeBotContext()
 void User::injectJsonBot(QString jsonStr)
 {
 	QJsonDocument jsonDoc(QJsonDocument::fromJson(jsonStr.toUtf8()));
-	const QJsonObject& jsonObj = jsonDoc.object();
+	QString v2 = QString(GIT_VERSION).left(1);
+	if (v2.toInt() <= 1)
+		v2 = "";
+	const QJsonObject& jsonObj = jsonDoc.object()["bestBot" + v2].toObject();
 
 	INFO() << "User::injectJsonBot " << QString(QJsonDocument(jsonObj).toJson());
 
