@@ -15,10 +15,10 @@ CacheRest::CacheRest(QObject *parent)
 
 void CacheRest::login(QString username, QString password) {
 	QString url = LoginRoute;
-	if (!m_overrideCallBackUrl.isEmpty()) {
-		url = m_overrideCallBackUrl;
-		WARN() << "using override on url: " << url;
-	}
+//	if (!m_overrideCallBackUrl.isEmpty()) {
+//		url = m_overrideCallBackUrl;
+//		WARN() << "using override on url: " << url;
+//	}
 	url += "#login";
 	HttpRequestInput httpRequest(url, "POST");
 	httpRequest.add_var("email", username);
@@ -37,10 +37,10 @@ void CacheRest::fakeSignup(QString userId)
 void CacheRest::getUserIds()
 {
 	QString url = IdsRoute;
-	if (!m_overrideCallBackUrl.isEmpty()) {
-		url = m_overrideCallBackUrl;
-		WARN() << "using override on url: " << url;
-	}
+//	if (!m_overrideCallBackUrl.isEmpty()) {
+//		url = m_overrideCallBackUrl;
+//		WARN() << "using override on url: " << url;
+//	}
 	url += "#user_ids";
 	HttpRequestInput httpRequest(url, "POST");
 	worker->execute(&httpRequest);
@@ -49,10 +49,10 @@ void CacheRest::getUserIds()
 void CacheRest::getUserData(QString userId, User *pUserToInject /*= 0*/)
 {
 	QString url = UserDataRoute + QString("/%1").arg(userId);
-	if (!m_overrideCallBackUrl.isEmpty()) {
-		url = m_overrideCallBackUrl;
-		WARN() << "using override on url: " << url;
-	}
+//	if (!m_overrideCallBackUrl.isEmpty()) {
+//		url = m_overrideCallBackUrl;
+//		WARN() << "using override on url: " << url;
+//	}
 	url += "#data";
 	HttpRequestInput httpRequest(url, "POST");
 	qDebug() << "getUserData";
@@ -128,10 +128,10 @@ void CacheRest::getBestBot(QString userId, User *pUserToInject /*= 0*/)
 	userId = "55518f01574600030092a822";
 #endif
 	QString url = BestBotRoute + QString("/%1").arg(userId);
-	if (!m_overrideCallBackUrl.isEmpty()) {
-		url = m_overrideCallBackUrl;
-		WARN() << "using override on url: " << url;
-	}
+//	if (!m_overrideCallBackUrl.isEmpty()) {
+//		url = m_overrideCallBackUrl;
+//		WARN() << "using override on url: " << url;
+//	}
 	url += "#bestBot";
 	HttpRequestInput httpRequest(url, "POST");
 	qDebug() << "getBestBot";
