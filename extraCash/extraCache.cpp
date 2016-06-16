@@ -328,7 +328,11 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 	flowObj.insert("d2EndMonth", d2EndMonth);
 	flowObj.insert("endMonthDelta1Month", endMonthDelta1Month);
 
-	statObj["flow"] = flowObj;
+	QString v2 = QString(GIT_VERSION).left(1);
+	if (v2.toInt() > 1)
+		statObj["flow" + v2] = flowObj;
+	else
+		statObj["flow"] = flowObj;
 
 	addTrend(statObj, "01", trend01);
 	addTrend(statObj, "07", trend07);

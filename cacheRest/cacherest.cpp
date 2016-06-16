@@ -115,9 +115,13 @@ void CacheRest::sendNewBot(QString userId, QJsonObject newBot)
 	url += "#newBot";
 	HttpRequestInput httpRequest(url, "POST");
 	QJsonObject jsonNewBot;
-	jsonNewBot.insert("newBot", newBot);
+	QString v2 = QString(GIT_VERSION).left(1);
+	if (v2.toInt() > 1)
+		jsonNewBot.insert("newBot" + v2, newBot);
+	else
+		jsonNewBot.insert("newBot", newBot);
 	jsonNewBot["route"] = QString("newBot");
-	jsonNewBot["_majorVersion"] = QString(GIT_VERSION).left(1);
+	jsonNewBot["_majorVersion"] = v2;
 	httpRequest.add_json(jsonNewBot);
 	worker->execute(&httpRequest);
 }
