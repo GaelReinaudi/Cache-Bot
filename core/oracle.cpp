@@ -86,7 +86,7 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 
 	if (includeOracleSummaries) {
 	// week summary
-	int daysToSunday = Transaction::daysToSunday();
+	int daysToSunday = 7;//Transaction::daysToSunday();
 	summary.weekDetails["daysToSunday"] = daysToSunday;
 	double dailyFrequent = 0.0;
 	double dailyInfrequent = 0.0;
@@ -100,6 +100,8 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 	for (QSharedPointer<Oracle> pOr : m_subOracles) {
 		double daily = pOr->avgDaily();
 		if (daily >= 0)
+			continue;
+		if (pOr->args()->m_filterFlags & Transaction::NoChecking)
 			continue;
 		QJsonObject orj = pOr->toJson();
 		double avgAmount = orj["avgAmnt"].toDouble();
@@ -181,6 +183,8 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 		++index;
 		double daily = pOr->avgDaily();
 		if (daily >= 0)
+			continue;
+		if (pOr->args()->m_filterFlags & Transaction::NoChecking)
 			continue;
 		QJsonObject orj = pOr->toJson();
 		double avgAmount = orj["avgAmnt"].toDouble();
