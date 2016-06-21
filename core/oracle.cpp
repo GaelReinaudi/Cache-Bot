@@ -101,9 +101,9 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 		double daily = pOr->avgDaily();
 		if (daily >= 0)
 			continue;
-		if (pOr->args()->m_filterFlags & Transaction::NoChecking)
-			continue;
 		QJsonObject orj = pOr->toJson();
+//		if (orj["_filter"].toInt() & Transaction::NoChecking)
+//			continue;
 		double avgAmount = orj["avgAmnt"].toDouble();
 		if (pOr->feature()->isPeriodic()) {
 			double fitness = orj["fitness"].toDouble();
@@ -184,9 +184,9 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 		double daily = pOr->avgDaily();
 		if (daily >= 0)
 			continue;
-		if (pOr->args()->m_filterFlags & Transaction::NoChecking)
-			continue;
 		QJsonObject orj = pOr->toJson();
+//		if (orj["_filter"].toInt() & Transaction::NoChecking)
+//			continue;
 		double avgAmount = orj["avgAmnt"].toDouble();
 		if (pOr->feature()->isPeriodic()) {
 			QDate nextDate = QDate::fromString(orj["nextDate"].toString(), "yyyy-MM-dd");

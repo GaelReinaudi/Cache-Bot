@@ -8,9 +8,14 @@
 
 static const double SLOPE_MULTIPLICATION_EXTRA_TODAY = 0.5;
 
+QString v2 = QString(GIT_VERSION).left(1);
+QString flowString = "flow";
+
 ExtraCache::ExtraCache(QString userID, QJsonObject jsonArgs)
 	: CacheAccountConnector(userID, jsonArgs)
 {
+	if (v2.toInt() > 1)
+		flowString += v2;
 }
 
 void ExtraCache::onUserInjected(User* pUser)
@@ -57,7 +62,7 @@ double ExtraCache::calcSummary(Bot* bestBot, QJsonObject& statObj, int doAskThin
 	double flowDif_1 = MetricDiff<1>::get(MetricSmoother<2>::get(OracleSummary::get(user())))->value(Transaction::currentDay());
 	double flowDif_2 = MetricDiff<2>::get(MetricSmoother<2>::get(OracleSummary::get(user())))->value(Transaction::currentDay());
 	double flowDif_3 = MetricDiff<3>::get(MetricSmoother<2>::get(OracleSummary::get(user())))->value(Transaction::currentDay());
-	QJsonObject flowObj = statObj["flow"].toObject();
+	QJsonObject flowObj = statObj[flowString].toObject();
 	flowObj.insert("ma_2", flowMA_2);
 	flowObj.insert("ma_3", flowMA_3);
 	flowObj.insert("ma_4", flowMA_4);
@@ -108,7 +113,7 @@ flowCalc:
 		}
 		flowObj["indOracleHypotheTrans"] = indOracleHypo;
 	}
-	statObj.insert(numCalc == 1 ? "flow" : "askFlow", flowObj);
+	statObj.insert(numCalc == 1 ? flowString : "askFlow", flowObj);
 	if (doAskThing && jsonArgs().contains("ask") && numCalc < 2) {
 		user()->setHypotheTrans(jsonArgs()["ask"].toDouble());
 //		HistoMetric::clearAll();
@@ -205,8 +210,8 @@ QJsonObject ExtraCache::orderCategoryTree(QJsonObject &catObj)
 	QJsonObject newObj;
 	QMap<double, QString> costKeys;
 	for (const QString& k : catObj.keys()) {
-		double cost = catObj[k].toObject()["flow"].toObject()["dailyBill"].toDouble();
-		cost += catObj[k].toObject()["flow"].toObject()["dailyNeg"].toDouble();
+		double cost = catObj[k].toObject()[flowString].toObject()["dailyBill"].toDouble();
+		cost += catObj[k].toObject()[flowString].toObject()["dailyNeg"].toDouble();
 		costKeys.insertMulti(cost, k);
 	}
 	const int maxNumTop = 4;
@@ -285,7 +290,7 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 	double d2Min50Delta1Month = valMin50;
 	d2Min50Delta1Month += BalanceMetric::get(user())->value(Transaction::currentDay());
 	d2Min50Delta1Month -= BalanceMetric::get(user())->value(Transaction::currentDay().addDays(d2M50).addMonths(-1));
-	QJsonObject flowObj = statObj["flow"].toObject();
+	QJsonObject flowObj = statObj[flowString].toObject();
 	flowObj.insert("d2z50", d2z50);
 	flowObj.insert("d2z20", d2z20);
 	flowObj.insert("d2z80", d2z80);
@@ -328,11 +333,7 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 	flowObj.insert("d2EndMonth", d2EndMonth);
 	flowObj.insert("endMonthDelta1Month", endMonthDelta1Month);
 
-	QString v2 = QString(GIT_VERSION).left(1);
-	if (v2.toInt() > 1)
-		statObj["flow" + v2] = flowObj;
-	else
-		statObj["flow"] = flowObj;
+	statObj[flowString] = flowObj;
 
 	addTrend(statObj, "01", trend01);
 	addTrend(statObj, "07", trend07);

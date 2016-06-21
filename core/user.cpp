@@ -158,8 +158,10 @@ void User::injectJsonData(QString jsonStr)
 		QJsonObject jsonTrans = jsonTransArray[iT].toObject();
 		QString acPlaidId = jsonTrans["plaid_account"].toString();
 		Account* pInAcc = getAccountByPlaidId(acPlaidId);
-		if (pInAcc)
-			m_allTransactions.appendNew(jsonTrans, pInAcc);
+		if (pInAcc) {
+//			if (pInAcc->type() == Account::Type::Checking)
+				m_allTransactions.appendNew(jsonTrans, pInAcc);
+		}
 	}
 	INFO() << "maxDaysOldAllTransatcion " << Transaction::maxDaysOldAllTransatcion();
 	m_allTransactions.sort();
@@ -338,11 +340,12 @@ void User::injectJsonBot(QString jsonStr)
 {
 	QJsonDocument jsonDoc(QJsonDocument::fromJson(jsonStr.toUtf8()));
 	QString v2 = QString(GIT_VERSION).left(1);
-	if (v2.toInt() <= 1)
-		v2 = "";
-	const QJsonObject& jsonObj = jsonDoc.object()["bestBot" + v2].toObject();
+	QString botStr = "bestBot";
+	if (v2.toInt() > 1)
+		botStr += v2;
+	const QJsonObject& jsonObj = jsonDoc.object()[botStr].toObject();
 
-	INFO() << "User::injectJsonBot " << QString(QJsonDocument(jsonObj).toJson());
+	INFO() << "User::injectJsonBot " << botStr << " " << QString(QJsonDocument(jsonObj).toJson());
 
 	{
 		QFile sampleReturn("jsonBot.json");
