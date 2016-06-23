@@ -117,8 +117,8 @@ void CacheRest::sendNewBot(QString userId, QJsonObject newBot)
 	QJsonObject jsonNewBot;
 	QString v2 = QString(GIT_VERSION).left(1);
 	QString botString = "newBot";
-	if (v2.toInt() > 1)
-		botString += v2;
+//	if (v2.toInt() > 1)
+//		botString += v2;
 
 	jsonNewBot.insert(botString, newBot);
 	jsonNewBot["route"] = QString("newBot");
