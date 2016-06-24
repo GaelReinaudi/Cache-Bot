@@ -256,6 +256,13 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 	summary.weekDetails["approxDailyInfrequent"] = toSignifDigit_2(dailyInfrequent);
 	summary.weekDetails["approxTotInfrequent"] = toSignifDigit_2((dailyInfrequent + dailyNotSureBill) * daysToSunday);
 	summary.weekDetails["approxTotBill"] = toSignifDigit_2(totBills);
+
+	QJsonArray rev7;
+	QVector<Transaction> rev = const_cast<SuperOracle*>(this)->revelation(Transaction::currentDay().addDays(7));
+	for (const Transaction& t : rev) {
+		rev7.append(t.id);
+	}
+	summary.weekDetails["rev7"] = rev7;
 	}
 
 	if (summary.posSum == 0.0) {
