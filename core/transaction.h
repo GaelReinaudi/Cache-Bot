@@ -50,11 +50,11 @@ public:
 		ToExterior = 0x40,
 		ToDigitLike = 0x80,
 
-		OtherToOther = 0x100,
-		OtherExterior = 0x200,
+		OtherToOther = 0x1000,
+		OtherExterior = 0x2000,
 
-		OtherToChecking = 0x400,
-		OtherFromChecking = 0x800,
+		OtherToChecking = 0x4000,
+		OtherFromChecking = 0x8000,
 
 		NoChecking = OtherToOther | OtherExterior | OtherToChecking | OtherFromChecking,
 		YesChecking = ~NoChecking

@@ -112,7 +112,8 @@ void UserViewer::onNewSummarizedTree(QJsonObject jsonObj)
 	// sort per tot amount
 	QList<QJsonObject> listObj;
 	for (const auto f : jsonObj["features"].toArray()) {
-		listObj.append(f.toObject());
+		if (f.toObject()["numBund"].toInt())
+			listObj.append(f.toObject());
 	}
 	std::sort(listObj.begin(), listObj.end(), [](const QJsonObject& a, const QJsonObject& b){
 		return qAbs(a["_daily"].toDouble()) > qAbs(b["_daily"].toDouble());
