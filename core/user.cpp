@@ -159,7 +159,7 @@ void User::injectJsonData(QString jsonStr)
 		QString acPlaidId = jsonTrans["plaid_account"].toString();
 		Account* pInAcc = getAccountByPlaidId(acPlaidId);
 		if (pInAcc) {
-//			if (pInAcc->type() == Account::Type::Checking)
+			if (pInAcc->type() == Account::Type::Checking)
 				m_allTransactions.appendNew(jsonTrans, pInAcc);
 		}
 	}
@@ -266,7 +266,7 @@ void User::injectJsonData(QString jsonStr)
 			}
 		}
 	}
-	User::totalAdjustedBalance = balance(Account::Type::All) + User::balanceAdjust;
+	User::totalAdjustedBalance = balance(Account::Type::Checking);//All) + User::balanceAdjust;
 	//////// mark as "return" in certain conditions
 	for (int i = 0; i < m_allTransactions.count(); ++i) {
 		Transaction* pT = &m_allTransactions.transArray()[i];
