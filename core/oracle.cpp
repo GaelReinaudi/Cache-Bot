@@ -49,7 +49,7 @@ double SuperOracle::avgDaily(int limDayProba) const
 	return avg;
 }
 
-SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries) const
+SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries)
 {
 	DBG() << "SuperOracle::avgCashFlow";
 	SuperOracle::Summary summary;
@@ -258,7 +258,8 @@ SuperOracle::Summary SuperOracle::computeAvgCashFlow(bool includeOracleSummaries
 	summary.weekDetails["approxTotBill"] = toSignifDigit_2(totBills);
 
 	QJsonArray rev7;
-	QVector<Transaction> rev = const_cast<SuperOracle*>(this)->revelation(Transaction::currentDay().addDays(7));
+	resetDate(Transaction::currentDay());
+	QVector<Transaction> rev = revelation(Transaction::currentDay().addDays(7));
 	for (const Transaction& t : rev) {
 		rev7.append(t.id);
 	}

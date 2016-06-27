@@ -60,7 +60,7 @@ public:
 		YesChecking = ~NoChecking
 	};
 	int checkPOV = 0;
-	bool isNotChecking() const { return flags & NoChecking; }
+	bool isNotChecking() const { return checkPOV & NoChecking; }
 	bool isInternal() const { return flags & Transaction::Flag::Internal; }
 	bool isFuture() const { return Transaction::currentDay().daysTo(date) > 0; }
 	bool isToOld() const { return date < Transaction::currentDay().addDays(-Transaction::maxDaysOld()); }

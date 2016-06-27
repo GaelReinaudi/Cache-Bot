@@ -230,7 +230,7 @@ public:
 		}
 		Summary effectOf(const Summary& endSummary, int overDays) const;
 	};
-	Summary computeAvgCashFlow(bool includeOracleSummaries = true) const;
+	Summary computeAvgCashFlow(bool includeOracleSummaries = true);
 	FeatureArgs* args() override { return 0; }
 
 private:
