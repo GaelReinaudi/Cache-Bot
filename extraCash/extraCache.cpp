@@ -303,19 +303,29 @@ void ExtraCache::onBotInjected(Bot* bestBot)
 	flowObj.insert("d2Min50Delta1Month", d2Min50Delta1Month);
 
 	QJsonArray simuBal;
+	QJsonArray simuBalMin;
 	QJsonArray simuBalApprox;
 	QJsonArray simuDev;
 	QJsonArray simuVal;
+	double balMin = 9e9;
 	Montecarlo<128>::get(user())->simuValDev(Transaction::currentDay(), simuVal, simuDev);
 	for (int i = 0; i < simuVal.count(); ++i) {
 		double b = simuVal[i].toDouble() + User::totalAdjustedBalance;
 		double d = simuDev[i].toDouble();
 		simuBal.append(b);
+		balMin = qMin(balMin, b);
+		simuBalMin.append(balMin);
 		simuBalApprox.append(roundByBaseSystem(b, d));
 	}
+	flowObj.insert("forecasted_balance_7_day", simuBal.at(7).toDouble());
+	flowObj.insert("forecasted_balance_14_day", simuBal.at(14).toDouble());
+
+	flowObj.insert("min_balance_over_7_day", simuBalMin.at(7).toDouble());
+	flowObj.insert("min_balance_over_14_day", simuBalMin.at(14).toDouble());
 
 	flowObj.insert("simuVal", simuVal);
 	flowObj.insert("simuBal", simuBal);
+	flowObj.insert("simuBalMin", simuBalMin);
 	flowObj.insert("simuBalApprox", simuBalApprox);
 	flowObj.insert("simuDev", simuDev);
 	flowObj.insert("weekDetail", summary.weekDetails);
