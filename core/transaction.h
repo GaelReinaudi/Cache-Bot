@@ -57,7 +57,7 @@ public:
 		OtherFromChecking = 0x8000,
 
 		NoChecking = OtherToOther | OtherExterior | OtherToChecking | OtherFromChecking,
-		YesChecking = ~NoChecking
+		YesChecking = 0x0fffffff ^ NoChecking
 	};
 	int checkPOV = 0;
 	bool isNotChecking() const { return checkPOV & NoChecking; }
