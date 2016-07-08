@@ -159,7 +159,7 @@ void User::injectJsonData(QString jsonStr)
 		QString acPlaidId = jsonTrans["plaid_account"].toString();
 		Account* pInAcc = getAccountByPlaidId(acPlaidId);
 		if (pInAcc) {
-			if (pInAcc->type() == Account::Type::Checking)
+//			if (pInAcc->type() == Account::Type::Checking)
 				m_allTransactions.appendNew(jsonTrans, pInAcc);
 		}
 	}
