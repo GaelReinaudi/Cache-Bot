@@ -387,7 +387,7 @@ QVector<Transaction> OracleEveryOtherWeek::revelation(QDate upToDate)
 //		else if (m_args.m_consecMissed == 0 && qAbs(m_args.m_lastDateMatched.daysTo(Transaction::actualCurrentDay())) <= SLACK_FOR_LATE_TRANS) {
 //			targetTrans.pop_front();
 //		}
-		while (targetTrans.first().date < Transaction::currentDay()) {
+		while (targetTrans.count() && targetTrans.first().date < Transaction::currentDay()) {
 			targetTrans.pop_front();
 		}
 	}
