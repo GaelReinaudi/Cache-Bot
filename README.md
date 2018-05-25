@@ -1,4 +1,4 @@
-Gramatical Evolution used to discover people's spending habits and to predict their future account balance. 
+Grammatical Evolution used to discover people's spending habits and to predict their future account balance. 
 
 Pattern matching of bank accounts transcations:
 
